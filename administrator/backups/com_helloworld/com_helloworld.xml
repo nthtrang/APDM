@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+	<name>helloworld</name>
+	<!-- The following elements are optional and free of formatting conttraints -->
+	<creationDate>February 2007</creationDate>
+	<author>Petr Vojtechovsky</author>
+	<authorEmail>vojtechovsky@gmail.com</authorEmail>
+	<authorUrl>http://www.vojtechovsky.net</authorUrl>
+	<copyright>(C) 2007 All rights reserved.</copyright>
+	<license>GNU/GPL</license>
+	<!--  The version string is recorded in the components table -->
+	<version>1.5.0</version>
+	<!-- The description is optional and defaults to the name -->
+	  <description>
+    <![CDATA[<p>This is TRULY Hello world component for joomla 1.5 (no legacy mode!)
+    <br />This component introduces simple Administration/User interface and render "Hello WORLD" into joomla content.
+    <br />
+    </p>
+    <p>
+    <br />You will learn :
+    <li>how to do very simple example of JOOMLA 1.5 component</li>
+    <li>how to localize your components(english/czech language component)</li>
+    <li>how to create administrator backend interface (administrator component)
+    <li>how to create user frontend interface (site component)
+    <li>how to create XML script for your component</li>
+    <li>how to use system logs to debuging your code</li>
+    </p>
+    <br />  
+    <br /> I found it very flustrating that the original helloworld example used pattemplates and gave me errors.
+    <br /> Narcissus made a great piece of work documenting weblinks component. 
+    <a href="http://forum.joomla.org/index.php/topic,137324.msg672813.html#msg672813" target="_blank" style="cursor:help;">Narcissus - weblinks</a> 
+    <br /> I left some of his notes in my component. 
+    <br />
+    <br />For more information visit:
+    <a href="http://www.vojtechovsky.net/joomla/" target="_blank" style="cursor:help;">www.vojtechovsky.net/joomla/</a>
+    <br />Bookmark this page, more tutorials are comming soon.
+    <br />My next tutorial will be "hello world" using the new MVC framework included in Joomla! 1.5, so keep in touch.     
+    <br />
+    <br />If you like to see languages support:
+    <br /> 1) Copy "cs-CZ" directory (installation\language\cs-CZ) into "language" directory (language\cs-CZ)       
+    <br /> 2) copy "cs-CZ" directory (installation\language\cs-CZ) into "administrator\language" directory (administrator\language\cs-CZ)
+    <br /> 3) Choose Czech language for site and for administration.
+  </p>]]></description> 
+
+	<!-- Custom Install Script to execute 
+	<installfile>install.eventlist.php</installfile>
+	-->
+	<!-- Custom Uninstall Script to execute 
+	<uninstallfile>uninstall.eventlist.php</uninstallfile>
+  -->
+	<!-- Install Database Section 
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">install.mysql.utf8.sql</file>
+			<file driver="mysql">install.mysql.nonutf8.sql</file>
+		</sql>
+	</install>
+	-->
+	<!-- Uninstall Database Section 
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">uninstall.mysql.utf8.sql</file>
+			<file driver="mysql">uninstall.mysql.nonutf8.sql</file>
+		</sql>
+	</uninstall>
+-->
+	<!-- Site Main File Copy Section-->
+	<files>
+		<filename>index.html</filename>
+		<filename>helloworld.php</filename>
+	</files>
+	 
+	<!-- Site Main Language File Copy Section -->
+	<languages>
+		<language tag="en-GB">en-GB.com_helloworld.ini</language>
+		<language tag="cs-CZ">cs-CZ.com_helloworld.ini</language>
+	</languages>
+	
+	
+	<!-- Site Main Media File Copy Section 
+	<media destination="com_helloworld">
+		<filename>helloworld.png</filename>
+	</media>
+-->
+	<administration>
+	
+		<!-- Administration Menu Section -->
+		<menu img="components/com_helloworld/images/helloworld.png">Hello World</menu>
+		<submenu>
+			<!-- Note that all & must be escaped to &amp; for the file to be valid XML and be parsed by the installer -->
+			<menu link="option=com_helloworld&amp;task=helloworld">Hello World!</menu>
+			<menu link="option=com_helloworld&amp;task=helloagain">Hello Again!</menu>
+			<menu link="option=com_helloworld&amp;task=hellotestfoo">Testing Foo Function</menu>
+		</submenu>
+		
+		<!-- Administration Main File Copy Section -->
+		<!-- Note the folder attribute: This attribute describes the folder
+			to copy FROM in the package to install therefore files copied
+			in this section are copied from /admin/ in the package -->
+		<files folder="admin">
+		 <filename>index.html</filename>
+		 <filename>admin.helloworld.php</filename>
+		 <filename>admin.helloworld.html.php</filename>		
+     <filename>assets/index.html</filename>	
+     <filename>images/index.html</filename>	
+     <filename>images/helloworld.png</filename>
+		</files>
+		
+		<!-- Administration Language File Copy Section -->
+		<languages folder="admin">
+			<language tag="en-GB">en-GB.com_helloworld.ini</language>
+			<language tag="cs-CZ">cs-CZ.com_helloworld.ini</language>
+		</languages>
+		
+		<!-- Administration Main Media File Copy Section -->
+		<media folder="admin" destination="com_helloworld/images">
+	  	<filename>images/helloworld.png</filename>
+		</media>
+		-->
+	</administration>
+</install>
