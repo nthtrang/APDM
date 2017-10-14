@@ -57,7 +57,17 @@ function DeletePnsChild(){
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			<tr align="right">
-			<td align="right"><input type="button" name="btinsert" value="Delete" onclick="DeletePnsChild();" /> </td>	
+			<td align="right">
+                        <?php
+                                 if($this->pns_status!='Release')
+                        {
+                                ?>
+                                <input type="button" name="btinsert" value="Delete" onclick="DeletePnsChild();" /> 
+                        <?php
+                        }
+                        ?>
+                        
+                        </td>	
 		</tr>
 		</tr>			
 </table>

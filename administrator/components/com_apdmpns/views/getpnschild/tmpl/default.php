@@ -57,7 +57,14 @@ function UpdatePnsChild(){
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value=='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			<tr align="right">
-			<td align="right"><input type="button" name="btinsert" value="Insert" onclick="UpdatePnsChild();" /> </td>	
+			<td align="right"><?php
+                        if($this->pns_status!='Release')
+                        {
+                                ?><input type="button" name="btinsert" value="Insert" onclick="UpdatePnsChild();" /> 
+                        <?php
+                        }
+                        ?>
+                        </td>	
 		</tr>
 		</tr>			
 </table>

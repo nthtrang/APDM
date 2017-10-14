@@ -153,7 +153,11 @@ class pnsViewpns_info extends JView
         $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
-        $lists['status'] = JHTML::_('select.genericlist',   $status, 'pns_status', 'class="inputbox" size="1"', 'value', 'text', $row->pns_status );
+        //check if status is released => disable option
+        $classDisabled = "";
+        if($row->pns_status=='Release')
+            $classDisabled = 'disabled = "disabled"';    
+        $lists['status'] = JHTML::_('select.genericlist',   $status, 'pns_status', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->pns_status );
         //for edit pns
          $lists['arr_v'] = $arr_vendor;
          $lists['arr_s'] = $arr_supplier;
@@ -164,6 +168,7 @@ class pnsViewpns_info extends JView
 		$this->assignRef('row',	$row);
         $this->assignRef('arr_parent_code_detail', $arr_parent_code_detail);
         $this->assignRef('cd', $cd);
+        $this->assignRef('pns_status', $row->pns_status);
         
 		parent::display($tpl);
 	}

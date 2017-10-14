@@ -54,7 +54,11 @@ class ecoViewupdate extends JView
 		$status_s[] = JHTML::_('select.option', 'Pending', JText::_('Pending') , 'value', 'text'); 
 		$status_s[] = JHTML::_('select.option', 'Released', JText::_('Released') , 'value', 'text'); 
 		$status_s[] = JHTML::_('select.option', 'Reject', JText::_('Reject') , 'value', 'text'); 
-		$lists['status']   =  JHTML::_('select.genericlist',   $status_s, 'eco_status', 'class="inputbox" size="1" ', 'value', 'text', $row->eco_status ); 
+                //check if status is released => disable option
+                $classDisabled = "";
+                if($row->eco_status=='Released')
+                    $classDisabled = 'disabled = "disabled"';   
+		$lists['status']   =  JHTML::_('select.genericlist',   $status_s, 'eco_status', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->eco_status ); 
 		
 		
 /*    

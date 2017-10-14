@@ -180,6 +180,12 @@ class ECOController extends JController
 			    JError::raiseError( 500, $db->stderr() );
 			    return false;
 		    }else{
+                            if($row->eco_status=='Released')
+                            {
+                                $query = 'update apdm_pns set pns_status= "Release" where eco_id = '.$row->eco_id.'';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
 			    if ($isNew){
 				    $what = "W";
 			    }else{
