@@ -308,7 +308,39 @@
 				
 			</table>
 		</fieldset>
-		
+		<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
+                
+                			<table class="admintable">
+				<?php if (count($this->arr_status) > 0 ) { ?>
+					<tr>
+						<td colspan="2">
+						<table width="100%"  class="adminlist" cellpadding="1">						
+						<thead>
+							<th colspan="3"><?php echo JText::_('List Approvers ')?></th>
+						</thead>
+						<tr>
+							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="45%"><strong><?php echo JText::_('Email')?> </strong></td>
+							<td width="30%"><strong><?php echo JText::_('Status')?> </strong></td>							
+						</tr>
+						<?php $i = 1; 
+					foreach ($this->arr_status as $status) { 
+						?>
+							<tr>
+							<td><?php echo $i?></td>
+							<td><?php echo $status->email;?></td>
+							<td><?php echo $status->eco_status;?></td>
+						</tr>
+						<?php $i++; } ?>
+						</table>
+						</td>
+					</tr>
+				<?php  
+				} ?>
+			</table>
+                
+                </fieldset>
 	</div>
 	
 	<div class="clr"></div>

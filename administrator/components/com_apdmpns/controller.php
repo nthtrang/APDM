@@ -42,7 +42,7 @@ class PNsController extends JController
         $this->registerTask( 'ajax_list_pns', 'ajax_list_pns' ); 
         $this->registerTask( 'list_child', 'list_child' );   
         $this->registerTask( 'list_where_used', 'list_where_used' );   
-       
+
 	}
 
 	/**
@@ -1518,6 +1518,12 @@ class PNsController extends JController
         } 
               
         return $result;
+    }
+    function DisplayPnsAllChildId($pns_id){  
+        $db =& JFactory::getDBO();
+        $rows = array();
+        $db->setQuery('SELECT pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent='.$pns_id);
+        return $result = $db->loadObjectList();
     }
     function GetEcoValue($eco_id){
         $db = & JFactory::getDBO();

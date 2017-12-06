@@ -39,10 +39,15 @@ class ecoViewupdate extends JView
 		$db 		=& JFactory::getDBO();
 		$row = & JTable::getInstance('apdmeco');	
         $arr_file = array();
+        $arr_status = array();
 		if($edit){
 			$row->load($cid[0]);
             $db->setQuery("SELECT * FROM apdm_eco_files WHERE eco_id=".$cid[0]);
             $arr_file = $db->loadObjectList();
+            
+            //viet status	
+            $db->setQuery("SELECT * FROM apdm_eco_status WHERE eco_id=".$cid[0]);
+            $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase
 		$db->setQuery("SELECT username FROM apdm_users WHERE user_enable=0 ORDER BY username ");
@@ -58,7 +63,7 @@ class ecoViewupdate extends JView
                 $classDisabled = "";
                 if($row->eco_status=='Released')
                     $classDisabled = 'disabled = "disabled"';   
-		$lists['status']   =  JHTML::_('select.genericlist',   $status_s, 'eco_status', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->eco_status ); 
+		$lists['status']   =  JHTML::_('select.genericlist',   $status_s, 'eco_status_tmp', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->eco_status ); 
 		
 		
 /*    
@@ -99,6 +104,7 @@ class ecoViewupdate extends JView
 		$this->assignRef('row',	$row);
 		$this->assignRef('list_user',	$list_user);
         $this->assignRef('arr_file',    $arr_file);
+        $this->assignRef('arr_status',    $arr_status);
 		parent::display($tpl);
 	}
 }

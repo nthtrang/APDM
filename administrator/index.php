@@ -11,6 +11,9 @@
 * See COPYRIGHT.php for copyright notices and details.
 */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 // Set flag that this is a parent file
 define( '_JEXEC', 1 );
 
