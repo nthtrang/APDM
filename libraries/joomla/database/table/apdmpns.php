@@ -67,6 +67,10 @@ class JTableAPDMpns extends JTable
 	
 	
 	var $pns_deleted		= null;
+        var $pns_life_cycle		= null;
+        var $pns_uom		= null;
+        var $pns_cost		= null;
+        var $pns_stock		= null;
 
 	/**
 	* @param database A database connector object

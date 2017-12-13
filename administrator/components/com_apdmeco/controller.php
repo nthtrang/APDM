@@ -32,6 +32,7 @@ class ECOController extends JController
 		$this->registerTask( 'unblock', 'block' );
 		$this->registerTask( 'download', 'download' );
         $this->registerTask( 'export', 'export' ); 
+        $this->registerTask( 'files'  , 	'files'  );        
 	}
 
 	/**
@@ -284,7 +285,11 @@ class ECOController extends JController
 			    }
 			    
 		    }
-		    
+		    //viec loghistory
+                    $queryLog = "insert into `apdm_eco_affected`(`eco_id`,`eco_name`,`eco_description`,`eco_status`,`eco_project`,`eco_type`,`eco_field_impact`,`eco_reason`,`eco_what`,`eco_special`,`eco_benefit`,`eco_technical`,`eco_tech_design`,`eco_estimated`,`eco_estimated_cogs`,`eco_target`,`eco_modified`,`eco_modified_by`) values ".
+                            "('".$row->eco_id."','".$row->eco_name."','".$row->eco_description."','".$row->eco_status."','".$row->eco_project."','".$row->eco_type."','".$row->eco_field_impact."','".$row->eco_reason."','".$row->eco_what."','".$row->eco_special."','".$row->eco_benefit."','".$row->eco_technical."','".$row->eco_tech_design."','".$row->eco_estimated."','".$row->eco_estimated_cogs."','".$row->eco_target."','".$row->eco_modified."',$row->eco_modified_by)";
+                            $db->setQuery($queryLog);
+                    $db->query();
 		    switch ( $this->getTask() )
 		    {
 			    case 'apply':
@@ -729,13 +734,29 @@ class ECOController extends JController
         echo $result;
         exit;
     }
-/**
-	Read filesize of file
-*/
-	function Readfilesize($filename){
-      $path = JPATH_SITE.DS.'uploads'.DS.'eco'.DS;   
-      $filesize =  ceil ( filesize($path.$filename) / 1000 ) ;
-      return $filesize;
-   }
-	
+        /**
+        Read filesize of file
+        */
+        function Readfilesize($filename){
+                $path = JPATH_SITE.DS.'uploads'.DS.'eco'.DS;   
+                $filesize =  ceil ( filesize($path.$filename) / 1000 ) ;
+                return $filesize;
+        }
+        /**
+                * Display all files eco
+        */	
+        function files(){
+                JRequest::setVar( 'layout', 'files'  );
+                JRequest::setVar( 'view', 'update' );
+                parent::display();
+        }
+    
+        /**
+                * Display all files eco
+        */	
+        function affected(){
+                JRequest::setVar( 'layout', 'affected'  );
+                JRequest::setVar( 'view', 'update' );
+                parent::display();
+        }        
 }

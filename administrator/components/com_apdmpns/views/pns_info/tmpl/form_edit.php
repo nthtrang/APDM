@@ -130,9 +130,10 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" onkeypress="return CharatersOnlyEspecial(this, event)" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+                                                <?php echo $this->row->pns_revision;?>
+						<input type="hidden" onkeypress="return CharatersOnlyEspecial(this, event)" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
 						<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
-<input type="button" name="RevRoll" value="<?php echo JText::_('Rev Roll')?>" onclick="get_rev_roll();"/>
+<input type="hidden" name="RevRoll" value="<?php echo JText::_('Rev Roll')?>" onclick="get_rev_roll();"/>
 						
 					</td>
 				</tr>
@@ -162,25 +163,25 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<!--<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_PARENT' ); ?>
+							<?php //echo JText::_( 'PNS_PARENT' ); ?>
 						</label>
 					</td>
 					<td valign="top">
 						<?php 
-							if (count($this->lists['where_use']) > 0) { ?>
+							/*if (count($this->lists['where_use']) > 0) { ?>
 								<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
 <input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
 							<?php	
 							}else {
 								echo JText::_('NONE_PNS_USE');
-							}
+							}*/
 						?>
 						
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -233,6 +234,26 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
+							<?php echo JText::_( 'Life Cycle' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->lists['life_cycle']?>
+					</td>
+				</tr>					
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'UOM' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->lists['uom']?>
+					</td>
+				</tr>	                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
 							<?php echo JText::_( 'Date Create' ); ?>
 						</label>
 					</td>
@@ -275,7 +296,6 @@
 
 					</td>
 				</tr>
-				
 				
 			</table>
 		</fieldset>

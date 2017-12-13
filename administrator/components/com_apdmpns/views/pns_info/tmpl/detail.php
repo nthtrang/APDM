@@ -9,12 +9,17 @@
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
-	if (in_array("E", $role)) {
+	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
 		JToolBarHelper::editListX();
 		
 	}
+        else
+        {
+                JToolBarHelper::customX("Cannotedit", 'cannotedit', '', 'Cannotedit', false);
+        }
 	if (in_array("W", $role)) {
-		JToolBarHelper::addNew();
+                //viet comment
+		//JToolBarHelper::addNew();
 	}
 	
 	JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -94,27 +99,27 @@
 						
 					</td>
 				</tr>
-				<tr>
+				<!--<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_PARENT' ); ?>
+							<?php //echo JText::_( 'PNS_PARENT' ); ?>
 						</label>
 					</td>
 					<td valign="top">
 						<?php 
-							if (count($this->lists['where_use']) > 0) {								
+						//	if (count($this->lists['where_use']) > 0) {								
 								?>
 								<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
-<input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
+<input type="button" name="where_used" value="<?php //echo JText::_('List PNs')?>"/>
 </a>
 							<?php	
-							}else{
-								echo JText::_('NONE_PNS_USE');
-							}
+							//}else{
+						//		echo JText::_('NONE_PNS_USE');
+						//	}
 						?>
 						
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -155,6 +160,26 @@
 						<?php echo $this->row->pns_status; ?>
 					</td>
 				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Life Cycle' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_life_cycle; ?>
+					</td>
+				</tr>					
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'UOM' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_uom; ?>
+					</td>
+				</tr>	
 						<tr>
 					<td class="key" valign="top">
 						<label for="username">

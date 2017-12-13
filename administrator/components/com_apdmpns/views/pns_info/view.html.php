@@ -147,12 +147,18 @@ class pnsViewpns_info extends JView
         $lists['mf'] = JHTML::_('select.genericlist',   $mfs, 'manufacture_id[]', 'class="inputbox" size="1"', 'value', 'text' );
         //GET list status of PNS
         $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
+        
+        $status[] = JHTML::_('select.option',  'Active', JText::_( 'Active' ) , 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Inactive', JText::_( 'Inactive' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Obsolete',  JText::_( 'Obsolete' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'DoNotUse',  JText::_( 'Do Not Use' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Engineering', JText::_( 'Engineering' ), 'value', 'text');         
         //check if status is released => disable option
         $classDisabled = "";
         if($row->pns_status=='Release')
@@ -169,6 +175,24 @@ class pnsViewpns_info extends JView
         $this->assignRef('arr_parent_code_detail', $arr_parent_code_detail);
         $this->assignRef('cd', $cd);
         $this->assignRef('pns_status', $row->pns_status);
+        //viec add life cycle
+        $lifeValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_LIFE_CYCLE' ) .' -', 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Create', JText::_( 'Create' ) , 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Inreview', JText::_( 'In Review' ), 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Released',  JText::_( 'Released' ), 'value', 'text');
+        $lists['life_cycle'] = JHTML::_('select.genericlist',   $lifeValue, 'pns_life_cycle', 'class="inputbox" size="1"', 'value', 'text',$row->pns_life_cycle );
+        $this->assignRef('pns_life_cycle', $row->pns_life_cycle);
+        //viec add pns_uom
+        $uomValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_UOM' ) .' -', 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Each', JText::_( 'Each (ea)' ) , 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Undefined', JText::_( 'Undefined' ), 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Meter',  JText::_( 'Meter (m)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Centimeter',  JText::_( 'Centimeter (cm)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Foot',  JText::_( 'Foot (ft)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Inch',  JText::_( 'Inch (in)' ), 'value', 'text');
+        $lists['uom'] = JHTML::_('select.genericlist',   $uomValue, 'pns_uom', 'class="inputbox" size="1"', 'value', 'text',$row->pns_uom );
+        $this->assignRef('pns_uom', $row->pns_uom);
+        
         
 		parent::display($tpl);
 	}

@@ -10,10 +10,10 @@
 		JToolBarHelper::customX('export', 'excel', '', 'Export', false);
 	}	
 	if (in_array("D", $role)) {
-		JToolBarHelper::deleteList('Are you sure to delete it(s)?');
+		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
 	}
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+		//JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNewX();

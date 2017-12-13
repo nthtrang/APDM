@@ -285,7 +285,7 @@ function get_number_eco(){
 	<div class="col width-40">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
-			<table class="admintable">
+			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_file) > 0 ) { ?>
 					<tr>
 						<td colspan="2">
@@ -412,7 +412,7 @@ function get_number_eco(){
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
                 
-                			<table class="admintable">
+                			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_status) > 0 ) { ?>
 					<tr>
 						<td colspan="2">

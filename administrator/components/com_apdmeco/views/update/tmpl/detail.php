@@ -6,14 +6,17 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Detail' ).' ]</small></small>' , 'generic.png' );	
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>' , 'generic.png' );	
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role)) {
 		JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {
-		JToolBarHelper::addNewX();
+	//	JToolBarHelper::addNewX();
 	}
+        JToolBarHelper::customX("files", 'files', '', 'Files', false);
+        JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
+        
 	JToolBarHelper::cancel( 'cancel', 'Close' );
 
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -44,6 +47,14 @@
 			submitform( pressbutton );
 			return;
 		}
+		if (pressbutton == 'files') {
+			  window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id?>");
+			return;
+		}  
+		if (pressbutton == 'affected') {
+			  window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id?>");
+			return;
+		}                  
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");	
 	}
 </script>
@@ -51,7 +62,7 @@
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-60">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'INFORMATION_DETAIL' ); ?></legend>
+		<legend><?php echo JText::_( 'Summary' ); ?></legend>
 			<table class="admintable" cellspacing="1">				
 				<tr>
 					<td class="key" valign="top">
@@ -226,7 +237,7 @@
 	<div class="col width-40">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?></legend>
-			<table class="admintable">
+			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_file) > 0 ) { ?>
 					<tr>
 						<td colspan="2">
@@ -311,7 +322,7 @@
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
                 
-                			<table class="admintable">
+                			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_status) > 0 ) { ?>
 					<tr>
 						<td colspan="2">

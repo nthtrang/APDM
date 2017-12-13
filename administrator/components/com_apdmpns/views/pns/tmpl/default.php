@@ -14,7 +14,8 @@
       JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
 	}
 	if (in_array("D", $role)) {
-		JToolBarHelper::deleteList('Are you sure to delete it(s)?');
+                //viet comment
+		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
 	}
 	if (in_array("E", $role)) {
 		JToolBarHelper::editListX();

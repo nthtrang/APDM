@@ -216,8 +216,7 @@
 					<td>
 						<?php echo $this->lists['status']?>
 					</td>
-				</tr>
-				
+				</tr>			
 				
 			</table>
 		</fieldset>

@@ -673,7 +673,7 @@ class PNsController extends JController
         $row        = & JTable::getInstance('apdmpns');
         $datenow    =& JFactory::getDate(); 
         $post       =  JRequest::get('post');
-        
+
         $pns_parent = JRequest::getVar('pns_parent',  array(), '', 'array');
         $pns_child = JRequest::getVar('pns_child',  array(), '', 'array');
         $pns_revision_old  = JRequest::getVar('pns_revision_old');
@@ -685,7 +685,8 @@ class PNsController extends JController
             JError::raiseError( 500, $db->stderr() );
             return false;
         } 
-        
+         $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
+           $row->pns_uom = JRequest::getVar('pns_uom');
         $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS;    
         
         if ($pns_revision ==$pns_revision_old ){
@@ -2457,5 +2458,8 @@ function getcurrentdir($path=".") {
         }
         
         return $dirarr;
+        /*
+          alter table `apdm`.`apdm_pns` add column `pns_life_cycle` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_deleted`, add column `pns_uom` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_life_cycle`, add column `pns_cost` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_uom`, add column `pns_stock` int (11) DEFAULT '0' NULL  after `pns_cost`;
+         */
 }// end func
 }
