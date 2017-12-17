@@ -235,7 +235,7 @@
 		</fieldset>
 	</div>
 	<div class="col width-40">
-		<fieldset class="adminform">
+		<!--<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?></legend>
 			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_file) > 0 ) { ?>
@@ -271,7 +271,7 @@
 				
 				
 			</table>
-		</fieldset>
+		</fieldset>-->
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Parameters' ); ?></legend>
 			<table class="admintable">

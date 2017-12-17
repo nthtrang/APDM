@@ -56,7 +56,7 @@
 </script>
 
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
-	<div class="col width-60">
+	<div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?></legend>
 			<table class="admintable" width="100%">
