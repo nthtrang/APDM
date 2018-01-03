@@ -179,7 +179,7 @@
 					<td>
 						<?php echo $this->row->pns_uom; ?>
 					</td>
-				</tr>	
+				<!--</tr>	
 						<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -201,7 +201,7 @@
  						<?php echo GetValueUser($this->row->pns_create_by, "username"); ?>
 
 					</td>
-				</tr>
+				</tr>-->
 				
 				<tr>
 					<td class="key" valign="top">

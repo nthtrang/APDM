@@ -5,8 +5,10 @@
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
-	
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Files' ).' ]</small></small>' , 'generic.png' );	
+	$tabsummary = '<button onclick="javascript:hideMainMenu(); submitbutton(\'summary\')" class="buttonfiles" style="vertical-align:middle"><span>Summary </span></button>';
+        $tabaffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Files' ).' ]</small></small>'.$tabsummary.$tabaffected , 'generic.png' );	
 	//JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role)) {
 		//JToolBarHelper::editListX();
@@ -14,8 +16,8 @@
 	if (in_array("W", $role)) {
 	//	JToolBarHelper::addNewX();
 	}
-        JToolBarHelper::customX("summary", 'summary', '', 'Summary', false);
-        JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
+       // JToolBarHelper::customX("summary", 'summary', '', 'Summary', false);
+       // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 
 	JToolBarHelper::cancel( 'cancel', 'Close' );
 
@@ -28,6 +30,37 @@
 
 	
 ?>
+<style>
+        .buttonfiles {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f49542;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 120px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+.buttonaffected {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f49542;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 180px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
+</style>
 <script language="javascript" type="text/javascript">
 	function submitbutton(pressbutton) {
 		var form = document.adminForm;

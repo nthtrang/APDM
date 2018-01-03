@@ -6,8 +6,10 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
+        $demote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'demote\')" class="buttonfiles" style="vertical-align:middle"><span>Demote </span></button>';
+        $promote  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="buttonaffected" style="vertical-align:middle"><span>Promote</span></button>';
 
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. $text .' ]</small></small>'.$demote.$promote , 'generic.png' );
 	if (!intval($edit)) {
 		JToolBarHelper::save('save', 'Save & Add new');
 	}
@@ -37,6 +39,14 @@
 			submitform( pressbutton );
 			return;
 		}
+                if (pressbutton == 'demote') {
+			  window.location.assign("index.php?option=com_apdmeco&task=demote&cid[]=<?php echo $this->row->eco_id?>&time=<?php echo time();?>");
+			return;
+		}  
+		if (pressbutton == 'promote') {
+			  window.location.assign("index.php?option=com_apdmeco&task=promote&cid[]=<?php echo $this->row->eco_id?>&time=<?php echo time();?>");
+			return;
+		}    
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
 	
 		if (trim(form.eco_name.value) == 0) {
@@ -83,7 +93,37 @@ function get_number_eco(){
 		}).request();
 }
 </script>
+<style>
+        .buttonfiles {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 120px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
 
+.buttonaffected {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 180px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
+</style>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-60">
 		<fieldset class="adminform">
@@ -251,13 +291,15 @@ function get_number_eco(){
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'STATUS' ); ?>
+							<?php echo JText::_( 'Life Cicle' ); ?>
 						</label>
 					</td>
 					<td>
 						<?php echo $this->lists['status']?>
 					</td>
 				</tr>
+                                
+
 				<tr>
 					<td><?php echo JText::_('SEND_MAIL');?></td>
 					<td><input type="checkbox" name="check_sendmail" id="check_sendmail" value="1" onclick="display_block();" /></td>

@@ -40,6 +40,7 @@ class ecoViewupdate extends JView
 		$row = & JTable::getInstance('apdmeco');	
         $arr_file = array();
         $arr_status = array();
+         
         $arr_affected = array();
 		if($edit){
 			$row->load($cid[0]);
@@ -60,16 +61,23 @@ class ecoViewupdate extends JView
 		$lists['activate'] 	= JHTML::_('select.booleanlist',  'eco_activate', 'class="inputbox" size="1"', $eco_activate );
 		//for eco actiave (statis)
 		//$status_s[] = JHTML::_('select.option', '', JText::_('SELECT_STATUS') , 'value', 'text'); 
-		$status_s[] = JHTML::_('select.option', 'Pending', JText::_('Pending') , 'value', 'text'); 
+		$status_s[] = JHTML::_('select.option', 'Create', JText::_('Create') , 'value', 'text'); 
+		$status_s[] = JHTML::_('select.option', 'Inreview', JText::_('In Review') , 'value', 'text'); 
 		$status_s[] = JHTML::_('select.option', 'Released', JText::_('Released') , 'value', 'text'); 
-		$status_s[] = JHTML::_('select.option', 'Reject', JText::_('Reject') , 'value', 'text'); 
                 //check if status is released => disable option
                 $classDisabled = "";
-                if($row->eco_status=='Released')
+               // if($row->eco_status=='Released')
                     $classDisabled = 'disabled = "disabled"';   
 		$lists['status']   =  JHTML::_('select.genericlist',   $status_s, 'eco_status_tmp', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->eco_status ); 
 		
-		
+                //viec chnage status=lifecycle
+                $life_cycle_s[] = JHTML::_('select.option', 'Create', JText::_('Create') , 'value', 'text'); 
+		$life_cycle_s[] = JHTML::_('select.option', 'Inreview', JText::_('In Review') , 'value', 'text'); 
+		$life_cycle_s[] = JHTML::_('select.option', 'eleased', JText::_('Released') , 'value', 'text'); 
+		 $classDisabled = "";
+                if($row->eco_lifecycle=='Released')
+                    $classDisabled = 'disabled = "disabled"';   
+		$lists['lifecycle']   =  JHTML::_('select.genericlist',   $life_cycle_s, 'eco_lifecycle', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->eco_lifecycle ); 
 /*    
 		$type[] =    JHTML::_('select.option', JText::_('TYPE_UNASSIGNED'), JText::_('TYPE_UNASSIGNED') , 'value', 'text'); 
         $type[] =    JHTML::_('select.option', JText::_('TYPE_BUSINESS_PROCEDURE'), JText::_('TYPE_BUSINESS_PROCEDURE') , 'value', 'text');   
