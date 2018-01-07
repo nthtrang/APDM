@@ -501,6 +501,23 @@ class JToolBarHelper
 
 		$mainframe->set('JComponentTitle', $html);
 	}
+        function addPns($alt = 'New',$eco_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_pns_eco&tmpl=component&cid[]=$eco_id", 850,500 );
+	}
+  
+	function deletePns($msg = '', $task = 'removepns', $alt = 'Delete')
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add a delete button
+		if ($msg) {
+			$bar->appendButton( 'Confirm', $msg, 'delete', $alt, $task, true, false );
+		} else {
+			$bar->appendButton( 'Standard', 'delete', $alt, $task, true, false );
+		}
+	}        
 }
 
 /**
@@ -515,5 +532,6 @@ class JSubMenuHelper
 		$menu = &JToolBar::getInstance('submenu');
 		$menu->appendButton($name, $link, $active);
 	}
+
 }
 ?>

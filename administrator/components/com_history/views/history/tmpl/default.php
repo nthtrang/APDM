@@ -7,7 +7,6 @@
 	JToolBarHelper::deleteList('Are you sure to delete it?');
 	JToolBarHelper::cancel();
 ?>
-
 <form action="index.php?option=com_history" method="post" name="adminForm">
 	<table>
 		<tr>

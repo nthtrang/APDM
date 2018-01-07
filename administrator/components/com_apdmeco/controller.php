@@ -756,8 +756,10 @@ class ECOController extends JController
                 * Display all files eco
         */	
         function affected(){
-                JRequest::setVar( 'layout', 'affected'  );
-                JRequest::setVar( 'view', 'update' );
+//                JRequest::setVar( 'layout', 'affected'  );
+//                JRequest::setVar( 'view', 'listpns' );
+                JRequest::setVar( 'layout', 'default'  );
+                JRequest::setVar( 'view', 'listpns' );                
                 parent::display();
         }       
                 /**
@@ -852,5 +854,58 @@ class ECOController extends JController
                                 $msg = JText::sprintf( 'Successfully Promote',$cid[0]  );
 				    $this->setRedirect( 'index.php?option=com_apdmeco&task=detail&cid[]='. $cid[0], $msg );
                                             
-        }     
+        }
+        /*
+          * type_id 4
+          */        
+         function  GetPnManufacture($pns_id){
+             $db = & JFactory::getDBO();
+             $rows  = array();
+             $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.pns_id =".$pns_id;
+
+             $db->setQuery($query);
+             $result = $db->loadObjectList();
+             if (count($result) > 0){
+                 foreach ($result as $obj){
+                     $rows[] = array('mf'=>$obj->info_name, 'v_mf'=>$obj->supplier_info);
+                 }
+             }
+             return $rows;
+         }
+         /*
+          * type_id 2
+          */
+         function GetPnVendor($pns_id)
+         {
+             $db = & JFactory::getDBO();
+             $rows  = array();
+             $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 2 AND  p.pns_id =".$pns_id;
+             $db->setQuery($query);
+             $result = $db->loadObjectList();
+             if (count($result) > 0){
+                 foreach ($result as $obj){
+                     $rows[] = array('vendor_name'=>$obj->info_name, 'vendor_info'=>$obj->supplier_info);
+                 }
+             }
+             return $rows;
+         }
+         /*
+          * type_id 3
+          */
+          function GetPnSupplier($pns_id)
+         {
+             $db = & JFactory::getDBO();
+             $rows  = array();
+             $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 3 AND  p.pns_id =".$pns_id;
+             $db->setQuery($query);
+             $result = $db->loadObjectList();
+             if (count($result) > 0){
+                 foreach ($result as $obj){
+                     $rows[] = array('supplier_name'=>$obj->info_name, 'supplier_info'=>$obj->supplier_info);
+                 }
+             }
+             return $rows;
+         }
+                   
+        
 }

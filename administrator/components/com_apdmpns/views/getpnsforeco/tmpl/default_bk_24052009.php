@@ -1,29 +1,32 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
+
 <?php
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) , 'cpanel.png' );
+	if (in_array("V", $role)) { ?>
+	
+	<?php	JToolBarHelper::customX('export', 'excel', '', 'Export', false);
+	//	JToolBarHelper::editListX('detail', 'View Detail');
+	}
+	
 	if (in_array("E", $role)) {
-		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
-		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);
+		JToolBarHelper::customX('multi_upload', 'upload', '', 'Multi Uploads', false);
 		
 	}
-	if (in_array("V", $role)) { 	
-      JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
-	}
-	if (in_array("D", $role)) {
-                //viet comment
-		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
+		
+	if (in_array("W", $role)) {
+		JToolBarHelper::addNew();
 	}
 	if (in_array("E", $role)) {
 		JToolBarHelper::editListX();
 		
 	}
-	if (in_array("W", $role)) {
-		JToolBarHelper::addNew();
-	}
 	
+	if (in_array("D", $role)) {
+		JToolBarHelper::deleteList('Are you sure to delete it(s)?');
+	}
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -61,31 +64,9 @@ function submitbutton(pressbutton) {
 				form.task.value = '';
 				return;
 			}
-			if (pressbutton == 'next_upload_step2') {
-				if (form.boxchecked.value==0){
-					alert("Please select PNs to upload file!");
-				}else if (form.boxchecked.value <=10) {
-					submitform( pressbutton );
-						return;
-				}else{
-					alert("Please chooes less than 10 PNs to upload file. Thanks");
-					return false;
-				}
-				//
-			
-			}
-			if (pressbutton == 'next_upload_step1') {
-				if (form.boxchecked.value==0){
-					alert("Please select PNs to upload file!");
-				}else if (form.boxchecked.value <=5) {
-					submitform( pressbutton );
-						return;
-				}else{
-					alert("Please chooes less than 5 PNs to upload file. Thanks");
-					return false;
-				}
-				//
-			
+			if (pressbutton == 'multi_upload') {
+				submitform( pressbutton );
+				return;
 			}
 			
 			if (pressbutton == 'submit') {
@@ -117,18 +98,18 @@ function submitbutton(pressbutton) {
 				<?php echo $this->lists['type_filter'];?>
 				&nbsp;&nbsp;
 			<button onclick="javascript: return submitbutton('submit')"><?php echo JText::_( 'Go' ); ?></button>
-			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+			<button onclick="document.getElementById('text_search').value='';this.form.getElementById('type_filter').value='0';this.form.getElementById('filter_status').value='';this.form.getElementById('filter_type').value='';this.form.getElementById('filter_created_by').value='0';this.form.getElementById('filter_modified_by').value='0';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			
 		</tr>
 		<tr>
 			
-			<td align="right">
+			<td>
 			<?php echo $this->lists['status'];?>
-			
-			<?php echo $this->lists['pns_type'];?>
-			<?php echo $this->lists['pns_create_by'];?>
-			<?php echo $this->lists['pns_modified_by'];?></td>
+			</td>
+			<td><?php echo $this->lists['pns_type'];?></td>
+			<td><?php echo $this->lists['pns_create_by'];?></td>
+			<td><?php echo $this->lists['pns_modified_by'];?></td>
 		</tr>
 			
 </table>
@@ -144,13 +125,10 @@ function submitbutton(pressbutton) {
 				<th class="title" width="15%">
 					<?php echo JHTML::_('grid.sort',   JText::_('PART_NUMBER_CODE'), 'p.pns_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th width="5%" class="title" >
-					<?php echo JText::_( 'BOM' ); ?>
-				</th>
-				<th  class="title" width="10%">
+				<th  class="title" width="15%">
 					<?php echo JHTML::_('grid.sort',   JText::_('ECO'), 'p.eco_id', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th width="5%" class="title" >
+				<th width="15%" class="title" >
 					<?php echo JText::_( 'DOWNLOAD_PDF' ); ?>
 				</th>
 				
@@ -160,18 +138,24 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th class="title"  >
-					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
+				<th w class="title" >
+					<?php echo JHTML::_('grid.sort',   JText::_('Date Create'), 'p.pns_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
-				<th width="20%" class="title">
-					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+				<th w class="title">
+					<?php echo JHTML::_('grid.sort',   JText::_('Create by'), 'p.pns_create_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
+				<th w class="title">
+					<?php echo JHTML::_('grid.sort',   JText::_('Date Modified'), 'p.pns_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+				</th>
+				<th  class="title">
+					<?php echo JHTML::_('grid.sort',   JText::_('Modified By'), 'p.pns_modified_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+				</th>				
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="10">
+				<td colspan="11">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -184,15 +168,17 @@ function submitbutton(pressbutton) {
 			{
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+				if ($row->pns_revision !='')	{
+					$pns_code = PNsController::GetNameCCs($row->ccs_id).'-'.$row->pns_code.'-'.$row->pns_revision;
+				}else{
+					$pns_code = PNsController::GetNameCCs($row->ccs_id).'-'.$row->pns_code;
+				}
 				if ($row->pns_image !=''){
 					$pns_image = $path_image.$row->pns_image;
 				}else{
 					$pns_image = JText::_('NONE_IMAGE_PNS');
 				}
 				//echo $pns_image;
-				$mf = PNsController::GetManufacture($row->pns_id);
-				$bom = PNsController::GetChildParentNumber($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td>
@@ -204,27 +190,14 @@ function submitbutton(pressbutton) {
 				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
-				</td>	
-				<td>
-				<?php if ($bom) { ?>
-				<a href="index.php?option=com_apdmpns&task=listpns&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
-					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
-				<?php } else {?>
-					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
-				<?php } ?>
-	
-				</td>
+				</td>				
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>
 				<td>
 					<?php if($row->pns_pdf !="") { ?>
-					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
-					<?php }else{ ?>
-					<img src="images/downloads.png" width="16" height="16" border="0" alt="<?php echo JText::_('NONE_PDF_FILE')?>" />
-					<?php
-				
-					}?>
+					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="Click to download file pdf"><?php echo $row->pns_pdf;?></a>
+					<?php }else{ echo JText::_('NONE_PDF_FILE');}?>
 				</td>
 				<td align="center">
 					<?php echo $row->pns_status;?>
@@ -233,20 +206,17 @@ function submitbutton(pressbutton) {
 					<?php echo $row->pns_type;?>
 				</td>
 				<td>
-					<?php echo  $row->pns_description; ?>
+					<?php echo  JHTML::_('date', $row->pns_create, '%m-%d-%Y'); ?>
 				</td>
 				<td>
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo '<strong>-'.$m['mf'].': </strong>&nbsp;&nbsp;'.$m['v_mf'].'<br />';
-					}
-						
-					}else{
-						
-					}
-					 ?>
-				</td>				
+					<?php echo GetValueUser($row->pns_create_by, 'name'); ?>
+				</td>
+				<td nowrap="nowrap">
+						<?php echo ($row->pns_modified !='0000-00-00 00:00:00') ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
+				</td>
+				<td>
+					<?php echo GetValueUser($row->pns_modified_by, 'name'); ?>
+				</td>
 			</tr>
 			<?php
 				$k = 1 - $k;

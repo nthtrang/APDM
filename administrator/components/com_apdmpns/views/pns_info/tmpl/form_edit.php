@@ -49,7 +49,7 @@
 			return false;
 		}
 		if (form.pns_status.value==""){
-			alert("Please select Part Number Status");
+			alert("Please select Part Number Status/");
 			from.pns_status.focus();
 			return false;
 		}

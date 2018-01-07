@@ -2462,4 +2462,25 @@ function getcurrentdir($path=".") {
           alter table `apdm`.`apdm_pns` add column `pns_life_cycle` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_deleted`, add column `pns_uom` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_life_cycle`, add column `pns_cost` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_uom`, add column `pns_stock` int (11) DEFAULT '0' NULL  after `pns_cost`;
          */
 }// end func
+    function get_list_pns_eco(){
+        JRequest::setVar( 'layout', 'default'  );
+        JRequest::setVar( 'view', 'getpnsforeco' );
+        parent::display();
+    }
+    function ajax_add_pns(){
+             $db       =& JFactory::getDBO();
+        $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
+        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );                   
+        $db->setQuery("update apdm_pns set eco_id = ".$cid[0]." WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->query();      
+    }
+    function removepns(){
+        $db       =& JFactory::getDBO();
+        $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
+        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );
+        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->query();      
+        $msg = JText::_('Have deleted successfull.');
+	$this->setRedirect( 'index.php?option=com_apdmeco&task=affected&cid[]='.$cid[0], $msg);
+    }         
 }
