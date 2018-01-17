@@ -3,27 +3,30 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
-	$cid = JRequest::getVar( 'cid', array(0) );
-	$edit		= JRequest::getVar('edit',true);
-	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
+	$cid = JRequest::getVar('cid', array(0));
+$edit = JRequest::getVar('edit', true);
+$text = intval($edit) ? JText::_('Edit') : JText::_('New');
+$demote = $promote = "";
+$me = & JFactory::getUser();
+if (intval($edit) && $this->row->eco_create_by == $me->get('id')) {
         $demote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'demote\')" class="buttonfiles" style="vertical-align:middle"><span>Demote </span></button>';
-        $promote  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="buttonaffected" style="vertical-align:middle"><span>Promote</span></button>';
+        $promote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="buttonaffected" style="vertical-align:middle"><span>Promote</span></button>';
+}
+JToolBarHelper::title(JText::_('ECO_MANAGEMET') . ': <small><small>[ ' . $text . ' ]</small></small>' . $demote . $promote, 'generic.png');
+if (!intval($edit)) {
+        JToolBarHelper::save('save', 'Save & Add new');
+}
+JToolBarHelper::apply('apply', 'Save');
 
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. $text .' ]</small></small>'.$demote.$promote , 'generic.png' );
-	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}
-	JToolBarHelper::apply('apply', 'Save');
-	
-	if ( $edit ) {
-		// for existing items the button is renamed `close`
-		JToolBarHelper::cancel( 'cancel', 'Close' );
-	} else {
-		JToolBarHelper::cancel();
-	}
-	
-	$cparams = JComponentHelper::getParams ('com_media');
-	$editor = &JFactory::getEditor();
+if ($edit) {
+        // for existing items the button is renamed `close`
+        JToolBarHelper::cancel('cancel', 'Close');
+} else {
+        JToolBarHelper::cancel();
+}
+
+$cparams = JComponentHelper::getParams('com_media');
+$editor = &JFactory::getEditor();
 ?>
 
 <?php
@@ -125,7 +128,7 @@ function get_number_eco(){
 }
 </style>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
-	<div class="col width-60">
+	<div class="col width-50">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'INFORMATION_DETAIL' ); ?></legend>
 			<table class="admintable" cellspacing="1">				
@@ -300,31 +303,12 @@ function get_number_eco(){
 				</tr>
                                 
 
-				<tr>
-					<td><?php echo JText::_('SEND_MAIL');?></td>
-					<td><input type="checkbox" name="check_sendmail" id="check_sendmail" value="1" onclick="display_block();" /></td>
-				</tr>
-				<tr id="list_user" style="display:none">
-					<td valign="top"><?php echo JText::_('LIST_EMAIL_USER');?></td>
-					<td>
-					<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmusers&task=get_list&tmpl=component" title="<?php echo JText::_('Select User')?>">
-<input type="button" name="listUser" value="<?php echo JText::_('Select User')?>"/>
-</a></p>
-					<!--<select name="mail_user[]" multiple="multiple" size="10">
-					<?php //foreach ($this->list_user as $list) {?>
-						<option value="<?php //echo $list->username;?>"><?php //echo $list->username;?></option>
-					<?php //} ?>
-					</select>-->
-					<p id="listAjaxUser">
-					
-					</p>
-					</td>
-				</tr>
+				
 				
 			</table>
 		</fieldset>
 	</div>
-	<div class="col width-40">
+	<div class="col width-50">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
 			<table class="admintable" width="100%"  >
@@ -464,8 +448,8 @@ function get_number_eco(){
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Email')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Status')?> </strong></td>							
+							<td width="15%"><strong><?php echo JText::_('Email')?> </strong></td>
+							<td width="80%"><strong><?php echo JText::_('Approve Status')?> </strong></td>							
 						</tr>
 						<?php $i = 1; 
 					foreach ($this->arr_status as $status) { 
@@ -473,7 +457,23 @@ function get_number_eco(){
 							<tr>
 							<td><?php echo $i?></td>
 							<td><?php echo $status->email;?></td>
-							<td><?php echo $status->eco_status;?></td>
+							
+                                                        <td width="60%"><?php  
+                                                        if($status->eco_status != 'Released'){                                                          
+                                                       ?>
+                                                                <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id;?>&time=<?php echo time();?>'></a>
+                                                               <input type="radio" name="approve_status" id="approve_status1" value="Released"  class="inputbox" size="1"/>
+                                                                <label for="approve_status1">Approve</label>
+                                                                <input type="radio" name="approve_status" id="approve_status0" value="Inreview" checked="checked" class="inputbox" size="1"/>
+                                                                <label for="approve_status0">Reject</label>	
+                                                                <textarea cols="70" rows="6" id ="approve_note" name ='approve_note'><?php echo $status->note;?></textarea>
+                                                        <?php                                                         
+                                                        }
+                                                        elseif($status->eco_status == 'Released'){
+                                                                echo "Approved";
+                                                        }
+                                                       ?>
+                                                        </td>
 						</tr>
 						<?php $i++; } ?>
 						</table>
@@ -482,7 +482,32 @@ function get_number_eco(){
 				<?php  
 				} ?>
 			</table>
-                
+                <?php 
+                if (intval($edit) && $this->row->eco_create_by == $me->get('id')) {
+                ?>
+                <table class="admintable" >
+                <tr>
+					<td><?php echo JText::_('SEND_MAIL');?></td>
+					<td><input type="checkbox" name="check_sendmail" id="check_sendmail" value="1" onclick="display_block();" /></td>
+				</tr>
+				<tr id="list_user" style="display:none">
+					<td valign="top"><?php echo JText::_('LIST_EMAIL_USER');?></td>
+					<td>
+					<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmusers&task=get_list&tmpl=component" title="<?php echo JText::_('Select User')?>">
+<input type="button" name="listUser" value="<?php echo JText::_('Select User')?>"/>
+</a></p>
+					<!--<select name="mail_user[]" multiple="multiple" size="10">
+					<?php //foreach ($this->list_user as $list) {?>
+						<option value="<?php //echo $list->username;?>"><?php //echo $list->username;?></option>
+					<?php //} ?>
+					</select>-->
+					<p id="listAjaxUser">
+					
+					</p>
+					</td>
+				</tr>
+                </table>
+                 <?php }?>
                 </fieldset>
 	</div>
 	<div class="clr"></div>

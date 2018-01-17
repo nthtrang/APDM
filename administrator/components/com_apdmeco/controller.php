@@ -108,204 +108,206 @@ class ECOController extends JController
 	/**
 	 * Saves the record
 	 */
-	function save()
-	{
-		global $mainframe;
+	function save() {
+                global $mainframe;
 
-		// Check for request forgeries
-		JRequest::checkToken() or jexit( 'Invalid Token' );
+                // Check for request forgeries
+                JRequest::checkToken() or jexit('Invalid Token');
 
-		$option = JRequest::getCmd( 'option');
+                $option = JRequest::getCmd('option');
 
-		// Initialize some variables
-		$db			= & JFactory::getDBO();
-		$me			= & JFactory::getUser();
-		$check_senmail = JRequest::getVar('check_sendmail');
-		
-		$MailFrom	= $mainframe->getCfg('mailfrom');
-		$FromName	= $mainframe->getCfg('fromname');
-		$SiteName	= $mainframe->getCfg('sitename');
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $check_senmail = JRequest::getVar('check_sendmail');
 
-		
-		
-		//echo JPATH_SITE;
-		//upload file pdf
-        $row = & JTable::getInstance('apdmeco');
-        if (!$row->bind( JRequest::get('post'))) {
-            JError::raiseError( 500, $db->stderr() );
-            return false;
-        }
-        if (! $row->check()){
-            $msg = JText::_( 'This name eco have exist. Please input other name' );
-            $this->setRedirect( 'index.php?option=com_apdmeco&task=add', $msg ); 
-        }else{
-            $arr_file = array();
-		    for ($i=1; $i <= 10; $i++) {
-                $file_name = 'file'.$i;
-		        if($_FILES[$file_name]['size'] > 0){			
-			        $handle = new Upload($_FILES[$file_name]);
-			        //get root path
-			        $path_eco = JPATH_SITE.DS.'uploads'.DS.'eco'.DS;					
-			        if ($handle->uploaded) {			
-			          $handle->Process($path_eco);			 
-			          if ($handle->processed) {
-						$arr_file[]   = $handle->file_dst_name;
-			         }
-			        }
-		        }
-            }
-		    
-		    $row->eco_id = (int) $row->eco_id;
-		    $isNew = true;		
-			$IsCreater = 'create';		    
-		    if ($row->eco_id) {
-			    $isNew = false;
-				$IsCreater = 'update';
-			    $datenow =& JFactory::getDate();
-			    $row->eco_modified 	= $datenow->toMySQL();
-			    $row->eco_modified_by 	= $me->get('id');
-		    }
-		    $row->eco_create_by 	= $row->eco_create_by ? $row->eco_create_by : $me->get('id');
+                $MailFrom = $mainframe->getCfg('mailfrom');
+                $FromName = $mainframe->getCfg('fromname');
+                $SiteName = $mainframe->getCfg('sitename');
 
-		    if ($row->eco_create && strlen(trim( $row->eco_create )) <= 10) {
-			    $row->eco_create 	.= ' 00:00:00';
-		    }
-		    $config =& JFactory::getConfig();
-		    $tzoffset = $config->getValue('config.offset');
-		    $date =& JFactory::getDate($row->eco_create, $tzoffset);
-		    $row->eco_create = $date->toMySQL();
-		   
-		    
-		    // Store the content to the database
-		    if (!$row->store()) {
-			    JError::raiseError( 500, $db->stderr() );
-			    return false;
-		    }else{
+                $approve_status = JRequest::getVar('approve_status');
+                $approve_note = JRequest::getVar('approve_note');
+                
+
+                //echo JPATH_SITE;
+                //upload file pdf
+                $row = & JTable::getInstance('apdmeco');
+                if (!$row->bind(JRequest::get('post'))) {
+                        JError::raiseError(500, $db->stderr());
+                        return false;
+                }
+                if (!$row->check()) {
+                        $msg = JText::_('This name eco have exist. Please input other name');
+                        $this->setRedirect('index.php?option=com_apdmeco&task=add', $msg);
+                } else {
+                        $arr_file = array();
+                        for ($i = 1; $i <= 10; $i++) {
+                                $file_name = 'file' . $i;
+                                if ($_FILES[$file_name]['size'] > 0) {
+                                        $handle = new Upload($_FILES[$file_name]);
+                                        //get root path
+                                        $path_eco = JPATH_SITE . DS . 'uploads' . DS . 'eco' . DS;
+                                        if ($handle->uploaded) {
+                                                $handle->Process($path_eco);
+                                                if ($handle->processed) {
+                                                        $arr_file[] = $handle->file_dst_name;
+                                                }
+                                        }
+                                }
+                        }
+
+                        $row->eco_id = (int) $row->eco_id;
+                        $isNew = true;
+                        $IsCreater = 'create';
+                        if ($row->eco_id) {
+                                $isNew = false;
+                                $IsCreater = 'update';
+                                $datenow = & JFactory::getDate();
+                                $row->eco_modified = $datenow->toMySQL();
+                                $row->eco_modified_by = $me->get('id');
+                        }
+                        
+
+                        if ($row->eco_create && strlen(trim($row->eco_create)) <= 10) {
+                                $row->eco_create .= ' 00:00:00';
+                        }
+                        $config = & JFactory::getConfig();
+                        $tzoffset = $config->getValue('config.offset');
+                        $date = & JFactory::getDate($row->eco_create, $tzoffset);
+                        $row->eco_create = $date->toMySQL();
+
+
+                        // Store the content to the database
+                        if (!$row->store()) {
+                                JError::raiseError(500, $db->stderr());
+                                return false;
+                        } else {
 
 //                           if(JRequest::getVar('eco_status_tmp')=='Released')
 //                           {
-                               //viet add historyapprove       
-                                $query = 'update apdm_eco_status set eco_status= "'.JRequest::getVar('eco_status_tmp').'" where eco_id = '.$row->eco_id.' and email= "'.$me->get('email').'"';
-                                $db->setQuery($query);
-                                $db->query();	 
-                        //   }
-                           $db->setQuery('select count(*) from apdm_eco_status where eco_id = '.$row->eco_id.'');
-                		 $totalApprovers = $db->loadResult();
-                           //check all release
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Create" and eco_id = '.$row->eco_id.'');
-                		 $totalPending = $db->loadResult();
-                                if ($totalPending>0){
-                                      $row->eco_status = 'Create';//JRequest::getVar('eco_status_tmp');  
-                                      $row->store();    
-                                }
-                           //check all release
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = '.$row->eco_id.'');
-                		 $totalReleased = $db->loadResult();
-                                if ($totalApprovers == $totalReleased){
-                                      $row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');  
-                                      $row->store();    
-                                }
-                                  //check all reject
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Inreview" and eco_id = '.$row->eco_id.'');
-                		 $totalReject = $db->loadResult();
-                                if ($totalApprovers == $totalReject){
-                                      $row->eco_status = 'Inreview';//JRequest::getVar('eco_status_tmp');  
-                                      $row->store();    
-                                }
-                                
-                            if($row->eco_status=='Released')
-                            {
-                                $query = 'update apdm_pns set pns_status= "Release" where eco_id = '.$row->eco_id.'';
+//                           Temp not use
+                                //viet add historyapprove 
+                                                
+                                $query = 'update apdm_eco_status set eco_status= "' . $approve_status . '", note = "'.$approve_note.'" where eco_id = ' . $row->eco_id . ' and email= "' . $me->get('email') . '"';
                                 $db->setQuery($query);
                                 $db->query();
-                                             
-                            }
-			    if ($isNew){
-				    $what = "W";
-			    }else{
-				    $what = "E";
-			    }			
-			    JAdministrator::HistoryUser(5, $what, $row->eco_id);
-		    }
-    
-            if (count($arr_file) > 0 ){
-                foreach ($arr_file as $file){
-                    $query = "INSERT INTO apdm_eco_files (eco_id, file_name) VALUES (".$row->eco_id.", '".$file."') ";
-                    $db->setQuery($query);
-                    $db->query();
-                }
-            }
-		    if ($check_senmail){
-                            
-			    $arr_user = JRequest::getVar('mail_user', array(0), '', 'array');	
-                            
-			    //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
-				$subject = "[ADP] ECO ".$row->eco_status." notice - ".$row->eco_name;
-			    $message1 = "Please be noticed that this ECO has been ".$row->eco_status;
-				
-				if ($row->eco_status!='Released'){
-				$subject = "[ADP] ECO Approval request - ".$row->eco_name;
-				$message1 = "Please go to <a href='http://10.10.1.245/ADP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=".$row->eco_id."'>ADP</a> to approve/reject for this ECO";
-                                
-                                foreach ($arr_user as $user){
-                                          $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (".$row->eco_id.", '".$user."','".$row->eco_status."') ON DUPLICATE KEY UPDATE eco_status = '".$row->eco_status."'";
-                                         $db->setQuery($query);
+//                                //   }
+//                                $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $row->eco_id . '');
+//                                $totalApprovers = $db->loadResult();
+//                                //check all release
+//                                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Create" and eco_id = ' . $row->eco_id . '');
+//                                $totalPending = $db->loadResult();
+//                                if ($totalPending > 0) {
+//                                        $row->eco_status = 'Create'; //JRequest::getVar('eco_status_tmp');  
+//                                        $row->store();
+//                                }
+//                                //check all release
+//                                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $row->eco_id . '');
+//                                $totalReleased = $db->loadResult();
+//                                if ($totalApprovers == $totalReleased) {
+//                                        $row->eco_status = 'Released'; //JRequest::getVar('eco_status_tmp');  
+//                                        $row->store();
+//                                }
+//                                //check all reject
+//                                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Inreview" and eco_id = ' . $row->eco_id . '');
+//                                $totalReject = $db->loadResult();
+//                                if ($totalApprovers == $totalReject) {
+//                                        $row->eco_status = 'Inreview'; //JRequest::getVar('eco_status_tmp');  
+//                                        $row->store();
+//                                }
+
+                                if ($row->eco_status == 'Released') {
+                                        $query = 'update apdm_pns set pns_status= "Release" where eco_id = ' . $row->eco_id . '';
+                                        $db->setQuery($query);
                                         $db->query();
                                 }
-				}
-				
+                                if ($isNew) {
+                                        $row->eco_create_by = $row->eco_create_by ? $row->eco_create_by : $me->get('id');
+                                        //if create new set eco_status(lyfe_cycle) default is Create
+                                        $row->eco_status = 'Create';
+                                        $row->store();
+                                        $what = "W";
+                                } else {
+                                        $what = "E";
+                                }
+                                JAdministrator::HistoryUser(5, $what, $row->eco_id);
+                        }
 
-				$message2 = "<br>+ ECO #: ".$row->eco_name.
-									    "<br>+ Description: ".$row->eco_description. 
-							            "<br>+ Status: ".$row->eco_status.
+                        if (count($arr_file) > 0) {
+                                foreach ($arr_file as $file) {
+                                        $query = "INSERT INTO apdm_eco_files (eco_id, file_name) VALUES (" . $row->eco_id . ", '" . $file . "') ";
+                                        $db->setQuery($query);
+                                        $db->query();
+                                }
+                        }
+                        if ($check_senmail) {
+
+                                $arr_user = JRequest::getVar('mail_user', array(0), '', 'array');
+
+                                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                                $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
+                                $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+
+                                if ($row->eco_status != 'Released') {
+                                        $subject = "[ADP] ECO Approval request - " . $row->eco_name;
+                                        $message1 = "Please go to <a href='http://10.10.1.245/ADP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to approve/reject for this ECO";
+
+                                        foreach ($arr_user as $user) {
+                                                if($user!= $me->get('email'))
+                                                {
+                                                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $row->eco_id . ", '" . $user . "','" . $row->eco_status . "') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
+                                                        $db->setQuery($query);
+                                                        $db->query();
+                                                }
+                                        }
+                                }
 
 
-							            "<br>+ Created by: ".GetValueUser($row->eco_create_by, 'username').
-							            "<br>+ Date of create: ".$row->eco_create;
-				
-				$message = $message1 . $message2;
-				
+                                $message2 = "<br>+ ECO #: " . $row->eco_name .
+                                        "<br>+ Description: " . $row->eco_description .
+                                        "<br>+ Status: " . $row->eco_status .
+                                        "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
+                                        "<br>+ Date of create: " . $row->eco_create;
 
-				if (!$isNew){
-					$message .= "<br>+ Modified by: ".GetValueUser($row->eco_modified_by, 'username').
-											 "<br>+ Date of modify: ".$row->eco_modified;
-				}			  
+                                $message = $message1 . $message2;
 
-					
-                $adminEmail = $me->get('email');
-                $adminName    = $me->get('name');
-                if ($MailFrom != '' && $FromName != '')
-                    {
-                        $adminName     = $FromName;
-                        $adminEmail = $MailFrom;
-                    }
-   
-			    foreach ($arr_user as $user){
-             //tam thoi  JUtility::sendMail( $adminEmail, $adminName, $user, $subject, $message, 1 );    
-                                
-			    }
-			    
-		    }
-		    //viec loghistory
-                    $queryLog = "insert into `apdm_eco_affected`(`eco_id`,`eco_name`,`eco_description`,`eco_status`,`eco_project`,`eco_type`,`eco_field_impact`,`eco_reason`,`eco_what`,`eco_special`,`eco_benefit`,`eco_technical`,`eco_tech_design`,`eco_estimated`,`eco_estimated_cogs`,`eco_target`,`eco_modified`,`eco_modified_by`) values ".
-                            "('".$row->eco_id."','".$row->eco_name."','".$row->eco_description."','".$row->eco_status."','".$row->eco_project."','".$row->eco_type."','".$row->eco_field_impact."','".$row->eco_reason."','".$row->eco_what."','".$row->eco_special."','".$row->eco_benefit."','".$row->eco_technical."','".$row->eco_tech_design."','".$row->eco_estimated."','".$row->eco_estimated_cogs."','".$row->eco_target."','".$row->eco_modified."',$row->eco_modified_by)";
-                            $db->setQuery($queryLog);
-                    $db->query();
-		    switch ( $this->getTask() )
-		    {
-			    case 'apply':
-				    $msg = JText::sprintf( 'Successfully Saved changes to ECO', $row->eco_name );
-				    $this->setRedirect( 'index.php?option=com_apdmeco&task=detail&cid[]='. $row->eco_id, $msg );
-				    break;
 
-			    case 'save':
-			    default:
-				    $msg = JText::sprintf( 'Successfully Saved ECO', $row->eco_name );
-				    $this->setRedirect( 'index.php?option=com_apdmeco&task=add', $msg );
-				    break;
-		    }
+                                if (!$isNew) {
+                                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
+                                                "<br>+ Date of modify: " . $row->eco_modified;
+                                }
+
+
+                                $adminEmail = $me->get('email');
+                                $adminName = $me->get('name');
+                                if ($MailFrom != '' && $FromName != '') {
+                                        $adminName = $FromName;
+                                        $adminEmail = $MailFrom;
+                                }
+
+                                foreach ($arr_user as $user) {
+                                        //tam thoi  JUtility::sendMail( $adminEmail, $adminName, $user, $subject, $message, 1 );    
+                                }
+                        }
+                        //viec loghistory
+                        $queryLog = "insert into `apdm_eco_affected`(`eco_id`,`eco_name`,`eco_description`,`eco_status`,`eco_project`,`eco_type`,`eco_field_impact`,`eco_reason`,`eco_what`,`eco_special`,`eco_benefit`,`eco_technical`,`eco_tech_design`,`eco_estimated`,`eco_estimated_cogs`,`eco_target`,`eco_modified`,`eco_modified_by`) values " .
+                                "('" . $row->eco_id . "','" . $row->eco_name . "','" . $row->eco_description . "','" . $row->eco_status . "','" . $row->eco_project . "','" . $row->eco_type . "','" . $row->eco_field_impact . "','" . $row->eco_reason . "','" . $row->eco_what . "','" . $row->eco_special . "','" . $row->eco_benefit . "','" . $row->eco_technical . "','" . $row->eco_tech_design . "','" . $row->eco_estimated . "','" . $row->eco_estimated_cogs . "','" . $row->eco_target . "','" . $row->eco_modified . "',$row->eco_modified_by)";
+                        $db->setQuery($queryLog);
+                        $db->query();
+                        switch ($this->getTask()) {
+                                case 'apply':
+                                        $msg = JText::sprintf('Successfully Saved changes to ECO', $row->eco_name);
+                                        $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $row->eco_id, $msg);
+                                        break;
+
+                                case 'save':
+                                default:
+                                        $msg = JText::sprintf('Successfully Saved ECO', $row->eco_name);
+                                        $this->setRedirect('index.php?option=com_apdmeco&task=add', $msg);
+                                        break;
+                        }
+                }
         }
-	}
 
 	/**
 	 * Removes the record(s) from the database
@@ -771,7 +773,6 @@ class ECOController extends JController
                 $me			= & JFactory::getUser();  
                 $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
                 $row = $db->loadObject();        
-                 $row->eco_status;
                 if(!$row->eco_status)
                 {
                         $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (".$cid[0].", '".$me->get('email')."','Create') ON DUPLICATE KEY UPDATE eco_status = '".$row->eco_status."'";
@@ -803,57 +804,52 @@ class ECOController extends JController
         /**
                 * Display all files eco
         */	
-        function promote(){
+        function promote() {
                 $db = & JFactory::getDBO();
-		$cid = JRequest::getVar( 'cid', array(0) );                
-                $me			= & JFactory::getUser();  
-                $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
-                $row = $db->loadObject();        
-                 $row->eco_status;
-                if(!$row->eco_status)
-                {
-                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (".$cid[0].", '".$me->get('email')."','Create') ON DUPLICATE KEY UPDATE eco_status = '".$row->eco_status."'";
+                $cid = JRequest::getVar('cid', array(0));
+                $me = & JFactory::getUser();
+                $select = $db->setQuery('select eco_status from apdm_eco_status where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '"');
+                $row = $db->loadObject();
+                if (!$row->eco_status) {                        
+                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $cid[0] . ", '" . $me->get('email') . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
+                        $db->setQuery($query);
+                        $db->query();
+                } elseif ($row->eco_status == 'Create') {
+                        $query = 'update apdm_eco_status set eco_status= "Inreview" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '"';
                         $db->setQuery($query);
                         $db->query();
                 }
-                elseif($row->eco_status=='Create')
-                {
-                        $query = 'update apdm_eco_status set eco_status= "Inreview" where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"';
+                $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . '');
+                $totalApprovers = $db->loadResult();
+                //check all release
+                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Create" and eco_id = ' . $cid[0] . '');
+                $totalPending = $db->loadResult();
+                if ($totalPending > 0) {
+                        // $row->eco_status = 'Create';//JRequest::getVar('eco_status_tmp');    
+                        $query = 'update apdm_eco set eco_status= "Inreview" where eco_id = ' . $cid[0];
                         $db->setQuery($query);
-                        $db->query();	 
+                        $db->query();
                 }
-                           $db->setQuery('select count(*) from apdm_eco_status where eco_id = '.$cid[0].'');
-                		 $totalApprovers = $db->loadResult();
-                           //check all release
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Create" and eco_id = '.$cid[0].'');
-                		 $totalPending = $db->loadResult();
-                                if ($totalPending>0){
-                                     // $row->eco_status = 'Create';//JRequest::getVar('eco_status_tmp');    
-                                        $query = 'update apdm_eco set eco_status= "Inreview" where eco_id = '.$cid[0];
-                                        $db->setQuery($query);
-                                        $db->query();
-                                }
-                           //check all release
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = '.$cid[0].'');
-                		 $totalReleased = $db->loadResult();
-                                if ($totalApprovers == $totalReleased){
-                                      //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');  
-                                        $query = 'update apdm_eco set eco_status= "Released" where eco_id = '.$cid[0];
-                                        $db->setQuery($query);
-                                        $db->query(); 
-                                }
-                                  //check all reject
-                                 $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Inreview" and eco_id = '.$cid[0].'');
-                		 $totalReject = $db->loadResult();
-                                if ($totalApprovers == $totalReject){
-                                    //  $row->eco_status = 'Inreview';//JRequest::getVar('eco_status_tmp');  
-                                        $query = 'update apdm_eco set eco_status= "Released" where eco_id = '.$cid[0];
-                                        $db->setQuery($query);
-                                        $db->query();    
-                                }
-                                $msg = JText::sprintf( 'Successfully Promote',$cid[0]  );
-				    $this->setRedirect( 'index.php?option=com_apdmeco&task=detail&cid[]='. $cid[0], $msg );
-                                            
+                //check all release
+                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . '');
+                $totalReleased = $db->loadResult();
+                if ($totalApprovers == $totalReleased) {
+                        //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');  
+                        $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
+                        $db->setQuery($query);
+                        $db->query();
+                }
+                //check all reject
+                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Inreview" and eco_id = ' . $cid[0] . '');
+                $totalReject = $db->loadResult();
+                if ($totalApprovers == $totalReject) {
+                        //  $row->eco_status = 'Inreview';//JRequest::getVar('eco_status_tmp');  
+                        $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
+                        $db->setQuery($query);
+                        $db->query();
+                }
+                $msg = JText::sprintf('Successfully Promote', $cid[0]);
+                $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
         }
         /*
           * type_id 4
@@ -905,6 +901,25 @@ class ECOController extends JController
                  }
              }
              return $rows;
+         }
+         function approve(){
+                $db = & JFactory::getDBO();
+		$cid = JRequest::getVar( 'cid', array(0) );                
+                $me			= & JFactory::getUser();  
+                $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
+                $row = $db->loadObject();        
+                 $row->eco_status;
+                if (!$row->eco_status) {
+                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $cid[0] . ", '" . $me->get('email') . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
+                        $db->setQuery($query);
+                        $db->query();
+                } elseif ($row->eco_status == 'Create') {
+                        $query = 'update apdm_eco_status set eco_status= "Released" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '"';
+                        $db->setQuery($query);
+                        $db->query();
+                }
+                $msg = JText::sprintf('Successfully Approve', $cid[0]);
+                $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
          }
                    
         
