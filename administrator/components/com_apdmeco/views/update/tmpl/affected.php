@@ -1,7 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-
+ddd
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	

@@ -180,7 +180,8 @@ class pnsViewpns_info extends JView
         $lifeValue[] = JHTML::_('select.option',  'Create', JText::_( 'Create' ) , 'value', 'text'); 
         $lifeValue[] = JHTML::_('select.option',  'Inreview', JText::_( 'In Review' ), 'value', 'text'); 
         $lifeValue[] = JHTML::_('select.option',  'Released',  JText::_( 'Released' ), 'value', 'text');
-        $lists['life_cycle'] = JHTML::_('select.genericlist',   $lifeValue, 'pns_life_cycle', 'class="inputbox" size="1"', 'value', 'text',$row->pns_life_cycle );
+        $classDisabled = 'disabled = "disabled"';
+        $lists['life_cycle'] = JHTML::_('select.genericlist',   $lifeValue, 'pns_life_cycle', 'class="inputbox " '.$classDisabled.' size="1"', 'value', 'text',$row->pns_life_cycle );
         $this->assignRef('pns_life_cycle', $row->pns_life_cycle);
         //viec add pns_uom
         $uomValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_UOM' ) .' -', 'value', 'text'); 

@@ -444,12 +444,13 @@ function get_number_eco(){
 						<td colspan="2">
 						<table width="100%"  class="adminlist" cellpadding="1">						
 						<thead>
-							<th colspan="3"><?php echo JText::_('List Approvers ')?></th>
+							<th colspan="4"><?php echo JText::_('List Approvers ')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
 							<td width="15%"><strong><?php echo JText::_('Email')?> </strong></td>
-							<td width="80%"><strong><?php echo JText::_('Approve Status')?> </strong></td>							
+							<td width="80%"><strong><?php echo JText::_('Approve Status')?> </strong></td>	
+                                                        <td width="80%"><strong><?php echo JText::_('Remove approvers')?> </strong></td>
 						</tr>
 						<?php $i = 1; 
 					foreach ($this->arr_status as $status) { 
@@ -461,18 +462,20 @@ function get_number_eco(){
                                                         <td width="60%"><?php  
                                                         if($status->eco_status != 'Released'){                                                          
                                                        ?>
-                                                                <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id;?>&time=<?php echo time();?>'></a>
-                                                               <input type="radio" name="approve_status" id="approve_status1" value="Released"  class="inputbox" size="1"/>
-                                                                <label for="approve_status1">Approve</label>
-                                                                <input type="radio" name="approve_status" id="approve_status0" value="Inreview" checked="checked" class="inputbox" size="1"/>
-                                                                <label for="approve_status0">Reject</label>	
-                                                                <textarea cols="70" rows="6" id ="approve_note" name ='approve_note'><?php echo $status->note;?></textarea>
+                                                                
+                                                              
+                                                               	
+                                                                <textarea disabled="disabled" cols="40" rows="6" id ="approve_note" name ='approve_note'><?php echo $status->note;?></textarea>
                                                         <?php                                                         
                                                         }
                                                         elseif($status->eco_status == 'Released'){
                                                                 echo "Approved";
                                                         }
                                                        ?>
+                                                        </td>
+                                                        <td>
+                                                                 <input type="checkbox" name="mail_remove[]" value="<?php echo $status->email?>"  class="inputbox" size="1"/>
+                                                                <label for="approve_status1">Remove</label>
                                                         </td>
 						</tr>
 						<?php $i++; } ?>

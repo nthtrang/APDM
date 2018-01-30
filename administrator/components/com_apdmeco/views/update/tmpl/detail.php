@@ -6,9 +6,10 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-        $tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-        $tabaffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabfiles.$tabaffected , 'generic.png' );	
+        //$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
+        $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
 
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role) && $this->row->eco_status !="Released") {
@@ -50,8 +51,12 @@
 			submitform( pressbutton );
 			return;
 		}
-		if (pressbutton == 'files') {
-			  window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id?>");
+//		if (pressbutton == 'files') {
+//			  window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id?>");
+//			return;
+//		}  
+		if (pressbutton == 'approvers') {
+			  window.location.assign("index.php?option=com_apdmeco&task=approvers\&cid[]=<?php echo $this->row->eco_id?>");
 			return;
 		}  
 		if (pressbutton == 'affected') {
@@ -268,7 +273,7 @@
 		</fieldset>
 	</div>
 	<div class="col width-40">
-		<!--<fieldset class="adminform">
+		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?></legend>
 			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_file) > 0 ) { ?>
@@ -304,7 +309,7 @@
 				
 				
 			</table>
-		</fieldset>-->
+		</fieldset>
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Parameters' ); ?></legend>
 			<table class="admintable">
