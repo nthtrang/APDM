@@ -792,6 +792,15 @@ class ECOController extends JController
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 $cid = JRequest::getVar('cid', array(0));
+                  $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . '');
+                $trow = $db->loadResult();
+                if ($trow==0) {
+                         $msg = JText::sprintf('Must choose at least one person for Review', $cid[0]);
+                               return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
+//                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $cid[0] . ", '" . $me->get('email') . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
+//                        $db->setQuery($query);
+//                        $db->query();
+                }
                 $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
                 $row = $db->loadObject();        
                 $approve_status = JRequest::getVar('approve_status');
