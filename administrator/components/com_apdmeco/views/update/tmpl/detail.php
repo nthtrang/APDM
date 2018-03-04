@@ -12,7 +12,9 @@
 	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
 
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
-	if (in_array("E", $role) && $this->row->eco_status !="Released") {
+        
+        
+	if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
 		JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {

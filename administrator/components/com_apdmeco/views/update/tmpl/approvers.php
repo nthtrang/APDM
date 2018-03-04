@@ -144,10 +144,10 @@
 						<?php $i = 1; 
                                                 $me = & JFactory::getUser();
                                                 $me->get('email');
-                                                
                                                 foreach ($this->arr_status as $status) { 
                                                 if($me->get('email')==$status->email)
                                                 {
+                                                        echo 3;
 						?>
 							<tr>
 							<td><?php echo $i?></td>
