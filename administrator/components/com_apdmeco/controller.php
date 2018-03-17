@@ -815,35 +815,17 @@ class ECOController extends JController
                 * Display all files eco
         */	
         function demote(){
+               
                 $db = & JFactory::getDBO();
 		$cid = JRequest::getVar( 'cid', array(0) );                
                 $me			= & JFactory::getUser();  
-                $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
-                $row = $db->loadObject();        
-                if(!$row->eco_status)
-                {
-                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (".$cid[0].", '".$me->get('email')."','Create') ON DUPLICATE KEY UPDATE eco_status = '".$row->eco_status."'";
-                        $db->setQuery($query);
-                        $db->query();
-                }
-                elseif($row->eco_status!='Create')
-                {
-                        $query = 'update apdm_eco_status set eco_status= "Create" where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"';
-                        $db->setQuery($query);
-                        $db->query();	 
-                }
-                $db->setQuery('select count(*) from apdm_eco_status where eco_id = '.$cid[0].'');
-                $totalApprovers = $db->loadResult();
-                //check all release
-                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Create" and eco_id = '.$cid[0].'');
-                $totalPending = $db->loadResult();
-                if ($totalPending>0){
-                        // $row->eco_status = 'Create';//JRequest::getVar('eco_status_tmp');    
-                        $query = 'update apdm_eco set eco_status= "Create" where eco_id = '.$cid[0];
-                        $db->setQuery($query);
-                        $db->query();
-                }
-         $msg = JText::sprintf( 'Successfully Demote',$cid[0]  );
+                $query = 'update apdm_eco_status set eco_status= "Create" where eco_id = '.$cid[0];
+                $db->setQuery($query);
+                $db->query();	 
+                $query = 'update apdm_eco set eco_status= "Create" where eco_id = ' . $cid[0];
+                $db->setQuery($query);
+                $db->query();
+                $msg = JText::sprintf( 'Successfully Demote',$cid[0]  );
 				    $this->setRedirect( 'index.php?option=com_apdmeco&task=detail&cid[]='. $cid[0], $msg );
 
         }
@@ -872,7 +854,49 @@ class ECOController extends JController
                         //set all pn 
                         $query = 'update apdm_pns set pns_status= "Inreview" where eco_id = ' . $cid[0] . '';
                         $db->setQuery($query);
-                        $db->query();                        
+                        $db->query();                    
+//send email
+                        
+                       
+                                $row =& JTable::getInstance('apdmeco');
+                                $row->load($cid[0]);
+                                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                                $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
+                                $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+
+                                $message2 = "<br>+ ECO #: " . $row->eco_name .
+                                        "<br>+ Description: " . $row->eco_description .
+                                        "<br>+ Status: " . $row->eco_status .
+                                        "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
+                                        "<br>+ Date of create: " . $row->eco_create;
+
+                                $message = $message1 . $message2;
+
+
+                                if (!$isNew) {
+                                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
+                                                "<br>+ Date of modify: " . $row->eco_modified;
+                                }
+
+
+                                $adminEmail = $me->get('email');
+                                $adminName = $me->get('name');
+                                if ($MailFrom != '' && $FromName != '') {
+                                        $adminName = $FromName;
+                                        $adminEmail = $MailFrom;
+                                }
+                                $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . '');
+                                $result = $db->loadObjectList();
+                                     if (count($result) > 0){
+                                         foreach ($result as $obj){
+                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                         }
+                                     }
+                                foreach ($arr_user as $user) {
+                                        //tam thoi  JUtility::sendMail( $adminEmail, $adminName, $user, $subject, $message, 1 );    
+                                }
+                        
+                        
                 }
 //                elseif ($row->eco_status == 'Create') {
 //                        $query = 'update apdm_eco_status set eco_status= "Inreview" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '"';

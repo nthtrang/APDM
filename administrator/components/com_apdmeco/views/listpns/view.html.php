@@ -39,6 +39,9 @@ class ecoViewlistpns extends JView
         $lists['eco_id']        = $cid;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('rows',        $rows);             
+        $rowEco = & JTable::getInstance('apdmeco');	
+        $rowEco->load($cid[0]);
+        $this->assignRef('rowEco',	$rowEco);
 		parent::display($tpl);
 	}
 }

@@ -12,7 +12,7 @@
 	
 		
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
-	if (in_array("W", $role)) {
+	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::addPns("New",$cid[0]);
 	} 
         

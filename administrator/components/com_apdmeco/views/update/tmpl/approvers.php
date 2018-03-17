@@ -10,8 +10,8 @@
         $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
         $demote = $promote = "";
         $me = & JFactory::getUser();
-
-        if ($this->row->eco_create_by == $me->get('id')) {
+        
+        if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status !="Released") {
                 $demote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'demote\')" class="button_demote" style="vertical-align:middle"><span>Demote </span></button>';
                 $promote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="button_promote" style="vertical-align:middle"><span>Promote</span></button>';
         }
@@ -147,7 +147,6 @@
                                                 foreach ($this->arr_status as $status) { 
                                                 if($me->get('email')==$status->email)
                                                 {
-                                                        echo 3;
 						?>
 							<tr>
 							<td><?php echo $i?></td>
