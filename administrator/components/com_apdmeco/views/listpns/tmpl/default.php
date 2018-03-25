@@ -19,7 +19,7 @@
 //	if (in_array("E", $role)) {
 //		JToolBarHelper::editListX();
 //	}
-	if (in_array("D", $role)) {
+	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::deletePns('Are you sure to delete it?');
 	}
 	
@@ -180,7 +180,7 @@ function submitbutton(pressbutton) {
 					<?php echo $row->pns_description; ?>
 				</td>
 				<td align="center">
-					<?php echo $row->pns_status; ?>
+					<?php echo $row->pns_life_cycle; ?>
 				</td>				
 				<td align="center">
 					<?php echo $row->pns_type;?>
@@ -235,7 +235,8 @@ function submitbutton(pressbutton) {
 				</td>
 				<td>
 					<?php 
-if ($row->pns_life_cycle =='Create') {
+     
+if ($row->pns_life_cycle =='Create' || ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {
 		?>
                   <a href="<?php echo $edit_link;?>" class="toolbar">
 <span class="icon-32-edit" title="Edit">

@@ -218,7 +218,7 @@ class ECOController extends JController
 //                                }
 
                                 if ($row->eco_status == 'Released') {
-                                        $query = 'update apdm_pns set pns_status= "Release" where eco_id = ' . $row->eco_id . '';
+                                        $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $row->eco_id . '';
                                         $db->setQuery($query);
                                         $db->query();
                                 }
@@ -840,8 +840,8 @@ class ECOController extends JController
                 
                 $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . '');
                 $trow = $db->loadResult();
-                if ($trow==0) {
-                         $msg = JText::sprintf('Must choose at least one person for Review', $cid[0]);
+                if ($trow<2) {
+                         $msg = JText::sprintf('Must choose at least 2 persons for Review', $cid[0]);
                                return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
 //                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $cid[0] . ", '" . $me->get('email') . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
 //                        $db->setQuery($query);
@@ -852,12 +852,10 @@ class ECOController extends JController
                         $db->setQuery($query);
                         $db->query();
                         //set all pn 
-                        $query = 'update apdm_pns set pns_status= "Inreview" where eco_id = ' . $cid[0] . '';
+                        $query = 'update apdm_pns set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . '';
                         $db->setQuery($query);
                         $db->query();                    
-//send email
-                        
-                       
+//send email           
                                 $row =& JTable::getInstance('apdmeco');
                                 $row->load($cid[0]);
                                 //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
@@ -868,14 +866,14 @@ class ECOController extends JController
                                         "<br>+ Description: " . $row->eco_description .
                                         "<br>+ Status: " . $row->eco_status .
                                         "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
-                                        "<br>+ Date of create: " . $row->eco_create;
+                                        "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
 
                                 $message = $message1 . $message2;
 
 
                                 if (!$isNew) {
                                         $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
-                                                "<br>+ Date of modify: " . $row->eco_modified;
+                                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
                                 }
 
 
@@ -924,10 +922,47 @@ class ECOController extends JController
                         $db->setQuery($query);
                         $db->query();
                         //set all pn 
-                        $query = 'update apdm_pns set pns_status= "Release" where eco_id = ' . $cid[0] . '';
+                        $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . '';
                         $db->setQuery($query);
                         $db->query();
                 }
+                
+                //send email 
+                                $row =& JTable::getInstance('apdmeco');
+                                $row->load($cid[0]);
+                                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                                $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
+                                $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+
+                                $message2 = "<br>+ ECO #: " . $row->eco_name .
+                                        "<br>+ Description: " . $row->eco_description .
+                                        "<br>+ Status: " . $row->eco_status .
+                                        "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
+                                        "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
+
+                                $message = $message1 . $message2;
+
+
+                                if (!$isNew) {
+                                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
+                                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
+                                }
+
+
+                                $adminEmail = $me->get('email');
+                                $adminName = $me->get('name');
+                                if ($MailFrom != '' && $FromName != '') {
+                                        $adminName = $FromName;
+                                        $adminEmail = $MailFrom;
+                                }
+                                $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . '');
+                                $result = $db->loadObjectList();
+                                     if (count($result) > 0){
+                                         foreach ($result as $obj){
+                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                         }
+                                     }
+                
                 //check all reject
 //                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Inreview" and eco_id = ' . $cid[0] . '');
 //                $totalReject = $db->loadResult();
