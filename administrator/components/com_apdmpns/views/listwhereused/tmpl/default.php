@@ -3,9 +3,14 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+$role = JAdministrator::RoleOnComponent(6);
+	JToolBarHelper::title( JText::_( 'List PNs Where Used' ) , 'cpanel.png' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
+	if (in_array("V", $role)) {
+		//JToolBarHelper::customX('export_whereused', 'excel', '', 'Export', false);
+	}	
+	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	
 ?>
 <script language="javascript">
@@ -24,10 +29,10 @@ function CheckForm() {
 }
 
 </script>
-<h1><?php echo JText::_('List PNs Where Used')?></h1>
+<h1><?php //echo JText::_('List PNs Where Used')?></h1>
 <form action="index.php?option=com_apdmpns&task=list_child&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
-<table  width="100%">
+<!--<table  width="100%">
 		<tr>
 			<td colspan="4"  >
 				<?php echo JText::_( 'Filter' ); ?>:
@@ -39,7 +44,7 @@ function CheckForm() {
 			</td>
 			
 		</tr>			
-</table>
+</table>-->
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>

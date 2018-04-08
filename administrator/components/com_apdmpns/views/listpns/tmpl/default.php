@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+//BOM
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) , 'cpanel.png' );
 	
@@ -100,7 +101,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
         foreach ($list_pns as $rowp){
                 ?>
         <tr>
-		<td width="25%"><?php echo '<p style="height:25px"><a href="javascript:void(0)" title="Click display Pns child">+</a><input  type="checkbox" onclick="isChecked(this.checked);isCheckedChild(this.checked,'.$rowp->pns_id.')" value="'.$rowp->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$rowp->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$rowp->text.'</a></p> '; ?></td>
+		<td width="25%"><?php echo '<p style="height:25px"><input  type="checkbox" onclick="isChecked(this.checked);isCheckedChild(this.checked,'.$rowp->pns_id.')" value="'.$rowp->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$rowp->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$rowp->text.'</a></p> '; ?></td>
 		<td><?php echo $rowp->eco_name;?></td>
 		<td><?php echo $rowp->pns_type;?></td>
 		<td><?php echo $rowp->pns_status;?></td>

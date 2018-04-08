@@ -749,10 +749,12 @@ class PNsController extends JController
            }
            //for pans parent
            //for parent of pns
+           
           $arr_pns_waring = array();
           $arr_parent_id = array();
           if (count($pns_child) > 0){
               foreach ($pns_child as $child){
+                     // echo "INSERT INTO apdm_pns_parents (pns_id, pns_parent) VALUES (".$child.", ".$row->pns_id.")";die;
                   $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent) VALUES (".$child.", ".$row->pns_id.")" );
                   $db->query();
               }
@@ -1574,10 +1576,10 @@ class PNsController extends JController
         require_once (JPATH_BASE .DS.'includes'.DS.'PHPExcel'.DS.'RichText.php');        
         require_once(JPATH_BASE .DS.'includes'.DS.'PHPExcel'.DS.'IOFactory.php');   
         require_once('includes/download.class.php');     
-         ini_set("memory_limit", "252M");   
+         ini_set("memory_limit", "512M");   
         @set_time_limit(1000000);
         $objPHPExcel = new PHPExcel();                               
-        $objReader = PHPExcel_IOFactory::createReader('Excel5');
+        $objReader = PHPExcel_IOFactory::createReader('Excel2007');//Excel5
         $objPHPExcel = $objReader->load(JPATH_COMPONENT.DS.'apdm_pn_bom_report.xls'); 
 		
         global $mainframe;
@@ -2403,6 +2405,18 @@ class PNsController extends JController
     $db->setQuery($query);
     $result = $db->loadResult();
     return $result;
+ }
+  function GetChildWhereNumber($pns_id){ 
+          $db = & JFactory::getDBO();
+         $db->setQuery("SELECT pr.id, pr.pns_parent, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p on pr.pns_parent = p.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  WHERE c.ccs_activate=1 AND c.ccs_deleted = 0 AND p.pns_deleted =0 AND pr.pns_id=".$pns_id);
+        $list_where_use = $db->loadObjectList();
+        $arr_where_use = array();
+        if (count($list_where_use) > 0){
+                foreach ($list_where_use as $w){
+                        $arr_where_use[] = array("id"=>$w->pns_parent, "pns_code"=>$w->parent_pns_code);
+                }
+        }
+        return $arr_where_use;
  }
  function size_format($bytes="") {
       $retval = "";

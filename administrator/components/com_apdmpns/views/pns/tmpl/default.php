@@ -147,6 +147,9 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" >
 					<?php echo JText::_( 'BOM' ); ?>
 				</th>
+                                <th width="5%" class="title" >
+					<?php echo JText::_( 'PNS_PARENT' ); ?>
+				</th>
 				<th  class="title" width="10%">
 					<?php echo JHTML::_('grid.sort',   JText::_('ECO'), 'p.eco_id', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
@@ -193,6 +196,11 @@ function submitbutton(pressbutton) {
 				//echo $pns_image;
 				$mf = PNsController::GetManufacture($row->pns_id);
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
+                                $wheruse = PNsController::GetChildWhereNumber($row->pns_id);
+                        
+  
+                                
+                                
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td>
@@ -208,6 +216,15 @@ function submitbutton(pressbutton) {
 				<td>
 				<?php if ($bom) { ?>
 				<a href="index.php?option=com_apdmpns&task=listpns&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
+					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
+				<?php } else {?>
+					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
+				<?php } ?>
+	
+				</td>
+                                <td>
+				<?php if ($wheruse) { ?>
+				<a href="index.php?option=com_apdmpns&task=list_where_used&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
 				<?php } else {?>
 					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />

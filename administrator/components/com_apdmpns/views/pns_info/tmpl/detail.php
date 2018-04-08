@@ -99,23 +99,25 @@
 						
 					</td>
 				</tr>
-				<!--<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php //echo JText::_( 'PNS_PARENT' ); ?>
+							<?php echo JText::_( 'PNS_PARENT' ); ?>
 						</label>
 					</td>
 					<td valign="top">
 						<?php 
-						//	if (count($this->lists['where_use']) > 0) {								
+							if (count($this->lists['where_use']) > 0) {								
 								?>
 								<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
-<input type="button" name="where_used" value="<?php //echo JText::_('List PNs')?>"/>
+<input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
+                                                <a href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
+<input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
 </a>
 							<?php	
-							//}else{
-						//		echo JText::_('NONE_PNS_USE');
-						//	}
+							}else{
+								echo JText::_('NONE_PNS_USE');
+							}
 						?>
 						
 					</td>
