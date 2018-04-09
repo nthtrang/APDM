@@ -158,12 +158,22 @@ class pnsViewlistwhereused extends JView
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
         
+        //titlewhere used
+        $query = "SELECT p.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code_full  FROM apdm_pns AS p  WHERE p.pns_id=".$id." ORDER BY p.ccs_code";    
+      
+        $db->setQuery( $query);
+        $rowstitle = $db->loadObjectList();              
+        $this->assignRef('title',        $rowstitle);        
+        
+        //get parent
+
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;
         $lists['search']= $search;    
+        $lists['pns_id']        = $id;    
         $this->assignRef('lists',        $lists);
-        $this->assignRef('rows',        $rows);
+        $this->assignRef('rows',        $rows);     
         $this->assignRef('pagination',    $pagination);   
         $this->assignRef('id',    $id);       
 		parent::display($tpl);

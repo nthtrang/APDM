@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+$db                =& JFactory::getDBO();
 $role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'List PNs Where Used' ) , 'cpanel.png' );
 	// clean item data
@@ -11,7 +12,8 @@ $role = JAdministrator::RoleOnComponent(6);
 		//JToolBarHelper::customX('export_whereused', 'excel', '', 'Export', false);
 	}	
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
-	
+	$title = $this->title[0];
+        $pns_code_full = $title->pns_code_full;
 ?>
 <script language="javascript">
 function CheckForm() {
@@ -45,12 +47,11 @@ function CheckForm() {
 			
 		</tr>			
 </table>-->
+<div> <input type="checkbox" onclick="isChecked(this.checked);" value="<?php echo $this->id;?>" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->id?>&cd=<?php echo $this->id?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong></a>
+
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
-				<th width="2%" class="title">
-					<?php echo JText::_( 'NUM' ); ?>
-				</th>
 				
 				<th class="title" width="15%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
@@ -70,7 +71,7 @@ function CheckForm() {
 		<tfoot>
 			<tr>
 				<td colspan="5">
-					<?php  echo $this->pagination->getListFooter(); ?>
+					<?php // echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
 		</tfoot>
@@ -92,12 +93,9 @@ function CheckForm() {
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
-					<?php echo $i+1+$this->pagination->limitstart;?>
-				</td>
 				
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-					<?php echo $pns_code;?>
+				<td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
+                                <?php    echo '<p style="margin-left:0px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $pns_code.'</a></p> '; ?>                                                
 				</span>
 				</td>	
 				<td align="center">
@@ -110,13 +108,175 @@ function CheckForm() {
 					<?php echo  $row->pns_description; ?>
 				</td>							
 			</tr>
+                        	<?php		
+                                //level2      
+                               $list_pns_c2 = PNsController::DisplayPnsAllParentId($row->pns_id); 
+                               if(isset($list_pns_c2)&& sizeof($list_pns_c2)>0)
+                               {
+                                        foreach ($list_pns_c2 as $row2){
+                                                if ($row2->pns_image !=''){
+                                                        $pns_image1 = $path_image.$row2->pns_image;
+                                                }else{
+                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                }                                                
+                                       ?>
+                                                <tr>
+ 
+
+                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row2->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row2->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row2->text.'</a></p> '; ?>
+                                                        </span>
+                                                        </td>	
+                                                        <td align="center">
+                                                                <?php echo $row2->pns_status;?>
+                                                        </td>
+                                                        <td align="center">
+                                                                <?php echo $row2->pns_type;?>
+                                                        </td>
+                                                        <td>
+                                                                <?php echo  $row2->pns_description; ?>
+                                                        </td>							
+                                                </tr>
+                                               <?php		
+                                                //level3      
+                                               $list_pns_c3 = PNsController::DisplayPnsAllParentId($row2->pns_id); 
+                                               if(isset($list_pns_c3)&& sizeof($list_pns_c3)>0)
+                                               {
+                                                        foreach ($list_pns_c3 as $row3){
+                                                                if ($row3->pns_image !=''){
+                                                                        $pns_image1 = $path_image.$row3->pns_image;
+                                                                }else{
+                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                }                                                
+                                                       ?>
+                                                                <tr>
+
+
+                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row3->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row3->text.'</a></p> '; ?>
+                                                                        </span>
+                                                                        </td>	
+                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_status;?>
+                                                                        </td>
+                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_type;?>
+                                                                        </td>
+                                                                        <td>
+                                                                                <?php echo  $row3->pns_description; ?>
+                                                                        </td>							
+                                                                </tr>
+                                                               <?php		
+                                                                //level4     
+                                                               $list_pns_c4 = PNsController::DisplayPnsAllParentId($row3->pns_id); 
+                                                               if(isset($list_pns_c4)&& sizeof($list_pns_c4)>0)
+                                                               {
+                                                                        foreach ($list_pns_c4 as $row4){
+                                                                                if ($row4->pns_image !=''){
+                                                                                        $pns_image1 = $path_image.$row4->pns_image;
+                                                                                }else{
+                                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                }                                                
+                                                                       ?>
+                                                                                <tr>
+
+
+                                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row4->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row4->text.'</a></p> '; ?>
+                                                                                        </span>
+                                                                                        </td>	
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_status;?>
+                                                                                        </td>
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_type;?>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                <?php echo  $row4->pns_description; ?>
+                                                                                        </td>							
+                                                                                </tr>
+                                                                                       <?php		
+                                                                                        //level5     
+                                                                                       $list_pns_c5 = PNsController::DisplayPnsAllParentId($row4->pns_id); 
+                                                                                       if(isset($list_pns_c5)&& sizeof($list_pns_c5)>0)
+                                                                                       {
+                                                                                                foreach ($list_pns_c5 as $row5){
+                                                                                                        if ($row5->pns_image !=''){
+                                                                                                                $pns_image1 = $path_image.$row5->pns_image;
+                                                                                                        }else{
+                                                                                                                $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                                        }                                                
+                                                                                               ?>
+                                                                                                        <tr>
+                                                                                                                <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                       <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row5->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row5->text.'</a></p> '; ?>
+                                                                                                                </span>
+                                                                                                                </td>	
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_status;?>
+                                                                                                                </td>
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                        <?php echo  $row5->pns_description; ?>
+                                                                                                                </td>							
+                                                                                                        </tr>
+                                                                                                               <?php		
+                                                                                                                //level6     
+                                                                                                               $list_pns_c6 = PNsController::DisplayPnsAllParentId($row5->pns_id); 
+                                                                                                               if(isset($list_pns_c6)&& sizeof($list_pns_c6)>0)
+                                                                                                               {
+                                                                                                                        foreach ($list_pns_c6 as $row6){
+                                                                                                                                if ($row6->pns_image !=''){
+                                                                                                                                        $pns_image1 = $path_image.$row6->pns_image;
+                                                                                                                                }else{
+                                                                                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                                                                }                                                
+                                                                                                                       ?>
+                                                                                                                                <tr>
+                                                                                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row6->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row6->text.'</a></p> '; ?>
+                                                                                                                                        </span>
+                                                                                                                                        </td>	
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_status;?>
+                                                                                                                                        </td>
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                        </td>
+                                                                                                                                        <td>
+                                                                                                                                                <?php echo  $row6->pns_description; ?>
+                                                                                                                                        </td>							
+                                                                                                                                </tr>
+                                                                                                                                <?php
+                                                                                                                        }
+                                                                                                               }//end level6
+                                                                                                               ?>                                                                                                           
+                                                                                                        <?php
+                                                                                                }
+                                                                                       }//end level5
+                                                                                       ?>   
+                                                                                <?php
+                                                                        }
+                                                               }//end level4
+                                                               ?>                                                                
+                                                                <?php
+                                                        }
+                                               }//end level3
+                                               ?>
+                                                <?php
+                                        }
+                               }
+                               ?>
+
 			<?php
 				$k = 1 - $k;
 				}
 			?>
 		</tbody>
 	</table>
-
+</div>
 	<div class="clr"></div>		
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />

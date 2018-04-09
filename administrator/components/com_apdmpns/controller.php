@@ -1525,9 +1525,15 @@ class PNsController extends JController
     function DisplayPnsAllChildId($pns_id){  
         $db =& JFactory::getDBO();
         $rows = array();
-        $db->setQuery('SELECT pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent='.$pns_id);
+        $db->setQuery('SELECT pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in ('.$pns_id.')');
         return $result = $db->loadObjectList();
     }
+    function DisplayPnsAllParentId($pns_id){  
+        $db =& JFactory::getDBO();
+        $rows = array();
+        $db->setQuery('SELECT p.*,pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in ('.$pns_id.')');
+        return $result = $db->loadObjectList();
+    }    
     function GetEcoValue($eco_id){
         $db = & JFactory::getDBO();
         $db->setQuery('SELECT eco_name FROM apdm_eco WHERE eco_id ='.$eco_id);
@@ -1579,7 +1585,7 @@ class PNsController extends JController
          ini_set("memory_limit", "512M");   
         @set_time_limit(1000000);
         $objPHPExcel = new PHPExcel();                               
-        $objReader = PHPExcel_IOFactory::createReader('Excel2007');//Excel5
+        $objReader = PHPExcel_IOFactory::createReader('Excel5');//Excel5
         $objPHPExcel = $objReader->load(JPATH_COMPONENT.DS.'apdm_pn_bom_report.xls'); 
 		
         global $mainframe;
