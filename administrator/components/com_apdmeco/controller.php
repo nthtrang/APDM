@@ -875,7 +875,7 @@ class ECOController extends JController
                                         $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
                                                 "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
                                 }
-
+                                $message .= "<br>Please go to <a href='http://10.10.1.245/ADP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
 
                                 $adminEmail = $me->get('email');
                                 $adminName = $me->get('name');
@@ -947,7 +947,7 @@ class ECOController extends JController
                                         $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
                                                 "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
                                 }
-
+                                $message .= "<br>Please go to <a href='http://10.10.1.245/ADP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
 
                                 $adminEmail = $me->get('email');
                                 $adminName = $me->get('name');

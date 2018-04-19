@@ -9,7 +9,7 @@ $role = JAdministrator::RoleOnComponent(6);
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 	if (in_array("V", $role)) {
-		//JToolBarHelper::customX('export_whereused', 'excel', '', 'Export', false);
+		JToolBarHelper::customX('export_whereused', 'excel', '', 'Export', false);
 	}	
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	$title = $this->title[0];
@@ -29,10 +29,21 @@ function CheckForm() {
 		
 	
 }
-
+function submitbutton(pressbutton) {
+			var form = document.adminForm;
+			if (pressbutton == 'cancel_listpns') {				
+				submitform( pressbutton );
+				return;
+			}
+			if (pressbutton == 'export_whereused') {		
+				submitform( pressbutton );
+				return;
+			}
+}
 </script>
 <h1><?php //echo JText::_('List PNs Where Used')?></h1>
-<form action="index.php?option=com_apdmpns&task=list_child&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+
+<form action="index.php?option=com_apdmpns" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <!--<table  width="100%">
 		<tr>
@@ -47,8 +58,7 @@ function CheckForm() {
 			
 		</tr>			
 </table>-->
-<div> <input type="checkbox" onclick="isChecked(this.checked);" value="<?php echo $this->id;?>" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->id?>&cd=<?php echo $this->id?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong></a>
-
+                                <div> <input type="checkbox" onclick="isChecked(this.checked);" value="<?php echo $this->id;?>" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->id?>&cd=<?php echo $this->id?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level 0</a>
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -56,7 +66,9 @@ function CheckForm() {
 				<th class="title" width="15%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
 				</th>
-				
+                                <th width="8%">
+                                        <?php echo JText::_('Level')?>
+                                </th>				
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
 				</th>
@@ -97,7 +109,7 @@ function CheckForm() {
 				<td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
                                 <?php    echo '<p style="margin-left:0px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $pns_code.'</a></p> '; ?>                                                
 				</span>
-				</td>	
+				</td>	<td>-1</td>
 				<td align="center">
 					<?php echo $row->pns_status;?>
 				</td>
@@ -126,7 +138,7 @@ function CheckForm() {
                                                         <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row2->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row2->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row2->text.'</a></p> '; ?>
                                                         </span>
-                                                        </td>	
+                                                        </td><td>-2</td>	
                                                         <td align="center">
                                                                 <?php echo $row2->pns_status;?>
                                                         </td>
@@ -153,9 +165,9 @@ function CheckForm() {
 
 
                                                                         <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row3->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row3->text.'</a></p> '; ?>
+                                                                               <?php    echo '<p style="margin-left:80px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row3->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row3->text.'</a></p> '; ?>
                                                                         </span>
-                                                                        </td>	
+                                                                        </td>	<td>-3</td>
                                                                         <td align="center">
                                                                                 <?php echo $row3->pns_status;?>
                                                                         </td>
@@ -182,9 +194,9 @@ function CheckForm() {
 
 
                                                                                         <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-                                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row4->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row4->text.'</a></p> '; ?>
+                                                                                               <?php    echo '<p style="margin-left:120px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row4->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row4->text.'</a></p> '; ?>
                                                                                         </span>
-                                                                                        </td>	
+                                                                                        </td>	<td>-4</td>
                                                                                         <td align="center">
                                                                                                 <?php echo $row4->pns_status;?>
                                                                                         </td>
@@ -209,9 +221,9 @@ function CheckForm() {
                                                                                                ?>
                                                                                                         <tr>
                                                                                                                 <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-                                                                                                                       <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row5->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row5->text.'</a></p> '; ?>
+                                                                                                                       <?php    echo '<p style="margin-left:160px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row5->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row5->text.'</a></p> '; ?>
                                                                                                                 </span>
-                                                                                                                </td>	
+                                                                                                                </td><td>-5</td>	
                                                                                                                 <td align="center">
                                                                                                                         <?php echo $row5->pns_status;?>
                                                                                                                 </td>
@@ -236,9 +248,9 @@ function CheckForm() {
                                                                                                                        ?>
                                                                                                                                 <tr>
                                                                                                                                         <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-                                                                                                                                               <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row6->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row6->text.'</a></p> '; ?>
+                                                                                                                                               <?php    echo '<p style="margin-left:200px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row6->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row6->text.'</a></p> '; ?>
                                                                                                                                         </span>
-                                                                                                                                        </td>	
+                                                                                                                                        </td>	<td>-6</td>
                                                                                                                                         <td align="center">
                                                                                                                                                 <?php echo $row6->pns_status;?>
                                                                                                                                         </td>
@@ -281,8 +293,15 @@ function CheckForm() {
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" id="task" value="list_where_used" />
+        <input type="hidden" name="boxchecked" value="0" />
+        <input type="hidden" name="pns_id" value="<?php echo $this->lists['pns_id'];?>"  />
 	<input type="hidden" name="tmpl" value="component" />	
+        <input type="hidden" name="return" value="<?php echo $this->lists['pns_id'];?>"  />
+        <input type="hidden" name="cd" value="<?php echo $this->lists['pns_id'];?>"  />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
+
+
+
 </form>
 

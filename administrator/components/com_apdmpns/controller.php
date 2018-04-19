@@ -1530,8 +1530,8 @@ class PNsController extends JController
     }
     function DisplayPnsAllParentId($pns_id){  
         $db =& JFactory::getDBO();
-        $rows = array();
-        $db->setQuery('SELECT p.*,pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in ('.$pns_id.')');
+        $rows = array();        
+        $db->setQuery('SELECT p.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in ('.$pns_id.')');
         return $result = $db->loadObjectList();
     }    
     function GetEcoValue($eco_id){
@@ -1896,6 +1896,307 @@ class PNsController extends JController
             
 		
 	}
+function export_whereused(){     
+        
+        include_once(JPATH_BASE .DS.'includes'.DS.'PHPExcel.php');
+        require_once (JPATH_BASE .DS.'includes'.DS.'PHPExcel'.DS.'RichText.php');        
+        require_once(JPATH_BASE .DS.'includes'.DS.'PHPExcel'.DS.'IOFactory.php');   
+        require_once('includes/download.class.php');     
+         ini_set("memory_limit", "512M");   
+         ini_set("error_reporting", "E_ALL");   
+        @set_time_limit(1000000);
+        $objPHPExcel = new PHPExcel();                               
+        $objReader = PHPExcel_IOFactory::createReader('Excel5');//Excel5
+        $objPHPExcel = $objReader->load(JPATH_COMPONENT.DS.'apdm_pn_bom_report.xls'); 
+		
+        global $mainframe;
+	$me             =& JFactory::getUser();   		              
+        $pns_id 		= JRequest::getVar('pns_id');
+        $username 		= $me->get('username');
+        $db             =& JFactory::getDBO();  
+        $query = 'SELECT * FROM apdm_pns WHERE pns_id='.$pns_id;
+
+        $db->setQuery( $query);
+        $row = $db->loadObject(); 
+
+        $listPNs = array();
+        $listPNs[] = array(
+            "pns_code"=>$row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision,
+            "pns_level"=>0,
+            "eco"=>GetEcoValue($row->eco_id),
+            "pns_type"=>$row->pns_type,
+            "pns_des"=>$row->pns_description,
+            "pns_status"=>$row->pns_status,
+            "pns_date"=>JHTML::_('date', $row->pns_create, '%m/%d/%Y')
+        );
+        //get list child
+        //$query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_id=".$pns_id." ORDER BY p.ccs_code ";       
+        
+        $query = "SELECT p.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code_full  FROM apdm_pns AS p  WHERE p.pns_id=".$pns_id." ORDER BY p.ccs_code";    
+        $db->setQuery($query);
+        $rows = $db->loadObjectList();
+        //$db->setQuery('SELECT p.*,pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in ('.$pns_id.')');
+        //for level 2
+        $query1 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$pns_id.")";
+        $db->setQuery($query1);
+        $result1 = $db->loadObjectList();    
+        if(isset($result1)&& sizeof($result1)>0){
+        foreach ($result1 as $obj1) {
+            $listPNs[] = array(
+                "pns_code"=>$obj1->full_pns_code,
+                "pns_level"=>"-1",
+                "eco"=>$obj1->eco_name,
+                "pns_type"=>$obj1->pns_type,
+                "pns_des"=>$obj1->pns_description,
+                "pns_status"=>$obj1->pns_status,
+                "pns_date"=>JHTML::_('date', $obj1->pns_create, '%m/%d/%Y')
+            );
+            ///check for child of level 3
+           echo $query2 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj1->pns_id.")";
+            $db->setQuery($query2);
+            $result2 = $db->LoadObjectList();
+            if(isset($result2)&& sizeof($result2)>0){
+                foreach ($result2 as $obj2){                  
+                     $listPNs[] = array(
+                         "pns_code"=>$obj2->full_pns_code,
+                        "pns_level"=>"-2",
+                        "eco"=>$obj2->eco_name,
+                        "pns_type"=>$obj2->pns_type,
+                        "pns_des"=>$obj2->pns_description,
+                        "pns_status"=>$obj2->pns_status,
+                        "pns_date"=>JHTML::_('date', $obj2->pns_create, '%m/%d/%Y')
+                    );
+                    //check for level 4
+                   $query3 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj2->pns_id.")";
+                    $db->setQuery($query3);
+                    $result3 = $db->LoadObjectList();
+                    if(isset($result3)&& sizeof($result3)>0){
+                         foreach ($result3 as $obj3){                            
+                            $listPNs[] = array(
+                                "pns_code"=>$obj3->full_pns_code,
+                                "pns_level"=>"-3",
+                                "eco"=>$obj3->eco_name,
+                                "pns_type"=>$obj3->pns_type,
+                                "pns_des"=>$obj3->pns_description,
+                                "pns_status"=>$obj3->pns_status,
+                                "pns_date"=>JHTML::_('date', $obj3->pns_create, '%m/%d/%Y')
+                            );
+                            //check for level 5
+                            $query4 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj3->pns_id.")";
+                            $db->setQuery($query4);
+                            $result4 = $db->LoadObjectList();
+                            if(isset($result4)&& sizeof($result4)>0){
+                                foreach ($result4 as $obj4){   
+                                     $listPNs[] = array(
+                                        "pns_code"=>$obj4->full_pns_code,
+                                        "pns_level"=>"-4",
+                                        "eco"=>$obj4->eco_name,
+                                        "pns_type"=>$obj4->pns_type,
+                                        "pns_des"=>$obj4->pns_description,
+                                        "pns_status"=>$obj4->pns_status,
+                                        "pns_date"=>JHTML::_('date', $obj4->pns_create, '%m/%d/%Y')
+                                    );
+                                    //check for level 6
+                                    $query5 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj4->pns_id.")";
+                                    $db->setQuery($query5);
+                                    $result5 = $db->LoadObjectList();
+                                    if(isset($result5)&& sizeof($result5)>0){
+                                        foreach ($result5 as $obj5){                                          
+                                           $listPNs[] = array(
+                                                "pns_code"=>$obj5->full_pns_code,
+                                                "pns_level"=>"-5",
+                                                "eco"=>$obj5->eco_name,
+                                                "pns_type"=>$obj5->pns_type,
+                                                "pns_des"=>$obj5->pns_description,
+                                                "pns_status"=>$obj5->pns_status,
+                                                "pns_date"=>JHTML::_('date', $obj5->pns_create, '%m/%d/%Y')
+                                            );
+                                            //check for level 7
+                                            $query6 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj5->pns_id.")";
+                                            $db->setQuery($query6);
+                                            $result6 = $db->LoadObjectList();
+                                            if(isset($result6)&& sizeof($result6)>0){
+                                                foreach ($result6 as $obj6){                                                   
+                                                     $listPNs[] = array(
+                                                        "pns_code"=>$obj6->full_pns_code,
+                                                        "pns_level"=>"-6",
+                                                        "eco"=>GetEcoValue($obj6->eco_id),
+                                                        "pns_type"=>$obj6->pns_type,
+                                                        "pns_des"=>$obj6->pns_description,
+                                                        "pns_status"=>$obj6->pns_status,
+                                                        "pns_date"=>JHTML::_('date', $obj6->pns_create, '%m/%d/%Y')
+                                                    );          
+                                                    // check for level 8
+                                                    $query7 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj6->pns_id.")";
+                                                    $db->setQuery($query7);
+                                                    $result7 = $db->LoadObjectList();
+                                                    if(isset($result7)&& sizeof($result7)>0){
+                                                        foreach ($result7 as $obj7){       
+                                                             $listPNs[] = array(
+                                                                "pns_code"=>$obj7->full_pns_code,
+                                                                "pns_level"=>"-7",
+                                                                "eco"=>$obj7->eco_name,
+                                                                "pns_type"=>$obj7->pns_type,
+                                                                "pns_des"=>$obj7->pns_description,
+                                                                "pns_status"=>$obj7->pns_status,
+                                                                "pns_date"=>JHTML::_('date', $obj7->pns_create, '%m/%d/%Y')
+                                                            );       
+                                                            //check for level 9
+                                                            $query8 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj7->pns_id.")";
+                                                            $db->setQuery($query8);
+                                                            $result8 = $db->LoadObjectList();
+                                                            if(isset($result8)&& sizeof($result8)>0){
+                                                                foreach ($result8 as $obj8){       
+                                                                    $listPNs[] = array(
+                                                                        "pns_code"=>$obj8->full_pns_code,
+                                                                        "pns_level"=>"-8",
+                                                                        "eco"=>$obj8->eco_name,
+                                                                        "pns_type"=>$obj8->pns_type,
+                                                                        "pns_des"=>$obj8->pns_description,
+                                                                        "pns_status"=>$obj8->pns_status,
+                                                                        "pns_date"=>JHTML::_('date', $obj8->pns_create, '%m/%d/%Y')
+                                                                    );
+                                                                    //check for level 10;
+                                                                    $query9 = "SELECT p.*,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p   LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_parent LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id  WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id in (".$obj8->pns_id.")";
+                                                                    $db->setQuery($query9);
+                                                                    $result9 = $db->LoadObjectList();
+                                                                    if(isset($result9)&& sizeof($result9)>0){
+                                                                        foreach ($result9 as $obj9){       
+                                                                             $listPNs[] = array(
+                                                                                "pns_code"=>$obj9->full_pns_code,
+                                                                                "pns_level"=>"-9",
+                                                                                "eco"=>$obj9>eco_name,
+                                                                                "pns_type"=>$obj9->pns_type,
+                                                                                "pns_des"=>$obj9->pns_description,
+                                                                                "pns_status"=>$obj9->pns_status,
+                                                                                "pns_date"=>JHTML::_('date', $obj9->pns_create, '%m/%d/%Y')
+                                                                            );
+                                                                            
+                                                                        }
+                                                                    }//check for level 10;
+                                                                }
+                                                            }//check for level 9;
+                                                        }
+                                                    }//check for level 8;
+                                                }
+                                            }//check for level 7;
+                                         }
+                                    }//check for level 6;
+                                }
+                            }//check for level 5;
+                         }
+                    }//check for level 4;
+                }
+            }//check for level 3;        
+        }
+        }
+         $user_name = $me->get('name');
+            $date = JHTML::_('date', date("Y-m-d"), '%m/%d/%Y');
+             //for Execl
+            $styleThinBlackBorderOutline = array(
+                'borders' => array(
+                    'outline' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('argb' => 'FF000000'),
+                    ),
+                ),
+            );
+            
+            $objPHPExcel->getActiveSheet()->getStyle('A5')->getFont()->setBold(true);          
+            $objPHPExcel->getActiveSheet()->getStyle('F5')->getFont()->setBold(true);  
+           
+            $objPHPExcel->getActiveSheet()->setCellValue('A5', 'Username: '.$me->get('username'));   
+            $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: '.$date); 
+            $nRecord = count($listPNs);       
+            $objPHPExcel->getActiveSheet()->getStyle('A7:F'.$nRecord)->getAlignment()->setWrapText(true);
+            if ($nRecord > 0){
+                    $j=0;
+                    $i = 7;        
+					$number = 1;
+                    foreach ($listPNs as $pns){
+                        $a = 'A'.$i;
+                        $b='B'.$i;
+                        $c='C'.$i;
+                        $d = 'D'.$i;
+                        $e = 'E'.$i;
+                        $f = 'F'.$i;
+                        $g = 'G'.$i;                        
+						$h = 'H'.$i;
+                        //set heigh or row 
+                        $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(30);               
+						$objPHPExcel->getActiveSheet()->setCellValue($a, $number);
+                        $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
+                        $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
+                        $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
+                        $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
+                        $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);  
+                        $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);                         
+                        $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_date']);                         
+                        
+                        //set format
+                        $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($d)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($e)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+                        $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+						$objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                       
+                        
+                        $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($d)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($e)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
+                        $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+						$objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        
+                        
+                                                                                                                                    
+                        $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($c)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($d)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($e)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                        $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+						$objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                      
+                      
+                        
+                        $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                
+                        if ($j%2==0) {
+                            $objPHPExcel->getActiveSheet()->getStyle($a.':'.$h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                            $objPHPExcel->getActiveSheet()->getStyle($a.':'.$h)->getFill()->getStartColor()->setRGB('EEEEEE');
+                          
+                        }
+                       if ($j ==$nRecord-1){
+                            $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($c)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($d)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($e)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                            $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+							$objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                      
+                        }                 
+                        $i++;
+                        $j++;  
+						$number++;  
+                    }
+            }
+            $path_export = JPATH_SITE.DS.'uploads'.DS.'export'.DS;           
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save($path_export.'APDM_BOM_REPORT.xls');             
+            $dFile=new DownloadFile($path_export,'APDM_BOM_REPORT.xls');
+            exit; 
+            
+		
+	}        
 	/*
 		* Export list PNs with format excel
 	*/

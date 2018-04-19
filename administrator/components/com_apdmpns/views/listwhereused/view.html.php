@@ -166,7 +166,7 @@ class pnsViewlistwhereused extends JView
         $this->assignRef('title',        $rowstitle);        
         
         //get parent
-
+        
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;
