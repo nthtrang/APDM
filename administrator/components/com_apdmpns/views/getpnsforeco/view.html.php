@@ -25,7 +25,7 @@ jimport( 'joomla.application.component.view');
  * @subpackage	Users
  * @since 1.0
  */
-class pnsViewgetpnschild extends JView
+class pnsViewgetpnsforeco extends JView
 {
 	function display($tpl = null)
 	{
@@ -55,7 +55,7 @@ class pnsViewgetpnschild extends JView
         
         
         $where = array();  
-        $where[] = 'p.pns_deleted = 0';
+        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Create","Released")';
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';

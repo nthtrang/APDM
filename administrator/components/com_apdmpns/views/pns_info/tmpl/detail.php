@@ -9,12 +9,17 @@
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
-	if (in_array("E", $role)) {
+	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
 		JToolBarHelper::editListX();
 		
 	}
+        else
+        {
+                JToolBarHelper::customX("Cannotedit", 'cannotedit', '', 'Cannotedit', false);
+        }
 	if (in_array("W", $role)) {
-		JToolBarHelper::addNew();
+                //viet comment
+		//JToolBarHelper::addNew();
 	}
 	
 	JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -94,7 +99,7 @@
 						
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_PARENT' ); ?>
@@ -106,6 +111,8 @@
 								?>
 								<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
 <input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
+                                                <a href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
+<input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
 </a>
 							<?php	
 							}else{
@@ -114,7 +121,7 @@
 						?>
 						
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -155,6 +162,66 @@
 						<?php echo $this->row->pns_status; ?>
 					</td>
 				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Life Cycle' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_life_cycle; ?>
+					</td>
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_cost; ?>
+					</td>
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Date In' ); ?>
+						</label>
+					</td>
+					<td>						
+                                                <?php echo  JHTML::_('date', $this->row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+					</td>
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Stock' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_stock; ?>
+					</td>
+				</tr>	      
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Qty Used' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_qty_used; ?>
+					</td>
+				</tr>	                                 
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'UOM' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_uom; ?>
+					</td>
+				<!--</tr>	
 						<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -176,7 +243,7 @@
  						<?php echo GetValueUser($this->row->pns_create_by, "username"); ?>
 
 					</td>
-				</tr>
+				</tr>-->
 				
 				<tr>
 					<td class="key" valign="top">

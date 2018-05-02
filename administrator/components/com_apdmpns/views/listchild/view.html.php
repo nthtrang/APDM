@@ -157,7 +157,8 @@ class pnsViewlistchild extends JView
         $type[] = JHTML::_('select.option', 5, JText::_('Part Number Code'), 'value', 'text');
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
-        
+        $db->setQuery("SELECT pns_status from apdm_pns WHERE pns_id=".$id);                    
+        $this->assignRef('pns_status',$db->loadResult());
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;

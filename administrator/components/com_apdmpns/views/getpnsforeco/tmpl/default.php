@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+$cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -22,29 +23,29 @@ function CheckForm() {
 		
 	
 }
-function UpdatePnsChild(){
+function UpdatePnsEco(){
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns';			
+		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns&eco[]=<?php echo $cid[0];?>';
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
-			onComplete:function(result){				
-				window.parent.document.getElementById('pns_child').innerHTML = result;				
+			onComplete:function(result){
+			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
 				window.parent.document.getElementById('sbox-window').close();	
+                                window.parent.location.reload();
 				
 
 			}
 		}).request();
-
 	}
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_child&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_eco&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -58,11 +59,11 @@ function UpdatePnsChild(){
 			</td>
 			<tr align="right">
 			<td align="right"><?php
-                        if($this->pns_status!='Release')
-                        {
-                                ?><input type="button" name="btinsert" value="Insert" onclick="UpdatePnsChild();" /> 
+                      //  if($this->pns_status!='Release')
+                       /// {
+                                ?><input type="button" name="btinsert" value="Save" onclick="UpdatePnsEco();" /> 
                         <?php
-                        }
+                     //   }
                         ?>
                         </td>	
 		</tr>

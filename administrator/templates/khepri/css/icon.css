@@ -58,6 +58,10 @@
 .icon-32-preview 		{ background-image: url(../images/toolbar/icon-32-preview.png); }
 .icon-32-default 		{ background-image: url(../images/toolbar/icon-32-default.png); }
 .icon-32-excel 		{ background-image: url(../images/toolbar/icon-32-excel.png); }
+.icon-32-cannotedit		{ background-image: url(../images/toolbar/icon-32-cannotedit.png); }
+.icon-32-files		{ background-image: url(../images/toolbar/icon-32-attach.png); }
+.icon-32-summary		{ background-image: url(../images/toolbar/icon-32-ads_done_small.png); }
+.icon-32-affected		{ background-image: url(../images/toolbar/icon-32-adduser.png); }
 
 
 /** header icons **/

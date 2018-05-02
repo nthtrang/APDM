@@ -38,7 +38,8 @@ class pnsViewpns_info extends JView
             }
             $lists['pns_parent_info'] = $arr_parent_info;
 			//get array where user : new fucntio
-			$db->setQuery("SELECT pr.id, pr.pns_parent, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p on pr.pns_parent = p.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  WHERE c.ccs_activate=1 AND c.ccs_deleted = 0 AND p.pns_deleted =0 AND pr.pns_id=".$row->pns_id);
+//echo "SELECT pr.id, pr.pns_parent, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p on pr.pns_parent = p.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  WHERE c.ccs_activate=1 AND c.ccs_deleted = 0 AND p.pns_deleted =0 AND pr.pns_id=".$row->pns_id;
+            $db->setQuery("SELECT pr.id, pr.pns_parent, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p on pr.pns_parent = p.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code  WHERE c.ccs_activate=1 AND c.ccs_deleted = 0 AND p.pns_deleted =0 AND pr.pns_id=".$row->pns_id);
             $list_where_use = $db->loadObjectList();
 			$arr_where_use = array();
 			if (count($list_where_use) > 0){
@@ -147,13 +148,23 @@ class pnsViewpns_info extends JView
         $lists['mf'] = JHTML::_('select.genericlist',   $mfs, 'manufacture_id[]', 'class="inputbox" size="1"', 'value', 'text' );
         //GET list status of PNS
         $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
-        $lists['status'] = JHTML::_('select.genericlist',   $status, 'pns_status', 'class="inputbox" size="1"', 'value', 'text', $row->pns_status );
+//        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
+//        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
+        
+        $status[] = JHTML::_('select.option',  'Active', JText::_( 'Active' ) , 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Inactive', JText::_( 'Inactive' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Obsolete',  JText::_( 'Obsolete' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'DoNotUse',  JText::_( 'Do Not Use' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'Engineering', JText::_( 'Engineering' ), 'value', 'text');         
+        //check if status is released => disable option
+        $classDisabled = "";
+        if($row->pns_status=='Release')
+            $classDisabled = 'disabled = "disabled"';    
+        $lists['status'] = JHTML::_('select.genericlist',   $status, 'pns_status', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->pns_status );
         //for edit pns
          $lists['arr_v'] = $arr_vendor;
          $lists['arr_s'] = $arr_supplier;
@@ -164,6 +175,31 @@ class pnsViewpns_info extends JView
 		$this->assignRef('row',	$row);
         $this->assignRef('arr_parent_code_detail', $arr_parent_code_detail);
         $this->assignRef('cd', $cd);
+        $this->assignRef('pns_status', $row->pns_status);
+        //viec add life cycle
+        $lifeValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_LIFE_CYCLE' ) .' -', 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Create', JText::_( 'Create' ) , 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Inreview', JText::_( 'In Review' ), 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Released',  JText::_( 'Released' ), 'value', 'text');
+        $classDisabled = 'disabled = "disabled"';
+        $lists['life_cycle'] = JHTML::_('select.genericlist',   $lifeValue, 'pns_life_cycle', 'class="inputbox " '.$classDisabled.' size="1"', 'value', 'text',$row->pns_life_cycle );
+        $this->assignRef('pns_life_cycle', $row->pns_life_cycle);
+        //viec add pns_uom
+        $uomValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_UOM' ) .' -', 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Each', JText::_( 'Each (ea)' ) , 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Undefined', JText::_( 'Undefined' ), 'value', 'text'); 
+        $uomValue[] = JHTML::_('select.option',  'Meter',  JText::_( 'Meter (m)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Centimeter',  JText::_( 'Centimeter (cm)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Foot',  JText::_( 'Foot (ft)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Inch',  JText::_( 'Inch (in)' ), 'value', 'text');
+        $lists['uom'] = JHTML::_('select.genericlist',   $uomValue, 'pns_uom', 'class="inputbox" size="1"', 'value', 'text',$row->pns_uom );
+        $lists['pns_cost'] = $row->pns_cost;
+        $lists['pns_datein'] = $row->pns_datein;
+        $lists['pns_stock'] = $row->pns_stock;
+        $lists['pns_qty_used'] = $row->pns_qty_used;
+        
+        $this->assignRef('pns_uom', $row->pns_uom);
+        
         
 		parent::display($tpl);
 	}

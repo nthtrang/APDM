@@ -10,10 +10,10 @@
 		JToolBarHelper::customX('export', 'excel', '', 'Export', false);
 	}	
 	if (in_array("D", $role)) {
-		JToolBarHelper::deleteList('Are you sure to delete it(s)?');
+		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
 	}
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+		//JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNewX();
@@ -108,7 +108,7 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   'Activate', 'e.eco_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Status', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Life Cycle', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'Date Create', 'e.eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>

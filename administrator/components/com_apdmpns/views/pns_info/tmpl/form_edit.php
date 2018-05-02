@@ -49,7 +49,7 @@
 			return false;
 		}
 		if (form.pns_status.value==""){
-			alert("Please select Part Number Status");
+			alert("Please select Part Number Status/");
 			from.pns_status.focus();
 			return false;
 		}
@@ -130,9 +130,10 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" onkeypress="return CharatersOnlyEspecial(this, event)" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+                                                <?php echo $this->row->pns_revision;?>
+						<input type="hidden" onkeypress="return CharatersOnlyEspecial(this, event)" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
 						<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
-<input type="button" name="RevRoll" value="<?php echo JText::_('Rev Roll')?>" onclick="get_rev_roll();"/>
+<input type="hidden" name="RevRoll" value="<?php echo JText::_('Rev Roll')?>" onclick="get_rev_roll();"/>
 						
 					</td>
 				</tr>
@@ -162,25 +163,25 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<!--<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_PARENT' ); ?>
+							<?php //echo JText::_( 'PNS_PARENT' ); ?>
 						</label>
 					</td>
 					<td valign="top">
 						<?php 
-							if (count($this->lists['where_use']) > 0) { ?>
+							/*if (count($this->lists['where_use']) > 0) { ?>
 								<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=list_where_used&tmpl=component&id=<?php echo $this->row->pns_id?>" title="Image">
 <input type="button" name="where_used" value="<?php echo JText::_('List PNs')?>"/>
 							<?php	
 							}else {
 								echo JText::_('NONE_PNS_USE');
-							}
+							}*/
 						?>
 						
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -190,8 +191,13 @@
 					<td>
 					<input type="text" value="<?php echo PNsController::GetECO($this->row->eco_id); ?>" name="eco_name" id="eco_name" readonly="readonly" />
 					<input type="hidden" name="eco_id" id="eco_id" value="<?php echo $this->row->eco_id;?>" />
-					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
-<input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>
+                                        <?php 
+                                        if($this->pns_status!='Release'){?>
+					<!--viec remove<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
+<input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>-->
+                                        <?php
+                                        }
+                                        ?>
 </a>	
 					</td>
 				</tr>
@@ -225,6 +231,74 @@
 						<?php echo $this->lists['status']?>
 					</td>
 				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Life Cycle' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->lists['life_cycle']?>
+					</td>
+				</tr>
+                                                 <?php 
+                                                 $classDisabled = 'disabled = "disabled"';  
+                                        if($this->pns_status=='Released'){
+                                                $classDisabled = "";
+                                        }
+                                        ?>                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo $this->lists['pns_cost']?>" name="pns_cost" id="pns_cost" <?php echo $classDisabled;?> />
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Date In' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%m-%d-%Y %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Stock' ); ?>
+						</label>
+					</td>
+					<td>
+
+                                                <input type="text" value="<?php echo $this->lists['pns_stock']?>" name="pns_stock" id="pns_stock" <?php echo $classDisabled;?> />
+
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Qty Used' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo $this->lists['pns_qty_used']?>" name="pns_qty_used" id="pns_qty_used" />
+					</td>
+				</tr>                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'UOM' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->lists['uom']?>
+					</td>
+				</tr>	                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -271,7 +345,6 @@
 					</td>
 				</tr>
 				
-				
 			</table>
 		</fieldset>
 	</div>
@@ -296,7 +369,7 @@
 					<img src="../uploads/pns/images/<?php echo $this->row->pns_image?>" width="200" height="100"  />
 					<br />
 					<a href="index.php?option=com_apdmpns&task=download_img&id=<?php echo $this->row->pns_id?>" title="<?php echo JText::_('Click here to download image')?>" ><?php echo JText::_('Download Image')?></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_img&id=<?php echo $this->row->pns_id?>"  title="<?php echo JText::_('Click here to remove image')?>" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
+					<a href="index.php?option=com_apdmpns&task=remove_img&id=<?php echo $this->row->pns_id?>&remove=00<?php echo time();?>"  title="<?php echo JText::_('Click here to remove image')?>" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
 					</td>
 				</tr>
 				<?php } ?>
@@ -314,7 +387,7 @@
 				<?php if ($this->row->pns_pdf !="") {?>
 				<tr>
 					<td colspan="2" align="center"><a href="index.php?option=com_apdmpns&task=download&id=<?php echo $this->row->pns_id?>" title="Click here to download file"><?php echo $this->row->pns_pdf;?>&nbsp;(<?php $filesizepdf = PNsController::Readfilesize('pdf', $this->row->pns_pdf); echo number_format($filesizepdf, 0, '.', ' ')?>&nbsp;KB)</a>&nbsp;&nbsp;					
-					<a href="index.php?option=com_apdmpns&task=remove_pdf&id=<?php echo $this->row->pns_id?>" title="Click here to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
+					<a href="index.php?option=com_apdmpns&task=remove_pdf&id=<?php echo $this->row->pns_id?>&remove=010<?php echo time();?>" title="Click here to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
 					</td>
 				</tr>
 				<?php } ?>
@@ -345,7 +418,7 @@
 					<td><?php echo $cad['cad_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_cad&id=<?php echo $cad['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_cad&id=<?php echo $cad['id']?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+					<a href="index.php?option=com_apdmpns&task=remove_cad&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
 				</tr>
 				<?php $i++; } ?>
 				

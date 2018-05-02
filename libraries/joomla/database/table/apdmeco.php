@@ -68,6 +68,8 @@ class JTableAPDMeco extends JTable
 	var $eco_modified	= null;	
 	
 	var $eco_modified_by	= null;
+        
+        var $eco_lifecycle	= null;
 
 	/**
 	* @param database A database connector object
@@ -103,6 +105,7 @@ class JTableAPDMeco extends JTable
 		$this->eco_estimated 		=  strtoupper($this->eco_estimated);
 		$this->eco_estimated_cogs 	=  strtoupper($this->eco_estimated_cogs);
 		$this->eco_target		 	=  strtoupper($this->eco_target);
+                $this->eco_lifecycle		 	=  strtoupper($this->eco_lifecycle);
 	//	$this->eco_estimated_cogs 	=  strtoupper($this->eco_estimated_cogs);
 		
 		

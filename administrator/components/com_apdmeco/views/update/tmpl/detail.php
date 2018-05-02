@@ -6,14 +6,23 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Detail' ).' ]</small></small>' , 'generic.png' );	
+        //$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
+        $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
+
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
-	if (in_array("E", $role)) {
+        
+        
+	if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
 		JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {
-		JToolBarHelper::addNewX();
+	//	JToolBarHelper::addNewX();
 	}
+      //  JToolBarHelper::customX("files", 'files', '', 'Files', false);
+     //   JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
+        
 	JToolBarHelper::cancel( 'cancel', 'Close' );
 
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -44,14 +53,56 @@
 			submitform( pressbutton );
 			return;
 		}
+//		if (pressbutton == 'files') {
+//			  window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id?>");
+//			return;
+//		}  
+		if (pressbutton == 'approvers') {
+			  window.location.assign("index.php?option=com_apdmeco&task=approvers\&cid[]=<?php echo $this->row->eco_id?>");
+			return;
+		}  
+		if (pressbutton == 'affected') {
+			  window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id?>");
+			return;
+		}                  
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");	
 	}
 </script>
+<style>
+        .buttonfiles {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f49542;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 120px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
 
+.buttonaffected {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f49542;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 32px;
+  width: 180px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 30px;
+}
+</style>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-60">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'INFORMATION_DETAIL' ); ?></legend>
+		<legend><?php echo JText::_( 'Summary' ); ?></legend>
 			<table class="admintable" cellspacing="1">				
 				<tr>
 					<td class="key" valign="top">
@@ -226,7 +277,7 @@
 	<div class="col width-40">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Files' ); ?></legend>
-			<table class="admintable">
+			<table class="admintable" width="100%"  >
 				<?php if (count($this->arr_file) > 0 ) { ?>
 					<tr>
 						<td colspan="2">
@@ -308,7 +359,39 @@
 				
 			</table>
 		</fieldset>
-		
+		<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
+                
+                			<table class="admintable" width="100%"  >
+				<?php if (count($this->arr_status) > 0 ) { ?>
+					<tr>
+						<td colspan="2">
+						<table width="100%"  class="adminlist" cellpadding="1">						
+						<thead>
+							<th colspan="3"><?php echo JText::_('List Approvers ')?></th>
+						</thead>
+						<tr>
+							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="45%"><strong><?php echo JText::_('Email')?> </strong></td>
+							<td width="30%"><strong><?php echo JText::_('Status')?> </strong></td>							
+						</tr>
+						<?php $i = 1; 
+					foreach ($this->arr_status as $status) { 
+						?>
+							<tr>
+							<td><?php echo $i?></td>
+							<td><?php echo $status->email;?></td>
+							<td><?php echo $status->eco_status;?></td>
+						</tr>
+						<?php $i++; } ?>
+						</table>
+						</td>
+					</tr>
+				<?php  
+				} ?>
+			</table>
+                
+                </fieldset>
 	</div>
 	
 	<div class="clr"></div>
