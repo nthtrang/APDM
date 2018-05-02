@@ -170,11 +170,26 @@ function submitbutton(pressbutton) {
 				<th width="20%" class="title">
 					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
 				</th>
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Cost' ); ?>
+				</th>   
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Date In' ); ?>
+				</th>       
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Stock' ); ?>
+				</th>    
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Qty Used' ); ?>
+				</th>  
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Qty Remain' ); ?>
+				</th>                                    
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="10">
+				<td colspan="16">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -263,7 +278,22 @@ function submitbutton(pressbutton) {
 						
 					}
 					 ?>
-				</td>				
+				</td>	
+                                <td align="center">
+					<?php echo $row->pns_cost;?>
+				</td>   
+                                <td align="center">
+					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+				</td>   
+                                <td align="center">
+					<?php echo $row->pns_stock;?>
+				</td>   
+                                <td align="center">
+					<?php echo $row->pns_qty_used;?>
+				</td>   
+                                <td align="center">
+					<?php echo round($row->pns_stock - $row->pns_qty_used);?>
+				</td>                                   
 			</tr>
 			<?php
 				$k = 1 - $k;

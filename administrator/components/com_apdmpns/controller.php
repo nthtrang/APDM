@@ -2781,6 +2781,7 @@ function getcurrentdir($path=".") {
         return $dirarr;
         /*
           alter table `apdm`.`apdm_pns` add column `pns_life_cycle` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_deleted`, add column `pns_uom` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_life_cycle`, add column `pns_cost` varchar (100) COLLATE utf8_general_ci   NULL  after `pns_uom`, add column `pns_stock` int (11) DEFAULT '0' NULL  after `pns_cost`;
+         * 
          */
 }// end func
     function get_list_pns_eco(){

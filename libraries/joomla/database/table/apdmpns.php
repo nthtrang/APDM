@@ -30,7 +30,7 @@ class JTableAPDMpns extends JTable
 	
 	var $ccs_code				= null;
                                                                                
-    var $eco_id             = null; 
+        var $eco_id             = null; 
 	
 	
 	var $pns_code			= null;
@@ -71,7 +71,9 @@ class JTableAPDMpns extends JTable
         var $pns_uom		= null;
         var $pns_cost		= null;
         var $pns_stock		= null;
-
+        var $pns_datein		= null;    
+        var $pns_qty_used		= null;                
+        
 	/**
 	* @param database A database connector object
 	*/

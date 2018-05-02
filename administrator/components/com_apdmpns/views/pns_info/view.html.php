@@ -193,6 +193,11 @@ class pnsViewpns_info extends JView
         $uomValue[] = JHTML::_('select.option',  'Foot',  JText::_( 'Foot (ft)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Inch',  JText::_( 'Inch (in)' ), 'value', 'text');
         $lists['uom'] = JHTML::_('select.genericlist',   $uomValue, 'pns_uom', 'class="inputbox" size="1"', 'value', 'text',$row->pns_uom );
+        $lists['pns_cost'] = $row->pns_cost;
+        $lists['pns_datein'] = $row->pns_datein;
+        $lists['pns_stock'] = $row->pns_stock;
+        $lists['pns_qty_used'] = $row->pns_qty_used;
+        
         $this->assignRef('pns_uom', $row->pns_uom);
         
         

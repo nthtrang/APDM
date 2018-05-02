@@ -240,7 +240,55 @@
 					<td>
 						<?php echo $this->lists['life_cycle']?>
 					</td>
-				</tr>					
+				</tr>
+                                                 <?php 
+                                                 $classDisabled = 'disabled = "disabled"';  
+                                        if($this->pns_status=='Released'){
+                                                $classDisabled = "";
+                                        }
+                                        ?>                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo $this->lists['pns_cost']?>" name="pns_cost" id="pns_cost" <?php echo $classDisabled;?> />
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Date In' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%m-%d-%Y %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Stock' ); ?>
+						</label>
+					</td>
+					<td>
+
+                                                <input type="text" value="<?php echo $this->lists['pns_stock']?>" name="pns_stock" id="pns_stock" <?php echo $classDisabled;?> />
+
+					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Qty Used' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo $this->lists['pns_qty_used']?>" name="pns_qty_used" id="pns_qty_used" />
+					</td>
+				</tr>                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

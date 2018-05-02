@@ -171,7 +171,47 @@
 					<td>
 						<?php echo $this->row->pns_life_cycle; ?>
 					</td>
-				</tr>					
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_cost; ?>
+					</td>
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Date In' ); ?>
+						</label>
+					</td>
+					<td>						
+                                                <?php echo  JHTML::_('date', $this->row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+					</td>
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Stock' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_stock; ?>
+					</td>
+				</tr>	      
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Qty Used' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->pns_qty_used; ?>
+					</td>
+				</tr>	                                 
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
