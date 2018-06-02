@@ -277,6 +277,28 @@ function checkAll( n, fldName ) {
 		document.adminForm.boxchecked.value = 0;
 	}
 }
+        function checkboxBom (field) {
+                for (i = 0; i < field.length; i++) {
+                        if(field[i].checked == true) {
+                                uncheckedAll(field);
+                        }
+                        else {
+                                checkedAll(field);
+                        }
+                }
+        }
+        function checkedAll(field)
+        {
+                for (i = 0; i < field.length; i++)
+                        field[i].checked = true ;
+                
+        }
+
+        function uncheckedAll(field)
+        {
+                for (i = 0; i < field.length; i++)
+                        field[i].checked = false ;
+        }
 // for commodyti code
 function checkAllCC( n, fldName ) {
 	var f = document.adminForm;
@@ -417,6 +439,7 @@ function isChecked(isitchecked){
 	}
 }
 
+
 function isCheckedFile(isitchecked, i){
 	
 	
@@ -514,7 +537,7 @@ function checkCalendar(ev) {
 	if (el == calendar.element || el.tagName == "A") break;
 	if (el == null) {
 		// calls closeHandler which should hide the calendar.
-		calendar.callCloseHandler(); Calendar.stopEvent(ev);
+		calendar.callCloseHandler();Calendar.stopEvent(ev);
 	}
 }
 
@@ -557,7 +580,7 @@ function popupWindow(mypage, myname, w, h, scroll) {
 	var wint = (screen.height - h) / 2;
 	winprops = 'height='+h+',width='+w+',top='+wint+',left='+winl+',scrollbars='+scroll+',resizable'
 	win = window.open(mypage, myname, winprops)
-	if (parseInt(navigator.appVersion) >= 4) { win.window.focus(); }
+	if (parseInt(navigator.appVersion) >= 4) {win.window.focus();}
 }
 
 // LTrim(string) : Returns a copy of a string without leading spaces.

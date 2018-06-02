@@ -8,7 +8,7 @@ class pnsViewpns_info extends JView
 	{
         
 
-		$cid		= JRequest::getVar( 'cid', array(0), '', 'array' );        
+		$cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
         $cd         = JRequest::getVar('cd');  
 		$edit		= JRequest::getVar('edit',true);
 		$me 		= JFactory::getUser();

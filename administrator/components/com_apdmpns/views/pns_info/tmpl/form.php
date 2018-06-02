@@ -7,7 +7,7 @@
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 
-	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) . ': <small><small>[ '. $text .' ]</small></small>' , 'cpanel.png' );
+	JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. $text .' ]</small></small>' , 'cpanel.png' );
 	
 	
 	if (!intval($edit)) {
@@ -190,13 +190,24 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_TYPE' ); ?>
+							<?php echo JText::_( 'Make/Buy' ); ?>
 						</label>
 					</td>
 					<td>
 						<?php echo $this->lists['pns_type']?>
 					</td>
 				</tr>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'UOM' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->lists['uom']?>
+					</td>
+                                        
+				</tr>	                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

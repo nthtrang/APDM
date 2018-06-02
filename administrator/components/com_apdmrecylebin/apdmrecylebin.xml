@@ -21,7 +21,7 @@
 	<administration>		
 		<menu img="generic.png">ADP ECO Management</menu>	
 		<submenu>
-			<menu link="option=com_apdmrecylebin&amp;task=ccs">Commodity Code</menu>
+			<menu link="option=com_apdmrecylebin&amp;task=ccs">Commodity Codess</menu>
 			<menu link="option=com_apdmrecylebin&amp;task=info">Info VD/SP/MF</menu>
 			<menu link="option=com_apdmrecylebin&amp;task=eco">ECO</menu>
 			<menu link="option=com_apdmrecylebin&amp;task=pns">Part Number</menu>

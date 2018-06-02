@@ -19,7 +19,13 @@
 		<language tag="en-GB">en-GB.com_apdmpns.ini</language>
 	</languages>	
 	<administration>		
-		<menu img="generic.png">APDM PNs Management</menu>				
+		<menu img="generic.png">APDM PNs Management</menu>		
+		<submenu>
+			<menu link="option=com_apdmpns&amp;task=ccs">Commodity Codess</menu>
+			<menu link="option=com_apdmpns&amp;task=info">Info VD/SP/MF</menu>
+			<menu link="option=com_apdmpns&amp;task=eco">ECO</menu>
+			<menu link="option=com_apdmpns&amp;task=pns">Part Number</menu>
+		</submenu>
 		<files folder="admin">
 		 <filename>index.html</filename>
 		 <filename>apdmpns.php</filename>	

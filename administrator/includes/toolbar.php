@@ -507,6 +507,12 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_pns_eco&tmpl=component&cid[]=$eco_id", 850,500 );
 	}
+        function addPnsChild($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_bom_child&tmpl=component&id=$id", 850,500 );
+	}
   
 	function deletePns($msg = '', $task = 'removepns', $alt = 'Delete')
 	{

@@ -409,7 +409,7 @@
 				<?php
 				
 				$i = 1;
-				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+				echo $folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
 				foreach ($this->lists['cads_files'] as $cad) {
 					$filesize = PNsController::Readfilesize('cads', $cad['cad_file'], $this->row->ccs_code, $folder_pns);
 				?>

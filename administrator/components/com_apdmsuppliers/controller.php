@@ -425,8 +425,8 @@ class apdmsuppliersController extends JController
         $rows = $db->loadObjectList();        
         $result = '';
         foreach ($rows as $row){
-            $result .= '<tr>';
-            $result .= '<td>'.$row->info_name.' <input type="hidden" value="'.$row->info_id.'" name="'.$name_check.'[]" /></td><td><input type="text" value="" name="'.$name_value.'[]" size="50" /></td>';
+            $result .= '<tr id="'.$row->info_id.'">';
+            $result .= '<td>'.$row->info_name.' <input type="hidden" value="'.$row->info_id.'" name="'.$name_check.'[]" /></td><td><input type="text" value="" name="'.$name_value.'[]" size="50" required/></td><td><a onclick="removeMf('.$row->info_id.');">Remove</a></td>';
             $result .='</tr>';
         }
         echo $result;
