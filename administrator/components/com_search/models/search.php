@@ -44,6 +44,7 @@ class SearchModelSearch extends JModel
 
 	function getItems( )
 	{
+                
 		global $mainframe, $option;
 		$db	=& JFactory::getDBO();
 

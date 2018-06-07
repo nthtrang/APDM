@@ -28,17 +28,7 @@ $pns_code_full = $row->pns_code_full;
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
 	}        
-//	if (in_array("E", $role)) {
-//		JToolBarHelper::editListX();
-//		
-//	}        
-//	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
-//	if (in_array("E", $role)) {
-//		JToolBarHelper::editListX();
-//	}
-//	if (in_array("D", $role)) {
-//		JToolBarHelper::deleteList('Are you sure to delete it(s)?');
-//	}
+
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -136,8 +126,8 @@ function isCheckedBom(isitchecked,id){
 			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'MEP' ); ?></a></li>
-                        <li><a id="server"><?php echo JText::_( 'REV' ); ?></a></li>
-                        <li><a id="server"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
+                        <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
 	</div>

@@ -65,8 +65,8 @@
 			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" class="active"><?php echo JText::_( 'MEP' ); ?></a></li>
-                        <li><a id="server"><?php echo JText::_( 'REV' ); ?></a></li>
-                        <li><a id="server"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
+                        <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
 	</div>
@@ -79,7 +79,7 @@
 		<legend><?php echo JText::_( 'Vendor' ); ?></legend>
 		<?php if (count($this->lists['arr_v']) > 0) {
 		?>
-			<table class="admintable" cellspacing="1" width="400">
+			<table class="adminlist" cellspacing="1" width="400">
 			<thead>
 				<tr>
 					<th width="200"><?php echo JText::_( 'Vendor Name' ); ?></th>
@@ -98,9 +98,7 @@
 		<?php }
 		  ?>	
 		
-		 	<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=2&pns_id=<?php echo $this->row->pns_id?>" title="Image">
-<input type="button" name="addVendor" value="<?php echo JText::_('Select Vendor')?>"/>
-</a></p>
+		 	
 		
 			<table class="admintable" cellspacing="1" width="400">
 			<thead>
@@ -115,6 +113,9 @@
 					</tr>
 			</tbody>
 			</table>
+                <p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=2&pns_id=<?php echo $this->row->pns_id?>" title="Image">
+<input type="button" name="addVendor" value="<?php echo JText::_('Select Vendor')?>"/>
+</a></p>
 		</fieldset>
 	</div>
 	<div class="clr"></div>
@@ -122,7 +123,7 @@
 	<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Supplier' ); ?></legend>
 		<?php if (count($this->lists['arr_s']) > 0) { ?>
-			<table class="admintable" cellspacing="1" width="400">
+			<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>						
 						<th width="200"><?php echo JText::_( 'Supplier Name' ); ?></th>
@@ -139,9 +140,7 @@
 				</tbody>
 				</table>
 		<?php } ?>
-		 	<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=3&pns_id=<?php echo $this->row->pns_id?>" title="Image">
-<input type="button" name="addSupplier" value="<?php echo JText::_('Select Supplier')?>"/>
-</a></p>
+		 	
 		<table class="admintable" cellspacing="1" width="400">
 				<thead>
 					<tr>						
@@ -155,6 +154,9 @@
 					</tr>
 				</tbody>
 				</table>
+                <p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=3&pns_id=<?php echo $this->row->pns_id?>" title="Image">
+<input type="button" name="addSupplier" value="<?php echo JText::_('Select Supplier')?>"/>
+</a></p>
 		</fieldset>
 	</div>
 	<div class="clr"></div>
@@ -162,7 +164,7 @@
 	<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Manufacture' ); ?></legend>
 		<?php if (count($this->lists['arr_m']) > 0) { ?>
-		<table class="admintable" cellspacing="1" width="400">
+		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>
 					<th width="200"><?php echo JText::_( 'Manufacture Name' ); ?></th>

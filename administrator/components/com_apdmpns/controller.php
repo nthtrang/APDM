@@ -49,6 +49,15 @@ class PNsController extends JController
         $this->registerTask( 'whereused', 'whereused' ); 
         $this->registerTask('specification','specification');
         $this->registerTask('mep','mep');
+        $this->registerTask('rev','rev');
+        $this->registerTask('update_rev_roll','update_rev_roll');
+        $this->registerTask('save_rev_roll','save_rev_roll');
+        $this->registerTask('dash','dash');
+        $this->registerTask('get_dash_up','get_dash_up');
+        $this->registerTask('searchall','searchall');
+        
+        
+        
         
 
 	}
@@ -195,6 +204,43 @@ class PNsController extends JController
         JRequest::setVar( 'edit', true );
         parent::display();
     } 
+    	/*
+		* Asign template for displat list child of Pns
+	*/
+    function rev(){
+        JRequest::setVar( 'layout', 'rev'  );
+        JRequest::setVar( 'view', 'pns_info' );
+        JRequest::setVar( 'edit', true );
+        parent::display();
+    }     
+    	/*
+		* Asign template for get list child PNS  for BOM PNS
+	*/
+    function get_pns_rev(){
+        JRequest::setVar( 'layout', 'default'  );
+        JRequest::setVar( 'view', 'revroll' );
+        parent::display();
+    }    
+    function update_rev_roll() {
+        $db       =& JFactory::getDBO();
+        $id = JRequest::getVar('id');
+        $rev = JRequest::getVar('rev');
+        $pns_id = JRequest::getVar('pns_id');
+        $query = "UPDATE apdm_pns SET pns_revision='" . $rev . "' WHERE pns_id=" . $pns_id;
+        $db->setQuery($query);
+        $db->query();
+        $msg = JText::_('Successfully Saved Rev Roll') . $text_mess;
+        $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $pns_id, $msg);        
+    }
+    	/*
+		* Asign template for displat list child of Pns
+	*/
+    function dash(){
+        JRequest::setVar( 'layout', 'dash'  );
+        JRequest::setVar( 'view', 'pns_info' );
+        JRequest::setVar( 'edit', true );
+        parent::display();
+    }         
     /*
      * 
      * add bom tab in pn detail
@@ -202,6 +248,16 @@ class PNsController extends JController
         function bom(){
         JRequest::setVar( 'layout', 'bom'  );
         JRequest::setVar( 'view', 'listpns' );
+        parent::display();
+    }
+    
+        /*
+     * 
+     * add bom tab in pn detail
+     */
+        function searchall(){
+        JRequest::setVar( 'layout', 'default'  );
+        JRequest::setVar( 'view', 'searchall' );
         parent::display();
     }
     /** 
@@ -470,6 +526,133 @@ class PNsController extends JController
         $new_code = implode("", $arr_result);    
         return $new_code;
     }
+/*
+		* Get rev roll for Pns
+	*/
+    function next_rev_roll(){
+        global $arrCharacter;
+        $db         =& JFactory::getDBO();              
+       // $arrLast    = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'T', 'V', 'Y', 'Z');
+        $cid	 = JRequest::getVar( 'cid', array(0), '', 'array' );       
+        $ccs_code   = JRequest::getVar('ccs_code');
+        $query      = "SELECT pns_revision FROM apdm_pns_rev WHERE pns_id='".$cid[0]."' order by pns_revision DESC LIMIT 0, 1";
+        $db->setQuery($query);
+        $rows       = $db->loadObjectList();
+        $last_revision = trim($rows[0]->pns_revision);
+        $firstChar     = $last_revision{0};
+        $lastChar      = $last_revision{1};
+        $newfirstChar  = '';
+        $newLastChar   = '';
+        //check for last char
+        $i = 0;
+        $itemp = 0;
+        foreach ($arrCharacter as $char){
+            if ($char == $lastChar){
+                $itemp = $i;
+            }
+            $i++;
+        }
+             
+        if ($itemp == count($arrCharacter)-1){ //last char of array
+                $newLastChar = 'A';
+                
+                //get new first Char
+                $j = 0;
+                $jTemp = 0;
+                foreach ($arrCharacter as $char_first){
+                        if ($char_first == $firstChar){
+                            $jTemp = $j;
+                        }
+                       $j++;
+                }
+             
+                if ($jTemp == count($arrCharacter) -1 ){
+                    $newfirstChar = '0';
+                }else{
+                    $newfirstChar = $arrCharacter[$jTemp+1];
+                }
+        }else{
+            $newfirstChar = $firstChar;
+            $newLastChar  = $arrCharacter[$itemp+1];
+        }
+         $new_code = $newfirstChar.$newLastChar;
+        
+        
+        
+        //for change by request Khang
+        /*
+        $arrExist   = array();
+        if (count($rows) > 0){
+            foreach ($rows as $row){
+                $arrExist[] = $row->pns_revision;
+            }
+        }
+        $new_code  = PNsController::RandomRevision();             
+        if (count($arrExist) > 0 && in_array($new_code, $arrExist)){
+            $new_code  = PNsController::RandomRevision();
+        } */                                           
+        return    $new_code;
+       // exit;
+		
+        
+        
+    }  
+    function save_rev_roll() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();           
+                $datenow    =& JFactory::getDate(); 
+                $pns_id = JRequest::getVar('pns_id');
+                $ccs_code = JRequest::getVar('ccs_code');
+                $pns_code = JRequest::getVar('pns_code');
+                $pns_revision = JRequest::getVar('pns_revision');
+                $eco_id = JRequest::getVar('eco_id');
+                $pns_modified = $datenow->toMySQL();
+                $pns_modified_by = $me->get('id');
+                $pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                $return = JRequest::getVar('return');                        
+                $db->setQuery("INSERT INTO apdm_pns_rev (pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_modified,pns_modified_by,pns_life_cycle) VALUES (" . $pns_id . ", '" . $ccs_code . "', '" . $pns_code . "', '" . $pns_revision . "', '" . $eco_id . "', '" . $pns_modified . "', '" . $pns_modified_by . "', '" . $pns_life_cycle . "')");
+                $db->query();
+                $msg = "Successfully Saved Rev Roll";
+                $this->setRedirect( 'index.php?option=com_apdmpns&task=detail&cid[0]='.$pns_id, $msg );
+                
+        }
+        
+        function get_dash_up(){		
+                
+                
+		$db         =& JFactory::getDBO();  
+                $pns_code   = JRequest::getVar('pns_code');
+                $ccs_code   = JRequest::getVar('ccs_code');
+                $pns_id   = JRequest::getVar('pns_id');
+		$query = "SELECT pns_code  FROM apdm_pns  WHERE ccs_code = '".$ccs_code."' ORDER BY pns_id DESC LIMIT 0, 1 ";
+                $db->setQuery($query);
+                $rows = $db->loadObject();		 
+		 if ( $rows){ //267890-00
+		 	$temp = explode("-", $rows->pns_code);
+		 	$pns_latest = $temp[1];
+			
+		 }else{
+		 	$pns_latest = 0;
+		 }
+		 
+		$next_pns_code = (int) $pns_latest;
+		$next_pns_code++;
+		$number = strlen($next_pns_code);
+		switch ($number){
+			case '1':                                
+				$new_pns_code = '0'.$next_pns_code;
+			break;
+			case '2':
+				$new_pns_code = $next_pns_code;
+			break;
+			default:
+				$new_pns_code = $next_pns_code;
+			break;
+		}
+		echo $new_pns_code;
+		exit;
+	}
+
     /*
 		Get code defaut : Ajax request
 	*/
@@ -564,7 +747,7 @@ class PNsController extends JController
         }else{
             $query_check = "SELECT pns_id FROM apdm_pns WHERE ccs_code='".$row->ccs_code."' AND pns_code = '".$pns_code_check."'";    
         }
-        
+
         $db->setQuery($query_check);
         $result_check = $db->loadResult();         
         if ($result_check > 0){
@@ -721,6 +904,9 @@ class PNsController extends JController
 		switch ( $this->getTask() )
 		{
 			case 'apply':
+                                //insert  rev history
+                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '".$row->pns_id."'");
+                                $db->query();
 				$msg = JText::_( 'Successfully Saved Part Number' ).$text_mess;
 				$this->setRedirect( 'index.php?option=com_apdmpns&task=detail&cid[0]='.$row->pns_id, $msg );
 				break;
@@ -733,7 +919,52 @@ class PNsController extends JController
 				break;
 		}
 	}
+ function edit_pns_dash(){
+        
+        global $mainframe;
+         // Initialize some variables
+        $db            = & JFactory::getDBO();
+        $me            = & JFactory::getUser();
+        $row        = & JTable::getInstance('apdmpns');
+        $datenow    =& JFactory::getDate(); 
+        $post       =  JRequest::get('post');
 
+  //      $pns_parent = JRequest::getVar('pns_parent',  array(), '', 'array');
+  //      $pns_child = JRequest::getVar('pns_child',  array(), '', 'array');
+        $pns_id = JRequest::getVar('pns_id');
+        $pns_revision_old  = JRequest::getVar('pns_revision_old');
+        $eco_id = JRequest::getVar('eco_id');
+        $pns_type= JRequest::getVar('pns_type');
+        $pns_description= JRequest::getVar('pns_description');
+        $pns_code_old = JRequest::getVar('pns_code_old');
+        $pns_revision  = JRequest::getVar('pns_revision');
+        $pns_code = JRequest::getVar('pns_code');      
+        $pns_version = JRequest::getVar('pns_version');
+        $new_pns_code = $pns_code."-".$pns_version;
+        if($new_pns_code === $pns_code_old)
+        {
+                $msg = JText::_( 'Dash Roll not change' );
+                $this->setRedirect( 'index.php?option=com_apdmpns&task=dash&cid[0]='.$pns_id, $msg );
+                return;
+        }
+        
+        $ccs_code  = JRequest::getVar('ccs_code');
+        $db->setQuery("insert into apdm_pns (ccs_code,pns_code,pns_revision,eco_id,pns_type,pns_status,pns_pdf,pns_image,pns_description,pns_create,pns_create_by,pns_modified,pns_modified_by,pns_deleted,pns_life_cycle,pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number) select ccs_code,'".$new_pns_code."',pns_revision,'".$eco_id."','".$pns_type."',pns_status,pns_pdf,pns_image,'".$pns_description."',pns_create,pns_create_by,pns_modified,pns_modified_by,pns_deleted,'Create',pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number from apdm_pns where pns_id='".$pns_id."'");
+        $db->query();
+
+        //getnew pnsID
+        
+        $query = "SELECT pns_id  FROM apdm_pns  WHERE pns_code = '".$new_pns_code."'  and  ccs_code = '".$ccs_code."' ORDER BY pns_id DESC LIMIT 0, 1 ";
+        $db->setQuery($query);
+        $rows = $db->loadObject();	
+                //insert  rev history
+        $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '".$rows->pns_id."'");
+        $db->query();        
+        $msg = JText::_( 'Successfully Saved Dash Roll' );
+        
+	$this->setRedirect( 'index.php?option=com_apdmpns&task=dash&cid[0]='.$rows->pns_id, $msg );
+        
+ }
     /**
     * @desc save edit pns
     */
@@ -938,7 +1169,7 @@ class PNsController extends JController
                     $text_mess .= '"'.$aaa['pns'].'" => '.$aaa['mess'].'; ';
                 }
             }
-             $msg = JText::_( 'Successfully Saved Part ddddd' ).$text_mess;
+             $msg = JText::_( 'Successfully Saved Part.' ).$text_mess;
              if(isset($redirect)&&$redirect!="")
              {
                 $this->setRedirect('index.php?option=com_apdmpns&task='.$redirect.'&cid[]='.$row->pns_id, $msg);        

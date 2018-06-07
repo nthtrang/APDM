@@ -524,6 +524,12 @@ class JToolBarHelper
 			$bar->appendButton( 'Standard', 'delete', $alt, $task, true, false );
 		}
 	}        
+        function addPnsRev($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_pns_rev&tmpl=component&cid[]=$id", 400,200 );
+	}        
 }
 
 /**

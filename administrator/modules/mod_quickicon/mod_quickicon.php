@@ -177,7 +177,8 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			$link = 'index.php?option=com_languages&amp;client=0';
 			quickiconButton( $link, 'icon-48-language.png', JText::_( 'Language Manager' ) );
 		}
-		
+		$link = 'index.php?option=com_apdmpns&task=searchall';
+			quickiconButton( $link, 'icon-48-search.png', JText::_( 'Search' ) );
 	/*	if ( $user->get('gid') > 24 ) {
 			$link = 'index.php?option=com_config';
 			quickiconButton( $link, 'icon-48-config.png', JText::_( 'Global Configuration' ) );

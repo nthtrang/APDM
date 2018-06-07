@@ -249,4 +249,65 @@ if ($step==1) {
 		exit;
 	} 
 }
+if ($step==2) {
+	$zdir = 100;
+        
+	$folder_file = 'folderfile';
+	$fp = fopen($folder_file.'/log_file.txt', 'r+');
+	touch($folder_file.'/log_file.txt');
+    //fwrite($fp, "\n");
+	$j=1;
+	$str = '';
+	for ($i=0; $i <count($zdir); $i++) {		
+	 $str .= $j.". ".$zdir[$i]."  \r\n ";
+	 $j++;
+	}
+    
+    fwrite($fp, $str);	
+    fclose($fp);
+	$zdir[] = 'log_file.txt';
+	if (count($zdir)>0) {
+		$dirarray=array();
+		$dirsize=0;
+		$zdirsize=0;
+		for ($i=0;$i<count($zdir);$i++) {
+			$ffile = $zdir[$i];
+			if (is_dir($ffile)) {
+				getdir($ffile);
+			} else {
+				if ($fsize=@filesize($ffile)) $zdirsize+=$fsize;
+			}
+		}
+		$zdirsize+=$dirsize;
+		for ($i=0;$i<count($dirarray);$i++) {
+			$zdir[] = $dirarray[$i];
+		}
+		if (!@is_dir($conf['dir'])) {
+			$res = @mkdir($conf['dir'],0777);
+			if (!$res) $txtout = "Cannot create dir !<br>";
+		} else @chmod($conf['dir'],0777);
+	
+		$zipname = $_POST['filename'];
+		$zipname=str_replace("/","",$zipname);
+		if (empty($zipname)) $zipname="PNsZip_".time();
+		$zipname.=".zip";
+		
+		$ziper = new zipfile();
+		$ziper->addFiles($zdir);
+		$ziper->output("{$conf['dir']}/{$zipname}");
+		
+		if ($fsize=@filesize("{$conf['dir']}/{$zipname}")) $zipsize=$fsize;
+		else $zipsize=0;
+		
+		$zdirsize = size_format($zdirsize);
+		$zipsize = size_format($zipsize);
+		$archive_file_name = $conf['dir'].'/'.$zipname;			
+		header("Content-type: application/zip");
+        header("Content-Disposition: attachment; filename=$archive_file_name");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        readfile("$archive_file_name");
+		exit;
+	} 
+}
 ?>

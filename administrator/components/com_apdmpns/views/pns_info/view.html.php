@@ -9,7 +9,7 @@ class pnsViewpns_info extends JView
         
 
 		$cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
-        $cd         = JRequest::getVar('cd');  
+                $cd         = JRequest::getVar('cd');  
 		$edit		= JRequest::getVar('edit',true);
 		$me 		= JFactory::getUser();
 		JArrayHelper::toInteger($cid, array(0));		
@@ -106,7 +106,7 @@ class pnsViewpns_info extends JView
         $pns_type[] = JHTML::_( 'select.option', 'Making', 'Making', 'value', 'text' );
         $pns_type[] = JHTML::_( 'select.option', 'Buying', 'Buying', 'value', 'text' ); 
         $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
-		$lists['pns_type'] 	= JHTML::_('select.radiolist', $pns_type, 'pns_type', 'class="inputbox" size="1"', 'value', 'text', $pns_type_get );
+		$lists['pns_type'] 	= JHTML::_('select.genericlist', $pns_type, 'pns_type', 'class="inputbox" size="1"', 'value', 'text', $pns_type_get );
         //get list vendor
         $vd[] = JHTML::_('select.option', 0, JText::_('SELECT_VENDOR'), 'value', 'text' );
         $db->setQuery("SELECT info_id AS value, info_name AS text FROM apdm_supplier_info WHERE info_type=2 AND info_activate=1 AND info_id NOT IN (".implode(",", $arr_info_exist).") AND info_deleted=0 ORDER BY info_name");
@@ -176,7 +176,7 @@ class pnsViewpns_info extends JView
         $this->assignRef('arr_parent_code_detail', $arr_parent_code_detail);
         $this->assignRef('cd', $cd);
         $this->assignRef('pns_status', $row->pns_status);
-        //viec add life cycle
+        //viet add life cycle
         $lifeValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_LIFE_CYCLE' ) .' -', 'value', 'text'); 
         $lifeValue[] = JHTML::_('select.option',  'Create', JText::_( 'Create' ) , 'value', 'text'); 
         $lifeValue[] = JHTML::_('select.option',  'Inreview', JText::_( 'In Review' ), 'value', 'text'); 
@@ -184,7 +184,7 @@ class pnsViewpns_info extends JView
         $classDisabled = 'disabled = "disabled"';
         $lists['life_cycle'] = JHTML::_('select.genericlist',   $lifeValue, 'pns_life_cycle', 'class="inputbox " '.$classDisabled.' size="1"', 'value', 'text',$row->pns_life_cycle );
         $this->assignRef('pns_life_cycle', $row->pns_life_cycle);
-        //viec add pns_uom
+        //viet add pns_uom
         $uomValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_UOM' ) .' -', 'value', 'text'); 
         $uomValue[] = JHTML::_('select.option',  'Each', JText::_( 'Each (ea)' ) , 'value', 'text'); 
         $uomValue[] = JHTML::_('select.option',  'Undefined', JText::_( 'Undefined' ), 'value', 'text'); 
@@ -197,7 +197,10 @@ class pnsViewpns_info extends JView
         $lists['pns_datein'] = $row->pns_datein;
         $lists['pns_stock'] = $row->pns_stock;
         $lists['pns_qty_used'] = $row->pns_qty_used;
-        
+        //Add revision
+            $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
+            $list_revision = $db->loadObjectList();
+         $this->assignRef('revision',        $list_revision);
         $this->assignRef('pns_uom', $row->pns_uom);
         
         

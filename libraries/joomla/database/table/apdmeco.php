@@ -81,7 +81,7 @@ class JTableAPDMeco extends JTable
 	}
     function check(){
          // check for existing name
-        $query = 'SELECT  eco_id'
+       echo $query = 'SELECT  eco_id'
         . ' FROM apdm_eco '
         . ' WHERE eco_name = '.trim($this->_db->Quote($this->eco_name))        
         ;

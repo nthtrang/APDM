@@ -7,10 +7,11 @@
 	$role = JAdministrator::RoleOnComponent(5);	
 	
         //$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-        $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
+   //     $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+   //     $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+//	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
 
+        JToolBarHelper::title( JText::_( $this->row->eco_name));
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
         
         
@@ -58,7 +59,7 @@
 //			return;
 //		}  
 		if (pressbutton == 'approvers') {
-			  window.location.assign("index.php?option=com_apdmeco&task=approvers\&cid[]=<?php echo $this->row->eco_id?>");
+			  window.location.assign("index.php?option=com_apdmeco&task=approvers&cid[]=<?php echo $this->row->eco_id?>");
 			return;
 		}  
 		if (pressbutton == 'affected') {
@@ -68,37 +69,21 @@
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");	
 	}
 </script>
-<style>
-        .buttonfiles {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #f49542;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 120px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
 
-.buttonaffected {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #f49542;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 180px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
-</style>
+<div class="submenu-box">
+	<div class="submenu-pad">
+		<ul id="submenu" class="configuration">
+			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=whereused&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+                        <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
+                        <li><a id="routes" href="index.php?option=com_apdmeco&task=mep&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+		</ul>
+		<div class="clr"></div>
+	</div>
+</div>
+<div class="clr"></div>
+<p>&nbsp;</p>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-60">
 		<fieldset class="adminform">

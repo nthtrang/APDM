@@ -6,11 +6,12 @@
 	$role = JAdministrator::RoleOnComponent(5);
         $cid = JRequest::getVar( 'cid', array(0) );
 	//$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-        $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-        $tabSummary = '<button onclick="javascript:hideMainMenu(); submitbutton(\'summary\')" class="buttonfiles" style="vertical-align:middle"><span>Summary </span></button>';        
-	JToolBarHelper::title( JText::_( 'ADP ECO MAMANGEMENT' )  . ': <small><small>[ '. JText::_( 'Affected Parts Edit' ).' ]</small></small>'.$tabApprovers.$tabSummary, 'cpanel.png' );
+    //    $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+     //   $tabSummary = '<button onclick="javascript:hideMainMenu(); submitbutton(\'summary\')" class="buttonfiles" style="vertical-align:middle"><span>Summary </span></button>';        
+	//JToolBarHelper::title( JText::_( 'ADP ECO MAMANGEMENT' )  . ': <small><small>[ '. JText::_( 'Affected Parts Edit' ).' ]</small></small>'.$tabApprovers.$tabSummary, 'cpanel.png' );
 	
-		
+	
+        JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::addPns("New",$cid[0]);
@@ -67,37 +68,20 @@ function submitbutton(pressbutton) {
 }
 
 </script>
-<style>
-        .buttonfiles {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #f49542;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 120px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
-
-.buttonaffected {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #f49542;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 180px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
-</style>
+<div class="submenu-box">
+	<div class="submenu-pad">
+		<ul id="submenu" class="configuration">
+			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="affected" class="active"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+                        <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
+                        <li><a id="routes" href="index.php?option=com_apdmeco&task=mep&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+		</ul>
+		<div class="clr"></div>
+	</div>
+</div>
+<div class="clr"></div>
+<p>&nbsp;</p>
 <form action="index.php?option=com_apdmpns" method="post" name="adminForm" onsubmit="submitbutton('')" >
 <table class="adminlist" cellpadding="1">
 		<thead>

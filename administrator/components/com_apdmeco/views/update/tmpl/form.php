@@ -2,6 +2,7 @@
 
 <?php JHTML::_('behavior.tooltip'); ?>
 
+
 <?php
 	$cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
@@ -96,37 +97,7 @@ function get_number_eco(){
 		}).request();
 }
 </script>
-<style>
-        .buttonfiles {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 120px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
-
-.buttonaffected {
-  display: inline-block;
-  border-radius: 4px;
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px 32px;
-  width: 180px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 30px;
-}
-</style>
+dfd
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-50">
 		<fieldset class="adminform">

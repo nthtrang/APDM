@@ -34,6 +34,8 @@ class ECOController extends JController
         $this->registerTask( 'export', 'export' ); 
         $this->registerTask( 'files'  , 	'files'  );        
         $this->registerTask( 'saveapprove'  , 	'saveapprove'  );    
+        $this->registerTask( 'savefiles', 	'savefiles'  );
+        
 	}
 
 	/**
@@ -105,7 +107,49 @@ class ECOController extends JController
 		$dFile=new DownloadFile($path_eco,$file_name);
 		exit;
 	}
+        function savefiles()
+        {
+                global $mainframe;
 
+                // Check for request forgeries
+                JRequest::checkToken() or jexit('Invalid Token');
+
+                $option = JRequest::getCmd('option');
+
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $row = & JTable::getInstance('apdmeco');
+                if (!$row->bind(JRequest::get('post'))) {
+                        JError::raiseError(500, $db->stderr());
+                        return false;
+                }                           
+                $arr_file = array();
+                for ($i = 1; $i <= 10; $i++) {
+                        $file_name = 'file' . $i;
+                        if ($_FILES[$file_name]['size'] > 0) {
+                                $handle = new Upload($_FILES[$file_name]);
+                                //get root path
+                                $path_eco = JPATH_SITE . DS . 'uploads' . DS . 'eco' . DS;
+                                if ($handle->uploaded) {
+                                        $handle->Process($path_eco);
+                                        if ($handle->processed) {
+                                                $arr_file[] = $handle->file_dst_name;
+                                        }
+                                }
+                        }
+                }
+                if (count($arr_file) > 0) {
+                        foreach ($arr_file as $file) {
+                                $query = "INSERT INTO apdm_eco_files (eco_id, file_name) VALUES (" . $row->eco_id . ", '" . $file . "') ";
+                                $db->setQuery($query);
+                                $db->query();
+                        }
+                }
+                $msg = JText::sprintf('Successfully Saved changes to Files', $row->eco_name);
+                $this->setRedirect('index.php?option=com_apdmeco&task=files&cid[]=' . $row->eco_id, $msg);                
+                
+        }
 	/**
 	 * Saves the record
 	 */
@@ -300,7 +344,7 @@ class ECOController extends JController
                                         //tam thoi  JUtility::sendMail( $adminEmail, $adminName, $user, $subject, $message, 1 );    
                                 }
                         }
-                        //viec loghistory
+                        //viet loghistory
                         $queryLog = "insert into `apdm_eco_affected`(`eco_id`,`eco_name`,`eco_description`,`eco_status`,`eco_project`,`eco_type`,`eco_field_impact`,`eco_reason`,`eco_what`,`eco_special`,`eco_benefit`,`eco_technical`,`eco_tech_design`,`eco_estimated`,`eco_estimated_cogs`,`eco_target`,`eco_modified`,`eco_modified_by`) values " .
                                 "('" . $row->eco_id . "','" . $row->eco_name . "','" . $row->eco_description . "','" . $row->eco_status . "','" . $row->eco_project . "','" . $row->eco_type . "','" . $row->eco_field_impact . "','" . $row->eco_reason . "','" . $row->eco_what . "','" . $row->eco_special . "','" . $row->eco_benefit . "','" . $row->eco_technical . "','" . $row->eco_tech_design . "','" . $row->eco_estimated . "','" . $row->eco_estimated_cogs . "','" . $row->eco_target . "','" . $row->eco_modified . "',$row->eco_modified_by)";
                         $db->setQuery($queryLog);
