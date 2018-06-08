@@ -165,8 +165,7 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			}else{
 				if ($user_apdm==0) {
 					$link = 'index.php?option=com_apdmrecylebin';
-					quickiconButton( $link, 'icon-48-trash.png', JText::_( 'RECYCLE BIN MANAGER' ) );
-					
+					quickiconButton( $link, 'icon-48-trash.png', JText::_( 'RECYCLE BIN MANAGER' ) );					
 					$link = 'index.php?option=com_config';
 					quickiconButton( $link, 'icon-48-config.png', JText::_( 'GLOBAL CONFIGURATION' ) );
 				}
