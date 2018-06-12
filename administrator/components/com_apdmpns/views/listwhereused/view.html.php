@@ -34,6 +34,7 @@ class pnsViewlistwhereused extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns&task=list_where_used';
         $id               = JRequest::getVar('id');        
+        $whereused = JRequest::getVar('task');         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
         
@@ -52,7 +53,7 @@ class pnsViewlistwhereused extends JView
         
         $where = array();  
         $arrPNsChild = array();
-        $where[] = 'p.pns_deleted = 0';
+        
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
@@ -127,7 +128,7 @@ class pnsViewlistwhereused extends JView
                 break;
             }
         }
-        
+
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         
@@ -142,13 +143,30 @@ class pnsViewlistwhereused extends JView
 
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
-        
-        $query = 'SELECT p.* '
+      
+        if($whereused=="whereused")
+        {
+              
+             $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            
             . $orderby
-        ;
+                ;              
+              $query  =  $where != ""? $query :"";
+        }
+        else
+        {
+               
+                 $where  = count( $where )? ' where p.pns_deleted = 0 ' . $where:"";
+             $query = 'SELECT p.* '
+            . ' FROM apdm_pns AS p'
+            . $filter
+            . $where            
+            . $orderby
+                ; 
+        }
+                
         
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList();        
@@ -158,7 +176,7 @@ class pnsViewlistwhereused extends JView
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
         
-        //titlewhere used
+        //title where used
         $query = "SELECT p.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code_full  FROM apdm_pns AS p  WHERE p.pns_id=".$id." ORDER BY p.ccs_code";    
       
         $db->setQuery( $query);

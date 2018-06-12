@@ -14,14 +14,14 @@
         JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::addPns("New",$cid[0]);
+		JToolBarHelper::addEcoRoutes("New",$cid[0]);
 	} 
         
 //	if (in_array("E", $role)) {
 //		JToolBarHelper::editListX();
 //	}
 	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::deletePns('Are you sure to delete it?');
+		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it?');
 	}
 	
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -60,7 +60,7 @@ function submitbutton(pressbutton) {
 				submitform( pressbutton );
 				return;
 			}
-                        if(pressbutton == 'removepns')
+                        if(pressbutton == 'remove_routes')
                         {
                              submitform( pressbutton );
                              return;
@@ -77,10 +77,10 @@ function submitbutton(pressbutton) {
         <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
-			<li><a id="affected" class="active"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
+			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
 			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
-                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+                        <li><a id="routes"  class="active"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -92,7 +92,7 @@ function submitbutton(pressbutton) {
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
-<form action="index.php?option=com_apdmpns" method="post" name="adminForm" onsubmit="submitbutton('')" >
+<form action="index.php?option=com_apdmeco" method="post" name="adminForm" onsubmit="submitbutton('')" >
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -103,34 +103,19 @@ function submitbutton(pressbutton) {
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
 				<th class="title" width="15%">
-					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
+					<?php echo  JText::_('Name'); ?>
                                 </th>
 				<th  class="title" width="10%">
-					<?php echo  JText::_('PNS_DESCRIPTION'); ?>
+					<?php echo  JText::_('Description'); ?>
 				</th>
-				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Life Cycle'); ?>
-				</th>				
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Type'); ?>
+					<?php echo JText::_('Due date'); ?>
 				</th>
                                 <th class="title"  >
-					<?php echo JText::_( 'Vendor' ); ?>
-				</th>
-                                <th class="title"  >
-					<?php echo JText::_( 'Vendor_PN' ); ?>
-				</th>                                
-				<th class="title"  >
-					<?php echo JText::_( 'Supplier' ); ?>
-				</th>
-				<th class="title"  >
-					<?php echo JText::_( 'Supplier_PN' ); ?>
-				</th>				
-				<th width="20%" class="title">
-					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+					<?php echo JText::_( 'Owner' ); ?>
 				</th>
 				<th class="title">
 					<?php echo JText::_( 'Action' ); ?>
@@ -139,114 +124,48 @@ function submitbutton(pressbutton) {
 		</thead>
 		
 		<tbody>
-		<?php
-			$path_image = '../uploads/pns/images/';
+		<?php			
 			$k = 0;
                         
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
        
 				$row 	=& $this->rows[$i];
-				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-                                $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->pns_id;	
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
-				if ($row->pns_image !=''){
-					$pns_image = $path_image.$row->pns_image;
-				}else{
-					$pns_image = JText::_('NONE_IMAGE_PNS');
-				}
-				//echo $pns_image;
-				$mf = EcoController::GetPnManufacture($row->pns_id);
-				$mv = EcoController::GetPnVendor($row->pns_id);
-                                $ms = EcoController::GetPnSupplier($row->pns_id);
+				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
+                                $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->id;	
+				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td>
 					<?php echo $i+1;?>
 				</td>
 				<td>
-					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
-				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
-				</span>
-				</td>	
-				
-				<td align="center">
-					<?php echo $row->pns_description; ?>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>
 				</td>
 				<td align="center">
-					<?php echo $row->pns_life_cycle; ?>
+                                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=add_approvers&tmpl=component" title="Click here for add Approvers">
+                                                <?php echo $row->name; ?>
+                                        </a>
+					<p id="listAjaxUser">
+					
+					</p>
+				</td>
+				<td align="center">
+					<?php echo $row->description; ?>
 				</td>		
 				<td align="center">
-					<?php echo $row->pns_status; ?>
+					<?php echo $row->status; ?>
 				</td>		                                
 				<td align="center">
-					<?php echo $row->pns_type;?>
+					<?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y %H:%M:%S') ;?>
 				</td>
 				<td align="center">
-					<?php 
-					if (count($mv) > 0){
-                                                foreach ($mv as $m){
-                                                        echo $m['vendor_name'];
-                                                }
-					}
-					 ?>
+                                        <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
 				<td align="center">
-					<?php 
-					if (count($mv) > 0){
-                                                foreach ($mv as $m){
-                                                        echo $m['vendor_info'];
-                                                }
-					}
-					 ?>
-				</td>   
-				<td align="center">
-					<?php 
-					if (count($ms) > 0){
-                                                foreach ($ms as $m){
-                                                        echo $m['supplier_name'];
-                                                }
-					}
-					 ?>
-				</td>
-				<td align="center">
-					<?php 
-					if (count($ms) > 0){
-                                                foreach ($ms as $m){
-                                                        echo $m['supplier_info'];
-                                                }
-					}
-					 ?>
+					Edit
 				</td>                                
-				<td>
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo '<strong>-'.$m['mf'].': </strong>&nbsp;&nbsp;'.$m['v_mf'].'<br />';
-					}
-						
-					}else{
-						
-					}
-					 ?>
-				</td>
-				<td>
-					<?php 
-     
-if ($row->pns_life_cycle =='Create' || ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {
-		?>
-                  <a href="<?php echo $edit_link;?>" class="toolbar">
-<span class="icon-32-edit" title="Edit">
-</span>
-Edit
-</a>
-                                        <?php 
-		
-	}
-					 ?>
-				</td>                                
+				                            
 			</tr>
 			<?php
 				$k = 1 - $k;

@@ -58,7 +58,12 @@
 	
 </script>
 <div class="submenu-box">
-	<div class="submenu-pad">
+                <div class="t">
+                <div class="t">
+                        <div class="t"></div>
+                </div>
+        </div>
+        <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail"  href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->row->pns_id?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom" href="index.php?option=com_apdmpns&task=bom&id=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'BOM' ); ?></a></li>
@@ -69,7 +74,12 @@
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
-	</div>
+        </div>
+        <div class="b">
+                <div class="b">
+                        <div class="b"></div>
+                </div>
+        </div>
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>

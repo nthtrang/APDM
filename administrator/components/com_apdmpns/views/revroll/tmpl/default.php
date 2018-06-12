@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php	
+//poup add rev roll
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );

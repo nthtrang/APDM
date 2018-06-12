@@ -80,16 +80,26 @@ function get_number_eco(){
 }
 </script>
 <div class="submenu-box">
-	<div class="submenu-pad">
+		<div class="t">
+                <div class="t">
+                        <div class="t"></div>
+                </div>
+        </div>
+        <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
 			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" class="active"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
-                        <li><a id="routes" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
 		<div class="clr"></div>
-	</div>
+        </div>
+        <div class="b">
+                <div class="b">
+                        <div class="b"></div>
+                </div>
+        </div>
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>

@@ -6,12 +6,12 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-        //$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-   //     $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-   //     $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
-//	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
+        $tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
+       $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
 
-        JToolBarHelper::title( JText::_( $this->row->eco_name));
+      //  JToolBarHelper::title( JText::_( $this->row->eco_name));
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
         
         
@@ -71,16 +71,26 @@
 </script>
 
 <div class="submenu-box">
-	<div class="submenu-pad">
+	<div class="t">
+                <div class="t">
+                        <div class="t"></div>
+                </div>
+        </div>
+        <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
 			<li><a id="initial" href="index.php?option=com_apdmeco&task=whereused&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
-                        <li><a id="routes" href="index.php?option=com_apdmeco&task=mep&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
 		<div class="clr"></div>
-	</div>
+        </div>
+        <div class="b">
+                <div class="b">
+                        <div class="b"></div>
+                </div>
+        </div>
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>

@@ -119,7 +119,12 @@ function isCheckedBom(isitchecked,id){
 			elem.style.display = 'none';
 </script>
 <div class="submenu-box">
-	<div class="submenu-pad">
+	<div class="t">
+                <div class="t">
+                        <div class="t"></div>
+                </div>
+        </div>
+        <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom"  class="active"><?php echo JText::_( 'BOM' ); ?></a></li>
@@ -129,8 +134,13 @@ function isCheckedBom(isitchecked,id){
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'REV' ); ?></a></li>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
 		</ul>
-		<div class="clr"></div>
-	</div>
+		 <div class="clr"></div>
+        </div>
+        <div class="b">
+                <div class="b">
+                        <div class="b"></div>
+                </div>
+        </div>
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>

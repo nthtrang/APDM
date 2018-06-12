@@ -35,6 +35,11 @@ class ECOController extends JController
         $this->registerTask( 'files'  , 	'files'  );        
         $this->registerTask( 'saveapprove'  , 	'saveapprove'  );    
         $this->registerTask( 'savefiles', 	'savefiles'  );
+        $this->registerTask( 'save_routes', 	'save_routes'  );
+        $this->registerTask( 'add_routes', 	'add_routes'  );
+        $this->registerTask( 'remove_routes', 	'remove_routes'  );
+        
+        
         
 	}
 
@@ -808,6 +813,14 @@ class ECOController extends JController
                 JRequest::setVar( 'view', 'update' );
                 parent::display();
         }
+        /**
+                * Display all files eco
+        */	
+        function routes(){
+                JRequest::setVar( 'layout', 'default'  );
+                JRequest::setVar( 'view', 'routes' );
+                parent::display();
+        }        
     
         /**
                 * Display all files eco
@@ -855,6 +868,43 @@ class ECOController extends JController
                    $msg = JText::sprintf('Successfully Approve/Reject', $cid[0]);
                 $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
         }
+       function add_routes(){
+        JRequest::setVar( 'layout', 'addroutes'  );
+        JRequest::setVar( 'view', 'routes' );
+        parent::display();
+    }    
+    function save_routes() {
+           
+            
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();           
+                $datenow    =& JFactory::getDate(); 
+                $name = JRequest::getVar('name');
+                $description = JRequest::getVar('description');
+                $status = 'Create';
+                $due_date = JRequest::getVar('due_date');
+                $eco_id = JRequest::getVar('eco_id');
+                $created = $datenow->toMySQL();
+                $owner = $me->get('id');
+                $return = JRequest::getVar('return');                        
+                $db->setQuery("INSERT INTO apdm_eco_routes (eco_id,name,description,status,due_date,created,owner) VALUES ('" . $eco_id . "', '" . $name . "', '" . $description . "', '" . $status . "', '" . $due_date . "', '" . $created . "', '" . $owner . "')");
+                $db->query();
+                $msg = "Successfully Saved Route";
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[0]='.$pns_id, $msg );
+                
+        }  
+        function remove_routes()
+        {
+                $db       =& JFactory::getDBO();
+                $cid      = JRequest::getVar( 'cid', array(), '', 'array' );     
+                $route_id      = JRequest::getVar( 'id', array(), '', 'array' );die;
+                $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (".implode(",", $route_id).")");
+                $db->query();      
+                $msg = JText::_('Have deleted successfull.');
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=affected&cid[]='.$cid[0], $msg);
+                      //  apdm_eco_routes
+        }
+        
                 /**
                 * Display all files eco
         */	
