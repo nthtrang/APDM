@@ -2,38 +2,54 @@
 
 <?php JHTML::_('behavior.tooltip'); ?>
 
-<?php	
-//poup add routes
+
+<?php
+	$cid = JRequest::getVar('cid', array(0));
+$edit = JRequest::getVar('edit', true);
+$text = intval($edit) ? JText::_('Edit') : JText::_('New');
+$demote = $promote = "";
 $me = & JFactory::getUser();
-	$cid = JRequest::getVar( 'cid', array(0) );
-	$edit		= JRequest::getVar('edit',true);
-	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-        $row = $this->rows;
+$row = $this->row;
+
+JToolBarHelper::title( JText::_($row[0]->name));
+if (!intval($edit)) {
+        JToolBarHelper::save('save', 'Save & Add new');
+}
+JToolBarHelper::apply('update_routes', 'Savedd');
+
+if ($edit) {
+        // for existing items the button is renamed `close`
+        JToolBarHelper::cancel('cancel', 'Close');
+} else {
+        JToolBarHelper::cancel();
+}
+
+$cparams = JComponentHelper::getParams('com_media');
+$editor = &JFactory::getEditor();
+?>
+
+<?php
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-	//ToolBarHelper::apply('apply', 'Save');  
+	
 ?>
 <script language="javascript" type="text/javascript">
-function UpdateRoutesWindow(){   
-        window.parent.document.getElementById('sbox-window').close();	
-        window.parent.location.reload();
-}
+	function submitbutton(pressbutton) {
+		var form = document.adminForm;
+		if (pressbutton == 'cancel') {
+			submitform( pressbutton );
+			return;
+		}  
+		submitform( pressbutton );
+	}
+
 
 </script>
 
-<form action="index.php?option=com_apdmeco&task=save_routes&cid[]=<?php echo $cid[0]?>" method="post" name="adminFormSaveRoutes" enctype="multipart/form-data" >
-         <table  width="100%">
-		<tr>
-			<td></td>
-			<tr align="right">
-			<td align="right">
-                                <input type="submit" name="btinsersave" value="Save Route"  onclick="UpdateRoutesWindow();"/>
-                        </td>	
-		</tr>
-		</tr>			
-</table>
-			<table class="admintable" cellspacing="1">
+<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
+	<div class="col width-50">
+		<table class="admintable" cellspacing="1">
                                 <tr>
 					<td class="key">
 						<label for="name">
@@ -69,11 +85,18 @@ function UpdateRoutesWindow(){
 					</td>
 				</tr>
 			</table>
+	</div>
 	
-
-
-	<input type="text" name="eco_id" value="<?php echo $cid[0];?>" />	
+	<div class="clr"></div>
+<div style="display:none"><?php
+						// parameters : areaname, content, width, height, cols, rows
+echo $editor->display( 'text',  $row->text , '10%', '10', '10', '3' ) ;
+?></div>
+        <input type="text" name="id" value="<?php echo  $row[0]->id?>" />
+	<input type="hidden" name="eco_id" value="<?php echo  $row[0]->eco_id?>" />
+	<input type="hidden" name="cid[]" value="<?php echo  $row[0]->eco_id?>" />
 	<input type="hidden" name="option" value="com_apdmeco" />
-	<input type="hidden" name="return" value="routes"  />
+	<input type="hidden" name="task" value="" />	
+        <input type="hidden" name="id" value="" />	
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

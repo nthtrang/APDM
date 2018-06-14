@@ -50,14 +50,14 @@ class ecoViewupdate extends JView
             //viec loadd affected
             $db->setQuery("SELECT * FROM apdm_eco_affected WHERE eco_id=".$cid[0]." order by id desc");
             $arr_affected = $db->loadObjectList();
-            //viec status	
-            $db->setQuery("SELECT * FROM apdm_eco_status WHERE eco_id=".$cid[0]);
+            //viet status	
+            $db->setQuery("SELECT st.*,eco.eco_id,eco.eco_create_by FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id inner join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE eco.eco_id=".$cid[0]);
             $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase
-		$db->setQuery("SELECT username FROM apdm_users WHERE user_enable=0 ORDER BY username ");
+		$db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 and  user_id != '".$me->get('id')."' ORDER BY jos.username ");
 		$list_user = $db->loadObjectList();	
-        $eco_activate  = ($row->eco_id) ? $row->eco_activate : 1;
+                $eco_activate  = ($row->eco_id) ? $row->eco_activate : 1;
 		$lists['activate'] 	= JHTML::_('select.booleanlist',  'eco_activate', 'class="inputbox" size="1"', $eco_activate );
 		//for eco actiave (statis)
 		//$status_s[] = JHTML::_('select.option', '', JText::_('SELECT_STATUS') , 'value', 'text'); 

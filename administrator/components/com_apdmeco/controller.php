@@ -38,6 +38,8 @@ class ECOController extends JController
         $this->registerTask( 'save_routes', 	'save_routes'  );
         $this->registerTask( 'add_routes', 	'add_routes'  );
         $this->registerTask( 'remove_routes', 	'remove_routes'  );
+         $this->registerTask( 'edit_routes', 	'edit_routes'  );
+         $this->registerTask( 'add_approvers', 	'add_approvers'  );
         
         
         
@@ -837,8 +839,48 @@ class ECOController extends JController
                 JRequest::setVar( 'view', 'update' );                
                 parent::display();
         } 
+        function add_approvers(){
+                JRequest::setVar( 'layout', 'add_approvers'  );
+                JRequest::setVar( 'view', 'update' );                
+                parent::display();
+        }         
+         function addapprove()
+         {
+                
+                global $mainframe;
+                // Check for request forgeries
+                JRequest::checkToken() or jexit('Invalid Token');
+
+                $option = JRequest::getCmd('option');
+
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $cid = JRequest::getVar('cid', array(0));
+                $routes = JRequest::getVar('route');
+                $approve_status = JRequest::getVar('approve_status',array());                  
+                $approve_note = JRequest::getVar('approve_note',array());
+                $title = JRequest::getVar('title',array());
+                $mail_user = JRequest::getVar('mail_user',array());
+                foreach($mail_user as $key => $user)
+                {
+                        if($user)
+                        {
+                               echo $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id) values ('.$cid[0].',"'.$user.'","'.$approve_status[$key].'",'.$routes.') on duplicate key update user_id=user_id';
+                               die;
+                                $db->setQuery($query);
+                                $db->query();
+                                
+                        }
+                }
+                 $msg = JText::sprintf('Successfully Add Approve', $cid[0]);
+                $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
+                
+                
+         }
         function saveapprove()
         {
+                
                 global $mainframe;
                 // Check for request forgeries
                 JRequest::checkToken() or jexit('Invalid Token');
@@ -850,30 +892,35 @@ class ECOController extends JController
                 $me = & JFactory::getUser();
                 $cid = JRequest::getVar('cid', array(0));
                   $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . '');
-                $trow = $db->loadResult();
-                if ($trow==0) {
+                $check_approver = $db->loadResult();
+                if ($check_approver==0) {
                          $msg = JText::sprintf('Must choose at least one person for Review', $cid[0]);
-                               return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
-//                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $cid[0] . ", '" . $me->get('email') . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
-//                        $db->setQuery($query);
-//                        $db->query();
+                         return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
                 }
                 $select  = $db->setQuery('select eco_status from apdm_eco_status where eco_id = '.$cid[0].' and email= "'.$me->get('email').'"');
                 $row = $db->loadObject();        
                 $approve_status = JRequest::getVar('approve_status');
-                $approve_note = JRequest::getVar('approve_note');
+               
+                echo $approve_note = JRequest::getVar('approve_note');
+                die;
                 $query = 'update apdm_eco_status set eco_status= "' . $approve_status . '", note = "'.$approve_note.'" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '"';
                 $db->setQuery($query);
                 $db->query();
                    $msg = JText::sprintf('Successfully Approve/Reject', $cid[0]);
                 $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
         }
-       function add_routes(){
-        JRequest::setVar( 'layout', 'addroutes'  );
-        JRequest::setVar( 'view', 'routes' );
-        parent::display();
-    }    
-    function save_routes() {
+       function add_routes() {
+                JRequest::setVar('layout', 'addroutes');
+                JRequest::setVar('view', 'routes');
+                parent::display();
+        }
+       function edit_routes() {
+                JRequest::setVar('layout', 'form');
+                JRequest::setVar('view', 'routes');
+                JRequest::setVar( 'edit', true );
+                parent::display();
+        }
+        function save_routes() {
            
             
                 $db = & JFactory::getDBO();
@@ -893,15 +940,38 @@ class ECOController extends JController
                 $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[0]='.$pns_id, $msg );
                 
         }  
+  function update_routes() {
+           
+          
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();      
+                $datenow    =& JFactory::getDate();
+              //  echo $id = JRequest::getVar('id');die;
+                
+                $name = JRequest::getVar('name');
+                $description = JRequest::getVar('description');
+                $status = 'Create';
+                $due_date = JRequest::getVar('due_date');
+                $eco_id = JRequest::getVar('eco_id');
+                $created = $datenow->toMySQL();
+                $owner = $me->get('id');
+                $return = JRequest::getVar('return');                        
+                $db->setQuery("update apdm_eco_routes set eco_id,name,description,status,due_date,created,owner VALUES ('" . $eco_id . "', '" . $name . "', '" . $description . "', '" . $status . "', '" . $due_date . "', '" . $created . "', '" . $owner . "')");
+                $db->query();
+                $msg = "Successfully Saved Route";
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[0]='.$pns_id, $msg );
+                
+        }          
         function remove_routes()
         {
+
                 $db       =& JFactory::getDBO();
-                $cid      = JRequest::getVar( 'cid', array(), '', 'array' );     
-                $route_id      = JRequest::getVar( 'id', array(), '', 'array' );die;
+                $cid      = JRequest::getVar( 'eco');  
+                $route_id      = JRequest::getVar( 'route_id', array(), '', 'array' );                
                 $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (".implode(",", $route_id).")");
                 $db->query();      
                 $msg = JText::_('Have deleted successfull.');
-                $this->setRedirect( 'index.php?option=com_apdmeco&task=affected&cid[]='.$cid[0], $msg);
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[]='.$cid, $msg);
                       //  apdm_eco_routes
         }
         

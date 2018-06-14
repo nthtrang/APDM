@@ -30,9 +30,19 @@ class ecoViewroutes extends JView
 	function display($tpl = null)
 	{
 	   // global $mainframe, $option;
-
-        $db                =& JFactory::getDBO();
-	$cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
+                $db                =& JFactory::getDBO();
+                $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
+                $edit		= JRequest::getVar('edit',true);               
+                $row = & JTable::getInstance('apdmecoroutes');
+                $route_id		= JRequest::getVar( 'id');
+                if($edit){
+                    $row->load($route_id);
+                        $query = "SELECT * FROM apdm_eco_routes WHERE  id=".$route_id." and deleted = 0 ORDER BY id desc";        
+                        $db->setQuery( $query);
+                        $row = $db->loadObjectList();                        
+                    $this->assignRef('row',	$row);
+                }
+       
         $query = "SELECT * FROM apdm_eco_routes WHERE   eco_id=".$cid[0]." and deleted = 0 ORDER BY id desc";        
         $db->setQuery( $query);
         $rows = $db->loadObjectList();              

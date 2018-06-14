@@ -11,18 +11,21 @@
 	//JToolBarHelper::title( JText::_( 'ADP ECO MAMANGEMENT' )  . ': <small><small>[ '. JText::_( 'Affected Parts Edit' ).' ]</small></small>'.$tabApprovers.$tabSummary, 'cpanel.png' );
 	
 	
-        JToolBarHelper::title( JText::_($this->rowEco->eco_name));
-	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
+        JToolBarHelper::title( JText::_($row->eco_name));
+
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::addEcoRoutes("New",$cid[0]);
 	} 
-        
+
+	if (in_array("D", $role)) {           
+		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it(s)?','remove_routes');
+	}        
 //	if (in_array("E", $role)) {
 //		JToolBarHelper::editListX();
 //	}
-	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it?');
-	}
+//	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
+//		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it?');
+//	}
 	
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
@@ -36,30 +39,18 @@
 <script language="javascript">
 function submitbutton(pressbutton) {
 			var form = document.adminForm;
-                        if (pressbutton == 'summary') {
-                                window.location.assign("index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $cid[0]?>")
-                                return;
-                        }
+//                        if (pressbutton == 'summary') {
+//                                window.location.assign("index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $cid[0]?>")
+//                                return;
+//                        }
 //                        if (pressbutton == 'files') {
 //                                window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $cid[0]?>");
 //                                return;
 //                        }      
-                        if (pressbutton == 'approvers') {
-                                window.location.assign("index.php?option=com_apdmeco&task=approvers&cid[]=<?php echo $cid[0]?>");
-                                return;
-                        }      
-			if (pressbutton == 'cancel_listpns') {				
-				submitform( pressbutton );
-				return;
-			}
-                        if (pressbutton == 'cancel_listpns') {				
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'export_bom') {				
-				submitform( pressbutton );
-				return;
-			}
+//                        if (pressbutton == 'approvers') {
+//                                window.location.assign("index.php?option=com_apdmeco&task=approvers&cid[]=<?php echo $cid[0]?>");
+//                                return;
+//                        }      
                         if(pressbutton == 'remove_routes')
                         {
                              submitform( pressbutton );
@@ -92,7 +83,7 @@ function submitbutton(pressbutton) {
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
-<form action="index.php?option=com_apdmeco" method="post" name="adminForm" onsubmit="submitbutton('')" >
+<form action="index.php?option=com_apdmeco" method="post" name="adminForm" >
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -132,18 +123,17 @@ function submitbutton(pressbutton) {
        
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->id;	
+                                $edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&id='.$row->id;	
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td>
 					<?php echo $i+1;?>
 				</td>
-				<td>
-					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>
+				<td><input  type="checkbox" id = "route_id" onclick="isChecked(this.checked);" value="<?php echo $row->id;?>" name="route_id[]"  />					
 				</td>
 				<td align="center">
-                                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=add_approvers&tmpl=component" title="Click here for add Approvers">
+                                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=add_approvers&cid[]=<?php echo $cid[0]?>&routes=<?php echo $row->id?>" title="Click here for add Approvers">
                                                 <?php echo $row->name; ?>
                                         </a>
 					<p id="listAjaxUser">
@@ -163,7 +153,7 @@ function submitbutton(pressbutton) {
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
 				<td align="center">
-					Edit
+					<a href="<?php echo $edit_link;?>">Edit</a>
 				</td>                                
 				                            
 			</tr>
@@ -175,7 +165,8 @@ function submitbutton(pressbutton) {
 	</table>
 
 	<div class="clr"></div>	
-	<input type="hidden" name="option" value="com_apdmpns" />
+
+	<input type="hidden" name="option" value="com_apdmeco" />
 	<input type="hidden" name="task" value="" />
         <input type="hidden" name="eco" value="<?php echo $cid[0]?>" />
 	<input type="hidden" name="boxchecked" value="0" />

@@ -116,7 +116,7 @@ function isCheckedBom(isitchecked,id){
 }
 
 		elem.style.visibility = 'hidden';
-			elem.style.display = 'none';
+		elem.style.display = 'none';
 </script>
 <div class="submenu-box">
 	<div class="t">

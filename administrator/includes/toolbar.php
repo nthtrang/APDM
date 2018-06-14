@@ -540,6 +540,7 @@ class JToolBarHelper
 	{
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add a delete button
+                
 		if ($msg) {
 			$bar->appendButton( 'Confirm', $msg, 'delete', $alt, $task, true, false );
 		} else {
