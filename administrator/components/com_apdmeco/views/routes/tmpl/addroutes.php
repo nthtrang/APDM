@@ -72,7 +72,7 @@ function UpdateRoutesWindow(){
 	
 
 
-	<input type="text" name="eco_id" value="<?php echo $cid[0];?>" />	
+	<input type="hidden" name="eco_id" value="<?php echo $cid[0];?>" />	
 	<input type="hidden" name="option" value="com_apdmeco" />
 	<input type="hidden" name="return" value="routes"  />
 	<?php echo JHTML::_( 'form.token' ); ?>

@@ -38,10 +38,10 @@ class ecoViewupdate extends JView
 		JArrayHelper::toInteger($cid, array(0));		
 		$db 		=& JFactory::getDBO();
 		$row = & JTable::getInstance('apdmeco');	
-        $arr_file = array();
-        $arr_status = array();
-         
-        $arr_affected = array();
+                $arr_file = array();
+                $arr_status = array();
+
+                $arr_affected = array();
 		if($edit){
 			$row->load($cid[0]);
             $db->setQuery("SELECT * FROM apdm_eco_files WHERE eco_id=".$cid[0]);
@@ -51,7 +51,9 @@ class ecoViewupdate extends JView
             $db->setQuery("SELECT * FROM apdm_eco_affected WHERE eco_id=".$cid[0]." order by id desc");
             $arr_affected = $db->loadObjectList();
             //viet status	
-            $db->setQuery("SELECT st.*,eco.eco_id,eco.eco_create_by FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id inner join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE eco.eco_id=".$cid[0]);
+            
+            $routes		= JRequest::getVar('routes');
+            $db->setQuery("SELECT st.*,eco.eco_id,eco.eco_create_by FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes);
             $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase

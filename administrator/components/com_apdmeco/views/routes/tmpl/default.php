@@ -11,7 +11,7 @@
 	//JToolBarHelper::title( JText::_( 'ADP ECO MAMANGEMENT' )  . ': <small><small>[ '. JText::_( 'Affected Parts Edit' ).' ]</small></small>'.$tabApprovers.$tabSummary, 'cpanel.png' );
 	
 	
-        JToolBarHelper::title( JText::_($row->eco_name));
+        JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::addEcoRoutes("New",$cid[0]);
@@ -123,7 +123,7 @@ function submitbutton(pressbutton) {
        
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&id='.$row->id;	
+                                $edit_link = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
@@ -153,7 +153,22 @@ function submitbutton(pressbutton) {
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
 				<td align="center">
-					<a href="<?php echo $edit_link;?>">Edit</a>
+                                        <?php                                         
+                                        if($row->id == $this->rowEco->eco_routes_id)
+                                                echo '<strong>Current Route</strong>';
+                                        else{
+                                                if($this->rowEco->eco_status =! "Released"){
+                                        ?>
+					<a href="<?php echo $edit_link;?>">Set Route</a>
+                                        <?php
+                                        }
+                                        else{
+                                                 ?>
+					<a href="<?php echo $edit_link;?>">Set Route</a>
+                                        <?php
+                                        }
+                                        }
+                                        ?>
 				</td>                                
 				                            
 			</tr>

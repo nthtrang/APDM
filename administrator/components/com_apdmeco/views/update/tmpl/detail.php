@@ -6,11 +6,11 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-        $tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-       $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
-
+//        $tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
+//       $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
+//        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
+//	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
+ JToolBarHelper::title( JText::_($this->row->eco_name));
       //  JToolBarHelper::title( JText::_( $this->row->eco_name));
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
         
@@ -69,7 +69,16 @@
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");	
 	}
 </script>
-
+<?php 
+$me = & JFactory::getUser();
+$me->get('email');
+$owner = $this->row->eco_create_by;
+$link ="index.php?option=com_apdmeco&amp;task=add_approvers&amp;cid[]=".$this->row->eco_id."&amp;routes=".$this->row->eco_routes_id."&amp;time=".time();
+if($owner == $me->get('id'))
+{        
+        $link ="index.php?option=com_apdmeco&amp;task=routes&amp;cid[]=".$this->row->eco_id."&amp;time=".time();
+}
+?>
 <div class="submenu-box">
 	<div class="t">
                 <div class="t">
@@ -82,7 +91,7 @@
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
 			<li><a id="initial" href="index.php?option=com_apdmeco&task=whereused&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
-                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+                        <li><a id="routes" href="<?php echo $link;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
 		<div class="clr"></div>
         </div>

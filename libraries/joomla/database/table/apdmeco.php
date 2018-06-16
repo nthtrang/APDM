@@ -70,6 +70,8 @@ class JTableAPDMeco extends JTable
 	var $eco_modified_by	= null;
         
         var $eco_lifecycle	= null;
+        var $eco_routes_id	= null;
+        
 
 	/**
 	* @param database A database connector object
