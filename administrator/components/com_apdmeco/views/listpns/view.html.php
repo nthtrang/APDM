@@ -39,6 +39,16 @@ class ecoViewlistpns extends JView
         $lists['eco_id']        = $cid;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('rows',        $rows);             
+        //for initial
+        $query = "SELECT p.*,init.init_plant_status,init.init_make_buy,init.init_leadtime,init.init_buyer,init.init_cost,init.init_modified,init.init_modified_by,init.init_supplier, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code_full FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id left join apdm_pns_initial init on init.pns_id = p.pns_id WHERE  c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND p.eco_id=".$cid[0]." ORDER BY p.ccs_code";
+        $db->setQuery( $query);
+        $rowint = $db->loadObjectList();     
+        $this->assignRef('rowint',	$rowint);
+        
+        $db->setQuery("SELECT p.* FROM apdm_supplier_info as p WHERE p.info_type=4 ");
+        $list_manufacture = $db->loadObjectList();
+        $this->assignRef('manufacture',	$list_manufacture);
+        
         $rowEco = & JTable::getInstance('apdmeco');	
         $rowEco->load($cid[0]);
         $this->assignRef('rowEco',	$rowEco);

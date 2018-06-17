@@ -6,26 +6,16 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$role = JAdministrator::RoleOnComponent(5);	
 	
-//        $tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-//       $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-//        $tabAffected  = '<button onclick="javascript:hideMainMenu(); submitbutton(\'affected\')" class="buttonaffected" style="vertical-align:middle"><span>Affected Parts </span></button>';
-//	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ) . ': <small><small>[ '. JText::_( 'Summary' ).' ]</small></small>'.$tabApprovers.$tabAffected , 'generic.png' );	
- JToolBarHelper::title( JText::_($this->row->eco_name));
+        JToolBarHelper::title( JText::_($this->row->eco_name));
       //  JToolBarHelper::title( JText::_( $this->row->eco_name));
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
-        
-        
 	if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
 		JToolBarHelper::editListX();
 	}
 	if (in_array("W", $role)) {
 	//	JToolBarHelper::addNewX();
 	}
-      //  JToolBarHelper::customX("files", 'files', '', 'Files', false);
-     //   JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-        
 	JToolBarHelper::cancel( 'cancel', 'Close' );
-
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -89,7 +79,7 @@ if($owner == $me->get('id'))
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
-			<li><a id="initial" href="index.php?option=com_apdmeco&task=whereused&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=initial&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
                         <li><a id="routes" href="<?php echo $link;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
@@ -104,9 +94,8 @@ if($owner == $me->get('id'))
 <div class="clr"></div>
 <p>&nbsp;</p>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
-	<div class="col width-60">
+	<div class="col width-100">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Summary' ); ?></legend>
 			<table class="admintable" cellspacing="1">				
 				<tr>
 					<td class="key" valign="top">
@@ -267,58 +256,23 @@ if($owner == $me->get('id'))
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'STATUS' ); ?>
+							<?php echo JText::_( 'State' ); ?>
 						</label>
 					</td>
 					<td>
 						<?php echo $this->row->eco_status; ?>
 					</td>
-				</tr>			
-				
-			</table>
-		</fieldset>
-	</div>
-	<div class="col width-40">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Files' ); ?></legend>
-			<table class="admintable" width="100%"  >
-				<?php if (count($this->arr_file) > 0 ) { ?>
-					<tr>
-						<td colspan="2">
-						<table width="100%"  class="adminlist" cellpadding="1">						
-						<thead>
-							<th colspan="4"><?php echo JText::_('List file ')?></th>
-						</thead>
-						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  </strong></td>
-						</tr>
-						<?php $i = 1; 
-					foreach ($this->arr_file as $file) { 
-						$filesize = ECOController::Readfilesize($file->file_name);
-					?>
-							<tr>
-							<td><?php echo $i?></td>
-							<td><?php echo $file->file_name;?></td>
-							<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-							<td><a href="index.php?option=com_apdmeco&task=download&id=<?php echo $file->id?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-							</td>
-						</tr>
-						<?php $i++; } ?>
-						</table>
-						</td>
-					</tr>
-				<?php  
-				} ?>
-				
-				
-			</table>
-		</fieldset>
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Parameters' ); ?></legend>
-			<table class="admintable">
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="eco_record_number">
+							<?php echo JText::_( 'Record Number' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->eco_record_number; ?>
+					</td>
+				</tr>	                                
 				<tr>
 					<td class="key">
 						<label for="ccs_create">
@@ -359,11 +313,10 @@ if($owner == $me->get('id'))
 						<?php echo ($this->row->eco_modified_by) ? GetValueUser($this->row->eco_modified_by, 'name') : 'None';?>
 					</td>
 				</tr>
-				
-				
 			</table>
 		</fieldset>
-		<fieldset class="adminform">
+	</div>
+		<!--<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
                 
                 			<table class="admintable" width="100%"  >
@@ -397,7 +350,7 @@ if($owner == $me->get('id'))
                 
                 </fieldset>
 	</div>
-	
+	-->
 	<div class="clr"></div>
 
 	<input type="hidden" name="eco_id" value="<?php echo $this->row->eco_id?>" />

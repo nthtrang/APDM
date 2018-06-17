@@ -71,7 +71,7 @@ class JTableAPDMeco extends JTable
         
         var $eco_lifecycle	= null;
         var $eco_routes_id	= null;
-        
+        var $eco_record_number	= null;
 
 	/**
 	* @param database A database connector object
@@ -83,7 +83,7 @@ class JTableAPDMeco extends JTable
 	}
     function check(){
          // check for existing name
-       echo $query = 'SELECT  eco_id'
+        $query = 'SELECT  eco_id'
         . ' FROM apdm_eco '
         . ' WHERE eco_name = '.trim($this->_db->Quote($this->eco_name))        
         ;

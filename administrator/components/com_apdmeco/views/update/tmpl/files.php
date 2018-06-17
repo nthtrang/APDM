@@ -1,8 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-
-
 <?php
 	$cid = JRequest::getVar('cid', array(0));
         $edit = JRequest::getVar('edit', true);
@@ -13,7 +11,10 @@ $me = & JFactory::getUser();
 if (!intval($edit)) {
         JToolBarHelper::save('save', 'Save & Add new');
 }
-JToolBarHelper::apply('savefiles', 'Save');
+if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
+       JToolBarHelper::apply('savefiles', 'Save');
+}
+
 
 if ($edit) {
         // for existing items the button is renamed `close`
@@ -89,7 +90,7 @@ function get_number_eco(){
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
-			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=initial&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" class="active"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
                         <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>

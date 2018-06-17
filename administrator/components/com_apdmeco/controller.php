@@ -25,22 +25,25 @@ class ECOController extends JController
 
 		// Register Extra tasks
 		$this->registerTask( 'add'  , 	'display'  );
-        $this->registerTask( 'edit'  ,     'display'  );
+                $this->registerTask( 'edit'  ,     'display'  );
 		$this->registerTask( 'detail'  , 	'display'  );        
 		$this->registerTask( 'apply', 	'save'  );
 		$this->registerTask( 'flogout', 'logout');
 		$this->registerTask( 'unblock', 'block' );
 		$this->registerTask( 'download', 'download' );
-        $this->registerTask( 'export', 'export' ); 
-        $this->registerTask( 'files'  , 	'files'  );        
-        $this->registerTask( 'saveapprove'  , 	'saveapprove'  );    
-        $this->registerTask( 'savefiles', 	'savefiles'  );
-        $this->registerTask( 'save_routes', 	'save_routes'  );
-        $this->registerTask( 'add_routes', 	'add_routes'  );
-        $this->registerTask( 'remove_routes', 	'remove_routes'  );
-         $this->registerTask( 'edit_routes', 	'edit_routes'  );
-         $this->registerTask( 'add_approvers', 	'add_approvers'  );
-         $this->registerTask( 'set_route_eco', 	'set_route_eco'  );
+                $this->registerTask( 'export', 'export' ); 
+                $this->registerTask( 'files'  , 	'files'  );        
+                $this->registerTask( 'saveapprove'  , 	'saveapprove'  );    
+                $this->registerTask( 'savefiles', 	'savefiles'  );
+                $this->registerTask( 'save_routes', 	'save_routes'  );
+                $this->registerTask( 'add_routes', 	'add_routes'  );
+                $this->registerTask( 'remove_routes', 	'remove_routes'  );
+                $this->registerTask( 'edit_routes', 	'edit_routes'  );
+                $this->registerTask( 'add_approvers', 	'add_approvers'  );
+                $this->registerTask( 'set_route_eco', 	'set_route_eco'  );
+                $this->registerTask( 'initial', 	'initial'  );
+                $this->registerTask( 'affected', 	'affected'  );
+                
         
         
         
@@ -816,6 +819,17 @@ class ECOController extends JController
                 JRequest::setVar( 'view', 'update' );
                 parent::display();
         }
+        
+        /**
+                * Display initial eco
+        */	
+        function initial(){
+//                JRequest::setVar( 'layout', 'affected'  );
+//                JRequest::setVar( 'view', 'listpns' );
+                JRequest::setVar( 'layout', 'initial'  );
+                JRequest::setVar( 'view', 'listpns' );                
+                parent::display();
+        }        
         /**
                 * Display all files eco
         */	
@@ -950,7 +964,14 @@ class ECOController extends JController
                 if ($check_approve<=1) {
                          $msg = JText::sprintf('Must choose at least 2 person to route before set', $cid[0]);
                          return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
-                }                  
+                }     
+                $row =& JTable::getInstance('apdmeco');
+                $row->load($cid[0]);      
+                if ($row->eco_status == 'Released') {
+                         $msg = JText::sprintf('Eco released can not set another route', $cid[0]);
+                         return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
+                }                   
+                
                 $query = 'update apdm_eco set eco_routes_id= "' . $id . '" where eco_id = ' . $cid[0] . ' and eco_create_by = "' . $me->get('id') . '"';                
                 $db->setQuery($query);
                 $db->query();                
@@ -1091,6 +1112,7 @@ class ECOController extends JController
                 * Display all files eco
         */	
         function promote() {
+                
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(0));
                 $me = & JFactory::getUser();
@@ -1101,10 +1123,9 @@ class ECOController extends JController
                         $msg = JText::sprintf('Must choose at least 2 persons for Review', $cid[0]);                               
                         return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$route, $msg);
                 }
-                else{
+                else{                       
                         $row =& JTable::getInstance('apdmeco');
                         $row->load($cid[0]);  
-                        
                         if($row->eco_status =='Create')
                         {                                                        
                                 //promote up to inreview
@@ -1167,7 +1188,7 @@ class ECOController extends JController
                                 $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . '';
                                 $db->setQuery($query);
                                 $db->query();
-                        }
+                        
 
                         //send email PRROMOTE RELEASED
                         $row =& JTable::getInstance('apdmeco');
@@ -1202,9 +1223,15 @@ class ECOController extends JController
                                //    JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                  }
                              }
-                $msg = JText::sprintf('Successfully Promote', $cid[0]);
-                $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
-        }
+                        $msg = JText::sprintf('Successfully Promote', $cid[0]);
+                        $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
+                        }
+                        else{
+                              $msg = JText::sprintf('All approvers must approve first', $cid[0]);
+                              return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$route, $msg);  
+                        }
+                        
+                }
                 }
                 
         }
@@ -1279,6 +1306,39 @@ class ECOController extends JController
                 $msg = JText::sprintf('Successfully Approve', $cid[0]);
                 $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
          }
-                   
+    function saveinitial()
+    {          
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();        
+        $cid = JRequest::getVar('cid', array(), '', 'array');
+        $eco = JRequest::getVar('eco');
+        $pns_id = JRequest::getVar('pns_id');
+        $datenow = & JFactory::getDate(); 
+        foreach ($cid as $id) {           
+                $init_plant_status = JRequest::getVar('init_plant_status_' . $id);
+                $init_make_buy = JRequest::getVar('init_make_buy_' . $id); 
+                $init_leadtime = JRequest::getVar('init_leadtime_' . $id); 
+                $init_buyer = JRequest::getVar('init_buyer_' . $id); 
+                $init_supplier = JRequest::getVar('init_supplier_' . $id);              
+                $init_modified = $datenow->toMySQL();
+                $init_modified_by = $me->get('id');    
+                $init_cost = JRequest::getVar('init_cost_' . $id);                 
+                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
+                $check_exist = $db->loadResult();
+                if ($check_exist==0) {
+                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
+                        $db->setQuery($query);
+                        $db->query();
+                }      
+                else
+                {                
+                        $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
+                        //echo $db->getQuery();
+                        $db->query();
+                }
+        }
+        $msg = "Successfully Saved Initital";
+        $this->setRedirect('index.php?option=com_apdmeco&task=initial&cid[]=' . $eco, $msg);        
+    }                   
         
 }

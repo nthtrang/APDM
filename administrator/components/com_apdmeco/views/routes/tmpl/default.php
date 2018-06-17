@@ -69,7 +69,7 @@ function submitbutton(pressbutton) {
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
-			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=initial&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->rowEco->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
                         <li><a id="routes"  class="active"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>

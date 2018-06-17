@@ -168,7 +168,7 @@ if($owner == $me->get('id'))
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Affected Parts' ); ?></a></li>
-			<li><a id="initial" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
+			<li><a id="initial" href="index.php?option=com_apdmeco&task=initial&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Initial Data' ); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id;?>"><?php echo JText::_( 'Supporting Document' ); ?></a></li>
                         <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id;?>" class="active"><?php echo JText::_( 'Routes' ); ?></a></li>                     
 		</ul>
@@ -209,9 +209,11 @@ if($owner == $me->get('id'))
 						?>
 							<tr>
 							<td><?php echo $i?></td>
-                                                        <td width="15%"><input type="text" name="title[]" id="title" value="<?php echo $status->title?>" /></td>
+                                                        <td width="15%">    
+                                                                <?php echo $status->title?>
+                                                                <input type="hidden" name="title[]" id="title" value="<?php echo $status->title?>" /></td>
 							<td width="15%"><?php echo $status->email;?>
-                                                        <input type="text" name="mail_user[]" id="title" value="<?php echo $status->email;?>" />
+                                                        <input type="hidden" name="mail_user[]" id="title" value="<?php echo $status->email;?>" />
                                                         </td>
 							<?php  
                                                         if($status->eco_status != 'Released'){                                                          
