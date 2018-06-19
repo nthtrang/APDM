@@ -97,7 +97,7 @@ function get_number_eco(){
 		}).request();
 }
 </script>
-dfd
+
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-50">
 		<fieldset class="adminform">

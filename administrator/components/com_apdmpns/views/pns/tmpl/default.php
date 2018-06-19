@@ -170,9 +170,9 @@ function submitbutton(pressbutton) {
 				<th width="20%" class="title">
 					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
 				</th>
-				<th width="20%" class="title">
+<!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
-				</th>   
+				</th>   -->
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Date In' ); ?>
 				</th>       
@@ -229,8 +229,9 @@ function submitbutton(pressbutton) {
 				</span>
 				</td>	
 				<td>
-				<?php if ($bom) { ?>
-				<a href="index.php?option=com_apdmpns&task=listpns&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
+				<?php if ($bom) {                                       
+                                ?>
+				<a href="index.php?option=com_apdmpns&task=bom&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
 				<?php } else {?>
 					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
@@ -239,7 +240,7 @@ function submitbutton(pressbutton) {
 				</td>
                                 <td>
 				<?php if ($wheruse) { ?>
-				<a href="index.php?option=com_apdmpns&task=list_where_used&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
+				<a href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
 				<?php } else {?>
 					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
@@ -279,9 +280,9 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>	
-                                <td align="center">
+<!--                                <td align="center">
 					<?php echo $row->pns_cost;?>
-				</td>   
+				</td>   -->
                                 <td align="center">
 					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
 				</td>   

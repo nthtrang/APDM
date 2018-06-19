@@ -17,6 +17,10 @@ function UpdateSupplier(){
 		if (type==4){
 			var idUpdate = 'manufacture_get';
 		}
+                //for getall
+		if (type==0){
+			var idUpdate = 'manufacture_get';
+		}                
 		
 		var url = 'index.php?option=com_apdmsuppliers&task=ajax_supplier';		
 		var MyAjax = new Ajax(url, {

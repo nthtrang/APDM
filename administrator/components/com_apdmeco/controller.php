@@ -1340,5 +1340,13 @@ class ECOController extends JController
         $msg = "Successfully Saved Initital";
         $this->setRedirect('index.php?option=com_apdmeco&task=initial&cid[]=' . $eco, $msg);        
     }                   
-        
+    function removepns(){
+        $db       =& JFactory::getDBO();
+        $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
+        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );
+        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->query();      
+        $msg = JText::_('Have deleted successfull.');
+	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
+    }           
 }

@@ -3193,10 +3193,11 @@ function getcurrentdir($path=".") {
         parent::display();
     }
     function ajax_add_pns(){
-             $db       =& JFactory::getDBO();
+        $db       =& JFactory::getDBO();
         $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
         $cid      = JRequest::getVar( 'eco', array(), '', 'array' );                   
         $db->setQuery("update apdm_pns set eco_id = ".$cid[0]." WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->getQuery();
         $db->query();      
     }
     function removepns(){

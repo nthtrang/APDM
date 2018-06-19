@@ -21,7 +21,7 @@
 //		JToolBarHelper::editListX();
 //	}
 	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::deletePns('Are you sure to delete it?');
+		JToolBarHelper::deletePns('Are you sure to delete itdd?');
 	}
 	if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
