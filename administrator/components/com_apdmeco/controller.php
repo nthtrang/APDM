@@ -899,8 +899,7 @@ class ECOController extends JController
                 
          }
         function saveapprove()
-        {
-                //echo 3;die;
+        {                
                 global $mainframe;
                 // Check for request forgeries
                 JRequest::checkToken() or jexit('Invalid Token');
@@ -1030,7 +1029,6 @@ class ECOController extends JController
                 parent::display();
         }
         function save_routes() {
-           echo 4;die;
             
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();           
@@ -1055,8 +1053,7 @@ class ECOController extends JController
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();      
                 $datenow    =& JFactory::getDate();
-              //  echo $id = JRequest::getVar('id');die;
-                
+
                 $name = JRequest::getVar('name');
                 $description = JRequest::getVar('description');
                 $status = 'Create';

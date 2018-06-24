@@ -121,6 +121,8 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			if($user_apdm==0 &&  (in_array(6, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmpns';
 				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'PN MANAGER' ) );
+                                $link = 'index.php?option=com_apdmcpns';
+				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'Customers Part Number Management' ) );
 			}
 			//suplier
 			if($user_apdm==0 &&  (in_array(2, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator")){

@@ -242,10 +242,11 @@
 					</td>
 				</tr>
                                                  <?php 
-                                                 $classDisabled = 'disabled = "disabled"';  
-                                        if($this->pns_status=='Released'){
-                                                $classDisabled = "";
-                                        }
+                                                 $classDisabled="";
+//                                                 $classDisabled = 'disabled = "disabled"';  
+//                                        if($this->pns_status=='Released'){
+//                                                $classDisabled = "";
+//                                        }
                                         ?>                                
 				<tr>
 					<td class="key" valign="top">
@@ -264,7 +265,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%m-%d-%Y %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>
 				<tr>

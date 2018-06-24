@@ -18,6 +18,7 @@
 	
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew();
+                JToolBarHelper::customX('addcustomer', 'new', '', 'New Customer', false);
 	}
 	
 	/*if (in_array("R", $role)) {
@@ -57,6 +58,10 @@ function submitbutton(pressbutton) {
 				form.task.value = '';
 				return;
 			}
+			if (pressbutton == 'addcustomer') {
+				submitform( pressbutton );				
+				return;
+			}                        
 		
 }
 

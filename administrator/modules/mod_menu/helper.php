@@ -163,13 +163,13 @@ class modMenuHelper
 				' WHERE '.$db->NameQuote( 'option' ).' <> "com_frontpage"' .
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
-				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 ) '.
+				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50 ) '.
 				' ORDER BY ordering, name';
 		}else{
 			if ($usertype=='Administrator' && $user_apdm==0){
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49)'.
+				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50)'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
@@ -180,7 +180,7 @@ class modMenuHelper
 				}
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (40, 41, 42, 48 '.$list_recyle_bin.' )'.
+				' WHERE id IN (40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';

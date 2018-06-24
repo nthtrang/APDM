@@ -40,6 +40,7 @@ class CCsController extends JController
 
 		// Register Extra tasks
 		$this->registerTask( 'add'  , 	'display'  );
+                $this->registerTask( 'addcustomer'  , 	'display'  );
 		$this->registerTask( 'edit'  , 	'display'  );
 		$this->registerTask( 'detail'  , 'display'  );
 		$this->registerTask( 'trash'  , 'display'  );
@@ -58,7 +59,12 @@ class CCsController extends JController
 		
 		switch($this->getTask())
 		{
-			
+			case 'addcustomer':
+                        {
+				JRequest::setVar( 'layout', 'formcus'  );
+				JRequest::setVar( 'view', 'cce' );
+				JRequest::setVar( 'edit', false );                                
+                        } break;
 			case 'add'     :
 			{	
 				JRequest::setVar( 'layout', 'form'  );
@@ -106,7 +112,7 @@ class CCsController extends JController
 		$db			= & JFactory::getDBO();
 		$me			= & JFactory::getUser();
 		$row = & JTable::getInstance('apdmccs');	
-        $ccs_description = strtoupper(JRequest::getVar('ccs_description'));	
+                $ccs_description = strtoupper(JRequest::getVar('ccs_description'));	
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError( 500, $db->stderr() );
 			return false;
@@ -170,6 +176,91 @@ class CCsController extends JController
 			    default:
 				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
 				    $this->setRedirect( 'index.php?option=com_apdmccs&task=add', $msg );
+				    break;
+		    }
+        }
+	}
+/**
+	 * Saves the record
+	 */
+	function savecus()
+	{
+		global $mainframe;
+		// Check for request forgeries
+		JRequest::checkToken() or jexit( 'Invalid Token' );
+		$option = JRequest::getCmd( 'option');
+		// Initialize some variables
+		$db			= & JFactory::getDBO();
+		$me			= & JFactory::getUser();
+		$row = & JTable::getInstance('apdmccs');	
+                $ccs_description = strtoupper(JRequest::getVar('ccs_description'));	
+                $ccs_code1 = strtoupper(JRequest::getVar('ccs_code1'));	
+                $ccs_code2 = strtoupper(JRequest::getVar('ccs_code2'));
+                $ccs_code = $ccs_code1.$ccs_code2;
+		if (!$row->bind(JRequest::get('post'))) {
+			JError::raiseError( 500, $db->stderr() );
+			return false;
+		}
+                $row->ccs_description = $ccs_description;
+		$row->ccs_code = $ccs_code;
+                $row->ccs_id = (int) $row->ccs_id;
+	 	$isNew = true;		
+		// Are we saving from an item edit?
+		if ($row->ccs_id) {
+			$isNew = false;
+			$datenow =& JFactory::getDate();
+			$row->ccs_modified 		= $datenow->toMySQL();
+			$row->ccs_modified_by 	= $me->get('id');
+		}
+		$row->ccs_create_by 	= $row->ccs_create_by ? $row->ccs_create_by : $me->get('id');
+
+		if ($row->ccs_create && strlen(trim( $row->ccs_create )) <= 10) {
+			$row->ccs_create 	.= ' 00:00:00';
+		}
+		$config =& JFactory::getConfig();
+		$tzoffset = $config->getValue('config.offset');
+		$date =& JFactory::getDate($row->ccs_create, $tzoffset);
+		$row->ccs_create = $date->toMySQL();
+		if (!$row->check()){          
+            
+             $msg = JText::_('This commodity code have exist. Please input an other.');
+             $this->setRedirect( 'index.php?option=com_apdmccs&task=addcustomer', $msg ); 
+           
+        } else if (!$row->check_des()){
+              $msg = JText::_('This description of commodity code have exist. Please input an other.');
+             $this->setRedirect( 'index.php?option=com_apdmccs&task=addcustomer', $msg ); 
+        }else{
+		// Store the content to the database
+		    if (!$row->store()) {
+			    JError::raiseError( 500, $db->stderr() );
+			    return false;
+		    }else{
+                
+			    if ($isNew){
+                      //create folder
+                    $path_pns_ccs =  JPATH_SITE.DS.'uploads'.DS.'pns'.DS.'cads'.DS.$row->ccs_code.DS;   
+                    $upload = new upload($_FILES['']);
+                    $upload->r_mkdir($path_pns_ccs, 0777);
+				    $what = "W";
+                   
+			    }else{
+				    $what = "E";
+			    }
+			    JAdministrator::HistoryUser(1, $what, $row->ccs_id);
+		    }
+		    
+		    switch ( $this->getTask() )
+		    {
+			    case 'savecus':
+				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
+				    $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detail&cid[]='. $row->ccs_id, $msg );
+				    //$this->setRedirect( 'index.php?option=com_apdmccs', $msg );
+				    break;
+
+			    case 'save':
+			    default:
+				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
+				    $this->setRedirect( 'index.php?option=com_apdmccs&task=addcustomer', $msg );
 				    break;
 		    }
         }

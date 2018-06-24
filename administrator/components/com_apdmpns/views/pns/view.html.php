@@ -39,6 +39,7 @@ class pnsViewpns extends JView
         
         $where = array();  
         $where[] = 'p.pns_deleted = 0';
+        $where[] = 'p.pns_cpn = 0';
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
@@ -119,7 +120,7 @@ class pnsViewpns extends JView
                 $leght = strlen (trim($keyword));                    
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));                                                         
-                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
+                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE pns_cpn = 0 and ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
                        $rs_pns = $db->loadObjectList();
                        $array_pns_id_find = array();
                        if (count($rs_pns) > 0){
@@ -133,7 +134,7 @@ class pnsViewpns extends JView
                        $where[] = 'p.pns_id IN ('.implode(",", $array_pns_id_find).') ';
                    }elseif ($leght==13){                       
                        $arr_code = explode("-", trim($keyword));                         
-                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
+                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE pns_cpn = 0 and  ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
                        $rs_pns = $db->loadObjectList();                       
                        if (count($rs_pns) > 1){
                            foreach ($rs_pns as $obj) {

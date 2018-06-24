@@ -22,6 +22,7 @@
 	}
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew();
+              //   JToolBarHelper::customX('addpncus', 'new', '', 'New PN Customer', false);
 	}
 	
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -61,6 +62,11 @@ function submitbutton(pressbutton) {
 				form.task.value = '';
 				return;
 			}
+			if (pressbutton == 'addpncus') {
+				submitform( pressbutton );
+				form.task.value = '';
+				return;
+			}                        
 			if (pressbutton == 'next_upload_step2') {
 				if (form.boxchecked.value==0){
 					alert("Please select PNs to upload file!");

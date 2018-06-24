@@ -69,6 +69,14 @@ class PNsController extends JController
 	{
 		switch($this->getTask())
 		{
+			case 'addpncus'     :
+			{	
+			
+				JRequest::setVar( 'layout', 'formcus'  );
+				JRequest::setVar( 'view', 'pns_info' );
+				JRequest::setVar( 'edit', false );
+				
+			} break;                        
 			case 'add'     :
 			{	
 			
@@ -711,7 +719,6 @@ class PNsController extends JController
 	 */
 	function save()
 	{
-               
 		global $mainframe;
         $pns_parent = JRequest::getVar('pns_parent',  array(), '', 'array');
         $pns_child  = JRequest::getVar('pns_child',  array(), '', 'array');
@@ -977,7 +984,6 @@ class PNsController extends JController
         $row        = & JTable::getInstance('apdmpns');
         $datenow    =& JFactory::getDate(); 
         $post       =  JRequest::get('post');
-
         $pns_parent = JRequest::getVar('pns_parent',  array(), '', 'array');
         $pns_child = JRequest::getVar('pns_child',  array(), '', 'array');
         $pns_revision_old  = JRequest::getVar('pns_revision_old');
