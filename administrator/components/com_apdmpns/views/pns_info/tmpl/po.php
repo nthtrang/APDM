@@ -10,18 +10,7 @@
         if ($this->row->pns_revision) 
                 $partnumber .= '-'.$this->row->pns_revision;	
 	JToolBarHelper::title( $partnumber , 'cpanel.png' );
-	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}
-	
-	JToolBarHelper::apply('edit_pns', 'Save');
-	if ( $edit ) {
-		// for existing items the button is renamed `close`
-		JToolBarHelper::cancel( 'cancel', 'Close' );
-	} else {
-		JToolBarHelper::cancel();
-	}
-        JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+        JToolBarHelper::addPnsPos("Add PO",$this->row->pns_id);
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
 ?>
@@ -71,9 +60,9 @@
 			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
-                        <li><a id="rev" class="active"><?php echo JText::_( 'REV' ); ?></a></li>
+                        <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
+                        <li><a id="po" class="active"><?php echo JText::_( 'POs' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -86,34 +75,42 @@
 <div class="clr"></div>
 <p>&nbsp;</p>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
-		<?php if (count($this->revision) > 0) { ?>
+		<?php if (count($this->pos) > 0) { ?>
 		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>
-                                                <th width="100"><?php echo JText::_( 'No' ); ?></th>
-                                                <th width="200"><?php echo JText::_( 'P/N' ); ?></th>
-					<th width="100"><?php echo JText::_( 'Revision' ); ?></th>
-						<th width="100"><?php echo JText::_( 'State' ); ?></th>
-						<th width="100"><?php echo JText::_( 'ECO' ); ?></th>
-                                                <th width="100"><?php echo JText::_( 'REV ROLL' ); ?></th>
+                                                <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                                <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                                <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                                <th width="100"><?php echo JText::_('Attached'); ?></th>
+                                                <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                                <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                                <th width="100"><?php echo JText::_('Action'); ?></th>
 					</tr>
 				</thead>
 				<tbody>					
 					<?php 
                                         $i=0;
-                                        foreach($this->revision as $rev) { 
+                                        foreach($this->pos as $po) { 
                                              $i++;  
                                                 ?>
 					<tr>
-                                                <td><?php echo $i;?></td>
-                                                <td><input type="hidden" name="m_exist[]" value="<?php echo $rev->pns_rev_id;?>" >
-                                                        <input type="hidden" name="m_exist_id[]" value="<?php echo $rev->pns_rev_id;?>" >
-                                                        <?php echo $rev->parent_pns_code?> 
-                                                </td>
-                                                <td><input type="text" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
-                                                <td><?php echo $rev->pns_life_cycle;?> </td>
-                                                <td><?php echo $rev->eco_name;?></td>
-                                                <td><a href="index.php?option=com_apdmpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a>
+                                                <td><?php echo $i;?></td>                                            
+                                                <td><?php echo $po->po_code;?> </td>
+                                                <td><?php echo $po->po_description;?></td>                                                
+                                                 <td>
+                                                         <?php 
+                                                         if($po->po_file){?>
+                                                  <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id;?>" title="<?php echo JText::_('Click here to download')?>" ><?php echo JText::_('Download')?></a>&nbsp;&nbsp;
+                                                  <?php }?>
+                                                  </td>
+                                                 <td>
+                                                 <?php echo  JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                 </td>
+                                                  <td>
+                                                  <?php echo GetValueUser($po->po_create_by, "username"); ?>
+                                                  </td>                                                  
+                                                <td><a href="index.php?option=com_apdmpns&task=remove_po&id=<?php echo $po->pns_po_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Remove')?></a>
                                                 </td></tr>
 		<?php }
 		 } ?>

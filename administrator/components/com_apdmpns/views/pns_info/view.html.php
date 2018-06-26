@@ -201,6 +201,13 @@ class pnsViewpns_info extends JView
             $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
             $list_revision = $db->loadObjectList();
          $this->assignRef('revision',        $list_revision);
+         
+         //add PO
+          //Add revision
+         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_po AS po on p.pns_id = po.pns_id WHERE p.pns_deleted =0 AND po.pns_id=".$row->pns_id);
+         $list_pos = $db->loadObjectList();         
+         $this->assignRef('pos',        $list_pos);
+         
         $this->assignRef('pns_uom', $row->pns_uom);
         
         

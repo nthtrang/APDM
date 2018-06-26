@@ -55,6 +55,7 @@ class PNsController extends JController
         $this->registerTask('dash','dash');
         $this->registerTask('get_dash_up','get_dash_up');
         $this->registerTask('searchall','searchall');
+        $this->registerTask('po','po');
         
         
         
@@ -3215,4 +3216,80 @@ function getcurrentdir($path=".") {
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=affected&cid[]='.$cid[0], $msg);
     }         
+    	/*
+		* List PO asign to PNS
+	*/
+    function po(){
+        JRequest::setVar( 'layout', 'po'  );
+        JRequest::setVar( 'view', 'pns_info' );
+        JRequest::setVar( 'edit', true );
+        parent::display();
+    }     
+    	/*
+		* Asign template for get list child PNS  for BOM PNS
+	*/
+    function get_pns_po(){
+        JRequest::setVar( 'layout', 'default'  );
+        JRequest::setVar( 'view', 'pos' );
+        parent::display();
+    }     
+    function save_pns_po() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();           
+                $datenow    =& JFactory::getDate(); 
+                $pns_id = JRequest::getVar('pns_id');
+                $po_code = JRequest::getVar('po_code');
+                $po_description = JRequest::getVar('po_description');
+                $po_state = "Create";//JRequest::getVar('po_state');
+                $pns_created = $datenow->toMySQL();
+                $pns_created_by = $me->get('id');
+                $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS;
+                //upload attached POs
+                   if($_FILES['po_file']['size'] > 0){
+                    $attached = new upload($_FILES['po_file']);                                   
+                    $attached->file_new_name_body = $pns_id."_".str_replace("-", "_", $po_code);
+                    if (file_exists($path_pns.'images'.DS.$attached->file_new_name_body.".".$attached->file_src_name_ext)) {
+
+                        @unlink($path_pns.'images'.DS.$attached->file_new_name_body.".".$attached->file_src_name_ext);
+                    }
+                    if ($attached->uploaded){
+                        $attached->Process($path_pns.'images'.DS);
+                        if ($attached->processed){
+                            $po_file = $attached->file_dst_name;
+                        }
+                    }
+
+                }      
+                
+                //$pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                $return = JRequest::getVar('return');                        
+                $db->setQuery("INSERT INTO apdm_pns_po (pns_id,po_code,po_description,po_file,po_state,po_created,po_create_by) VALUES (" . $pns_id . ", '" . $po_code . "', '" . $po_description . "', '".$po_file."', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
+                $db->query();
+                $msg = "Successfully Saved Pos";
+                $this->setRedirect( 'index.php?option=com_apdmpns&task=po&cid[0]='.$pns_id, $msg );
+                
+        }    
+            function download_po(){
+                $pns_id = JRequest::getVar('id');
+                $row = & JTable::getInstance('apdmpnspo');    
+                $row->load($pns_id);
+                $file_name = $row->po_file;
+                $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS.'images'.DS;           
+                $dFile=new DownloadFile($path_pns,$file_name);
+                exit;
+            }        
+
+                       
+            function remove_po(){
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();           
+                $datenow    =& JFactory::getDate(); 
+                $pns_id = JRequest::getVar('pns_id');
+                $po_id = JRequest::getVar('id');
+                $db->setQuery("DELETE FROM apdm_pns_po WHERE pns_id = '".$pns_id."' AND pns_po_id = ".$po_id."");
+                $db->query();
+                $msg = "Successfully Delete Pos";
+                $this->setRedirect( 'index.php?option=com_apdmpns&task=po&cid[0]='.$pns_id, $msg );                
+            }                    
+            
 }
