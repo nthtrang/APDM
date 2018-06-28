@@ -227,7 +227,7 @@
 						</label>
 					</td>
 					<td>						
-                                                <?php echo  JHTML::_('date', $this->row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+                                                <?php echo  JHTML::_('date', $this->row->pns_datein, '%m-%d-%Y'); ?>
 					</td>
 				</tr>	
 				<tr>
@@ -261,18 +261,18 @@
 					</td>
                                         
 				</tr>	
-				<!--		<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Date Create' ); ?>
-						</label>
-					</td>
-					<td>
- 						<?php echo  JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S'); ?>
-
-					</td>
-				</tr>
-				-->
+                                <tr>
+                                        <td class="key" valign="top">
+                                                <label for="username">
+                                                        <?php echo JText::_('Date Create'); ?>
+                                                </label>
+                                        </td>
+                                        <td>
+                                                <?php echo JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        
+                                        </td>
+                                </tr>
+				
 				
 					<td class="key" valign="top">
 						<label for="username">

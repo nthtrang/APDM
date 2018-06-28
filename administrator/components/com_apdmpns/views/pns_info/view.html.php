@@ -88,6 +88,14 @@ class pnsViewpns_info extends JView
                     $cads_files[] = array('id'=>$r->pns_cad_id, 'cad_file'=>$r->cad_file);
                 }
             }
+            ///get list image files
+            $db->setQuery("SELECT * FROM apdm_pns_image WHERE pns_id=".$row->pns_id);
+            $res = $db->loadObjectList();
+            if (count($res)>0){
+                foreach ($res as $r){
+                    $images_files[] = array('id'=>$r->pns_image_id, 'image_file'=>$r->image_file);
+                }
+            }            
 		}     
 		//get list commodity code
 		$cc[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
@@ -170,6 +178,7 @@ class pnsViewpns_info extends JView
          $lists['arr_s'] = $arr_supplier;
          $lists['arr_m'] = $arr_mf;
          $lists['cads_files'] = $cads_files;
+         $lists['image_files'] = $images_files;
          
 		$this->assignRef('lists',	$lists);
 		$this->assignRef('row',	$row);
@@ -192,6 +201,9 @@ class pnsViewpns_info extends JView
         $uomValue[] = JHTML::_('select.option',  'Centimeter',  JText::_( 'Centimeter (cm)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Foot',  JText::_( 'Foot (ft)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Inch',  JText::_( 'Inch (in)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Gram',  JText::_( 'Gram (g)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Kilogram',  JText::_( 'Kilogram (Kg)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Lbin',  JText::_( 'Lbin' ), 'value', 'text');
         $lists['uom'] = JHTML::_('select.genericlist',   $uomValue, 'pns_uom', 'class="inputbox" size="1"', 'value', 'text',$row->pns_uom );
         $lists['pns_cost'] = $row->pns_cost;
         $lists['pns_datein'] = $row->pns_datein;

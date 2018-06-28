@@ -10,11 +10,16 @@
         if ($this->row->pns_revision) 
                 $partnumber .= '-'.$this->row->pns_revision;
 	//JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
-        JToolBarHelper::title( $partnumber);	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}
+        JToolBarHelper::title( $partnumber);	
+        $role = JAdministrator::RoleOnComponent(6);      
+	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+                if (!intval($edit)) {
+                        JToolBarHelper::save('save', 'Save & Add new');
+                }
+                JToolBarHelper::apply('edit_pns_dash', 'Save');
+        }
 	
-	JToolBarHelper::apply('edit_pns_dash', 'Save');
+	
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
 ?>

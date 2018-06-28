@@ -15,13 +15,16 @@
 ?>
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){        				
-        window.parent.document.getElementById('sbox-window').close();	
-        window.parent.location.reload();
+        window.parent.document.getElementById('sbox-window').close();	       
+     // window.parent.document.location.reload(true);
+        window.parent.document.location.href = "index.php?option=com_apdmpns&task=po&cid[]=<?php echo $cid[0]?>&time=<?php echo time();?>";
+     //   setTimeout("window.parent.document.getElementById('sbox-window').close();",1000);
+       //setTimeout( "window.document.getElementById('sbox-window').close();window.parent.document.location.reload();", 2000 );
 }
 
 </script>
 
-<form action="index.php?option=com_apdmpns&task=save_pns_po&cid[]=<?php echo $cid[0]?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
+<form action="index.php?option=com_apdmpns&task=save_pns_po&cid[]=<?php echo $cid[0]?>&time=<?php echo time();?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
 			<td></td>

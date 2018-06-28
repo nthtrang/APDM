@@ -18,13 +18,14 @@ $pns_code_full = $row->pns_code_full;
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('download', 'download', '', 'Download', false);	
 	}
-	if (in_array("D", $role)) {           
+       
+	if (in_array("D", $role)&& $this->row->pns_life_cycle =='Create') {           
 		JToolBarHelper::deleteList('Are you sure to delete it(s)?','removepnbom');
 	}
-        if (in_array("E", $role)) {
+        if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
 		JToolBarHelper::addPnsChild("Add Part Child",$this->lists['pns_id']);
         }   
-	if (in_array("V", $role)) { 	
+	if (in_array("V", $role)&& $this->row->pns_life_cycle =='Create') { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
 	}        

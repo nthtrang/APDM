@@ -771,7 +771,7 @@ class PNsController extends JController
         $ccs_code = $row->ccs_code;
         //for upload file image
         $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS;    
-        if($_FILES['pns_imge']['size'] > 0){
+        if($_FILES['pns_imge1']['size'] > 0){
             $imge = new upload($_FILES['pns_imge']);
             if ($pns_revision !="") {
                 $imge->file_new_name_body = $ccs_code."-".$pns_code_check."-".$pns_revision;
@@ -783,8 +783,7 @@ class PNsController extends JController
                 if ($imge->processed){
                     $pns_imge = $imge->file_dst_name;
                 }
-            }
-            
+            }                                   
         }else{
             $pns_imge = '';
         }
@@ -831,7 +830,7 @@ class PNsController extends JController
         $file_zip =  $path_pns.'cads'.DS.'zip.php';
         copy($file_zip, $path_pns_cads.'zip.php');
         $arr_file_uplad = array();
-		$arr_error_upload_cads = array();
+	$arr_error_upload_cads = array();
            for($i=1; $i <= 20; $i++){   
               if ($_FILES['pns_cad'.$i]['size'] > 0){
 			  	  if (!move_uploaded_file($_FILES['pns_cad'.$i]['tmp_name'], $path_pns_cads.$_FILES['pns_cad'.$i]['name'])){
@@ -976,6 +975,10 @@ class PNsController extends JController
     /**
     * @desc save edit pns
     */
+        function edit_specification()
+        {
+                
+        }
     function edit_pns(){
         
         global $mainframe;
@@ -991,6 +994,7 @@ class PNsController extends JController
         $pns_revision  = JRequest::getVar('pns_revision');
         $pns_code = JRequest::getVar('pns_code');
         $ccs_code  = JRequest::getVar('ccs_code');
+        $pns_description = strtoupper($post['pns_description']); 
         
         $redirect = JRequest::getVar('redirect');
         if (! $row->bind($post)){
@@ -1000,31 +1004,69 @@ class PNsController extends JController
          $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
            $row->pns_uom = JRequest::getVar('pns_uom');
         $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS;    
-        
+        $pns_id = JRequest::getVar('pns_id'); 
+        $row = & JTable::getInstance('apdmpns');
+         $row->load($pns_id);
+
         if ($pns_revision ==$pns_revision_old ){
-        //no change pns revision
-           if($_FILES['pns_imge']['size'] > 0){
-            $imge = new upload($_FILES['pns_imge']);
-            if ($pns_revision !="") {                
-                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code)."_".$pns_revision;
-            }else{
-                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code);
-            }
-          
-            if (file_exists($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext)) {
+		$arr_error_upload_image = array();
+                 $arr_image_upload = array();
+                   for($i=1; $i <= 20; $i++){
+                             if($_FILES['pns_image'.$i]['size'] > 0){
+                             $imge = new upload($_FILES['pns_image'.$i]);
+                            if ($pns_revision !="") {                
+                                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code)."_".$pns_revision;
+                            }else{
+                                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code);
+                            }
+
+                            if (file_exists($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext)) {
+
+                                @unlink($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext);
+                            }
+                            if ($imge->uploaded){
+                                $imge->Process($path_pns.'images'.DS);
+                                if ($imge->processed){
+                                    $arr_image_upload[] = $imge->file_dst_name;
+                                }
+                                else
+                                {
+                                        $arr_error_upload_image[] = $_FILES['pns_imge'.$i]['name'];
+                                }
+                            }                            
+                            }
+                   }   
+                    if (count($arr_image_upload) > 0){
+                        foreach ($arr_image_upload as $file){
+                            $db->setQuery("INSERT INTO apdm_pns_image (pns_id,image_file,date_created,created_by) VALUES (".$row->pns_id.", '".$file."', '".$datenow->toMySQL()."', ".$me->get('id')." ) ");
+                            $db->query();
+                        }
+                }                
                 
-                @unlink($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext);
-            }
-            if ($imge->uploaded){
-                $imge->Process($path_pns.'images'.DS);
-                if ($imge->processed){
-                    $pns_imge = $imge->file_dst_name;
-                }
-            }
-            
-        }else{
-            $pns_imge = JRequest::getVar('old_pns_image');
-        }
+                
+        //no change pns revision
+//           if($_FILES['pns_imge1']['size'] > 0){
+//            $imge = new upload($_FILES['pns_imge']);
+//            if ($pns_revision !="") {                
+//                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code)."_".$pns_revision;
+//            }else{
+//                $imge->file_new_name_body = $ccs_code."_".str_replace("-", "_", $pns_code);
+//            }
+//          
+//            if (file_exists($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext)) {
+//                
+//                @unlink($path_pns.'images'.DS.$imge->file_new_name_body.".".$imge->file_src_name_ext);
+//            }
+//            if ($imge->uploaded){
+//                $imge->Process($path_pns.'images'.DS);
+//                if ($imge->processed){
+//                    $pns_imge = $imge->file_dst_name;
+//                }
+//            }
+//            
+//        }else{
+//            $pns_imge = JRequest::getVar('old_pns_image');
+//        }
         //upload file pdf
         if ($_FILES['pns_pdf']['size'] > 0){
             $pdf = new upload($_FILES['pns_pdf']);
@@ -1054,7 +1096,7 @@ class PNsController extends JController
            $row->pns_modified_by = $me->get('id'); 
            $row->pns_image = $pns_imge;
            $row->pns_pdf = $pns_pdf;
-		   $row->pns_description = strtoupper($post['pns_description']); 
+	   $row->pns_description = $pns_description;
            if (!$row->store()){
               $msg = JText::_( 'Successfully Saved Part Number' );
               $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]='.$row->pns_id, $msg);  
@@ -1144,23 +1186,22 @@ class PNsController extends JController
           }else{
             $folder =   $ccs_code.'-'.$row->pns_code;
          }
-        $path_pns_cads = $path_pns.'cads'.DS.$ccs_code.DS.$folder.DS;
+         $path_pns_cads = $path_pns.'cads'.DS.$ccs_code.DS.$folder.DS;
 		$arr_error_upload_cads = array();
          $arr_file_uplad = array();
            for($i=1; $i <= 20; $i++){   
-              if ($_FILES['pns_cad'.$i]['size'] > 0){
+              if ($_FILES['pns_cad'.$i]['size'] > 0){                     
                   $cad = new upload($_FILES['pns_cad'.$i]);                
                   if (file_exists($path_pns_cads.$_FILES['pns_cad'.$i]['name'])){
                       @unlink($path_pns_cads.$_FILES['pns_cad'.$i]['name']);
                   }
 				  if (!move_uploaded_file($_FILES['pns_cad'.$i]['tmp_name'], $path_pns_cads.$_FILES['pns_cad'.$i]['name'])){
 				  		$arr_error_upload_cads[] = $_FILES['pns_cad'.$i]['name'];
-				  }else{
+				  }else{                                          
 				  		$arr_file_uplad[] = $_FILES['pns_cad'.$i]['name'];
 				  }
               }
            }
-          
             if (count($arr_file_uplad) > 0){
                 foreach ($arr_file_uplad as $file){
                     $db->setQuery("INSERT INTO apdm_pn_cad (pns_id, cad_file, date_create, created_by) VALUES (".$row->pns_id.", '".$file."', '".$datenow->toMySQL()."', ".$me->get('id')." ) ");
@@ -1573,8 +1614,34 @@ $bar->appendButton( 'Link', 'menus', 'Menus', "index.php?option=com_menus" );
          }else{
             $msg = JText::_('Have a problem with remove image.');               
          }
-          $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]='.$id, $msg);  
+          $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]='.$id, $msg);  
      }
+ /**
+     * @desc  Remove file cads
+     */
+     function remove_imgs(){
+         $db = & JFactory::getDBO();
+         $id= JRequest::getVar('id');
+         $pid= JRequest::getVar('pid');
+         //get name file cad
+         $query = "SELECT * FROM apdm_pns_image WHERE pns_image_id=".$id;           
+         $db->setQuery($query);
+         $row = $db->loadObject();         
+         $pns_id = $row->pns_id;                      
+         $file_name = $row->image_file;         
+         //get folder file cad          
+         $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS;
+         
+         $handle = new upload($path_pns.$file_name);
+         $handle->file_dst_pathname = $path_pns.$file_name;
+         $handle->clean();
+         
+         $db->setQuery("DELETE FROM apdm_pns_image WHERE pns_image_id=".$id);
+         $db->query(); 
+         $msg = JText::_('Have successfuly delete image file');
+         $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]='.$pns_id, $msg); 
+         
+     }     
      /**
      * @desc  remove pns pdf file     
      */
@@ -1594,7 +1661,7 @@ $bar->appendButton( 'Link', 'menus', 'Menus', "index.php?option=com_menus" );
          }else{
             $msg = JText::_('Have a problem with remove pdf.');               
          }
-          $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]='.$id, $msg); 
+          $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]='.$id, $msg); 
      }
      /**
      * @desc  Remove file cads
@@ -1623,7 +1690,7 @@ $bar->appendButton( 'Link', 'menus', 'Menus', "index.php?option=com_menus" );
          $db->setQuery("DELETE FROM apdm_pn_cad WHERE pns_cad_id=".$id);
          $db->query(); 
          $msg = JText::_('Have successfuly delete cad file');
-         $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]='.$pns_id, $msg); 
+         $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]='.$pns_id, $msg); 
          
      }
    /**
@@ -1687,11 +1754,15 @@ $bar->appendButton( 'Link', 'menus', 'Menus', "index.php?option=com_menus" );
       switch ($folder){
           case "cads":
                 $path_pns .= $folder.DS.$ccs.DS.$pns.DS;    
-          break;                
+          break;        
+          case "images":
+                $path_pns .= $folder.DS;    
+          break;     
           default: //images; pdf
             $path_pns .= $folder.DS;       
           break;
       }
+
 	  if (file_exists($path_pns.$filename) ) {
             $filesize =  ceil( filesize($path_pns.$filename) / 1000 );
 	  }else{
@@ -1724,6 +1795,22 @@ $bar->appendButton( 'Link', 'menus', 'Menus', "index.php?option=com_menus" );
         $dFile=new DownloadFile($path_pns,$file_name);
         exit;
     }
+    /**
+    * @desc Download imge of PNs
+    */
+    function download_imgs(){
+            $db = & JFactory::getDBO(); 
+        $pns_id = JRequest::getVar('pid');
+        $image_id = JRequest::getVar('id');        
+         $query = "SELECT * FROM apdm_pns_image WHERE pns_image_id=".$image_id;           
+         $db->setQuery($query);
+         $row = $db->loadObject();         
+         $pns_id = $row->pns_id;                      
+         $file_name = $row->image_file;        
+        $path_pns = JPATH_SITE.DS.'uploads'.DS.'pns'.DS.'images'.DS;           
+        $dFile=new DownloadFile($path_pns,$file_name);
+        exit;
+    }    
 	/**
     * @desc Download cad file of PNs
     */
@@ -3265,8 +3352,9 @@ function getcurrentdir($path=".") {
                 $return = JRequest::getVar('return');                        
                 $db->setQuery("INSERT INTO apdm_pns_po (pns_id,po_code,po_description,po_file,po_state,po_created,po_create_by) VALUES (" . $pns_id . ", '" . $po_code . "', '" . $po_description . "', '".$po_file."', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
                 $db->query();
-                $msg = "Successfully Saved Pos";
+                 $msg = "Successfully Saved Pos";
                 $this->setRedirect( 'index.php?option=com_apdmpns&task=po&cid[0]='.$pns_id, $msg );
+                exit;
                 
         }    
             function download_po(){

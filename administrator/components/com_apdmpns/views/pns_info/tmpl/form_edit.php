@@ -204,7 +204,7 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_TYPE' ); ?>
+							<?php echo JText::_( 'Make/Buy' ); ?>
 						</label>
 					</td>
 					<td>
@@ -218,7 +218,7 @@
 						</label>
 					</td>
 					<td>
-						<textarea name="pns_description" rows="10" cols="60"><?php echo $this->row->pns_description?></textarea>
+						<textarea maxlength='40' name="pns_description" rows="10" cols="60"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -234,7 +234,7 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'Life Cycle' ); ?>
+							<?php echo JText::_( 'State' ); ?>
 						</label>
 					</td>
 					<td>
@@ -265,7 +265,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>
 				<tr>

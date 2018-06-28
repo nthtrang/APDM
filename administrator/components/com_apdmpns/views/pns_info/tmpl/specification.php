@@ -13,8 +13,10 @@
 	if (!intval($edit)) {
 		JToolBarHelper::save('save', 'Save & Add new');
 	}
-	
-	JToolBarHelper::apply('edit_pns', 'Save');
+        $role = JAdministrator::RoleOnComponent(6);      
+	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+                JToolBarHelper::apply('edit_pns', 'Save');
+        }
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -105,6 +107,43 @@
 					}
 				}
 			});	
+                        
+                        //for image
+                        //File Input Generate
+			var mid=0;			
+			var mclick=1;
+			$$(".iptfichier_image span").each(function(itext,id) {
+				if (mid!=0)
+					itext.style.display = "none";
+					mid++;
+			});
+			$('lnkfichier_image').addEvents ({				
+				'click':function(){	
+					if (mclick<mid) {
+						$$(".iptfichier_image span")[mclick].style.display="block";
+					//	alert($$(".iptfichier input")[mclick].style.display);
+						mclick++;
+					}
+				}
+			});	
+                        //for pdf
+                        //File Input Generate
+			var mid=0;			
+			var mclick=1;
+			$$(".iptfichier_pdf span").each(function(itext,id) {
+				if (mid!=0)
+					itext.style.display = "none";
+					mid++;
+			});
+			$('lnkfichier_pdf').addEvents ({				
+				'click':function(){	
+					if (mclick<mid) {
+						$$(".iptfichier_pdf span")[mclick].style.display="block";
+					//	alert($$(".iptfichier input")[mclick].style.display);
+						mclick++;
+					}
+				}
+			});	                        
 		});
 
 </script>
@@ -140,37 +179,113 @@
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Image, Pdf, CAD files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
 			<table class="admintable">
+				<?php if ($this->row->pns_image !="") {?>
 				<tr>
+<!--					<td colspan="2" align="center">
+					<img src="../uploads/pns/images/<?php echo $this->row->pns_image?>" width="200" height="100"  />
+					<br />
+					<a href="index.php?option=com_apdmpns&task=download_img&id=<?php echo $this->row->pns_id?>" title="<?php echo JText::_('Click here to download image')?>" ><?php echo JText::_('Download Image')?></a>&nbsp;&nbsp;
+					<a href="index.php?option=com_apdmpns&task=remove_img&id=<?php echo $this->row->pns_id?>&remove=00<?php echo time();?>"  title="<?php echo JText::_('Click here to remove image')?>" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
+					</td>
+                                        ddd-->
+                                        <td colspan="2" >
+					<table width="100%"  class="adminlist" cellpadding="1">
+						<hr />
+						<thead>
+							<th colspan="4"><?php echo JText::_('List Image files')?></th>
+						</thead>
+						<tr>
+							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
+							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
+							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
+						</tr>
+				<?php
+				
+				$i = 1;
+				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+				foreach ($this->lists['image_files'] as $image) {
+					$filesize = PNsController::Readfilesize('images', $image['image_file'], $this->row->ccs_code, $folder_pns);
+				?>
+				<tr>
+					<td><?php echo $i?></td>
+					<td><img src="../uploads/pns/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
+					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
+					<td><a href="index.php?option=com_apdmpns&task=download_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+					<a href="index.php?option=com_apdmpns&task=remove_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+				</tr>
+				<?php $i++; } ?>
+				
+				<tr>
+					
+					<td colspan="4" align="center">
+					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_cads&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+                                        <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                        </a>&nbsp;&nbsp;
+
+					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+				</tr>
+								
+					</table>
+					</td>                                        
+                                        
+				</tr>
+				<?php } ?>
+				<tr>
+<tr>
 					<td class="key">
 						<label for="ccs_create">
 							<?php echo JText::_('IMAGE')?>
 						</label>
 					</td>
 					<td>
-						<input type="file" name="pns_imge" />
+<!--						<input type="file" name="pns_imge" />-->
 						<input type="hidden" name="old_pns_image" value="<?php echo $this->row->pns_image;?>" />
+                                                <div class="iptfichier_image">
+                                                 <span id="1">
+							<input type="file" name="pns_image1" /> 
+						</span>
+						<span id="2">
+							<input type="file" name="pns_image2" /> 
+						</span>
+						<span id="3">
+							<input type="file" name="pns_image3" /> 
+						</span>
+						<span id="4">
+							<input type="file" name="pns_image4" /> 
+						</span>
+                                                </div>
+                                                <br />
+                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more Images');?>" ><?php echo JText::_('Click here to add more Images');?></a>
 					</td>
-				</tr>
-				<?php if ($this->row->pns_image !="") {?>
-				<tr>
-					<td colspan="2" align="center">
-					<img src="../uploads/pns/images/<?php echo $this->row->pns_image?>" width="200" height="100"  />
-					<br />
-					<a href="index.php?option=com_apdmpns&task=download_img&id=<?php echo $this->row->pns_id?>" title="<?php echo JText::_('Click here to download image')?>" ><?php echo JText::_('Download Image')?></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_img&id=<?php echo $this->row->pns_id?>&remove=00<?php echo time();?>"  title="<?php echo JText::_('Click here to remove image')?>" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
+				</tr>                                        
 					<td class="key">
 						<label for="ccs_create">
 							<?php echo JText::_('PDF')?>
 						</label>
 					</td>
 					<td>
-						<input type="file" name="pns_pdf" />
+<!--						<input type="file" name="pns_pdf" />-->
 						<input type="hidden" name="old_pns_pdf" value="<?php echo $this->row->pns_pdf;?>" />
-					</td>
+                                                
+					
+                                                <div class="iptfichier_pdf">
+                                                 <span id="1">
+							<input type="file" name="pns_pdf1" /> 
+						</span>
+						<span id="2">
+							<input type="file" name="pns_pdf2" /> 
+						</span>
+						<span id="3">
+							<input type="file" name="pns_pdf3" /> 
+						</span>
+						<span id="4">
+							<input type="file" name="pns_pdf4" /> 
+						</span>
+                                                </div>
+                                                <br />
+                                                <a href="javascript:;"id="lnkfichier_pdf" title="<?php echo JText::_('Click here to add more pdf');?>" ><?php echo JText::_('Click here to add more pdf');?></a>
+                                        </td>
 				</tr>
 				<?php if ($this->row->pns_pdf !="") {?>
 				<tr>
@@ -316,5 +431,11 @@
 	<input type="hidden" name="task" value="" />
         <input type="hidden" name="redirect" value="specification" />
 	<input type="hidden" name="return" value="<?php echo $this->cd;?>"  />
+        
+        <input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+	<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
+        <input type="hidden" value="<?php echo $this->row->pns_description?>" name="pns_description" />
+        <input type="hidden"  name="pns_code" id="pns_code"  size="10" value="<?php echo $this->row->pns_code;?>"/>
+        <input type="hidden" name="ccs_code" id="ccs_code" value="<?php echo $this->row->ccs_code;?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

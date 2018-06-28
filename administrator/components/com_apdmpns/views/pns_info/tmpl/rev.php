@@ -10,18 +10,22 @@
         if ($this->row->pns_revision) 
                 $partnumber .= '-'.$this->row->pns_revision;	
 	JToolBarHelper::title( $partnumber , 'cpanel.png' );
-	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}
-	
-	JToolBarHelper::apply('edit_pns', 'Save');
+        $role = JAdministrator::RoleOnComponent(6);      
+	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+                if (!intval($edit)) {
+                        JToolBarHelper::save('save', 'Save & Add new');
+                }
+
+                JToolBarHelper::apply('edit_pns', 'Save');
+                JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+        }
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
 	} else {
 		JToolBarHelper::cancel();
 	}
-        JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+        
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
 ?>

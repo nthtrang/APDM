@@ -17,7 +17,9 @@ $me = & JFactory::getUser();
 <script language="javascript" type="text/javascript">
 function UpdateRoutesWindow(){   
         window.parent.document.getElementById('sbox-window').close();	
-        window.parent.location.reload();
+        //window.top.location.
+        //window.parent.location.reload(1);
+        window.parent.location.href = "index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $cid[0]?>&time=<?php echo time();?>";
 }
 
 </script>

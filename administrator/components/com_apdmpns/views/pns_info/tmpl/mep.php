@@ -12,8 +12,10 @@
 	if (!intval($edit)) {
 		JToolBarHelper::save('save', 'Save & Add new');
 	}
-	
-	JToolBarHelper::apply('edit_pns', 'Save');
+        $role = JAdministrator::RoleOnComponent(6);      
+	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {	
+                JToolBarHelper::apply('edit_pns', 'Save');
+        }
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
