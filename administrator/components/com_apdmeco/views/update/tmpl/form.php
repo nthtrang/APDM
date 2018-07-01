@@ -137,7 +137,7 @@ function get_number_eco(){
 						</label>
 					</td>
 					<td>
-						<textarea name="eco_description" rows="5" cols="30"><?php echo $this->row->eco_description?></textarea>
+						<textarea maxlength='40' name="eco_description" rows="5" cols="30"><?php echo $this->row->eco_description?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -190,6 +190,17 @@ function get_number_eco(){
 						<textarea name="eco_what" rows="10" cols="50"><?php echo $this->row->eco_what?></textarea>
 					</td>
 				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="eco_record_number">
+							<?php echo JText::_( 'Record Number' ); ?>
+						</label>
+					</td>
+					<td>
+						<textarea name="eco_record_number" rows="10" cols="50"><?php echo $this->row->eco_record_number?></textarea>
+					</td>
+				</tr>                                
+                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -265,7 +276,7 @@ function get_number_eco(){
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'Life Cicle' ); ?>
+							<?php echo JText::_( 'State' ); ?>
 						</label>
 					</td>
 					<td>

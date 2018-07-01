@@ -1,7 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-sss
+
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
@@ -9,7 +9,7 @@ sss
 
 	JToolBarHelper::title( JText::_( 'Customers Code Management' ) . ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
 	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
+	//	JToolBarHelper::save('save', 'Save & Add new');
 	}	JToolBarHelper::apply('savecus', 'Save');
 	
 	if ( $edit ) {

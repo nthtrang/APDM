@@ -87,7 +87,12 @@ class JTableApdmccs  extends JTable
 	 */
 	var $ccs_deleted			= null;
 
-	
+	/**
+	 * The mark is cpn
+	 *
+	 * @var int
+	 */
+	var $ccs_cpn			= null;	
 
 	/**
 	* @param database A database connector object

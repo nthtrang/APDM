@@ -108,7 +108,7 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   'Activate', 'e.eco_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Life Cycle', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'State', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'Date Create', 'e.eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>

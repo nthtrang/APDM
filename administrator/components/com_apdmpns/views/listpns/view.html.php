@@ -39,7 +39,11 @@ class pnsViewlistpns extends JView
         $rows = $db->loadObjectList();              
         $lists['pns_id']        = $pns_id;    
         $this->assignRef('lists',        $lists);
-        $this->assignRef('rows',        $rows);             
+        $this->assignRef('rows',        $rows);          
+                //get parent
+        $row = & JTable::getInstance('apdmpns');
+        $row->load($pns_id);   
+        $this->assignRef('row',        $row);     
 		parent::display($tpl);
 	}
 }

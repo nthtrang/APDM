@@ -161,8 +161,10 @@
                         <li><a id="specification" class="active" ><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <?php }?>
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -178,21 +180,14 @@
 	<div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Image, Pdf, CAD files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
-			<table class="admintable">
-				<?php if ($this->row->pns_image !="") {?>
+			<table class="adminlist">
+				<?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
-<!--					<td colspan="2" align="center">
-					<img src="../uploads/pns/images/<?php echo $this->row->pns_image?>" width="200" height="100"  />
-					<br />
-					<a href="index.php?option=com_apdmpns&task=download_img&id=<?php echo $this->row->pns_id?>" title="<?php echo JText::_('Click here to download image')?>" ><?php echo JText::_('Download Image')?></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_img&id=<?php echo $this->row->pns_id?>&remove=00<?php echo time();?>"  title="<?php echo JText::_('Click here to remove image')?>" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
-					</td>
-                                        ddd-->
                                         <td colspan="2" >
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List Image files')?></th>
+							<th colspan="4"><?php echo JText::_('List P/N Images')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -219,11 +214,11 @@
 				<tr>
 					
 					<td colspan="4" align="center">
-					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_cads&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_images&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
                                         <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-                                        </a>&nbsp;&nbsp;
+                                        </a>&nbsp;&nbsp;-->
 
-					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
 				</tr>
 								
 					</table>
@@ -231,8 +226,7 @@
                                         
 				</tr>
 				<?php } ?>
-				<tr>
-<tr>
+                                <tr>
 					<td class="key">
 						<label for="ccs_create">
 							<?php echo JText::_('IMAGE')?>
@@ -254,14 +248,80 @@
 						<span id="4">
 							<input type="file" name="pns_image4" /> 
 						</span>
+						<span id="5">
+							<input type="file" name="pns_image5" /> 
+						</span>
+						<span id="6">
+							<input type="file" name="pns_image6" /> 
+						</span>
+						<span id="7">
+							<input type="file" name="pns_image7" /> 
+						</span>
+						<span id="8">
+							<input type="file" name="pns_image8" /> 
+						</span>
+						<span id="9">
+							<input type="file" name="pns_image9" /> 
+						</span>   
+						<span id="10">
+							<input type="file" name="pns_image10" /> 
+						</span>                                                           
                                                 </div>
                                                 <br />
                                                 <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more Images');?>" ><?php echo JText::_('Click here to add more Images');?></a>
 					</td>
-				</tr>                                        
+                                        </tr>  
+                                        
+                                        
+                                        <tr>  
+                                <?php if (isset($this->lists['pdf_files'])&& count($this->lists['pdf_files'])>0) {?>
+				<tr>
+                                        <td colspan="2" >
+					<table width="100%"  class="adminlist" cellpadding="1">
+						<hr />
+						<thead>
+							<th colspan="4"><?php echo JText::_('List P/N PDF')?></th>
+						</thead>
+						<tr>
+							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
+							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
+							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
+						</tr>
+				<?php
+				
+				$i = 1;
+				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+				foreach ($this->lists['pdf_files'] as $pdf) {
+					$filesize = PNsController::Readfilesize('pdf', $pdf['pdf_file'], $this->row->ccs_code, $folder_pns);
+				?>
+				<tr>
+					<td><?php echo $i?></td>
+					<td><?php echo $pdf['pdf_file']?></td>
+					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
+					<td><a href="index.php?option=com_apdmpns&task=download_pdfs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+					<a href="index.php?option=com_apdmpns&task=remove_pdfs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+				</tr>
+				<?php $i++; } ?>
+				
+				<tr>
+					
+					<td colspan="4" align="center">
+<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_pdfs&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+                                        <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                        </a>&nbsp;&nbsp;-->
+
+					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_pdfs&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+				</tr>
+								
+					</table>
+					</td>                                        
+                                        
+				</tr>
+				<?php } ?>                                                
 					<td class="key">
 						<label for="ccs_create">
-							<?php echo JText::_('PDF')?>
+							<?php echo JText::_('P/N PDF')?>
 						</label>
 					</td>
 					<td>
@@ -282,18 +342,29 @@
 						<span id="4">
 							<input type="file" name="pns_pdf4" /> 
 						</span>
+                                                 <span id="5">
+							<input type="file" name="pns_pdf5" /> 
+						</span>
+						<span id="6">
+							<input type="file" name="pns_pdf6" /> 
+						</span>
+						<span id="7">
+							<input type="file" name="pns_pdf7" /> 
+						</span>
+						<span id="8">
+							<input type="file" name="pns_pdf8" /> 
+						</span>
+						<span id="9">
+							<input type="file" name="pns_pdf9" /> 
+						</span>
+						<span id="10">
+							<input type="file" name="pns_pdf10" /> 
+						</span>                                                        
                                                 </div>
                                                 <br />
                                                 <a href="javascript:;"id="lnkfichier_pdf" title="<?php echo JText::_('Click here to add more pdf');?>" ><?php echo JText::_('Click here to add more pdf');?></a>
                                         </td>
-				</tr>
-				<?php if ($this->row->pns_pdf !="") {?>
-				<tr>
-					<td colspan="2" align="center"><a href="index.php?option=com_apdmpns&task=download&id=<?php echo $this->row->pns_id?>" title="Click here to download file"><?php echo $this->row->pns_pdf;?>&nbsp;(<?php $filesizepdf = PNsController::Readfilesize('pdf', $this->row->pns_pdf); echo number_format($filesizepdf, 0, '.', ' ')?>&nbsp;KB)</a>&nbsp;&nbsp;					
-					<a href="index.php?option=com_apdmpns&task=remove_pdf&id=<?php echo $this->row->pns_id?>&remove=010<?php echo time();?>" title="Click here to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} " >Remove</a>
-					</td>
-				</tr>
-				<?php } ?>
+				</tr>				
 				<?php if (count($this->lists['cads_files']) > 0) {
 				?>				
 				<tr>
@@ -301,7 +372,7 @@
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List file cads')?></th>
+							<th colspan="4"><?php echo JText::_('P/N CAD')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>

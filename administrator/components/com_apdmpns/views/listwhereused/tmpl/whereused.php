@@ -1,7 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-   
 <?php
 $db                =& JFactory::getDBO();
 $role = JAdministrator::RoleOnComponent(6);
@@ -59,8 +58,10 @@ function submitbutton(pressbutton) {
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
                         <li><a  id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a  id="dash" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <?php } ?>
 		</ul>
 		 <div class="clr"></div>
         </div>

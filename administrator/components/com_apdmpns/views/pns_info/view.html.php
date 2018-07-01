@@ -95,14 +95,28 @@ class pnsViewpns_info extends JView
                 foreach ($res as $r){
                     $images_files[] = array('id'=>$r->pns_image_id, 'image_file'=>$r->image_file);
                 }
-            }            
+            }      
+            ///get list pdf files
+            $db->setQuery("SELECT * FROM apdm_pns_pdf WHERE pns_id=".$row->pns_id);
+            $res = $db->loadObjectList();
+            if (count($res)>0){
+                foreach ($res as $r){
+                    $pdf_files[] = array('id'=>$r->pns_pdf_id, 'pdf_file'=>$r->pdf_file);
+                }
+            }                  
 		}     
 		//get list commodity code
 		$cc[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
-		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_description) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 ORDER BY ccs_code ");
+		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_description) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 0 ORDER BY ccs_code ");
 	//	echo "SELECT CONCAT_WS(' :: ', ccs_code, ccs_description) as value, ccs_code as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 ORDER BY ccs_code ";
 		$ccs = array_merge($cc, $db->loadObjectList());
-        $lists['ccs'] = JHTML::_('select.genericlist',   $ccs, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );
+                $lists['ccs'] = JHTML::_('select.genericlist',   $ccs, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );
+                //get list commodity code for CPN
+		$cccpn[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
+		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_description) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
+	//	echo "SELECT CONCAT_WS(' :: ', ccs_code, ccs_description) as value, ccs_code as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 ORDER BY ccs_code ";
+		$ccscpn = array_merge($cccpn, $db->loadObjectList());
+        $lists['ccscpn'] = JHTML::_('select.genericlist',   $ccscpn, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );        
 		//get list pns to display parrent        
         //get list eco
         $eco[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_ECO' ) .' -', 'value', 'text');
@@ -179,6 +193,7 @@ class pnsViewpns_info extends JView
          $lists['arr_m'] = $arr_mf;
          $lists['cads_files'] = $cads_files;
          $lists['image_files'] = $images_files;
+         $lists['pdf_files'] = $pdf_files;
          
 		$this->assignRef('lists',	$lists);
 		$this->assignRef('row',	$row);
@@ -210,7 +225,7 @@ class pnsViewpns_info extends JView
         $lists['pns_stock'] = $row->pns_stock;
         $lists['pns_qty_used'] = $row->pns_qty_used;
         //Add revision
-            $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
+            $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
             $list_revision = $db->loadObjectList();
          $this->assignRef('revision',        $list_revision);
          

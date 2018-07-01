@@ -10,18 +10,22 @@
         if ($this->row->pns_revision) 
                 $partnumber .= '-'.$this->row->pns_revision;	
 	JToolBarHelper::title( $partnumber , 'cpanel.png' );
-	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}
-	
-	JToolBarHelper::apply('edit_pns', 'Save');
+        $role = JAdministrator::RoleOnComponent(6);      
+	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+                if (!intval($edit)) {
+                        JToolBarHelper::save('save', 'Save & Add new');
+                }
+
+                JToolBarHelper::apply('edit_pns', 'Save');
+                JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+        }
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
 	} else {
 		JToolBarHelper::cancel();
 	}
-        JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+        
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
 ?>
@@ -108,10 +112,10 @@
                                                         <input type="hidden" name="m_exist_id[]" value="<?php echo $rev->pns_rev_id;?>" >
                                                         <?php echo $rev->parent_pns_code?> 
                                                 </td>
-                                                <td><input type="text" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
+                                                <td><?php echo $rev->pns_revision;?><input type="hidden" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
                                                 <td><?php echo $rev->pns_life_cycle;?> </td>
                                                 <td><?php echo $rev->eco_name;?></td>
-                                                <td><a href="index.php?option=com_apdmcpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a>
+                                                <td><a href="index.php?option=com_apdmpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a>
                                                 </td></tr>
 		<?php }
 		 } ?>
@@ -129,7 +133,12 @@
 	<input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id;?>" />	
 	<input type="hidden" name="option" value="com_apdmcpns" />
 	<input type="hidden" name="task" value="" />
-        <input type="hidden" name="redirect" value="mep" />
+        <input type="hidden" name="redirect" value="rev" />
 	<input type="hidden" name="return" value="<?php echo $this->cd;?>"  />
+        <input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+	<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
+        <input type="hidden" value="<?php echo $this->row->pns_description?>" name="pns_description" />
+        <input type="hidden"  name="pns_code" id="pns_code"  size="10" value="<?php echo $this->row->pns_code;?>"/>
+        <input type="hidden" name="ccs_code" id="ccs_code" value="<?php echo $this->row->ccs_code;?>" />             
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

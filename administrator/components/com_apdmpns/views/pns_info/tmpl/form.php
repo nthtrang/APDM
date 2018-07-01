@@ -1,9 +1,16 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
+        $eco_name = "";
+        $eco_id=0;
+        if(JRequest::getVar( 'eco_id')){
+              $eco_id =  JRequest::getVar('eco_id');
+        }
+        if(JRequest::getVar( 'eco_name')){
+              $eco_name =  JRequest::getVar('eco_name');
+        }
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 
@@ -179,8 +186,8 @@
 						</label>
 					</td>
 					<td>
-					<input type="text" value="" name="eco_name" id="eco_name" readonly="readonly" />
-					<input type="hidden" name="eco_id" id="eco_id" value="0" />
+					<input type="text" value="<?php echo $eco_name;?>" name="eco_name" id="eco_name" readonly="readonly" />
+					<input type="hidden" name="eco_id" id="eco_id" value="<?php echo $eco_id?>" />
 						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
 <input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>
 </a>
@@ -406,5 +413,6 @@
 	<input type="hidden" name="cid[]" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="" />
+        <input type="text" name="return" value="<?php echo $eco_name?>"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

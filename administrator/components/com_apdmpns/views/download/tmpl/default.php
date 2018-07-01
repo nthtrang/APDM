@@ -80,7 +80,7 @@ function checkForm(){
 					$pns_code  = $name_array[count($name_array)-2];
 					$cc = $name_array[count($name_array)-3];
 				}
-    			   $path_file = $path_pns.DS.$cc.DS.$pns_code.DS.$name_file;
+                                $path_file = $path_pns.DS.$cc.DS.$pns_code.DS.$name_file;
 				   $filesize =  ceil( filesize($path_file) / 1000 );                
 				if ($name_file !='zip.php' && $name_file !='log_file.txt') {
 			?>

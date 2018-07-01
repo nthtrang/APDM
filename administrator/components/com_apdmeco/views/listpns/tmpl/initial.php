@@ -14,14 +14,14 @@
         JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::addPns("New",$cid[0]);
+		JToolBarHelper::addPns("Add Part",$cid[0]);
 	} 
         
 //	if (in_array("E", $role)) {
 //		JToolBarHelper::editListX();
 //	}
 	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::deletePns('Are you sure to delete itdd?');
+		JToolBarHelper::deletePns('Are you sure to delete it?',"removepns","Remove Part");
 	}
 	if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
@@ -191,7 +191,7 @@ function isCheckedInitial(isitchecked,id){
 					<?php echo JText::_('Make/Buy'); ?>
 				</th>
                                 <th class="title"  >
-					<?php echo JText::_( 'Lead time' ); ?>
+					<?php echo JText::_( 'Lead time(Day)' ); ?>
 				</th>
                                 <th class="title"  >
 					<?php echo JText::_( 'Buyer' ); ?>
@@ -222,6 +222,7 @@ function isCheckedInitial(isitchecked,id){
                         $plant_status_arr[] = JHTML::_('select.option', 'Obsolete', JText::_('Obsolete') , 'value', 'text');                        
                                           
                         $make_buy_arr = array();
+                        $make_buy_arr[] = JHTML::_('select.option', 'Unassign', JText::_('Unassign') , 'value', 'text'); 
                         $make_buy_arr[] = JHTML::_('select.option', 'Make', JText::_('Make') , 'value', 'text'); 
                         $make_buy_arr[] = JHTML::_('select.option', 'Buy', JText::_('Buy') , 'value', 'text'); 
                         //select list manufacture
@@ -271,9 +272,10 @@ function isCheckedInitial(isitchecked,id){
                                         ?>
 				</td>
 				<td align="center">
-                                        <span style="display:block" id="text_init_leadtime_<?php echo $row->pns_id;?>"><?php echo JHTML::_('date', $row->init_leadtime, '%m-%d-%Y %H:%M:%S'); ?> </span>
+                                        <span style="display:block" id="text_init_leadtime_<?php echo $row->pns_id;?>"><?php echo  $row->init_leadtime; ?> </span>
                                         <span style="display:none" id="sp_init_leadtime_<?php echo $row->pns_id;?>">
-                                        <?php echo JHTML::_('calendar', $row->init_leadtime, 'init_leadtime_'.$row->pns_id, 'due_date_'.$row->pns_id.'[]', '%Y-%m-%d %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+                                                 <input type="text" value="<?php echo $row->init_leadtime?$row->init_leadtime:3;?>" id="init_leadtime_<?php echo $row->pns_id;?>"  name="init_leadtime_<?php echo $row->pns_id;?>" />
+                                        <?php //echo JHTML::_('calendar', $row->init_leadtime, 'init_leadtime_'.$row->pns_id, 'due_date_'.$row->pns_id.'[]', '%Y-%m-%d %H:%M:%S', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</span>
 				</td>
                                 <td align="center">
@@ -281,8 +283,8 @@ function isCheckedInitial(isitchecked,id){
                                          <input style="display:none" type="text" value="<?php echo $row->init_buyer;?>" id="init_buyer_<?php echo $row->pns_id;?>"  name="init_buyer_<?php echo $row->pns_id;?>" />
 				</td>      
                                 <td align="center">
-					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo $row->init_cost;?></span>
-                                         <input style="display:none" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
+					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo number_format((float)$row->init_cost, 2, '.', '');;?></span>
+                                         <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
 				</td>                                    
 				<td align="center">
                                         <?php 

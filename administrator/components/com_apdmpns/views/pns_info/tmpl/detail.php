@@ -13,8 +13,7 @@
         JToolBarHelper::title( $partnumber);
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
-		JToolBarHelper::editListX();
-		
+		JToolBarHelper::editListX();		
 	}
         else
         {
@@ -23,20 +22,12 @@
 	if (in_array("W", $role)) {
                 //viet comment
 		//JToolBarHelper::addNew();
-	}
-	
-	JToolBarHelper::cancel( 'cancel', 'Close' );
-	
-		
+	}	
+	JToolBarHelper::cancel( 'cancel', 'Close' );			
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
-?>
-
-<?php
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
-	
 ?>
 <script language="javascript" type="text/javascript">
 	function submitbutton(pressbutton) {
@@ -75,8 +66,10 @@
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <?php } ?>
 		</ul>
 		<div class="clr"></div>
         </div>

@@ -11,21 +11,21 @@ $pns_code_full = $row->pns_code_full;
 	$role = JAdministrator::RoleOnComponent(6);      
 	JToolBarHelper::title( $pns_code_full , 'cpanel.png' );
 	
-//	if (in_array("V", $role)) {
-//		JToolBarHelper::customX('export_bom', 'excel', '', 'Export', false);
-//	}
+	if (in_array("V", $role)) {
+		JToolBarHelper::customX('export_bom', 'excel', '', 'Export', false);
+	}
 	if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('download', 'download', '', 'Download', false);	
 	}
        
-	if (in_array("D", $role)&& $this->row->pns_life_cycle =='Create') {           
+	if (in_array("D", $role)&& $row->pns_life_cycle =='Create') {           
 		JToolBarHelper::deleteList('Are you sure to delete it(s)?','removepnbom');
 	}
-        if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+        if (in_array("E", $role)&& $row->pns_life_cycle =='Create') {
 		JToolBarHelper::addPnsChild("Add Part Child",$this->lists['pns_id']);
         }   
-	if (in_array("V", $role)&& $this->row->pns_life_cycle =='Create') { 	
+	if (in_array("V", $role)&& $row->pns_life_cycle =='Create') { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
 	}        
@@ -133,8 +133,10 @@ function isCheckedBom(isitchecked,id){
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <?php } ?>
 		</ul>
 		 <div class="clr"></div>
         </div>
@@ -158,6 +160,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
         <table width="100%" class="adminlist" cellpadding="1">
 	<thead>
 		<tr>
+                         <th width="8%">				
+                             #
+                        </th>                        
                         <th width="8%">
 				
                                 <input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.bom)"/>
@@ -181,7 +186,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 				<?php echo JText::_('Qty')?>
 			</th>                     
 			<th width="6%">
-				<?php echo JText::_('Uom')?>
+				<?php echo JText::_('UOM')?>
 			</th>
 			<th width="6%">
 				<?php echo JText::_('MFG Name')?>
@@ -205,8 +210,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 $manufacture = PNsController::GetManufacture($row->pns_id);
                 ?>
         <tr>
-                <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>
-                <td>1</td>
+                <td><?php echo $level;?></td>
+                <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>                
+                 <td>1</td>
 		<td width="45%"><?php echo '<p style="height:25px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row->text.'</a></p> '; ?></td>		
                 <td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
                 <td>
@@ -235,7 +241,8 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                         $manufacture = PNsController::GetManufacture($row->pns_id);
                        ?>
                            <tr>
-                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>
+                                   <td><?php echo $level;?></td>
+                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>                                 
                                    <td>2</td>
                                 <td width="45%"><?php echo '<p style="margin-left:40px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row->text.'</a></p> '; ?></td>                                
                                 <td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
@@ -267,6 +274,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                         $manufacture = PNsController::GetManufacture($row3->pns_id);
                                        ?>
                                            <tr>
+                                                   <td><?php echo $level;?></td>
                                                    <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row3->pns_id;?>);" value="<?php echo $row3->pns_id;?>" name="cid[]"  /></td>
                                                     <td>3</td>
                                                 <td width="45%"><?php echo '<p style="margin-left:80px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row3->text.'</a></p> '; ?></td>                                               
@@ -297,6 +305,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 $manufacture = PNsController::GetManufacture($row4->pns_id);
                                                        ?>
                                                            <tr>
+                                                                   <td><?php echo $level;?></td>
                                                                    <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row4->pns_id;?>);" value="<?php echo $row4->pns_id;?>" name="cid[]"  /></td>
                                                                    <td>4</td>
                                                                 <td width="45%"><?php echo '<p style="margin-left:120px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row4->text.'</a></p> '; ?></td>
@@ -327,6 +336,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         $manufacture = PNsController::GetManufacture($row5->pns_id);
                                                                                ?>
                                                                                    <tr>
+                                                                                           <td><?php echo $level;?></td>
                                                                                            <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row5->pns_id;?>);" value="<?php echo $row5->pns_id;?>" name="cid[]"  /></td>
                                                                                            <td>5</td>
                                                                                         <td width="45%"><?php echo '<p style="margin-left:140px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row5->text.'</a></p> '; ?></td>
@@ -358,6 +368,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 $manufacture = PNsController::GetManufacture($row6->pns_id);
                                                                                                        ?>
                                                                                                            <tr>
+                                                                                                                   <td><?php echo $level;?></td>
                                                                                                                    <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row6->pns_id;?>);" value="<?php echo $row6->pns_id;?>" name="cid[]"  /></td>
                                                                                                                    <td>6</td>
                                                                                                                 <td width="45%"><?php echo '<p style="margin-left:180px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row6->text.'</a></p> '; ?></td>
@@ -389,6 +400,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                         $manufacture = PNsController::GetManufacture($row7->pns_id);
                                                                                                                                ?>
                                                                                                                                    <tr>
+                                                                                                                                           <td><?php echo $level;?></td>
                                                                                                                                            <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row7->pns_id;?>);" value="<?php echo $row7->pns_id;?>" name="cid[]"  /></td>
                                                                                                                                            <td>7</td>
                                                                                                                                         <td width="45%"><?php echo '<p style="margin-left:220px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row7->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row7->text.'</a></p> '; ?></td>
@@ -420,6 +432,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 $manufacture = PNsController::GetManufacture($row8->pns_id);
                                                                                                                                                        ?>
                                                                                                                                                            <tr>
+                                                                                                                                                                   <td><?php echo $level;?></td>
                                                                                                                                                                    <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,<?php echo $row8->pns_id;?>);" value="<?php echo $row8->pns_id;?>" name="cid[]"  /></td>
                                                                                                                                                                    <td>8</td>
                                                                                                                                                                 <td width="45%"><?php echo '<p style="margin-left:240px"> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row8->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row8->text.'</a></p> '; ?></td>

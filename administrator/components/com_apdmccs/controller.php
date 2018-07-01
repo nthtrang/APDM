@@ -201,6 +201,7 @@ class CCsController extends JController
 			JError::raiseError( 500, $db->stderr() );
 			return false;
 		}
+                $row->ccs_cpn = 1;
                 $row->ccs_description = $ccs_description;
 		$row->ccs_code = $ccs_code;
                 $row->ccs_id = (int) $row->ccs_id;

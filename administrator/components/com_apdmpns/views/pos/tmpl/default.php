@@ -64,10 +64,11 @@ function UpdatePnsRevWindow(){
 					<td class="key">
 						<label for="name">
 							<?php echo JText::_( 'Attached' ); ?>
-						</label>
+						</label>                                                
 					</td>
 					<td>						
-						 <input type="file" name="po_file" />
+						 <input type="file" name="po_file" /><br/>
+                                                 <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font>
 					</td>
 				</tr>				
 			</table>

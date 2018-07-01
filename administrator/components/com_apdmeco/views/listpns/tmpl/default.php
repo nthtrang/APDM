@@ -14,7 +14,8 @@
         JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::addPns("New",$cid[0]);
+		JToolBarHelper::addPns("Add Part",$cid[0]);
+                JToolBarHelper::addNew("new_part","New Part");        
 	} 
         
 //	if (in_array("E", $role)) {
@@ -52,8 +53,8 @@ function submitbutton(pressbutton) {
 				submitform( pressbutton );
 				return;
 			}
-                        if (pressbutton == 'cancel_listpns') {				
-				submitform( pressbutton );
+                        if (pressbutton == 'new_part') {				
+				  window.location.assign("index.php?option=com_apdmpns&task=add&eco_id=<?php echo $cid[0]?>&eco_name=<?php echo $this->rowEco->eco_name?>");
 				return;
 			}
 			if (pressbutton == 'export_bom') {				
@@ -109,7 +110,7 @@ function submitbutton(pressbutton) {
 					<?php echo  JText::_('PNS_DESCRIPTION'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Life Cycle'); ?>
+					<?php echo JText::_('State'); ?>
 				</th>				
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
@@ -235,7 +236,7 @@ function submitbutton(pressbutton) {
 				<td>
 					<?php 
      
-if ($row->pns_life_cycle =='Create' || ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {
+if ($row->pns_life_cycle =='Create') {
 		?>
                   <a href="<?php echo $edit_link;?>" class="toolbar">
 <span class="icon-32-edit" title="Edit">
@@ -245,6 +246,11 @@ Edit
                                         <?php 
 		
 	}
+        else
+        {
+                echo "Can not edit";
+        }
+        
 					 ?>
 				</td>                                
 			</tr>

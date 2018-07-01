@@ -184,7 +184,9 @@ class pnsViewlistwhereused extends JView
         $this->assignRef('title',        $rowstitle);        
         
         //get parent
-        
+        $row = & JTable::getInstance('apdmpns');
+        $row->load($id);   
+        $this->assignRef('row',        $row);     
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;

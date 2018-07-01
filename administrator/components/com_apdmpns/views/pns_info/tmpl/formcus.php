@@ -1,5 +1,4 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
@@ -143,7 +142,7 @@
 						</label>
 					</td>
 					<td>
-                                                        <?php echo $this->lists['ccs'];?>       
+                                                        <?php echo $this->lists['ccscpn'];?>       
                                                 <a href="index.php?option=com_apdmccs&task=addcustomer"><?php echo JText::_('Generate Customer')?></a>
 					</td>
 				</tr>

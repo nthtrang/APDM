@@ -4,13 +4,16 @@
 <?php
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) , 'cpanel.png' );
+	if (in_array("W", $role)) {
+		JToolBarHelper::addNew("add","New PN");
+                JToolBarHelper::customX('addpncus', 'new', '', 'New MPN', false);
+	}           
 	if (in_array("E", $role)) {
 		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
-		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);
-		
-	}
+		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);		
+	}     
 	if (in_array("V", $role)) { 	
-      JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
+                JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
 	}
 	if (in_array("D", $role)) {
                 //viet comment
@@ -19,20 +22,10 @@
 	if (in_array("E", $role)) {
 		JToolBarHelper::editListX();
 		
-	}
-	if (in_array("W", $role)) {
-		JToolBarHelper::addNew();
-              //   JToolBarHelper::customX('addpncus', 'new', '', 'New PN Customer', false);
-	}
-	
+	}	
 	$cparams = JComponentHelper::getParams ('com_media');
-?>
-
-<?php
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
-	
 ?>
 <script language="javascript">
 function submitbutton(pressbutton) {

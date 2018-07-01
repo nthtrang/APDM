@@ -1,18 +1,18 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
-	$cid = JRequest::getVar('cid', array(0));
-        $edit = JRequest::getVar('edit', true);
+$cid = JRequest::getVar('cid', array(0));
+$edit = JRequest::getVar('edit', true);
 $text = intval($edit) ? JText::_('Edit') : JText::_('New');
 $demote = $promote = "";
 $me = & JFactory::getUser();
- JToolBarHelper::title( JText::_( $this->row->eco_name));
+$role = JAdministrator::RoleOnComponent(5);
+JToolBarHelper::title(JText::_($this->row->eco_name));
 if (!intval($edit)) {
         JToolBarHelper::save('save', 'Save & Add new');
 }
-if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
-       JToolBarHelper::apply('savefiles', 'Save');
+if (in_array("E", $role) && $this->row->eco_status != "Released" && $this->row->eco_status != "Inreview") {
+        JToolBarHelper::apply('savefiles', 'Save');
 }
 
 

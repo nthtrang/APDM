@@ -73,8 +73,10 @@
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" class="active"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
+                        <?php }?>
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -226,5 +228,10 @@
 	<input type="hidden" name="task" value="" />
         <input type="hidden" name="redirect" value="mep" />
 	<input type="hidden" name="return" value="<?php echo $this->cd;?>"  />
+        <input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+	<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
+        <input type="hidden" value="<?php echo $this->row->pns_description?>" name="pns_description" />
+        <input type="hidden"  name="pns_code" id="pns_code"  size="10" value="<?php echo $this->row->pns_code;?>"/>
+        <input type="hidden" name="ccs_code" id="ccs_code" value="<?php echo $this->row->ccs_code;?>" />        
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

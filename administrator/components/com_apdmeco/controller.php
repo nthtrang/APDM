@@ -273,9 +273,13 @@ class ECOController extends JController
 //                                }
 
                                 if ($row->eco_status == 'Released') {
-                                        $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $row->eco_id . '';
+                                        $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $row->eco_id . '';                                        
                                         $db->setQuery($query);
                                         $db->query();
+                                        //update status REV
+                                        $query = 'update apdm_pns_rev set pns_life_cycle= "Released" where eco_id = ' . $row->eco_id . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $row->eco_id . ') ';
+                                        $db->setQuery($query);
+                                        $db->query();                                        
                                 }
                                 if ($isNew) {
                                         $row->eco_create_by = $row->eco_create_by ? $row->eco_create_by : $me->get('id');
@@ -1098,8 +1102,16 @@ class ECOController extends JController
                 $db->setQuery($query);
                 $db->query();	 
                 $query = 'update apdm_eco set eco_status= "Create" where eco_id = ' . $cid[0];
-                $db->setQuery($query);
+                $db->setQuery($query);               
                 $db->query();
+                //set all pn 
+                $query = 'update apdm_pns set pns_life_cycle= "Create" where eco_id = ' . $cid[0] . '';
+                $db->setQuery($query);
+                $db->query();        
+                //update status REV
+                $query = 'update apdm_pns_rev set pns_life_cycle= "Create" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                $db->setQuery($query);
+                $db->query();                                        
                 $msg = JText::sprintf( 'Successfully Demote',$cid[0]  );
                 $this->setRedirect( 'index.php?option=com_apdmeco&task=detail&cid[]='. $cid[0], $msg );
 
@@ -1132,7 +1144,11 @@ class ECOController extends JController
                                 //set all pn 
                                 $query = 'update apdm_pns set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . '';
                                 $db->setQuery($query);
-                                $db->query();                    
+                                $db->query();        
+                                //update status REV
+                                $query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                                $db->setQuery($query);
+                                $db->query();                                        
                                 //send email Inreview          
                                 $row =& JTable::getInstance('apdmeco');
                                 $row->load($cid[0]);
@@ -1180,11 +1196,15 @@ class ECOController extends JController
                                 //update eco to Released
                                 $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
                                 $db->setQuery($query);
-                                $db->query();
+                                $db->query();                                
                                 //set all pn 
                                 $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . '';
                                 $db->setQuery($query);
                                 $db->query();
+                                //update status REV
+                                $query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                                $db->setQuery($query);
+                                $db->query();                                      
                         
 
                         //send email PRROMOTE RELEASED
