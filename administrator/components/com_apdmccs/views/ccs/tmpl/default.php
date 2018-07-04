@@ -141,7 +141,9 @@ function submitbutton(pressbutton) {
 				$img 	= $row->ccs_activate ? 'tick.png' : 'publish_x.png';
 				$task 	= $row->ccs_activate ? 'block' : 'unblock';
 				$alt 	= $row->ccs_activate ? JText::_( 'Enabled' ) : JText::_( 'Blocked' );
-				$link 	= 'index.php?option=com_apdmccs&amp;view=detail&amp;task=detail&amp;cid[]='. $row->ccs_id. '';
+                                $link 	= 'index.php?option=com_apdmccs&amp;view=detail&amp;task=detail&amp;cid[]='. $row->ccs_id. '';
+                                if($row->ccs_cpn==1)
+                                        $link 	= 'index.php?option=com_apdmccs&amp;view=detail&amp;task=detailmpn&amp;cid[]='. $row->ccs_id. '';			
 				$npns = CCsController::GetNumberOfPNs($row->ccs_id);
 				$link_pns = "#";
 			?>

@@ -222,9 +222,19 @@
 						</label>
 					</td>
 					<td>
-						<textarea name="pns_description" rows="10" cols="40"><?php echo $this->row->pns_description?></textarea>
+						<textarea maxlength='40' name="pns_description" rows="10" cols="40"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo $this->row->pns_cost?>" name="pns_cost" id="pns_cost" />
+					</td>
+				</tr>                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -413,6 +423,7 @@
 	<input type="hidden" name="cid[]" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="" />
+         <input type="hidden" name="mpn" value="0" />
         <input type="text" name="return" value="<?php echo $eco_name?>"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

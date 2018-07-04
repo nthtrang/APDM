@@ -93,6 +93,13 @@ class JTableApdmccs  extends JTable
 	 * @var int
 	 */
 	var $ccs_cpn			= null;	
+        
+	/**
+	 * The customer name for mpn
+	 *
+	 * @var string
+	 */
+	var $ccs_name			= null;	        
 
 	/**
 	* @param database A database connector object

@@ -210,7 +210,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo $this->row->pns_cost; ?>
+                                                <?php echo number_format((float)$this->row->pns_cost, 2, '.', '');?>						
 					</td>
 				</tr>	
 				<tr>

@@ -78,16 +78,26 @@
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'COMMODITY_CODE' ); ?>
+							<?php echo JText::_( "Customer's PN" ); ?>
 						</label>
 					</td>
 					<td>
-                                                <input type="text" maxlength="1"  name="ccs_code1" onkeydown="capitaliseName()" onKeyPress="return CharatersOnlyEspecialUpCase(this, event);" id="ccs_code1" class="inputbox" size="5" value="<?php echo $this->row->ccs_code;?>" <?php echo ($this->row->ccs_id) ? 'readonly=""' : '';?>  />
-						<input type="text" maxlength="2"  name="ccs_code2" onKeyPress="return numbersOnly(this, event);" id="ccs_code2" class="inputbox" size="5" value="<?php echo $this->row->ccs_code;?>" <?php echo ($this->row->ccs_id) ? 'readonly=""' : '';?>  /><?php if (!$this->row->ccs_id) {?>
+                                                <input type="text" maxlength="1"  name="ccs_code1" onkeydown="capitaliseName()" onKeyPress="return CharatersOnlyEspecialUpCase(this, event);" id="ccs_code1" class="inputbox" size="5" value="<?php echo substr($this->row->ccs_code, 0, 1); ?>" <?php echo ($this->row->ccs_id) ? 'readonly=""' : '';?>  />
+						<input type="text" maxlength="2"  name="ccs_code2" onKeyPress="return numbersOnly(this, event);" id="ccs_code2" class="inputbox" size="5" value="<?php echo substr($this->row->ccs_code, 1, 2); ?>" <?php echo ($this->row->ccs_id) ? 'readonly=""' : '';?>  /><?php if (!$this->row->ccs_id) {?>
 						&nbsp;&nbsp;<!--<a href="javascript:void(0)" onclick="get_defautl_code();"><?php //echo JText::_('DEFAULT_CODE')?></a>-->
 						<?php } ?>
 					</td>
 				</tr>
+				<tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( "Customer Name" ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text"  name="ccs_name" id="ccs_name" class="inputbox" size="50" value="<?php echo $this->row->ccs_name;?>"/>						
+					</td>
+				</tr>                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -165,5 +175,7 @@
 	<input type="hidden" name="cid[]" value="<?php echo $this->row->ccs_id?>" />
 	<input type="hidden" name="option" value="com_apdmccs" />
 	<input type="hidden" name="task" value="savecus" />
+        <input type="text" name="back" value="<?php echo  JRequest::getVar( 'back');?>" />
+        
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

@@ -81,6 +81,14 @@ class PNsController extends JController {
                                         JRequest::setVar('edit', true);
                                 }
                                 break;
+                        case 'detailmpn': {
+
+                                        JRequest::setVar('layout', 'detailmpn');
+                                        JRequest::setVar('view', 'pns_info');
+                                        JRequest::setVar('edit', true);
+                                }
+                                break;                        
+                        
                 }
                 parent::display();
         }
@@ -746,6 +754,8 @@ class PNsController extends JController {
                 $row->pns_id = (int) $row->pns_id;
                 $isNew = true;
                 $pns_code = trim($post['pns_code']);
+                if(JRequest::getVar('mpn')==1)
+                        $row->pns_cpn  =1;//set CPN
                 //check pns_code
                 if (strlen($pns_code) < 6) {
                         $new = '';
@@ -1012,15 +1022,16 @@ class PNsController extends JController {
                 $pns_revision = JRequest::getVar('pns_revision');
                 $pns_code = JRequest::getVar('pns_code');
                 $ccs_code = JRequest::getVar('ccs_code');
+                $pns_cost = strtoupper($post['pns_cost']);
                 $pns_description = strtoupper($post['pns_description']);
-
                 $redirect = JRequest::getVar('redirect');
                 if (!$row->bind($post)) {
                         JError::raiseError(500, $db->stderr());
                         return false;
                 }
                 $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
-                $row->pns_uom = JRequest::getVar('pns_uom');
+                $row->pns_cost = JRequest::getVar('pns_cost');
+                $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 $pns_id = JRequest::getVar('pns_id');
                 $row = & JTable::getInstance('apdmpns');
@@ -1123,6 +1134,7 @@ class PNsController extends JController {
                         $row->pns_image = $pns_imge;
                         $row->pns_pdf = $pns_pdf;
                         $row->pns_description = $pns_description;
+                        $row->pns_cost = JRequest::getVar('pns_cost');
                         if (!$row->store()) {
                                 $msg = JText::_('Successfully Saved Part Number');
                                 $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]=' . $row->pns_id, $msg);

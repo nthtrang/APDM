@@ -283,7 +283,7 @@ function isCheckedInitial(isitchecked,id){
                                          <input style="display:none" type="text" value="<?php echo $row->init_buyer;?>" id="init_buyer_<?php echo $row->pns_id;?>"  name="init_buyer_<?php echo $row->pns_id;?>" />
 				</td>      
                                 <td align="center">
-					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo number_format((float)$row->init_cost, 2, '.', '');;?></span>
+					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo number_format((float)$row->init_cost, 2, '.', '');?></span>
                                          <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
 				</td>                                    
 				<td align="center">

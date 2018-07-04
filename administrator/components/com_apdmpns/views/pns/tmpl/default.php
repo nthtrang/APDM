@@ -6,7 +6,7 @@
 	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) , 'cpanel.png' );
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew("add","New PN");
-                JToolBarHelper::customX('addpncus', 'new', '', 'New MPN', false);
+                JToolBarHelper::customX('addpncus', 'new', '', 'Mass Create PN', false);
 	}           
 	if (in_array("E", $role)) {
 		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
@@ -200,7 +200,10 @@ function submitbutton(pressbutton) {
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
 				$row 	=& $this->rows[$i];
-				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
+                                if($row->pns_cpn==1)
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
+                                else
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
 				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
 				if ($row->pns_image !=''){
 					$pns_image = $path_image.$row->pns_image;
@@ -280,7 +283,7 @@ function submitbutton(pressbutton) {
 					 ?>
 				</td>	
 <!--                                <td align="center">
-					<?php echo $row->pns_cost;?>
+					<?php echo  number_format((float)$row->pns_cost, 2, '.', '');?>
 				</td>   -->
                                 <td align="center">
 					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>

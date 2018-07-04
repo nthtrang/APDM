@@ -77,12 +77,25 @@ class CCsController extends JController
 				JRequest::setVar( 'view', 'cce' );
 				JRequest::setVar( 'edit', true );
 			} break;
+			case 'editmpn'    :
+			{				
+				JRequest::setVar( 'layout', 'formcus'  );
+				JRequest::setVar( 'view', 'cce' );
+				JRequest::setVar( 'edit', true );
+			} break;                
+                
 			case 'detail':{
 				JRequest::setVar( 'layout', 'view'  );
 				JRequest::setVar( 'view', 'cce' );
 				JRequest::setVar( 'edit', true );
 			}
 			break;
+			case 'detailmpn':{
+				JRequest::setVar( 'layout', 'viewmpn'  );
+				JRequest::setVar( 'view', 'cce' );
+				JRequest::setVar( 'edit', true );
+			}
+			break;                                
 			case 'trash':{
 				JRequest::setVar( 'layout', 'default'  );
 				JRequest::setVar( 'view', 'ccr' );				
@@ -167,8 +180,11 @@ class CCsController extends JController
 		    switch ( $this->getTask() )
 		    {
 			    case 'apply':
-				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
-				    $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detail&cid[]='. $row->ccs_id, $msg );
+				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );                                    
+                                    if($row->ccs_cpn==0)
+                                        $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detail&cid[]='. $row->ccs_id, $msg );
+                                    else
+                                        $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detailmpn&cid[]='. $row->ccs_id, $msg );
 				    //$this->setRedirect( 'index.php?option=com_apdmccs', $msg );
 				    break;
 
@@ -252,9 +268,12 @@ class CCsController extends JController
 		    
 		    switch ( $this->getTask() )
 		    {
-			    case 'savecus':
+			    case 'savecus':                                    
 				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
-				    $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detail&cid[]='. $row->ccs_id, $msg );
+                                    if(JRequest::getVar('back')=="mpn")
+                                        $this->setRedirect( 'index.php?option=com_apdmpns&task=addpncus', $msg );                                            
+                                    else
+                                        $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detailmpn&cid[]='. $row->ccs_id, $msg );                                        
 				    //$this->setRedirect( 'index.php?option=com_apdmccs', $msg );
 				    break;
 

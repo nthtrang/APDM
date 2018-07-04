@@ -235,6 +235,10 @@ class pnsViewpns_info extends JView
          $list_pos = $db->loadObjectList();         
          $this->assignRef('pos',        $list_pos);
          
+         $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");         
+         $list_ccs = $db->loadObjectList();               
+         $this->assignRef('ccs_name',         $list_ccs[0]->ccs_name);
+         
         $this->assignRef('pns_uom', $row->pns_uom);
         
         

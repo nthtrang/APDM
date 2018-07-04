@@ -60,11 +60,11 @@
 			return false;
 		}
 		
-		if (form.pns_version.value ==""){
-			alert("Please input PNs Version ");
-			form.pns_version.focus();
-			return false;
-		}
+//		if (form.pns_version.value ==""){
+//			alert("Please input PNs Version ");
+//			form.pns_version.focus();
+//			return false;
+//		}
 		
 		if (form.pns_version.value !="" && form.pns_version.value.length != 2){
 			alert("PNs Version must 2 characters");
@@ -72,12 +72,12 @@
 			return false;
 		}
 		
-		if (form.eco_id.value==0){
-			alert("Please select ECO");
-			form.eco.focus();
-			return false;
-		}
-		
+//		if (form.eco_id.value==0){
+//			alert("Please select ECO");
+//			form.eco.focus();
+//			return false;
+//		}
+//		
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status");
 			from.pns_status.focus();
@@ -143,7 +143,7 @@
 					</td>
 					<td>
                                                         <?php echo $this->lists['ccscpn'];?>       
-                                                <a href="index.php?option=com_apdmccs&task=addcustomer"><?php echo JText::_('Generate Customer')?></a>
+                                                <a href="index.php?option=com_apdmccs&task=addcustomer&back=mpn"><?php echo JText::_('Generate Customer')?></a>
 					</td>
 				</tr>
                                 <tr>
@@ -153,9 +153,8 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" maxlength="6" onKeyPress="return numbersOnly(this, event);"  name="pns_code" id="pns_code" class="inputbox" size="20" value=""/>
-						<input type="text" maxlength="2" onKeyPress="return numbersOnly(this, event);" name="pns_version" id="pns_version" class="inputbox" size="5" value="00" />
-						<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_code();"><?php echo JText::_('DEFAULT_CODE')?></a>
+						<input type="text" maxlength="12"  name="pns_code" id="pns_code" class="inputbox" size="20" value=""/>
+						<input type="text" maxlength="2" onKeyPress="return numbersOnly(this, event);" name="pns_version" id="pns_version" class="inputbox" size="5" value="00" />					
 
 					</td>
 				</tr>                                
@@ -218,7 +217,17 @@
 						<?php echo $this->lists['uom']?>
 					</td>
                                         
-				</tr>	                                
+				</tr>	   
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="<?php echo number_format((float)$this->row->pns_cost, 2, '.', '');?>" name="pns_cost" id="pns_cost" />
+					</td>
+				</tr>                                    
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -226,7 +235,7 @@
 						</label>
 					</td>
 					<td>
-						<textarea name="pns_description" rows="10" cols="40"><?php echo $this->row->pns_description?></textarea>
+						<textarea maxlength='40' name="pns_description" rows="10" cols="40"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -417,5 +426,6 @@
 	<input type="hidden" name="cid[]" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="" />
+        <input type="hidden" name="mpn" value="1" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

@@ -8,7 +8,10 @@
 	$role = JAdministrator::RoleOnComponent(1);	
 	JToolBarHelper::title( JText::_( 'COMMODITY_CODE_MAMANGEMENT' ) . ': <small><small>[ view ]</small></small>' , 'generic.png' );
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+                if($this->row->ccs_cpn!=1)
+                        JToolBarHelper::editListX();
+                else
+                        JToolBarHelper::editListX("editmpn","Edit");
 	}
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew();
@@ -36,10 +39,15 @@
 				submitform( pressbutton );
 				return;
 			}
-			if (pressbutton == 'edit') {
-				submitform( pressbutton );
-				return;
-			}	
+                if (pressbutton == 'edit') {
+                        submitform( pressbutton );
+                        return;
+                }
+                if (pressbutton == 'editmpn') {
+                        submitform( pressbutton );
+                        return;
+                }                
+                
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
 
 		// do field validation
@@ -59,7 +67,9 @@
 				<tr>
 					<td class="key">
 						<label for="name">
+                                              
 							<?php echo JText::_( 'COMMODITY_CODE' ); ?>
+                                                       
 						</label>
 					</td>
 					<td>
