@@ -123,8 +123,8 @@ function submitbutton(pressbutton) {
        
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $edit_link = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
-				
+                                $set_route = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
+				$edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td>
@@ -159,12 +159,14 @@ function submitbutton(pressbutton) {
                                         else{
                                                 if($this->rowEco->eco_status =! "Released"){
                                         ?>
-					<a href="<?php echo $edit_link;?>">Set Route</a>
+					<a href="<?php echo $set_route;?>">Set Route</a>&nbsp;| &nbsp;
+                                        <a href="<?php echo $edit_link;?>">Edit</a>
                                         <?php
                                         }
                                         else{
                                                  ?>
-					<a href="<?php echo $edit_link;?>">Set Route</a>
+					<a href="<?php echo $set_route;?>">Set Route</a> &nbsp;| &nbsp;
+                                         <a href="<?php echo $edit_link;?>">Edit</a>
                                         <?php
                                         }
                                         }

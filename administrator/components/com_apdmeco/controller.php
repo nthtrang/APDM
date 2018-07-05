@@ -165,6 +165,7 @@ class ECOController extends JController
 	 * Saves the record
 	 */
 	function save() {
+
                 global $mainframe;
 
                 // Check for request forgeries
@@ -231,7 +232,11 @@ class ECOController extends JController
                         $tzoffset = $config->getValue('config.offset');
                         $date = & JFactory::getDate($row->eco_create, $tzoffset);
                         $row->eco_create = $date->toMySQL();
-
+                        $row->eco_reason =JRequest::getVar('eco_reason');
+                        $row->eco_what = JRequest::getVar('eco_what');
+                        $row->eco_special =JRequest::getVar('eco_special');
+                        $row->eco_benefit = JRequest::getVar('eco_benefit'); 
+                        $row->eco_technical =JRequest::getVar('eco_technical');                      
 
                         // Store the content to the database
                         if (!$row->store()) {
@@ -1063,13 +1068,23 @@ class ECOController extends JController
                 $status = 'Create';
                 $due_date = JRequest::getVar('due_date');
                 $eco_id = JRequest::getVar('eco_id');
+                $route_id = JRequest::getVar('route_id');
                 $created = $datenow->toMySQL();
                 $owner = $me->get('id');
                 $return = JRequest::getVar('return');                        
-                $db->setQuery("update apdm_eco_routes set eco_id,name,description,status,due_date,created,owner VALUES ('" . $eco_id . "', '" . $name . "', '" . $description . "', '" . $status . "', '" . $due_date . "', '" . $created . "', '" . $owner . "')");
+                $me = & JFactory::getUser();
+                $cid = JRequest::getVar('cid', array(0));       
+                $db->setQuery('select count(*) from apdm_eco_routes  where eco_id = ' . $cid[0] . ' and id ="'.$route_id.'" and owner = "' . $me->get('id') . '"');
+                $check_owner = $db->loadResult();
+                if ($check_owner==0) {
+                         $msg = JText::sprintf('You are not permission save routes', $cid[0]);
+                         return $this->setRedirect('index.php?option=com_apdmeco&task=routes&t='.time().'&cid[]=' . $cid[0], $msg);
+                }                   
+                
+                $db->setQuery("update apdm_eco_routes set name = '".$name."',description='".$description."',due_date='".$due_date."' where eco_id =  '".$eco_id."' and id = '" . $route_id . "'");
                 $db->query();
                 $msg = "Successfully Saved Route";
-                $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[0]='.$pns_id, $msg );
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&t='.time().'&cid[0]='.$cid[0], $msg );
                 
         }          
         function remove_routes()
@@ -1077,10 +1092,25 @@ class ECOController extends JController
 
                 $db       =& JFactory::getDBO();
                 $cid      = JRequest::getVar( 'eco');  
-                $route_id      = JRequest::getVar( 'route_id', array(), '', 'array' );                
-                $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (".implode(",", $route_id).")");
-                $db->query();      
-                $msg = JText::_('Have deleted successfull.');
+                $me = & JFactory::getUser();   
+                $route_id      = JRequest::getVar( 'route_id', array(), '', 'array' );     
+                foreach($route_id as $id)
+                {
+                        $db->setQuery('select count(*) from apdm_eco_routes where eco_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');
+                        $check_owner = $db->loadResult();
+                        if ($check_owner==0) {
+                                 $id_f[] = $id;                                
+                                 continue;
+                                //return $this->setRedirect('index.php?option=com_apdmeco&task=routes&t='.time().'&cid[]=' . $cid, $msg);
+                        }   
+                        $id_o[] = $id;
+                        
+                        $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (". $id.")");                        
+                        $db->query();      
+                }
+                 $msgf = JText::sprintf('You are not permission delete routes '.  implode(",", $id_f));
+                $msg = JText::sprintf(' Have deleted successfull routes '.implode(",", $id_o));
+                $msg = JText::_($msgf.'<>'.$msg);
                 $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[]='.$cid, $msg);
                       //  apdm_eco_routes
         }

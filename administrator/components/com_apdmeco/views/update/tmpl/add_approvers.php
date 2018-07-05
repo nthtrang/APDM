@@ -187,7 +187,7 @@ if($owner == $me->get('id'))
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Approvers' ); ?></legend>
                 
-                			<table class="adminlist"  width="100%">			
+                			<table class="admintable"  width="100%">			
                     
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -231,7 +231,7 @@ if($owner == $me->get('id'))
                                     
                                                         </td>                                                        
                                                         <td width="25%">                                                                
-                                                                <textarea cols="70" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note;?></textarea>                                                       
+                                                                <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note;?></textarea>                                                       
                                                         </td>
                                                          <?php                                                         
                                                         }
@@ -268,7 +268,7 @@ if($owner == $me->get('id'))
                                                                 <?php echo $status->eco_status?>                                                        
                                                         </td>                                                        
                                                         <td width="25%">                                                                
-                                                                <textarea disabled="disabled" cols="70" rows="6" id ="approve_note" name ='approve_note[]'><?php echo $status->note;?></textarea>
+                                                                <textarea disabled="disabled" cols="25" rows="6" id ="approve_note" name ='approve_note[]'><?php echo $status->note;?></textarea>
                                                         
                                                         </td>
                                                         <?php                                                         
@@ -317,7 +317,7 @@ if($owner == $me->get('id'))
                                                                 <select name="mail_user[]" >
                                                                         <option value="">Select Approver</option>
                                                                         <?php foreach ($this->list_user as $list) { ?>
-                                                                                <option value="<?php echo $list->email; ?>"><?php echo $list->username; ?></option>
+                                                                                <option value="<?php echo $list->email; ?>"><?php echo $list->name; ?></option>
                                                                         <?php } ?>
                                                                 </select>
                                                         </td>
@@ -332,7 +332,7 @@ if($owner == $me->get('id'))
                                                                         <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id; ?>&time=<?php echo time(); ?>'></a>                                                                
                                                                 </td>                                                        
                                                                 <td width="25%">                                                                
-                                                                        <textarea cols="70" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>                                                       
+                                                                        <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>                                                       
                                                                 </td>
                                                                 <?php
                                                         } elseif ($status->eco_status == 'Released') {

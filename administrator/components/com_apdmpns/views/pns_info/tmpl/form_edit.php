@@ -41,6 +41,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			form.eco.focus();
 			return false;
 		}
+		if (form.pns_stock.value < form.pns_qty_used.value){
+			alert("Please input Stock greater than Qty Used	");
+			form.pns_stock.focus();
+			return false;
+		}                
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status/");
 			from.pns_status.focus();
@@ -211,7 +216,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</label>
 					</td>
 					<td>
-						<textarea maxlength='40' name="pns_description" rows="10" cols="60"><?php echo $this->row->pns_description?></textarea>
+						<textarea maxlength='40' name="pns_description" rows="6" cols="30"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
 				<tr>

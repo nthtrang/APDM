@@ -160,6 +160,9 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   JText::_('Status'), 'p.pns_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JHTML::_('grid.sort',   JText::_('State'), 'p.pns_life_cycle', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+				</th>                                
+				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th class="title"  >
@@ -176,7 +179,8 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'Date In' ); ?>
 				</th>       
 				<th width="20%" class="title">
-					<?php echo JText::_( 'Stock' ); ?>
+					<?php //echo JText::_( 'Stock' ); ?>
+                                        <?php echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>    
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Qty Used' ); ?>
@@ -264,6 +268,9 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo $row->pns_status;?>
 				</td>
+				<td align="center">
+					<?php echo $row->pns_life_cycle;?>
+				</td>                                                                
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>

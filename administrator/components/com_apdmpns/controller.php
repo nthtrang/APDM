@@ -1029,8 +1029,7 @@ class PNsController extends JController {
                         JError::raiseError(500, $db->stderr());
                         return false;
                 }
-                $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
-                $row->pns_cost = JRequest::getVar('pns_cost');
+
                 $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 $pns_id = JRequest::getVar('pns_id');
@@ -1135,6 +1134,12 @@ class PNsController extends JController {
                         $row->pns_pdf = $pns_pdf;
                         $row->pns_description = $pns_description;
                         $row->pns_cost = JRequest::getVar('pns_cost');
+                        $row->pns_stock = JRequest::getVar('pns_stock');
+                        $row->pns_datein = JRequest::getVar('pns_datein');
+                        $row->pns_uom = JRequest::getVar('pns_uom');                        
+                        $row->pns_qty_used = JRequest::getVar('pns_qty_used');
+                        $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                        $row->pns_cost = JRequest::getVar('pns_cost');                        
                         if (!$row->store()) {
                                 $msg = JText::_('Successfully Saved Part Number');
                                 $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]=' . $row->pns_id, $msg);

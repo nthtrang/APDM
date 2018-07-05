@@ -131,8 +131,11 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'Supplier_PN' ); ?>
 				</th>				
 				<th width="20%" class="title">
-					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+					<?php echo JText::_( 'MFR name' ); ?>
 				</th>
+				<th width="20%" class="title">
+					<?php echo JText::_( 'MFG PN' ); ?>
+				</th>                                
 				<th class="title">
 					<?php echo JText::_( 'Action' ); ?>
 				</th>                                
@@ -225,7 +228,7 @@ function submitbutton(pressbutton) {
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo '<strong>-'.$m['mf'].': </strong>&nbsp;&nbsp;'.$m['v_mf'].'<br />';
+						echo $m['mf'];
 					}
 						
 					}else{
@@ -233,6 +236,18 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>
+                                <td>
+					<?php 
+					if (count($mf) > 0){
+					foreach ($mf as $m){
+						echo $m['v_mf'];
+					}
+						
+					}else{
+						
+					}
+					 ?>
+				</td>                                
 				<td>
 					<?php 
      

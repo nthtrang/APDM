@@ -222,7 +222,7 @@
 						</label>
 					</td>
 					<td>
-						<textarea maxlength='40' name="pns_description" rows="10" cols="40"><?php echo $this->row->pns_description?></textarea>
+						<textarea maxlength='40' name="pns_description" rows="6" cols="30"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
 				<tr>
