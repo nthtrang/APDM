@@ -43,8 +43,8 @@
 			form.ccs_code.focus();
 			return false;
 		}
-		if (form.pns_code.value=="" || !checkpnscode(form.pns_code.value)){
-			alert("Please input Part Number Code Correctly (exp: xxxxxx no special character)");
+		if (form.pns_code.value=="" ){
+			alert("Please input Part Number Code Correctly");
 			form.pns_code.focus();
 			return false;
 		}
@@ -59,7 +59,12 @@
 			form.pns_revision.focus();
 			return false;
 		}
-		
+		if (form.pns_quo_id.value ==0 ){
+			alert("Please input Quo# ");
+			form.pns_quo_id.focus();
+			return false;
+		}		
+                
 //		if (form.pns_version.value ==""){
 //			alert("Please input PNs Version ");
 //			form.pns_version.focus();
@@ -149,7 +154,7 @@
                                 <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Customer Code' ); ?>
+							<?php echo JText::_( 'Customer PN' ); ?>
 						</label>
 					</td>
 					<td>
@@ -200,6 +205,16 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
+							<?php echo JText::_( 'Cost' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" value="<?php echo $this->row->pns_cost?>" name="pns_cost" id="pns_cost" />
+					</td>
+				</tr>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
 							<?php echo JText::_( 'Make/Buy' ); ?>
 						</label>
 					</td>
@@ -217,17 +232,7 @@
 						<?php echo $this->lists['uom']?>
 					</td>
                                         
-				</tr>	   
-                                <tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Cost' ); ?>
-						</label>
-					</td>
-					<td>
-                                                <input type="text" value="<?php echo number_format((float)$this->row->pns_cost, 2, '.', '');?>" name="pns_cost" id="pns_cost" />
-					</td>
-				</tr>                                    
+				</tr>	                                 
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -247,8 +252,35 @@
 					<td>
 						<?php echo $this->lists['status']?>
 					</td>
-				</tr>			
-				
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Quo#' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="" name="quo_code" id="quo_code" readonly="readonly" />
+                                                <input type="hidden" name="pns_quo_id" id="pns_quo_id" value="0" />
+						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pns_quonew&tmpl=component" title="Image">
+                                        <input type="button" name="addQuos" value="<?php echo JText::_('Add Quo#')?>"/>
+                                        </a>
+					</td>
+				</tr>                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'PO#' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text" value="" name="po_code" id="po_code" readonly="readonly" />
+                                                <input type="hidden" name="pns_po_id" id="pns_po_id" value="0" />
+						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pns_ponew&tmpl=component" title="Image">
+                                        <input type="button" name="addPOs" value="<?php echo JText::_('Add PO#')?>"/>
+                                        </a>
+					</td>
+				</tr>	                                				
 			</table>
 		</fieldset>
 	</div>

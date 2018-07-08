@@ -12,7 +12,7 @@ $pns_code_full = $row->pns_code_full;
 	JToolBarHelper::title( $pns_code_full , 'cpanel.png' );
 	
 	if (in_array("V", $role)) {
-		JToolBarHelper::customX('export_bom', 'excel', '', 'Export', false);
+		JToolBarHelper::customX('export_bom_xls', 'excel', '', 'Export', false);
 	}
 	if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
@@ -50,6 +50,10 @@ function submitbutton(pressbutton) {
 				submitform( pressbutton );
 				return;
 			}
+			if (pressbutton == 'export_bom_xls') {				
+				submitform( pressbutton );
+				return;
+			}                        
 			if (pressbutton == 'removepnbom') {
 				submitform( pressbutton );
 				return;
@@ -134,9 +138,9 @@ function isCheckedBom(isitchecked,id){
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'REV' ); ?></a></li>
                          <?php if($this->row->pns_cpn!=1){?>
-                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
                         <?php } ?>
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'POs' ); ?></a></li>
 		</ul>
 		 <div class="clr"></div>
         </div>

@@ -13,7 +13,7 @@
         JToolBarHelper::title( $partnumber);
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
-		JToolBarHelper::editListX();		
+		JToolBarHelper::editListX("editmpn","Edit");		
 	}
         else
         {
@@ -40,7 +40,7 @@
 				submitform( pressbutton );
 				return;
 			}
-			if (pressbutton == 'edit') {
+			if (pressbutton == 'editmpn') {
 				submitform( pressbutton );
 				return;
 			}
@@ -66,9 +66,9 @@
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
-                         <?php if($this->row->pns_cpn!=1){?>
-                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
                         <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                         <?php if($this->row->pns_cpn!=1){?>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
                         <?php } ?>
 		</ul>
 		<div class="clr"></div>
@@ -89,7 +89,7 @@
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'ASCENX_PNS' ); ?>
+							<?php echo JText::_( 'Customer Code' ); ?>
 						</label>
 					</td>
 					<td><?php echo $this->row->ccs_code.'-'.$this->row->pns_code;?>					
@@ -219,7 +219,7 @@
 						</label>
 					</td>
 					<td>
-                                                <?php echo number_format((float)$this->row->pns_cost, 2, '.', '');?>						
+                                                <?php echo $this->row->pns_cost;?>
 					</td>
 				</tr>	
 				<tr>
@@ -263,6 +263,36 @@
 					</td>
                                         
 				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Quo#' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php 
+                                                foreach ($this->quos as $quo) {
+                                                        echo $quo->quo_code."</br>";
+                                                }                                                
+                                                ?>
+					</td>
+                                        
+				</tr>	
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'PO#' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php 
+                                                foreach ($this->pos as $po) {
+                                                        echo $po->po_code."</br>";
+                                                }                                                
+                                                ?>
+					</td>
+                                        
+				</tr>	                                
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">

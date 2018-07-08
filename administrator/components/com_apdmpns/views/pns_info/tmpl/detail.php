@@ -2,6 +2,11 @@
 
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
+        if($this->row->pns_cpn==1)
+        {
+                $app =& JFactory::getApplication();
+                $app->redirect('index.php?option=com_apdmpns&task=detailmpn&cid[0]='.$this->row->pns_id);
+        }
 	$cid = JRequest::getVar( 'cid', array(0) );
 	//$edit		= JRequest::getVar('edit',true);
 	//$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
@@ -67,9 +72,9 @@
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
                          <?php if($this->row->pns_cpn!=1){?>
-                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
                         <?php } ?>
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -210,9 +215,9 @@
 						</label>
 					</td>
 					<td>
-                                                <?php echo number_format((float)$this->row->pns_cost, 2, '.', '');?>						
+                                                <?php echo $this->row->pns_cost;?>
 					</td>
-				</tr>	
+				</tr>	                                				
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

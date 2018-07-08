@@ -59,9 +59,9 @@ function submitbutton(pressbutton) {
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
                          <?php if($this->row->pns_cpn!=1){?>
-                        <li><a  id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
-                        <li><a  id="dash" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
+                        <li><a  id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
                         <?php } ?>
+                        <li><a  id="dash" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
 		</ul>
 		 <div class="clr"></div>
         </div>
@@ -103,6 +103,9 @@ function submitbutton(pressbutton) {
 				</th>			
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
+				</th>                                                                
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('ECO Number'); ?>
 				</th>                                
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
@@ -112,10 +115,13 @@ function submitbutton(pressbutton) {
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Current REV'); ?>
-				</th>
-				<th width="5%" class="title" nowrap="nowrap">
+				</th>                            
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Current DASH'); ?>
-				</th>                                
+				</th>    -->
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Make/Buy'); ?>
+				</th>                                    
 
 			</tr>
 		</thead>
@@ -153,17 +159,29 @@ function submitbutton(pressbutton) {
 					<?php echo  $row->pns_description; ?>
 				</td>		                                        
 				<td align="center">
+					<?php echo PNsController::GetEcoValue($row->eco_name);?>
+				</td>                                
+				<td align="center">
 					<?php echo $row->pns_life_cycle;?>
 				</td>
 				<td align="center">
-					<?php echo $row->pns_type;?>
+					<?php 
+                                        $list_rev = PNsController::DisplayAllRevValue($row->pns_id); 
+                                        foreach($list_rev as $rev)
+                                        {
+                                                echo $rev->pns_revision."</br>";
+                                        }
+                                        ?>
 				</td>
                                 <td align="center">
-					<?php echo $row->pns_type;?>
+					<?php echo $row->pns_revision;?>
 				</td>	
+<!--                                <td align="center">
+					<?php echo $row->pns_type;?>
+				</td>	-->
                                 <td align="center">
 					<?php echo $row->pns_type;?>
-				</td>	
+				</td>	                                
 			</tr>
                         	<?php		
                                 //level2      
@@ -186,16 +204,28 @@ function submitbutton(pressbutton) {
                                                         </td>
                                                         <td>
                                                                 <?php echo  $row2->pns_description; ?>
-                                                        </td>	                                                        
+                                                        </td>	                
+                                                        <td align="center">
+                                                                <?php echo PNsController::GetEcoValue($row2->eco_id);?>
+                                                        </td>                                                          
                                                         <td align="center">
                                                                 <?php echo $row2->pns_life_cycle;?>
                                                         </td>
                                                         <td align="center">
-                                                                <?php echo $row2->pns_type;?>
+                                                                <?php 
+                                                                $list_rev = PNsController::DisplayAllRevValue($row2->pns_id); 
+                                                                foreach($list_rev as $rev)
+                                                                {
+                                                                        echo $rev->pns_revision."</br>";
+                                                                }
+                                                                ?>
                                                         </td>
                                                         <td align="center">
-                                                                <?php echo $row2->pns_type;?>
+                                                                <?php echo $row2->pns_revision;?>
                                                         </td>	
+<!--                                                        <td align="center">
+                                                                <?php echo $row2->pns_type;?>
+                                                        </td>	-->
                                                         <td align="center">
                                                                 <?php echo $row2->pns_type;?>
                                                         </td>	                                                        
@@ -222,19 +252,31 @@ function submitbutton(pressbutton) {
                                                                         </td>	
                                                                         <td>
                                                                                 <?php echo  $row3->pns_description; ?>
-                                                                        </td>	                                                                        
+                                                                        </td>	  
+                                                                        <td align="center">
+                                                                                <?php echo PNsController::GetEcoValue($row3->eco_id);?>
+                                                                        </td>                                                                          
                                                                         <td align="center">
                                                                                 <?php echo $row3->pns_life_cycle;?>
                                                                         </td>
                                                                         <td align="center">
-                                                                                <?php echo $row3->pns_type;?>
+                                                                                <?php 
+                                                                        $list_rev = PNsController::DisplayAllRevValue($row3->pns_id); 
+                                                                        foreach($list_rev as $rev)
+                                                                        {
+                                                                                echo $rev->pns_revision."</br>";
+                                                                        }
+                                                                        ?>
                                                                         </td>
                                                                         <td align="center">
-                                                                                <?php echo $row3->pns_type;?>
+                                                                                <?php echo $row3->pns_revision;?>
                                                                         </td>	
+<!--                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_type;?>
+                                                                        </td>	   -->
                                                                         <td align="center">
                                                                                 <?php echo $row3->pns_type;?>
-                                                                        </td>	                                                                        
+                                                                        </td>	                                                                           
 						
                                                                 </tr>
                                                                <?php		
@@ -258,19 +300,32 @@ function submitbutton(pressbutton) {
                                                                                         </td>	
                                                                                         <td>
                                                                                                 <?php echo  $row4->pns_description; ?>
-                                                                                        </td>	                                                                                        
+                                                                                        </td>	                  
+                                                                                        <td align="center">
+                                                                                                <?php echo PNsController::GetEcoValue($row4->eco_id);?>
+                                                                                        </td>                                                                                          
                                                                                         <td align="center">
                                                                                                 <?php echo $row4->pns_life_cycle;?>
                                                                                         </td>
                                                                                         <td align="center">
-                                                                                                <?php echo $row4->pns_type;?>
+                                                                                                <?php 
+                                                                                                $list_rev = PNsController::DisplayAllRevValue($row4->pns_id); 
+                                                                                                foreach($list_rev as $rev)
+                                                                                                {
+                                                                                                        echo $rev->pns_revision."</br>";
+                                                                                                }
+                                                                                                ?>
                                                                                         </td>
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_revision;?>
+                                                                                        </td>	
+<!--                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_type;?>
+                                                                                        </td>	-->
                                                                                         <td align="center">
                                                                                                 <?php echo $row4->pns_type;?>
                                                                                         </td>	
-                                                                                        <td align="center">
-                                                                                                <?php echo $row4->pns_type;?>
-                                                                                        </td>							
+                                                                                        
                                                                                 </tr>
                                                                                        <?php		
                                                                                         //level5     
@@ -293,19 +348,31 @@ function submitbutton(pressbutton) {
                                                                                                                 </td>	
                                                                                                                 <td>
                                                                                                                         <?php echo  $row5->pns_description; ?>
-                                                                                                                </td>		                                                                                                                
+                                                                                                                </td>		
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo PNsController::GetEcoValue($row5->eco_id);?>
+                                                                                                                </td>                                                                                                                  
                                                                                                                 <td align="center">
                                                                                                                         <?php echo $row5->pns_life_cycle;?>
                                                                                                                 </td>
                                                                                                                 <td align="center">
-                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                        <?php 
+                                                                                                                        $list_rev = PNsController::DisplayAllRevValue($row5->pns_id); 
+                                                                                                                        foreach($list_rev as $rev)
+                                                                                                                        {
+                                                                                                                                echo $rev->pns_revision."</br>";
+                                                                                                                        }
+                                                                                                                        ?>
                                                                                                                 </td>					
                                                                                                                 <td align="center">
-                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                        <?php echo $row5->pns_revision;?>
                                                                                                                 </td>	
+<!--                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                </td>	 -->
                                                                                                                 <td align="center">
                                                                                                                         <?php echo $row5->pns_type;?>
-                                                                                                                </td>	                                                                                                                
+                                                                                                                </td>	                                                                                                                 
                                                                                                         </tr>
                                                                                                                <?php		
                                                                                                                 //level6     
@@ -330,17 +397,29 @@ function submitbutton(pressbutton) {
                                                                                                                                                 <?php echo  $row6->pns_description; ?>
                                                                                                                                         </td>	
                                                                                                                                         <td align="center">
+                                                                                                                                                <?php echo PNsController::GetEcoValue($row6->eco_id);?>
+                                                                                                                                        </td>                                                                                                                                          
+                                                                                                                                        <td align="center">
                                                                                                                                                 <?php echo $row6->pns_life_cycle;?>
                                                                                                                                         </td>
                                                                                                                                         <td align="center">
-                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                                <?php 
+                                                                                                                                                $list_rev = PNsController::DisplayAllRevValue($row6->pns_id); 
+                                                                                                                                                foreach($list_rev as $rev)
+                                                                                                                                                {
+                                                                                                                                                        echo $rev->pns_revision."</br>";
+                                                                                                                                                }
+                                                                                                                                                ?>
                                                                                                                                         </td>
                                                                                                                                         <td align="center">
-                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                                <?php echo $row6->pns_revision;?>
                                                                                                                                         </td>	
+<!--                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                        </td>	          -->
                                                                                                                                         <td align="center">
                                                                                                                                                 <?php echo $row6->pns_type;?>
-                                                                                                                                        </td>	                                                                                                                                        						
+                                                                                                                                        </td>	                                                                                                                                                  
                                                                                                                                 </tr>
                                                                                                                                 <?php
                                                                                                                         }

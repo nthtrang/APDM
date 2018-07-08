@@ -113,10 +113,9 @@ class pnsViewpns_info extends JView
                 $lists['ccs'] = JHTML::_('select.genericlist',   $ccs, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );
                 //get list commodity code for CPN
 		$cccpn[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
-		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_description) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
-	//	echo "SELECT CONCAT_WS(' :: ', ccs_code, ccs_description) as value, ccs_code as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 ORDER BY ccs_code ";
+		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
 		$ccscpn = array_merge($cccpn, $db->loadObjectList());
-        $lists['ccscpn'] = JHTML::_('select.genericlist',   $ccscpn, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );        
+                $lists['ccscpn'] = JHTML::_('select.genericlist',   $ccscpn, 'ccs_code', 'class="inputbox" size="1"', 'value', 'text', $row->ccs_code );        
 		//get list pns to display parrent        
         //get list eco
         $eco[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_ECO' ) .' -', 'value', 'text');
@@ -224,24 +223,26 @@ class pnsViewpns_info extends JView
         $lists['pns_datein'] = $row->pns_datein;
         $lists['pns_stock'] = $row->pns_stock;
         $lists['pns_qty_used'] = $row->pns_qty_used;
-        //Add revision
+        //For revision
             $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
             $list_revision = $db->loadObjectList();
          $this->assignRef('revision',        $list_revision);
          
          //add PO
-          //Add revision
          $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_po AS po on p.pns_id = po.pns_id WHERE p.pns_deleted =0 AND po.pns_id=".$row->pns_id);
          $list_pos = $db->loadObjectList();         
          $this->assignRef('pos',        $list_pos);
+         //add Quo
+         $db->setQuery("SELECT quo.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_quo AS quo on p.pns_id = quo.pns_id WHERE p.pns_deleted =0 AND quo.pns_id=".$row->pns_id);
+         $list_quos = $db->loadObjectList();         
+         $this->assignRef('quos',        $list_quos);
+                  
          
          $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");         
          $list_ccs = $db->loadObjectList();               
          $this->assignRef('ccs_name',         $list_ccs[0]->ccs_name);
          
-        $this->assignRef('pns_uom', $row->pns_uom);
-        
-        
-		parent::display($tpl);
+              $this->assignRef('pns_uom', $row->pns_uom);             
+        parent::display($tpl);
 	}
 }
