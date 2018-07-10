@@ -157,7 +157,7 @@ function submitbutton(pressbutton) {
                                         if($row->id == $this->rowEco->eco_routes_id)
                                                 echo '<strong>Current Route</strong>';
                                         else{
-                                                if($this->rowEco->eco_status =! "Released"){
+                                                if($row->status=="Create"){
                                         ?>
 					<a href="<?php echo $set_route;?>">Set Route</a>&nbsp;| &nbsp;
                                         <a href="<?php echo $edit_link;?>">Edit</a>
@@ -165,8 +165,8 @@ function submitbutton(pressbutton) {
                                         }
                                         else{
                                                  ?>
-					<a href="<?php echo $set_route;?>">Set Route</a> &nbsp;| &nbsp;
-                                         <a href="<?php echo $edit_link;?>">Edit</a>
+					Can not do this action
+                                        <a href="<?php //echo $edit_link;?>"></a>
                                         <?php
                                         }
                                         }

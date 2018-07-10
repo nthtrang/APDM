@@ -83,7 +83,12 @@
 					}
 				}
 			});	
-		});        
+		});    
+                
+                function removeApprove(id){
+                document.getElementById(id).style.visibility= 'hidden';
+                document.getElementById(id).style.display= 'none';
+                }
 </script>
 <style>
         .buttonfiles {
@@ -196,6 +201,7 @@ if($owner == $me->get('id'))
 							<td width="20%"><strong><?php echo JText::_('Approve/Reject')?> </strong></td>
                                                         <td width="25%"><strong><?php echo JText::_('Comment')?> </strong></td>
                                                         <td width="20%"><strong><?php echo JText::_('Due Date')?> </strong></td>
+                                                        <td width="20%"><strong><?php echo JText::_('Action')?> </strong></td>
 						</tr>
                                                 <?php 
                                                  $i = 1;
@@ -212,7 +218,7 @@ if($owner == $me->get('id'))
                                                         <td width="15%">    
                                                                 <?php echo $status->title?>
                                                                 <input type="hidden" name="title[]" id="title" value="<?php echo $status->title?>" /></td>
-							<td width="15%"><?php echo $status->email;?>
+							<td width="15%"><?php echo EcoController::GetNameApprover($status->email);?>
                                                         <input type="hidden" name="mail_user[]" id="title" value="<?php echo $status->email;?>" />
                                                         </td>
 							<?php  
@@ -225,13 +231,16 @@ if($owner == $me->get('id'))
                                                                         $status_arr[] = JHTML::_('select.option', 'Released', JText::_('Approve') , 'value', 'text'); 
                                                                         $status_arr[] = JHTML::_('select.option', 'Reject', JText::_('Reject') , 'value', 'text'); 
                                                                          echo JHTML::_('select.genericlist',   $status_arr, 'approve_status[]', 'class="inputbox" size="1" ', 'value', 'text', $status->eco_status ); 
-                                                                         
+                                                                 if($status->eco_status == 'Reject'){  
+                                                                       $disabled="disabled";  
+                                                                 }         
                                                                 ?>
                                                                 <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id;?>&time=<?php echo time();?>'></a>
                                     
                                                         </td>                                                        
-                                                        <td width="25%">                                                                
-                                                                <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note;?></textarea>                                                       
+                                                        <td width="25%">     
+                                                                
+                                                                <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]' <?php echo $disabled;?>><?php echo $status->note;?></textarea>                                                       
                                                         </td>
                                                          <?php                                                         
                                                         }
@@ -249,6 +258,9 @@ if($owner == $me->get('id'))
                                                                 <td width="20%">                                                                
                                                                         <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S') ;?>                                               
                                                                 </td>   
+                                                                 <td width="25%">                                                                
+                                                                       <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id;?>&id=<?php echo  $status->id;?>&time=<?php echo time();?>&routes=<?php echo JRequest::getVar( 'routes')?>'>Remove</a>                                             
+                                                                </td>   
 						</tr>
 						<?php $i++; 
                                                 }
@@ -258,7 +270,7 @@ if($owner == $me->get('id'))
 							<tr>
 							<td><?php echo $i?></td>
                                                         <td><?php echo $status->title?></td>
-							<td><?php echo $status->email;?>
+							<td><?php echo EcoController::GetNameApprover($status->email);?>
                                                         <input type="text" name="mail_user[]" id="title" value="<?php echo $status->email;?>" />
                                                         </td>
 							<?php  
@@ -286,7 +298,11 @@ if($owner == $me->get('id'))
                                                        ?>  
                                                                 <td width="20%">                                                                
                                                                        <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S') ;?>
-                                                                </td>    
+                                                                </td> 
+                                                                 <td width="25%">                                                                
+                                                                       <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id;?>&id=<?php echo  $status->id;?>&time=<?php echo time();?>&routes=<?php echo JRequest::getVar( 'routes')?>'>Remove</a>                                             
+                                                                </td>   
+                                                                
 						</tr>
                                                 <?php
                                                     $i++;           
@@ -348,6 +364,9 @@ if($owner == $me->get('id'))
                                                         ?>      
                                                         <td width="20%">                                                                
                                                                 <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
+                                                        </td>   
+                                                         <td width="20%">                                                                
+                                                                 <a  style="cursor:pointer" onclick="removeApprove(<?php echo $j;?>)">Remove</a>
                                                         </td>   
                                                 </tr>
                                                 <?php }?>

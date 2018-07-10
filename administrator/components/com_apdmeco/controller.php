@@ -984,7 +984,7 @@ class ECOController extends JController
                 $db->setQuery($query);
                 $db->query();                
                 //set route to Inreview
-                $query = 'update apdm_eco_routes set status = "Inreview" where id = ' . $id . '';                
+                $query = 'update apdm_eco_routes set status = "Started" where id = ' . $id . '';                
                 $db->setQuery($query);
                 $db->query();
                 //reset all review of approvers
@@ -1096,12 +1096,18 @@ class ECOController extends JController
                 $route_id      = JRequest::getVar( 'route_id', array(), '', 'array' );     
                 foreach($route_id as $id)
                 {
-                        $db->setQuery('select count(*) from apdm_eco_routes where eco_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');
+                        $db->setQuery('select count(*) from apdm_eco_routes where eco_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');                        
                         $check_owner = $db->loadResult();
                         if ($check_owner==0) {
                                  $id_f[] = $id;                                
                                  continue;
                                 //return $this->setRedirect('index.php?option=com_apdmeco&task=routes&t='.time().'&cid[]=' . $cid, $msg);
+                        }   
+                        $db->setQuery('select status from apdm_eco_routes where eco_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');                       
+                        $check_status = $db->loadResult();
+                        if ($check_status!='Create') {
+                                 $id_f[] = $id;                                
+                                 continue;                                
                         }   
                         $id_o[] = $id;
                         
@@ -1207,7 +1213,7 @@ class ECOController extends JController
                                 $result = $db->loadObjectList();
                                      if (count($result) > 0){
                                          foreach ($result as $obj){
-                                    //       JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                          }
                                      }                        
                 }
@@ -1220,7 +1226,7 @@ class ECOController extends JController
                         if ($totalApprovers == $totalReleased) {
                                 //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');  
                                 //update route status Released
-                                $query = 'update apdm_eco_routes set status= "Released" where eco_id = ' . $cid[0] .' and id ='.$route;
+                                $query = 'update apdm_eco_routes set status= "Finished" where eco_id = ' . $cid[0] .' and id ='.$route;
                                 $db->setQuery($query);
                                 $db->query();
                                 //update eco to Released
@@ -1267,7 +1273,7 @@ class ECOController extends JController
                         $result = $db->loadObjectList();
                              if (count($result) > 0){
                                  foreach ($result as $obj){
-                               //    JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                   JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                  }
                              }
                         $msg = JText::sprintf('Successfully Promote', $cid[0]);
@@ -1396,4 +1402,21 @@ class ECOController extends JController
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
     }           
+        function GetNameApprover($email) {
+                $db = & JFactory::getDBO();
+                $db->setQuery("SELECT name FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 and  email = '".$email."' ORDER BY jos.username ");               
+		return $db->loadResult();	
+        }    
+        function removeapprove()
+        {
+                $db       =& JFactory::getDBO();
+                $cid      = JRequest::getVar( 'cid', array(), '', 'array' );
+                $id      = JRequest::getVar( 'id');
+                $routes = JRequest::getVar( 'routes');
+                $query = 'delete from apdm_eco_status where eco_id = ' . $cid[0] . ' and id= "' . $id . '"';
+                $db->setQuery($query);
+                $db->query();       
+                $msg = JText::_('Have remove approver successfull.');
+                $this->setRedirect( 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$cid[0].'&routes='.$routes, $msg);
+        }
 }

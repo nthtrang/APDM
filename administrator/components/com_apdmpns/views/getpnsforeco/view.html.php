@@ -55,7 +55,7 @@ class pnsViewgetpnsforeco extends JView
         
         
         $where = array();  
-        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Create","Released")';
+        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Create")';
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';

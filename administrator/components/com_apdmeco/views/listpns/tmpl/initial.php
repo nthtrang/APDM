@@ -74,7 +74,7 @@ function submitbutton(pressbutton) {
                         }
 }
 function checkForm(){
-alert(43)
+
 	if ($('boxchecked').value==0){
 		alert('Please select file.');
 		return false;
@@ -260,13 +260,13 @@ function isCheckedInitial(isitchecked,id){
 					<?php echo $row->pns_description; ?>
 				</td>	
 				<td align="center">					
-                                        <span style="display:block" id="text_init_plant_status_<?php echo $row->pns_id;?>"><?php echo $row->init_plant_status;?></span>
+                                        <span style="display:block" id="text_init_plant_status_<?php echo $row->pns_id;?>"><?php echo $row->init_plant_status?$row->init_plant_status:"Unreleased";?></span>
                                          <?php                                         
                                          echo JHTML::_('select.genericlist',   $plant_status_arr, 'init_plant_status_'.$row->pns_id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $row->init_plant_status ); 
                                         ?>
 				</td>		                                
 				<td align="center">
-					<span style="display:block" id="text_init_make_buy_<?php echo $row->pns_id;?>"><?php echo $row->init_make_buy;?></span>
+					<span style="display:block" id="text_init_make_buy_<?php echo $row->pns_id;?>"><?php echo $row->init_make_buy?$row->init_make_buy:"Unassign";?></span>
                                          <?php                                         
                                          echo JHTML::_('select.genericlist',   $make_buy_arr, 'init_make_buy_'.$row->pns_id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $row->init_make_buy ); 
                                         ?>

@@ -102,11 +102,6 @@ function submitbutton(pressbutton) {
 				<th  class="title" >
 					<?php echo JText::_( 'Description' ); ?>
 				</th>
-				
-				
-				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Activate', 'e.eco_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
-				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'State', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
@@ -168,10 +163,10 @@ function submitbutton(pressbutton) {
 					<?php //} ?>
 					
 				</td>-->
-				<td align="center">
+<!--				<td align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
-				</td>
+				</td>-->
 				<td>
 					<?php echo $row->eco_status ; ?>
 				</td>

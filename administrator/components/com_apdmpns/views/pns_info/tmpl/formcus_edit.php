@@ -1,4 +1,4 @@
-ssd<?php defined('_JEXEC') or die('Restricted access'); ?>
+<?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip');
 $cid = JRequest::getVar( 'cid', array(0) );
@@ -36,11 +36,14 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			form.pns_revision.focus();
 			return false;
 		}		
-		if (form.pns_stock.value < form.pns_qty_used.value){
+                var pns_stock = Math.round(form.pns_stock.value);
+                var pns_qty_used = Math.round(form.pns_qty_used.value);
+		if ( pns_qty_used > pns_stock){                
 			alert("Please input Stock greater than Qty Used	");
 			form.pns_stock.focus();
 			return false;
-		}                
+		}    
+                return false;
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status/");
 			from.pns_status.focus();

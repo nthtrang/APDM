@@ -644,9 +644,18 @@ class PNsController extends JController {
                 $pns_modified = $datenow->toMySQL();
                 $pns_modified_by = $me->get('id');
                 $pns_life_cycle = JRequest::getVar('pns_life_cycle');
-                $return = JRequest::getVar('return');
+                $return = JRequest::getVar('return');                
                 $db->setQuery("INSERT INTO apdm_pns_rev (pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_modified,pns_modified_by,pns_life_cycle) VALUES (" . $pns_id . ", '" . $ccs_code . "', '" . $pns_code . "', '" . $pns_revision . "', '" . $eco_id . "', '" . $pns_modified . "', '" . $pns_modified_by . "', '" . $pns_life_cycle . "')");
                 $db->query();
+               //Make folder for download
+                $folder = $ccs_code . '-' . $pns_code . '-' . $pns_revision;
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $path_pns_cads = $path_pns . 'cads' . DS . $ccs_code . DS . $folder . DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_pns_cads, 0777); 
+                //copy file zip to folder pns_cad
+                $file_zip = $path_pns . 'cads' . DS . 'zip.php';
+                copy($file_zip, $path_pns_cads . 'zip.php');                
                 $msg = "Successfully Saved Rev Roll";
                 $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $pns_id, $msg);
         }
@@ -960,7 +969,6 @@ class PNsController extends JController {
 
                         case 'save':
                         default:
-                                echo 7;die;
                                 $msg = JText::_('Successfully Saved Part Number') . ': ' . $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision . ' ' . $text_mess;
                                 $return = JRequest::getVar('return');
                                 $eco_id = JRequest::getVar('eco_id');
@@ -2044,7 +2052,6 @@ class PNsController extends JController {
                 //bom
                 PNsController::export_bom();
 
-
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
                         if (!$res)
@@ -2540,7 +2547,8 @@ class PNsController extends JController {
 //                $objWriter->save($path_export . 'APDM_BOM_REPORT.xls');
 //                $dFile = new DownloadFile($path_export, 'APDM_BOM_REPORT.xls');
                 //tmp
-                $name = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                
+                $name = $row->ccs_code . '-' . $row->pns_code . '-AA';// . $row->pns_revision;
                 $path_export = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row->ccs_code . DS . $name . DS;
 
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -2859,7 +2867,7 @@ class PNsController extends JController {
                         $i = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
-                                echo 1;
+                                
                                 $a = 'A' . $i;
                                 $b = 'B' . $i;
                                 $c = 'C' . $i;

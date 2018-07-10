@@ -11,7 +11,8 @@
                 $partnumber .= '-'.$this->row->pns_revision;	
 	JToolBarHelper::title( $partnumber , 'cpanel.png' );
         $role = JAdministrator::RoleOnComponent(6);      
-	if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
+        //&& $this->row->pns_life_cycle =='Create'
+	if (in_array("E", $role)) {
                 if (!intval($edit)) {
                         JToolBarHelper::save('save', 'Save & Add new');
                 }

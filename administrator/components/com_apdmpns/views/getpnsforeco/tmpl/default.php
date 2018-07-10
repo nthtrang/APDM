@@ -90,7 +90,10 @@ function UpdatePnsEco(){
 					<?php echo JText::_('Status'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Type'); ?>
+					<?php echo JText::_('State'); ?>
+				</th>                                
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Make/Buy'); ?>
 				</th>
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
@@ -139,6 +142,9 @@ function UpdatePnsEco(){
 				<td align="center">
 					<?php echo $row->pns_status;?>
 				</td>
+                                <td align="center">
+					<?php echo $row->pns_life_cycle;?>
+				</td>                                
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
