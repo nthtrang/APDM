@@ -71,11 +71,11 @@
 //			return false;
 //		}
 		
-		if (form.pns_version.value !="" && form.pns_version.value.length != 2){
-			alert("PNs Version must 2 characters");
-			form.pns_version.focus();
-			return false;
-		}
+//		if (form.pns_version.value !="" && form.pns_version.value.length != 2){
+//			alert("PNs Version must 2 characters");
+//			form.pns_version.focus();
+//			return false;
+//		}
 		
 //		if (form.eco_id.value==0){
 //			alert("Please select ECO");
@@ -159,7 +159,7 @@
 					</td>
 					<td>
 						<input type="text" maxlength="12"  name="pns_code" id="pns_code" class="inputbox" size="20" value=""/>
-						<input type="text" maxlength="2" onKeyPress="return numbersOnly(this, event);" name="pns_version" id="pns_version" class="inputbox" size="5" value="00" />					
+<!--						<input type="text" maxlength="2" onKeyPress="return numbersOnly(this, event);" name="pns_version" id="pns_version" class="inputbox" size="5" value="00" />					-->
 
 					</td>
 				</tr>                                

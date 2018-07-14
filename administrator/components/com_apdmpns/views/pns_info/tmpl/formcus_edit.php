@@ -43,7 +43,6 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			form.pns_stock.focus();
 			return false;
 		}    
-                return false;
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status/");
 			from.pns_status.focus();
@@ -295,7 +294,47 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
 						<?php echo $this->lists['uom']?>
 					</td>
-				</tr>	                                
+				</tr>
+<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Quo#' ); ?>
+						</label>
+					</td>
+					<td>
+                                                                                              
+                                                <input type="text" value="" name="quo_code" id="quo_code" readonly="readonly" />
+                                                <input type="hidden" name="pns_quo_id" id="pns_quo_id" value="0" />
+						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pns_quonew&tmpl=component" title="Image">
+                                        <input type="button" name="addQuos" value="<?php echo JText::_('Add Quo#')?>"/>
+                                        </a><br/>
+                                                <?php 
+                                                foreach ($this->quos as $quo) {
+                                                        echo $quo->quo_code."</br>";
+                                                }                                                
+                                                ?>  
+					</td>
+				</tr>                                
+				<tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'PO#' ); ?>
+						</label>
+					</td>
+					<td>
+                                                                                               
+                                                <input type="text" value="" name="po_code" id="po_code" readonly="readonly" />
+                                                <input type="hidden" name="pns_po_id" id="pns_po_id" value="0" />
+						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pns_ponew&tmpl=component" title="Image">
+                                        <input type="button" name="addPOs" value="<?php echo JText::_('Add PO#')?>"/>
+                                        </a><br/>
+                                                <?php 
+                                                foreach ($this->pos as $po) {
+                                                        echo $po->po_code."</br>";
+                                                }                                                
+                                                ?> 
+					</td>
+				</tr>	                                     
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

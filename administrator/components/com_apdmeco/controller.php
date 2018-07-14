@@ -330,7 +330,7 @@ class ECOController extends JController
                                         foreach ($arr_user as $user) {
                                                 if($user!= $me->get('email'))
                                                 {
-                                                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $row->eco_id . ", '" . $user . "','Create') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
+                                                        $query = "INSERT INTO apdm_eco_status (eco_id,email,eco_status) VALUES (" . $row->eco_id . ", '" . $user . "','Inreview') ON DUPLICATE KEY UPDATE eco_status = '" . $row->eco_status . "'";
                                                         $db->setQuery($query);
                                                         $db->query();
                                                 }
@@ -833,8 +833,6 @@ class ECOController extends JController
                 * Display initial eco
         */	
         function initial(){
-//                JRequest::setVar( 'layout', 'affected'  );
-//                JRequest::setVar( 'view', 'listpns' );
                 JRequest::setVar( 'layout', 'initial'  );
                 JRequest::setVar( 'view', 'listpns' );                
                 parent::display();
@@ -852,8 +850,6 @@ class ECOController extends JController
                 * Display all files eco
         */	
         function affected(){
-//                JRequest::setVar( 'layout', 'affected'  );
-//                JRequest::setVar( 'view', 'listpns' );
                 JRequest::setVar( 'layout', 'default'  );
                 JRequest::setVar( 'view', 'listpns' );                
                 parent::display();
@@ -894,7 +890,7 @@ class ECOController extends JController
                                 $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = '.$user);
                                 $check_exist = $db->loadResult();
                                 if ($check_exist==0) {
-                                        echo $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'") on duplicate key update user_id=user_id';
+                                        $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'") on duplicate key update user_id=user_id';
                                         $db->setQuery($query);
                                         $db->query();
                                 }
@@ -988,7 +984,7 @@ class ECOController extends JController
                 $db->setQuery($query);
                 $db->query();
                 //reset all review of approvers
-                $query = 'update apdm_eco_status set eco_status = "Create", eco_id = ' . $cid[0] . ' where routes_id = ' . $id . '';                
+                $query = 'update apdm_eco_status set eco_status = "Inreview", eco_id = ' . $cid[0] . ' where routes_id = ' . $id . '';                
                 $db->setQuery($query);
                 $db->query();    
                 //SEND EMAIL
@@ -1134,7 +1130,7 @@ class ECOController extends JController
                 $query = 'update apdm_eco_routes set status= "Create" where eco_id = ' . $cid[0] .' and id ='.$route;
                 $db->setQuery($query);
                 $db->query();                
-                $query = 'update apdm_eco_status set eco_status= "Create" where eco_id = '.$cid[0].' and routes_id ='.$route;
+                $query = 'update apdm_eco_status set eco_status= "Inreview" where eco_id = '.$cid[0].' and routes_id ='.$route;
                 $db->setQuery($query);
                 $db->query();	 
                 $query = 'update apdm_eco set eco_status= "Create" where eco_id = ' . $cid[0];
@@ -1213,7 +1209,7 @@ class ECOController extends JController
                                 $result = $db->loadObjectList();
                                      if (count($result) > 0){
                                          foreach ($result as $obj){
-                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                       //    JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                          }
                                      }                        
                 }
@@ -1367,6 +1363,7 @@ class ECOController extends JController
         $eco = JRequest::getVar('eco');
         $pns_id = JRequest::getVar('pns_id');
         $datenow = & JFactory::getDate(); 
+        $arr_fail=array();
         foreach ($cid as $id) {           
                 $init_plant_status = JRequest::getVar('init_plant_status_' . $id);
                 $init_make_buy = JRequest::getVar('init_make_buy_' . $id); 
@@ -1376,21 +1373,32 @@ class ECOController extends JController
                 $init_modified = $datenow->toMySQL();
                 $init_modified_by = $me->get('id');    
                 $init_cost = JRequest::getVar('init_cost_' . $id);                 
-                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
-                $check_exist = $db->loadResult();
-                if ($check_exist==0) {
-                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
-                        $db->setQuery($query);
-                        $db->query();
-                }      
-                else
-                {                
-                        $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
-                        //echo $db->getQuery();
-                        $db->query();
+                //check status PNS first
+                $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$id."'";
+                $db->setQuery($get_status);
+                $status = $db->loadResult();                
+                if($status=="Released")
+                {
+                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
+                        $check_exist = $db->loadResult();
+                        if ($check_exist==0) {
+                                $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
+                                $db->setQuery($query);
+                                $db->query();
+                        }      
+                        else
+                        {                
+                                $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
+                                //echo $db->getQuery();
+                                $db->query();
+                        }
+                }
+                 else {
+                        $arr_fail[]=$id;
                 }
         }
         $msg = "Successfully Saved Initital";
+        $msg .= "Fail to Saved Initital with PN".  implode(",", $arr_fail);
         $this->setRedirect('index.php?option=com_apdmeco&task=initial&cid[]=' . $eco, $msg);        
     }                   
     function removepns(){

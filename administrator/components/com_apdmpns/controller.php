@@ -647,6 +647,17 @@ class PNsController extends JController {
                 $return = JRequest::getVar('return');                
                 $db->setQuery("INSERT INTO apdm_pns_rev (pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_modified,pns_modified_by,pns_life_cycle) VALUES (" . $pns_id . ", '" . $ccs_code . "', '" . $pns_code . "', '" . $pns_revision . "', '" . $eco_id . "', '" . $pns_modified . "', '" . $pns_modified_by . "', '" . $pns_life_cycle . "')");
                 $db->query();
+                //Insett into PN
+                $query = "INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,eco_id,pns_type,pns_status,pns_pdf,pns_image,pns_description,pns_create,pns_create_by,pns_modified,pns_modified_by,pns_deleted,pns_life_cycle,pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn)";
+                $query .= "SELECT '".$ccs_code."','".$pns_code."','".$pns_revision."',".$eco_id.",pns_type,pns_status,pns_pdf,pns_image,pns_description,'".$pns_modified."','".$pns_modified_by."','".$pns_modified."','".$pns_modified_by."',0,'".$pns_life_cycle."',pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn FROM apdm_pns WHERE pns_id = $pns_id";
+                $db->setQuery($query);
+                $db->query();
+                
+                $getlast_id = "select pns_id from apdm_pns where ccs_code ='".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                $db->setQuery($getlast_id);
+                $last_id = $db->loadResult();
+                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $last_id . "'");
+                $db->query();
                //Make folder for download
                 $folder = $ccs_code . '-' . $pns_code . '-' . $pns_revision;
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
@@ -769,8 +780,7 @@ class PNsController extends JController {
                 $row->pns_id = (int) $row->pns_id;
                 $isNew = true;
                 $pns_code = trim($post['pns_code']);
-                if(JRequest::getVar('mpn')==1)
-                        $row->pns_cpn  =1;//set CPN
+
                 //check pns_code
                 if (strlen($pns_code) < 6) {
                         $new = '';
@@ -780,17 +790,23 @@ class PNsController extends JController {
                 }
                 $pns_code = $new . $pns_code;
                 $pns_version = $post['pns_version'];
+                if(JRequest::getVar('mpn')==1)
+                {
+                        $row->pns_cpn  =1;//set CPN                        
+                        $pns_code_check = $pns_code;
+                }
+                else
+                {                       
+                        $pns_code_check = $pns_code . "-" . $pns_version;
+                }
                 $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
-
-                $pns_code_check = $pns_code . "-" . $pns_version;
-
                 //check for pns code in database
                 if ($pns_revision != "") {
                         $query_check = "SELECT pns_id FROM apdm_pns WHERE ccs_code='" . $row->ccs_code . "' AND pns_code = '" . $pns_code_check . "' AND pns_revision='" . $pns_revision . "'";
                 } else {
                         $query_check = "SELECT pns_id FROM apdm_pns WHERE ccs_code='" . $row->ccs_code . "' AND pns_code = '" . $pns_code_check . "'";
                 }
-
+                
                 $db->setQuery($query_check);
                 $result_check = $db->loadResult();
                 if ($result_check > 0) {
@@ -1572,22 +1588,27 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $currentUser = & JFactory::getUser();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
-
-                JArrayHelper::toInteger($cid);
+               
+              //  JArrayHelper::toInteger($cid);
 
                 if (count($cid) < 1) {
-                        JError::raiseError(500, JText::_('Select a User to delete', true));
+                        JError::raiseError(500, JText::_('Select a Bom to delete', true));
                 }
-
                 foreach ($cid as $id) {
+                        echo $id;
+                        $pns = explode("_", $id);
+                        $pns_id = $pns[0];
+                        $parent_id = $pns[2];
                         // check for a super admin ... can't delete them
-                        $query = "UPDATE apdm_pns SET pns_deleted=1 WHERE pns_id=" . $id;
-                        $db->setQuery($query);
+                        //$query = "UPDATE apdm_pns SET pns_deleted=1 WHERE pns_id=" . $id;
+                        //$db->setQuery($query);
+                        //$db->query();
+                        $db->setQuery("DELETE FROM apdm_pns_parents WHERE pns_id =" . $pns_id . " and pns_parent = ".$parent_id."");
                         $db->query();
                         ///update history
-                        JAdministrator::HistoryUser(6, 'D', $id);
+                        //JAdministrator::HistoryUser(6, 'D', $id);
                 }
-                $msg = "Have successfuly delete pns";
+                $msg = "Have successfuly Remove pns";
                 $return = JRequest::getVar('return');
                 if ($return) {
                         $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $return, $msg);
@@ -2164,25 +2185,47 @@ class PNsController extends JController {
                 return $result;
         }
 
+        
         function saveref() {
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
                 $pns_id = JRequest::getVar('pns_id');
+               
                 foreach ($cid as $id) {
-                        $find_number = JRequest::getVar('find_number_' . $id);
-                        $ref_des = JRequest::getVar('ref_des_' . $id);
-                        $stock = JRequest::getVar('stock_' . $id);
+			$pnsid = explode("_", $id);
+                        $id = $pnsid[0];
+                        $step = $pnsid[1];
+                        $pr_id = $pnsid[2];
+                       echo  $find_number = JRequest::getVar('find_number_' . $id.'_'.$step);
+                       echo $ref_des = JRequest::getVar('ref_des_' . $id.'_'.$step);
+                        $checkref = explode(",", $ref_des);    
+                        echo count($checkref);
+                     echo   $stock = JRequest::getVar('stock_' . $id.'_'.$step);
+
+                        $arr_fail=array();
+                        if(count($checkref)!=$stock )
+                         {
+                                $arr_fail[] =$id;
+                                continue;   
+                         }                        
                         $db->setQuery("update apdm_pns set pns_stock=" . $stock . ", pns_find_number = '" . $find_number . "',pns_ref_des= '" . $ref_des . "' WHERE  pns_id = " . $id);
                         $db->query();
                 }
-                $msg = "Successfully Saved Part Number";
+                if(count($arr_fail)>0)
+                {
+                        $msg = "Total Ref des mismatch with Qty:".  implode(",", $arr_fail);
+                }
+                else
+                {
+                        $msg = "Successfully Saved Part Number";
+                }
                 $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $pns_id, $msg);
         }
 
         function DisplayPnsAllChildId($pns_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
-                $db->setQuery('SELECT pr.pns_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');
                 return $result = $db->loadObjectList();
         }
 
@@ -3564,6 +3607,12 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'getpnsforeco');
                 parent::display();
         }
+        //for init
+        function get_list_pns_eco_init() {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsforinit');
+                parent::display();
+        }        
 
         function ajax_add_pns() {
                 $db = & JFactory::getDBO();
@@ -3573,6 +3622,37 @@ class PNsController extends JController {
                 $db->getQuery();
                 $db->query();
         }
+        function ajax_add_pns_init() {
+                $db = & JFactory::getDBO();
+                $pns = JRequest::getVar('cid', array(), '', 'array');
+                $cid = JRequest::getVar('eco', array(), '', 'array');
+                $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
+                $db->query();
+                foreach($pns as $id)
+                {
+                        //check status PNS first
+                        $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$id."'";
+                        $db->setQuery($get_status);
+                        $status = $db->loadResult();                
+                        if($status=="Released")
+                        {
+                                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
+                                $check_exist = $db->loadResult();
+                                if ($check_exist==0) {
+                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
+                                        $db->setQuery($query);
+                                        $db->query();
+                                }      
+                                else
+                                {                
+                                        $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
+                                        //echo $db->getQuery();
+                                        $db->query();
+                                }
+                        }
+                         
+                }
+        }        
 
         function removepns() {
                 $db = & JFactory::getDBO();

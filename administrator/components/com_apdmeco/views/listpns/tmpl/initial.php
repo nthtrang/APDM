@@ -14,7 +14,7 @@
         JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::addPns("Add Part",$cid[0]);
+		JToolBarHelper::addPnsInit("Add Part",$cid[0]);
 	} 
         
 //	if (in_array("E", $role)) {
@@ -142,6 +142,32 @@ function isCheckedInitial(isitchecked,id){
 
 	}
 }
+function numbersOnlyEspecial111(myfield, e, dec){
+       
+	 var key;
+	 var keychar;
+	 if (window.event)
+		key = window.event.keyCode;
+	 else if (e)
+		key = e.which;
+	 else
+		return true;
+	 keychar = String.fromCharCode(key);
+	 // control keys
+
+	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+	 // numbers
+	 else if ((("0123456789-").indexOf(keychar) > -1))
+		return true;
+	 // decimal point jump
+	 else if (dec && (keychar == "."))
+		{
+		myfield.form.elements[dec].focus();
+		return false;
+		}
+	 else
+		return false;
+}
 </script>
 <div class="submenu-box">
 	<div class="t">
@@ -175,7 +201,7 @@ function isCheckedInitial(isitchecked,id){
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				<th width="3%" class="title">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
+<!--					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />-->
 				</th>
 				<th class="title" width="15%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
@@ -280,11 +306,18 @@ function isCheckedInitial(isitchecked,id){
 				</td>
                                 <td align="center">
 					 <span style="display:block" id="text_init_buyer_<?php echo $row->pns_id;?>"><?php echo $row->init_buyer;?></span>
-                                         <input style="display:none" type="text" value="<?php echo $row->init_buyer;?>" id="init_buyer_<?php echo $row->pns_id;?>"  name="init_buyer_<?php echo $row->pns_id;?>" />
+<!--                                         <input style="display:none" type="text" value="<?php echo $row->init_buyer;?>" id="init_buyer_<?php echo $row->pns_id;?>"  name="init_buyer_<?php echo $row->pns_id;?>" />-->
+                                       <span style="display:none" id="init_buyer_<?php echo $row->pns_id;?>">
+                                         <select  name="init_buyer_<?php echo $row->pns_id;?>" >
+                                                                        <option value="">Select Approver</option>
+                                                                        <?php foreach ($this->list_user as $list) { ?>
+                                                                                <option value="<?php echo $list->name; ?>" <?php echo ($list->name==$row->init_buyer)?'selected="selected"':"";?>><?php echo $list->name; ?></option>
+                                                                        <?php } ?>
+                                         </select>
 				</td>      
                                 <td align="center">
 					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo number_format((float)$row->init_cost, 2, '.', '');?></span>
-                                         <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
+                                         <input style="display:none" onKeyPress="return numbersOnlyEspecial111(this, event);" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
 				</td>                                    
 				<td align="center">
                                         <?php 
@@ -312,7 +345,7 @@ function isCheckedInitial(isitchecked,id){
 				<td>
 					<?php 
      
-if ($row->pns_life_cycle =='Create' || ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {
+if ($row->pns_life_cycle =='Create' && ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {
 		?>
                   <a href="<?php echo $edit_link;?>" class="toolbar">
 <span class="icon-32-edit" title="Edit">

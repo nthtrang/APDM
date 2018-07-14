@@ -101,26 +101,35 @@
 					<th width="100"><?php echo JText::_( 'Revision' ); ?></th>
 						<th width="100"><?php echo JText::_( 'State' ); ?></th>
 						<th width="100"><?php echo JText::_( 'ECO' ); ?></th>
-                                                <th width="100"><?php echo JText::_( 'REV ROLL' ); ?></th>
+<!--                                                <th width="100"><?php echo JText::_( 'REV ROLL' ); ?></th>-->
 					</tr>
 				</thead>
 				<tbody>					
 					<?php 
                                         $i=0;
+                                        $db 		=& JFactory::getDBO();
                                         foreach($this->revision as $rev) { 
-                                             $i++;  
+                                             $i++; 
+                                             $getlast_id = "select pns_id from apdm_pns where ccs_code ='".$rev->ccs_code."' and pns_code = '".$rev->pns_code."' and pns_revision = '".$rev->pns_revision."'";
+                                             $db->setQuery($getlast_id);
+                                             $last_id = $db->loadResult();
+                                             if(!$last_id)
+                                             {
+                                                     $last_id = $this->row->pns_id;
+                                             }
+                                                     
                                                 ?>
 					<tr>
                                                 <td><?php echo $i;?></td>
                                                 <td><input type="hidden" name="m_exist[]" value="<?php echo $rev->pns_rev_id;?>" >
                                                         <input type="hidden" name="m_exist_id[]" value="<?php echo $rev->pns_rev_id;?>" >
-                                                        <?php echo $rev->parent_pns_code?> 
+                                                        <a href="index.php?option=com_apdmpns&amp;task=detail&cid[0]=<?php echo $last_id;?>" title="Click here to view PN detail"><?php echo $rev->parent_pns_code?> </a>
                                                 </td>
                                                 <td><?php echo $rev->pns_revision;?><input type="hidden" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
                                                 <td><?php echo $rev->pns_life_cycle;?> </td>
                                                 <td><?php echo $rev->eco_name;?></td>
-                                                <td><a href="index.php?option=com_apdmpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a>
-                                                </td></tr>
+<!--                                                <td><a href="index.php?option=com_apdmpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a></td>-->
+                                        </tr>
 		<?php }
 		 } ?>
 				</tbody>

@@ -53,7 +53,7 @@ class ecoViewupdate extends JView
             //viet status	
             
             $routes		= JRequest::getVar('routes');
-            $db->setQuery("SELECT st.*,eco.eco_id,eco.eco_create_by FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes);
+            $db->setQuery("SELECT rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes);
             $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase
@@ -120,6 +120,9 @@ class ecoViewupdate extends JView
         $this->assignRef('arr_file',    $arr_file);
         $this->assignRef('arr_affected',    $arr_affected);
         
+        $db->setQuery("SELECT * FROM apdm_eco_routes WHERE eco_id=".$cid[0]." and id=".$routes." order by id desc");
+            $arr_route= $db->loadObjectList();
+            $this->assignRef('arr_route',    $arr_route);
         $this->assignRef('arr_status',    $arr_status);
 		parent::display($tpl);
 	}

@@ -52,8 +52,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         function removeMf(id)
         {
                 var parent = document.getElementById("manufacture_get");
-                var mf = document.getElementById(id);
-                parent.removeChild(mf);
+                var mf = document.getElementById(id).remove();
+                //parent.removeChild(mf);
         }
 	
 </script>

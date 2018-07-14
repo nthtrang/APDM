@@ -124,8 +124,8 @@ class pnsViewpns_info extends JView
         $lists['eco'] = JHTML::_('select.genericlist',   $ecos, 'eco_id', 'class="inputbox" size="1"', 'value', 'text', $row->eco_id );
 		//get list pns_type       
 		$pns_type_get = ($row->pns_id) ? trim($row->pns_type) : 'Making';
-        $pns_type[] = JHTML::_( 'select.option', 'Making', 'Making', 'value', 'text' );
-        $pns_type[] = JHTML::_( 'select.option', 'Buying', 'Buying', 'value', 'text' ); 
+        $pns_type[] = JHTML::_( 'select.option', 'Make', 'Make', 'value', 'text' );
+        $pns_type[] = JHTML::_( 'select.option', 'Buy', 'Buye', 'value', 'text' ); 
         $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
 		$lists['pns_type'] 	= JHTML::_('select.genericlist', $pns_type, 'pns_type', 'class="inputbox" size="1"', 'value', 'text', $pns_type_get );
         //get list vendor
@@ -224,7 +224,7 @@ class pnsViewpns_info extends JView
         $lists['pns_stock'] = $row->pns_stock;
         $lists['pns_qty_used'] = $row->pns_qty_used;
         //For revision
-            $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
+            $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$row->pns_id);
             $list_revision = $db->loadObjectList();
          $this->assignRef('revision',        $list_revision);
          

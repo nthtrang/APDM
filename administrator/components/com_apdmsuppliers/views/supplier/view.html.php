@@ -64,7 +64,7 @@ class apdmsuppliersViewsupplier extends JView {
                 if($type!=0)
                         $where[] = 's.info_type = ' . $type;
                 if (count($suppler_id) > 0) {
-                        $where[] = 's.info_id NOT IN (' . implode(",", $suppler_id) . ') ';
+                   //     $where[] = 's.info_id NOT IN (' . implode(",", $suppler_id) . ') ';
                 }
                 if (isset($search) && $search != '') {
                         $searchEscaped = $db->Quote('%' . $db->getEscaped($search, true) . '%', false);
