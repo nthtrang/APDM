@@ -159,7 +159,7 @@ function submitbutton(pressbutton) {
 					<?php echo  $row->pns_description; ?>
 				</td>		                                        
 				<td align="center">
-					<?php echo PNsController::GetEcoValue($row->eco_name);?>
+					<?php echo PNsController::GetEcoValue($row->eco_id);?>
 				</td>                                
 				<td align="center">
 					<?php echo $row->pns_life_cycle;?>

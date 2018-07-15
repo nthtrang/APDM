@@ -126,6 +126,42 @@
 					}
 				}
 			});	
+                        //for image
+                        //File Input Generate
+			var mid=0;			
+			var mclick=1;
+			$$(".iptfichier_image span").each(function(itext,id) {
+				if (mid!=0)
+					itext.style.display = "none";
+					mid++;
+			});
+			$('lnkfichier_image').addEvents ({				
+				'click':function(){	
+					if (mclick<mid) {
+						$$(".iptfichier_image span")[mclick].style.display="block";
+					//	alert($$(".iptfichier input")[mclick].style.display);
+						mclick++;
+					}
+				}
+			});	
+                        //for pdf
+                        //File Input Generate
+			var mid=0;			
+			var mclick=1;
+			$$(".iptfichier_pdf span").each(function(itext,id) {
+				if (mid!=0)
+					itext.style.display = "none";
+					mid++;
+			});
+			$('lnkfichier_pdf').addEvents ({				
+				'click':function(){	
+					if (mclick<mid) {
+						$$(".iptfichier_pdf span")[mclick].style.display="block";
+					//	alert($$(".iptfichier input")[mclick].style.display);
+						mclick++;
+					}
+				}
+			});                              
 		});
 		
 		//for PNs _arent
@@ -295,7 +331,40 @@
 						</label>
 					</td>
 					<td>
-						<input type="file" name="pns_imge" />
+						<div class="iptfichier_image">
+                                                 <span id="1">
+							<input type="file" name="pns_image1" /> 
+						</span>
+						<span id="2">
+							<input type="file" name="pns_image2" /> 
+						</span>
+						<span id="3">
+							<input type="file" name="pns_image3" /> 
+						</span>
+						<span id="4">
+							<input type="file" name="pns_image4" /> 
+						</span>
+						<span id="5">
+							<input type="file" name="pns_image5" /> 
+						</span>
+						<span id="6">
+							<input type="file" name="pns_image6" /> 
+						</span>
+						<span id="7">
+							<input type="file" name="pns_image7" /> 
+						</span>
+						<span id="8">
+							<input type="file" name="pns_image8" /> 
+						</span>
+						<span id="9">
+							<input type="file" name="pns_image9" /> 
+						</span>   
+						<span id="10">
+							<input type="file" name="pns_image10" /> 
+						</span>                                                           
+                                                </div>
+                                                <br />
+                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more Images');?>" ><?php echo JText::_('Click here to add more Images');?></a>                                                
 					</td>
 				</tr>
 				<tr>
@@ -305,7 +374,40 @@
 						</label>
 					</td>
 					<td>
-						<input type="file" name="pns_pdf" />
+						<div class="iptfichier_pdf">
+                                                 <span id="1">
+							<input type="file" name="pns_pdf1" /> 
+						</span>
+						<span id="2">
+							<input type="file" name="pns_pdf2" /> 
+						</span>
+						<span id="3">
+							<input type="file" name="pns_pdf3" /> 
+						</span>
+						<span id="4">
+							<input type="file" name="pns_pdf4" /> 
+						</span>
+                                                 <span id="5">
+							<input type="file" name="pns_pdf5" /> 
+						</span>
+						<span id="6">
+							<input type="file" name="pns_pdf6" /> 
+						</span>
+						<span id="7">
+							<input type="file" name="pns_pdf7" /> 
+						</span>
+						<span id="8">
+							<input type="file" name="pns_pdf8" /> 
+						</span>
+						<span id="9">
+							<input type="file" name="pns_pdf9" /> 
+						</span>
+						<span id="10">
+							<input type="file" name="pns_pdf10" /> 
+						</span>                                                        
+                                                </div>
+                                                <br />
+                                                <a href="javascript:;"id="lnkfichier_pdf" title="<?php echo JText::_('Click here to add more pdf');?>" ><?php echo JText::_('Click here to add more pdf');?></a>
 					</td>
 				</tr>
 				<tr>

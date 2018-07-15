@@ -199,12 +199,18 @@
 				
 				$i = 1;
 				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+                                
+                                if ($this->row->pns_revision) {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code . '-' . $this->row->pns_revision;
+                                } else {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code;
+                                }                                   
 				foreach ($this->lists['image_files'] as $image) {
 					$filesize = PNsController::Readfilesize('images', $image['image_file'], $this->row->ccs_code, $folder_pns);
 				?>
 				<tr>
 					<td><?php echo $i?></td>
-					<td><img src="../uploads/pns/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
+					<td><img src="../uploads/pns/cads/<?php echo $this->row->ccs_code . DS . $folder . DS?><?php echo $image['image_file']?>" width="200" height="100"  /></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
 					<a href="index.php?option=com_apdmpns&task=remove_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
@@ -233,7 +239,7 @@
 						</label>
 					</td>
 					<td>
-<!--						<input type="file" name="pns_imge" />-->
+
 						<input type="hidden" name="old_pns_image" value="<?php echo $this->row->pns_image;?>" />
                                                 <div class="iptfichier_image">
                                                  <span id="1">

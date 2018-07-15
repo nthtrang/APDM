@@ -209,11 +209,15 @@ function submitbutton(pressbutton) {
                                 else
                                         $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
 				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
-				if ($row->pns_image !=''){
-					$pns_image = $path_image.$row->pns_image;
+                                $image = PNsController::GetImagePreview($row->pns_id);
+				if ($image !=''){
+					
+                                        $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
 				}else{
-					$pns_image = JText::_('NONE_IMAGE_PNS');
+					$pns_image = JText::_('None image for preview');
 				}
+
+                                
 				//echo $pns_image;
 				$mf = PNsController::GetManufacture($row->pns_id);
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
@@ -230,7 +234,7 @@ function submitbutton(pressbutton) {
 				<td>
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
@@ -257,8 +261,10 @@ function submitbutton(pressbutton) {
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>
 				<td>
-					<?php if($row->pns_pdf !="") { ?>
-					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
+					<?php 
+                                        $exist_pdf =PNsController::checkexistPdf($row->pns_id);
+                                        if($exist_pdf) { ?>
+					 <a href="index.php?option=com_apdmpns&task=download_allpdfs&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
 					<?php }else{ ?>
 					<img src="images/downloads.png" width="16" height="16" border="0" alt="<?php echo JText::_('NONE_PDF_FILE')?>" />
 					<?php

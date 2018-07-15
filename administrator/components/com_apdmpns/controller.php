@@ -820,48 +820,16 @@ class PNsController extends JController {
                 //get ccs 
                 // $db->setQuery("SELECT ccs_code FROM apdm_ccs WHERE ccs_id=".$row->ccs_id);
                 $ccs_code = $row->ccs_code;
-                //for upload file image
-                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
-                if ($_FILES['pns_imge1']['size'] > 0) {
-                        $imge = new upload($_FILES['pns_imge']);
-                        if ($pns_revision != "") {
-                                $imge->file_new_name_body = $ccs_code . "-" . $pns_code_check . "-" . $pns_revision;
-                        } else {
-                                $imge->file_new_name_body = $ccs_code . "-" . $pns_code_check;
-                        }
-                        if ($imge->uploaded) {
-                                $imge->Process($path_pns . 'images' . DS);
-                                if ($imge->processed) {
-                                        $pns_imge = $imge->file_dst_name;
-                                }
-                        }
-                } else {
-                        $pns_imge = '';
-                }
-                //upload file pdf
-                if ($_FILES['pns_pdf']['size'] > 0) {
-                        $pdf = new upload($_FILES['pns_pdf']);
-                        if ($pns_revision != "") {
-                                $pdf->file_new_name_body = $ccs_code . "-" . $pns_code_check . "-" . $pns_revision;
-                        } else {
-                                $pdf->file_new_name_body = $ccs_code . "-" . $pns_code_check;
-                        }
-                        if ($pdf->uploaded) {
-                                $pdf->process($path_pns . 'pdf' . DS);
-                                if ($pdf->processed) {
-                                        $pns_pdf = $pdf->file_dst_name;
-                                }
-                        }
-                } else {
-                        $pns_pdf = '';
-                }
+
+                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 $row->pns_create = $datenow->toMySQL();
-                $row->pns_image = $pns_imge;
-                $row->pns_pdf = $pns_pdf;
+                //$row->pns_image = $pns_imge;
+                //$row->pns_pdf = $pns_pdf;
                 $row->pns_create_by = $me->get('id');
                 $row->pns_revision = $pns_revision;
                 $row->pns_description = strtoupper($post['pns_description']);
                 //save information of Pns in datbase
+                
                 if (!$row->store()) {
                         JError::raiseError(500, $db->stderr());
                         return false;
@@ -897,6 +865,78 @@ class PNsController extends JController {
                                         $db->query();
                                 }
                         }
+                        //for upload file image
+                        ///for pns cads/image/pdf
+                       
+                        $path_cads = $path_pns . 'cads' . DS . $ccs_code . DS . $folder . DS;  
+
+
+                       //upload new images
+                        $arr_error_upload_image = array();
+                        $arr_image_upload = array();
+                        for ($i = 1; $i <= 20; $i++) {
+                                if ($_FILES['pns_image' . $i]['size'] > 0) {
+                                        $imge = new upload($_FILES['pns_image' . $i]);
+                                        if ($pns_revision != "") {
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time()."_".$i;
+                                        } else {
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time()."_".$i;
+                                        }
+
+                                        if (file_exists($path_pns_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                                @unlink($path_pns_cads .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                        }
+                                        if ($imge->uploaded) {
+                                                $imge->Process($path_pns_cads);
+                                                if ($imge->processed) {
+                                                        $arr_image_upload[] = $imge->file_dst_name;
+                                                } else {
+                                                        $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
+                                                }
+                                        }
+                                }
+                        }
+                        if (count($arr_image_upload) > 0) {
+                                foreach ($arr_image_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_image (pns_id,image_file,date_created,created_by) VALUES (" . $row->pns_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }        
+
+                        //upload new pdf
+                        $arr_error_upload_pdf = array();
+                        $arr_pdf_upload = array();
+                        for ($i = 1; $i <= 20; $i++) {
+                                if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+                                        $imge = new upload($_FILES['pns_pdf' . $i]);
+                                        if ($pns_revision != "") {
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time()."_".$i;
+                                        } else {
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time()."_".$i;
+                                        }
+
+                                        if (file_exists($path_pns_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                                @unlink($path_pns_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                        }
+                                        if ($imge->uploaded) {
+                                                $imge->Process($path_pns_cads);
+                                                if ($imge->processed) {
+                                                        $arr_pdf_upload[] = $imge->file_dst_name;
+                                                } else {
+                                                        $arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+                                                }
+                                        }
+                                }
+                        }
+                        if (count($arr_pdf_upload) > 0) {
+                                foreach ($arr_pdf_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_pdf (pns_id,pdf_file,date_created,created_by) VALUES (" . $row->pns_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }                        
+                        
                         //for vendor    vendor_info
                         $vendors = JRequest::getVar('vendor_id', array(), '', 'array');
                         $vendors_infos = JRequest::getVar('vendor_info', array(), '', 'array');
@@ -1075,7 +1115,16 @@ class PNsController extends JController {
                 }
 
                 $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                
+                ///for pns cads/image/pdf
+                if ($pns_revision) {
+                        $folder = $ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                } else {
+                        $folder = $ccs_code . '-' . $row->pns_code;
+                }
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $path_cads = $path_pns . 'cads' . DS . $ccs_code . DS . $folder . DS;                
+               
                 $pns_id = JRequest::getVar('pns_id');
                 $row = & JTable::getInstance('apdmpns');
                 $row->load($pns_id);
@@ -1089,17 +1138,17 @@ class PNsController extends JController {
                                 if ($_FILES['pns_image' . $i]['size'] > 0) {
                                         $imge = new upload($_FILES['pns_image' . $i]);
                                         if ($pns_revision != "") {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time();
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time()."_".$i;
                                         } else {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time();
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time()."_".$i;
                                         }
 
-                                        if (file_exists($path_pns . 'images' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+                                        if (file_exists($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
 
-                                                @unlink($path_pns . 'images' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                                @unlink($path_cads .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
                                         }
                                         if ($imge->uploaded) {
-                                                $imge->Process($path_pns . 'images' . DS);
+                                                $imge->Process($path_cads);
                                                 if ($imge->processed) {
                                                         $arr_image_upload[] = $imge->file_dst_name;
                                                 } else {
@@ -1121,17 +1170,17 @@ class PNsController extends JController {
                                 if ($_FILES['pns_pdf' . $i]['size'] > 0) {
                                         $imge = new upload($_FILES['pns_pdf' . $i]);
                                         if ($pns_revision != "") {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time();
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time()."_".$i;
                                         } else {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time();
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time()."_".$i;
                                         }
 
-                                        if (file_exists($path_pns . 'pdf' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+                                        if (file_exists($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
 
-                                                @unlink($path_pns . 'pdf' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                                @unlink($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
                                         }
                                         if ($imge->uploaded) {
-                                                $imge->Process($path_pns . 'pdf' . DS);
+                                                $imge->Process($path_cads);
                                                 if ($imge->processed) {
                                                         $arr_pdf_upload[] = $imge->file_dst_name;
                                                 } else {
@@ -1324,11 +1373,11 @@ class PNsController extends JController {
                         if ($_FILES['pns_imge']['size'] > 0) {
                                 $imge = new upload($_FILES['pns_imge']);
                                 $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision;
-                                if (file_exists($path_pns . 'images' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
-                                        @unlink($path_pns . 'images' . DS . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                if (file_exists($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+                                        @unlink($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
                                 }
                                 if ($imge->uploaded) {
-                                        $imge->Process($path_pns . 'images' . DS);
+                                        $imge->Process($path_cads);
                                         if ($imge->processed) {
                                                 $pns_imge = $imge->file_dst_name;
                                         }
@@ -1336,13 +1385,13 @@ class PNsController extends JController {
                         } else {
                                 ///copy new file image
                                 $pns_imge_old = JRequest::getVar('old_pns_image');
-                                $copy_img = new upload($path_pns . 'images' . DS . $pns_imge_old);
+                                $copy_img = new upload($path_cads . $pns_imge_old);
                                 $copy_img->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision;
-                                if (file_exists($path_pns . 'images' . DS . $copy_img->file_new_name_body . "." . $copy_img->file_src_name_ext)) {
-                                        @unlink($path_pns . 'images' . DS . $copy_img->file_new_name_body . "." . $copy_img->file_src_name_ext);
+                                if (file_exists($path_cads . $copy_img->file_new_name_body . "." . $copy_img->file_src_name_ext)) {
+                                        @unlink($path_cads . $copy_img->file_new_name_body . "." . $copy_img->file_src_name_ext);
                                 }
                                 if ($copy_img->uploaded) {
-                                        $copy_img->process($path_pns . 'images' . DS);
+                                        $copy_img->process($path_pns);
 
                                         if ($copy_img->processed) {
                                                 $pns_imge = $copy_img->file_dst_name;
@@ -1353,11 +1402,11 @@ class PNsController extends JController {
                         if ($_FILES['pns_pdf']['size'] > 0) {
                                 $pdf = new upload($_FILES['pns_pdf']);
                                 $pdf->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision;
-                                if (file_exists($path_pns . 'pdf' . DS . $pdf->file_new_name_body . '.' . $pdf->file_src_name_ext)) {
-                                        @unlink($path_pns . 'pdf' . DS . $pdf->file_new_name_body . '.' . $pdf->file_src_name_ext);
+                                if (file_exists($path_cads . $pdf->file_new_name_body . '.' . $pdf->file_src_name_ext)) {
+                                        @unlink($path_cads . $pdf->file_new_name_body . '.' . $pdf->file_src_name_ext);
                                 }
                                 if ($pdf->uploaded) {
-                                        $pdf->process($path_pns . 'pdf' . DS);
+                                        $pdf->process($path_cads);
                                         if ($pdf->processed) {
                                                 $pns_pdf = $pdf->file_dst_name;
                                         }
@@ -1365,16 +1414,16 @@ class PNsController extends JController {
                         } else {
                                 //copy new file pdf
                                 $pns_pdf_old = JRequest::getVar('old_pns_pdf');
-                                $copy_pdf = new upload($path_pns . 'pdf' . DS . $pns_pdf_old);
+                                $copy_pdf = new upload($path_cads . $pns_pdf_old);
                                 $copy_pdf->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision;
 
-                                if (file_exists($path_pns . 'pdf' . DS . $copy_pdf->file_new_name_body . "." . $copy_pdf->file_src_name_ext)) {
-                                        @unlink($path_pns . 'pdf' . DS . $copy_pdf->file_new_name_body . "." . $copy_pdf->file_src_name_ext);
+                                if (file_exists($path_cads . $copy_pdf->file_new_name_body . "." . $copy_pdf->file_src_name_ext)) {
+                                        @unlink($path_cads . $copy_pdf->file_new_name_body . "." . $copy_pdf->file_src_name_ext);
                                 }
                                 $copy_pdf->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision;
 
                                 if ($copy_pdf->uploaded) {
-                                        $copy_pdf->process($path_pns . 'pdf' . DS);
+                                        $copy_pdf->process($path_cads);
 
                                         if ($copy_pdf->processed) {
                                                 $pns_pdf = $copy_pdf->file_dst_name;
@@ -1955,13 +2004,24 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns_id = JRequest::getVar('pid');
                 $image_id = JRequest::getVar('id');
-                $query = "SELECT * FROM apdm_pns_image WHERE pns_image_id=" . $image_id;
+
+
+                $query = "SELECT img.pns_id,img.image_file,p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns_image img inner join apdm_pns p on img.pns_id = p.pns_id WHERE pns_image_id=" . $image_id;
                 $db->setQuery($query);
                 $row = $db->loadObject();
+                
+                ///for pns cads/image/pdf
+                if ($row->pns_revision) {
+                        $folder = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                } else {
+                        $folder = $row->ccs_code . '-' . $row->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $path_cads = $path_pns . 'cads' . DS . $row->ccs_code . DS . $folder . DS;                   
+                
                 $pns_id = $row->pns_id;
                 $file_name = $row->image_file;
-                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'images' . DS;
-                $dFile = new DownloadFile($path_pns, $file_name);
+                $dFile = new DownloadFile($path_cads, $file_name);
                 exit;
         }
 
@@ -1972,16 +2032,61 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns_id = JRequest::getVar('pid');
                 $image_id = JRequest::getVar('id');
-                $query = "SELECT * FROM apdm_pns_pdf WHERE pns_pdf_id=" . $image_id;
+                $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns_pdf pdf inner join apdm_pns p on pdf.pns_id = p.pns_id WHERE pns_pdf_id=" . $image_id;
                 $db->setQuery($query);
                 $row = $db->loadObject();
+                
+                ///for pns cads/image/pdf
+                if ($row->pns_revision) {
+                        $folder = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                } else {
+                        $folder = $row->ccs_code . '-' . $row->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $path_cads = $path_pns . 'cads' . DS . $row->ccs_code . DS . $folder . DS;   
+               
                 $pns_id = $row->pns_id;
                 $file_name = $row->pdf_file;
-                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'pdf' . DS;
-                $dFile = new DownloadFile($path_pns, $file_name);
+                //$path_pns = $path_cads;
+                $dFile = new DownloadFile($path_cads, $file_name);
                 exit;
         }
+        function download_allpdfs()
+        {
+                $db = & JFactory::getDBO();                
+                $pn_id = JRequest::getVar('id');
+                $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns_pdf pdf inner join apdm_pns p on pdf.pns_id = p.pns_id WHERE pdf.pns_id =" . $pn_id;
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();
+                
 
+                foreach($rows as $row)
+                {
+                        ///for pns cads/image/pdf
+                        if ($row->pns_revision) {
+                                $folder = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $folder = $row->ccs_code . '-' . $row->pns_code;
+                        }
+                        $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                        $path_cads = $path_pns . 'cads' . DS . $row->ccs_code . DS . $folder . DS;                           
+                        $pns_id = $rowr->pns_id;
+                        $file_name = $row->pdf_file;
+                        //$path_pns = $path_cads;
+                        $dFile = new DownloadFile($path_cads, $file_name);
+                }
+                exit;
+        }
+        function checkexistPdf($pn_id)
+        {
+                $db = & JFactory::getDBO();                
+                $db->setQuery("SELECT pdf_file FROM apdm_pns_pdf WHERE pns_id=" . $pn_id);
+                $pns_pdf = $db->loadResult();
+                if ($pns_pdf) {
+                        return 1;
+                }
+                return 0;
+        }
         /**
          * @desc Download cad file of PNs
          */
@@ -2013,7 +2118,6 @@ class PNsController extends JController {
          */
 
         function download_cad_all_pns() {
-
                 global $dirarray, $conf, $dirsize;
 
                 $conf['dir'] = "zipfiles";
@@ -2071,6 +2175,7 @@ class PNsController extends JController {
                 }
 
                 //bom
+                
                 PNsController::export_bom();
 
                 if (!@is_dir($conf['dir'])) {
@@ -2293,7 +2398,7 @@ class PNsController extends JController {
                 @set_time_limit(1000000);
                 $objPHPExcel = new PHPExcel();
                 $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
-                $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'apdm_pn_bom_report.xls');
+                $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'apdm_pn_bom_new_report.xls');
 
                 global $mainframe;
 
@@ -2314,15 +2419,22 @@ class PNsController extends JController {
                     "pns_type" => $row->pns_type,
                     "pns_des" => $row->pns_description,
                     "pns_status" => $row->pns_status,
+                    "pns_find_number" => $row->pns_find_number,                    
+                    "pns_ref_des" => $row->pns_ref_des,
+                    "pns_stock" => $row->pns_stock,
+                    "pns_uom" => $row->pns_uom,
+                    "pns_life_cycle" => $row->pns_life_cycle,
                     "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
+                    
                 );
+                //p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom
                 //get list child
                 $query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 //for level 2
                 foreach ($rows as $obj1) {
-                        $query1 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
+                        $query1 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
                         $db->setQuery($query1);
                         $result1 = $db->loadObject();
                         $listPNs[] = array(
@@ -2332,6 +2444,11 @@ class PNsController extends JController {
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
                             "pns_status" => $result1->pns_status,
+                            "pns_find_number" => $result1->pns_find_number, 
+                            "pns_ref_des" => $result1->pns_ref_des,
+                            "pns_stock" => $result1->pns_stock,
+                            "pns_uom" => $result1->pns_uom,
+                            "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -2339,7 +2456,7 @@ class PNsController extends JController {
                         $rows2 = $db->LoadObjectList();
                         if (count($rows2) > 0) {
                                 foreach ($rows2 as $obj2) {
-                                        $query2 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
+                                        $query2 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
                                         $db->setQuery($query2);
                                         $result2 = $db->loadObject();
                                         $listPNs[] = array(
@@ -2349,6 +2466,11 @@ class PNsController extends JController {
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
                                             "pns_status" => $result2->pns_status,
+                                            "pns_find_number" => $result2->pns_find_number, 
+                                            "pns_ref_des" => $result2->pns_ref_des,
+                                            "pns_stock" => $result2->pns_stock,
+                                            "pns_uom" => $result2->pns_uom,
+                                            "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         //check for level 4
@@ -2356,7 +2478,7 @@ class PNsController extends JController {
                                         $rows3 = $db->LoadObjectList();
                                         if (count($rows3) > 0) {
                                                 foreach ($rows3 as $obj3) {
-                                                        $query3 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
+                                                        $query3 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
                                                         $db->setQuery($query3);
                                                         $result3 = $db->loadObject();
                                                         $listPNs[] = array(
@@ -2366,6 +2488,11 @@ class PNsController extends JController {
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
                                                             "pns_status" => $result3->pns_status,
+                                                            "pns_find_number" => $result3->pns_find_number,
+                                                            "pns_ref_des" => $result3->pns_ref_des,
+                                                            "pns_stock" => $result3->pns_stock,
+                                                            "pns_uom" => $result3->pns_uom,
+                                                            "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -2373,7 +2500,7 @@ class PNsController extends JController {
                                                         $rows4 = $db->LoadObjectList();
                                                         if (count($rows4) > 0) {
                                                                 foreach ($rows4 as $obj4) {
-                                                                        $query4 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
+                                                                        $query4 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
                                                                         $db->setQuery($query4);
                                                                         $result4 = $db->loadObject();
                                                                         $listPNs[] = array(
@@ -2383,6 +2510,11 @@ class PNsController extends JController {
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
                                                                             "pns_status" => $result4->pns_status,
+                                                                            "pns_find_number" => $result4->pns_find_number, 
+                                                                            "pns_ref_des" => $result4->pns_ref_des,
+                                                                            "pns_stock" => $result4->pns_stock,
+                                                                            "pns_uom" => $result4->pns_uom,
+                                                                            "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -2390,7 +2522,7 @@ class PNsController extends JController {
                                                                         $rows5 = $db->LoadObjectList();
                                                                         if (count($rows5) > 0) {
                                                                                 foreach ($rows5 as $obj5) {
-                                                                                        $query5 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
+                                                                                        $query5 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
                                                                                         $db->setQuery($query5);
                                                                                         $result5 = $db->loadObject();
                                                                                         $listPNs[] = array(
@@ -2400,6 +2532,11 @@ class PNsController extends JController {
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
                                                                                             "pns_status" => $result5->pns_status,
+                                                                                            "pns_find_number" => $result5->pns_find_number, 
+                                                                                            "pns_ref_des" => $result5->pns_ref_des,
+                                                                                            "pns_stock" => $result5->pns_stock,
+                                                                                            "pns_uom" => $result5->pns_uom,
+                                                                                            "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -2407,7 +2544,7 @@ class PNsController extends JController {
                                                                                         $rows6 = $db->LoadObjectList();
                                                                                         if (count($rows6) > 0) {
                                                                                                 foreach ($rows6 as $obj6) {
-                                                                                                        $query6 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
+                                                                                                        $query6 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
                                                                                                         $db->setQuery($query6);
                                                                                                         $result6 = $db->loadObject();
                                                                                                         $listPNs[] = array(
@@ -2417,6 +2554,11 @@ class PNsController extends JController {
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
                                                                                                             "pns_status" => $result6->pns_status,
+                                                                                                            "pns_find_number" => $result6->pns_find_number, 
+                                                                                                            "pns_ref_des" => $result6->pns_ref_des,
+                                                                                                            "pns_stock" => $result6->pns_stock,
+                                                                                                            "pns_uom" => $result6->pns_uom,
+                                                                                                            "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -2424,7 +2566,7 @@ class PNsController extends JController {
                                                                                                         $rows7 = $db->LoadObjectList();
                                                                                                         if (count($rows7) > 0) {
                                                                                                                 foreach ($rows7 as $obj7) {
-                                                                                                                        $query7 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
+                                                                                                                        $query7 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
                                                                                                                         $db->setQuery($query7);
                                                                                                                         $result7 = $db->loadObject();
                                                                                                                         $listPNs[] = array(
@@ -2434,6 +2576,11 @@ class PNsController extends JController {
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
                                                                                                                             "pns_status" => $result7->pns_status,
+                                                                                                                            "pns_find_number" => $result7->pns_find_number, 
+                                                                                                                            "pns_ref_des" => $result7->pns_ref_des,
+                                                                                                                            "pns_stock" => $result7->pns_stock,                                                                                                                                            
+                                                                                                                            "pns_uom" => $result7->pns_uom,
+                                                                                                                            "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -2441,7 +2588,7 @@ class PNsController extends JController {
                                                                                                                         $rows8 = $db->LoadObjectList();
                                                                                                                         if (count($rows8) > 0) {
                                                                                                                                 foreach ($rows8 as $obj8) {
-                                                                                                                                        $query8 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
+                                                                                                                                        $query8 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
                                                                                                                                         $db->setQuery($query8);
                                                                                                                                         $result8 = $db->loadObject();
                                                                                                                                         $listPNs[] = array(
@@ -2451,6 +2598,11 @@ class PNsController extends JController {
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
                                                                                                                                             "pns_status" => $result8->pns_status,
+                                                                                                                                            "pns_find_number" => $result8->pns_find_number, 
+                                                                                                                                            "pns_ref_des" => $result8->pns_ref_des,
+                                                                                                                                            "pns_stock" => $result8->pns_stock,          
+                                                                                                                                            "pns_uom" => $result8->pns_uom,
+                                                                                                                                            "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -2458,7 +2610,7 @@ class PNsController extends JController {
                                                                                                                                         $rows9 = $db->LoadObjectList();
                                                                                                                                         if (count($rows9) > 0) {
                                                                                                                                                 foreach ($rows9 as $obj9) {
-                                                                                                                                                        $query9 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
+                                                                                                                                                        $query9 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
                                                                                                                                                         $db->setQuery($query9);
                                                                                                                                                         $result9 = $db->loadObject();
                                                                                                                                                         $listPNs[] = array(
@@ -2468,6 +2620,11 @@ class PNsController extends JController {
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
                                                                                                                                                             "pns_status" => $result9->pns_status,
+                                                                                                                                                            "pns_find_number" => $result9->pns_find_number,
+                                                                                                                                                            "pns_ref_des" => $result9->pns_ref_des,
+                                                                                                                                                            "pns_stock" => $result9->pns_stock,
+                                                                                                                                                            "pns_uom" => $result9->pns_uom,
+                                                                                                                                                            "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -2508,20 +2665,25 @@ class PNsController extends JController {
                 $nRecord = count($listPNs);
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
-                        $j = 0;
-                        $i = 7;
+                        $jj = 0;
+                        $ii = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
-                                $a = 'A' . $i;
-                                $b = 'B' . $i;
-                                $c = 'C' . $i;
-                                $d = 'D' . $i;
-                                $e = 'E' . $i;
-                                $f = 'F' . $i;
-                                $g = 'G' . $i;
-                                $h = 'H' . $i;
+                                $a = 'A' . $ii;
+                                $b = 'B' . $ii;
+                                $c = 'C' . $ii;
+                                $d = 'D' . $ii;
+                                $e = 'E' . $ii;
+                                $f = 'F' . $ii;
+                                $g = 'G' . $ii;
+                                $h = 'H' . $ii;//for pns_find_number
+                                $i = 'I' . $ii;
+                                $j = 'J' . $ii;
+                                $k = 'K' . $ii;
+                                $l = 'L' . $ii;
+                                $m = 'M' . $ii;
                                 //set heigh or row 
-                                $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(30);
+                                $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
                                 $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
@@ -2529,7 +2691,12 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_stock']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -2540,6 +2707,11 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -2550,6 +2722,11 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -2561,16 +2738,20 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-
-                                if ($j % 2 == 0) {
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                                if ($jj % 2 == 0) {
+                                       $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
                                         $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->getStartColor()->setRGB('EEEEEE');
                                 }
-                                if ($j == $nRecord - 1) {
+                                if ($jj == $nRecord - 1) {
                                         $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($c)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -2579,9 +2760,14 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
-                                $i++;
-                                $j++;
+                                $ii++;
+                                $jj++;
                                 $number++;
                         }
                 }
@@ -2593,9 +2779,8 @@ class PNsController extends JController {
                 
                 $name = $row->ccs_code . '-' . $row->pns_code . '-AA';// . $row->pns_revision;
                 $path_export = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row->ccs_code . DS . $name . DS;
-
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                $objWriter->save($path_export . $name . '_APDM_BOM_REPORT.xls');
+                $objWriter->save($path_export . $name .'-'.time(). '_APDM_BOM_REPORT.xls');
                 //  $dFile = new DownloadFile($path_export, $name.'_APDM_BOM_REPORT.xls');                
                 //     exit;
         }
@@ -2634,7 +2819,6 @@ class PNsController extends JController {
                     "pns_code" => $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision,
                     "pns_level" => 0,
                     "eco" => GetEcoValue($row->eco_id),
-                    "pns_type" => $row->pns_type,
                     "pns_des" => $row->pns_description,
                     "pns_rev" => implode("<>",$arr_rev),
                     "pns_current_rev" => $row->pns_revision,
@@ -2666,7 +2850,6 @@ class PNsController extends JController {
                                     "pns_code" => $obj1->full_pns_code,
                                     "pns_level" => "-1",
                                     "eco" => $obj1->eco_name,
-                                    "pns_type" => $obj1->pns_type,
                                     "pns_des" => $obj1->pns_description,
                                     "pns_rev" => implode("<>",$arr_rev1),
                                     "pns_current_rev" => $obj1->pns_revision,
@@ -2689,8 +2872,7 @@ class PNsController extends JController {
                                                 $listPNs[] = array(
                                                     "pns_code" => $obj2->full_pns_code,
                                                     "pns_level" => "-2",
-                                                    "eco" => $obj2->eco_name,
-                                                    "pns_type" => $obj2->pns_type,
+                                                    "eco" => $obj2->eco_name,                                                    
                                                     "pns_des" => $obj2->pns_description,
                                                     "pns_rev" => implode("<>",$arr_rev2),
                                                     "pns_current_rev" => $obj2->pns_revision,
@@ -2713,8 +2895,7 @@ class PNsController extends JController {
                                                                 $listPNs[] = array(
                                                                     "pns_code" => $obj3->full_pns_code,
                                                                     "pns_level" => "-3",
-                                                                    "eco" => $obj3->eco_name,
-                                                                    "pns_type" => $obj3->pns_type,
+                                                                    "eco" => $obj3->eco_name,                                                                    
                                                                     "pns_des" => $obj3->pns_description,
                                                                     "pns_rev" => implode("<>",$arr_rev3),
                                                                     "pns_current_rev" => $obj3->pns_revision,
@@ -2737,8 +2918,7 @@ class PNsController extends JController {
                                                                                 $listPNs[] = array(
                                                                                     "pns_code" => $obj4->full_pns_code,
                                                                                     "pns_level" => "-4",
-                                                                                    "eco" => $obj4->eco_name,
-                                                                                    "pns_type" => $obj4->pns_type,
+                                                                                    "eco" => $obj4->eco_name,                                                                                    
                                                                                     "pns_des" => $obj4->pns_description,
                                                                                     "pns_rev" => implode("<>",$arr_rev4),
                                                                                     "pns_current_rev" => $obj4->pns_revision,
@@ -2761,8 +2941,7 @@ class PNsController extends JController {
                                                                                                 $listPNs[] = array(
                                                                                                     "pns_code" => $obj5->full_pns_code,
                                                                                                     "pns_level" => "-5",
-                                                                                                    "eco" => $obj5->eco_name,
-                                                                                                    "pns_type" => $obj5->pns_type,
+                                                                                                    "eco" => $obj5->eco_name,                                                                                                    
                                                                                                     "pns_des" => $obj5->pns_description,
                                                                                                     "pns_rev" => implode("<>",$arr_rev5),
                                                                                                     "pns_current_rev" => $obj5->pns_revision,
@@ -2785,8 +2964,7 @@ class PNsController extends JController {
                                                                                                                 $listPNs[] = array(
                                                                                                                     "pns_code" => $obj6->full_pns_code,
                                                                                                                     "pns_level" => "-6",
-                                                                                                                    "eco" => GetEcoValue($obj6->eco_id),
-                                                                                                                    "pns_type" => $obj6->pns_type,
+                                                                                                                    "eco" => GetEcoValue($obj6->eco_id),                                                                                                                    
                                                                                                                     "pns_des" => $obj6->pns_description,
                                                                                                                     "pns_rev" => implode("<>",$arr_rev6),
                                                                                                                     "pns_current_rev" => $obj6->pns_revision,
@@ -2809,8 +2987,7 @@ class PNsController extends JController {
                                                                                                                                 $listPNs[] = array(
                                                                                                                                     "pns_code" => $obj7->full_pns_code,
                                                                                                                                     "pns_level" => "-7",
-                                                                                                                                    "eco" => $obj7->eco_name,
-                                                                                                                                    "pns_type" => $obj7->pns_type,
+                                                                                                                                    "eco" => $obj7->eco_name,                                                                                                                                    
                                                                                                                                     "pns_des" => $obj7->pns_description,
                                                                                                                                     "pns_rev" => implode("<>",$arr_rev7),
                                                                                                                                     "pns_current_rev" => $obj7->pns_revision,
@@ -2833,8 +3010,7 @@ class PNsController extends JController {
                                                                                                                                                 $listPNs[] = array(
                                                                                                                                                     "pns_code" => $obj8->full_pns_code,
                                                                                                                                                     "pns_level" => "-8",
-                                                                                                                                                    "eco" => $obj8->eco_name,
-                                                                                                                                                    "pns_type" => $obj8->pns_type,
+                                                                                                                                                    "eco" => $obj8->eco_name,                                                                                                                                                    
                                                                                                                                                     "pns_des" => $obj8->pns_description,
                                                                                                                                                     "pns_rev" => implode("<>",$arr_rev8),
                                                                                                                                                     "pns_current_rev" => $obj8->pns_revision,
@@ -2857,8 +3033,7 @@ class PNsController extends JController {
                                                                                                                                                                 $listPNs[] = array(
                                                                                                                                                                     "pns_code" => $obj9->full_pns_code,
                                                                                                                                                                     "pns_level" => "-9",
-                                                                                                                                                                    "eco" => $obj9 > eco_name,
-                                                                                                                                                                    "pns_type" => $obj9->pns_type,
+                                                                                                                                                                    "eco" => $obj9 > eco_name,                                                                                                                                                                    
                                                                                                                                                                     "pns_des" => $obj9->pns_description,
                                                                                                                                                                     "pns_rev" => implode("<>",$arr_rev9),
                                                                                                                                                                     "pns_current_rev" => $obj9->pns_revision,
@@ -2904,62 +3079,53 @@ class PNsController extends JController {
                 $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: ' . $date);
                 $nRecord = count($listPNs);
                 
-                $objPHPExcel->getActiveSheet()->getStyle('A7:K' . $nRecord)->getAlignment()->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
-                        $j = 0;
-                        $i = 7;
+                        $jj = 0;
+                        $ii = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
                                 
-                                $a = 'A' . $i;
-                                $b = 'B' . $i;
-                                $c = 'C' . $i;
-                                $d = 'D' . $i;
-                                $e = 'E' . $i;
-                                $f = 'F' . $i;
-                                $g = 'G' . $i;
-                                $h = 'H' . $i;
-                                //$i = 'I' . $i;
-                               // $j = 'J' . $i;
-                              //  $k = 'K' . $i;
+                                $a = 'A' . $ii;
+                                $b = 'B' . $ii;
+                                $c = 'C' . $ii;
+                                $d = 'D' . $ii;
+                                $e = 'E' . $ii;
+                                $f = 'F' . $ii;
+                                $g = 'G' . $ii;
+                                $h = 'H' . $ii;
+                                $i = 'I' . $ii;
+                                $j = 'J' . $ii;
+                                $k = 'K' . $ii;
+                                
                                 
                                 //set heigh or row 
-                                $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(30);
+                                $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
                                 $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_rev']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_current_rev']);
-                               // $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_status']);
-                               // $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_state']);
-                               // $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_rev']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_current_rev']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_status']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_state']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_date']);
                                 
                           
                                 //set format
-                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                               
-                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                               
-                                $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($d)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($e)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                               //$objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                             //  $objPHPExce->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                
-                               // $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                               
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                               
+                                $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($d)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($e)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -2970,8 +3136,8 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                               // $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                               // $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 
 
 
@@ -2984,8 +3150,8 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                               // $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                               // $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 
 
 
@@ -2993,8 +3159,8 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
                                 if ($j % 2 == 0) {
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->getStartColor()->setRGB('EEEEEE');
+                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $k)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $k)->getFill()->getStartColor()->setRGB('EEEEEE');
                                 }
                                 if ($j == $nRecord - 1) {
                                         $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -3005,21 +3171,22 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                       $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                        //$objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                        //$objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                     
                                 }
                                 $i++;
                                 $j++;
                                 $number++;
                                 
+                                
                         }
                 }
                 $path_export = JPATH_SITE . DS . 'uploads' . DS . 'export' . DS;
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                $objWriter->save($path_export . 'APDM_BOM_REPORT.xls');
-                $dFile = new DownloadFile($path_export, 'APDM_BOM_REPORT.xls');
+                $objWriter->save($path_export . 'APDM_WHEREUSED_REPORT.xls');
+                $dFile = new DownloadFile($path_export, 'APDM_WHEREUSED_REPORT.xls');
                 exit;
         }
 
@@ -3846,7 +4013,7 @@ class PNsController extends JController {
                 @set_time_limit(1000000);
                 $objPHPExcel = new PHPExcel();
                 $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
-                $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'apdm_pn_bom_report.xls');
+                $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'apdm_pn_bom_new_report.xls');
 
                 global $mainframe;
 
@@ -3867,15 +4034,22 @@ class PNsController extends JController {
                     "pns_type" => $row->pns_type,
                     "pns_des" => $row->pns_description,
                     "pns_status" => $row->pns_status,
+                    "pns_find_number" => $row->pns_find_number,                    
+                    "pns_ref_des" => $row->pns_ref_des,
+                    "pns_stock" => $row->pns_stock,
+                    "pns_uom" => $row->pns_uom,
+                    "pns_life_cycle" => $row->pns_life_cycle,
                     "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
+                    
                 );
+                //p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom
                 //get list child
                 $query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 //for level 2
                 foreach ($rows as $obj1) {
-                        $query1 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
+                        $query1 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
                         $db->setQuery($query1);
                         $result1 = $db->loadObject();
                         $listPNs[] = array(
@@ -3885,6 +4059,11 @@ class PNsController extends JController {
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
                             "pns_status" => $result1->pns_status,
+                            "pns_find_number" => $result1->pns_find_number, 
+                            "pns_ref_des" => $result1->pns_ref_des,
+                            "pns_stock" => $result1->pns_stock,
+                            "pns_uom" => $result1->pns_uom,
+                            "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -3892,7 +4071,7 @@ class PNsController extends JController {
                         $rows2 = $db->LoadObjectList();
                         if (count($rows2) > 0) {
                                 foreach ($rows2 as $obj2) {
-                                        $query2 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
+                                        $query2 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
                                         $db->setQuery($query2);
                                         $result2 = $db->loadObject();
                                         $listPNs[] = array(
@@ -3902,6 +4081,11 @@ class PNsController extends JController {
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
                                             "pns_status" => $result2->pns_status,
+                                            "pns_find_number" => $result2->pns_find_number, 
+                                            "pns_ref_des" => $result2->pns_ref_des,
+                                            "pns_stock" => $result2->pns_stock,
+                                            "pns_uom" => $result2->pns_uom,
+                                            "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         //check for level 4
@@ -3909,7 +4093,7 @@ class PNsController extends JController {
                                         $rows3 = $db->LoadObjectList();
                                         if (count($rows3) > 0) {
                                                 foreach ($rows3 as $obj3) {
-                                                        $query3 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
+                                                        $query3 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
                                                         $db->setQuery($query3);
                                                         $result3 = $db->loadObject();
                                                         $listPNs[] = array(
@@ -3919,6 +4103,11 @@ class PNsController extends JController {
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
                                                             "pns_status" => $result3->pns_status,
+                                                            "pns_find_number" => $result3->pns_find_number,
+                                                            "pns_ref_des" => $result3->pns_ref_des,
+                                                            "pns_stock" => $result3->pns_stock,
+                                                            "pns_uom" => $result3->pns_uom,
+                                                            "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -3926,7 +4115,7 @@ class PNsController extends JController {
                                                         $rows4 = $db->LoadObjectList();
                                                         if (count($rows4) > 0) {
                                                                 foreach ($rows4 as $obj4) {
-                                                                        $query4 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
+                                                                        $query4 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
                                                                         $db->setQuery($query4);
                                                                         $result4 = $db->loadObject();
                                                                         $listPNs[] = array(
@@ -3936,6 +4125,11 @@ class PNsController extends JController {
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
                                                                             "pns_status" => $result4->pns_status,
+                                                                            "pns_find_number" => $result4->pns_find_number, 
+                                                                            "pns_ref_des" => $result4->pns_ref_des,
+                                                                            "pns_stock" => $result4->pns_stock,
+                                                                            "pns_uom" => $result4->pns_uom,
+                                                                            "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -3943,7 +4137,7 @@ class PNsController extends JController {
                                                                         $rows5 = $db->LoadObjectList();
                                                                         if (count($rows5) > 0) {
                                                                                 foreach ($rows5 as $obj5) {
-                                                                                        $query5 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
+                                                                                        $query5 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
                                                                                         $db->setQuery($query5);
                                                                                         $result5 = $db->loadObject();
                                                                                         $listPNs[] = array(
@@ -3953,6 +4147,11 @@ class PNsController extends JController {
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
                                                                                             "pns_status" => $result5->pns_status,
+                                                                                            "pns_find_number" => $result5->pns_find_number, 
+                                                                                            "pns_ref_des" => $result5->pns_ref_des,
+                                                                                            "pns_stock" => $result5->pns_stock,
+                                                                                            "pns_uom" => $result5->pns_uom,
+                                                                                            "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -3960,7 +4159,7 @@ class PNsController extends JController {
                                                                                         $rows6 = $db->LoadObjectList();
                                                                                         if (count($rows6) > 0) {
                                                                                                 foreach ($rows6 as $obj6) {
-                                                                                                        $query6 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
+                                                                                                        $query6 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
                                                                                                         $db->setQuery($query6);
                                                                                                         $result6 = $db->loadObject();
                                                                                                         $listPNs[] = array(
@@ -3970,6 +4169,11 @@ class PNsController extends JController {
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
                                                                                                             "pns_status" => $result6->pns_status,
+                                                                                                            "pns_find_number" => $result6->pns_find_number, 
+                                                                                                            "pns_ref_des" => $result6->pns_ref_des,
+                                                                                                            "pns_stock" => $result6->pns_stock,
+                                                                                                            "pns_uom" => $result6->pns_uom,
+                                                                                                            "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -3977,7 +4181,7 @@ class PNsController extends JController {
                                                                                                         $rows7 = $db->LoadObjectList();
                                                                                                         if (count($rows7) > 0) {
                                                                                                                 foreach ($rows7 as $obj7) {
-                                                                                                                        $query7 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
+                                                                                                                        $query7 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
                                                                                                                         $db->setQuery($query7);
                                                                                                                         $result7 = $db->loadObject();
                                                                                                                         $listPNs[] = array(
@@ -3987,6 +4191,11 @@ class PNsController extends JController {
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
                                                                                                                             "pns_status" => $result7->pns_status,
+                                                                                                                            "pns_find_number" => $result7->pns_find_number, 
+                                                                                                                            "pns_ref_des" => $result7->pns_ref_des,
+                                                                                                                            "pns_stock" => $result7->pns_stock,                                                                                                                                            
+                                                                                                                            "pns_uom" => $result7->pns_uom,
+                                                                                                                            "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -3994,7 +4203,7 @@ class PNsController extends JController {
                                                                                                                         $rows8 = $db->LoadObjectList();
                                                                                                                         if (count($rows8) > 0) {
                                                                                                                                 foreach ($rows8 as $obj8) {
-                                                                                                                                        $query8 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
+                                                                                                                                        $query8 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
                                                                                                                                         $db->setQuery($query8);
                                                                                                                                         $result8 = $db->loadObject();
                                                                                                                                         $listPNs[] = array(
@@ -4004,6 +4213,11 @@ class PNsController extends JController {
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
                                                                                                                                             "pns_status" => $result8->pns_status,
+                                                                                                                                            "pns_find_number" => $result8->pns_find_number, 
+                                                                                                                                            "pns_ref_des" => $result8->pns_ref_des,
+                                                                                                                                            "pns_stock" => $result8->pns_stock,          
+                                                                                                                                            "pns_uom" => $result8->pns_uom,
+                                                                                                                                            "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -4011,7 +4225,7 @@ class PNsController extends JController {
                                                                                                                                         $rows9 = $db->LoadObjectList();
                                                                                                                                         if (count($rows9) > 0) {
                                                                                                                                                 foreach ($rows9 as $obj9) {
-                                                                                                                                                        $query9 = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
+                                                                                                                                                        $query9 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
                                                                                                                                                         $db->setQuery($query9);
                                                                                                                                                         $result9 = $db->loadObject();
                                                                                                                                                         $listPNs[] = array(
@@ -4021,6 +4235,11 @@ class PNsController extends JController {
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
                                                                                                                                                             "pns_status" => $result9->pns_status,
+                                                                                                                                                            "pns_find_number" => $result9->pns_find_number,
+                                                                                                                                                            "pns_ref_des" => $result9->pns_ref_des,
+                                                                                                                                                            "pns_stock" => $result9->pns_stock,
+                                                                                                                                                            "pns_uom" => $result9->pns_uom,
+                                                                                                                                                            "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -4061,20 +4280,25 @@ class PNsController extends JController {
                 $nRecord = count($listPNs);
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
-                        $j = 0;
-                        $i = 7;
+                        $jj = 0;
+                        $ii = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
-                                $a = 'A' . $i;
-                                $b = 'B' . $i;
-                                $c = 'C' . $i;
-                                $d = 'D' . $i;
-                                $e = 'E' . $i;
-                                $f = 'F' . $i;
-                                $g = 'G' . $i;
-                                $h = 'H' . $i;
+                                $a = 'A' . $ii;
+                                $b = 'B' . $ii;
+                                $c = 'C' . $ii;
+                                $d = 'D' . $ii;
+                                $e = 'E' . $ii;
+                                $f = 'F' . $ii;
+                                $g = 'G' . $ii;
+                                $h = 'H' . $ii;//for pns_find_number
+                                $i = 'I' . $ii;
+                                $j = 'J' . $ii;
+                                $k = 'K' . $ii;
+                                $l = 'L' . $ii;
+                                $m = 'M' . $ii;
                                 //set heigh or row 
-                                $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(30);
+                                $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
                                 $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
@@ -4082,7 +4306,12 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_stock']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -4093,6 +4322,11 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -4103,6 +4337,11 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -4114,16 +4353,20 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-
-                                if ($j % 2 == 0) {
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                                if ($jj % 2 == 0) {
+                                       $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
                                         $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $h)->getFill()->getStartColor()->setRGB('EEEEEE');
                                 }
-                                if ($j == $nRecord - 1) {
+                                if ($jj == $nRecord - 1) {
                                         $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($c)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -4132,9 +4375,14 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($f)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($g)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
-                                $i++;
-                                $j++;
+                                $ii++;
+                                $jj++;
                                 $number++;
                         }
                 }
@@ -4150,4 +4398,10 @@ class PNsController extends JController {
                 $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id inner join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$pns_id);
                 return $list_revision = $db->loadObjectList();             
         }        
+        function GetImagePreview($pns_id)
+        {
+                $db = & JFactory::getDBO();
+                $db->setQuery("select image_file from apdm_pns_image where pns_id ='".$pns_id."' limit 1");
+                return $db->loadResult();                
+        }
 }

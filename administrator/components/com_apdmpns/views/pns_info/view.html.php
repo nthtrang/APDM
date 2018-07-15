@@ -124,9 +124,9 @@ class pnsViewpns_info extends JView
         $lists['eco'] = JHTML::_('select.genericlist',   $ecos, 'eco_id', 'class="inputbox" size="1"', 'value', 'text', $row->eco_id );
 		//get list pns_type       
 		$pns_type_get = ($row->pns_id) ? trim($row->pns_type) : 'Making';
-        $pns_type[] = JHTML::_( 'select.option', 'Make', 'Make', 'value', 'text' );
-        $pns_type[] = JHTML::_( 'select.option', 'Buy', 'Buye', 'value', 'text' ); 
-        $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
+                $pns_type[] = JHTML::_( 'select.option', 'Make', 'Make', 'value', 'text' );
+                $pns_type[] = JHTML::_( 'select.option', 'Buy', 'Buy', 'value', 'text' ); 
+                $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
 		$lists['pns_type'] 	= JHTML::_('select.genericlist', $pns_type, 'pns_type', 'class="inputbox" size="1"', 'value', 'text', $pns_type_get );
         //get list vendor
         $vd[] = JHTML::_('select.option', 0, JText::_('SELECT_VENDOR'), 'value', 'text' );
