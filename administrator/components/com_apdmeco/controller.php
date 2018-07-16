@@ -1164,7 +1164,8 @@ class ECOController extends JController
                         $msg = JText::sprintf('Must choose at least 2 persons for Review', $cid[0]);                               
                         return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$route, $msg);
                 }
-                else{                       
+                else{    
+                        
                         $row =& JTable::getInstance('apdmeco');
                         $row->load($cid[0]);  
                         if($row->eco_status =='Create')
@@ -1209,7 +1210,7 @@ class ECOController extends JController
                                 $result = $db->loadObjectList();
                                      if (count($result) > 0){
                                          foreach ($result as $obj){
-                                       //    JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                          }
                                      }                        
                 }
@@ -1234,7 +1235,7 @@ class ECOController extends JController
                                 $db->setQuery($query);
                                 $db->query();
                                 //update status REV
-                                $query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                                $query = 'update apdm_pns_rev set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
                                 $db->setQuery($query);
                                 $db->query();                                      
                         
@@ -1427,4 +1428,10 @@ class ECOController extends JController
                 $msg = JText::_('Have remove approver successfull.');
                 $this->setRedirect( 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$cid[0].'&routes='.$routes, $msg);
         }
+        function GetImagePreview($pns_id)
+        {
+                $db = & JFactory::getDBO();
+                $db->setQuery("select image_file from apdm_pns_image where pns_id ='".$pns_id."' limit 1");
+                return $db->loadResult();                
+        }        
 }

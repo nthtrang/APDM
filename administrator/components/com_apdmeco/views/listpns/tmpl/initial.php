@@ -209,6 +209,9 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				<th  class="title" width="10%">
 					<?php echo  JText::_('PNS_DESCRIPTION'); ?>
 				</th>
+                                <th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('State'); ?>
+				</th>	                                
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Plant Status'); ?>
 				</th>				
@@ -260,10 +263,11 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
                                 $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->pns_id;	
 				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
-				if ($row->pns_image !=''){
-					$pns_image = $path_image.$row->pns_image;
+				$image = ECOController::GetImagePreview($row->pns_id);
+				if ($image !=''){					
+                                        $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
 				}else{
-					$pns_image = JText::_('NONE_IMAGE_PNS');
+					$pns_image = JText::_('None image for preview');
 				}
 				//echo $pns_image;
 				$mf = EcoController::GetPnManufacture($row->pns_id);
@@ -277,7 +281,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				<td>					
                                         <input type="checkbox" id = "initial" onclick="isCheckedInitial(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  />
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
@@ -285,6 +289,9 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				<td align="center">
 					<?php echo $row->pns_description; ?>
 				</td>	
+                                <td align="center">
+					<?php echo $row->pns_life_cycle; ?>
+				</td>                                
 				<td align="center">					
                                         <span style="display:block" id="text_init_plant_status_<?php echo $row->pns_id;?>"><?php echo $row->init_plant_status?$row->init_plant_status:"Unreleased";?></span>
                                          <?php                                         

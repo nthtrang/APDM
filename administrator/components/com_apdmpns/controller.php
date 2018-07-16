@@ -788,7 +788,7 @@ class PNsController extends JController {
                                 $new .='0';
                         }
                 }
-                $pns_code = $new . $pns_code;
+               
                 $pns_version = $post['pns_version'];
                 if(JRequest::getVar('mpn')==1)
                 {
@@ -796,7 +796,8 @@ class PNsController extends JController {
                         $pns_code_check = $pns_code;
                 }
                 else
-                {                       
+                {   
+                        $pns_code = $new . $pns_code;
                         $pns_code_check = $pns_code . "-" . $pns_version;
                 }
                 $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
@@ -1017,22 +1018,46 @@ class PNsController extends JController {
                                 $return = JRequest::getVar('return');
                                 $eco_id = JRequest::getVar('eco_id');
                                 if ($return) {
-                                        $this->setRedirect('index.php?option=com_apdmeco&task=affected&cid[]=' . $eco_id, $msg);
+                                       return $this->setRedirect('index.php?option=com_apdmeco&task=affected&cid[]=' . $eco_id, $msg);
                                 } else {
-                                        $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $row->pns_id, $msg);
+                                       return $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $row->pns_id, $msg);
                                 }
                                 break;
 
                         case 'save':
                         default:
+                                //update POS
+                                if(JRequest::getVar('pns_po_id')!=0)
+                                {
+                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
+                                        $db->query();                                
+                                }
+                                //update QuoS
+                                if(JRequest::getVar('pns_quo_id')!=0)
+                                {
+                                        $db->setQuery("update apdm_pns_quo set pns_id = ".$row->pns_id." where pns_quo_id = '".JRequest::getVar('pns_quo_id')."'");
+                                        $db->query();                                
+                                }                                
+                                //insert  rev history
+                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $row->pns_id . "'");
+                                $db->query();                                
                                 $msg = JText::_('Successfully Saved Part Number') . ': ' . $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision . ' ' . $text_mess;
                                 $return = JRequest::getVar('return');
                                 $eco_id = JRequest::getVar('eco_id');
                                 if ($return) {
                                         $this->setRedirect('index.php?option=com_apdmeco&task=affected&cid[]=' . $eco_id, $msg);
                                 } else {
-                                        $this->setRedirect('index.php?option=com_apdmpns&task=add', $msg);
+                                        if(JRequest::getVar('mpn')==1)
+                                        {
+                                                return $this->setRedirect('index.php?option=com_apdmpns&task=addpncus', $msg);
+                                        }
+                                        else
+                                        {
+                                              return  $this->setRedirect('index.php?option=com_apdmpns&task=add', $msg); 
+                                        }
+                                        
                                 }
+                                
                                 $this->setRedirect('index.php?option=com_apdmpns&task=add', $msg);
                                 break;
                 }
