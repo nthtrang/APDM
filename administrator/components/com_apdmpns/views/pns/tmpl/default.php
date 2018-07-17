@@ -7,7 +7,8 @@
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew("add","New PN");
                 JToolBarHelper::customX('addpncus', 'new', '', 'Mass Create PN', false);
-	}           
+	}  
+     
 	if (in_array("E", $role)) {
 		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
 		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);		
@@ -15,6 +16,7 @@
 	if (in_array("V", $role)) { 	
                 JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
 	}
+        
 	if (in_array("D", $role)) {
                 //viet comment
 		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
@@ -210,8 +212,7 @@ function submitbutton(pressbutton) {
                                         $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
 				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
                                 $image = PNsController::GetImagePreview($row->pns_id);
-				if ($image !=''){
-					
+				if ($image !=''){					
                                         $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
 				}else{
 					$pns_image = JText::_('None image for preview');

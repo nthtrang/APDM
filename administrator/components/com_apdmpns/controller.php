@@ -92,7 +92,13 @@ class PNsController extends JController {
                                         JRequest::setVar('view', 'pns_info');
                                         JRequest::setVar('edit', true);
                                 }
-                                break;                        
+                                break;   
+                        case 'updatestock':{
+                                        JRequest::setVar('layout', 'form_editstock');
+                                        JRequest::setVar('view', 'pns_info');
+                                        JRequest::setVar('edit', true);
+                        }
+                        break;
                         
                 }
                 parent::display();
@@ -1114,7 +1120,19 @@ class PNsController extends JController {
         function edit_specification() {
                 
         }
-
+        function edit_pns_stock()
+        {
+                 global $mainframe;
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $pns_cost = strtoupper($post['pns_cost']);
+                $pns_id = JRequest::getVar('pns_id');
+                $db->setQuery("UPDATE apdm_pns SET pns_cost='" . JRequest::getVar('pns_cost') . "',pns_stock ='" . JRequest::getVar('pns_stock') . "',pns_datein ='" . JRequest::getVar('pns_datein') . "',pns_qty_used ='" . JRequest::getVar('pns_qty_used') . "' WHERE pns_id=" . $pns_id);
+                $db->query();
+                $msg = JText::_('Successfully Update Stock Part Number');
+                $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[]=' . $pns_id, $msg);               
+        }
         function edit_pns() {
 
                 global $mainframe;
@@ -3813,13 +3831,25 @@ class PNsController extends JController {
                 $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
                 $db->getQuery();
                 $db->query();
+                //add to inital
+                foreach($pns as $pn_id)
+                {
+                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $pn_id);
+                        $check_exist = $db->loadResult();
+                        if ($check_exist==0) {
+                                $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$pn_id.',"Unreleased","Unassign","3","'.$cid[0].'")';
+                                $db->setQuery($query);
+                                $db->query();
+                        }                              
+                }
+                
         }
         function ajax_add_pns_init() {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $cid = JRequest::getVar('eco', array(), '', 'array');
-                $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
-                $db->query();
+               // $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
+                //$db->query();
                 foreach($pns as $id)
                 {
                         //check status PNS first
@@ -3831,19 +3861,15 @@ class PNsController extends JController {
                                 $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
                                 $check_exist = $db->loadResult();
                                 if ($check_exist==0) {
-                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
+                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$id.',"Unreleased","Unassign","3","'.$cid[0].'")';
                                         $db->setQuery($query);
                                         $db->query();
                                 }      
-                                else
-                                {                
-                                        $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
-                                        //echo $db->getQuery();
-                                        $db->query();
-                                }
+                                
                         }
                          
                 }
+                return $msg = JText::_('Have deleted successfull.');
         }        
 
         function removepns() {

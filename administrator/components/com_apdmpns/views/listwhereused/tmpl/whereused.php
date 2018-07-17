@@ -127,7 +127,7 @@ function submitbutton(pressbutton) {
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="5">
+				<td colspan="9">
 					<?php // echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>

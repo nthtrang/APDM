@@ -11,6 +11,9 @@
 	//$edit		= JRequest::getVar('edit',true);
 	//$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 	$role = JAdministrator::RoleOnComponent(6);
+	if (in_array("S", $role)) {		
+                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Stock', false);
+	}             
         $partnumber = $this->row->ccs_code.'-'.$this->row->pns_code;
         if ($this->row->pns_revision) 
                 $partnumber .= '-'.$this->row->pns_revision;
@@ -42,17 +45,21 @@
 			return;
 		}
 		if (pressbutton == 'add') {
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'edit') {
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'export_detail') {
-				submitform( pressbutton );
-				return;
-			}
+                        submitform( pressbutton );
+                        return;
+                }
+                if (pressbutton == 'edit') {
+                        submitform( pressbutton );
+                        return;
+                }
+                if (pressbutton == 'updatestock') {
+                        submitform( pressbutton );
+                        return;
+                }                        
+                if (pressbutton == 'export_detail') {
+                        submitform( pressbutton );
+                        return;
+                }
 			
 	}	
 

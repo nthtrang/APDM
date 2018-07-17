@@ -107,6 +107,7 @@
 	$pns3 = 0;
 	$pns4 = 0;
 	$pns5 = 0;
+        $pns6 = 0;
 	$pnsall=0;
 	if(count($this->arrPns) > 0){
 		foreach ($this->arrPns as $pns){
@@ -115,6 +116,7 @@
 			if ($pns=='E') {$pns3=1; $pnsall++;}
 			if ($pns=='D') {$pns4=1; $pnsall++;}
 			if ($pns=='R') {$pns5=1; $pnsall++;}
+                        if ($pns=='S') {$pns6=1; $pnsall++;}
 
 		}
 	}
@@ -198,6 +200,10 @@
 							<?php echo JText::_( 'ROLE_RESTORE' ); ?>
 						</label>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <label>
+							<?php echo JText::_( 'Stock Update' ); ?>
+						</label>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<label>
 							<?php echo JText::_( 'ROLE_CHECK_ALL' ); ?>
 						</label>
@@ -215,7 +221,7 @@
 						<input type="checkbox" name="cc[]" value="W" <?php echo ($cc2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="cc1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="cc[]" value="E" <?php echo ($cc3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="cc2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="cc[]" value="D" <?php echo ($cc4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="cc3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="cc[]" value="R" <?php echo ($cc5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="cc4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="cc[]" value="R" <?php echo ($cc5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="cc4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllCC(5, 'cc');" value="" name="toggle1" <?php if ($ccall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>				
@@ -231,7 +237,7 @@
 						<input type="checkbox" name="eco[]" value="W" <?php echo ($eco2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="eco1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="eco[]" value="E" <?php echo ($eco3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="eco2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="eco[]" value="D" <?php echo ($eco4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="eco3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="eco[]" value="R" <?php echo ($eco5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="eco4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="eco[]" value="R" <?php echo ($eco5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="eco4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllECO(5, 'eco');" value="" name="toggle5" <?php if ($ecoall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>
@@ -246,8 +252,9 @@
 						<input type="checkbox" name="p[]" value="W" <?php echo ($pns2) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="p1"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="p[]" value="E" <?php echo ($pns3) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="p2"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="p[]" value="D" <?php echo ($pns4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="p[]" value="R" <?php echo ($pns5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllPNS(5, 'p');" value="0" name="toggle6" <?php if ($pnsall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" name="p[]" value="R" <?php echo ($pns5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" name="p[]" value="S" <?php echo ($pns6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllPNS(6, 'p');" value="0" name="toggle6" <?php if ($pnsall==6) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>				
 			<tr>
@@ -262,7 +269,7 @@
 						<input type="checkbox" name="v[]" value="W" <?php echo ($vd2) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="v1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="v[]" value="E" <?php echo ($vd3) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="v2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="v[]" value="D" <?php echo ($vd4) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="v3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="v[]" value="R" <?php echo ($vd5) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="v4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="v[]" value="R" <?php echo ($vd5) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="v4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllVendor(5, 'v');" value="" name="toggle2" <?php if ($vdall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>
