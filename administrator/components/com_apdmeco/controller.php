@@ -1210,7 +1210,7 @@ class ECOController extends JController
                                 $result = $db->loadObjectList();
                                      if (count($result) > 0){
                                          foreach ($result as $obj){
-                                           //JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
+                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
                                          }
                                      }                        
                 }
@@ -1389,7 +1389,7 @@ class ECOController extends JController
                         }      
                         else
                         {                
-                                $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "'  WHERE  pns_id = " . $id);
+                                $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "',eco_id='".$eco."'  WHERE  pns_id = " . $id);
                                 //echo $db->getQuery();
                                 $db->query();
                         }
@@ -1411,6 +1411,16 @@ class ECOController extends JController
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
     }           
+    
+    function removepnsinit(){
+        $db       =& JFactory::getDBO();
+        $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
+        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );       
+        $db->setQuery("delete from apdm_pns_initial WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->query();  
+        $msg = JText::_('Have deleted successfull.');
+	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
+    }         
         function GetNameApprover($email) {
                 $db = & JFactory::getDBO();
                 $db->setQuery("SELECT name FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 and  email = '".$email."' ORDER BY jos.username ");               

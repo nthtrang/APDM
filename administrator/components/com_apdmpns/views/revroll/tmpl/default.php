@@ -83,8 +83,8 @@ function UpdatePnsRevWindow(){
 						</label>
 					</td>
 					<td>
-                                                <?php echo $rev[0]->pns_life_cycle;?>
-                                                <input type="hidden" name="pns_life_cycle" id="pns_life_cycle" value="<?php echo $rev[0]->pns_life_cycle;?>" />
+                                                Create
+                                                <input type="hidden" name="pns_life_cycle" id="pns_life_cycle" value="Create" />
 					</td>
 				</tr>
                             

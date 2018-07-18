@@ -21,7 +21,7 @@
 //		JToolBarHelper::editListX();
 //	}
 	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
-		JToolBarHelper::deletePns('Are you sure to delete it?',"removepns","Remove Part");
+		JToolBarHelper::deletePns('Are you sure to delete it?',"removepnsinit","Remove Part");
 	}
 	if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
@@ -67,7 +67,7 @@ function submitbutton(pressbutton) {
 				submitform( pressbutton );
 				return;
 			}
-                        if(pressbutton == 'removepns')
+                        if(pressbutton == 'removepnsinit')
                         {
                              submitform( pressbutton );
                              return;
@@ -81,66 +81,93 @@ function checkForm(){
 	}
 	return true;
 }
-function isCheckedInitial(isitchecked,id){
-	if (isitchecked == true){
-		document.adminForm.boxchecked.value++;
-                document.getElementById('init_plant_status_'+id).style.visibility= 'visible';
-                document.getElementById('init_plant_status_'+id).style.display= 'block';
-                document.getElementById('init_make_buy_'+id).style.visibility= 'visible';
-                document.getElementById('init_make_buy_'+id).style.display= 'block';  
-                document.getElementById('sp_init_leadtime_'+id).style.visibility= 'visible';
-                document.getElementById('sp_init_leadtime_'+id).style.display= 'block';      
-                document.getElementById('init_buyer_'+id).style.visibility= 'visible';
-                document.getElementById('init_buyer_'+id).style.display= 'block';    
-                document.getElementById('init_cost_'+id).style.visibility= 'visible';
-                document.getElementById('init_cost_'+id).style.display= 'block';    
-                document.getElementById('init_supplier_'+id).style.visibility= 'visible';
-                document.getElementById('init_supplier_'+id).style.display= 'block';                    
-                
-                
-                document.getElementById('text_init_plant_status_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_plant_status_'+id).style.display= 'none';
-                document.getElementById('text_init_make_buy_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_make_buy_'+id).style.display= 'none';        
-                document.getElementById('text_init_leadtime_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_leadtime_'+id).style.display= 'none';              
-                document.getElementById('text_init_buyer_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_buyer_'+id).style.display= 'none';    
-                document.getElementById('text_init_cost_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_cost_'+id).style.display= 'none';    
-                document.getElementById('text_init_supplier_'+id).style.visibility= 'hidden';
-                document.getElementById('text_init_supplier_'+id).style.display= 'none';                    
-	}
-	else {
-		document.adminForm.boxchecked.value--;
-                document.getElementById('text_init_plant_status_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_plant_status_'+id).style.display= 'block';
-                document.getElementById('text_init_make_buy_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_make_buy_'+id).style.display= 'block'; 
-                document.getElementById('text_init_leadtime_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_leadtime_'+id).style.display= 'block';              
-                document.getElementById('text_init_buyer_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_buyer_'+id).style.display= 'block';     
-                document.getElementById('text_init_cost_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_cost_'+id).style.display= 'block';     
-                document.getElementById('text_init_supplier_'+id).style.visibility= 'visible';
-                document.getElementById('text_init_supplier_'+id).style.display= 'block';                     
-                
+function isCheckedInitial(isitchecked,id,state){
+        if(state!="Released")
+        {
+                if (isitchecked == true){
+                        document.adminForm.boxchecked.value++;
+                        document.getElementById('init_plant_status_'+id).style.visibility= 'visible';
+                        document.getElementById('init_plant_status_'+id).style.display= 'block';
+                        document.getElementById('init_make_buy_'+id).style.visibility= 'visible';
+                        document.getElementById('init_make_buy_'+id).style.display= 'block';  
+                        document.getElementById('sp_init_leadtime_'+id).style.visibility= 'visible';
+                        document.getElementById('sp_init_leadtime_'+id).style.display= 'block';      
+                        document.getElementById('init_buyer_'+id).style.visibility= 'visible';
+                        document.getElementById('init_buyer_'+id).style.display= 'block';    
+                        document.getElementById('init_cost_'+id).style.visibility= 'visible';
+                        document.getElementById('init_cost_'+id).style.display= 'block';    
+                        document.getElementById('init_supplier_'+id).style.visibility= 'visible';
+                        document.getElementById('init_supplier_'+id).style.display= 'block';                    
 
-                document.getElementById('init_plant_status_'+id).style.visibility= 'hidden';
-                document.getElementById('init_plant_status_'+id).style.display= 'none';
-                document.getElementById('init_make_buy_'+id).style.visibility= 'hidden';
-                document.getElementById('init_make_buy_'+id).style.display= 'none';                    
-                document.getElementById('sp_init_leadtime_'+id).style.visibility= 'hidden';
-                document.getElementById('sp_init_leadtime_'+id).style.display= 'none';                     
-                document.getElementById('init_buyer_'+id).style.visibility= 'hidden';
-                document.getElementById('init_buyer_'+id).style.display= 'none';      
-                document.getElementById('init_cost_'+id).style.visibility= 'hidden';
-                document.getElementById('init_cost_'+id).style.display= 'none';      
-                document.getElementById('init_supplier_'+id).style.visibility= 'hidden';
-                document.getElementById('init_supplier_'+id).style.display= 'none';                      
 
-	}
+                        document.getElementById('text_init_plant_status_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_plant_status_'+id).style.display= 'none';
+                        document.getElementById('text_init_make_buy_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_make_buy_'+id).style.display= 'none';        
+                        document.getElementById('text_init_leadtime_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_leadtime_'+id).style.display= 'none';              
+                        document.getElementById('text_init_buyer_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_buyer_'+id).style.display= 'none';    
+                        document.getElementById('text_init_cost_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_cost_'+id).style.display= 'none';    
+                        document.getElementById('text_init_supplier_'+id).style.visibility= 'hidden';
+                        document.getElementById('text_init_supplier_'+id).style.display= 'none';                    
+                }
+                else {
+                        document.adminForm.boxchecked.value--;
+                        document.getElementById('text_init_plant_status_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_plant_status_'+id).style.display= 'block';
+                        document.getElementById('text_init_make_buy_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_make_buy_'+id).style.display= 'block'; 
+                        document.getElementById('text_init_leadtime_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_leadtime_'+id).style.display= 'block';              
+                        document.getElementById('text_init_buyer_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_buyer_'+id).style.display= 'block';     
+                        document.getElementById('text_init_cost_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_cost_'+id).style.display= 'block';     
+                        document.getElementById('text_init_supplier_'+id).style.visibility= 'visible';
+                        document.getElementById('text_init_supplier_'+id).style.display= 'block';                     
+
+
+                        document.getElementById('init_plant_status_'+id).style.visibility= 'hidden';
+                        document.getElementById('init_plant_status_'+id).style.display= 'none';
+                        document.getElementById('init_make_buy_'+id).style.visibility= 'hidden';
+                        document.getElementById('init_make_buy_'+id).style.display= 'none';                    
+                        document.getElementById('sp_init_leadtime_'+id).style.visibility= 'hidden';
+                        document.getElementById('sp_init_leadtime_'+id).style.display= 'none';                     
+                        document.getElementById('init_buyer_'+id).style.visibility= 'hidden';
+                        document.getElementById('init_buyer_'+id).style.display= 'none';      
+                        document.getElementById('init_cost_'+id).style.visibility= 'hidden';
+                        document.getElementById('init_cost_'+id).style.display= 'none';      
+                        document.getElementById('init_supplier_'+id).style.visibility= 'hidden';
+                        document.getElementById('init_supplier_'+id).style.display= 'none';                      
+
+                }
+        }
+        else
+                {
+                       if (isitchecked == true){
+                                document.adminForm.boxchecked.value++;
+                                document.getElementById('init_plant_status_'+id).style.visibility= 'visible';
+                                document.getElementById('init_plant_status_'+id).style.display= 'block';
+                                        
+
+
+                                document.getElementById('text_init_plant_status_'+id).style.visibility= 'hidden';
+                                document.getElementById('text_init_plant_status_'+id).style.display= 'none';
+                                               
+                        }
+                        else {
+                                document.adminForm.boxchecked.value--;
+                                document.getElementById('text_init_plant_status_'+id).style.visibility= 'visible';
+                                document.getElementById('text_init_plant_status_'+id).style.display= 'block';
+                               
+
+                                document.getElementById('init_plant_status_'+id).style.visibility= 'hidden';
+                                document.getElementById('init_plant_status_'+id).style.display= 'none';
+                               
+                        }        
+                }
 }
 function numbersOnlyEspecial111(myfield, e, dec){
        
@@ -279,7 +306,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 					<?php echo $i+1;?>
 				</td>
 				<td>					
-                                        <input type="checkbox" id = "initial" onclick="isCheckedInitial(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  />
+                                        <input type="checkbox" id = "initial" onclick="isCheckedInitial(this.checked,<?php echo $row->pns_id;?>,'<?php echo $row->pns_life_cycle;?>');" value="<?php echo $row->pns_id;?>" name="cid[]"  />
 				</td>
 				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>

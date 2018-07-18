@@ -3834,7 +3834,8 @@ class PNsController extends JController {
                 //add to inital
                 foreach($pns as $pn_id)
                 {
-                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $pn_id);
+                        
+                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $pn_id.' AND eco_id = '.$cid[0].'');
                         $check_exist = $db->loadResult();
                         if ($check_exist==0) {
                                 $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$pn_id.',"Unreleased","Unassign","3","'.$cid[0].'")';
@@ -3858,7 +3859,7 @@ class PNsController extends JController {
                         $status = $db->loadResult();                
                         if($status=="Released")
                         {
-                                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
+                                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id.' AND eco_id = '.$cid[0].'');
                                 $check_exist = $db->loadResult();
                                 if ($check_exist==0) {
                                         $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$id.',"Unreleased","Unassign","3","'.$cid[0].'")';
