@@ -23,7 +23,7 @@
 	if (in_array("D", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::deletePns('Are you sure to delete it?',"removepnsinit","Remove Part");
 	}
-	if (in_array("V", $role)) { 	
+	if (in_array("V", $role)&& $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('saveinitial', 'save', '', 'Save', false);	
 	}        	

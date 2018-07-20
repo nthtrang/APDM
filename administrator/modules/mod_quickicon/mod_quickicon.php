@@ -121,8 +121,8 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			if($user_apdm==0 &&  (in_array(6, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmpns';
 				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'PN MANAGER' ) );
-                                $link = 'index.php?option=com_apdmcpns';
-				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'Customers Part Number Management' ) );
+                                $link = 'index.php?option=com_apdmpns&task=pomanagement';
+				quickiconButton( $link, 'icon-48-component.png', JText::_( 'PO' ) );                                
 			}
 			//suplier
 			if($user_apdm==0 &&  (in_array(2, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator")){
@@ -133,7 +133,7 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			//ECO
 			if($user_apdm==0 &&  (in_array(5, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmeco';
-				quickiconButton( $link, 'icon-48-category.png', JText::_( 'ECO MANAGER' ) );
+				quickiconButton( $link, 'icon-48-category.png', JText::_( 'ECO MANAGER' ) );                                
 			}
 			//Profile
 			if ($user_apdm==0) {

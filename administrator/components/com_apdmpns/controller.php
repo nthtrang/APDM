@@ -52,6 +52,8 @@ class PNsController extends JController {
                 $this->registerTask('get_dash_up', 'get_dash_up');
                 $this->registerTask('searchall', 'searchall');
                 $this->registerTask('po', 'po');
+                $this->registerTask('pomanagement', 'pomanagement');
+                
         }
 
         /**
@@ -3822,7 +3824,13 @@ class PNsController extends JController {
                 JRequest::setVar('layout', 'default');
                 JRequest::setVar('view', 'getpnsforinit');
                 parent::display();
-        }        
+        }    
+        //for po
+        function get_list_pns_po() {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsforpos');
+                parent::display();
+        }            
 
         function ajax_add_pns() {
                 $db = & JFactory::getDBO();
@@ -3873,15 +3881,35 @@ class PNsController extends JController {
                 return $msg = JText::_('Have deleted successfull.');
         }        
 
+        function ajax_add_pns_pos() {
+                $db = & JFactory::getDBO();
+                $pns = JRequest::getVar('cid', array(), '', 'array');
+                $po_id = JRequest::getVar('po_id');
+                $db->setQuery("update apdm_pns set po_id = " . $po_id . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
+                $db->query();
+                return $msg = JText::_('Have add pns successfull.');
+        }            
         function removepns() {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $cid = JRequest::getVar('eco', array(), '', 'array');
                 $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
                 $db->query();
+                $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).") and eco_id = ".$cid[0]);
+                $db->query();                  
                 $msg = JText::_('Have deleted successfull.');
-                $this->setRedirect('index.php?option=com_apdmeco&task=affected&cid[]=' . $cid[0], $msg);
+                return $this->setRedirect('index.php?option=com_apdmeco&task=affected&cid[]=' . $cid[0], $msg);
         }
+
+        function removepnspos() {
+                $db = & JFactory::getDBO();
+                $pns = JRequest::getVar('cid', array(), '', 'array');
+                $po_id = JRequest::getVar('po_id');
+                $db->setQuery("update apdm_pns set po_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
+                $db->query();               
+                $msg = JText::_('Have removed successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=po_detail&id=' . $po_id, $msg);
+        }        
 
         /*
          * List PO asign to PNS
@@ -3893,6 +3921,20 @@ class PNsController extends JController {
                 JRequest::setVar('edit', true);
                 parent::display();
         }
+        function po_detail() {
+                JRequest::setVar('layout', 'po_detail_pns');
+                JRequest::setVar('view', 'pos');
+                parent::display();
+        }        
+        /*
+         * List PO asign to PNS
+         */
+
+        function pomanagement() {
+                JRequest::setVar('layout', 'po_list');
+                JRequest::setVar('view', 'pos');
+                parent::display();
+        }        
 
         /*
          * Asign template for get list child PNS  for BOM PNS
@@ -3903,6 +3945,17 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'pos');
                 parent::display();
         }
+        function add_po() {
+                JRequest::setVar('layout', 'add_po');
+                JRequest::setVar('view', 'pos');
+                parent::display();
+        }   
+        function edit_po() {
+                JRequest::setVar('layout', 'edit_po');
+                JRequest::setVar('view', 'pos');
+                parent::display();
+        }           
+        
         /*
          * Asign template for get list child PNS  for BOM PNS
          */
@@ -3947,6 +4000,72 @@ class PNsController extends JController {
                 $this->setRedirect('index.php?option=com_apdmpns&task=po&cid[0]=' . $pns_id, $msg);
                 exit;
         }
+        function save_po() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $po_code = JRequest::getVar('po_code');
+                $po_description = JRequest::getVar('po_description');
+                $po_state = "Create"; //JRequest::getVar('po_state');
+                $pns_created = $datenow->toMySQL();
+                $pns_created_by = $me->get('id');
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //upload attached POs
+                if ($_FILES['po_file']['size'] > 0) {
+                        $attached = new upload($_FILES['po_file']);
+                        $attached->file_new_name_body = $pns_id . "_" . str_replace("-", "_", $po_code);
+                        if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
+
+                                @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
+                        }
+                        if ($attached->uploaded) {
+                                $attached->Process($path_pns . 'images' . DS);
+                                if ($attached->processed) {
+                                        $po_file = $attached->file_dst_name;
+                                }
+                        }
+                }
+                //$pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                $return = JRequest::getVar('return');
+                $db->setQuery("INSERT INTO apdm_pns_po (po_code,po_description,po_file,po_state,po_created,po_create_by) VALUES ('" . $po_code . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
+                $db->query();
+                $msg = "Successfully Saved Pos";
+                $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
+                exit;
+        }        
+        
+        function save_editpo() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $po_code = JRequest::getVar('po_code');
+                $po_description = JRequest::getVar('po_description');
+                $po_id = JRequest::getVar('po_id');
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //upload attached POs
+                $query = "update apdm_pns_po set po_code = '".$po_code."',po_description='".$po_description."' where pns_po_id=".$po_id."";
+                if ($_FILES['po_file']['size'] > 0) {
+                        $attached = new upload($_FILES['po_file']);
+                        $attached->file_new_name_body = str_replace("-", "_", $po_code)."_".time();
+                        if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
+
+                                @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
+                        }
+                        if ($attached->uploaded) {
+                                $attached->Process($path_pns . 'images' . DS);
+                                if ($attached->processed) {
+                                        $po_file = $attached->file_dst_name;
+                                        $query = "update apdm_pns_po set po_code = '".$po_code."',po_description='".$po_description."',po_file='".$po_file."' where pns_po_id=".$po_id."";
+                                }
+                        }
+                }                                                
+                $return = JRequest::getVar('return');     
+                $db->setQuery($query);
+                $db->query();
+                $msg = "Successfully Saved Pos";
+                return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
+                exit;
+        }              
         function save_pns_posnew() {
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();

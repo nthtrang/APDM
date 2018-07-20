@@ -526,6 +526,12 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_bom_child&tmpl=component&id=$id", 850,500 );
 	}
+        function addPnsPo($alt = 'New',$po_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_pns_po&tmpl=component&po_id=$po_id", 850,500 );
+	}        
   
 	function deletePns($msg = '', $task = 'removepns', $alt = 'Delete')
 	{
@@ -565,7 +571,13 @@ class JToolBarHelper
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_pns_po&tmpl=component&cid[]=$id", 600,300 );
-	}    
+	}  
+        function addPos($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_po&tmpl=component", 600,300 );
+	}          
          
 }
 

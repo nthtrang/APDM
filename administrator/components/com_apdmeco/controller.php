@@ -1378,28 +1378,20 @@ class ECOController extends JController
                 $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$id."'";
                 $db->setQuery($get_status);
                 $status = $db->loadResult();                
-                if($status=="Released")
-                {
-                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
-                        $check_exist = $db->loadResult();
-                        if ($check_exist==0) {
-                                $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'")';
-                                $db->setQuery($query);
-                                $db->query();
-                        }      
-                        else
-                        {                
-                                $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "',eco_id='".$eco."'  WHERE  pns_id = " . $id);
-                                //echo $db->getQuery();
-                                $db->query();
-                        }
-                }
-                 else {
-                        $arr_fail[]=$id;
+                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id);
+                $check_exist = $db->loadResult();
+                if ($check_exist==0) {
+                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,init_buyer,init_supplier,init_cost,init_modified,init_modified_by,eco_id) values ('.$id.',"'.$init_plant_status.'","'.$init_make_buy.'","'.$init_leadtime.'","'.$init_buyer.'","'.$init_supplier.'","'.$init_cost.'","'.$init_modified.'","'.$init_modified_by.'","'.$eco.'")';
+                        $db->setQuery($query);
+                        $db->query();
+                }      
+                else
+                {                
+                        $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "',eco_id='".$eco."'  WHERE  pns_id = " . $id ." and eco_id = ".$eco);
+                        $db->query();
                 }
         }
         $msg = "Successfully Saved Initital";
-        $msg .= "Fail to Saved Initital with PN".  implode(",", $arr_fail);
         $this->setRedirect('index.php?option=com_apdmeco&task=initial&cid[]=' . $eco, $msg);        
     }                   
     function removepns(){
@@ -1408,6 +1400,8 @@ class ECOController extends JController
         $cid      = JRequest::getVar( 'eco', array(), '', 'array' );
         $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
         $db->query();      
+        $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).") and eco_id = $cid");
+        $db->query();  
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
     }           
@@ -1416,7 +1410,9 @@ class ECOController extends JController
         $db       =& JFactory::getDBO();
         $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
         $cid      = JRequest::getVar( 'eco', array(), '', 'array' );       
-        $db->setQuery("delete from apdm_pns_initial WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
+        $db->query();  
+        $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).")");
         $db->query();  
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);

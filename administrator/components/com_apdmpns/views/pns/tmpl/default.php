@@ -22,7 +22,7 @@
 		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
 	}
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+		//JToolBarHelper::editListX();
 		
 	}	
 	$cparams = JComponentHelper::getParams ('com_media');
