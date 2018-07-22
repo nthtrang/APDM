@@ -175,6 +175,9 @@ function submitbutton(pressbutton) {
 				<th  class="title" width="10%">
 					<?php echo JText::_('ECO'); ?>
 				</th>
+				<th  class="title" width="10%">
+					<?php echo JText::_('PO'); ?>
+				</th>                                
 				<th width="5%" class="title" >
 					<?php echo JText::_( 'DOWNLOAD_PDF' ); ?>
 				</th>
@@ -262,6 +265,9 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>
+				<td align="center">
+					<?php echo PNsController::GetPoValue($row->po_id); ?>
+				</td>                                
 				<td>
 					<?php if($row->pns_pdf !="") { ?>
 					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>

@@ -837,6 +837,7 @@ class PNsController extends JController {
                 $row->pns_create_by = $me->get('id');
                 $row->pns_revision = $pns_revision;
                 $row->pns_description = strtoupper($post['pns_description']);
+                $row->po_id = JRequest::getVar('pns_po_id');
                 //save information of Pns in datbase
                 
                 if (!$row->store()) {
@@ -1010,8 +1011,10 @@ class PNsController extends JController {
                                 //update POS
                                 if(JRequest::getVar('pns_po_id')!=0)
                                 {
-                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
-                                        $db->query();                                
+//                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
+//                                        $db->query();
+                                        $db->setQuery("update apdm_pns set po_id = " . JRequest::getVar('pns_po_id') . " WHERE  pns_id = ".$row->pns_id."");
+                                        $db->query();                                        
                                 }
                                 //update QuoS
                                 if(JRequest::getVar('pns_quo_id')!=0)
@@ -1037,8 +1040,10 @@ class PNsController extends JController {
                                 //update POS
                                 if(JRequest::getVar('pns_po_id')!=0)
                                 {
-                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
-                                        $db->query();                                
+//                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
+//                                        $db->query();       
+                                        $db->setQuery("update apdm_pns set po_id = " . JRequest::getVar('pns_po_id') . " WHERE  pns_id = ".$row->pns_id."");
+                                        $db->query();                                                                                
                                 }
                                 //update QuoS
                                 if(JRequest::getVar('pns_quo_id')!=0)
@@ -1279,13 +1284,19 @@ class PNsController extends JController {
                         $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
                         $row->pns_cost = JRequest::getVar('pns_cost');      
                         $row->eco_id = JRequest::getVar('eco_id');  
+                        $row->po_id = JRequest::getVar('pns_po_id');  
                         if (!$row->store()) {
                                 $msg = JText::_('Successfully Saved Part Number');
                                 $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]=' . $row->pns_id, $msg);
                         }
+                        //update QuoS
+                        if(JRequest::getVar('pns_quo_id')!=0)
+                        {
+                                $db->setQuery("update apdm_pns_quo set pns_id = ".$row->pns_id." where pns_quo_id = '".JRequest::getVar('pns_quo_id')."'");
+                                $db->query();                                                                
+                        }                         
                         //for pans parent
                         //for parent of pns
-
                         $arr_pns_waring = array();
                         $arr_parent_id = array();
                         if (count($pns_child) > 0) {
@@ -1414,6 +1425,7 @@ class PNsController extends JController {
                         $row->pns_code = $pns_code;
                         $row->pns_revision = strtoupper($pns_revision);
                         $row->pns_deleted = 0;
+                        $row->po_id = JRequest::getVar('pns_po_id');
                         $row->pns_description = strtoupper($post['pns_description']);
                         if ($_FILES['pns_imge']['size'] > 0) {
                                 $imge = new upload($_FILES['pns_imge']);
@@ -2391,6 +2403,11 @@ class PNsController extends JController {
                 $db->setQuery('SELECT eco_name FROM apdm_eco WHERE eco_id =' . $eco_id);
                 return $db->loadResult();
         }
+        function GetPoValue($po_id) {
+                $db = & JFactory::getDBO();
+                $db->setQuery('SELECT po_code FROM apdm_pns_po WHERE pns_po_id =' . $po_id);
+                return $db->loadResult();
+        }        
 
         function GetArrPartNumberParent($pns_id) {
                 $db = & JFactory::getDBO();

@@ -322,17 +322,13 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</label>
 					</td>
 					<td>
-                                                                                               
-                                                <input type="text" value="" name="po_code" id="po_code" readonly="readonly" />
-                                                <input type="hidden" name="pns_po_id" id="pns_po_id" value="0" />
+                                                                                              
+                                                <input type="text" value="<?php echo PNsController::GetPoValue($this->row->po_id);?>" name="po_code" id="po_code" readonly="readonly" />
+                                                <input type="hidden" name="pns_po_id" id="pns_po_id" value="<?php echo $this->row->po_id?>" />
 						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pns_ponew&tmpl=component" title="Image">
                                         <input type="button" name="addPOs" value="<?php echo JText::_('Add PO#')?>"/>
-                                        </a><br/>
-                                                <?php 
-                                                foreach ($this->pos as $po) {
-                                                        echo $po->po_code."</br>";
-                                                }                                                
-                                                ?> 
+                                        </a>
+                                                
 					</td>
 				</tr>	                                     
 				<tr>

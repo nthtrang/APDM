@@ -38,7 +38,7 @@ class pnsViewpos extends JView
         $me 		= JFactory::getUser();
         JArrayHelper::toInteger($cid, array(0));	
         $row = & JTable::getInstance('apdmpnspo');     
-       echo $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
+        $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
         $keyword                = $search;
         $search                = JString::strtolower( $search );
         $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );

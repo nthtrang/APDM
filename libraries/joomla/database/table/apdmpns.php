@@ -76,6 +76,7 @@ class JTableAPDMpns extends JTable
         var $pns_ref_des		= null;    
         var $pns_find_number		= null;   
         var $pns_cpn		= null;   
+        var $po_id = null;
         
 	/**
 	* @param database A database connector object

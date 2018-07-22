@@ -73,6 +73,18 @@ class pnsViewsearchall extends JView
                         }
                         
                     }
+                     //POS
+                    $arr_po_id = array();
+                    //select table ECO with keyword input     
+                 //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
+                    $db->setQuery('SELECT * FROM apdm_pns_po WHERE (po_code LIKE '.$searchEscaped.' OR  po_description LIKE '.$searchEscaped .' )');
+                    $rs_po = $db->loadObjectList();
+                    if (count($rs_po) >0){
+                        foreach ($rs_po as $po){
+                           $arr_po_id[] = $po->pns_po_id; 
+                        }
+                        
+                    }                    
         //        break;
        //         case '2': //Vendor
                     $arr_vendor_id = array();
@@ -200,9 +212,15 @@ class pnsViewsearchall extends JView
             }          
             
         }
+        //ECO
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
+        //POS
+        if (count($arr_po_id) > 0) {
+            $where[] = 'p.po_id IN ('.implode(',', $arr_po_id).')';
+        }        
+        
         
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
@@ -262,6 +280,7 @@ class pnsViewsearchall extends JView
         $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
         $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
         $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 7, JText::_('PO'), 'value', 'text');
         //$type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
         $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
         $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');        

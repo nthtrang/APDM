@@ -39,18 +39,12 @@ function UpdatePos(){
 	
 }        
 </script>
-
 <form action="index.php?option=com_apdmpns&task=save_pns_posnew&cid[]=<?php echo $cid[0]?>&time=<?php echo time();?>" method="post" name="adminFormPosnew" id="adminFormPosnew" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
 			<td></td>
-			<td align="right"><?php
-                       // if($this->pns_status!='Release')
-                      //  {
-                                ?><input type="button" name="btinsersave" value="Save"  onclick="UpdatePos();" />
-                        <?php
-                      //  }
-                        ?>
+			<td align="right">
+                                <input type="button" name="btinsersave" value="Save"  onclick="UpdatePos();" />
                         </td>	
 		</tr>	
 </table>
