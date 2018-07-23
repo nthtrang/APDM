@@ -62,6 +62,16 @@ function UpdatePos(){
                                 <tr>
 					<td class="key">
 						<label for="name">
+							<?php echo JText::_( 'Qty' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" onKeyPress="return numbersOnly(this, event);"   name="qty" id="qty"  size="10" value="<?php echo $rev[0]->qty;?>"/>						
+					</td>
+				</tr>                                   
+                                <tr>
+					<td class="key">
+						<label for="name">
 							<?php echo JText::_( 'Description' ); ?>
 						</label>
 					</td>

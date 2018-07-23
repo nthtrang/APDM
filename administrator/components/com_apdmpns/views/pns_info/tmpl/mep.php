@@ -74,7 +74,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <?php if ($this->row->pns_cpn != 1) { ?>
                                 <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('DASH ROLL'); ?></a></li>                        
                         <?php } ?>
-<!--                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('POs'); ?></a></li>                                                -->
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('POs'); ?></a></li>                                                
                 </ul>
                 <div class="clr"></div>
         </div>

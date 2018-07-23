@@ -7,8 +7,8 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("PO Management", 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(6);      
-if (in_array("E", $role)) {
+$role = JAdministrator::RoleOnComponent(7);      
+if (in_array("W", $role)) {
         JToolBarHelper::addPos("Add PO", $this->row->pns_id);
 }
 $cparams = JComponentHelper::getParams('com_media');
@@ -61,6 +61,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?></th>     
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Action'); ?></th>
@@ -88,15 +89,19 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>
+                                                <td><?php echo $po->qty; ?></td>   
                                                 <td>
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td>
                                                         <?php echo GetValueUser($po->po_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td>
-                                                        
+                                                <td><?php if (in_array("E", $role)) {
+                                                        ?>
                                                         <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $po->pns_po_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <?php
+                                                }
+                                                        ?>                                                        
                                                 </td></tr>
                                                 <?php }
                                         } ?>

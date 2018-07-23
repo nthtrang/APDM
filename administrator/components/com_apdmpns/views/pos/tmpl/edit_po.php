@@ -8,15 +8,19 @@
 	JToolBarHelper::title("Edit PO #".$this->po_row->po_code, 'cpanel.png');
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-
+$role = JAdministrator::RoleOnComponent(7);      
 ?>
 
 <form action="index.php?option=com_apdmpns&task=save_editpo&time=<?php echo time();?>" method="post" name="adminForm" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
 			<td></td>
+                        <?php if (in_array("E", $role)) {
+                                                        ?>
 			<td align="right"><input type="submit" name="btinsersave" value="Save" />
- 
+ <?php 
+                        }
+ ?>
                         </td>	
 		</tr>	
 </table>
@@ -31,6 +35,16 @@
 						<input type="text"  name="po_code" id="po_code"  size="60" value="<?php echo $this->po_row->po_code;?>"/>						
 					</td>
 				</tr>
+                                <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Qty' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" onKeyPress="return numbersOnly(this, event);"  name="qty" id="qty"  size="60" value="<?php echo $this->po_row->qty;?>"/>						
+					</td>
+				</tr>                                
                                 <tr>
 					<td class="key">
 						<label for="name">

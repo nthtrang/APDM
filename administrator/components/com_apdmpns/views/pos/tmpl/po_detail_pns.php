@@ -6,13 +6,15 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("#".$this->po_row->po_code, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(6);      
-if (in_array("E", $role)) {
+$role = JAdministrator::RoleOnComponent(7);      
+if (in_array("W", $role)) {
         JToolBarHelper::addPnsPo("Add Part", $this->po_row->pns_po_id);
+        
 }
 if (in_array("D", $role)) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"removepnspos","Remove Part");
 }
+
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>
@@ -84,7 +86,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				</span></td>
                                                 <td><?php echo $row->pns_description; ?></td>                                                
                                                 <td>
-                                                        <?php echo $row->pns_stock; ?>
+                                                        <?php echo $row->qty; ?>
                                                 </td>                                                 
                                                </tr>
                                                 <?php }

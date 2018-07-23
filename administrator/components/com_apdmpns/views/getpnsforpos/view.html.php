@@ -55,7 +55,7 @@ class pnsViewgetpnsforpos extends JView
         
         
         $where = array();  
-        $where[] = 'p.pns_deleted = 0 ';//and po_id = 0
+        $where[] = 'p.pns_deleted = 0';//and po_id = 0
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';

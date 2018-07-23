@@ -100,6 +100,23 @@
 
 		}
 	}
+	//for PO
+	$po1 = 0;
+	$po2 = 0;
+	$po3 = 0;
+	$po4 = 0;
+	$po5 = 0;
+	$poall=0;
+	if(count($this->arrPO) > 0){
+		foreach ($this->arrPO as $po){
+			if ($po=='V') {$po1=1; $poall++;}
+			if ($po=='W') {$po2=1; $poall++;}
+			if ($po=='E') {$po3=1; $poall++;}
+			if ($po=='D') {$po4=1; $poall++;}
+			if ($po=='R') {$po5=1; $poall++;}
+
+		}
+	}        
 
 	//for part number
 	$pns1 = 0;
@@ -107,7 +124,7 @@
 	$pns3 = 0;
 	$pns4 = 0;
 	$pns5 = 0;
-        $pns6 = 0;
+        $pns6 = 0;        
 	$pnsall=0;
 	if(count($this->arrPns) > 0){
 		foreach ($this->arrPns as $pns){
@@ -117,10 +134,11 @@
 			if ($pns=='D') {$pns4=1; $pnsall++;}
 			if ($pns=='R') {$pns5=1; $pnsall++;}
                         if ($pns=='S') {$pns6=1; $pnsall++;}
+                        
 
 		}
 	}
-	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPns);
+	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPO) + count($this->arrPns);
 	//$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -256,7 +274,23 @@
                                                 <input type="checkbox" name="p[]" value="S" <?php echo ($pns6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllPNS(6, 'p');" value="0" name="toggle6" <?php if ($pnsall==6) { ?> checked="checked" <?php } ?>/>
 					</td>
-				</tr>				
+				</tr>		
+                                <tr>
+					<td valign="top" class="key">
+						<label for="gid">
+							<?php echo JText::_( 'PO' ); ?>
+							
+						</label>
+					</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="po[]" value="V" <?php echo ($po1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="po[]" value="W" <?php echo ($po2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="po[]" value="E" <?php echo ($po3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="po[]" value="D" <?php echo ($po4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="po[]" value="R" <?php echo ($po5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllPO(5, 'po');" value="" name="toggle5" <?php if ($poall==5) { ?> checked="checked" <?php } ?>/>
+					</td>
+				</tr>		                                
 			<tr>
 					<td class="key">
 						<label for="email">

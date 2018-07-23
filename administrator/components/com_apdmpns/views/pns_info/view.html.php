@@ -229,7 +229,7 @@ class pnsViewpns_info extends JView
          $this->assignRef('revision',        $list_revision);
          
          //add PO
-         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_po AS po on p.pns_id = po.pns_id WHERE p.pns_deleted =0 AND po.pns_id=".$row->pns_id);
+         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p inner JOIN apdm_pns_po_fk fk on p.pns_id = fk.pns_id inner join apdm_pns_po AS po on po.pns_po_id = fk.po_id WHERE fk.pns_id=".$row->pns_id);
          $list_pos = $db->loadObjectList();         
          $this->assignRef('pos',        $list_pos);
          //add Quo

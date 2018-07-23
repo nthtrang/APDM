@@ -82,7 +82,7 @@ class pnsViewpos extends JView
 //         $pos_list = $db->loadObjectList();         
 //         $this->assignRef('pos_list',        $pos_list);     
         //for PO detailid
-         $db->setQuery("SELECT po.*, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po inner JOIN apdm_pns AS p on po.pns_po_id = p.po_id where po.pns_po_id=".$po_id);
+         $db->setQuery("SELECT po.*, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po inner JOIN apdm_pns_po_fk fk on po.pns_po_id = fk.po_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where po.pns_po_id=".$po_id);
          $pns_list = $db->loadObjectList();         
          $this->assignRef('po_pn_list',        $pns_list);     
          

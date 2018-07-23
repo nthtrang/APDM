@@ -311,7 +311,7 @@ class JAdministrator extends JApplication
 		$arr_role = array();
 		$arr_value = array();
 		if ($usertype =='Administrator' || $usertype=="Super Administrator") {
-			$arr_value = array("V", "W", "E", "D", "R");
+			$arr_value = array("V", "W", "E", "D", "R","S");
 		}else{
 			if (count($role_result) > 0){
 				foreach ($role_result as $obj){

@@ -62,9 +62,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('MEP'); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('REV'); ?></a></li>
                          <?php if($this->row->pns_cpn!=1){?>
-                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('DASH ROLL'); ?></a></li>
-                        <li><a id="po" class="active"><?php echo JText::_('POs'); ?></a></li>
+                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('DASH ROLL'); ?></a></li>                        
                         <?php }?>
+                        <li><a id="po" class="active"><?php echo JText::_('POs'); ?></a></li>
                 </ul>
                 <div class="clr"></div>
         </div>
@@ -98,7 +98,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 ?>
                                         <tr>
                                                 <td><?php echo $i; ?></td>                                            
-                                                <td><?php echo $po->po_code; ?> </td>
+                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
                                                 <td><?php echo $po->po_description; ?></td>                                                
                                                 <td>
                 <?php if ($po->po_file) { ?>

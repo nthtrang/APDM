@@ -1284,7 +1284,7 @@ class PNsController extends JController {
                         $row->pns_life_cycle = JRequest::getVar('pns_life_cycle');
                         $row->pns_cost = JRequest::getVar('pns_cost');      
                         $row->eco_id = JRequest::getVar('eco_id');  
-                        $row->po_id = JRequest::getVar('pns_po_id');  
+                        //$row->po_id = JRequest::getVar('pns_po_id');  
                         if (!$row->store()) {
                                 $msg = JText::_('Successfully Saved Part Number');
                                 $this->setRedirect('index.php?option=com_apdmpns&task=edit&cid[]=' . $row->pns_id, $msg);
@@ -1294,7 +1294,13 @@ class PNsController extends JController {
                         {
                                 $db->setQuery("update apdm_pns_quo set pns_id = ".$row->pns_id." where pns_quo_id = '".JRequest::getVar('pns_quo_id')."'");
                                 $db->query();                                                                
-                        }                         
+                        }  
+                        //update QuoS
+                        if(JRequest::getVar('pns_po_id')!=0)
+                        {
+                                $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $row->pns_id . "'," . JRequest::getVar('pns_po_id') . ")");
+                                $db->query();                                                               
+                        }                          
                         //for pans parent
                         //for parent of pns
                         $arr_pns_waring = array();
@@ -2177,8 +2183,8 @@ class PNsController extends JController {
         function download_cad_all_pns() {
                 global $dirarray, $conf, $dirsize;
 
-                $conf['dir'] = "zipfiles";
-
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
                 $db = & JFactory::getDBO();
                 $pns_id = JRequest::getVar('pns_id');
                 $querypn = "SELECT p.ccs_code,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
@@ -3902,8 +3908,14 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $po_id = JRequest::getVar('po_id');
-                $db->setQuery("update apdm_pns set po_id = " . $po_id . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
-                $db->query();
+                //$db->setQuery("update apdm_pns set po_id = " . $po_id . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
+                //$db->query();
+                //innsert to FK table
+                foreach($pns as $pn_id)
+                {
+                        $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $pn_id . "'," . $po_id . ")");
+                        $db->query();                         
+                }                 
                 return $msg = JText::_('Have add pns successfull.');
         }            
         function removepns() {
@@ -3922,8 +3934,13 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $po_id = JRequest::getVar('po_id');
-                $db->setQuery("update apdm_pns set po_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
-                $db->query();               
+//                $db->setQuery("update apdm_pns set po_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
+//                $db->query();    
+                foreach($pns as $pns_id)
+                {
+                        $db->setQuery("DELETE FROM apdm_pns_po_fk WHERE pns_id = '" . $pns_id . "' AND po_id = " . $po_id . "");
+                        $db->query();                    
+                }
                 $msg = JText::_('Have removed successfull.');
                 return $this->setRedirect('index.php?option=com_apdmpns&task=po_detail&id=' . $po_id, $msg);
         }        
@@ -3989,6 +4006,7 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $pns_id = JRequest::getVar('pns_id');
                 $po_code = JRequest::getVar('po_code');
+                $qty = JRequest::getVar('qty');                
                 $po_description = JRequest::getVar('po_description');
                 $po_state = "Create"; //JRequest::getVar('po_state');
                 $pns_created = $datenow->toMySQL();
@@ -4009,10 +4027,18 @@ class PNsController extends JController {
                                 }
                         }
                 }
+                
                 //$pns_life_cycle = JRequest::getVar('pns_life_cycle');
                 $return = JRequest::getVar('return');
-                $db->setQuery("INSERT INTO apdm_pns_po (pns_id,po_code,po_description,po_file,po_state,po_created,po_create_by) VALUES (" . $pns_id . ", '" . $po_code . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
+                $db->setQuery("INSERT INTO apdm_pns_po (po_code,qty,po_description,po_file,po_state,po_created,po_create_by) VALUES ( '" . $po_code . "','" . $qty . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
                 $db->query();
+                //get last ID PO
+                $db->setQuery("select pns_po_id,po_code from apdm_pns_po where po_code='".$po_code."'");
+                $db->query();  
+                $rows = $db->loadObjectList(); 
+                //innsert to FK table
+                $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $pns_id . "'," . $rows[0]->pns_po_id . ")");
+                $db->query();                
                 $msg = "Successfully Saved Pos";
                 $this->setRedirect('index.php?option=com_apdmpns&task=po&cid[0]=' . $pns_id, $msg);
                 exit;
@@ -4026,6 +4052,7 @@ class PNsController extends JController {
                 $po_state = "Create"; //JRequest::getVar('po_state');
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');
+                $qty = JRequest::getVar('qty');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 //upload attached POs
                 if ($_FILES['po_file']['size'] > 0) {
@@ -4044,7 +4071,7 @@ class PNsController extends JController {
                 }
                 //$pns_life_cycle = JRequest::getVar('pns_life_cycle');
                 $return = JRequest::getVar('return');
-                $db->setQuery("INSERT INTO apdm_pns_po (po_code,po_description,po_file,po_state,po_created,po_create_by) VALUES ('" . $po_code . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
+                $db->setQuery("INSERT INTO apdm_pns_po (po_code,qty,po_description,po_file,po_state,po_created,po_create_by) VALUES ('" . $po_code . "','" . $qty . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
                 $db->query();
                 $msg = "Successfully Saved Pos";
                 $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
@@ -4058,9 +4085,10 @@ class PNsController extends JController {
                 $po_code = JRequest::getVar('po_code');
                 $po_description = JRequest::getVar('po_description');
                 $po_id = JRequest::getVar('po_id');
+                $qty = JRequest::getVar('qty');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 //upload attached POs
-                $query = "update apdm_pns_po set po_code = '".$po_code."',po_description='".$po_description."' where pns_po_id=".$po_id."";
+                $query = "update apdm_pns_po set po_code = '".$po_code."',qty = '".$qty."',po_description='".$po_description."' where pns_po_id=".$po_id."";
                 if ($_FILES['po_file']['size'] > 0) {
                         $attached = new upload($_FILES['po_file']);
                         $attached->file_new_name_body = str_replace("-", "_", $po_code)."_".time();
@@ -4072,7 +4100,7 @@ class PNsController extends JController {
                                 $attached->Process($path_pns . 'images' . DS);
                                 if ($attached->processed) {
                                         $po_file = $attached->file_dst_name;
-                                        $query = "update apdm_pns_po set po_code = '".$po_code."',po_description='".$po_description."',po_file='".$po_file."' where pns_po_id=".$po_id."";
+                                        $query = "update apdm_pns_po set po_code = '".$po_code."',qty = '".$qty."',po_description='".$po_description."',po_file='".$po_file."' where pns_po_id=".$po_id."";
                                 }
                         }
                 }                                                
@@ -4093,6 +4121,7 @@ class PNsController extends JController {
                 $po_state = "Create"; //JRequest::getVar('po_state');
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');
+                $qty = JRequest::getVar('qty');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 //upload attached POs
                 if ($_FILES['po_file']['size'] > 0) {
@@ -4135,8 +4164,8 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $pns_id = JRequest::getVar('pns_id');
                 $po_id = JRequest::getVar('id');
-                $db->setQuery("DELETE FROM apdm_pns_po WHERE pns_id = '" . $pns_id . "' AND pns_po_id = " . $po_id . "");
-                $db->query();
+                $db->setQuery("DELETE FROM apdm_pns_po_fk WHERE pns_id = '" . $pns_id . "' AND po_id = " . $po_id . "");
+                $db->query();        
                 $msg = "Successfully Delete Pos";
                 $this->setRedirect('index.php?option=com_apdmpns&task=po&cid[0]=' . $pns_id, $msg);
         }
