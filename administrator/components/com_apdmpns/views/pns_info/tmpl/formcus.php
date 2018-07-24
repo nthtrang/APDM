@@ -59,11 +59,11 @@
 			form.pns_revision.focus();
 			return false;
 		}
-		if (form.pns_quo_id.value ==0 ){
-			alert("Please input Quo# ");
-			form.pns_quo_id.focus();
-			return false;
-		}		
+//		if (form.pns_quo_id.value ==0 ){
+//			alert("Please input Quo# ");
+//			form.pns_quo_id.focus();
+//			return false;
+//		}		
                 
 //		if (form.pns_version.value ==""){
 //			alert("Please input PNs Version ");

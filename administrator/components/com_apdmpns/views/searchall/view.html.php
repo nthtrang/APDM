@@ -58,7 +58,8 @@ class pnsViewsearchall extends JView
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
            
         }
-       
+
+
         //if ($type_filter){           
         //    switch($type_filter){
        //         case '1': //ECO
@@ -295,6 +296,8 @@ class pnsViewsearchall extends JView
         $this->assignRef('lists',        $lists);
         $this->assignRef('rows',        $rows);
         $this->assignRef('rs_eco',        $rs_eco);
+        $this->assignRef('rs_po',        $rs_po);
+        
         $this->assignRef('rs_supplier',        $rs_supplier);
          $this->assignRef('rs_mf',        $rs_mf);
          $this->assignRef('rs_pns',        $rs_pns);

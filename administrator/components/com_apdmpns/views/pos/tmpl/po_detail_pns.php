@@ -8,7 +8,8 @@ $edit = JRequest::getVar('edit', true);
 JToolBarHelper::title("#".$this->po_row->po_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(7);      
 if (in_array("W", $role)) {
-        JToolBarHelper::addPnsPo("Add Part", $this->po_row->pns_po_id);
+        JToolBarHelper::addPnsPo("Add Part", $this->po_row->pns_po_id);        
+        JToolBarHelper::customX('saveqtyfk', 'save', '', 'Save', false);	
         
 }
 if (in_array("D", $role)) {
@@ -36,6 +37,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 submitform( pressbutton );
                         }
                 }
+                if (pressbutton == 'saveqtyfk') {
+                        submitform( pressbutton );
+                        return;
+                }                      
                 if(pressbutton == 'removepnspos')
                 {
                      submitform( pressbutton );
@@ -43,6 +48,28 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }                
 			
         }
+
+function isCheckedPosPn(isitchecked,id){
+       
+	if (isitchecked == true){
+		document.adminForm.boxchecked.value++;
+                document.getElementById('qty_'+id).style.visibility= 'visible';
+                document.getElementById('qty_'+id).style.display= 'block';
+                document.getElementById('text_qty_'+id).style.visibility= 'hidden';
+                document.getElementById('text_qty_'+id).style.display= 'none';        
+	}
+	else {
+		document.adminForm.boxchecked.value--;
+                document.getElementById('text_qty_'+id).style.visibility= 'visible';
+                document.getElementById('text_qty_'+id).style.display= 'block';
+
+                document.getElementById('qty_'+id).style.visibility= 'hidden';
+                document.getElementById('qty_'+id).style.display= 'none';
+             
+                
+                
+	}
+}        
 
 </script>
 <div class="clr"></div>
@@ -79,14 +106,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <tr>
                                                 <td><?php echo $i; ?></td>         
                                                 <td>					
-                                                <input type="checkbox" id = "pns_po" onclick="isChecked(this.checked);" value="<?php echo $row->pns_id;?>" name="cid[]"  />
+                                                <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->id;?>');" value="<?php echo $row->id;?>" name="cid[]"  />
                                                 </td>                                                
                                                 <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->parent_pns_code;?></a>
 				</span></td>
                                                 <td><?php echo $row->pns_description; ?></td>                                                
-                                                <td>
-                                                        <?php echo $row->qty; ?>
+                                                <td>                                                    
+                                                        <span style="display:block" id="text_qty_<?php echo $row->id;?>"><?php echo $row->qty;?></span>
+                                                        <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->id;?>"  name="qty_<?php echo $row->id;?>" />                                                        
                                                 </td>                                                 
                                                </tr>
                                                 <?php }
@@ -100,7 +128,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </table>		
 
         <input type="hidden" name="po_id" value="<?php echo $this->po_row->pns_po_id; ?>" />
-        <input type="hidden" name="option" value="com_apdmpns" />       
+        <input type="hidden" name="option" value="com_apdmpns" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="boxchecked" value="0" />
 <?php echo JHTML::_('form.token'); ?>

@@ -174,10 +174,7 @@ function submitbutton(pressbutton) {
 				</th>
 				<th  class="title" width="10%">
 					<?php echo JText::_('ECO'); ?>
-				</th>
-				<th  class="title" width="10%">
-					<?php echo JText::_('PO'); ?>
-				</th>                                
+				</th>                             
 				<th width="5%" class="title" >
 					<?php echo JText::_( 'DOWNLOAD_PDF' ); ?>
 				</th>
@@ -264,10 +261,7 @@ function submitbutton(pressbutton) {
 				</td>
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
-				</td>
-				<td align="center">
-					<?php echo PNsController::GetPoValue($row->po_id); ?>
-				</td>                                
+				</td>                            
 				<td>
 					<?php if($row->pns_pdf !="") { ?>
 					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
@@ -320,6 +314,57 @@ function submitbutton(pressbutton) {
 			?>
 		</tbody>
 	</table>
+</fieldset>
+<fieldset class="adminform">
+        <legend><?php echo JText::_("PO Result");?></legend>
+            
+                <table class="adminlist" cellpadding="1">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+                                </tr>
+                        </thead>
+                 
+                        <tbody>					
+        <?php
+                        $k = 0;
+			for ($i=0, $n=count( $this->rs_po ); $i < $n; $i++)
+			{
+				$po 	=& $this->rs_po[$i];
+
+                ?>
+                                      <tr class="<?php echo "row$k"; ?>">
+                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td><?php echo $po->po_description; ?></td>                                                
+                                                <td>
+                <?php if ($po->po_file) { ?>
+                                                                <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
+                                                        <?php } ?>
+                                                </td>                                                
+                                                <td>
+                                                        <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                </td>
+                                                <td>
+                                                        <?php echo GetValueUser($po->po_create_by, "username"); ?>
+                                                </td>                                                  
+                                                <td><?php if (in_array("E", $role)) {
+                                                        ?>
+                                                        <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $po->pns_po_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <?php
+                                                }
+                                                        ?>                                                        
+                                                </td></tr>
+                                                <?php }
+                                         ?>
+                </tbody>
+        </table>		
 </fieldset>
 <fieldset class="adminform">
         <legend><?php echo JText::_( 'Supplier Result' ); ?></legend>

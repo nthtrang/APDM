@@ -19,6 +19,10 @@
         {
                 JToolBarHelper::customX("Cannotedit", 'cannotedit', '', 'Cannotedit', false);
         }
+
+	if (in_array("S", $role)) {		
+                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Stock', false);
+	}            
 	if (in_array("W", $role)) {
                 //viet comment
 		//JToolBarHelper::addNew();
@@ -44,6 +48,10 @@
 				submitform( pressbutton );
 				return;
 			}
+                        if (pressbutton == 'updatestock') {
+                                submitform( pressbutton );
+                                return;
+                        }                            
 			if (pressbutton == 'export_detail') {
 				submitform( pressbutton );
 				return;

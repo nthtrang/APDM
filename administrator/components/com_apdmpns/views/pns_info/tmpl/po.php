@@ -9,9 +9,10 @@ $partnumber = $this->row->ccs_code . '-' . $this->row->pns_code;
 if ($this->row->pns_revision)
         $partnumber .= '-' . $this->row->pns_revision;
 JToolBarHelper::title($partnumber, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(6);      
+$role = JAdministrator::RoleOnComponent(6);   
+
 if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
-        JToolBarHelper::addPnsPos("Add PO", $this->row->pns_id);
+      //  JToolBarHelper::addPnsPos("Add PO", $this->row->pns_id);
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -111,7 +112,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td>
                                                         <?php echo GetValueUser($po->po_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td><a href="index.php?option=com_apdmpns&task=remove_po&id=<?php echo $po->pns_po_id; ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
+                                                <td>
+                                                        <?php if(in_array("D", $role)){?>
+                                                        <a href="index.php?option=com_apdmpns&task=remove_po&id=<?php echo $po->pns_po_id; ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
+                                                                <?php }
+                                                                ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

@@ -34,17 +34,7 @@ $role = JAdministrator::RoleOnComponent(7);
 					<td>
 						<input type="text"  name="po_code" id="po_code"  size="60" value="<?php echo $this->po_row->po_code;?>"/>						
 					</td>
-				</tr>
-                                <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Qty' ); ?>
-						</label>
-					</td>
-					<td>
-						<input type="text" onKeyPress="return numbersOnly(this, event);"  name="qty" id="qty"  size="60" value="<?php echo $this->po_row->qty;?>"/>						
-					</td>
-				</tr>                                
+				</tr>                       
                                 <tr>
 					<td class="key">
 						<label for="name">

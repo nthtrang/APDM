@@ -191,8 +191,8 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<input type="hidden" name="eco_id" id="eco_id" value="<?php echo $this->row->eco_id;?>" />
                                         <?php 
                                         if($this->pns_status!='Release'){?>
-					<!--viec remove<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
-<input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>-->
+					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
+<input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>
                                         <?php
                                         }
                                         ?>

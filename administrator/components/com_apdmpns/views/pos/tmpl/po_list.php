@@ -14,39 +14,41 @@ if (in_array("W", $role)) {
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>
-
 <?php
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
 <script language="javascript" type="text/javascript">
-        function submitbutton(pressbutton) {
+       function submitbutton(pressbutton) {
                 var form = document.adminForm;
-                if (pressbutton == 'submit') {
+                if (pressbutton == 'btnSubmit') {
                         var d = document.adminForm;
-                        if (d.text_search.value==""){
+                        if ( document.adminForm.text_search.value==""){
                                 alert("Please input keyword");	
                                 d.text_search.focus();
                                 return false;				
                         }else{
+                                document.adminForm.submit();
                                 submitform( pressbutton );
+				
                         }
                 }
 			
         }
 
+
 </script>
 <div class="clr"></div>
-<form action="index.php?option=com_apdmpns&task=pomanagement&t=<?php echo time();?>"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
+<form action="index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
+        <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />        
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >
 				<?php echo JText::_( 'Filter' ); ?>:
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 
-				<?php echo $this->lists['type_filter'];?>
+				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 				
 				&nbsp;&nbsp;
-			<button onclick="javascript: return submitbutton('submit')"><?php echo JText::_( 'Go' ); ?></button>
+			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php echo JText::_( 'Go' ); ?></button>
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			
@@ -60,8 +62,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Attached'); ?></th>
-                                        <th width="100"><?php echo JText::_('Qty'); ?></th>     
+                                        <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Action'); ?></th>
@@ -88,8 +89,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <?php if ($po->po_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
-                                                </td>
-                                                <td><?php echo $po->qty; ?></td>   
+                                                </td>                                                
                                                 <td>
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>

@@ -1010,18 +1010,27 @@ class PNsController extends JController {
                         case 'apply':
                                 //update POS
                                 if(JRequest::getVar('pns_po_id')!=0)
-                                {
-//                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
-//                                        $db->query();
-                                        $db->setQuery("update apdm_pns set po_id = " . JRequest::getVar('pns_po_id') . " WHERE  pns_id = ".$row->pns_id."");
-                                        $db->query();                                        
+                                {    
+                                        $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $row->pns_id . "'," . JRequest::getVar('pns_po_id'). ")");
+                                        $db->query();                                                                             
                                 }
                                 //update QuoS
                                 if(JRequest::getVar('pns_quo_id')!=0)
                                 {
                                         $db->setQuery("update apdm_pns_quo set pns_id = ".$row->pns_id." where pns_quo_id = '".JRequest::getVar('pns_quo_id')."'");
                                         $db->query();                                
-                                }                                
+                                }        
+                                //add inital
+                                if($row->eco_id){
+                                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $row->pns_id.' AND eco_id = '.$row->eco_id.'');
+                                        $check_exist = $db->loadResult();
+                                        if ($check_exist==0) {
+                                                $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$row->pns_id.',"Unreleased","Unassign","3","'.$row->eco_id.'")';
+                                                $db->setQuery($query);
+                                                $db->query();
+                                        } 
+                                }
+
                                 //insert  rev history
                                 $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $row->pns_id . "'");
                                 $db->query();
@@ -1039,18 +1048,26 @@ class PNsController extends JController {
                         default:
                                 //update POS
                                 if(JRequest::getVar('pns_po_id')!=0)
-                                {
-//                                        $db->setQuery("update apdm_pns_po set pns_id = ".$row->pns_id." where pns_po_id = '".JRequest::getVar('pns_po_id')."'");
-//                                        $db->query();       
-                                        $db->setQuery("update apdm_pns set po_id = " . JRequest::getVar('pns_po_id') . " WHERE  pns_id = ".$row->pns_id."");
-                                        $db->query();                                                                                
+                                {    
+                                        $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $row->pns_id . "'," . JRequest::getVar('pns_po_id'). ")");
+                                        $db->query();                                                                             
                                 }
                                 //update QuoS
                                 if(JRequest::getVar('pns_quo_id')!=0)
                                 {
                                         $db->setQuery("update apdm_pns_quo set pns_id = ".$row->pns_id." where pns_quo_id = '".JRequest::getVar('pns_quo_id')."'");
                                         $db->query();                                
-                                }                                
+                                }    
+                                //add inital
+                                if($row->eco_id){
+                                        $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $row->pns_id.' AND eco_id = '.$row->eco_id.'');
+                                        $check_exist = $db->loadResult();
+                                        if ($check_exist==0) {
+                                                $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$row->pns_id.',"Unreleased","Unassign","3","'.$row->eco_id.'")';
+                                                $db->setQuery($query);
+                                                $db->query();
+                                        } 
+                                }                                                                   
                                 //insert  rev history
                                 $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $row->pns_id . "'");
                                 $db->query();                                
@@ -1300,7 +1317,17 @@ class PNsController extends JController {
                         {
                                 $db->setQuery("INSERT INTO apdm_pns_po_fk (pns_id,po_id) VALUES ( '" . $row->pns_id . "'," . JRequest::getVar('pns_po_id') . ")");
                                 $db->query();                                                               
-                        }                          
+                        }       
+                        //add inital
+                        if($row->eco_id){
+                                $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $row->pns_id.' AND eco_id = '.$row->eco_id.'');
+                                $check_exist = $db->loadResult();
+                                if ($check_exist==0) {
+                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$row->pns_id.',"Unreleased","Unassign","3","'.$row->eco_id.'")';
+                                        $db->setQuery($query);
+                                        $db->query();
+                                } 
+                        }                        
                         //for pans parent
                         //for parent of pns
                         $arr_pns_waring = array();
@@ -2354,6 +2381,18 @@ class PNsController extends JController {
         }
 
         
+        function saveqtyfk() {
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+                $fkid = JRequest::getVar('id');               
+                foreach ($cid as $id) {
+                        $stock = JRequest::getVar('qty_' . $id);                     
+                        $db->setQuery("update apdm_pns_po_fk set qty=" . $stock . " WHERE  id = " . $id);
+                        $db->query();
+                }
+                $msg = "Successfully Saved Part Number";
+                $this->setRedirect('index.php?option=com_apdmpns&task=po_detail&id=' . $fkid, $msg);
+        }        
         function saveref() {
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
@@ -2364,13 +2403,16 @@ class PNsController extends JController {
                         $id = $pnsid[0];
                         $step = $pnsid[1];
                         $pr_id = $pnsid[2];
-                       echo  $find_number = JRequest::getVar('find_number_' . $id.'_'.$step);
-                       echo $ref_des = JRequest::getVar('ref_des_' . $id.'_'.$step);
+                         $find_number = JRequest::getVar('find_number_' . $id.'_'.$step);
+                        $ref_des = JRequest::getVar('ref_des_' . $id.'_'.$step);
                         $checkref = explode(",", $ref_des);    
-                        echo count($checkref);
-                     echo   $stock = JRequest::getVar('stock_' . $id.'_'.$step);
-
+                        $stock = JRequest::getVar('stock_' . $id.'_'.$step);
                         $arr_fail=array();
+                        if (in_array(null, $checkref)) {
+                                $arr_fail[] =$id;
+                                 continue;   
+                        }
+                        
                         if(count($checkref)!=$stock )
                          {
                                 $arr_fail[] =$id;
@@ -3964,7 +4006,7 @@ class PNsController extends JController {
          * List PO asign to PNS
          */
 
-        function pomanagement() {
+        function pomanagement() {            
                 JRequest::setVar('layout', 'po_list');
                 JRequest::setVar('view', 'pos');
                 parent::display();
