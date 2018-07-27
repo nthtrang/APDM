@@ -116,6 +116,7 @@ class RolesController extends JController
 		$m		= JRequest::getVar( 'v', array(0), '', 'array' );
 		$eco	= JRequest::getVar( 'eco', array(0), '', 'array' );
                 $po	= JRequest::getVar( 'po', array(0), '', 'array' );
+                $sto	= JRequest::getVar( 'sto', array(0), '', 'array' );
 		$p		= JRequest::getVar( 'p', array(0), '', 'array' );
 		if (count($c) > 0){
 			//update for vendor
@@ -173,7 +174,15 @@ class RolesController extends JController
 				$db->setQuery($query);
 				$db->query();
 			}
-		}     		
+		}  
+		if (count($sto) > 0){
+			//update for STO
+			foreach ($sto as $stoobject){
+				$query = "INSERT INTO apdm_role_component (role_id, component_id, role_value) VALUES({$role_id}, 8, '{$stoobject}')";
+				$db->setQuery($query);
+				$db->query();
+			}
+		}                  
 		//end value of component
 		switch ( $this->getTask() )
 		{

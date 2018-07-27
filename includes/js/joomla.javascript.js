@@ -393,7 +393,7 @@ function checkAllECO( n, fldName ) {
 ///for po
 function checkAllPO( n, fldName ) {
 	var f = document.adminForm;
-	var c = f.toggle5.checked;
+	var c = f.toggle7.checked;
 	var n2 = 0;
 	for (i=0; i < n; i++) {
 		cb = eval( 'f.' + fldName + '' + i );
@@ -406,6 +406,24 @@ function checkAllPO( n, fldName ) {
 		document.adminForm.boxcheckedpo.value = n2;
 	} else {
 		document.adminForm.boxcheckedpo.value = 0;
+	}
+}
+//for sto
+function checkAllSTO( n, fldName ) {
+	var f = document.adminForm;
+	var c = f.toggle8.checked;
+	var n2 = 0;
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+			cb.checked = c;
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxcheckedsto.value = n2;
+	} else {
+		document.adminForm.boxcheckedsto.value = 0;
 	}
 }
 //fo pns

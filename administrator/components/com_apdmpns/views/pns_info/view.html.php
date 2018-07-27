@@ -229,7 +229,7 @@ class pnsViewpns_info extends JView
          $this->assignRef('revision',        $list_revision);
          
          //add PO
-         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p inner JOIN apdm_pns_po_fk fk on p.pns_id = fk.pns_id inner join apdm_pns_po AS po on po.pns_po_id = fk.po_id WHERE fk.pns_id=".$row->pns_id);
+         $db->setQuery("SELECT po.*, fk.qty as stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p inner JOIN apdm_pns_po_fk fk on p.pns_id = fk.pns_id inner join apdm_pns_po AS po on po.pns_po_id = fk.po_id WHERE fk.pns_id=".$row->pns_id);
          $list_pos = $db->loadObjectList();         
          $this->assignRef('pos',        $list_pos);
          //add Quo
@@ -237,6 +237,11 @@ class pnsViewpns_info extends JView
          $list_quos = $db->loadObjectList();         
          $this->assignRef('quos',        $list_quos);
                   
+         //for STO Tracking
+         $db->setQuery("select sto.*,fk.qty as stock from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id);
+         $list_stos = $db->loadObjectList();         
+         $this->assignRef('stos',        $list_stos);
+                           
          
          $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");         
          $list_ccs = $db->loadObjectList();               

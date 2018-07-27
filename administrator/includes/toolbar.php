@@ -577,6 +577,24 @@ class JToolBarHelper
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_po&tmpl=component", 600,300 );
+	}   
+        function addNewito($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_stoi&tmpl=component", 600,300 );
+	}     
+        function addNeweto($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_stoe&tmpl=component", 600,300 );
+	}     
+        function addPnsSto($alt = 'New',$sto_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_pns_sto&tmpl=component&sto_id=$sto_id", 850,500 );
 	}          
          
 }

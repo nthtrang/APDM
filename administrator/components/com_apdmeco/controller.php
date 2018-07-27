@@ -1398,10 +1398,24 @@ class ECOController extends JController
         $db       =& JFactory::getDBO();
         $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
         $cid      = JRequest::getVar( 'eco', array(), '', 'array' );
-        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
-        $db->query();      
-        $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).") and eco_id = $cid");
-        $db->query();  
+        foreach($pns as $pn_id)
+        {
+                $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$pn_id."'";
+                $db->setQuery($get_status);
+                $status = $db->loadResult();                
+                //check if PN Released only remove at tab Ininital
+                if($status!="Released")
+                {        
+                        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id = ".$pn_id."");
+                        $db->query();  
+                }
+                $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id = ".$pn_id." and eco_id = $cid[0]");
+                $db->query();  
+                        
+        }        
+    
+//        $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).") and eco_id = $cid");
+//        $db->query();  
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
     }           
@@ -1409,11 +1423,22 @@ class ECOController extends JController
     function removepnsinit(){
         $db       =& JFactory::getDBO();
         $pns      = JRequest::getVar( 'cid', array(), '', 'array' );     
-        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );       
-        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id IN (".implode(",", $pns).")");
-        $db->query();  
-        $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id IN (".implode(",", $pns).")");
-        $db->query();  
+        $cid      = JRequest::getVar( 'eco', array(), '', 'array' );    
+        foreach($pns as $pn_id)
+        {
+                $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$pn_id."'";
+                $db->setQuery($get_status);
+                $status = $db->loadResult();                
+                //check if PN Released only remove at tab Ininital
+                if($status!="Released")
+                {        
+                        $db->setQuery("update apdm_pns set eco_id = 0 WHERE  pns_id = ".$pn_id."");
+                        $db->query();  
+                }
+                $db->setQuery("delete from apdm_pns_initial  WHERE  pns_id = ".$pn_id."");
+                $db->query();  
+                        
+        }
         $msg = JText::_('Have deleted successfull.');
 	$this->setRedirect( 'index.php?option=com_apdmeco&task=initial&cid[]='.$cid[0], $msg);
     }         

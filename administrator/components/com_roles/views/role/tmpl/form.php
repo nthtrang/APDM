@@ -117,7 +117,23 @@
 
 		}
 	}        
+	//for STO
+	$sto1 = 0;
+	$sto2 = 0;
+	$sto3 = 0;
+	$sto4 = 0;
+	$sto5 = 0;
+	$stoall=0;
+	if(count($this->arrSTO) > 0){
+		foreach ($this->arrSTO as $sto){
+			if ($sto=='V') {$sto1=1; $stoall++;}
+			if ($sto=='W') {$sto2=1; $stoall++;}
+			if ($sto=='E') {$sto3=1; $stoall++;}
+			if ($sto=='D') {$sto4=1; $stoall++;}
+			if ($sto=='R') {$sto5=1; $stoall++;}
 
+		}
+	}    
 	//for part number
 	$pns1 = 0;
 	$pns2 = 0;
@@ -288,9 +304,25 @@
 						<input type="checkbox" name="po[]" value="E" <?php echo ($po3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="po[]" value="D" <?php echo ($po4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="po[]" value="R" <?php echo ($po5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllPO(5, 'po');" value="" name="toggle5" <?php if ($poall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" onclick="checkAllPO(5, 'po');" value="" name="toggle7" <?php if ($poall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
-				</tr>		                                
+				</tr>	
+                                <tr>
+					<td valign="top" class="key">
+						<label for="gid">
+							<?php echo JText::_( 'STO' ); ?>
+							
+						</label>
+					</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="sto[]" value="V" <?php echo ($sto1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="sto[]" value="W" <?php echo ($sto2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="sto[]" value="E" <?php echo ($sto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="sto[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="sto[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllSTO(5, 'sto');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
+					</td>
+				</tr>	                                
 			<tr>
 					<td class="key">
 						<label for="email">
@@ -381,6 +413,8 @@
 	<input type="hidden" name="boxcheckedm" value="0" />
 	<input type="hidden" name="boxcheckeds" value="0" />
 	<input type="hidden" name="boxcheckedeco" value="0" />
+        <input type="hidden" name="boxcheckedpo" value="0" />
+        <input type="hidden" name="boxcheckedsto" value="0" />
 	<input type="hidden" name="boxcheckedpns" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

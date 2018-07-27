@@ -80,7 +80,7 @@ function isCheckedPosPn(isitchecked,id){
                                 <tr>
                                         <th width="18"><?php echo JText::_('No'); ?></th>                                               
                                         <th width="3%" class="title">
-					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>
+<!--					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>-->
 				</th>                                        
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                

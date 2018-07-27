@@ -62,6 +62,7 @@ function submitbutton(pressbutton) {
                         <li><a  id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
                         <?php } ?>
                         <li><a  id="dash" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
+                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO Tracking' ); ?></a></li>
 		</ul>
 		 <div class="clr"></div>
         </div>

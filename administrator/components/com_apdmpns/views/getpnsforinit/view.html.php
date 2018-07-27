@@ -55,7 +55,7 @@ class pnsViewgetpnsforinit extends JView
         
         
         $where = array();  
-        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Released")';
+        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Released") and eco_id > 0';
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';

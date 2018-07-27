@@ -84,11 +84,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                        <th width="100"><?php echo JText::_('Stock'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+<!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
                                 </tr>
                         </thead>
                         <tbody>					
@@ -100,6 +101,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <tr>
                                                 <td><?php echo $i; ?></td>                                            
                                                 <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td><?php echo $po->stock; ?></td> 
                                                 <td><?php echo $po->po_description; ?></td>                                                
                                                 <td>
                 <?php if ($po->po_file) { ?>
@@ -112,12 +114,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td>
                                                         <?php echo GetValueUser($po->po_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td>
+<!--                                                <td>
                                                         <?php if(in_array("D", $role)){?>
                                                         <a href="index.php?option=com_apdmpns&task=remove_po&id=<?php echo $po->pns_po_id; ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
                                                                 <?php }
                                                                 ?>
-                                                </td></tr>
+                                                </td>-->
+                                        </tr>
                                                 <?php }
                                         } ?>
                 </tbody>

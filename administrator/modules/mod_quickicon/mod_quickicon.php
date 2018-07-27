@@ -120,11 +120,19 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 			//PNs
 			if($user_apdm==0 &&  (in_array(6, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmpns';
-				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'PN MANAGER' ) );
+				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'PN MANAGER' ) );                             
+			}
+			//PO
+			if($user_apdm==0 &&  (in_array(7, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
                                 $link = 'index.php?option=com_apdmpns&task=pomanagement';
 				quickiconButton( $link, 'icon-48-component.png', JText::_( 'PO' ) );                                
-			}
-			//suplier
+			}                        
+			//STO
+			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                                $link = 'index.php?option=com_apdmpns&task=stomanagement';
+				quickiconButton( $link, 'icon-48-component.png', JText::_( 'STO' ) );                                
+			}                        
+                        //suplier
 			if($user_apdm==0 &&  (in_array(2, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator")){
 				$link = 'index.php?option=com_apdmsuppliers';
 				quickiconButton( $link, 'icon-48-category.png', JText::_( 'ORGANIZATION MANAGER' ) );
