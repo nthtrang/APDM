@@ -1068,6 +1068,10 @@ class upload {
 							   "image/avi",
 							   "image/mp3",
 							   "application/pdf",
+                                                           "application/zip",
+                                                           "application/x-zip-compressed",
+                                                           "multipart/x-zip",
+                                                           "application/x-compressed",
 							   );
     }
 

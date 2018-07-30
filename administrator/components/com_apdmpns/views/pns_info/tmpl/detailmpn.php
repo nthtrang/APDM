@@ -8,7 +8,9 @@
 	$role = JAdministrator::RoleOnComponent(6);
         $partnumber = $this->row->ccs_code.'-'.$this->row->pns_code;
         if ($this->row->pns_revision) 
+        {
                 $partnumber .= '-'.$this->row->pns_revision;
+        }
 	//JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
         JToolBarHelper::title( $partnumber);
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
@@ -20,13 +22,13 @@
                 JToolBarHelper::customX("Cannotedit", 'cannotedit', '', 'Cannotedit', false);
         }
 
-	if (in_array("S", $role)) {		
-                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Stock', false);
-	}            
-	if (in_array("W", $role)) {
+//	if (in_array("S", $role)) {		
+//                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Stock', false);
+//	}            
+//	if (in_array("W", $role)) {
                 //viet comment
 		//JToolBarHelper::addNew();
-	}	
+//	}	
 	JToolBarHelper::cancel( 'cancel', 'Close' );			
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
@@ -77,8 +79,8 @@
                          <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                                                
                         <?php } ?>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>                        
-                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO Tracking' ); ?></a></li>
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'PO' ); ?></a></li>                        
+                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -231,7 +233,7 @@
                                                 <?php echo $this->row->pns_cost;?>
 					</td>
 				</tr>	
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Date In' ); ?>
@@ -250,7 +252,7 @@
 					<td>
 						<?php echo $this->row->pns_stock; ?>
 					</td>
-				</tr>	      
+				</tr>	      -->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -258,7 +260,8 @@
 						</label>
 					</td>
 					<td>
-						<?php echo $this->row->pns_qty_used; ?>
+						<?php //echo $this->row->pns_qty_used; ?>
+                                                <?php echo PNsController::CalculateQtyUsedValue($this->row->pns_id);?>
 					</td>
 				</tr>	                      
 				<tr>

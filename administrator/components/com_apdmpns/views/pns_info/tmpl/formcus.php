@@ -48,17 +48,17 @@
 			form.pns_code.focus();
 			return false;
 		}
-		if (form.pns_revision.value =="" ){
-			alert("Please input PNs Revision ");
-			form.pns_revision.focus();
-			return false;
-		}
+//		if (form.pns_revision.value =="" ){
+//			alert("Please input PNs Revision ");
+//			form.pns_revision.focus();
+//			return false;
+//		}
 		
-		if (form.pns_revision.value !="" && form.pns_revision.value.length != 2){
-			alert("PNs Revision must 2 characters");
-			form.pns_revision.focus();
-			return false;
-		}
+//		if (form.pns_revision.value !="" && form.pns_revision.value.length != 2){
+//			alert("PNs Revision must 2 characters");
+//			form.pns_revision.focus();
+//			return false;
+//		}
 //		if (form.pns_quo_id.value ==0 ){
 //			alert("Please input Quo# ");
 //			form.pns_quo_id.focus();
@@ -206,7 +206,7 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" name="pns_revision" id="pns_revision" onkeypress="return CharatersOnlyEspecial(this, event)" class="inputbox" size="6" maxlength="2" value="AA" />
+						<input type="text" name="pns_revision" id="pns_revision"  class="inputbox" size="6" value="" />
 					</td>
 				</tr>
 				<tr>

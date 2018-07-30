@@ -181,8 +181,8 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'Date In' ); ?>
 				</th>       
 				<th width="20%" class="title">
-					<?php //echo JText::_( 'Stock' ); ?>
-                                        <?php echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JText::_( 'Stock' ); ?>
+                                        <?php //echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>    
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Qty Used' ); ?>
@@ -303,14 +303,16 @@ function submitbutton(pressbutton) {
 					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
 				</td>   
                                 <td align="center">
-					<?php echo $row->pns_stock;?>
+					<?php //echo $row->pns_stock;?>
+                                        <?php echo $stock = PNsController::CalculateInventoryValue($row->pns_id);?>
 				</td>   
                                 <td align="center">
-					<?php echo $row->pns_qty_used;?>
+					<?php //echo $row->pns_qty_used;?>
+                                        <?php echo $stockUsed = PNsController::CalculateQtyUsedValue($row->pns_id);?>
 				</td>   
                                 <td align="center">
-					<?php echo round($row->pns_stock - $row->pns_qty_used);?>
-				</td>                                   
+					<?php echo round($stock - $stockUsed);?>
+				</td>                                      
 			</tr>
 			<?php
 				$k = 1 - $k;

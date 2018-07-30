@@ -4212,6 +4212,14 @@ class PNsController extends JController {
                 $pns_created_by = $me->get('id');
                 $qty = JRequest::getVar('qty');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_po where po_code = '" . $po_code."'");
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The PO already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=stomanagement', $msg);
+                        return;
+                }                       
                 //upload attached POs
                 if ($_FILES['po_file']['size'] > 0) {
                         $attached = new upload($_FILES['po_file']);
@@ -4245,6 +4253,14 @@ class PNsController extends JController {
                 $po_id = JRequest::getVar('po_id');
                 $qty = JRequest::getVar('qty');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_po where po_code = '" . $po_code."' and pns_po_id != ".$po_id."");                
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The PO already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
+                        return;
+                }                    
                 //upload attached POs
                 $query = "update apdm_pns_po set po_code = '".$po_code."',qty = '".$qty."',po_description='".$po_description."' where pns_po_id=".$po_id."";
                 if ($_FILES['po_file']['size'] > 0) {
@@ -4265,7 +4281,7 @@ class PNsController extends JController {
                 $return = JRequest::getVar('return');     
                 $db->setQuery($query);
                 $db->query();
-                $msg = "Successfully Saved Pos";
+                $msg = "Successfully Saved Posss";
                 return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
                 exit;
         }              
@@ -4316,6 +4332,15 @@ class PNsController extends JController {
                 exit;
         }
 
+        function download_sto() {
+                $db = & JFactory::getDBO();
+                $pns_id = JRequest::getVar('id');
+                $db->setQuery("select sto_file from apdm_pns_sto where pns_sto_id ='".$pns_id."'");
+                $sto_file = $db->loadResult();               
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'images' . DS;
+                $dFile = new DownloadFile($path_pns, $sto_file);
+                exit;
+        }        
         function remove_po() {
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
@@ -4338,6 +4363,14 @@ class PNsController extends JController {
                 $sto_description = JRequest::getVar('sto_description');
                 $sto_id = JRequest::getVar('sto_id');
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_sto where sto_code = '" . $sto_code."' and pns_sto_id !=  ".$sto_id."");
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The ITO/ETO already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=stomanagement', $msg);
+                        return;
+                }                   
                 //upload attached POs
                 $query = "update apdm_pns_sto set sto_code = '".$sto_code."',sto_description='".$sto_description."' where pns_sto_id=".$sto_id."";
                 if ($_FILES['sto_file']['size'] > 0) {
@@ -4350,7 +4383,7 @@ class PNsController extends JController {
                         if ($attached->uploaded) {
                                 $attached->Process($path_pns . 'images' . DS);
                                 if ($attached->processed) {
-                                        $po_file = $attached->file_dst_name;
+                                        $sto_file = $attached->file_dst_name;
                                         $query = "update apdm_pns_sto set sto_code = '".$sto_code."',sto_description='".$sto_description."',sto_file='".$sto_file."' where pns_sto_id=".$sto_id."";
                                 }
                         }
@@ -4375,6 +4408,14 @@ class PNsController extends JController {
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');                
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_sto where sto_code = '" . $sto_code."'");
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The ITO already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=stomanagement', $msg);
+                        return;
+                }            
                 //upload attached POs
                 if ($_FILES['sto_file']['size'] > 0) {
                         $attached = new upload($_FILES['sto_file']);
@@ -4411,6 +4452,14 @@ class PNsController extends JController {
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');                
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_sto where sto_code = '" . $sto_code."'");
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The ETO already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=stomanagement', $msg);
+                        return;
+                }                       
                 //upload attached POs
                 if ($_FILES['sto_file']['size'] > 0) {
                         $attached = new upload($_FILES['sto_file']);
@@ -4895,16 +4944,27 @@ class PNsController extends JController {
                 $rows = $db->loadObjectList();
                 $CurrentStock = $rows[0]->pns_stock;
                 //get Stock IN
-                $db->setQuery("select qty as qty_in from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 1 where fk.pns_id='".$pns_id."'");
+                $db->setQuery("select  sum(qty) as qty_in from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 1 where fk.pns_id='".$pns_id."'");
                 $db->query();  
                 $rows = $db->loadObjectList();
                 $StockIn = $rows[0]->qty_in;
                 //get Stock OUT
-                $db->setQuery("select qty as qty_out from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id='".$pns_id."'");
+                $db->setQuery("select  sum(qty) as qty_out from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id='".$pns_id."'");
                 $db->query();  
                 $rows = $db->loadObjectList();
                 $StockOut = $rows[0]->qty_out;      
                 return $CurrentStock + ($StockIn-$StockOut);
                 exit;                
         }
+        function CalculateQtyUsedValue($pns_id)
+        {
+                $db = & JFactory::getDBO();
+                //get Stock OUT
+                $db->setQuery("select  sum(qty) as qty_out from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id='".$pns_id."'");
+                $db->query();  
+                $rows = $db->loadObjectList();
+                $StockOut = $rows[0]->qty_out;      
+                return $StockOut;
+                exit;                
+        }        
 }

@@ -65,7 +65,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                          <?php if($this->row->pns_cpn!=1){?>
                         <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('DASH ROLL'); ?></a></li>                        
                         <?php }?>
-                        <li><a id="po" class="active"><?php echo JText::_('POs'); ?></a></li>
+                        <li><a id="po" class="active"><?php echo JText::_('PO'); ?></a></li>
+                        <li><a id="rev" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('STO'); ?></a></li>
                 </ul>
                 <div class="clr"></div>
         </div>
@@ -84,7 +85,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
-                                        <th width="100"><?php echo JText::_('Stock'); ?></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>

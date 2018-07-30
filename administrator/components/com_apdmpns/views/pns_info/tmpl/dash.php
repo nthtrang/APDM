@@ -8,7 +8,9 @@
 
 	 $partnumber = $this->row->ccs_code.'-'.$this->row->pns_code;
         if ($this->row->pns_revision) 
+        {
                 $partnumber .= '-'.$this->row->pns_revision;
+        }
 	//JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
         JToolBarHelper::title( $partnumber);	
         $role = JAdministrator::RoleOnComponent(6);      
@@ -75,8 +77,8 @@
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
                         <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'REV' ); ?></a></li>
                         <li><a id="dash" class="active"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'POs' ); ?></a></li>
-                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO Tracking' ); ?></a></li>
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'PO' ); ?></a></li>
+                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO' ); ?></a></li>
 		</ul>
                 <div class="clr"></div>
         </div>

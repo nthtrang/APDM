@@ -30,19 +30,19 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			submitform( pressbutton );
 			return;
 		}
-		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
-		if (form.pns_revision.value !="" && form.pns_revision.value.length != 2){
-			alert("PNs Revision must 2 characters");
-			form.pns_revision.focus();
-			return false;
-		}		
-                var pns_stock = Math.round(form.pns_stock.value);
-                var pns_qty_used = Math.round(form.pns_qty_used.value);
-		if ( pns_qty_used > pns_stock){                
-			alert("Please input Stock greater than Qty Used	");
-			form.pns_stock.focus();
-			return false;
-		}    
+//		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
+//		if (form.pns_revision.value !="" && form.pns_revision.value.length != 2){
+//			alert("PNs Revision must 2 characters");
+//			form.pns_revision.focus();
+//			return false;
+//		}		
+//                var pns_stock = Math.round(form.pns_stock.value);
+//                var pns_qty_used = Math.round(form.pns_qty_used.value);
+//		if ( pns_qty_used > pns_stock){                
+//			alert("Please input Stock greater than Qty Used	");
+//			form.pns_stock.focus();
+//			return false;
+//		}    
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status/");
 			from.pns_status.focus();
@@ -126,7 +126,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					</td>
 					<td>
                                                 <?php echo $this->row->pns_revision;?>
-						<input type="hidden" onkeypress="return CharatersOnlyEspecial(this, event)" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6" maxlength="2" />
+						<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision" id="pns_revision" class="inputbox" size="6"  />
 						<input type="hidden" value="<?php echo $this->row->pns_revision;?>" name="pns_revision_old" />
 <input type="hidden" name="RevRoll" value="<?php echo JText::_('Rev Roll')?>" onclick="get_rev_roll();"/>
 						
@@ -253,7 +253,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                                                 <input type="text" value="<?php echo $this->lists['pns_cost']?>" name="pns_cost" id="pns_cost" <?php echo $classDisabled;?> />
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Date In' ); ?>
@@ -284,7 +284,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
                                                 <input type="text" value="<?php echo $this->lists['pns_qty_used']?>" name="pns_qty_used" id="pns_qty_used" />
 					</td>
-				</tr>                                
+				</tr>                                -->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

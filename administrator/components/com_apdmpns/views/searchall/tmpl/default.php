@@ -299,13 +299,15 @@ function submitbutton(pressbutton) {
 					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
 				</td>   
                                 <td align="center">
-					<?php echo $row->pns_stock;?>
+					<?php //echo $row->pns_stock;?>
+                                        <?php echo $stock = PNsController::CalculateInventoryValue($row->pns_id);?>
 				</td>   
                                 <td align="center">
-					<?php echo $row->pns_qty_used;?>
+					<?php //echo $row->pns_qty_used;?>
+                                        <?php echo $stockUsed = PNsController::CalculateQtyUsedValue($row->pns_id);?>
 				</td>   
                                 <td align="center">
-					<?php echo round($row->pns_stock - $row->pns_qty_used);?>
+					<?php echo round($stock - $stockUsed);?>
 				</td>                                   
 			</tr>
 			<?php

@@ -5,7 +5,7 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
-JToolBarHelper::title("#".$this->po_row->po_code, 'cpanel.png');
+JToolBarHelper::title($this->po_row->po_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(7);      
 if (in_array("W", $role)) {
         JToolBarHelper::addPnsPo("Add Part", $this->po_row->pns_po_id);        

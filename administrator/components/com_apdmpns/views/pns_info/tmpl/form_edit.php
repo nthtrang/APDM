@@ -41,11 +41,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			form.eco.focus();
 			return false;
 		}
-		if (form.pns_stock.value < form.pns_qty_used.value){
-			alert("Please input Stock greater than Qty Used	");
-			form.pns_stock.focus();
-			return false;
-		}                
+//		if (form.pns_stock.value < form.pns_qty_used.value){
+//			alert("Please input Stock greater than Qty Used	");
+//			form.pns_stock.focus();
+//			return false;
+//		}                
 		if (form.pns_status.value==""){
 			alert("Please select Part Number Status/");
 			from.pns_status.focus();
@@ -256,7 +256,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                                                 <input type="text" value="<?php echo $this->lists['pns_cost']?>" name="pns_cost" id="pns_cost" <?php echo $classDisabled;?> />
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Date In' ); ?>
@@ -287,7 +287,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
                                                 <input type="text" value="<?php echo $this->lists['pns_qty_used']?>" name="pns_qty_used" id="pns_qty_used" />
 					</td>
-				</tr>                                
+				</tr>    -->                            
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

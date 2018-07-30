@@ -130,7 +130,7 @@ class pnsViewsearchall extends JView
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));          
                    //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
-                       $db->setQuery("SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
+                       $db->setQuery("SELECT * FROM apdm_pns WHERE ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
                        $rs_pns = $db->loadObjectList();
                        $array_pns_id_find = array();
                        if (count($rs_pns) > 0){
@@ -142,7 +142,7 @@ class pnsViewsearchall extends JView
                        $where[] = 'p.pns_id IN ('.implode(",", $array_pns_id_find).') ';
                    }elseif ($leght==13){                       
                        $arr_code = explode("-", trim($keyword));                         
-                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
+                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
                        $rs_pns = $db->loadObjectList();                       
                        if (count($rs_pns) > 1){
                            foreach ($rs_pns as $obj) {
@@ -151,13 +151,13 @@ class pnsViewsearchall extends JView
                            $where[] = 'p.pns_id IN ('.implode(',', $arr_pns_id).')'; 
                        }else{
                             if(strlen($arr_code[0])==6){
-                                 $where[] = 'p.pns_code='.$arr_code[0].'-'.$arr_code[1].' AND p.pns_revision='.$arr_code[2];
+                                 $where[] = 'p.pns_code="'.$arr_code[0].'-'.$arr_code[1].'" AND p.pns_revision="'.$arr_code[2].'"';
                             }
                        }
                         
                    }elseif($leght==10){
                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code ='.$arr_code[0].' AND p.pns_code='.$arr_code[1];
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
                    }else{      
                      $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
