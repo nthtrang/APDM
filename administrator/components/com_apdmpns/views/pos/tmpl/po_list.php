@@ -46,6 +46,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		<tr>
 			<td colspan="4"  >
 				<?php echo JText::_( 'Filter' ); ?>:
+                                <?php echo $this->lists['search'];?>
 				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 				
 				&nbsp;&nbsp;
 			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php echo JText::_( 'Go' ); ?></button>

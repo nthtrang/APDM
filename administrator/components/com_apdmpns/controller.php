@@ -802,11 +802,13 @@ class PNsController extends JController {
                 {
                         $row->pns_cpn  =1;//set CPN                        
                         $pns_code_check = $pns_code;
+                        $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : '';
                 }
                 else
                 {   
                         $pns_code = $new . $pns_code;
                         $pns_code_check = $pns_code . "-" . $pns_version;
+                        $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
                 }
                 $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
                 //check for pns code in database

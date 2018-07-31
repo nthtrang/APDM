@@ -177,19 +177,19 @@ function submitbutton(pressbutton) {
 <!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>   -->
-				<th width="20%" class="title">
+<!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Date In' ); ?>
-				</th>       
+				</th>       -->
 				<th width="20%" class="title">
-					<?php echo JText::_( 'Stock' ); ?>
+					<?php echo JText::_( 'Inventory' ); ?>
                                         <?php //echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>    
-				<th width="20%" class="title">
+<!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Qty Used' ); ?>
 				</th>  
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Qty Remain' ); ?>
-				</th>                                    
+				</th>                                    -->
 			</tr>
 		</thead>
 		<tfoot>
@@ -299,20 +299,20 @@ function submitbutton(pressbutton) {
 <!--                                <td align="center">
 					<?php echo  number_format((float)$row->pns_cost, 2, '.', '');?>
 				</td>   -->
-                                <td align="center">
+<!--                                <td align="center">
 					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
-				</td>   
+				</td>   -->
                                 <td align="center">
 					<?php //echo $row->pns_stock;?>
                                         <?php echo $stock = PNsController::CalculateInventoryValue($row->pns_id);?>
 				</td>   
-                                <td align="center">
+<!--                                <td align="center">
 					<?php //echo $row->pns_qty_used;?>
                                         <?php echo $stockUsed = PNsController::CalculateQtyUsedValue($row->pns_id);?>
 				</td>   
                                 <td align="center">
 					<?php echo round($stock - $stockUsed);?>
-				</td>                                      
+				</td>                                      -->
 			</tr>
 			<?php
 				$k = 1 - $k;

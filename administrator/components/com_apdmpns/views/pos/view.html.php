@@ -32,7 +32,7 @@ class pnsViewpos extends JView
                 
 	   // global $mainframe, $option;
         global $mainframe, $option;
-        $option             = 'com_apdmpns';
+        $option             = 'com_apdmpns_pos';
         $db                =& JFactory::getDBO();
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
         $po_id		= JRequest::getVar( 'id');       
@@ -52,12 +52,12 @@ class pnsViewpos extends JView
         }  
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        
+        $orderby = ' ORDER BY p.pns_po_id desc';        
         $query = 'SELECT COUNT(p.pns_po_id)'
         . ' FROM apdm_pns_po AS p'
         . $where
         ;
-       //echo $query;
+
         $db->setQuery( $query );
         $total = $db->loadResult();
 
@@ -66,7 +66,8 @@ class pnsViewpos extends JView
         
         $query = 'SELECT p.* '
             . ' FROM apdm_pns_po AS p'
-            . $where;
+            . $where
+            . $orderby;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
