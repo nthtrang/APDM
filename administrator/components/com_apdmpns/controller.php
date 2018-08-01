@@ -810,7 +810,7 @@ class PNsController extends JController {
                         $pns_code_check = $pns_code . "-" . $pns_version;
                         $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
                 }
-                $pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
+                //$pns_revision = ($post['pns_revision'] != '') ? strtoupper($post['pns_revision']) : 'AA';
                 //check for pns code in database
                 if ($pns_revision != "") {
                         $query_check = "SELECT pns_id FROM apdm_pns WHERE ccs_code='" . $row->ccs_code . "' AND pns_code = '" . $pns_code_check . "' AND pns_revision='" . $pns_revision . "'";

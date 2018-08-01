@@ -4,8 +4,12 @@
 			$k = 0;
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
-				$row 	=& $this->rows[$i];				
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+				$row 	=& $this->rows[$i];								
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
+                                
 				if ($row->pns_image !=''){
 					$pns_image = $path_image.$row->pns_image;
 				}else{

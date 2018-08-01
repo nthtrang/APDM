@@ -14,6 +14,9 @@ $role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::cancel( 'cancel_listpns', 'Close' );
 	$title = $this->title[0];
         $pns_code_full = $title->pns_code_full;
+         if (substr($pns_code_full, -1)=="-"){
+           $pns_code_full = substr($pns_code_full, 0, strlen($pns_code_full)-1);  
+         }        
 ?>
 <script language="javascript">
 function CheckForm() {
@@ -94,7 +97,11 @@ function submitbutton(pressbutton) {
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
 				$row 	=& $this->rows[$i];				
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+				
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
 				if ($row->pns_image !=''){
 					$pns_image = $path_image.$row->pns_image;
 				}else{

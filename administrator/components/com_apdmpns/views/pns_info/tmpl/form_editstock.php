@@ -27,11 +27,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			submitform( pressbutton );
 			return;
 		}	
-		if (form.pns_stock.value < form.pns_qty_used.value){
-			alert("Please input Stock greater than Qty Used	");
-			form.pns_stock.focus();
-			return false;
-		}                
+//		if (form.pns_stock.value < form.pns_qty_used.value){
+//			alert("Please input Stock greater than Qty Used	");
+//			form.pns_stock.focus();
+//			return false;
+//		}                
 		submitform( pressbutton );
 	}
 	
@@ -146,14 +146,14 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                                                 <input type="text" value="<?php echo $this->lists['pns_cost']?>" name="pns_cost" id="pns_cost" <?php echo $classDisabled;?> />
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Date In' ); ?>
 						</label>
 					</td>
 					<td>
-						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+						<?php //echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>
 				<tr>
@@ -177,7 +177,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
                                                 <input type="text" value="<?php echo $this->lists['pns_qty_used']?>" name="pns_qty_used" id="pns_qty_used" />
 					</td>
-				</tr>                                
+				</tr>                                -->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

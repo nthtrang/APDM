@@ -5,7 +5,7 @@
 //poup add rev roll
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-	JToolBarHelper::title("Edit PO #".$this->po_row->po_code, 'cpanel.png');
+	JToolBarHelper::title("Edit PO ".$this->po_row->po_code, 'cpanel.png');
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
 $role = JAdministrator::RoleOnComponent(7);      

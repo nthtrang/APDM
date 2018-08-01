@@ -218,7 +218,11 @@ function submitbutton(pressbutton) {
 			{
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+				
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
 				if ($row->pns_image !=''){
 					$pns_image = $path_image.$row->pns_image;
 				}else{

@@ -22,9 +22,9 @@
                 JToolBarHelper::customX("Cannotedit", 'cannotedit', '', 'Cannotedit', false);
         }
 
-//	if (in_array("S", $role)) {		
-//                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Stock', false);
-//	}            
+	if (in_array("S", $role)) {		
+                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Cost', false);
+	}            
 //	if (in_array("W", $role)) {
                 //viet comment
 		//JToolBarHelper::addNew();

@@ -33,6 +33,9 @@
                 //viet comment
 		//JToolBarHelper::addNew();
 	}	
+	if (in_array("S", $role)) {		
+                JToolBarHelper::customX('updatestock', 'edit', '', 'Update Cost', false);
+	}         
 	JToolBarHelper::cancel( 'cancel', 'Close' );			
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();

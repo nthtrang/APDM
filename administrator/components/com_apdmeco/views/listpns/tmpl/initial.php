@@ -282,8 +282,12 @@ function numbersOnlyEspecial111(myfield, e, dec){
        
 				$row 	=& $this->rowint[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-                                $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->pns_id;	
-				$pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                $edit_link = 'index.php?option=com_apdmpns&amp;task=edit&cid[0]='.$row->pns_id;					
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
+                                
 				$image = ECOController::GetImagePreview($row->pns_id);
 				if ($image !=''){					
                                         $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
