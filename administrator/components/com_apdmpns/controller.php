@@ -2420,11 +2420,11 @@ class PNsController extends JController {
                 foreach ($cid as $id) {
 			$pnsid = explode("_", $id);
                         $id = $pnsid[0];
-                        $step = $pnsid[1];
+                         $step = $pnsid[1];
                         $pr_id = $pnsid[2];
                          $find_number = JRequest::getVar('find_number_' . $id.'_'.$step);
                         $ref_des = JRequest::getVar('ref_des_' . $id.'_'.$step);
-                        $checkref = explode(",", $ref_des);    
+                       // $checkref = explode(",", $ref_des);    
                         $stock = JRequest::getVar('stock_' . $id.'_'.$step);
                         $arr_fail=array();
 //                        if (in_array(null, $checkref)) {
@@ -2437,7 +2437,7 @@ class PNsController extends JController {
 //                                $arr_fail[] =$id;
 //                                continue;   
 //                         }                        
-                        $db->setQuery("update apdm_pns set pns_stock=" . $stock . ", pns_find_number = '" . $find_number . "',pns_ref_des= '" . $ref_des . "' WHERE  pns_id = " . $id);
+                        $db->setQuery("update apdm_pns_parents set stock='" . $stock . "', find_number = '" . $find_number . "',ref_des= '" . $ref_des . "' WHERE  pns_id = " . $id ." and pns_parent = ".$pr_id);                        
                         $db->query();
                 }
                 if(count($arr_fail)>0)
@@ -2454,7 +2454,7 @@ class PNsController extends JController {
         function DisplayPnsAllChildId($pns_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
-                $db->setQuery('SELECT pr.pns_id as pns_bom_id,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
                 return $result = $db->loadObjectList();
         }
 
@@ -2536,222 +2536,241 @@ class PNsController extends JController {
                 $username = $me->get('username');
                 $db = & JFactory::getDBO();
                 $query = 'SELECT * FROM apdm_pns WHERE pns_id=' . $pns_id;
-
                 $db->setQuery($query);
-                $row = $db->loadObject();
-
-                $listPNs = array();
-                $listPNs[] = array(
-                    "pns_code" => $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision,
-                    "pns_level" => 1,
-                    "eco" => GetEcoValue($row->eco_id),
-                    "pns_type" => $row->pns_type,
-                    "pns_des" => $row->pns_description,
-                    "pns_status" => $row->pns_status,
-                    "pns_find_number" => $row->pns_find_number,                    
-                    "pns_ref_des" => $row->pns_ref_des,
-                    "pns_stock" => $row->pns_stock,
-                    "pns_uom" => $row->pns_uom,
-                    "pns_life_cycle" => $row->pns_life_cycle,
-                    "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
-                    
-                );
-                //p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom
-                //get list child
-                $query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";
-                $db->setQuery($query);
-                $rows = $db->loadObjectList();
-                //for level 2
-                foreach ($rows as $obj1) {
-                        $query1 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
-                        $db->setQuery($query1);
-                        $result1 = $db->loadObject();
+                $row1 = $db->loadObject();                
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                               
+                $list_pns = $db->loadObjectList();
+                $listPNs = array();                           
+                foreach ($list_pns as $row){
+                        if ($row->pns_revision) {
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code;
+                        }
                         $listPNs[] = array(
-                            "pns_code" => $result1->full_pns_code,
+                            "pns_code" => $pns_code,
+                            "pns_level" => 1,
+                            "eco" => GetEcoValue($row->eco_id),
+                            "pns_type" => $row->pns_type,
+                            "pns_des" => $row->pns_description,
+                            "pns_status" => $row->pns_status,
+                            "find_number" => $row->find_number,                    
+                            "ref_des" => $row->ref_des,
+                            "stock" => $row->stock,
+                            "pns_uom" => $row->pns_uom,
+                            "pns_life_cycle" => $row->pns_life_cycle,
+                            "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
+
+                        );                
+                //get list child
+                //$query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";                                         
+                 $list_pns_c1 = $this->DisplayPnsAllChildId($row->pns_id); 
+                //for level 2
+                foreach ($list_pns_c1 as $result1) {                        
+                        if ($result1->pns_revision) {
+                                $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code . '-' . $result1->pns_revision;
+                        } else {
+                                $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code;
+                        }
+                        $listPNs[] = array(
+                            "pns_code" => $pns_code1,
                             "pns_level" => 2,
                             "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
                             "pns_status" => $result1->pns_status,
-                            "pns_find_number" => $result1->pns_find_number, 
-                            "pns_ref_des" => $result1->pns_ref_des,
-                            "pns_stock" => $result1->pns_stock,
+                            "find_number" => $result1->find_number, 
+                            "ref_des" => $result1->ref_des,
+                            "stock" => $result1->stock,
                             "pns_uom" => $result1->pns_uom,
                             "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
-                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj1->pns_id . " ORDER BY p.ccs_code");
-                        $rows2 = $db->LoadObjectList();
-                        if (count($rows2) > 0) {
-                                foreach ($rows2 as $obj2) {
-                                        $query2 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
-                                        $db->setQuery($query2);
-                                        $result2 = $db->loadObject();
+                        //$db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj1->pns_id . " ORDER BY p.ccs_code");
+//                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result1->pns_id . ')');
+//                        $rows2 = $db->loadObjectList();
+                        $list_pns_c2 = $this->DisplayPnsAllChildId($result1->pns_id); 
+                        if (count($list_pns_c2) > 0) {
+                                foreach ($list_pns_c2 as $result2) {
+                                        if ($result2->pns_revision) {
+                                                $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code . '-' . $result2->pns_revision;
+                                        } else {
+                                                $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code;
+                                        }
                                         $listPNs[] = array(
-                                            "pns_code" => $result2->full_pns_code,
+                                            "pns_code" => $pns_code2,
                                             "pns_level" => 3,
                                             "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
                                             "pns_status" => $result2->pns_status,
-                                            "pns_find_number" => $result2->pns_find_number, 
-                                            "pns_ref_des" => $result2->pns_ref_des,
-                                            "pns_stock" => $result2->pns_stock,
+                                            "find_number" => $result2->find_number, 
+                                            "ref_des" => $result2->ref_des,
+                                            "stock" => $result2->stock,
                                             "pns_uom" => $result2->pns_uom,
                                             "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
+                                        
                                         //check for level 4
-                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj2->pns_id . " ORDER BY p.ccs_code");
-                                        $rows3 = $db->LoadObjectList();
-                                        if (count($rows3) > 0) {
-                                                foreach ($rows3 as $obj3) {
-                                                        $query3 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
-                                                        $db->setQuery($query3);
-                                                        $result3 = $db->loadObject();
+                                        //$db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj2->pns_id . " ORDER BY p.ccs_code");
+                                        $list_pns_c3 = $this->DisplayPnsAllChildId($result2->pns_id);    
+                                        
+                                        if(isset($list_pns_c3)&& sizeof($list_pns_c3)>0){
+                                                foreach ($list_pns_c3 as $result3) {
+                                                        if ($result3->pns_revision) {
+                                                                $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code . '-' . $result3->pns_revision;
+                                                        } else {
+                                                                $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code;
+                                                        }
                                                         $listPNs[] = array(
-                                                            "pns_code" => $result3->full_pns_code,
+                                                            "pns_code" => $pns_code3,
                                                             "pns_level" => 4,
                                                             "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
                                                             "pns_status" => $result3->pns_status,
-                                                            "pns_find_number" => $result3->pns_find_number,
-                                                            "pns_ref_des" => $result3->pns_ref_des,
-                                                            "pns_stock" => $result3->pns_stock,
+                                                            "find_number" => $result3->find_number,
+                                                            "ref_des" => $result3->ref_des,
+                                                            "stock" => $result3->stock,
                                                             "pns_uom" => $result3->pns_uom,
                                                             "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
-                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj3->pns_id . " ORDER BY p.ccs_code");
-                                                        $rows4 = $db->LoadObjectList();
-                                                        if (count($rows4) > 0) {
-                                                                foreach ($rows4 as $obj4) {
-                                                                        $query4 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
-                                                                        $db->setQuery($query4);
-                                                                        $result4 = $db->loadObject();
+                                                                $list_pns_c4 = $this->DisplayPnsAllChildId($result3->pns_id);                                                         if (count($rows4) > 0) {
+                                                                foreach ($list_pns_c4 as $result4) {
+                                                                        if ($result4->pns_revision) {
+                                                                                $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code . '-' . $result4->pns_revision;
+                                                                        } else {
+                                                                                $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code;
+                                                                        }
                                                                         $listPNs[] = array(
-                                                                            "pns_code" => $result4->full_pns_code,
+                                                                            "pns_code" => $pns_code4,
                                                                             "pns_level" => 5,
                                                                             "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
                                                                             "pns_status" => $result4->pns_status,
-                                                                            "pns_find_number" => $result4->pns_find_number, 
-                                                                            "pns_ref_des" => $result4->pns_ref_des,
-                                                                            "pns_stock" => $result4->pns_stock,
+                                                                            "find_number" => $result4->find_number, 
+                                                                            "ref_des" => $result4->ref_des,
+                                                                            "stock" => $result4->stock,
                                                                             "pns_uom" => $result4->pns_uom,
                                                                             "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
-                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj4->pns_id . " ORDER BY p.ccs_code");
-                                                                        $rows5 = $db->LoadObjectList();
-                                                                        if (count($rows5) > 0) {
-                                                                                foreach ($rows5 as $obj5) {
-                                                                                        $query5 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
-                                                                                        $db->setQuery($query5);
-                                                                                        $result5 = $db->loadObject();
+                                                                        $list_pns_c5 = $this->DisplayPnsAllChildId($result4->pns_id);    
+                                                                        if (count($list_pns_c5) > 0) {
+                                                                                foreach ($list_pns_c5 as $result5) {
+                                                                                        if ($result4->pns_revision) {
+                                                                                                $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code . '-' . $result5->pns_revision;
+                                                                                        } else {
+                                                                                                $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code;
+                                                                                        }
                                                                                         $listPNs[] = array(
-                                                                                            "pns_code" => $result5->full_pns_code,
+                                                                                            "pns_code" => $pns_code5,
                                                                                             "pns_level" => 6,
                                                                                             "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
                                                                                             "pns_status" => $result5->pns_status,
-                                                                                            "pns_find_number" => $result5->pns_find_number, 
-                                                                                            "pns_ref_des" => $result5->pns_ref_des,
-                                                                                            "pns_stock" => $result5->pns_stock,
+                                                                                            "find_number" => $result5->find_number, 
+                                                                                            "ref_des" => $result5->ref_des,
+                                                                                            "stock" => $result5->stock,
                                                                                             "pns_uom" => $result5->pns_uom,
                                                                                             "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
-                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj5->pns_id . " ORDER BY p.ccs_code");
-                                                                                        $rows6 = $db->LoadObjectList();
-                                                                                        if (count($rows6) > 0) {
-                                                                                                foreach ($rows6 as $obj6) {
-                                                                                                        $query6 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
-                                                                                                        $db->setQuery($query6);
-                                                                                                        $result6 = $db->loadObject();
+                                                                                        $list_pns_c6 = $this->DisplayPnsAllChildId($result5->pns_id); 
+                                                                                        if (count($list_pns_c6) > 0) {
+                                                                                                foreach ($list_pns_c6 as $result6) {
+                                                                                                        if ($result6->pns_revision) {
+                                                                                                                $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code . '-' . $result6->pns_revision;
+                                                                                                        } else {
+                                                                                                                $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code;
+                                                                                                        }
                                                                                                         $listPNs[] = array(
-                                                                                                            "pns_code" => $result6->ccs_code . '-' . $result6->pns_code . '-' . $result6->pns_revision,
+                                                                                                            "pns_code" => $pns_code6,
                                                                                                             "pns_level" => 7,
                                                                                                             "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
                                                                                                             "pns_status" => $result6->pns_status,
-                                                                                                            "pns_find_number" => $result6->pns_find_number, 
-                                                                                                            "pns_ref_des" => $result6->pns_ref_des,
-                                                                                                            "pns_stock" => $result6->pns_stock,
+                                                                                                            "find_number" => $result6->find_number, 
+                                                                                                            "ref_des" => $result6->ref_des,
+                                                                                                            "stock" => $result6->stock,
                                                                                                             "pns_uom" => $result6->pns_uom,
                                                                                                             "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
-                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj6->pns_id . " ORDER BY p.ccs_code");
-                                                                                                        $rows7 = $db->LoadObjectList();
-                                                                                                        if (count($rows7) > 0) {
-                                                                                                                foreach ($rows7 as $obj7) {
-                                                                                                                        $query7 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
-                                                                                                                        $db->setQuery($query7);
-                                                                                                                        $result7 = $db->loadObject();
+                                                                                                        $list_pns_c7 = $this->DisplayPnsAllChildId($result6->pns_id);
+                                                                                                        if (count($list_pns_c7) > 0) {
+                                                                                                                foreach ($list_pns_c7 as $result7) {
+                                                                                                                        if ($result7->pns_revision) {
+                                                                                                                                $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code . '-' . $result7->pns_revision;
+                                                                                                                        } else {
+                                                                                                                                $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code;
+                                                                                                                        }
                                                                                                                         $listPNs[] = array(
-                                                                                                                            "pns_code" => $result7->full_pns_code,
+                                                                                                                            "pns_code" => $pns_code7,
                                                                                                                             "pns_level" => 8,
                                                                                                                             "eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
                                                                                                                             "pns_status" => $result7->pns_status,
-                                                                                                                            "pns_find_number" => $result7->pns_find_number, 
-                                                                                                                            "pns_ref_des" => $result7->pns_ref_des,
-                                                                                                                            "pns_stock" => $result7->pns_stock,                                                                                                                                            
+                                                                                                                            "find_number" => $result7->find_number, 
+                                                                                                                            "ref_des" => $result7->ref_des,
+                                                                                                                            "stock" => $result7->stock,                                                                                                                                            
                                                                                                                             "pns_uom" => $result7->pns_uom,
                                                                                                                             "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
-                                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj7->pns_id . " ORDER BY p.ccs_code");
-                                                                                                                        $rows8 = $db->LoadObjectList();
-                                                                                                                        if (count($rows8) > 0) {
-                                                                                                                                foreach ($rows8 as $obj8) {
-                                                                                                                                        $query8 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
-                                                                                                                                        $db->setQuery($query8);
-                                                                                                                                        $result8 = $db->loadObject();
+                                                                                                                        $list_pns_c8 = $this->DisplayPnsAllChildId($result7->pns_id);
+                                                                                                                        if (count($list_pns_c8) > 0) {
+                                                                                                                                foreach ($list_pns_c8 as $result8) { 
+                                                                                                                                        if ($result8->pns_revision) {
+                                                                                                                                                $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code . '-' . $result8->pns_revision;
+                                                                                                                                        } else {
+                                                                                                                                                $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code;
+                                                                                                                                        }
                                                                                                                                         $listPNs[] = array(
-                                                                                                                                            "pns_code" => $result8->full_pns_code,
+                                                                                                                                            "pns_code" => $pns_code8,
                                                                                                                                             "pns_level" => 9,
                                                                                                                                             "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
                                                                                                                                             "pns_status" => $result8->pns_status,
-                                                                                                                                            "pns_find_number" => $result8->pns_find_number, 
-                                                                                                                                            "pns_ref_des" => $result8->pns_ref_des,
-                                                                                                                                            "pns_stock" => $result8->pns_stock,          
+                                                                                                                                            "find_number" => $result8->find_number, 
+                                                                                                                                            "ref_des" => $result8->ref_des,
+                                                                                                                                            "stock" => $result8->stock,          
                                                                                                                                             "pns_uom" => $result8->pns_uom,
                                                                                                                                             "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
-                                                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj8->pns_id . " ORDER BY p.ccs_code");
-                                                                                                                                        $rows9 = $db->LoadObjectList();
-                                                                                                                                        if (count($rows9) > 0) {
-                                                                                                                                                foreach ($rows9 as $obj9) {
-                                                                                                                                                        $query9 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
-                                                                                                                                                        $db->setQuery($query9);
-                                                                                                                                                        $result9 = $db->loadObject();
+                                                                                                                                        $list_pns_c9 = $this->DisplayPnsAllChildId($result8->pns_id);
+                                                                                                                                        if (count($list_pns_c9) > 0) {
+                                                                                                                                                foreach ($list_pns_c9 as $result9) { 
+                                                                                                                                                        if ($result9->pns_revision) {
+                                                                                                                                                                $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code . '-' . $result9->pns_revision;
+                                                                                                                                                        } else {
+                                                                                                                                                                $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code;
+                                                                                                                                                        }
                                                                                                                                                         $listPNs[] = array(
-                                                                                                                                                            "pns_code" => $result9->full_pns_code,
+                                                                                                                                                            "pns_code" => $pns_code9,
                                                                                                                                                             "pns_level" => 10,
                                                                                                                                                             "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
                                                                                                                                                             "pns_status" => $result9->pns_status,
-                                                                                                                                                            "pns_find_number" => $result9->pns_find_number,
-                                                                                                                                                            "pns_ref_des" => $result9->pns_ref_des,
-                                                                                                                                                            "pns_stock" => $result9->pns_stock,
+                                                                                                                                                            "find_number" => $result9->find_number,
+                                                                                                                                                            "ref_des" => $result9->ref_des,
+                                                                                                                                                            "stock" => $result9->stock,
                                                                                                                                                             "pns_uom" => $result9->pns_uom,
                                                                                                                                                             "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
@@ -2773,7 +2792,7 @@ class PNsController extends JController {
                                 }
                         }
                 }
-                
+                }                
                 $user_name = $me->get('name');
                 $date = JHTML::_('date', date("Y-m-d"), '%m/%d/%Y');
                 //for Execl
@@ -2792,6 +2811,7 @@ class PNsController extends JController {
                 $objPHPExcel->getActiveSheet()->setCellValue('A5', 'Username: ' . $me->get('username'));
                 $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: ' . $date);
                 $nRecord = count($listPNs);
+                
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
                         $jj = 0;
@@ -2820,9 +2840,9 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_stock']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['stock']);                                
                                 $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
@@ -2905,9 +2925,12 @@ class PNsController extends JController {
 //                $objWriter->save($path_export . 'APDM_BOM_REPORT.xls');
 //                $dFile = new DownloadFile($path_export, 'APDM_BOM_REPORT.xls');
                 //tmp
-                
-                $name = $row->ccs_code . '-' . $row->pns_code . '-AA';// . $row->pns_revision;
-                $path_export = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row->ccs_code . DS . $name . DS;
+                if ($row1->pns_revision) {
+                        $name = $row1->ccs_code . '-' . $row1->pns_code . '-' . $row1->pns_revision;
+                } else {
+                        $name = $row1->ccs_code . '-' . $row1->pns_code;
+                }                                                 
+                $path_export = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row1->ccs_code . DS . $name . DS;
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
                 $objWriter->save($path_export . $name .'-'.time(). '_APDM_BOM_REPORT.xls');
                 //  $dFile = new DownloadFile($path_export, $name.'_APDM_BOM_REPORT.xls');                
@@ -4555,223 +4578,246 @@ class PNsController extends JController {
                 $pns_id = JRequest::getVar('pns_id');
                 $username = $me->get('username');
                 $db = & JFactory::getDBO();
-                $query = 'SELECT * FROM apdm_pns WHERE pns_id=' . $pns_id;
-
-                $db->setQuery($query);
-                $row = $db->loadObject();
-
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
+                $list_pns = $db->loadObjectList();
                 $listPNs = array();
-                $listPNs[] = array(
-                    "pns_code" => $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision,
-                    "pns_level" => 1,
-                    "eco" => GetEcoValue($row->eco_id),
-                    "pns_type" => $row->pns_type,
-                    "pns_des" => $row->pns_description,
-                    "pns_status" => $row->pns_status,
-                    "pns_find_number" => $row->pns_find_number,                    
-                    "pns_ref_des" => $row->pns_ref_des,
-                    "pns_stock" => $row->pns_stock,
-                    "pns_uom" => $row->pns_uom,
-                    "pns_life_cycle" => $row->pns_life_cycle,
-                    "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
-                    
-                );
-                //p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom
-                //get list child
-                $query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";
-                $db->setQuery($query);
-                $rows = $db->loadObjectList();
-                //for level 2
-                foreach ($rows as $obj1) {
-                        $query1 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj1->pns_id;
-                        $db->setQuery($query1);
-                        $result1 = $db->loadObject();
+                                       
+                foreach ($list_pns as $row){
+                        if ($row->pns_revision) {
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code;
+                        }
                         $listPNs[] = array(
-                            "pns_code" => $result1->full_pns_code,
+                            "pns_code" => $pns_code,
+                            "pns_level" => 1,
+                            "eco" => GetEcoValue($row->eco_id),
+                            "pns_type" => $row->pns_type,
+                            "pns_des" => $row->pns_description,
+                            "pns_status" => $row->pns_status,
+                            "find_number" => $row->find_number,                    
+                            "ref_des" => $row->ref_des,
+                            "stock" => $row->stock,
+                            "pns_uom" => $row->pns_uom,
+                            "pns_life_cycle" => $row->pns_life_cycle,
+                            "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
+
+                        );                
+                //get list child
+                //$query = "SELECT pr.*, p.ccs_code FROM apdm_pns_parents as pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $pns_id . " ORDER BY p.ccs_code ";
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $row->pns_id . ')');                                
+                $rows = $db->loadObjectList();                               
+                //for level 2
+                foreach ($rows as $result1) {
+                        if ($result1->pns_revision) {
+                                $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code . '-' . $result1->pns_revision;
+                        } else {
+                                $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code;
+                        }
+                        $listPNs[] = array(
+                            "pns_code" => $pns_code1,
                             "pns_level" => 2,
                             "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
                             "pns_status" => $result1->pns_status,
-                            "pns_find_number" => $result1->pns_find_number, 
-                            "pns_ref_des" => $result1->pns_ref_des,
-                            "pns_stock" => $result1->pns_stock,
+                            "find_number" => $result1->find_number, 
+                            "ref_des" => $result1->ref_des,
+                            "stock" => $result1->stock,
                             "pns_uom" => $result1->pns_uom,
                             "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
-                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj1->pns_id . " ORDER BY p.ccs_code");
-                        $rows2 = $db->LoadObjectList();
+                        //$db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj1->pns_id . " ORDER BY p.ccs_code");
+                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result1->pns_id . ')');
+                        $rows2 = $db->loadObjectList();
                         if (count($rows2) > 0) {
-                                foreach ($rows2 as $obj2) {
-                                        $query2 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj2->pns_id;
-                                        $db->setQuery($query2);
-                                        $result2 = $db->loadObject();
+                                foreach ($rows2 as $result2) {
+                                        if ($result2->pns_revision) {
+                                                $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code . '-' . $result2->pns_revision;
+                                        } else {
+                                                $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code;
+                                        }
                                         $listPNs[] = array(
-                                            "pns_code" => $result2->full_pns_code,
+                                            "pns_code" => $pns_code2,
                                             "pns_level" => 3,
                                             "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
                                             "pns_status" => $result2->pns_status,
-                                            "pns_find_number" => $result2->pns_find_number, 
-                                            "pns_ref_des" => $result2->pns_ref_des,
-                                            "pns_stock" => $result2->pns_stock,
+                                            "find_number" => $result2->find_number, 
+                                            "ref_des" => $result2->ref_des,
+                                            "stock" => $result2->stock,
                                             "pns_uom" => $result2->pns_uom,
                                             "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         //check for level 4
-                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj2->pns_id . " ORDER BY p.ccs_code");
-                                        $rows3 = $db->LoadObjectList();
+                                        //$db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj2->pns_id . " ORDER BY p.ccs_code");
+                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result2->pns_id . ')');                                        
+                                        $rows3 = $db->loadObjectList();
                                         if (count($rows3) > 0) {
-                                                foreach ($rows3 as $obj3) {
-                                                        $query3 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj3->pns_id;
-                                                        $db->setQuery($query3);
-                                                        $result3 = $db->loadObject();
+                                                foreach ($rows3 as $result3) {
+                                                        if ($result3->pns_revision) {
+                                                                $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code . '-' . $result3->pns_revision;
+                                                        } else {
+                                                                $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code;
+                                                        }
                                                         $listPNs[] = array(
-                                                            "pns_code" => $result3->full_pns_code,
+                                                            "pns_code" => $pns_code3,
                                                             "pns_level" => 4,
                                                             "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
                                                             "pns_status" => $result3->pns_status,
-                                                            "pns_find_number" => $result3->pns_find_number,
-                                                            "pns_ref_des" => $result3->pns_ref_des,
-                                                            "pns_stock" => $result3->pns_stock,
+                                                            "find_number" => $result3->find_number,
+                                                            "ref_des" => $result3->ref_des,
+                                                            "stock" => $result3->stock,
                                                             "pns_uom" => $result3->pns_uom,
                                                             "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
-                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj3->pns_id . " ORDER BY p.ccs_code");
-                                                        $rows4 = $db->LoadObjectList();
+                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result3->pns_id . ')');                                        
+                                                        $rows4 = $db->loadObjectList();
                                                         if (count($rows4) > 0) {
-                                                                foreach ($rows4 as $obj4) {
-                                                                        $query4 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj4->pns_id;
-                                                                        $db->setQuery($query4);
-                                                                        $result4 = $db->loadObject();
+                                                                foreach ($rows4 as $result4) {
+                                                                        if ($result4->pns_revision) {
+                                                                                $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code . '-' . $result4->pns_revision;
+                                                                        } else {
+                                                                                $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code;
+                                                                        }
                                                                         $listPNs[] = array(
-                                                                            "pns_code" => $result4->full_pns_code,
+                                                                            "pns_code" => $pns_code4,
                                                                             "pns_level" => 5,
                                                                             "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
                                                                             "pns_status" => $result4->pns_status,
-                                                                            "pns_find_number" => $result4->pns_find_number, 
-                                                                            "pns_ref_des" => $result4->pns_ref_des,
-                                                                            "pns_stock" => $result4->pns_stock,
+                                                                            "find_number" => $result4->find_number, 
+                                                                            "ref_des" => $result4->ref_des,
+                                                                            "stock" => $result4->stock,
                                                                             "pns_uom" => $result4->pns_uom,
                                                                             "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
-                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj4->pns_id . " ORDER BY p.ccs_code");
+                                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result4->pns_id . ')');                                        
                                                                         $rows5 = $db->LoadObjectList();
                                                                         if (count($rows5) > 0) {
-                                                                                foreach ($rows5 as $obj5) {
-                                                                                        $query5 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj5->pns_id;
-                                                                                        $db->setQuery($query5);
-                                                                                        $result5 = $db->loadObject();
+                                                                                foreach ($rows5 as $result5) {
+                                                                                        if ($result4->pns_revision) {
+                                                                                                $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code . '-' . $result5->pns_revision;
+                                                                                        } else {
+                                                                                                $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code;
+                                                                                        }
                                                                                         $listPNs[] = array(
-                                                                                            "pns_code" => $result5->full_pns_code,
+                                                                                            "pns_code" => $pns_code5,
                                                                                             "pns_level" => 6,
                                                                                             "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
                                                                                             "pns_status" => $result5->pns_status,
-                                                                                            "pns_find_number" => $result5->pns_find_number, 
-                                                                                            "pns_ref_des" => $result5->pns_ref_des,
-                                                                                            "pns_stock" => $result5->pns_stock,
+                                                                                            "find_number" => $result5->find_number, 
+                                                                                            "ref_des" => $result5->ref_des,
+                                                                                            "stock" => $result5->stock,
                                                                                             "pns_uom" => $result5->pns_uom,
                                                                                             "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
-                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj5->pns_id . " ORDER BY p.ccs_code");
+                                                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result5->pns_id . ')');                                        
                                                                                         $rows6 = $db->LoadObjectList();
                                                                                         if (count($rows6) > 0) {
-                                                                                                foreach ($rows6 as $obj6) {
-                                                                                                        $query6 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj6->pns_id;
-                                                                                                        $db->setQuery($query6);
-                                                                                                        $result6 = $db->loadObject();
+                                                                                                foreach ($rows6 as $result6) {
+                                                                                                        if ($result6->pns_revision) {
+                                                                                                                $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code . '-' . $result6->pns_revision;
+                                                                                                        } else {
+                                                                                                                $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code;
+                                                                                                        }
                                                                                                         $listPNs[] = array(
-                                                                                                            "pns_code" => $result6->ccs_code . '-' . $result6->pns_code . '-' . $result6->pns_revision,
+                                                                                                            "pns_code" => $pns_code6,
                                                                                                             "pns_level" => 7,
                                                                                                             "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
                                                                                                             "pns_status" => $result6->pns_status,
-                                                                                                            "pns_find_number" => $result6->pns_find_number, 
-                                                                                                            "pns_ref_des" => $result6->pns_ref_des,
-                                                                                                            "pns_stock" => $result6->pns_stock,
+                                                                                                            "find_number" => $result6->find_number, 
+                                                                                                            "ref_des" => $result6->ref_des,
+                                                                                                            "stock" => $result6->stock,
                                                                                                             "pns_uom" => $result6->pns_uom,
                                                                                                             "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
-                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj6->pns_id . " ORDER BY p.ccs_code");
+                                                                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result6->pns_id . ')');
                                                                                                         $rows7 = $db->LoadObjectList();
                                                                                                         if (count($rows7) > 0) {
-                                                                                                                foreach ($rows7 as $obj7) {
-                                                                                                                        $query7 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj7->pns_id;
-                                                                                                                        $db->setQuery($query7);
-                                                                                                                        $result7 = $db->loadObject();
+                                                                                                                foreach ($rows7 as $result7) {
+                                                                                                                        if ($result7->pns_revision) {
+                                                                                                                                $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code . '-' . $result7->pns_revision;
+                                                                                                                        } else {
+                                                                                                                                $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code;
+                                                                                                                        }
                                                                                                                         $listPNs[] = array(
-                                                                                                                            "pns_code" => $result7->full_pns_code,
+                                                                                                                            "pns_code" => $pns_code7,
                                                                                                                             "pns_level" => 8,
                                                                                                                             "eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
                                                                                                                             "pns_status" => $result7->pns_status,
-                                                                                                                            "pns_find_number" => $result7->pns_find_number, 
-                                                                                                                            "pns_ref_des" => $result7->pns_ref_des,
-                                                                                                                            "pns_stock" => $result7->pns_stock,                                                                                                                                            
+                                                                                                                            "find_number" => $result7->find_number, 
+                                                                                                                            "ref_des" => $result7->ref_des,
+                                                                                                                            "stock" => $result7->stock,                                                                                                                                            
                                                                                                                             "pns_uom" => $result7->pns_uom,
                                                                                                                             "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
-                                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj7->pns_id . " ORDER BY p.ccs_code");
+                                                                                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result7->pns_id . ')');
                                                                                                                         $rows8 = $db->LoadObjectList();
                                                                                                                         if (count($rows8) > 0) {
-                                                                                                                                foreach ($rows8 as $obj8) {
-                                                                                                                                        $query8 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj8->pns_id;
-                                                                                                                                        $db->setQuery($query8);
-                                                                                                                                        $result8 = $db->loadObject();
+                                                                                                                                foreach ($rows8 as $result8) { 
+                                                                                                                                        if ($result8->pns_revision) {
+                                                                                                                                                $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code . '-' . $result8->pns_revision;
+                                                                                                                                        } else {
+                                                                                                                                                $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code;
+                                                                                                                                        }
                                                                                                                                         $listPNs[] = array(
-                                                                                                                                            "pns_code" => $result8->full_pns_code,
+                                                                                                                                            "pns_code" => $pns_code8,
                                                                                                                                             "pns_level" => 9,
                                                                                                                                             "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
                                                                                                                                             "pns_status" => $result8->pns_status,
-                                                                                                                                            "pns_find_number" => $result8->pns_find_number, 
-                                                                                                                                            "pns_ref_des" => $result8->pns_ref_des,
-                                                                                                                                            "pns_stock" => $result8->pns_stock,          
+                                                                                                                                            "find_number" => $result8->find_number, 
+                                                                                                                                            "ref_des" => $result8->ref_des,
+                                                                                                                                            "stock" => $result8->stock,          
                                                                                                                                             "pns_uom" => $result8->pns_uom,
                                                                                                                                             "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
-                                                                                                                                        $db->setQuery("SELECT pr.*,  p.ccs_code FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns as p ON p.pns_id=pr.pns_id WHERE pr.pns_parent=" . $obj8->pns_id . " ORDER BY p.ccs_code");
+                                                                                                                                        $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $result8->pns_id . ')');
                                                                                                                                         $rows9 = $db->LoadObjectList();
                                                                                                                                         if (count($rows9) > 0) {
-                                                                                                                                                foreach ($rows9 as $obj9) {
-                                                                                                                                                        $query9 = "SELECT p.pns_life_cycle,p.pns_find_number,p.pns_ref_des,p.pns_stock,p.pns_uom,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS full_pns_code, e.eco_name, p.pns_type, p.pns_status, p.pns_description, p.pns_create  FROM apdm_pns AS p  lEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE p.pns_id=" . $obj9->pns_id;
-                                                                                                                                                        $db->setQuery($query9);
-                                                                                                                                                        $result9 = $db->loadObject();
+                                                                                                                                                foreach ($rows9 as $result9) { 
+                                                                                                                                                        if ($result9->pns_revision) {
+                                                                                                                                                                $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code . '-' . $result9->pns_revision;
+                                                                                                                                                        } else {
+                                                                                                                                                                $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code;
+                                                                                                                                                        }
                                                                                                                                                         $listPNs[] = array(
-                                                                                                                                                            "pns_code" => $result9->full_pns_code,
+                                                                                                                                                            "pns_code" => $pns_code9,
                                                                                                                                                             "pns_level" => 10,
                                                                                                                                                             "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
                                                                                                                                                             "pns_status" => $result9->pns_status,
-                                                                                                                                                            "pns_find_number" => $result9->pns_find_number,
-                                                                                                                                                            "pns_ref_des" => $result9->pns_ref_des,
-                                                                                                                                                            "pns_stock" => $result9->pns_stock,
+                                                                                                                                                            "find_number" => $result9->find_number,
+                                                                                                                                                            "ref_des" => $result9->ref_des,
+                                                                                                                                                            "stock" => $result9->stock,
                                                                                                                                                             "pns_uom" => $result9->pns_uom,
                                                                                                                                                             "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
@@ -4792,6 +4838,7 @@ class PNsController extends JController {
                                         }
                                 }
                         }
+                }
                 }
                 
                 $user_name = $me->get('name');
@@ -4840,9 +4887,9 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_stock']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['stock']);                                
                                 $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);

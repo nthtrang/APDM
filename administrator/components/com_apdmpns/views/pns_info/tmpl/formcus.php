@@ -194,7 +194,7 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" maxlength="12"  name="pns_code" id="pns_code" class="inputbox" size="20" value=""/>
+						<input type="text" maxlength="40"  name="pns_code" id="pns_code" class="inputbox" size="20" value=""/>
 <!--						<input type="text" maxlength="2" onKeyPress="return numbersOnly(this, event);" name="pns_version" id="pns_version" class="inputbox" size="5" value="00" />					-->
 
 					</td>
