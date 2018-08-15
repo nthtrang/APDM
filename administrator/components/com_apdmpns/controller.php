@@ -1175,6 +1175,7 @@ class PNsController extends JController {
                 $pns_code = JRequest::getVar('pns_code');
                 $ccs_code = JRequest::getVar('ccs_code');
                 $pns_cost = strtoupper($post['pns_cost']);
+                $pns_type = JRequest::getVar('pns_type');
                 $eco_id = strtoupper($post['eco_id']);
                 $pns_description = strtoupper($post['pns_description']);
                 $redirect = JRequest::getVar('redirect');
@@ -1297,6 +1298,8 @@ class PNsController extends JController {
                         $row->pns_description = $pns_description;
                         $row->pns_cost = JRequest::getVar('pns_cost');
                         $row->pns_stock = JRequest::getVar('pns_stock');
+                        $row->pns_type = JRequest::getVar('pns_type');
+                        $row->pns_status = JRequest::getVar('pns_status');
                         $row->pns_datein = JRequest::getVar('pns_datein');
                         $row->pns_uom = JRequest::getVar('pns_uom');                        
                         $row->pns_qty_used = JRequest::getVar('pns_qty_used');

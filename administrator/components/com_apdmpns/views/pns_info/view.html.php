@@ -179,11 +179,11 @@ class pnsViewpns_info extends JView
         $status[] = JHTML::_('select.option',  'Active', JText::_( 'Active' ) , 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Inactive', JText::_( 'Inactive' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Obsolete',  JText::_( 'Obsolete' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'DoNotUse',  JText::_( 'Do Not Use' ), 'value', 'text'); 
+        $status[] = JHTML::_('select.option',  'DoNotUse',  JText::_( ' Do Not Use' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Engineering', JText::_( 'Engineering' ), 'value', 'text');         
         //check if status is released => disable option
         $classDisabled = "";
-        if($row->pns_status=='Release')
+        if($row->pns_life_cycle=='Released')
             $classDisabled = 'disabled = "disabled"';    
         $lists['status'] = JHTML::_('select.genericlist',   $status, 'pns_status', 'class="inputbox" size="1" '.$classDisabled.'', 'value', 'text', $row->pns_status );
         //for edit pns
