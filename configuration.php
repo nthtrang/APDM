@@ -19,7 +19,7 @@ class JConfig {
 	var $live_site = '';
 	var $offset = '7';
 	var $caching = '0';
-	var $cachetime = '15';
+	var $cachetime = '0';
 	var $cache_handler = 'file';
 	var $memcache_settings = array();
 	var $ftp_enable = '0';
@@ -31,7 +31,7 @@ class JConfig {
 	var $dbtype = 'mysql';
 	var $host = 'localhost';
 	var $user = 'root';
-	var $db = 'adpm1';//apdm   adpm1
+	var $db = 'adpm1';
 	var $dbprefix = 'jos_';
 	var $mailer = 'smtp';
 	var $mailfrom = 'trang.nguyen@ascenx.com';
@@ -46,9 +46,9 @@ class JConfig {
 	var $MetaAuthor = '1';
 	var $MetaTitle = '1';
 	var $lifetime = '60';
-	var $session_handler = 'database';
+	var $session_handler = 'none';
 	var $password = '';
-	var $sitename = 'ADP - Ascenx Design Part';
+	var $sitename = 'ADP - Ascenx Design Part Demo';
 	var $MetaDesc = 'ADP - Ascenx Design Part';
 	var $MetaKeys = 'Ascenx, ADP';
 	var $offline_message = 'This site is down for maintenance. Please check back again soon.';
