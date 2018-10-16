@@ -35,7 +35,10 @@
 	}	
 	if (in_array("S", $role)) {		
                 JToolBarHelper::customX('updatestock', 'edit', '', 'Update Cost', false);
-	}         
+	}       
+	if (in_array("D", $role)) {		
+                JToolBarHelper::deleteList('Are you sure to delete it?');
+	}        
 	JToolBarHelper::cancel( 'cancel', 'Close' );			
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
@@ -65,6 +68,10 @@
                         submitform( pressbutton );
                         return;
                 }
+                if (pressbutton == 'remove') {
+				submitform( pressbutton );
+				return;
+			}                    
 			
 	}	
 

@@ -12,8 +12,8 @@
 	if (in_array("E", $role) && $this->row->eco_status !="Released" && $this->row->eco_status !="Inreview") {
 		JToolBarHelper::editListX();
 	}
-	if (in_array("W", $role)) {
-	//	JToolBarHelper::addNewX();
+	if (in_array("D", $role)) {		
+                JToolBarHelper::deleteList('Are you sure to delete it?');
 	}
 	JToolBarHelper::cancel( 'cancel', 'Close' );
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -44,6 +44,10 @@
 			submitform( pressbutton );
 			return;
 		}
+                if (pressbutton == 'remove') {
+				submitform( pressbutton );
+				return;
+			}                
 //		if (pressbutton == 'files') {
 //			  window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id?>");
 //			return;
