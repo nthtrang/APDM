@@ -107,7 +107,7 @@
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'ASCENX_PNS' ); ?>
+							<?php echo JText::_( 'Ascenx Viet Nam P/N' ); ?>
 						</label>
 					</td>
 					<td><?php echo $this->row->ccs_code.'-'.$this->row->pns_code;?>					
@@ -290,7 +290,7 @@
                                                 </label>
                                         </td>
                                         <td>
-                                                <?php echo JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S'); ?>
+                                                <?php echo JHTML::_('date',$this->row->pns_create, '%m-%d-%Y %H:%M:%S %p'); ?>
                                                         
                                         </td>
                                 </tr>
@@ -313,7 +313,7 @@
 						</label>
 					</td>
 					<td>
- 						<?php echo  ($this->row->pns_modified_by) ? JHTML::_('date', $this->row->pns_modified, '%m-%d-%Y %H:%M:%S') : ''; ?>
+ 						<?php echo  ($this->row->pns_modified_by) ? JHTML::_('date', $this->row->pns_modified, '%m-%d-%Y %H:%M:%S %p') : ''; ?>
 
 					</td>
 				</tr>

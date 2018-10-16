@@ -111,15 +111,18 @@ class zipfile
     {
 
         foreach($files as $file) {
+                
 			if (is_file($file)) //directory check
 			{
-				$data = implode("",file($file));
+				 $data = implode("",file($file));
+                                 $file= substr(end(explode("\\", $file)),1);
 	            $this->addFile($data,$file);
             } else {
 //				$data = implode("",file("ndkziper.txt"));
 //	            $this->addFile($data,$file."/ndkziper.txt");
 			}	
 		}
+                
     }
     
     function output($file)

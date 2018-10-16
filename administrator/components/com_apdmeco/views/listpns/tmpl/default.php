@@ -111,9 +111,9 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
 				</th>				
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
@@ -186,9 +186,9 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo $row->pns_life_cycle; ?>
 				</td>		
-				<td align="center">
+<!--				<td align="center">
 					<?php echo $row->pns_status; ?>
-				</td>		                                
+				</td>		                                -->
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>

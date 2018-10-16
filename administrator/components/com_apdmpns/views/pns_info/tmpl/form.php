@@ -86,11 +86,11 @@
 			return false;
 		}
 		
-		if (form.pns_status.value==""){
-			alert("Please select Part Number Status");
-			from.pns_status.focus();
-			return false;
-		}
+//		if (form.pns_status.value==""){
+//			alert("Please select Part Number Status");
+//			from.pns_status.focus();
+//			return false;
+//		}
 		
 		submitform( pressbutton );
 	}
@@ -230,7 +230,7 @@
 										
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Make/Buy' ); ?>
@@ -239,7 +239,7 @@
 					<td>
 						<?php echo $this->lists['pns_type']?>
 					</td>
-				</tr>
+				</tr>-->
                                 <tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -271,7 +271,7 @@
                                                 <input type="text" value="<?php echo $this->row->pns_cost?>" name="pns_cost" id="pns_cost" />
 					</td>
 				</tr>                                
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_STATUS' ); ?>
@@ -280,7 +280,7 @@
 					<td>
 						<?php echo $this->lists['status']?>
 					</td>
-				</tr>			
+				</tr>			-->
 				
 			</table>
 		</fieldset>
