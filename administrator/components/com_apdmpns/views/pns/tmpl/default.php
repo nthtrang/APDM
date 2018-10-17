@@ -158,9 +158,9 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'DOWNLOAD_PDF' ); ?>
 				</th>
 				
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Status'), 'p.pns_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('State'), 'p.pns_life_cycle', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>                                
@@ -275,9 +275,9 @@ function submitbutton(pressbutton) {
 				
 					}?>
 				</td>
-				<td align="center">
+<!--				<td align="center">
 					<?php echo $row->pns_status;?>
-				</td>
+				</td>-->
 				<td align="center">
 					<?php echo $row->pns_life_cycle;?>
 				</td>                                                                

@@ -208,7 +208,7 @@
 						<?php echo $this->row->pns_description?>
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_STATUS' ); ?>
@@ -217,7 +217,7 @@
 					<td>
 						<?php echo $this->row->pns_status; ?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

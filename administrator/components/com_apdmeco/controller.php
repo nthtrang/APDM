@@ -325,7 +325,7 @@ class ECOController extends JController
 
                                 if ($row->eco_status != 'Released') {
                                         $subject = "[ADP] ECO Approval request - " . $row->eco_name;
-                                        $message1 = "Please go to <a href='http://10.10.1.245/ADPU/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to approve/reject for this ECO";
+                                        $message1 = "Please go to <a href='http://10.10.1.245/AsxDP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to approve/reject for this ECO";
 
                                         foreach ($arr_user as $user) {
                                                 if($user!= $me->get('email'))
@@ -1008,7 +1008,7 @@ class ECOController extends JController
 //                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
 //                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
 //                }
-//                $message .= "<br>Please go to <a href='http://10.10.1.245/ADPU/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
+//                $message .= "<br>Please go to <a href='http://10.10.1.245/AsxDP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
 //
 //                $adminEmail = $me->get('email');
 //                $adminName = $me->get('name');
@@ -1199,7 +1199,7 @@ class ECOController extends JController
                                         $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
                                                 "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
                                 }
-                                $message .= "<br>Please go to <a href='http://10.10.1.245/ADPU/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
+                                $message .= "<br>Please go to <a href='http://10.10.1.245/AsxDP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
                                 $adminEmail = $me->get('email');
                                 $adminName = $me->get('name');
                                 if ($MailFrom != '' && $FromName != '') {
@@ -1258,7 +1258,7 @@ class ECOController extends JController
                                 $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
                                         "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
                         }
-                        $message .= "<br>Please go to <a href='http://10.10.1.245/ADPU/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
+                        $message .= "<br>Please go to <a href='http://10.10.1.245/AsxDP/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";       
 
                         $adminEmail = $me->get('email');
                         $adminName = $me->get('name');
@@ -1391,6 +1391,8 @@ class ECOController extends JController
                         $db->setQuery("update apdm_pns_initial set init_plant_status='".$init_plant_status."', init_make_buy = '" . $init_make_buy . "',init_leadtime= '" . $init_leadtime . "',init_buyer= '" . $init_buyer . "',init_supplier= '" . $init_supplier . "',init_cost= '" . $init_cost . "',init_modified= '" . $init_modified . "',init_modified_by= '" . $init_modified_by . "',eco_id='".$eco."'  WHERE  pns_id = " . $id ." and eco_id = ".$eco);
                         $db->query();
                 }
+                $db->setQuery("update apdm_pns set pns_type = '" . $init_make_buy . "' WHERE  pns_id = " . $id);
+                $db->query();
         }
         $msg = "Successfully Saved Initital";
         $this->setRedirect('index.php?option=com_apdmeco&task=initial&cid[]=' . $eco, $msg);        
