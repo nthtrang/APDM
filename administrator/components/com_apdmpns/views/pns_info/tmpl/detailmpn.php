@@ -174,7 +174,7 @@
 						<?php echo PNsController::GetEcoValue($this->row->eco_id);?>
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Make/Buy' ); ?>
@@ -183,7 +183,7 @@
 					<td>
 						<?php echo $this->row->pns_type; ?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -203,7 +203,7 @@
 					<td><?php echo $this->ccs_name;?>
 					</td>
 				</tr>	                                  
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_STATUS' ); ?>
@@ -212,7 +212,7 @@
 					<td>
 						<?php echo $this->row->pns_status; ?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

@@ -43,12 +43,12 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 //			form.pns_stock.focus();
 //			return false;
 //		}    
-		if (form.pns_status.value==""){
-			alert("Please select Part Number Status/");
-			from.pns_status.focus();
-			return false;
-		}
-		
+//		if (form.pns_status.value==""){
+//			alert("Please select Part Number Status/");
+//			from.pns_status.focus();
+//			return false;
+//		}
+//		
 		submitform( pressbutton );
 	}
 	function get_defautl_code(){
@@ -196,7 +196,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 </a>	
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Make/Buy' ); ?>
@@ -205,7 +205,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
 						<?php echo $this->lists['pns_type']?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -216,7 +216,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						<textarea maxlength='40' name="pns_description" rows="6" cols="30"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_STATUS' ); ?>
@@ -225,7 +225,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
 						<?php echo $this->lists['status']?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

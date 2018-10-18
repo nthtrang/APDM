@@ -73,11 +73,11 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'Description' ); ?>
 				</th>
 
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Activate'); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Life Cycle'); ?>
+					<?php echo JText::_('State'); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Date Create'); ?>
@@ -128,10 +128,10 @@ function submitbutton(pressbutton) {
 					<?php //} ?>
 					
 				</td>-->
-				<td align="center">
+<!--				<td align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
-				</td>
+				</td>-->
 				<td>
 					<?php echo $row->eco_status ; ?>
 				</td>
@@ -180,7 +180,7 @@ function submitbutton(pressbutton) {
 				</th>
 				
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Status'); ?>
+					<?php echo JText::_('State'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
@@ -276,7 +276,7 @@ function submitbutton(pressbutton) {
 					}?>
 				</td>
 				<td align="center">
-					<?php echo $row->pns_status;?>
+					<?php echo $row->pns_life_cycle;?>
 				</td>
 				<td align="center">
 					<?php echo $row->pns_type;?>

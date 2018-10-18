@@ -2554,8 +2554,7 @@ class PNsController extends JController {
                     "pns_level" => 0,
                     "eco" => GetEcoValue($row->eco_id),
                     "pns_type" => $row->pns_type,
-                    "pns_des" => $row->pns_description,
-                    "pns_status" => $row->pns_status,
+                    "pns_des" => $row->pns_description,                   
                     "find_number" => $row->find_number,                    
                     "ref_des" => $row->ref_des,
                     "stock" => $row->stock,
@@ -2582,7 +2581,7 @@ class PNsController extends JController {
                             "eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
-                            "pns_status" => $row->pns_status,
+//                            "pns_status" => $row->pns_status,
                             "find_number" => $row->find_number,                    
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
@@ -2607,7 +2606,7 @@ class PNsController extends JController {
                             "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
-                            "pns_status" => $result1->pns_status,
+//                            "pns_status" => $result1->pns_status,
                             "find_number" => $result1->find_number, 
                             "ref_des" => $result1->ref_des,
                             "stock" => $result1->stock,
@@ -2633,7 +2632,7 @@ class PNsController extends JController {
                                             "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
-                                            "pns_status" => $result2->pns_status,
+//                                            "pns_status" => $result2->pns_status,
                                             "find_number" => $result2->find_number, 
                                             "ref_des" => $result2->ref_des,
                                             "stock" => $result2->stock,
@@ -2659,7 +2658,7 @@ class PNsController extends JController {
                                                             "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
-                                                            "pns_status" => $result3->pns_status,
+//                                                            "pns_status" => $result3->pns_status,
                                                             "find_number" => $result3->find_number,
                                                             "ref_des" => $result3->ref_des,
                                                             "stock" => $result3->stock,
@@ -2681,7 +2680,7 @@ class PNsController extends JController {
                                                                             "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
-                                                                            "pns_status" => $result4->pns_status,
+//                                                                            "pns_status" => $result4->pns_status,
                                                                             "find_number" => $result4->find_number, 
                                                                             "ref_des" => $result4->ref_des,
                                                                             "stock" => $result4->stock,
@@ -2704,7 +2703,7 @@ class PNsController extends JController {
                                                                                             "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
-                                                                                            "pns_status" => $result5->pns_status,
+//                                                                                            "pns_status" => $result5->pns_status,
                                                                                             "find_number" => $result5->find_number, 
                                                                                             "ref_des" => $result5->ref_des,
                                                                                             "stock" => $result5->stock,
@@ -2727,7 +2726,7 @@ class PNsController extends JController {
                                                                                                             "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
-                                                                                                            "pns_status" => $result6->pns_status,
+//                                                                                                            "pns_status" => $result6->pns_status,
                                                                                                             "find_number" => $result6->find_number, 
                                                                                                             "ref_des" => $result6->ref_des,
                                                                                                             "stock" => $result6->stock,
@@ -2750,7 +2749,7 @@ class PNsController extends JController {
                                                                                                                             "eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
-                                                                                                                            "pns_status" => $result7->pns_status,
+//                                                                                                                            "pns_status" => $result7->pns_status,
                                                                                                                             "find_number" => $result7->find_number, 
                                                                                                                             "ref_des" => $result7->ref_des,
                                                                                                                             "stock" => $result7->stock,                                                                                                                                            
@@ -2773,7 +2772,7 @@ class PNsController extends JController {
                                                                                                                                             "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
-                                                                                                                                            "pns_status" => $result8->pns_status,
+//                                                                                                                                            "pns_status" => $result8->pns_status,
                                                                                                                                             "find_number" => $result8->find_number, 
                                                                                                                                             "ref_des" => $result8->ref_des,
                                                                                                                                             "stock" => $result8->stock,          
@@ -2796,7 +2795,7 @@ class PNsController extends JController {
                                                                                                                                                             "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
-                                                                                                                                                            "pns_status" => $result9->pns_status,
+//                                                                                                                                                            "pns_status" => $result9->pns_status,
                                                                                                                                                             "find_number" => $result9->find_number,
                                                                                                                                                             "ref_des" => $result9->ref_des,
                                                                                                                                                             "stock" => $result9->stock,
@@ -2838,14 +2837,13 @@ class PNsController extends JController {
                 $objPHPExcel->getActiveSheet()->getStyle('F5')->getFont()->setBold(true);
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A5', 'Username: ' . $me->get('username'));
-                $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: ' . $date);
-                $objPHPExcel->getActiveSheet()->setCellValue('A6', 'Level 0:' . $pnsCodeLevelZero);
+                $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: ' . $date);               
                 $nRecord = count($listPNs);
                 
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
                         $jj = 0;
-                        $ii = 8;
+                        $ii = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
                                 $a = 'A' . $ii;
@@ -2860,7 +2858,7 @@ class PNsController extends JController {
                                 $j = 'J' . $ii;
                                 $k = 'K' . $ii;
                                 $l = 'L' . $ii;
-                                $m = 'M' . $ii;
+                                //$m = 'M' . $ii;
                                 //set heigh or row 
                                 $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
@@ -2869,13 +2867,13 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['stock']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_uom']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
+                                //$objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -2890,7 +2888,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -2905,7 +2903,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -2921,7 +2919,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                //$objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
@@ -2943,7 +2941,7 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                       // $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
                                 $ii++;
                                 $jj++;
@@ -3004,7 +3002,7 @@ class PNsController extends JController {
                     "pns_des" => $row->pns_description,
                     "pns_rev" => implode("<>",$arr_rev),
                     "pns_current_rev" => $row->pns_revision,
-                    "pns_status" => $row->pns_status,
+                    //"pns_status" => $row->pns_status,
                     "pns_state" => $row->pns_life_cycle,
                     "pns_type" => $row->pns_type,
                     "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
@@ -3035,7 +3033,7 @@ class PNsController extends JController {
                                     "pns_des" => $obj1->pns_description,
                                     "pns_rev" => implode("<>",$arr_rev1),
                                     "pns_current_rev" => $obj1->pns_revision,
-                                    "pns_status" => $obj1->pns_status,
+                                   // "pns_status" => $obj1->pns_status,
                                     "pns_state" => $obj1->pns_life_cycle,
                                     "pns_type" => $obj1->pns_type,
                                     "pns_date" => JHTML::_('date', $obj1->pns_create, '%m/%d/%Y')
@@ -3058,7 +3056,7 @@ class PNsController extends JController {
                                                     "pns_des" => $obj2->pns_description,
                                                     "pns_rev" => implode("<>",$arr_rev2),
                                                     "pns_current_rev" => $obj2->pns_revision,
-                                                    "pns_status" => $obj2->pns_status,
+                                                  //  "pns_status" => $obj2->pns_status,
                                                     "pns_state" => $obj2->pns_life_cycle,
                                                     "pns_type" => $obj2->pns_type,
                                                     "pns_date" => JHTML::_('date', $obj2->pns_create, '%m/%d/%Y')
@@ -3081,7 +3079,7 @@ class PNsController extends JController {
                                                                     "pns_des" => $obj3->pns_description,
                                                                     "pns_rev" => implode("<>",$arr_rev3),
                                                                     "pns_current_rev" => $obj3->pns_revision,
-                                                                    "pns_status" => $obj3->pns_status,
+                                                                  //  "pns_status" => $obj3->pns_status,
                                                                     "pns_state" => $obj3->pns_life_cycle,
                                                                     "pns_type" => $obj3->pns_type,
                                                                     "pns_date" => JHTML::_('date', $obj3->pns_create, '%m/%d/%Y')
@@ -3104,7 +3102,7 @@ class PNsController extends JController {
                                                                                     "pns_des" => $obj4->pns_description,
                                                                                     "pns_rev" => implode("<>",$arr_rev4),
                                                                                     "pns_current_rev" => $obj4->pns_revision,
-                                                                                    "pns_status" => $obj4->pns_status,
+                                                                                 //   "pns_status" => $obj4->pns_status,
                                                                                     "pns_state" => $obj4->pns_life_cycle,
                                                                                     "pns_type" => $obj4->pns_type,
                                                                                     "pns_date" => JHTML::_('date', $obj4->pns_create, '%m/%d/%Y')
@@ -3127,7 +3125,7 @@ class PNsController extends JController {
                                                                                                     "pns_des" => $obj5->pns_description,
                                                                                                     "pns_rev" => implode("<>",$arr_rev5),
                                                                                                     "pns_current_rev" => $obj5->pns_revision,
-                                                                                                    "pns_status" => $obj5->pns_status,
+                                                                                                  //  "pns_status" => $obj5->pns_status,
                                                                                                     "pns_state" => $obj5->pns_life_cycle,
                                                                                                     "pns_type" => $obj5->pns_type,
                                                                                                     "pns_date" => JHTML::_('date', $obj5->pns_create, '%m/%d/%Y')
@@ -3150,7 +3148,7 @@ class PNsController extends JController {
                                                                                                                     "pns_des" => $obj6->pns_description,
                                                                                                                     "pns_rev" => implode("<>",$arr_rev6),
                                                                                                                     "pns_current_rev" => $obj6->pns_revision,
-                                                                                                                    "pns_status" => $obj6->pns_status,
+                                                                                                                 //   "pns_status" => $obj6->pns_status,
                                                                                                                     "pns_state" => $obj6->pns_life_cycle,
                                                                                                                     "pns_type" => $obj6->pns_type,
                                                                                                                     "pns_date" => JHTML::_('date', $obj6->pns_create, '%m/%d/%Y')
@@ -3173,7 +3171,7 @@ class PNsController extends JController {
                                                                                                                                     "pns_des" => $obj7->pns_description,
                                                                                                                                     "pns_rev" => implode("<>",$arr_rev7),
                                                                                                                                     "pns_current_rev" => $obj7->pns_revision,
-                                                                                                                                    "pns_status" => $obj7->pns_status,
+                                                                                                                                  //  "pns_status" => $obj7->pns_status,
                                                                                                                                     "pns_state" => $obj7->pns_life_cycle,
                                                                                                                                     "pns_type" => $obj7->pns_type,
                                                                                                                                     "pns_date" => JHTML::_('date', $obj7->pns_create, '%m/%d/%Y')
@@ -3196,7 +3194,7 @@ class PNsController extends JController {
                                                                                                                                                     "pns_des" => $obj8->pns_description,
                                                                                                                                                     "pns_rev" => implode("<>",$arr_rev8),
                                                                                                                                                     "pns_current_rev" => $obj8->pns_revision,
-                                                                                                                                                    "pns_status" => $obj8->pns_status,
+                                                                                                                                                  //  "pns_status" => $obj8->pns_status,
                                                                                                                                                     "pns_state" => $obj8->pns_life_cycle,
                                                                                                                                                     "pns_type" => $obj8->pns_type,
                                                                                                                                                     "pns_date" => JHTML::_('date', $obj8->pns_create, '%m/%d/%Y')
@@ -3219,7 +3217,7 @@ class PNsController extends JController {
                                                                                                                                                                     "pns_des" => $obj9->pns_description,
                                                                                                                                                                     "pns_rev" => implode("<>",$arr_rev9),
                                                                                                                                                                     "pns_current_rev" => $obj9->pns_revision,
-                                                                                                                                                                    "pns_status" => $obj9->pns_status,
+                                                                                                                                                                 //   "pns_status" => $obj9->pns_status,
                                                                                                                                                                     "pns_state" => $obj9->pns_life_cycle,
                                                                                                                                                                     "pns_type" => $obj9->pns_type,
                                                                                                                                                                     "pns_date" => JHTML::_('date', $obj9->pns_create, '%m/%d/%Y')
@@ -3264,8 +3262,9 @@ class PNsController extends JController {
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
                         $jj = 0;
-                        $ii = 8;
+                        $ii = 7;
                         $number = 1;
+                      
                         foreach ($listPNs as $pns) {
                                 
                                 $a = 'A' . $ii;
@@ -3278,7 +3277,7 @@ class PNsController extends JController {
                                 $h = 'H' . $ii;
                                 $i = 'I' . $ii;
                                 $j = 'J' . $ii;
-                                $k = 'K' . $ii;
+                          //      $k = 'K' . $ii;
                                 
                                 
                                 //set heigh or row 
@@ -3290,10 +3289,10 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_rev']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_current_rev']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_state']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['pns_state']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_date']);
+                         //       $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_date']);
                                 
                           
                                 //set format
@@ -3307,7 +3306,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
                                 $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);                                
-                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                            //    $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -3319,7 +3318,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                                $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                            //    $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 
 
 
@@ -3333,18 +3332,20 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                              //  $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 
 
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
-                                if ($j % 2 == 0) {
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $k)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $k)->getFill()->getStartColor()->setRGB('EEEEEE');
+                                if ($jj % 2 == 0) {                                                                                
+                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                                        
+                                        $objPHPExcel->getActiveSheet()->getStyle($a . ':' . $j)->getFill()->getStartColor()->setRGB('EEEEEE');                                        
                                 }
-                                if ($j == $nRecord - 1) {
+                                if ($jj == $nRecord - 1) {
+                                        
                                         $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($c)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -3355,11 +3356,11 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($h)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                        $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                    
+                               //         $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                   
                                 }
-                                $i++;
-                                $j++;
+                                $ii++;
+                                $jj++;
                                 $number++;
                                 
                                 
@@ -4625,7 +4626,7 @@ class PNsController extends JController {
                             "eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
-                            "pns_status" => $row->pns_status,
+                           // "pns_status" => $row->pns_status,
                             "find_number" => $row->find_number,                    
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
@@ -4654,7 +4655,7 @@ class PNsController extends JController {
                             "eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
-                            "pns_status" => $row->pns_status,
+                           // "pns_status" => $row->pns_status,
                             "find_number" => $row->find_number,                    
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
@@ -4680,7 +4681,7 @@ class PNsController extends JController {
                             "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
-                            "pns_status" => $result1->pns_status,
+                         //   "pns_status" => $result1->pns_status,
                             "find_number" => $result1->find_number, 
                             "ref_des" => $result1->ref_des,
                             "stock" => $result1->stock,
@@ -4705,7 +4706,7 @@ class PNsController extends JController {
                                             "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
-                                            "pns_status" => $result2->pns_status,
+                                          //  "pns_status" => $result2->pns_status,
                                             "find_number" => $result2->find_number, 
                                             "ref_des" => $result2->ref_des,
                                             "stock" => $result2->stock,
@@ -4730,7 +4731,7 @@ class PNsController extends JController {
                                                             "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
-                                                            "pns_status" => $result3->pns_status,
+                                                          //  "pns_status" => $result3->pns_status,
                                                             "find_number" => $result3->find_number,
                                                             "ref_des" => $result3->ref_des,
                                                             "stock" => $result3->stock,
@@ -4754,7 +4755,7 @@ class PNsController extends JController {
                                                                             "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
-                                                                            "pns_status" => $result4->pns_status,
+                                                                        //    "pns_status" => $result4->pns_status,
                                                                             "find_number" => $result4->find_number, 
                                                                             "ref_des" => $result4->ref_des,
                                                                             "stock" => $result4->stock,
@@ -4778,7 +4779,7 @@ class PNsController extends JController {
                                                                                             "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
-                                                                                            "pns_status" => $result5->pns_status,
+                                                                                          //  "pns_status" => $result5->pns_status,
                                                                                             "find_number" => $result5->find_number, 
                                                                                             "ref_des" => $result5->ref_des,
                                                                                             "stock" => $result5->stock,
@@ -4802,7 +4803,7 @@ class PNsController extends JController {
                                                                                                             "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
-                                                                                                            "pns_status" => $result6->pns_status,
+                                                                                                            //"pns_status" => $result6->pns_status,
                                                                                                             "find_number" => $result6->find_number, 
                                                                                                             "ref_des" => $result6->ref_des,
                                                                                                             "stock" => $result6->stock,
@@ -4826,7 +4827,7 @@ class PNsController extends JController {
                                                                                                                             "eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
-                                                                                                                            "pns_status" => $result7->pns_status,
+                                                                                                                           // "pns_status" => $result7->pns_status,
                                                                                                                             "find_number" => $result7->find_number, 
                                                                                                                             "ref_des" => $result7->ref_des,
                                                                                                                             "stock" => $result7->stock,                                                                                                                                            
@@ -4850,7 +4851,7 @@ class PNsController extends JController {
                                                                                                                                             "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
-                                                                                                                                            "pns_status" => $result8->pns_status,
+                                                                                                                                           // "pns_status" => $result8->pns_status,
                                                                                                                                             "find_number" => $result8->find_number, 
                                                                                                                                             "ref_des" => $result8->ref_des,
                                                                                                                                             "stock" => $result8->stock,          
@@ -4874,7 +4875,7 @@ class PNsController extends JController {
                                                                                                                                                             "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
-                                                                                                                                                            "pns_status" => $result9->pns_status,
+                                                                                                                                                           // "pns_status" => $result9->pns_status,
                                                                                                                                                             "find_number" => $result9->find_number,
                                                                                                                                                             "ref_des" => $result9->ref_des,
                                                                                                                                                             "stock" => $result9->stock,
@@ -4918,12 +4919,12 @@ class PNsController extends JController {
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A5', 'Username: ' . $me->get('username'));
                 $objPHPExcel->getActiveSheet()->setCellValue('F5', 'Date Created: ' . $date);
-                $objPHPExcel->getActiveSheet()->setCellValue('A6', 'Level 0:' . $pnsCodeLevelZero);
+                
                 $nRecord = count($listPNs);
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
                         $jj = 0;
-                        $ii = 8;
+                        $ii = 7;
                         $number = 1;
                         foreach ($listPNs as $pns) {
                                 $a = 'A' . $ii;
@@ -4938,7 +4939,7 @@ class PNsController extends JController {
                                 $j = 'J' . $ii;
                                 $k = 'K' . $ii;
                                 $l = 'L' . $ii;
-                                $m = 'M' . $ii;
+                             //   $m = 'M' . $ii;
                                 //set heigh or row 
                                 $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
@@ -4947,13 +4948,13 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_status']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['stock']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_uom']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_life_cycle']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_uom']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
+                              //  $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -4968,7 +4969,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                            //    $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -4983,7 +4984,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                //$objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -4999,7 +5000,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
@@ -5021,7 +5022,7 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                     //   $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
                                 $ii++;
                                 $jj++;
