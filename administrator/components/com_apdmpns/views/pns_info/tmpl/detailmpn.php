@@ -29,6 +29,9 @@
                 //viet comment
 		//JToolBarHelper::addNew();
 //	}	
+	if (in_array("D", $role)) {		
+                JToolBarHelper::deleteList('Are you sure to delete it?');
+	}               
 	JToolBarHelper::cancel( 'cancel', 'Close' );			
 	$cparams = JComponentHelper::getParams ('com_media');
 	$editor = &JFactory::getEditor();
@@ -58,6 +61,10 @@
 				submitform( pressbutton );
 				return;
 			}
+                if (pressbutton == 'remove') {
+				submitform( pressbutton );
+				return;
+			}                               
 			
 	}	
 
@@ -174,7 +181,7 @@
 						<?php echo PNsController::GetEcoValue($this->row->eco_id);?>
 					</td>
 				</tr>
-<!--				<tr>
+				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'Make/Buy' ); ?>
@@ -183,7 +190,7 @@
 					<td>
 						<?php echo $this->row->pns_type; ?>
 					</td>
-				</tr>-->
+				</tr>
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -322,7 +329,7 @@
                                                 </label>
                                         </td>
                                         <td>
-                                                <?php echo JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S'); ?>
+                                                <?php echo JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S %p'); ?>
                                                         
                                         </td>
                                 </tr>
@@ -345,7 +352,7 @@
 						</label>
 					</td>
 					<td>
- 						<?php echo  ($this->row->pns_modified_by) ? JHTML::_('date', $this->row->pns_modified, '%m-%d-%Y %H:%M:%S') : ''; ?>
+ 						<?php echo  ($this->row->pns_modified_by) ? JHTML::_('date', $this->row->pns_modified, '%m-%d-%Y %H:%M:%S %p') : ''; ?>
 
 					</td>
 				</tr>

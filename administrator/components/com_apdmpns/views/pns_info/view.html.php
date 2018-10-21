@@ -238,7 +238,7 @@ class pnsViewpns_info extends JView
          $this->assignRef('quos',        $list_quos);
                   
          //for STO Tracking
-         $db->setQuery("select sto.*,fk.qty as stock from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id);
+         $db->setQuery("select sto.*,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id);
          $list_stos = $db->loadObjectList();         
          $this->assignRef('stos',        $list_stos);
                            

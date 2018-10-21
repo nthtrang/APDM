@@ -1688,9 +1688,20 @@ class PNsController extends JController {
 
                 foreach ($cid as $id) {
                         // check for a super admin ... can't delete them
-                        $query = "UPDATE apdm_pns SET pns_deleted=1 WHERE pns_id=" . $id;
+                        $query = "UPDATE apdm_pns SET pns_deleted=1 WHERE pns_id=" . $id;                        
                         $db->setQuery($query);
                         $db->query();
+                        //
+                        $query = "Delete from apdm_pns_initial WHERE pns_id=" . $id;                        
+                        $db->setQuery($query);
+                        $db->query();     
+                        $query = "Delete from apdm_pns_pdf WHERE pns_id=" . $id;                        
+                        $db->setQuery($query);
+                        $db->query();           
+                        $query = "Delete from apdm_pns_image WHERE pns_id=" . $id;                        
+                        $db->setQuery($query);
+                        $db->query();                                   
+                        
                         ///update history
                         JAdministrator::HistoryUser(6, 'D', $id);
                 }
@@ -2409,8 +2420,10 @@ class PNsController extends JController {
                 $cid = JRequest::getVar('cid', array(), '', 'array');
                 $fkid = JRequest::getVar('id');               
                 foreach ($cid as $id) {
-                        $stock = JRequest::getVar('qty_' . $id);                     
-                        $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . " WHERE  id = " . $id);
+                        $stock = JRequest::getVar('qty_' . $id);         
+                        $location = JRequest::getVar('location_' . $id);         
+                        $partState = JRequest::getVar('partstate_' . $id);         
+                        $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);                        
                         $db->query();
                 }
                 $msg = "Successfully Saved Part Number";
@@ -2549,19 +2562,21 @@ class PNsController extends JController {
                 } else {
                         $pns_code = $row->ccs_code . '-' . $row->pns_code;
                 }
+                $manufacture = PNsController::GetManufacture($pns_id);                                                                          
                 $listPNs[] = array(
                     "pns_code" => $pns_code,
                     "pns_level" => 0,
-                    "eco" => GetEcoValue($row->eco_id),
+                 //   "eco" => GetEcoValue($row->eco_id),
                     "pns_type" => $row->pns_type,
                     "pns_des" => $row->pns_description,                   
                     "find_number" => $row->find_number,                    
                     "ref_des" => $row->ref_des,
                     "stock" => $row->stock,
                     "pns_uom" => $row->pns_uom,
-                    "pns_life_cycle" => $row->pns_life_cycle,
+                    "v_mf" => $manufacture[0]['v_mf'],
+                    "mf" => $manufacture[0]['mf'],
+                   // "pns_life_cycle" => $row->pns_life_cycle,
                     "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
-
                 );                                                                                          
                 $pnsCodeLevelZero = $pns_code; 
                 
@@ -2575,18 +2590,21 @@ class PNsController extends JController {
                         } else {
                                 $pns_code = $row->ccs_code . '-' . $row->pns_code;
                         }
+                        $manufacture = PNsController::GetManufacture($row->pns_id);
                         $listPNs[] = array(
                             "pns_code" => $pns_code,
                             "pns_level" => 1,
-                            "eco" => GetEcoValue($row->eco_id),
+                            //"eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
-//                            "pns_status" => $row->pns_status,
+                            //"pns_status" => $row->pns_status,
                             "find_number" => $row->find_number,                    
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
                             "pns_uom" => $row->pns_uom,
-                            "pns_life_cycle" => $row->pns_life_cycle,
+                            "v_mf" => $manufacture[0]['v_mf'],
+                            "mf" => $manufacture[0]['mf'],
+                            //"pns_life_cycle" => $row->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
                         );                
@@ -2600,10 +2618,11 @@ class PNsController extends JController {
                         } else {
                                 $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code;
                         }
+                        $manufacture = PNsController::GetManufacture($result1->pns_id);
                         $listPNs[] = array(
                             "pns_code" => $pns_code1,
                             "pns_level" => 2,
-                            "eco" => $result1->eco_name,
+                      //      "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
 //                            "pns_status" => $result1->pns_status,
@@ -2611,7 +2630,9 @@ class PNsController extends JController {
                             "ref_des" => $result1->ref_des,
                             "stock" => $result1->stock,
                             "pns_uom" => $result1->pns_uom,
-                            "pns_life_cycle" => $result1->pns_life_cycle,
+                            "v_mf" => $manufacture[0]['v_mf'],
+                            "mf" => $manufacture[0]['mf'],
+                      //      "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -2626,10 +2647,11 @@ class PNsController extends JController {
                                         } else {
                                                 $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code;
                                         }
+                                        $manufacture = PNsController::GetManufacture($result2->pns_id);
                                         $listPNs[] = array(
                                             "pns_code" => $pns_code2,
                                             "pns_level" => 3,
-                                            "eco" => $result2->eco_name,
+                                     //       "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
 //                                            "pns_status" => $result2->pns_status,
@@ -2637,7 +2659,9 @@ class PNsController extends JController {
                                             "ref_des" => $result2->ref_des,
                                             "stock" => $result2->stock,
                                             "pns_uom" => $result2->pns_uom,
-                                            "pns_life_cycle" => $result2->pns_life_cycle,
+                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                "mf" => $manufacture[0]['mf'],
+                                      //      "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         
@@ -2652,10 +2676,11 @@ class PNsController extends JController {
                                                         } else {
                                                                 $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code;
                                                         }
+                                                        $manufacture = PNsController::GetManufacture($result3->pns_id);
                                                         $listPNs[] = array(
                                                             "pns_code" => $pns_code3,
                                                             "pns_level" => 4,
-                                                            "eco" => $result3->eco_name,
+                                         //                   "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
 //                                                            "pns_status" => $result3->pns_status,
@@ -2663,7 +2688,9 @@ class PNsController extends JController {
                                                             "ref_des" => $result3->ref_des,
                                                             "stock" => $result3->stock,
                                                             "pns_uom" => $result3->pns_uom,
-                                                            "pns_life_cycle" => $result3->pns_life_cycle,
+                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                "mf" => $manufacture[0]['mf'],
+                                          //                  "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -2674,10 +2701,11 @@ class PNsController extends JController {
                                                                         } else {
                                                                                 $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code;
                                                                         }
+                                                                        $manufacture = PNsController::GetManufacture($result4->pns_id);
                                                                         $listPNs[] = array(
                                                                             "pns_code" => $pns_code4,
                                                                             "pns_level" => 5,
-                                                                            "eco" => $result4->eco_name,
+                                                                      //      "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
 //                                                                            "pns_status" => $result4->pns_status,
@@ -2685,7 +2713,9 @@ class PNsController extends JController {
                                                                             "ref_des" => $result4->ref_des,
                                                                             "stock" => $result4->stock,
                                                                             "pns_uom" => $result4->pns_uom,
-                                                                            "pns_life_cycle" => $result4->pns_life_cycle,
+                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                "mf" => $manufacture[0]['mf'],
+                                                                         //   "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -2697,10 +2727,11 @@ class PNsController extends JController {
                                                                                         } else {
                                                                                                 $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code;
                                                                                         }
+                                                                                        $manufacture = PNsController::GetManufacture($result5->pns_id);
                                                                                         $listPNs[] = array(
                                                                                             "pns_code" => $pns_code5,
                                                                                             "pns_level" => 6,
-                                                                                            "eco" => $result5->eco_name,
+                                                                                        //    "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
 //                                                                                            "pns_status" => $result5->pns_status,
@@ -2708,7 +2739,9 @@ class PNsController extends JController {
                                                                                             "ref_des" => $result5->ref_des,
                                                                                             "stock" => $result5->stock,
                                                                                             "pns_uom" => $result5->pns_uom,
-                                                                                            "pns_life_cycle" => $result5->pns_life_cycle,
+                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                            "mf" => $manufacture[0]['mf'],
+                                                                                         //   "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -2720,10 +2753,11 @@ class PNsController extends JController {
                                                                                                         } else {
                                                                                                                 $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code;
                                                                                                         }
+                                                                                                        $manufacture = PNsController::GetManufacture($result6->pns_id);
                                                                                                         $listPNs[] = array(
                                                                                                             "pns_code" => $pns_code6,
                                                                                                             "pns_level" => 7,
-                                                                                                            "eco" => GetEcoValue($result6->eco_id),
+                                                                                                        //    "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
 //                                                                                                            "pns_status" => $result6->pns_status,
@@ -2731,7 +2765,9 @@ class PNsController extends JController {
                                                                                                             "ref_des" => $result6->ref_des,
                                                                                                             "stock" => $result6->stock,
                                                                                                             "pns_uom" => $result6->pns_uom,
-                                                                                                            "pns_life_cycle" => $result6->pns_life_cycle,
+                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                            "mf" => $manufacture[0]['mf'],
+                                                                                                          //  "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -2743,10 +2779,11 @@ class PNsController extends JController {
                                                                                                                         } else {
                                                                                                                                 $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code;
                                                                                                                         }
+                                                                                                                        $manufacture = PNsController::GetManufacture($result7->pns_id);
                                                                                                                         $listPNs[] = array(
                                                                                                                             "pns_code" => $pns_code7,
                                                                                                                             "pns_level" => 8,
-                                                                                                                            "eco" => $result7->eco_name,
+                                                                                                                         //   "eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
 //                                                                                                                            "pns_status" => $result7->pns_status,
@@ -2754,7 +2791,9 @@ class PNsController extends JController {
                                                                                                                             "ref_des" => $result7->ref_des,
                                                                                                                             "stock" => $result7->stock,                                                                                                                                            
                                                                                                                             "pns_uom" => $result7->pns_uom,
-                                                                                                                            "pns_life_cycle" => $result7->pns_life_cycle,
+                                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                            "mf" => $manufacture[0]['mf'],
+                                                                                                                        //    "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -2766,10 +2805,11 @@ class PNsController extends JController {
                                                                                                                                         } else {
                                                                                                                                                 $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code;
                                                                                                                                         }
+                                                                                                                                        $manufacture = PNsController::GetManufacture($result8->pns_id);
                                                                                                                                         $listPNs[] = array(
                                                                                                                                             "pns_code" => $pns_code8,
                                                                                                                                             "pns_level" => 9,
-                                                                                                                                            "eco" => $result8->eco_name,
+                                                                                                                                        //    "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
 //                                                                                                                                            "pns_status" => $result8->pns_status,
@@ -2777,7 +2817,9 @@ class PNsController extends JController {
                                                                                                                                             "ref_des" => $result8->ref_des,
                                                                                                                                             "stock" => $result8->stock,          
                                                                                                                                             "pns_uom" => $result8->pns_uom,
-                                                                                                                                            "pns_life_cycle" => $result8->pns_life_cycle,
+                                                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                                                "mf" => $manufacture[0]['mf'],
+                                                                                                                                       //     "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -2789,10 +2831,11 @@ class PNsController extends JController {
                                                                                                                                                         } else {
                                                                                                                                                                 $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code;
                                                                                                                                                         }
+                                                                                                                                                        $manufacture = PNsController::GetManufacture($result9->pns_id);
                                                                                                                                                         $listPNs[] = array(
                                                                                                                                                             "pns_code" => $pns_code9,
                                                                                                                                                             "pns_level" => 10,
-                                                                                                                                                            "eco" => $result9 > eco_name,
+                                                                                                                                                       //     "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
 //                                                                                                                                                            "pns_status" => $result9->pns_status,
@@ -2800,7 +2843,9 @@ class PNsController extends JController {
                                                                                                                                                             "ref_des" => $result9->ref_des,
                                                                                                                                                             "stock" => $result9->stock,
                                                                                                                                                             "pns_uom" => $result9->pns_uom,
-                                                                                                                                                            "pns_life_cycle" => $result9->pns_life_cycle,
+                                                                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                                                            "mf" => $manufacture[0]['mf'],
+                                                                                                                                                       //     "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -2864,14 +2909,14 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
                                 $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['stock']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_uom']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_uom']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['v_mf']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['mf']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
                                 //$objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
@@ -4620,10 +4665,11 @@ class PNsController extends JController {
                         } else {
                                 $pns_code = $row->ccs_code . '-' . $row->pns_code;
                         }
+                        $manufacture = PNsController::GetManufacture($pns_id);                    
                         $listPNs[] = array(
                             "pns_code" => $pns_code,
                             "pns_level" => 0,
-                            "eco" => GetEcoValue($row->eco_id),
+                          //  "eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
                            // "pns_status" => $row->pns_status,
@@ -4631,7 +4677,9 @@ class PNsController extends JController {
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
                             "pns_uom" => $row->pns_uom,
-                            "pns_life_cycle" => $row->pns_life_cycle,
+                            "v_mf" => $manufacture[0]['v_mf'],
+                            "mf" => $manufacture[0]['mf'],
+                       //     "pns_life_cycle" => $row->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
                         );                                                                                          
@@ -4649,10 +4697,11 @@ class PNsController extends JController {
                         } else {
                                 $pns_code = $row->ccs_code . '-' . $row->pns_code;
                         }
+                        $manufacture = PNsController::GetManufacture($row->pns_id);
                         $listPNs[] = array(
                             "pns_code" => $pns_code,
                             "pns_level" => 1,
-                            "eco" => GetEcoValue($row->eco_id),
+                        //    "eco" => GetEcoValue($row->eco_id),
                             "pns_type" => $row->pns_type,
                             "pns_des" => $row->pns_description,
                            // "pns_status" => $row->pns_status,
@@ -4660,7 +4709,9 @@ class PNsController extends JController {
                             "ref_des" => $row->ref_des,
                             "stock" => $row->stock,
                             "pns_uom" => $row->pns_uom,
-                            "pns_life_cycle" => $row->pns_life_cycle,
+                            "v_mf" => $manufacture[0]['v_mf'],
+                            "mf" => $manufacture[0]['mf'],
+                         //   "pns_life_cycle" => $row->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
                         );                
@@ -4675,10 +4726,11 @@ class PNsController extends JController {
                         } else {
                                 $pns_code1 = $result1->ccs_code . '-' . $result1->pns_code;
                         }
+                        $manufacture = PNsController::GetManufacture($result1->pns_id);
                         $listPNs[] = array(
                             "pns_code" => $pns_code1,
                             "pns_level" => 2,
-                            "eco" => $result1->eco_name,
+                         //   "eco" => $result1->eco_name,
                             "pns_type" => $result1->pns_type,
                             "pns_des" => $result1->pns_description,
                          //   "pns_status" => $result1->pns_status,
@@ -4686,7 +4738,9 @@ class PNsController extends JController {
                             "ref_des" => $result1->ref_des,
                             "stock" => $result1->stock,
                             "pns_uom" => $result1->pns_uom,
-                            "pns_life_cycle" => $result1->pns_life_cycle,
+                            "v_mf" => $manufacture[0]['v_mf'],
+                            "mf" => $manufacture[0]['mf'],
+                         //   "pns_life_cycle" => $result1->pns_life_cycle,
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -4700,10 +4754,11 @@ class PNsController extends JController {
                                         } else {
                                                 $pns_code2 = $result2->ccs_code . '-' . $result2->pns_code;
                                         }
+                                        $manufacture = PNsController::GetManufacture($result2->pns_id);
                                         $listPNs[] = array(
                                             "pns_code" => $pns_code2,
                                             "pns_level" => 3,
-                                            "eco" => $result2->eco_name,
+                                     //       "eco" => $result2->eco_name,
                                             "pns_type" => $result2->pns_type,
                                             "pns_des" => $result2->pns_description,
                                           //  "pns_status" => $result2->pns_status,
@@ -4711,7 +4766,9 @@ class PNsController extends JController {
                                             "ref_des" => $result2->ref_des,
                                             "stock" => $result2->stock,
                                             "pns_uom" => $result2->pns_uom,
-                                            "pns_life_cycle" => $result2->pns_life_cycle,
+                                             "v_mf" => $manufacture[0]['v_mf'],
+                                                "mf" => $manufacture[0]['mf'],
+                                       //     "pns_life_cycle" => $result2->pns_life_cycle,
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         //check for level 4
@@ -4725,10 +4782,11 @@ class PNsController extends JController {
                                                         } else {
                                                                 $pns_code3 = $result3->ccs_code . '-' . $result3->pns_code;
                                                         }
+                                                        $manufacture = PNsController::GetManufacture($result3->pns_id);
                                                         $listPNs[] = array(
                                                             "pns_code" => $pns_code3,
                                                             "pns_level" => 4,
-                                                            "eco" => $result3->eco_name,
+                                                         //   "eco" => $result3->eco_name,
                                                             "pns_type" => $result3->pns_type,
                                                             "pns_des" => $result3->pns_description,
                                                           //  "pns_status" => $result3->pns_status,
@@ -4736,7 +4794,9 @@ class PNsController extends JController {
                                                             "ref_des" => $result3->ref_des,
                                                             "stock" => $result3->stock,
                                                             "pns_uom" => $result3->pns_uom,
-                                                            "pns_life_cycle" => $result3->pns_life_cycle,
+                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                "mf" => $manufacture[0]['mf'],
+                                                          //  "pns_life_cycle" => $result3->pns_life_cycle,
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -4749,10 +4809,11 @@ class PNsController extends JController {
                                                                         } else {
                                                                                 $pns_code4 = $result4->ccs_code . '-' . $result4->pns_code;
                                                                         }
+                                                                        $manufacture = PNsController::GetManufacture($result4->pns_id);
                                                                         $listPNs[] = array(
                                                                             "pns_code" => $pns_code4,
                                                                             "pns_level" => 5,
-                                                                            "eco" => $result4->eco_name,
+                                                                       //     "eco" => $result4->eco_name,
                                                                             "pns_type" => $result4->pns_type,
                                                                             "pns_des" => $result4->pns_description,
                                                                         //    "pns_status" => $result4->pns_status,
@@ -4760,7 +4821,9 @@ class PNsController extends JController {
                                                                             "ref_des" => $result4->ref_des,
                                                                             "stock" => $result4->stock,
                                                                             "pns_uom" => $result4->pns_uom,
-                                                                            "pns_life_cycle" => $result4->pns_life_cycle,
+                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                             "mf" => $manufacture[0]['mf'],
+                                                                         //   "pns_life_cycle" => $result4->pns_life_cycle,
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -4773,10 +4836,11 @@ class PNsController extends JController {
                                                                                         } else {
                                                                                                 $pns_code5 = $result5->ccs_code . '-' . $result5->pns_code;
                                                                                         }
+                                                                                        $manufacture = PNsController::GetManufacture($result5->pns_id);
                                                                                         $listPNs[] = array(
                                                                                             "pns_code" => $pns_code5,
                                                                                             "pns_level" => 6,
-                                                                                            "eco" => $result5->eco_name,
+                                                                                         //   "eco" => $result5->eco_name,
                                                                                             "pns_type" => $result5->pns_type,
                                                                                             "pns_des" => $result5->pns_description,
                                                                                           //  "pns_status" => $result5->pns_status,
@@ -4784,7 +4848,9 @@ class PNsController extends JController {
                                                                                             "ref_des" => $result5->ref_des,
                                                                                             "stock" => $result5->stock,
                                                                                             "pns_uom" => $result5->pns_uom,
-                                                                                            "pns_life_cycle" => $result5->pns_life_cycle,
+                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                "mf" => $manufacture[0]['mf'],
+                                                                                        //    "pns_life_cycle" => $result5->pns_life_cycle,
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -4797,10 +4863,11 @@ class PNsController extends JController {
                                                                                                         } else {
                                                                                                                 $pns_code6 = $result6->ccs_code . '-' . $result6->pns_code;
                                                                                                         }
+                                                                                                        $manufacture = PNsController::GetManufacture($result6->pns_id);
                                                                                                         $listPNs[] = array(
                                                                                                             "pns_code" => $pns_code6,
                                                                                                             "pns_level" => 7,
-                                                                                                            "eco" => GetEcoValue($result6->eco_id),
+                                                                                                         //   "eco" => GetEcoValue($result6->eco_id),
                                                                                                             "pns_type" => $result6->pns_type,
                                                                                                             "pns_des" => $result6->pns_description,
                                                                                                             //"pns_status" => $result6->pns_status,
@@ -4808,7 +4875,9 @@ class PNsController extends JController {
                                                                                                             "ref_des" => $result6->ref_des,
                                                                                                             "stock" => $result6->stock,
                                                                                                             "pns_uom" => $result6->pns_uom,
-                                                                                                            "pns_life_cycle" => $result6->pns_life_cycle,
+                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                "mf" => $manufacture[0]['mf'],                                                                                                            
+                                                                                                          //  "pns_life_cycle" => $result6->pns_life_cycle,
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -4821,10 +4890,11 @@ class PNsController extends JController {
                                                                                                                         } else {
                                                                                                                                 $pns_code7 = $result7->ccs_code . '-' . $result7->pns_code;
                                                                                                                         }
+                                                                                                                        $manufacture = PNsController::GetManufacture($result7->pns_id);
                                                                                                                         $listPNs[] = array(
                                                                                                                             "pns_code" => $pns_code7,
                                                                                                                             "pns_level" => 8,
-                                                                                                                            "eco" => $result7->eco_name,
+                                                                                                                            //"eco" => $result7->eco_name,
                                                                                                                             "pns_type" => $result7->pns_type,
                                                                                                                             "pns_des" => $result7->pns_description,
                                                                                                                            // "pns_status" => $result7->pns_status,
@@ -4832,7 +4902,9 @@ class PNsController extends JController {
                                                                                                                             "ref_des" => $result7->ref_des,
                                                                                                                             "stock" => $result7->stock,                                                                                                                                            
                                                                                                                             "pns_uom" => $result7->pns_uom,
-                                                                                                                            "pns_life_cycle" => $result7->pns_life_cycle,
+                                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                                "mf" => $manufacture[0]['mf'], 
+                                                                                                                          //  "pns_life_cycle" => $result7->pns_life_cycle,
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -4845,10 +4917,11 @@ class PNsController extends JController {
                                                                                                                                         } else {
                                                                                                                                                 $pns_code8 = $result8->ccs_code . '-' . $result8->pns_code;
                                                                                                                                         }
+                                                                                                                                        $manufacture = PNsController::GetManufacture($result8->pns_id);
                                                                                                                                         $listPNs[] = array(
                                                                                                                                             "pns_code" => $pns_code8,
                                                                                                                                             "pns_level" => 9,
-                                                                                                                                            "eco" => $result8->eco_name,
+                                                                                                                                           // "eco" => $result8->eco_name,
                                                                                                                                             "pns_type" => $result8->pns_type,
                                                                                                                                             "pns_des" => $result8->pns_description,
                                                                                                                                            // "pns_status" => $result8->pns_status,
@@ -4856,7 +4929,9 @@ class PNsController extends JController {
                                                                                                                                             "ref_des" => $result8->ref_des,
                                                                                                                                             "stock" => $result8->stock,          
                                                                                                                                             "pns_uom" => $result8->pns_uom,
-                                                                                                                                            "pns_life_cycle" => $result8->pns_life_cycle,
+                                                                                                                                            "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                                                 "mf" => $manufacture[0]['mf'], 
+                                                                                                                                          //  "pns_life_cycle" => $result8->pns_life_cycle,
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -4869,10 +4944,11 @@ class PNsController extends JController {
                                                                                                                                                         } else {
                                                                                                                                                                 $pns_code9 = $result9->ccs_code . '-' . $result9->pns_code;
                                                                                                                                                         }
+                                                                                                                                                        $manufacture = PNsController::GetManufacture($result9->pns_id);
                                                                                                                                                         $listPNs[] = array(
                                                                                                                                                             "pns_code" => $pns_code9,
                                                                                                                                                             "pns_level" => 10,
-                                                                                                                                                            "eco" => $result9 > eco_name,
+                                                                                                                                                           // "eco" => $result9 > eco_name,
                                                                                                                                                             "pns_type" => $result9->pns_type,
                                                                                                                                                             "pns_des" => $result9->pns_description,
                                                                                                                                                            // "pns_status" => $result9->pns_status,
@@ -4880,7 +4956,9 @@ class PNsController extends JController {
                                                                                                                                                             "ref_des" => $result9->ref_des,
                                                                                                                                                             "stock" => $result9->stock,
                                                                                                                                                             "pns_uom" => $result9->pns_uom,
-                                                                                                                                                            "pns_life_cycle" => $result9->pns_life_cycle,
+                                                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
+                                                                                                                                                                "mf" => $manufacture[0]['mf'], 
+                                                                                                                                                          //  "pns_life_cycle" => $result9->pns_life_cycle,
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -4945,14 +5023,14 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
                                 $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['eco']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['stock']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['pns_uom']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_life_cycle']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_uom']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['v_mf']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['mf']);
                                 $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
                               //  $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 

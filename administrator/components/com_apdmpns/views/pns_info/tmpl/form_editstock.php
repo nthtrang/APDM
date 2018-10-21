@@ -115,7 +115,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						<textarea maxlength='40' readonly name="pns_description" rows="6" cols="30"><?php echo $this->row->pns_description?></textarea>
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_STATUS' ); ?>
@@ -124,7 +124,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 					<td>
 						<?php echo $this->row->status;?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

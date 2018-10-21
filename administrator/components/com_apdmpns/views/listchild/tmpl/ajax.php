@@ -31,9 +31,9 @@
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
 				</th>
 				
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
@@ -82,9 +82,9 @@
 					<?php echo $pns_code;?>
 				</span>
 				</td>	
-				<td align="center">
+<!--				<td align="center">
 					<?php echo $row->pns_status;?>
-				</td>
+				</td>-->
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
