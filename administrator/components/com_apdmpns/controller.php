@@ -53,6 +53,8 @@ class PNsController extends JController {
                 $this->registerTask('searchall', 'searchall');
                 $this->registerTask('po', 'po');
                 $this->registerTask('pomanagement', 'pomanagement');
+                $this->registerTask('locatecode', 'locatecode');
+                
                 
         }
 
@@ -5156,4 +5158,86 @@ class PNsController extends JController {
                 return $StockOut;
                 exit;                
         }        
+        function locatecode() {
+                JRequest::setVar('layout', 'loca_list');
+                JRequest::setVar('view', 'location');
+                parent::display();
+        }        
+        function edit_location() {
+                JRequest::setVar('layout', 'edit_loca');
+                JRequest::setVar('view', 'location');
+                parent::display();
+        }          
+        
+        function save_editloca() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $currentUser = & JFactory::getUser();
+                $location_code = JRequest::getVar('location_code');
+                $location_description = JRequest::getVar('location_description');
+                $location_status = JRequest::getVar('location_status');
+                $location_id = JRequest::getVar('pns_location_id');
+ 
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_location where location_code = '" . $location_code."' and pns_location_id != ".$location_id."");                
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The Location Code already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+                        return;
+                }                              
+                $query =  "update apdm_pns_location set location_code = '".$location_code."',location_description='".$location_description."',location_status='".$location_status."',location_updated='".$datenow->toMySQL()."',location_updated_by =".$currentUser->get('id')." where pns_location_id=".$location_id."";                
+                $return = JRequest::getVar('return');     
+                $db->setQuery($query);
+                $db->query();
+                $msg = "Successfully Saved Code Location";
+                return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+                exit;
+        }                      
+        
+        function add_location() {
+                JRequest::setVar('layout', 'add_loca');
+                JRequest::setVar('view', 'location');
+                parent::display();
+        }   
+        function save_location() {
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $currentUser = & JFactory::getUser();
+                $location_code = JRequest::getVar('location_code');
+                $location_description = JRequest::getVar('location_description');
+                $location_status = JRequest::getVar('location_status');
+              
+                //check exist first
+                $db->setQuery("select count(*) from apdm_pns_location where location_code = '" . $location_code."'");
+                $check_exist = $db->loadResult();
+                if ($check_exist!=0) {    
+                        $msg = "The Location Code already exist!";
+                        $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+                        return;
+                }                       
+              //insert into `apdm_pns_location`(`pns_location_id`,`location_code`,`location_description`,`location_status`,`location_created`,`location_updated`,`location_create_by`,`location_updated_by`) values ( NULL,'A0101','A0101A0101A0101A0101A0101','1','2018-10-23','156','2018-10-23','156')
+                //$pns_life_cycle = JRequest::getVar('pns_life_cycle');
+                $return = JRequest::getVar('return');               
+                $db->setQuery("insert into `apdm_pns_location`(`location_code`,`location_description`,`location_status`,`location_created`,`location_updated`,`location_created_by`,`location_updated_by`) values ('" . $location_code . "','". $location_description . "', '" . $location_status . "','".$datenow->toMySQL()."', '".$datenow->toMySQL()."',".$currentUser->get('id').",".$currentUser->get('id').")");
+                $db->query();
+                $msg = "Successfully Saved Location ";
+                $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+                exit;
+        }                
+        function GetLocationCodeList() {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $query = "SELECT pns_location_id, location_code FROM apdm_pns_location WHERE  location_status =1";
+                $db->setQuery($query);
+                return $result = $db->loadObjectList();               
+        }
+         function GetCodeLocation($pns_location_id) {
+                $db = & JFactory::getDBO();                
+                $db->setQuery("SELECT location_code FROM apdm_pns_location WHERE pns_location_id=" . $pns_location_id);
+                return $db->loadResult();
+        }
 }
+

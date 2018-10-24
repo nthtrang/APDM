@@ -116,7 +116,11 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 				$link = 'index.php?option=com_apdmccs';
 				quickiconButton( $link, 'icon-48-category.png', JText::_( 'CC MANAGER' ) );
 			}
-			
+			//LOCATION CODE
+			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                                $link = 'index.php?option=com_apdmpns&task=locatecode';
+				quickiconButton( $link, 'icon-48-component.png', JText::_( 'Location Code Management' ) );                                
+			}     
 			//PNs
 			if($user_apdm==0 &&  (in_array(6, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmpns';

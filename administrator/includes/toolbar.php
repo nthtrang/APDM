@@ -596,6 +596,12 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=get_list_pns_sto&tmpl=component&sto_id=$sto_id", 850,500 );
 	}          
+        function addLocation($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_location&tmpl=component", 600,300 );
+	}               
          
 }
 

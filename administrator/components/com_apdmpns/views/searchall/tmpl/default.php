@@ -192,6 +192,9 @@ function submitbutton(pressbutton) {
 				<th width="20%" class="title">
 					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
 				</th>
+                                <th width="20%" class="title">
+					<?php echo JText::_( 'MFG PN' ); ?>
+				</th>                                
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>   
@@ -288,7 +291,7 @@ function submitbutton(pressbutton) {
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo '<strong>-'.$m['mf'].': </strong>&nbsp;&nbsp;'.$m['v_mf'].'<br />';
+						echo $m['mf'];
 					}
 						
 					}else{
@@ -296,6 +299,18 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>	
+                                <td>
+					<?php 
+					if (count($mf) > 0){
+					foreach ($mf as $m){
+						echo $m['v_mf'];
+					}
+						
+					}else{
+						
+					}
+					 ?>
+				</td>	                                
                                 <td align="center">
 					<?php echo $row->pns_cost;?>
 				</td>   
