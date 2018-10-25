@@ -2195,6 +2195,20 @@ class PNsController extends JController {
                 }
                 return 0;
         }
+        function checkexistSpec($pn_id)
+        {
+                $db = & JFactory::getDBO();                
+                $db->setQuery("SELECT pdf_file FROM apdm_pns_pdf WHERE pns_id=" . $pn_id);
+                $pns_pdf = $db->loadResult();
+                $db->setQuery("SELECT cad_file FROM apdm_pn_cad WHERE pns_id=" . $pn_id);
+                $pns_cad = $db->loadResult();
+                $db->setQuery("SELECT image_file FROM apdm_pns_image WHERE pns_id=" . $pn_id);
+                $pns_img = $db->loadResult();                
+                if ($pns_pdf || $pns_cad || $pns_img) {
+                        return 1;
+                }
+                return 0;
+        }                
         /**
          * @desc Download cad file of PNs
          */

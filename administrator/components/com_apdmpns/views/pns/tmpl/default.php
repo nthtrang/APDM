@@ -155,7 +155,7 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   JText::_('ECO'), 'p.eco_id', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="5%" class="title" >
-					<?php echo JText::_( 'DOWNLOAD_PDF' ); ?>
+					<?php echo JText::_( 'Download' ); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">
@@ -268,7 +268,7 @@ function submitbutton(pressbutton) {
 					<?php 
                                         $exist_pdf =PNsController::checkexistPdf($row->pns_id);
                                         if($exist_pdf) { ?>
-					 <a href="index.php?option=com_apdmpns&task=download_allpdfs&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
+					 <a href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
 					<?php }else{ ?>
 					<img src="images/downloads.png" width="16" height="16" border="0" alt="<?php echo JText::_('NONE_PDF_FILE')?>" />
 					<?php

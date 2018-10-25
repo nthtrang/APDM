@@ -85,9 +85,9 @@ function UpdatePnsChild(){
 					<?php echo JText::_('ECO'); ?>
 				</th>
 				
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
@@ -139,9 +139,9 @@ function UpdatePnsChild(){
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>				
-				<td align="center">
+<!--				<td align="center">
 					<?php echo $row->pns_status;?>
-				</td>
+				</td>-->
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
