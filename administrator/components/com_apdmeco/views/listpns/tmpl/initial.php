@@ -238,7 +238,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				</th>				
 
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Make/Buy'); ?>
+					<?php echo JText::_('Type'); ?>
 				</th>
                                 <th class="title"  >
 					<?php echo JText::_( 'Lead time(Day)' ); ?>

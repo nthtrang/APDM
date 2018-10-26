@@ -266,7 +266,7 @@ function submitbutton(pressbutton) {
 				</td>
 				<td>
 					<?php 
-                                        $exist_pdf =PNsController::checkexistPdf($row->pns_id);
+                                        $exist_pdf =PNsController::checkexistSpec($row->pns_id);
                                         if($exist_pdf) { ?>
 					 <a href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
 					<?php }else{ ?>

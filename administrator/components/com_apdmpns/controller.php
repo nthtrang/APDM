@@ -5253,5 +5253,27 @@ class PNsController extends JController {
                 $db->setQuery("SELECT location_code FROM apdm_pns_location WHERE pns_location_id=" . $pns_location_id);
                 return $db->loadResult();
         }
+ /**
+         * Removes the record(s) from the database
+         */
+        function removepnlocation() {
+                // Check for request forgeries     		
+
+                $db = & JFactory::getDBO();
+                $currentUser = & JFactory::getUser();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+               
+              //  JArrayHelper::toInteger($cid);
+
+                if (count($cid) < 1) {
+                        JError::raiseError(500, JText::_('Select a Code Location to delete', true));
+                }
+                foreach ($cid as $id) {
+                        $db->setQuery("DELETE FROM apdm_pns_location WHERE pns_location_id =" . $id);
+                        $db->query();
+                }
+                $msg = "Have successfuly Remove Code Location";
+                 return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode&id=' . $return, $msg);
+        }        
 }
 

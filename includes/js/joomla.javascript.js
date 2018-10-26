@@ -426,6 +426,24 @@ function checkAllSTO( n, fldName ) {
 		document.adminForm.boxcheckedsto.value = 0;
 	}
 }
+//for LOC
+function checkAllLOC( n, fldName ) {
+	var f = document.adminForm;
+	var c = f.toggle8.checked;
+	var n2 = 0;
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+			cb.checked = c;
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxcheckedloc.value = n2;
+	} else {
+		document.adminForm.boxcheckedloc.value = 0;
+	}
+}
 //fo pns
 function checkAllPNS( n, fldName ) {
 	var f = document.adminForm;

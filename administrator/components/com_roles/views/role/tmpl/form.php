@@ -134,6 +134,23 @@
 
 		}
 	}    
+        //for Location
+	$loc1 = 0;
+	$loc2 = 0;
+	$loc3 = 0;
+	$loc4 = 0;
+	$loc5 = 0;
+	$locall=0;
+	if(count($this->arrLOC) > 0){
+		foreach ($this->arrLOC as $loc){
+			if ($loc=='V') {$loc1=1; $stoall++;}
+			if ($loc=='W') {$loc2=1; $stoall++;}
+			if ($loc=='E') {$loc3=1; $stoall++;}
+			if ($loc=='D') {$loc4=1; $stoall++;}
+			if ($loc=='R') {$loc5=1; $stoall++;}
+
+		}
+	}            
 	//for part number
 	$pns1 = 0;
 	$pns2 = 0;
@@ -154,7 +171,7 @@
 
 		}
 	}
-	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPO) + count($this->arrPns) + count($this->arrSTO);
+	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPO) + count($this->arrPns) + count($this->arrSTO)+ count($this->arrLOC);
 	//$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -173,7 +190,7 @@
 		if (trim(form.role_name.value) == "") {
 			alert( "<?php echo JText::_( 'ALERT_NAME_ROLE', true ); ?>" );
 			form.role_name.focus();
-		} else if ((form.boxchecked.value == 0) && (form.boxcheckedcc.value==0) && (form.boxcheckedv.value==0) && (form.boxcheckeds.value==0) && (form.boxcheckedm.value==0) && (form.boxcheckedeco.value==0) && (form.boxcheckedpns.value==0) && (form.boxcheckedpo.value==0)&& (form.boxcheckedsto.value==0)) {
+		} else if ((form.boxchecked.value == 0) && (form.boxcheckedcc.value==0) && (form.boxcheckedv.value==0) && (form.boxcheckeds.value==0) && (form.boxcheckedm.value==0) && (form.boxcheckedeco.value==0) && (form.boxcheckedpns.value==0) && (form.boxcheckedpo.value==0)&& (form.boxcheckedsto.value==0)&& (form.boxcheckedloc.value==0)) {
 			alert( "<?php echo JText::_( 'ALERT_ROLE_VALUE', true ); ?>" );
 		} else {
 			submitform( pressbutton );
@@ -323,6 +340,22 @@
 						<input type="checkbox" onclick="checkAllSTO(5, 'sto');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>	                                
+			<tr><tr>
+					<td valign="top" class="key">
+						<label for="gid">
+							<?php echo JText::_( 'Code Location' ); ?>
+							
+						</label>
+					</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="V" <?php echo ($sto1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="W" <?php echo ($sto2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="E" <?php echo ($sto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllLOC(5, 'loc');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
+					</td>
+				</tr>	                                
 			<tr>
 					<td class="key">
 						<label for="email">
@@ -415,6 +448,7 @@
 	<input type="hidden" name="boxcheckedeco" value="0" />
         <input type="hidden" name="boxcheckedpo" value="0" />
         <input type="hidden" name="boxcheckedsto" value="0" />
+        <input type="hidden" name="boxcheckedloc" value="0" />
 	<input type="hidden" name="boxcheckedpns" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
