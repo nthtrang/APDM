@@ -143,11 +143,11 @@
 	$locall=0;
 	if(count($this->arrLOC) > 0){
 		foreach ($this->arrLOC as $loc){
-			if ($loc=='V') {$loc1=1; $stoall++;}
-			if ($loc=='W') {$loc2=1; $stoall++;}
-			if ($loc=='E') {$loc3=1; $stoall++;}
-			if ($loc=='D') {$loc4=1; $stoall++;}
-			if ($loc=='R') {$loc5=1; $stoall++;}
+			if ($loc=='V') {$loc1=1; $locall++;}
+			if ($loc=='W') {$loc2=1; $locall++;}
+			if ($loc=='E') {$loc3=1; $locall++;}
+			if ($loc=='D') {$loc4=1; $locall++;}
+			if ($loc=='R') {$loc5=1; $locall++;}
 
 		}
 	}            
@@ -348,12 +348,12 @@
 						</label>
 					</td>
 					<td>&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="loc[]" value="V" <?php echo ($sto1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="loc[]" value="W" <?php echo ($sto2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="loc[]" value="E" <?php echo ($sto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="loc[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="loc[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllLOC(5, 'loc');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" name="loc[]" value="V" <?php echo ($loc1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="W" <?php echo ($loc2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="E" <?php echo ($loc3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="D" <?php echo ($loc4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="loc[]" value="R" <?php echo ($loc5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllLOC(5, 'loc');" value="" name="toggle8" <?php if ($locall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>	                                
 			<tr>
