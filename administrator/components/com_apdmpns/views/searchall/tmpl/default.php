@@ -5,6 +5,7 @@
 	$role = JAdministrator::RoleOnComponent(6);
 	JToolBarHelper::title( JText::_( 'SEARCH' ) , 'search.png' );
 
+
 	
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
@@ -58,6 +59,10 @@ function submitbutton(pressbutton) {
 		</tr>
 			
 </table>
+<?php 
+if($this->type_filter==0 || $this->type_filter==1 )
+{
+?>
 <fieldset class="adminform">
 <legend><?php echo JText::_( 'Eco Result' ); ?></legend>
 <table class="adminlist" cellpadding="1">
@@ -155,6 +160,11 @@ function submitbutton(pressbutton) {
 		</tbody>                
                </table> 
 </fieldset>
+<?php 
+}
+if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 )
+{
+?>
 <fieldset class="adminform">
 <legend><?php echo JText::_( 'PNs Result' ); ?></legend>
 <table class="adminlist" cellpadding="1">
@@ -270,13 +280,16 @@ function submitbutton(pressbutton) {
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>                            
 				<td>
-					<?php if($row->pns_pdf !="") { ?>
-					 <a href="index.php?option=com_apdmpns&task=download&id=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
+                                        <?php 
+                                        $exist_pdf =PNsController::checkexistSpec($row->pns_id);
+                                        if($exist_pdf) { ?>
+					 <a href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $row->pns_id?>" title="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>"><img src="images/downloads_f2.png" width="16" height="16" border="0" alt="<?php echo JText::_('CLICK_HERE_TO_DOWNLOAD_FILE_PDF')?>" /></a>
 					<?php }else{ ?>
 					<img src="images/downloads.png" width="16" height="16" border="0" alt="<?php echo JText::_('NONE_PDF_FILE')?>" />
 					<?php
 				
-					}?>
+					}?>                                        
+					
 				</td>
 				<td align="center">
 					<?php echo $row->pns_life_cycle;?>
@@ -336,6 +349,11 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </fieldset>
+<?php 
+}
+if($this->type_filter==0 || $this->type_filter==7 )
+{
+?>
 <fieldset class="adminform">
         <legend><?php echo JText::_("PO Result");?></legend>
             
@@ -387,6 +405,11 @@ function submitbutton(pressbutton) {
                 </tbody>
         </table>		
 </fieldset>
+<?php 
+}
+if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==10 )
+{
+?>
 <fieldset class="adminform">
         <legend><?php echo JText::_( 'Supplier Result' ); ?></legend>
         <table class="adminlist" cellpadding="1">
@@ -482,6 +505,11 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </fieldset>
+<?php 
+}
+if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==8 )
+{
+?>
 <fieldset class="adminform">
         <legend><?php echo JText::_( 'Manufacture Result' ); ?></legend>
         <table class="adminlist" cellpadding="1">
@@ -577,6 +605,11 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </fieldset>
+<?php 
+}
+if($this->type_filter==0 || $this->type_filter==9 )
+{
+?>
 <fieldset class="adminform">
         <legend><?php echo JText::_( 'Vendor Result' ); ?></legend>
         <table class="adminlist" cellpadding="1">
@@ -672,6 +705,9 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </fieldset>
+<?php 
+}
+?>
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="searchall" />

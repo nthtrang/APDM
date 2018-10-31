@@ -2059,17 +2059,19 @@ class PNsController extends JController {
         function Readfilesize($folder, $filename, $ccs=null, $pns=null) {
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 $filesize = '';
-                switch ($folder) {
+                //PNsController::Readfilesize('images', $image['image_file'], $this->row->ccs_code, $folder);
+               /* switch ($folder) {
                         case "cads":
                                 $path_pns .= $folder . DS . $ccs . DS . $pns . DS;
                                 break;
                         case "images":
-                                $path_pns .= $folder . DS;
+                              echo  $path_pns .= $folder . DS;
                                 break;
                         default: //images; pdf
-                                $path_pns .= $folder . DS;
+                            echo    $path_pns .= $folder . DS;
                                 break;
-                }
+                }*/
+               $path_pns .= $folder . DS . $ccs . DS . $pns . DS;
 
                 if (file_exists($path_pns . $filename)) {
                         $filesize = ceil(filesize($path_pns . $filename) / 1000);

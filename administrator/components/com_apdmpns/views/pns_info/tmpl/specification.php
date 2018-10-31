@@ -207,14 +207,21 @@
                                         $folder = $this->row->ccs_code . '-' . $this->row->pns_code;
                                 }                                   
 				foreach ($this->lists['image_files'] as $image) {
-					$filesize = PNsController::Readfilesize('images', $image['image_file'], $this->row->ccs_code, $folder_pns);
+					$filesize = PNsController::Readfilesize('cads', $image['image_file'], $this->row->ccs_code, $folder);
 				?>
 				<tr>
 					<td><?php echo $i?></td>
 					<td><img src="../uploads/pns/cads/<?php echo $this->row->ccs_code . DS . $folder . DS?><?php echo $image['image_file']?>" width="200" height="100"  /></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+                                                <?php
+                                               if ($this->row->pns_life_cycle =='Create') {                       
+                                                ?>
+					<a href="index.php?option=com_apdmpns&task=remove_imgs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                         <?php
+                                               }
+                                                ?>
+                                        </td>
 				</tr>
 				<?php $i++; } ?>
 				
@@ -300,14 +307,21 @@
 				$i = 1;
 				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
 				foreach ($this->lists['pdf_files'] as $pdf) {
-					$filesize = PNsController::Readfilesize('pdf', $pdf['pdf_file'], $this->row->ccs_code, $folder_pns);
+					$filesize = PNsController::Readfilesize('cads', $pdf['pdf_file'], $this->row->ccs_code, $folder_pns);
 				?>
 				<tr>
 					<td><?php echo $i?></td>
 					<td><?php echo $pdf['pdf_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_pdfs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_pdfs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+                                                 <?php
+                                               if ($this->row->pns_life_cycle =='Create') {                       
+                                                ?>
+					<a href="index.php?option=com_apdmpns&task=remove_pdfs&pid=<?php echo $this->row->pns_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                         <?php
+                                               }
+                                                ?>
+                                        </td>
 				</tr>
 				<?php $i++; } ?>
 				
@@ -399,7 +413,14 @@
 					<td><?php echo $cad['cad_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_cad&id=<?php echo $cad['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-					<a href="index.php?option=com_apdmpns&task=remove_cad&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
+                                                 <?php
+                                               if ($this->row->pns_life_cycle =='Create') {                       
+                                                ?>
+					<a href="index.php?option=com_apdmpns&task=remove_cad&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                         <?php
+                                               }
+                                                ?>
+                                        </td>
 				</tr>
 				<?php $i++; } ?>
 				
