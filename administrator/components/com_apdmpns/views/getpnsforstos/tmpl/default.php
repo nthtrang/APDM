@@ -45,7 +45,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_eco_init&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_sto&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
