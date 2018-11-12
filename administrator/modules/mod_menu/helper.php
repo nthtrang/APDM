@@ -104,6 +104,7 @@ class modMenuHelper
 		 */
 		if (!$user_apdm) {
 //			$menu->addChild(new JMenuNode(JText::_('Sitea')), true);
+                        $menu->addChild(new JMenuNode(JText::_('Dashboard'), 'index.php?option=com_apdmeco&task=dashboard', 'class:dashboard'));
 		 	$menu->addChild(new JMenuNode(JText::_('Control Panel'), 'index.php'), true);
 		 	$menu->getParent();
 		 }
@@ -163,13 +164,13 @@ class modMenuHelper
 				' WHERE '.$db->NameQuote( 'option' ).' <> "com_frontpage"' .
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
-				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50 ) '.
+				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50,52,53,54 ) '.
 				' ORDER BY ordering, name';
-		}else{
+		}else{ 
 			if ($usertype=='Administrator' && $user_apdm==0){
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50)'.
+				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50,52,53,54)'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
@@ -180,7 +181,7 @@ class modMenuHelper
 				}
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
+				' WHERE id IN (53,54,52,40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
