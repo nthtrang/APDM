@@ -110,16 +110,15 @@ function saveApproveTask(id){
 			foreach ($this->arr_inreview as $row)
 			{
                                 $i++;
-				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $set_route = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
-				$edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
+				$linkEco 	= 'index.php?option=com_apdmeco&task=detail&cid[]='.$row->eco_id;	
+                                $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->eco_id.'&routes='.$row->routes_id;				
 			?>
 			<tr class="">
 				<td>
 					<?php echo $i;?>
 				</td>
-				<td><?php echo $row->route_name; ?></td>
-				<td><?php echo $row->eco_name; ?></td>
+				<td><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
+				<td><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
                                 <td><?php echo $row->eco_description; ?></td>
                                 <td><?php echo $row->eco_status; ?></td>
                                 <td><?php echo $row->title; ?></td>
@@ -152,7 +151,7 @@ function saveApproveTask(id){
 				</td>		
 					                                
 				<td align="center">
-					<?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y %H:%M:%S') ;?>
+					<?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y') ;?>
 				</td>
 				
 				<td align="center">
@@ -221,17 +220,16 @@ function saveApproveTask(id){
 			$i = 0;
 			foreach ($this->arr_pending as $row)
 			{
-                                $i++;
-				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $set_route = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
-				$edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
+                                $i++;                               
+				$linkEco 	= 'index.php?option=com_apdmeco&task=detail&cid[]='.$row->ecoid;	
+                                $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->ecoid.'&routes='.$row->id;				
 			?>
 			<tr class="">
 				<td>
 					<?php echo $i;?>
 				</td>
-				<td><?php echo $row->route_name; ?></td>
-				<td><?php echo $row->eco_name; ?></td>
+				<td><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
+				<td><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
                                 <td><?php echo $row->description; ?></td>
                                 <td><?php echo $row->eco_status; ?></td>
                                 <td>
@@ -270,7 +268,7 @@ function saveApproveTask(id){
                                               ?>
                                               <tr>
                                                     
-                                                        <td><?php echo JHTML::_('date', $rs['due_date'], '%m-%d-%Y %H:%M:%S'); ?></td>                                                  
+                                                        <td><?php echo JHTML::_('date', $rs['due_date'], '%m-%d-%Y'); ?></td>                                                  
                                               </tr>
                                               <?php }?>
                                                 </table>	
