@@ -162,7 +162,7 @@ if($this->type_filter==0 || $this->type_filter==1 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 )
+if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || $this->type_filter==10 || $this->type_filter==8 || $this->type_filter==9)
 {
 ?>
 <fieldset class="adminform">
@@ -198,13 +198,36 @@ if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 )
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
-				
+				<?php if($this->type_filter==8)
+                                {
+                                ?>
+                                        <th width="20%" class="title">
+                                                <?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+                                        </th>
+                                        <th width="20%" class="title">
+                                                <?php echo JText::_( 'MFG PN' ); ?>
+                                        </th>                                     
+                                <?php
+                                }elseif($this->type_filter==9){
+                                ?>
 				<th width="20%" class="title">
-					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+					<?php echo JText::_( 'Vendor' ); ?>
 				</th>
                                 <th width="20%" class="title">
-					<?php echo JText::_( 'MFG PN' ); ?>
-				</th>                                
+					<?php echo JText::_( 'Vendor PN' ); ?>
+				</th>   
+                                <?php 
+                                }elseif($this->type_filter==10){
+                                ?>
+				<th width="20%" class="title">
+					<?php echo JText::_( 'Supplier' ); ?>
+				</th>
+                                <th width="20%" class="title">
+					<?php echo JText::_( 'Supplier PN' ); ?>
+				</th>   
+                                <?php 
+                                }
+                                ?>
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>   
@@ -242,7 +265,15 @@ if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 )
 					$pns_image = JText::_('NONE_IMAGE_PNS');
 				}
 				//echo $pns_image;
-				$mf = PNsController::GetManufacture($row->pns_id);
+                                if($this->type_filter==8){//manufacture
+                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                }
+                                elseif($this->type_filter==9){//vendor 
+                                        $mf = PNsController::GetManufacture($row->pns_id,2);
+                                }
+                                elseif($this->type_filter==10){//Supplier 
+                                        $mf = PNsController::GetManufacture($row->pns_id,3);
+                                }                                        				
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
                                 $wheruse = PNsController::GetChildWhereNumber($row->pns_id);
                         

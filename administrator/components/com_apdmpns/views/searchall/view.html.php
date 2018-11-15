@@ -126,7 +126,7 @@ class pnsViewsearchall extends JView
      //           break;
       //          case '5': //for code
                    
-                $leght = strlen (trim($keyword));                    
+                 $leght = strlen (trim($keyword));                    
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));          
                    //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
@@ -160,7 +160,10 @@ class pnsViewsearchall extends JView
                          $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
                    }else{      
-                     $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                          $arr_code = explode("-", trim($keyword));
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%" AND p.pns_revision="'.$arr_code[2].'"';
+                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                     
                    }             
       //          break;
        //            }

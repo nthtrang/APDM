@@ -3915,10 +3915,10 @@ class PNsController extends JController {
                 return $result;
         }
 
-        function GetManufacture($pns_id) {
+        function GetManufacture($pns_id,$type=4) {
                 $db = & JFactory::getDBO();
                 $rows = array();
-                $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.pns_id =" . $pns_id;
+                $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = ".$type." AND  p.pns_id =" . $pns_id;
 
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
