@@ -126,11 +126,13 @@ function saveApproveTask(id){
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
                                 <td> 
+                                                                                
                                                         <?php  
                                                         if($row->eco_status != 'Released'){                                                          
                                                                 $status_arr = array();
+                                                                $status_arr[] = JHTML::_('select.option', 'Inreview', JText::_('Inreview'), 'value', 'text');
                                                                 $status_arr[] = JHTML::_('select.option', 'Released', JText::_('Approve'), 'value', 'text');
-                                                                $status_arr[] = JHTML::_('select.option', 'Inreview', JText::_('Reject'), 'value', 'text');                                                        
+                                                                $status_arr[] = JHTML::_('select.option', 'Reject', JText::_('Reject'), 'value', 'text');                                                        
                                                          echo JHTML::_('select.genericlist', $status_arr, 'approve_status_'. $i, 'class="inputbox" size="1" ', 'value', 'text',"Inreview" );
                                                         ?>
                                                         <input type="hidden" name="routes_id" id ="routes_id_<?php echo $i;?>" value="<?php echo $row->routes_id;?>" />

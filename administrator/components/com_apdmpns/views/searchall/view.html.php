@@ -60,9 +60,9 @@ class pnsViewsearchall extends JView
         }
 
 
-        //if ($type_filter){           
-        //    switch($type_filter){
-       //         case '1': //ECO
+      //  if ($type_filter){           
+       //     switch($type_filter){
+        //        case '1': //ECO
                     $arr_eco_id = array();
                     //select table ECO with keyword input     
                  //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
@@ -87,8 +87,57 @@ class pnsViewsearchall extends JView
                         
                     }                    
         //        break;
-       //         case '2': //Vendor
-                    $arr_vendor_id = array();
+               switch($type_filter){        
+                                    
+                case '9': //Vendor PN
+                    $pns_id_mf = array();
+                    //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_supplier = $db->loadObjectList();                    
+                    if (count($rs_supplier) > 0){
+                        foreach ($rs_supplier as $mf){
+                           $pns_id_mf[] = $mf->pns_id;
+                        }
+                        $pns_id_mf = array_unique($pns_id_mf);
+                        $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';                        
+                    } 
+                break;
+                 
+                 case '10': //Supplier PN
+                    $pns_id_mf = array();
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_supplier = $db->loadObjectList();
+                    
+
+                    if (count($rs_supplier) > 0){
+                        foreach ($rs_supplier as $mf){
+                           $pns_id_mf[] = $mf->pns_id;
+                        }
+                        $pns_id_mf = array_unique($pns_id_mf);
+                        $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';                        
+                    }                     
+                    
+                break;
+                
+                case '8': //Manufacture PN                         
+                    $pns_id_mf = array();
+                         //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_mf = $db->loadObjectList();
+                    
+                    if (count($rs_mf) > 0){
+                        foreach ($rs_mf as $mf){
+                           $pns_id_mf[] = $mf->pns_id;
+                        }
+                        $pns_id_mf = array_unique($pns_id_mf);
+                        $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';                        
+                    }                     
+                break;
+                case '2': //Vendor    
+                case '3': //Supplier
+                case '4': //Manufacture                                                     
+                case '0':                         
+                        $arr_vendor_id = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
                     $rs_vendor = $db->loadObjectList();
@@ -97,8 +146,6 @@ class pnsViewsearchall extends JView
                             $arr_vendor_id[] = $vendor->info_id;
                         }
                     }
-       //         break;
-       //          case '3': //Supplier
                     $arr_supplier_id = array();
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
                     $rs_supplier = $db->loadObjectList();
@@ -107,9 +154,7 @@ class pnsViewsearchall extends JView
                         foreach ($rs_supplier as $supplier){
                             $arr_supplier_id[] = $supplier->info_id;
                         }
-                    }
-       //         break;
-        //         case '4': //Manufacture
+                    }    
                     $arr_mf_id = array();
                       //   echo 'SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.')';
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
@@ -119,13 +164,13 @@ class pnsViewsearchall extends JView
                         foreach ($rs_mf as $mf){
                             $arr_mf_id[] = $mf->info_id;
                         }
-                    }
-        //        break;
+                    } 
+                    break;
         //        case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
      //           break;
       //          case '5': //for code
-                   
+               }
                  $leght = strlen (trim($keyword));                    
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));          
@@ -242,7 +287,7 @@ class pnsViewsearchall extends JView
         $pagination = new JPagination( $total, $limitstart, $limit );
         $where_del = '';
        
-        $query = 'SELECT p.* '
+       $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            
@@ -252,6 +297,7 @@ class pnsViewsearchall extends JView
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        //echo $db->getQuery();
         $rows = $db->loadObjectList(); 
          ///get information for filter
         $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 

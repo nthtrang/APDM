@@ -438,7 +438,7 @@ if($this->type_filter==0 || $this->type_filter==7 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==10 )
+if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )
 {
 ?>
 <fieldset class="adminform">
@@ -538,7 +538,7 @@ if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==10 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==8 )
+if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )
 {
 ?>
 <fieldset class="adminform">
@@ -638,7 +638,7 @@ if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==8 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==9 )
+if($this->type_filter==00 || $this->type_filter==99 )
 {
 ?>
 <fieldset class="adminform">
