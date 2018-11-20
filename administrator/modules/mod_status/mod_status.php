@@ -62,7 +62,55 @@ $query = 'SELECT COUNT( session_id )'
 ;
 $db->setQuery($query);
 $online_num = intval( $db->loadResult() );
+//print search box
+//
+//$search_type = <select name="type_filter" id="type_filter" class="inputbox" size="1"><option value="0" selected="selected"> Select Type To Filter</option><option value="5">Part Number</option><option value="1"> ECO</option><option value="7">PO</option><option value="3"> Supplier</option><option value="4"> Manufacture</option><option value="6">PNs Description</option></select>
+//
+    //for list filter type
+        $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 7, JText::_('PO'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');        
+        $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 10, JText::_('Supplier PN'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 8, JText::_('Manufacture PN'), 'value', 'text');        
+        $type[] = JHTML::_('select.option', 9, JText::_('Vendor PN'), 'value', 'text');          
+        $type_filter = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
+?>
+<script language="javascript">
+function submitbutton1(pressbutton) {
+        
+			var form = document.adminForm1;		
+                       
+			if (pressbutton == 'submit') {
+				var d = document.adminForm1;                             
+				if (d.text_search.value==""){
+					alert("Please input keyword");	
+					d.text_search.focus();
+					return;				
+				}else{
+					submitform( pressbutton );
+				}
+			}
+			
+		}
 
+</script>
+<?php
+       global $mainframe, $option;
+       $searchStr = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
+     
+        $searchStr                = JString::strtolower( $searchStr );
+$search = "<span class=\"search\"><form action=\"index.php?option=com_apdmpns&task=searchall\" method=\"post\" name=\"adminForm1\" onsubmit=\"submitbutton1('submit')\" >".
+$search .=         "Search what<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='40' />&nbsp;&nbsp;Filter With";
+$search .=         $type_filter;				
+$search .=         "<input type='submit' name='btinsersave' value='Go' />";
+$search .=         "<button onclick='document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();'>Reset</button>";
+$search .=         "</form></span>";
+$output[] = "";
 //Print the logged in users message
 $output[] = "<span class=\"loggedin-users\">".$online_num."</span>";
 
@@ -73,7 +121,7 @@ if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu') ) {
 	// Print the logout message
 	$output[] = "<span class=\"logout\"><a href=\"index.php?option=com_login&amp;task=logout\">".JText::_('Logout')."</a></span>";
 }
-
+$output[] = $search;
 // reverse rendering order for rtl display
 if ( $lang->isRTL() ) {
 	$output = array_reverse( $output );

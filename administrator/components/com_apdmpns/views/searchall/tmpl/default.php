@@ -37,7 +37,7 @@ function submitbutton(pressbutton) {
 <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
 <table  width="100%">
-		<tr>
+	<!--	<tr>
 			<td colspan="4"  >
 				<?php echo JText::_( 'Search what' ); ?>:
 				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 
@@ -47,7 +47,7 @@ function submitbutton(pressbutton) {
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			
-		</tr>
+		</tr>-->
 		<tr>
 			
 			<td align="right">
@@ -60,7 +60,7 @@ function submitbutton(pressbutton) {
 			
 </table>
 <?php 
-if($this->type_filter==0 || $this->type_filter==1 )
+if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 {
 ?>
 <fieldset class="adminform">
@@ -162,7 +162,7 @@ if($this->type_filter==0 || $this->type_filter==1 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || $this->type_filter==10 || $this->type_filter==8 || $this->type_filter==9)
+if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || $this->type_filter==10 || $this->type_filter==8 || $this->type_filter==9) && count($this->rows) )
 {
 ?>
 <fieldset class="adminform">
@@ -227,7 +227,16 @@ if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || $
 				</th>   
                                 <?php 
                                 }
-                                ?>
+                                else
+                                {
+                                ?><th width="20%" class="title">
+                                                <?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+                                        </th>
+                                        <th width="20%" class="title">
+                                                <?php echo JText::_( 'MFG PN' ); ?>
+                                        </th> 
+                                      <?php 
+                                }?>   
 				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>   
@@ -382,7 +391,7 @@ if($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || $
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==7 )
+if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
 {
 ?>
 <fieldset class="adminform">
@@ -438,7 +447,7 @@ if($this->type_filter==0 || $this->type_filter==7 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )
+if(($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )&&count( $this->rs_supplier ))
 {
 ?>
 <fieldset class="adminform">
@@ -538,7 +547,7 @@ if($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )
+if(($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )&&count( $this->rs_mf ))
 {
 ?>
 <fieldset class="adminform">
@@ -638,7 +647,7 @@ if($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )
 </fieldset>
 <?php 
 }
-if($this->type_filter==00 || $this->type_filter==99 )
+if(($this->type_filter==00 || $this->type_filter==99 )&&count( $this->rs_vendor ))
 {
 ?>
 <fieldset class="adminform">

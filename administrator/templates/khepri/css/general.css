@@ -128,17 +128,20 @@ textarea:focus { background-color: #ffd }
 
 
 /* -- status layout */
-#module-status      { float: right; }
-#module-status span { display: block; float: left; line-height: 16px; padding: 4px 10px 0 22px; margin-bottom: 5px; }
+/*#module-status      { float: right; }    */
+#module-status span { display: block;float: right;line-height: 16px; padding: 4px 10px 0 22px; margin-bottom: 5px; }
 
-#module-status { background: url(../images/mini_icon.png) 3px 5px no-repeat; }
+/*#module-status { background: url(../images/mini_icon.png) 3px 5px no-repeat; }*/
+#module-status { width: 1068px; float:right;}
+    
 .legacy-mode{ color: #c00;}
 #module-status .preview 			  { background: url(../images/menu/icon-16-media.png) 3px 3px no-repeat; }
 #module-status .unread-messages,
-#module-status .no-unread-messages { background: url(../images/menu/icon-16-messages.png) 3px 3px no-repeat; }
+#module-status .no-.unread-messagesunread-messages { background: url(../images/menu/icon-16-messages.png) 3px 3px no-repeat; }
 #module-status .unread-messages a  { font-weight: bold; }
-#module-status .loggedin-users     { background: url(../images/menu/icon-16-user.png) 3px 3px no-repeat; }
+#module-status .loggedin-users     {background: url(../images/menu/icon-16-user.png) 3px 3px no-repeat; }
 #module-status .logout             { background: url(../images/menu/icon-16-logout.png) 3px 3px no-repeat; }
+#module-status .search     { float: left;display:block;padding: 4px 10px 0 22px;background-color: #f0f0f0; }
 
 /* -- various styles -- */
 span.note {
