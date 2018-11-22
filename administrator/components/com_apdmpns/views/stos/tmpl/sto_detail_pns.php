@@ -134,6 +134,7 @@ function isCheckedPosPn(isitchecked,id){
         $partStateArr[] = JHTML::_('select.option', 'IT-G', "IT-G" , 'value', 'text'); 
         $partStateArr[] = JHTML::_('select.option', 'IT-D', "IT-D" , 'value', 'text'); 
         $partStateArr[] = JHTML::_('select.option', 'OO', "OO" , 'value', 'text'); 
+        $partStateArr[] = JHTML::_('select.option', 'Prototype', "Prototype" , 'value', 'text'); 
         
 
         $i = 0;       

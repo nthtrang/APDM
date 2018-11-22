@@ -67,6 +67,8 @@ $online_num = intval( $db->loadResult() );
 //$search_type = <select name="type_filter" id="type_filter" class="inputbox" size="1"><option value="0" selected="selected"> Select Type To Filter</option><option value="5">Part Number</option><option value="1"> ECO</option><option value="7">PO</option><option value="3"> Supplier</option><option value="4"> Manufacture</option><option value="6">PNs Description</option></select>
 //
     //for list filter type
+global $mainframe, $option;
+$type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'type_filter', 0, 'int');
         $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
         $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
         $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
@@ -100,7 +102,7 @@ function submitbutton1(pressbutton) {
 
 </script>
 <?php
-       global $mainframe, $option;
+       
        $searchStr = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
      
         $searchStr                = JString::strtolower( $searchStr );
