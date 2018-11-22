@@ -1242,9 +1242,9 @@ class PNsController extends JController {
                                 if ($_FILES['pns_pdf' . $i]['size'] > 0) {
                                         $imge = new upload($_FILES['pns_pdf' . $i]);
                                         if ($pns_revision != "") {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" . time()."_".$i;
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . $pns_revision . "_" .  substr(str_shuffle("0123456789"), 0, 4)."_".$i;
                                         } else {
-                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" . time()."_".$i;
+                                                $imge->file_new_name_body = $ccs_code . "_" . str_replace("-", "_", $pns_code) . "_" .  substr(str_shuffle("0123456789"), 0, 4)."_".$i;
                                         }
 
                                         if (file_exists($path_cads . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
