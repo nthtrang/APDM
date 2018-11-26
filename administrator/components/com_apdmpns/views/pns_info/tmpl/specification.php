@@ -306,8 +306,13 @@
 				
 				$i = 1;
 				$folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+                                if ($this->row->pns_revision) {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code . '-' . $this->row->pns_revision;
+                                } else {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code;
+                                }                                
 				foreach ($this->lists['pdf_files'] as $pdf) {
-					$filesize = PNsController::Readfilesize('cads', $pdf['pdf_file'], $this->row->ccs_code, $folder_pns);
+					$filesize = PNsController::Readfilesize('cads', $pdf['pdf_file'], $this->row->ccs_code, $folder);
 				?>
 				<tr>
 					<td><?php echo $i?></td>
@@ -405,8 +410,14 @@
 				
 				$i = 1;
 				 $folder_pns = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+                                 
+                                if ($this->row->pns_revision) {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code . '-' . $this->row->pns_revision;
+                                } else {
+                                        $folder = $this->row->ccs_code . '-' . $this->row->pns_code;
+                                }                                    
 				foreach ($this->lists['cads_files'] as $cad) {
-					$filesize = PNsController::Readfilesize('cads', $cad['cad_file'], $this->row->ccs_code, $folder_pns);
+					$filesize = PNsController::Readfilesize('cads', $cad['cad_file'], $this->row->ccs_code, $folder);
 				?>
 				<tr>
 					<td><?php echo $i?></td>
@@ -427,9 +438,9 @@
 				<tr>
 					
 					<td colspan="4" align="center">
-					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_cads&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_cads&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
 <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-</a>&nbsp;&nbsp;
+</a>&nbsp;&nbsp;-->
 				
 					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
 				</tr>

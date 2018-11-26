@@ -2223,7 +2223,7 @@ class PNsController extends JController {
                 $pns_id = $row->pns_id;
                 $file_name = $row->cad_file;
 
-                $querypn = "SELECT CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code, p.ccs_code FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $querypn = "SELECT p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
                 $db->setQuery($querypn);
                 $pns = $db->loadObject();
                 $pns_code = $pns->pns_code;
@@ -2231,9 +2231,19 @@ class PNsController extends JController {
                 if (substr($pns_code, -1) == "-") {
                         $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
                 }
-                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $ccs_code . DS . $pns_code . DS;
+                
+ ///for pns cads/image/pdf
+                if ($pns->pns_revision) {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code . '-' . $pns->pns_revision;
+                } else {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $path_cads = $path_pns . 'cads' . DS . $pns->ccs_code . DS . $folder . DS;   
+                
+                //$path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $ccs_code . DS . $pns_code . DS;
 
-                $dFile = new DownloadFile($path_pns, $file_name);
+                $dFile = new DownloadFile($path_cads, $file_name);
                 exit;
         }
 

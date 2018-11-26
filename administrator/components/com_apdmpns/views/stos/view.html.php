@@ -84,7 +84,7 @@ class pnsViewstos extends JView
 //         $pos_list = $db->loadObjectList();         
 //         $this->assignRef('pos_list',        $pos_list);     
         //for PO detailid
-         $db->setQuery("SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id);
+         $db->setQuery("SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." order by fk.pns_id desc");
          $pns_list = $db->loadObjectList();         
          $this->assignRef('sto_pn_list',        $pns_list);     
          

@@ -132,7 +132,7 @@ textarea:focus { background-color: #ffd }
 #module-status span { display: block;float: right;line-height: 16px; padding: 4px 10px 0 22px; margin-bottom: 5px; }
 
 /*#module-status { background: url(../images/mini_icon.png) 3px 5px no-repeat; }*/
-#module-status { width: 1068px; float:right;}
+#module-status { width: 1000px; float:right;}
     
 .legacy-mode{ color: #c00;}
 #module-status .preview 			  { background: url(../images/menu/icon-16-media.png) 3px 3px no-repeat; }
