@@ -4,6 +4,7 @@
 <?php
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
+$sto_id = JRequest::getVar('id');
 
 JToolBarHelper::title($this->sto_row->sto_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
@@ -13,7 +14,7 @@ if (in_array("W", $role)) {
         
 }
 if (in_array("D", $role)) {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"removepnsstos","Remove Part");
+        JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -40,7 +41,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         submitform( pressbutton );
                         return;
                 }                      
-                if(pressbutton == 'removepnsstos')
+                if(pressbutton == 'removeAllpnsstos')
                 {
                      submitform( pressbutton );
                      return;
@@ -48,44 +49,50 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 			
         }
 
-function isCheckedPosPn(isitchecked,id){
-       
+function isCheckedPosPn(isitchecked,id,sto){
+        
+       var arr_sto = sto.split(",");
 	if (isitchecked == true){
 		document.adminForm.boxchecked.value++;
-                document.getElementById('qty_'+id).style.visibility= 'visible';
-                document.getElementById('qty_'+id).style.display= 'block';
-                document.getElementById('text_qty_'+id).style.visibility= 'hidden';
-                document.getElementById('text_qty_'+id).style.display= 'none';    
+                arr_sto.forEach(function(sti) {
+    
+
+                document.getElementById('qty_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('qty_'+id+'_'+sti).style.display= 'block';
+                document.getElementById('text_qty_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('text_qty_'+id+'_'+sti).style.display= 'none';    
                 
-                document.getElementById('location_'+id).style.visibility= 'visible';
-                document.getElementById('location_'+id).style.display= 'block';
-                document.getElementById('text_location_'+id).style.visibility= 'hidden';
-                document.getElementById('text_location_'+id).style.display= 'none';    
+                document.getElementById('location_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('location_'+id+'_'+sti).style.display= 'block';
+                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('text_location_'+id+'_'+sti).style.display= 'none';    
                 
-                document.getElementById('partstate_'+id).style.visibility= 'visible';
-                document.getElementById('partstate_'+id).style.display= 'block';
-                document.getElementById('text_partstate_'+id).style.visibility= 'hidden';
-                document.getElementById('text_partstate_'+id).style.display= 'none';                    
+                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
+                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';         
+                });
 	}
 	else {
 		document.adminForm.boxchecked.value--;
-                document.getElementById('text_qty_'+id).style.visibility= 'visible';
-                document.getElementById('text_qty_'+id).style.display= 'block';
+                 arr_sto.forEach(function(sti) {
+                document.getElementById('text_qty_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('text_qty_'+id+'_'+sti).style.display= 'block';
 
-                document.getElementById('text_location_'+id).style.visibility= 'visible';
-                document.getElementById('text_location_'+id).style.display= 'block';
+                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('text_location_'+id+'_'+sti).style.display= 'block';
 
-                document.getElementById('text_partstate_'+id).style.visibility= 'visible';
-                document.getElementById('text_partstate_'+id).style.display= 'block';
+                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
 
-                document.getElementById('qty_'+id).style.visibility= 'hidden';
-                document.getElementById('qty_'+id).style.display= 'none';
+                document.getElementById('qty_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('qty_'+id+'_'+sti).style.display= 'none';
                 
-                document.getElementById('location_'+id).style.visibility= 'hidden';
-                document.getElementById('location_'+id).style.display= 'none';
-                document.getElementById('partstate_'+id).style.visibility= 'hidden';
-                document.getElementById('partstate_'+id).style.display= 'none';                
-             
+                document.getElementById('location_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('location_'+id+'_'+sti).style.display= 'none';
+                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';                
+             });
                 
                 
 	}
@@ -106,7 +113,8 @@ function isCheckedPosPn(isitchecked,id){
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Part State'); ?></th>  
+                                        <th width="100"><?php echo JText::_('Action'); ?></th>  
                                 </tr>
                         </thead>
                         <tbody>					
@@ -150,33 +158,54 @@ function isCheckedPosPn(isitchecked,id){
 				}else{
 					$pns_image = JText::_('None image for preview');
 				}                
-                                           
+                                 $stoList = PNsController::GetStoFrommPns($row->pns_id,$sto_id);
+                                 
                                 ?>
                                         <tr>
                                                 <td><?php echo $i; ?></td>         
                                                 <td>					
-                                                <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->id;?>');" value="<?php echo $row->id;?>" name="cid[]"  />
+                                                <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
                                                 <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->parent_pns_code;?></a>
 				</span></td>
-                                                <td><?php echo $row->pns_description; ?></td>                                                
-                                                <td>                                                    
-                                                        <span style="display:block" id="text_qty_<?php echo $row->id;?>"><?php echo $row->qty;?></span>
-                                                        <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->id;?>"  name="qty_<?php echo $row->id;?>" />                                                        
+                                                <td><?php echo $row->pns_description; ?></td>
+                                                
+                                                <td colspan="4">  
+                                                        
+                                                        <table class="adminlist" cellspacing="0" width="200">
+                                                                <?php 
+                                                                foreach ($this->sto_pn_list2 as $rw) {
+                                                                        if($rw->pns_id==$row->pns_id)
+                                                                        {
+                                                                ?>
+                                                                <tr><td align="center" width="74px">
+                                                        <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
+                                                        <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
                                                 </td> 
-                                                <td align="center">					
-                                                        <span style="display:block" id="text_location_<?php echo $row->id;?>"><?php echo $row->location?PNsController::GetCodeLocation($row->location):"";?></span>
+                                                <td align="center" width="77px">					
+                                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?PNsController::GetCodeLocation($rw->location):"";?></span>
                                                          <?php                                         
-                                                         echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $row->location ); 
+                                                         echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
                                                         ?>
                                                 </td>	
-                                                <td align="center">					
-                                                        <span style="display:block" id="text_partstate_<?php echo $row->id;?>"><?php echo $row->partstate?$row->partstate:"";?></span>
+                                                <td align="center" width="77px">					
+                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?$rw->partstate:"";?></span>
                                                          <?php                                         
-                                                         echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $row->partstate ); 
+                                                         echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
                                                         ?>
-                                                </td> 
+                                                </td>
+                                                <td align="center" width="75px">					
+                                                        <a href="index.php?option=com_apdmpns&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
+                                                </td>
+                                                                </tr>
+                                                                
+                                                                <?php 
+                                                                }
+                                                                }
+                                                                ?>
+                                                        </table>
+                                                </td>
                                                </tr>
                                                 <?php }
                                         } 

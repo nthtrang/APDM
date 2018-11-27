@@ -2446,13 +2446,19 @@ class PNsController extends JController {
         function saveqtyStofk() {
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
+               
                 $fkid = JRequest::getVar('id');               
                 foreach ($cid as $id) {
-                        $stock = JRequest::getVar('qty_' . $id);         
-                        $location = JRequest::getVar('location_' . $id);         
-                        $partState = JRequest::getVar('partstate_' . $id);         
-                        $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);                        
-                        $db->query();
+                        $obj = explode("_", $id);
+                        $pns=$obj[0];
+                        $ids = explode(",",$obj[1]);
+                        foreach ($ids as $id) {                                
+                                $stock = JRequest::getVar('qty_'. $pns .'_' . $id);      
+                                $location = JRequest::getVar('location_' . $pns .'_' . $id);         
+                                $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);         
+                                $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);                        
+                                $db->query();
+                        }
                 }
                 $msg = "Successfully Saved Part Number";
                 $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail&id=' . $fkid, $msg);
@@ -4167,7 +4173,7 @@ class PNsController extends JController {
          */
         function removepnsstos() {
                 $db = & JFactory::getDBO();
-                $pnsfk = JRequest::getVar('cid', array(), '', 'array');
+                $pnsfk = JRequest::getVar('cid', array(), '', 'array');                
                 $sto_id = JRequest::getVar('sto_id');
 //                $db->setQuery("update apdm_pns set po_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
 //                $db->query();    
@@ -4178,11 +4184,32 @@ class PNsController extends JController {
                 }
                 $msg = JText::_('Have removed successfull.');
                 return $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail&id=' . $sto_id, $msg);
-        }              
+        }     
+        /*
+         * Remove PNS out of STO in STO management 
+         */
+        function removeAllpnsstos() {
+                $db = & JFactory::getDBO();
+                $pnsfk = JRequest::getVar('cid', array(), '', 'array');           
+                $sto_id = JRequest::getVar('sto_id'); 
+                foreach($pnsfk as $fk_ids){
+                        $obj = explode("_", $fk_ids);
+                        $pns=$obj[0];
+                        $ids = explode(",",$obj[1]);
+                        foreach ($ids as $fk_id)                 
+                        {                                
+                                $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE id = '" . $fk_id . "' AND sto_id = " . $sto_id . "");
+                                $db->query();                    
+                        }
+                }
+                $msg = JText::_('Have removed Part successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail&id=' . $sto_id, $msg);
+        }         
         /*
          * List PO asign to PNS
          */
 
+        
         function po() {
                 JRequest::setVar('layout', 'po');
                 JRequest::setVar('view', 'pns_info');
@@ -5286,6 +5313,21 @@ class PNsController extends JController {
                 }
                 $msg = "Have successfuly Remove Code Location";
                  return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode&id=' . $return, $msg);
+        }    
+        function GetStoFrommPns($pns_id,$sto_id) {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
+                $query = "SELECT pns_id,id FROM apdm_pns_sto_fk WHERE pns_id = ".$pns_id ." and sto_id = ".$sto_id;
+
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        foreach ($result as $obj) {
+                                $rows[] = $obj->id;
+                        }
+                }
+                return $rows;
         }        
 }
 
