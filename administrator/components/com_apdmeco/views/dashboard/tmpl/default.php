@@ -62,7 +62,8 @@ function saveApproveTask(id){
 <div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'My task' ); ?></legend>
-<form action="index.php?option=com_apdmeco" method="post" name="adminForm" >
+<!--<form action="index.php?option=com_apdmeco" method="post" name="adminForm1" >-->
+<form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm1" id="adminFormPns"  >
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -167,6 +168,13 @@ function saveApproveTask(id){
 				}
 			?>
 		</tbody>
+                 <tfoot>
+			<tr>
+				<td colspan="11">
+					<?php  echo $this->pagination_inreview->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
 
 	<div class="clr"></div>	
@@ -182,6 +190,7 @@ function saveApproveTask(id){
                 <div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'My pending task' ); ?></legend>
+                <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
              <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -286,7 +295,18 @@ function saveApproveTask(id){
 				}
 			?>
 		</tbody>
+                <tfoot>
+			<tr>
+				<td colspan="11">
+					<?php  echo $this->pagination_pending->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
+                        <input type="hidden" name="option" value="com_apdmeco" />
+	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
+	<?php echo JHTML::_( 'form.token' ); ?>
+                </form>
 
                 </fieldset>
                         </div>

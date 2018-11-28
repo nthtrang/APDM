@@ -23,13 +23,14 @@ function CheckForm() {
 		
 	
 }
-function UpdatePnsEco(){
+function UpdatePnsEco(){        
+        var sto_id = $('sto_id').value;
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_stos&sto_id=<?php echo $sto_id;?>';
+		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_stos&sto_id='+sto_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -165,6 +166,7 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
+        <input type="text" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

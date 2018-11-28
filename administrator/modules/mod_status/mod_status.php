@@ -107,7 +107,7 @@ function submitbutton1(pressbutton) {
      
         $searchStr                = JString::strtolower( $searchStr );
 $search = "<span class=\"search\"><form action=\"index.php?option=com_apdmpns&task=searchall\" method=\"post\" name=\"adminForm1\" onsubmit=\"submitbutton1('submit')\" >".
-$search .=         "Search what<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='40' />&nbsp;&nbsp;Filter With";
+$search .=         "Search what<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='25' />&nbsp;&nbsp;Filter With";
 $search .=         $type_filter;				
 $search .=         "<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "<button onclick='document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();'>Reset</button>";
