@@ -4121,10 +4121,17 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $sto_id = JRequest::getVar('sto_id');
-                //innsert to FK table
+                
+                //innsert to FK table                
                 foreach($pns as $pn_id)
                 {
-                        $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id) VALUES ( '" . $pn_id . "','" . $sto_id . "')");
+                        $location="";
+                        $partstate="";
+                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1 order by stofk.id desc limit 1");
+                        $row = $db->loadObject();        
+                        $location = $row->location;
+                        $partstate = $row->partstate;                        
+                        $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pn_id . "','" . $sto_id . "','" . $location . "','" . $partstate . "')");
                         $db->query();                         
                 }                 
                 return $msg = JText::_('Have add pns successfull.');
