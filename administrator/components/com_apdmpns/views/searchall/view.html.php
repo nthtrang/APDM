@@ -58,11 +58,76 @@ class pnsViewsearchall extends JView
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
            
         }
-
-
-      //  if ($type_filter){           
-       //     switch($type_filter){
-        //        case '1': //ECO
+if ($type_filter==0){      
+        $arr_eco_id = array();
+                    //select table ECO with keyword input     
+                 //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
+                        $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
+                    $rs_eco = $db->loadObjectList();
+                    if (count($rs_eco) >0){
+                        foreach ($rs_eco as $eco){
+                           $arr_eco_id[] = $eco->eco_id; 
+                        }
+                        
+                    }
+$arr_po_id = array();
+                    //select table ECO with keyword input     
+                 //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
+                    $db->setQuery('SELECT * FROM apdm_pns_po WHERE (po_code LIKE '.$searchEscaped.' OR  po_description LIKE '.$searchEscaped .' )');
+                    $rs_po = $db->loadObjectList();
+                    if (count($rs_po) >0){
+                        foreach ($rs_po as $po){
+                           $arr_po_id[] = $po->pns_po_id; 
+                        }
+                        
+                    }
+                    
+                    //pn
+                    
+ $leght = strlen (trim($keyword));                    
+                 if ($leght==16){                                                                        
+                       $arr_code = explode("-", trim($keyword));          
+                   //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
+                       $db->setQuery("SELECT * FROM apdm_pns WHERE ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
+                       $rs_pns = $db->loadObjectList();
+                       $array_pns_id_find = array();
+                       if (count($rs_pns) > 0){
+                           foreach ($rs_pns as $pn){
+                               $array_pns_id_find[] = $pn->pns_id;
+                           }
+                         
+                       }
+                       $where[] = 'p.pns_id IN ('.implode(",", $array_pns_id_find).') ';
+                   }elseif ($leght==13){                       
+                       $arr_code = explode("-", trim($keyword));                         
+                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
+                       $rs_pns = $db->loadObjectList();                       
+                       if (count($rs_pns) > 1){
+                           foreach ($rs_pns as $obj) {
+                                $arr_pns_id[] =  $obj->pns_id;
+                           }            
+                           $where[] = 'p.pns_id IN ('.implode(',', $arr_pns_id).')'; 
+                       }else{
+                            if(strlen($arr_code[0])==6){
+                                 $where[] = 'p.pns_code="'.$arr_code[0].'-'.$arr_code[1].'" AND p.pns_revision="'.$arr_code[2].'"';
+                            }
+                       }
+                        
+                   }elseif($leght==10){
+                         $arr_code = explode("-", trim($keyword));
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
+                         
+                   }else{      
+                          $arr_code = explode("-", trim($keyword));
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%" AND p.pns_revision="'.$arr_code[2].'"';
+                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                     
+                   }                     
+}
+else
+{    
+            switch($type_filter){
+                case '1': //ECO
                     $arr_eco_id = array();
                     //select table ECO with keyword input     
                  //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
@@ -74,6 +139,8 @@ class pnsViewsearchall extends JView
                         }
                         
                     }
+                    break;
+                      case '7': //PO
                      //POS
                     $arr_po_id = array();
                     //select table ECO with keyword input     
@@ -86,9 +153,8 @@ class pnsViewsearchall extends JView
                         }
                         
                     }                    
-        //        break;
-               switch($type_filter){        
-                                    
+                break;
+            
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
@@ -166,11 +232,10 @@ class pnsViewsearchall extends JView
                         }
                     } 
                     break;
-        //        case '6': //for information of pns
+                case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
-     //           break;
-      //          case '5': //for code
-               }
+                break;
+                case '5': //for PNs code               
                  $leght = strlen (trim($keyword));                    
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));          
@@ -210,10 +275,10 @@ class pnsViewsearchall extends JView
                          $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
                      
                    }             
-      //          break;
-       //            }
+                break;
+                   }
             
-     //   }
+        }
         
         if(count($arr_vendor_id) > 0){           
             //get list pns have this vendor

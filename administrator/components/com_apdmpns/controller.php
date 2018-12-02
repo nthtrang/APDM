@@ -5336,5 +5336,30 @@ class PNsController extends JController {
                 }
                 return $rows;
         }        
+        function GetQtyFromPartStatePns($partState,$pns_id,$sto_type)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
+                $query = "SELECT sum(qty) FROM apdm_pns_sto_fk fk inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id  WHERE fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type =".$sto_type;
+                $db->setQuery($query);
+                return $db->loadResult();
+        }
+        function GetLocationFromPartStatePns($partState,$pns_id)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
+                $query = "select loc.location_code from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        foreach ($result as $obj) {
+                                $rows[] = $obj->location_code;
+                        }
+                }
+                return $rows;
+        }        
+        
 }
 

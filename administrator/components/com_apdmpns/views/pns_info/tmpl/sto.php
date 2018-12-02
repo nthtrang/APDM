@@ -78,6 +78,46 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
+<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Location and Quatity' ); ?></legend>
+                <?php              
+                $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","Prototype");
+                ?>
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('Part State'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
+                                        <th width="100"><?php echo JText::_('Location'); ?></th>                                        
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php 
+                                foreach($arrayPartState as $partState)
+                                {
+                               ?>
+                                <tr>
+                                         <td><?php echo $partState?></td>  
+                                          <td><?php 
+                                           $QtyIn = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,1);
+                                           $QtyOut = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,2);
+                                                echo $QtyIn-$QtyOut; ?></td>  
+                                           <td><?php 
+                                           $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
+                                           echo implode(",",$location);
+                                           ?></td>  
+                                </tr>
+                                <?php 
+                                }
+                                ?>        
+                                </tbody>
+                        
+                </table>
+                
+</fieldset>
+
+<fieldset class="adminform">
+		<legend><?php echo JText::_( 'History Transaction' ); ?></legend>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
 <?php if (count($this->stos) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
@@ -145,3 +185,4 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
 </form>
+</fieldset>

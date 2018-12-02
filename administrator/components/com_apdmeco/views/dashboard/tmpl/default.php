@@ -58,26 +58,52 @@ function saveApproveTask(id){
 
 </script>
 
-</script>
-<div class="col width-100">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'My task' ); ?></legend>
+<style>
+.scroll {
+   width: 200px;
+   height: 300px;
+   overflow: scroll;
+}
+/* width */
+.scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.scroll::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+.scroll::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+.scroll::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+</style>
+
+                        <fieldset class="adminform">
+                        <legend><?php echo JText::_( 'My task' ); ?></legend>
 <!--<form action="index.php?option=com_apdmeco" method="post" name="adminForm1" >-->
 <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm1" id="adminFormPns"  >
-<table class="adminlist" cellpadding="1">
-		<thead>
+        <div class="col width-100 scroll">
+        <table class="adminlist" cellpadding="0">
+<thead>
 			<tr>
-				<th width="2%" class="title">
+				<th width="5%" class="title">
 					<?php echo JText::_( '#' ); ?>
 				</th>
 				
-				<th class="title" width="15%">
+				<th class="title" width="7%">
 					<?php echo  JText::_('Name'); ?>
                                 </th>
-                                <th class="title" width="15%">
+                                <th class="title" width="6%">
 					<?php echo  JText::_('Eco'); ?>
                                 </th>
-				<th  class="title" width="10%">
+				<th  class="title" width="20%">
 					<?php echo  JText::_('Description'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
@@ -92,18 +118,17 @@ function saveApproveTask(id){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Approve/Reject'); ?>
 				</th>                                
-				<th width="5%" class="title" nowrap="nowrap">
+				<th width="15%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Comment'); ?>
 				</th>                                
-                                <th class="title"  >
+                                <th width="5%" lass="title"  >
 					<?php echo JText::_( 'Due date' ); ?>
 				</th>
-				<th class="title">
+				<th width="5%" class="title">
 					<?php echo JText::_( 'Action' ); ?>
 				</th>                                
 			</tr>
-		</thead>
-		
+		</thead>                
 		<tbody>
 		<?php		
 //                rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.name as route_name,eco.eco_name,eco.description,eco.eco_status
@@ -115,18 +140,18 @@ function saveApproveTask(id){
                                 $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->eco_id.'&routes='.$row->routes_id;				
 			?>
 			<tr class="">
-				<td>
+				<td width="6%" >
 					<?php echo $i;?>
 				</td>
-				<td><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
-				<td><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
-                                <td><?php echo $row->eco_description; ?></td>
-                                <td><?php echo $row->eco_status; ?></td>
-                                <td><?php echo $row->title; ?></td>
-                                <td align="center">
+				<td width="16%"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
+				<td width="17%"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
+                                <td width="35%"width="15%"><?php echo $row->eco_description; ?></td>
+                                <td width="5%"><?php echo $row->eco_status; ?></td>
+                                <td width="5%"><?php echo $row->title; ?></td>
+                                <td  width="5%" align="center">
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
-                                <td> 
+                                <td width="5%"> 
                                                                                 
                                                         <?php  
                                                         if($row->eco_status != 'Released'){                                                          
@@ -145,7 +170,7 @@ function saveApproveTask(id){
                                                         }
                                                        ?>                                        
                                        </td>				
-				<td align="center">
+				<td  width="5%" align="center">
                                           <?php  
                                                         if($row->eco_status != 'Released'){                                                          
                                                        ?>
@@ -153,11 +178,11 @@ function saveApproveTask(id){
 					<?php } ?>
 				</td>		
 					                                
-				<td align="center">
+				<td   width="5%" align="center">
 					<?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y') ;?>
 				</td>
 				
-				<td align="center">
+				<td  width="5%" align="center">
                                        <a id ="save_approve_task" name ="save_approve_task" href="javascript:void(0);" onclick="saveApproveTask(<?php echo $i?>);">Done</a>
                                        
 				</td>                                
@@ -171,12 +196,12 @@ function saveApproveTask(id){
                  <tfoot>
 			<tr>
 				<td colspan="11">
-					<?php  echo $this->pagination_inreview->getListFooter(); ?>
+					<?php // echo $this->pagination_inreview->getListFooter(); ?>
 				</td>
 			</tr>
 		</tfoot>
 	</table>
-
+</div>
 	<div class="clr"></div>	
 
 	<input type="hidden" name="option" value="com_apdmeco" />
@@ -186,12 +211,13 @@ function saveApproveTask(id){
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
                 </fieldset>
-</div>
-                <div class="col width-100">
+
+                
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'My pending task' ); ?></legend>
                 <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
-             <table class="adminlist" cellpadding="1">
+             		<div class="col width-100 scroll">
+              <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
 				<th width="2%" class="title">
@@ -224,7 +250,8 @@ function saveApproveTask(id){
 				</th>                                
 			</tr>
 		</thead>
-		
+  
+
 		<tbody>
 		<?php		
 //                rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.name as route_name,eco.eco_name,eco.description,eco.eco_status
@@ -272,14 +299,14 @@ function saveApproveTask(id){
                                               <?php }?>
                                                 </table>
                                 </td><td>
-                 <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
+                                <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
                                               <?php 
                                               foreach($arrAppver as $rs)
                                               {
                                               ?>
                                               <tr>
                                                     
-                                                        <td><?php echo JHTML::_('date', $rs['due_date'], '%m-%d-%Y'); ?></td>                                                  
+                                                        <td><?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y'); ?></td>                                                  
                                               </tr>
                                               <?php }?>
                                                 </table>	
@@ -294,15 +321,16 @@ function saveApproveTask(id){
 				
 				}
 			?>
-		</tbody>
+		</tbody>                
                 <tfoot>
 			<tr>
 				<td colspan="11">
-					<?php  echo $this->pagination_pending->getListFooter(); ?>
+					<?php  //echo $this->pagination_pending->getListFooter(); ?>
 				</td>
 			</tr>
 		</tfoot>
 	</table>
+                </div>
                         <input type="hidden" name="option" value="com_apdmeco" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
