@@ -145,6 +145,9 @@ function submitbutton(pressbutton) {
 				<th class="title" width="15%">
 					<?php echo JHTML::_('grid.sort',   JText::_('PART_NUMBER_CODE'), 'p.pns_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
+                                <th>
+                                        BarCode                                       
+                                </th>
 				<th width="5%" class="title" >
 					<?php echo JText::_( 'BOM' ); ?>
 				</th>
@@ -203,6 +206,7 @@ function submitbutton(pressbutton) {
 		<?php
 			$path_image = '../uploads/pns/images/';
 			$k = 0;
+                        $generator = new BarcodeGeneratorHTML();                                                                               
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
 				$row 	=& $this->rows[$i];
@@ -242,6 +246,11 @@ function submitbutton(pressbutton) {
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
+                                <td>
+                                        <?php 
+                                        echo $generator->getBarcode($pns_code,$generator::TYPE_CODE_128,1,20);
+                                        ?>
+                                </td>
 				<td>
 				<?php if ($bom) {                                       
                                 ?>
