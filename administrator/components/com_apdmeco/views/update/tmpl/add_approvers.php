@@ -244,7 +244,7 @@ if (count($this->arr_status) > 0) {
                                                                         
                                                                   
                                                                 <td width="20%">                                                                
-                                                                <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
+                                                                <?php echo JHTML::_('date', $status->route_due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
                                                                 </td>   
                                                                 <td width="25%">                                                                
                                                                         <?php if ($status->route_status == "Create" && $owner == $me->get('id') && $status->eco_status=="Inreview") { ?>
@@ -282,7 +282,7 @@ if (count($this->arr_status) > 0) {
                                                                         }
                                                                         ?>  
                                                                 <td width="20%">                                                                
-                                                                <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S'); ?>
+                                                                <?php echo JHTML::_('date', $status->route_due_date, '%m-%d-%Y %H:%M:%S'); ?>
                                                                 </td> 
                                                                 <td width="25%">  
                                                                 <?php if ($status->route_status == "Create" && $owner == $me->get('id')) { ?>
@@ -344,7 +344,7 @@ if (count($this->arr_status) > 0) {
                                                                 }
                                                                 ?>      
                                                         <td width="20%">                                                                
-                <?php echo JHTML::_('date', $status->due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
+                <?php echo JHTML::_('date', $status->route_due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
                                                         </td>   
                                                         <td width="20%">          
                 <?php if ($status->route_status == "Create" && $status->eco_status=="Inreview") { ?>

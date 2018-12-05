@@ -1,6 +1,10 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 defined('_JEXEC') or die( 'Restricted access' );
 jimport( 'joomla.application.component.view');
+
 
 class pnsViewpns_info extends JView
 {

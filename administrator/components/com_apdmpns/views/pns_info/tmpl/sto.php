@@ -81,7 +81,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Location and Quatity' ); ?></legend>
                 <?php              
-                $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","Prototype");
+                $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
                 ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
@@ -95,17 +95,36 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 <?php 
                                 foreach($arrayPartState as $partState)
                                 {
+                                        $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
                                ?>
-                                <tr>
-                                         <td><?php echo $partState?></td>  
-                                          <td><?php 
-                                           $QtyIn = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,1);
-                                           $QtyOut = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,2);
-                                                echo $QtyIn-$QtyOut; ?></td>  
+                                <tr rowspan="<?php echo count($location);?>">
+                                         <td ><?php echo $partState?></td>  
+                                         <td>
+                                                 <table class="adminlist" cellspacing="1" width="400">
+                                         <?php
+                                         foreach($location as $row){
+                                                 ?><tr><td>
+                                          
+                                                 <?php 
+                                         //  $QtyIn = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,1);
+                                           //$QtyOut = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,2);
+                                          //      echo $QtyIn-$QtyOut; 
+                                          echo $row->qty;
+                                          ?></td>
+                                            </tr>
+                                                
+                                           <?php }?></table></td>  
+                                         <td>
+                                                 <table class="adminlist" cellspacing="1" width="400">
+                                         <?php
+                                         foreach($location as $row){
+                                                 ?><tr>
                                            <td><?php 
-                                           $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
-                                           echo implode(",",$location);
-                                           ?></td>  
+                                           echo $row->location_code;
+                                           //echo implode(",",$location);
+                                           ?></td> </tr>
+                                                
+                                           <?php }?></table></td>                                         
                                 </tr>
                                 <?php 
                                 }
@@ -124,9 +143,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>
-                                        <th width="100"><?php echo JText::_('Qty in/Qty out'); ?></th>
+                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Qty in/Qty out'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>
@@ -143,9 +162,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 ?>
                                         <tr>
                                                 <td><?php echo $i; ?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                <td><?php echo $sto->stock; ?></td> 
-                                                <td><?php echo $sto->sto_description; ?></td>                                                
+                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
+                                                <td><?php echo $sto->sto_description; ?></td> 
+                                                <td><?php echo $sto->stock; ?></td>                                                 
                                                 <td>
                 <?php if ($sto->sto_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;

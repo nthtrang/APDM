@@ -69,16 +69,17 @@ $online_num = intval( $db->loadResult() );
     //for list filter type
 global $mainframe, $option;
 $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'type_filter', 0, 'int');
-        $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 0, JText::_('Search all'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('PN'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 6, JText::_('Description'), 'value', 'text');
         $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
         $type[] = JHTML::_('select.option', 7, JText::_('PO'), 'value', 'text');
-        //$type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 11, JText::_('STO'), 'value', 'text');
         $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');        
-        $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 10, JText::_('Supplier PN'), 'value', 'text');
         $type[] = JHTML::_('select.option', 8, JText::_('Manufacture PN'), 'value', 'text');        
+        $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 10, JText::_('Supplier PN'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
         $type[] = JHTML::_('select.option', 9, JText::_('Vendor PN'), 'value', 'text');          
         $type_filter = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
 ?>

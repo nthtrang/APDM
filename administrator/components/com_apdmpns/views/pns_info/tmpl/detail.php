@@ -117,10 +117,17 @@
 							<?php echo JText::_( 'Ascenx Viet Nam P/N' ); ?>
 						</label>
 					</td>
-					<td><?php echo $this->row->ccs_code.'-'.$this->row->pns_code;?>					
-						<?php if ($this->row->pns_revision) echo '-'.$this->row->pns_revision;?>
+					<td><?php 
+                                        if($this->row->pns_revision)
+                                                $pns_code = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+                                        else
+                                                $pns_code = $this->row->ccs_code.'-'.$this->row->pns_code;                                                                                        
+                                        
+                                        echo $pns_code;
+                                        ?>
 					</td>
 				</tr>	
+                                
                                 <tr>
 					<td class="key">
 						<label for="name">

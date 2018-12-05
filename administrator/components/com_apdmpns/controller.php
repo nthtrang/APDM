@@ -3587,8 +3587,8 @@ class PNsController extends JController {
         function export_detail() {
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
-                require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
-                require_once('includes/download.class.php');
+                require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');                
+                require_once('includes/download.class.php');               
                 ini_set("memory_limit", "252M");
                 @set_time_limit(1000000);
                 $objPHPExcel = new PHPExcel();
@@ -3636,6 +3636,8 @@ class PNsController extends JController {
                 $pns_modified_by = ($row->pns_modified_by) ? GetValueUser($row->pns_modified_by, "username") : 'None';
                 $pns_pdf = ($row->pns_pdf != '') ? $row->pns_pdf : 'None';
                 $objPHPExcel->getActiveSheet()->setCellValue('B7', $pns_code);
+            
+                
                 $objPHPExcel->getActiveSheet()->setCellValue('B8', GetEcoValue($row->eco_id));
                 $objPHPExcel->getActiveSheet()->setCellValue('B9', $row->pns_status);
                 $objPHPExcel->getActiveSheet()->setCellValue('B10', JHTML::_('date', $row->pns_create, '%m-%d-%Y %H:%M:%S'));
@@ -5350,15 +5352,15 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
-                $query = "select loc.location_code from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
+                $query = "select loc.location_code,fk.qty from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
                 $db->setQuery($query);
-                $result = $db->loadObjectList();
-                if (count($result) > 0) {
+                return $result = $db->loadObjectList();
+               /* if (count($result) > 0) {
                         foreach ($result as $obj) {
                                 $rows[] = $obj->location_code;
                         }
                 }
-                return $rows;
+                return $rows;*/
         }        
         
 }

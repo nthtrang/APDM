@@ -59,10 +59,9 @@ class pnsViewsearchall extends JView
            
         }
 if ($type_filter==0){      
-        $arr_eco_id = array();
+                $arr_eco_id = array();
                     //select table ECO with keyword input     
-                 //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
-                        $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
+                    $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
                     $rs_eco = $db->loadObjectList();
                     if (count($rs_eco) >0){
                         foreach ($rs_eco as $eco){
@@ -70,9 +69,8 @@ if ($type_filter==0){
                         }
                         
                     }
-$arr_po_id = array();
+                        $arr_po_id = array();
                     //select table ECO with keyword input     
-                 //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
                     $db->setQuery('SELECT * FROM apdm_pns_po WHERE (po_code LIKE '.$searchEscaped.' OR  po_description LIKE '.$searchEscaped .' )');
                     $rs_po = $db->loadObjectList();
                     if (count($rs_po) >0){
@@ -82,9 +80,20 @@ $arr_po_id = array();
                         
                     }
                     
+                        $arr_sto_id = array();
+                    //select table STO with keyword input                      
+                    $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
+                    $rs_sto = $db->loadObjectList();
+                    if (count($rs_sto) >0){
+                        foreach ($rs_sto as $sto){
+                           $pns_sto_id[] = $sto->pns_po_id; 
+                        }
+                        
+                    }                         
+                    
                     //pn
                     
- $leght = strlen (trim($keyword));                    
+                $leght = strlen (trim($keyword));                    
                  if ($leght==16){                                                                        
                        $arr_code = explode("-", trim($keyword));          
                    //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
@@ -154,7 +163,20 @@ else
                         
                     }                    
                 break;
-            
+                
+                case '11': //STO
+                     //STO
+                    $arr_sto_id = array();
+                    //select table STO with keyword input                      
+                    $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
+                    $rs_sto = $db->loadObjectList();
+                    if (count($rs_sto) >0){
+                        foreach ($rs_sto as $sto){
+                           $pns_sto_id[] = $sto->pns_po_id; 
+                        }
+                        
+                    }                    
+                break;
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
@@ -414,6 +436,7 @@ else
         $this->assignRef('rows',        $rows);
         $this->assignRef('rs_eco',        $rs_eco);
         $this->assignRef('rs_po',        $rs_po);
+        $this->assignRef('rs_sto',        $rs_sto);
         
         $this->assignRef('rs_supplier',        $rs_supplier);
          $this->assignRef('rs_mf',        $rs_mf);

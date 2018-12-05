@@ -37,7 +37,8 @@
 	$editor = &JFactory::getEditor();
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-?>
+
+          ?>
 <script language="javascript" type="text/javascript">
 	function submitbutton(pressbutton) {
 		var form = document.adminForm;
@@ -110,10 +111,17 @@
 							<?php echo JText::_( 'Customer Code' ); ?>
 						</label>
 					</td>
-					<td><?php echo $this->row->ccs_code.'-'.$this->row->pns_code;?>					
-						<?php if ($this->row->pns_revision) echo '-'.$this->row->pns_revision;?>
+					<td><?php 
+                                        if($this->row->pns_revision)
+                                                $pns_code = $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;
+                                        else
+                                                $pns_code = $this->row->ccs_code.'-'.$this->row->pns_code;                                                                                        
+                                        
+                                        echo $pns_code;
+                                        ?>
 					</td>
 				</tr>	
+                                                         
                                 <tr>
 					<td class="key">
 						<label for="name">

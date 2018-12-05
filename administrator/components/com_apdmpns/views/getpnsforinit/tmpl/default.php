@@ -98,11 +98,14 @@ function UpdatePnsEco(){
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
+                                <th class="title"  >
+					<?php echo JText::_( 'Manuafacture PN' ); ?>
+				</th>                                
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -154,7 +157,16 @@ function UpdatePnsEco(){
 				</td>
 				<td>
 					<?php echo  $row->pns_description; ?>
-				</td>							
+				</td>		
+                                <td>
+					<?php
+                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                        if (count($mf) > 0){
+                                                foreach ($mf as $m){
+                                                        echo $m['mf'];
+                                                }					
+					} ?>
+				</td>                                
 			</tr>
 			<?php
 				$k = 1 - $k;

@@ -239,6 +239,20 @@ class pnsViewgetpnsforstos extends JView
                         $arr_mf_id[] = -1;
                     }
                 break;
+                case '7': //Manufacture PN                         
+                    $arr_mf_id = array();
+                         //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_mf = $db->loadObjectList();                   
+                    if (count($rs_mf) > 0){
+                        foreach ($rs_mf as $mf){
+                           $arr_mf_id[] = $mf->info_id;
+                        }
+                        $arr_mf_id = array_unique($arr_mf_id);                       
+                    }else{
+                        $arr_mf_id[] = -1;
+                    }                     
+                    break;                
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
                 break;
@@ -325,7 +339,7 @@ class pnsViewgetpnsforstos extends JView
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
             $pns_id_mf = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 3 AND supplier_id IN (".implode(",",$arr_mf_id).")");
+            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 4 AND supplier_id IN (".implode(",",$arr_mf_id).")");
             $rs_ps_mf = $db->loadObjectList();
             if(count($rs_ps_mf) > 0){
                 foreach ($rs_ps_mf as $obj){
@@ -399,7 +413,8 @@ class pnsViewgetpnsforstos extends JView
         $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
         $type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
         $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 4, JText::_('Manufactory'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 7, JText::_('Manufacture PN'), 'value', 'text');
         $type[] = JHTML::_('select.option', 5, JText::_('Part Number Code'), 'value', 'text');
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);

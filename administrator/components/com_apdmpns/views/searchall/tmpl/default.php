@@ -343,12 +343,9 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				<td>
 					<?php 
 					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo $m['mf'];
-					}
-						
-					}else{
-						
+                                                foreach ($mf as $m){
+                                                        echo $m['mf'];
+                                                }					
 					}
 					 ?>
 				</td>	
@@ -747,7 +744,64 @@ if(($this->type_filter==00 || $this->type_filter==99 )&&count( $this->rs_vendor 
 </fieldset>
 <?php 
 }
+if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
+{
 ?>
+<fieldset class="adminform">
+        <legend><?php echo JText::_("STO Result");?></legend>
+   <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Attached'); ?></th>
+                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+<!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
+                                </tr>
+                        </thead>
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->rs_sto as $sto) {
+                $i++;
+                ?>
+                                        <tr>
+                                                <td><?php echo $i; ?></td>                                            
+                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
+                                                <td><?php echo $sto->sto_description; ?></td>                                                
+                                                <td>
+                                                <?php if ($sto->sto_file) { ?>
+                                                                <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
+                                                        <?php } ?>
+                                                </td>                                                
+                                                <td>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                </td>
+                                                <td>
+                                                        <?php echo GetValueUser($sto->sto_create_by, "username"); ?>
+                                                </td>                                                  
+                                                <td><?php
+                                                $role_sto = JAdministrator::RoleOnComponent(8);
+                                                if (in_array("E", $role_sto)) {
+                                                        ?>
+                                                        <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $sto->pns_sto_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <?php
+                                                }
+                                                        ?>                                                        
+                                                </td>
+                                        </tr>
+                                                <?php 
+                                        } ?>
+                </tbody>
+        </table>		        
+         </fieldset>
+        <?php
+}
+        
+        ?>
+       
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="searchall" />
