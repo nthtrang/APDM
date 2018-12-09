@@ -164,7 +164,7 @@ function UpdatePnsEco(){
                                         $mf = PNsController::GetManufacture($row->pns_id,4);
                                         if (count($mf) > 0){
                                                 foreach ($mf as $m){
-                                                        echo $m['mf'];
+                                                        echo $m['v_mf'];
                                                 }					
 					} ?>
 				</td>	                                
@@ -178,7 +178,7 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-        <input type="text" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
+        <input type="hidden" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

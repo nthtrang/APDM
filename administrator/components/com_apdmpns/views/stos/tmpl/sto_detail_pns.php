@@ -13,6 +13,17 @@ if (in_array("W", $role)) {
         JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save', false);	
         
 }
+ 
+if($this->sto_row->sto_file){        
+        JToolBarHelper::customX('download_sto', 'download', '', 'Download', false);
+}
+else
+{
+        JToolBarHelper::customX("Download", 'cannotdownload', '', 'Download', false);
+}
+
+ 
+                        
 if (in_array("D", $role)) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
 }
@@ -45,7 +56,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 {
                      submitform( pressbutton );
                      return;
-                }                
+                } 
+                if(pressbutton == 'download_sto')
+                {
+                     submitform( pressbutton );
+                     return;
+                }                 
+                
 			
         }
 

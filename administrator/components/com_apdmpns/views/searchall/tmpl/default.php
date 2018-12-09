@@ -261,9 +261,11 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 			$k = 0;
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
-				$row 	=& $this->rows[$i];
-				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-				
+				$row 	=& $this->rows[$i];				
+                                if($row->pns_cpn==1)
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
+                                else
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;					
                                 if($row->pns_revision)
                                         $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
                                 else
@@ -300,7 +302,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				</td>	
 				<td>
 				<?php if ($bom) { ?>
-				<a href="index.php?option=com_apdmpns&task=listpns&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
+				<a href="index.php?option=com_apdmpns&task=bom&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
 				<?php } else {?>
 					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
@@ -309,7 +311,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				</td>
                                 <td>
 				<?php if ($wheruse) { ?>
-				<a href="index.php?option=com_apdmpns&task=list_where_used&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
+				<a href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
 				<?php } else {?>
 					<img src="images/search.png" width="16" height="16" border="0" title="<?php echo JText::_('NO_PART_HIERARCHY')?>" alt="<?php echo JText::_('NO_PART_HIERARCHY')?>" />
@@ -758,7 +760,7 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
-<!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
+                                       <th width="100"><?php echo JText::_('Action'); ?></th>
                                 </tr>
                         </thead>
                         <tbody>					
@@ -782,11 +784,11 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                                                 <td>
                                                         <?php echo GetValueUser($sto->sto_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td><?php
+                                                <td><?php                                                
                                                 $role_sto = JAdministrator::RoleOnComponent(8);
                                                 if (in_array("E", $role_sto)) {
                                                         ?>
-                                                        <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $sto->pns_sto_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <a href="index.php?option=com_apdmpns&task=edit_sto&id=<?php echo $sto->pns_sto_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>                                                        

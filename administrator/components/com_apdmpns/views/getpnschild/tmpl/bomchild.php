@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+$pns_id		= JRequest::getVar( 'id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -22,8 +23,7 @@ function CheckForm() {
 		
 	
 }
-function UpdatePnsChild(){
-        
+function UpdatePnsChild(){   
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
@@ -46,7 +46,7 @@ function UpdatePnsChild(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_child&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_bom_child&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -158,7 +158,7 @@ function UpdatePnsChild(){
                                         $mf = PNsController::GetManufacture($row->pns_id,4);
                                         if (count($mf) > 0){
                                                 foreach ($mf as $m){
-                                                        echo $m['mf'];
+                                                        echo $m['v_mf'];
                                                 }					
 					} ?>
 				</td>                                
@@ -172,6 +172,7 @@ function UpdatePnsChild(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
+         <input type="hidden" name="pns_id" id="pns_id" value="<?php echo $pns_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

@@ -50,7 +50,10 @@ class modMenuHelper
 				$role2 = JAdministrator::RoleOnComponent(2); //SP. VD, MF
 				$role5 = JAdministrator::RoleOnComponent(5); // ECO
 				$role6 = JAdministrator::RoleOnComponent(6); //PNs
-				$arr_role = array_merge($role1, $role2, $role5, $role6);
+                                $role7 = JAdministrator::RoleOnComponent(7); //PO
+                                $role8 = JAdministrator::RoleOnComponent(8); //STO
+                                $role9 = JAdministrator::RoleOnComponent(9); //Location
+				$arr_role = array_merge($role1, $role2, $role5, $role6, $role7, $role8, $role9);
 		}
 	
 
@@ -82,6 +85,7 @@ class modMenuHelper
 		/*
 		 * Site SubMenu
 		 */
+                
 		$menu->addChild(new JMenuNode(JText::_('Site')), true);
 		$menu->addChild(new JMenuNode(JText::_('Control Panel'), 'index.php', 'class:cpanel'));
 		$menu->addSeparator();
@@ -104,9 +108,10 @@ class modMenuHelper
 		 */
 		if (!$user_apdm) {
 //			$menu->addChild(new JMenuNode(JText::_('Sitea')), true);
-                        $menu->addChild(new JMenuNode(JText::_('Dashboard'), 'index.php?option=com_apdmeco&task=dashboard', 'class:dashboard'));
-		 	$menu->addChild(new JMenuNode(JText::_('Control Panel'), 'index.php'), true);
-		 	$menu->getParent();
+                        $menu->addChild(new JMenuNode(JText::_('Dashboard'), 'index.php?option=com_apdmeco&task=dashboard'));
+                        //Hide 09/12/2018        
+                          //$menu->addChild(new JMenuNode(JText::_('Control Panel'), 'index.php'), 'class:dashboard');
+		 	//$menu->getParent();
 		 }
 	//}
 		/*
@@ -164,13 +169,13 @@ class modMenuHelper
 				' WHERE '.$db->NameQuote( 'option' ).' <> "com_frontpage"' .
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
-				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50,52,53,54 ) '.
+				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57) '.
 				' ORDER BY ordering, name';
 		}else{ 
 			if ($usertype=='Administrator' && $user_apdm==0){
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,50,52,53,54)'.
+				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57)'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
@@ -181,7 +186,7 @@ class modMenuHelper
 				}
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (53,54,52,40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
+				' WHERE id IN (57,56,55,53,54,52,40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
@@ -249,6 +254,38 @@ class modMenuHelper
 				}
 			}
 			$menu->getParent();
+                      
+                        //get component id of role			
+                        $usertype	= $user->get('usertype');
+                        if (trim($usertype) =='Super Administrator'){
+                                $user_apdm = 0;
+                        }
+                        $db->setQuery("SELECT role_id FROM  apdm_role_user WHERE user_id=".$user->get("id"));
+                       
+			$role_result = $db->loadObjectList();
+			$arr_role1 = array(0);
+			if (count($role_result) > 0){
+				foreach ($role_result as $obj){
+					$arr_role1[] = $obj->role_id;
+				}
+			}                        
+			 $db->setQuery("SELECT  DISTINCT component_id from apdm_role_component where role_id IN (".implode(",", $arr_role1).") ");
+                         $result_com = $db->loadObjectList();		
+                         $arr_component= array();
+			 if (count($result_com) > 0){
+			 	foreach ($result_com as $com){
+					$arr_component[] = $com->component_id;
+				}
+			 }
+                         	$menu->addSeparator();		 
+                        //PO
+			if($user_apdm==0 &&  (in_array(7, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                               
+				$menu->addChild(new JMenuNode(JText::_('PO'), 'index.php?option=com_apdmpns&task=pomanagement', 'class:dashboard'));                               
+			}                        
+			//STO
+			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
+				$menu->addChild(new JMenuNode(JText::_('STO'), 'index.php?option=com_apdmpns&task=stomanagement', 'class:dashboard'));                        
+			}                            
 		}
 
 		/*

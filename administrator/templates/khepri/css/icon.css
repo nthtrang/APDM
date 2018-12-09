@@ -62,7 +62,8 @@
 .icon-32-files		{ background-image: url(../images/toolbar/icon-32-attach.png); }
 .icon-32-summary		{ background-image: url(../images/toolbar/icon-32-ads_done_small.png); }
 .icon-32-affected		{ background-image: url(../images/toolbar/icon-32-adduser.png); }
-.icon-32-download        { background-image: url(../images/toolbar/icon-32-download.png); }
+.icon-32-download        { background-image: url(../images/toolbar/icon-32-download.png);}
+.icon-32-cannotdownload		{ background-image: url(../images/toolbar/icon-32-download.png);background-position:0px 32px; }
 
 /** header icons **/
 .icon-48-generic 		{ background-image: url(../images/header/icon-48-generic.png); }

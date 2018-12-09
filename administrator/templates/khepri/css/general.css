@@ -123,7 +123,7 @@ textarea:focus { background-color: #ffd }
 
 #toolbar-box 			{ background: #fbfbfb; margin-bottom: 10px; }
 
-#submenu-box { background: #f6f6f6; margin-bottom: 10px; }
+#submenu-box { background: #f6f6f6; margin-bottom: 10px;display: none; }
 #submenu-box .padding { padding: 0px;}
 
 

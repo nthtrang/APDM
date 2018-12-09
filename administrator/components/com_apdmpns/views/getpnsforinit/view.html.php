@@ -242,7 +242,7 @@ class pnsViewgetpnsforinit extends JView
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.'  group by ASI.info_id');
                     $rs_mf = $db->loadObjectList();                   
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){

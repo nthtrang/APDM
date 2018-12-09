@@ -166,8 +166,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td><?php echo $sto->sto_description; ?></td> 
                                                 <td><?php echo $sto->stock; ?></td>                                                 
                                                 <td>
-                <?php if ($sto->sto_file) { ?>
-                                                                <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
+                                                <?php if ($sto->sto_file) { ?>
+                                                                <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>
                                                 <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>

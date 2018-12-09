@@ -115,7 +115,7 @@ $search .=         "<button onclick='document.adminForm.text_search.value='';doc
 $search .=         "</form></span>";
 $output[] = "";
 //Print the logged in users message
-$output[] = "<span class=\"loggedin-users\">".$online_num."</span>";
+$output[] = "<span class=\"loggedin-users\">".$user->get('name')."</span>";
 
 if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu') ) {
 	 // Print the logout message
