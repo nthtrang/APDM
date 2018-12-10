@@ -114,7 +114,32 @@ function isCheckedPosPn(isitchecked,id,sto){
                 
 	}
 }        
+function numbersOnlyEspecia222(myfield, e, dec){
+       
+	 var key;
+	 var keychar;
+	 if (window.event)
+		key = window.event.keyCode;
+	 else if (e)
+		key = e.which;
+	 else
+		return true;
+	 keychar = String.fromCharCode(key);
+	 // control keys
 
+	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+	 // numbers
+	 else if ((("0123456789-").indexOf(keychar) > -1))
+		return true;
+	 // decimal point jump
+	 else if (dec && (keychar == "."))
+		{
+		myfield.form.elements[dec].focus();
+		return false;
+		}
+	 else
+		return false;
+}
 </script>
 <div class="clr"></div>
 <form action="index.php?option=com_apdmpns&task=stomanagement&t=<?php echo time();?>"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
@@ -127,7 +152,9 @@ function isCheckedPosPn(isitchecked,id,sto){
 <!--					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>-->
 				</th>                                        
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>  
+                                        <th width="100"><?php echo JText::_('UOM'); ?></th>  
+                                        <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>  
                                         <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
@@ -187,7 +214,16 @@ function isCheckedPosPn(isitchecked,id,sto){
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->parent_pns_code;?></a>
 				</span></td>
                                                 <td><?php echo $row->pns_description; ?></td>
-                                                
+                                                <td><?php echo $row->pns_uom; ?></td>
+                                                <td>
+                                                <?php
+                                                 $mf = PNsController::GetManufacture($row->pns_id,4);
+                                                if (count($mf) > 0){
+                                                        foreach ($mf as $m){
+                                                                echo $m['v_mf'];
+                                                        }					
+                                                } ?>
+                                                </td> 
                                                 <td colspan="4">  
                                                         
                                                         <table class="adminlist" cellspacing="0" width="200">
@@ -198,7 +234,7 @@ function isCheckedPosPn(isitchecked,id,sto){
                                                                 ?>
                                                                 <tr><td align="center" width="74px">
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
-                                                        <input style="display:none;width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
+                                                        <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecia222(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
                                                 </td> 
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?PNsController::GetCodeLocation($rw->location):"";?></span>

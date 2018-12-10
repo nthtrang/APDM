@@ -128,7 +128,7 @@ if ($type_filter==0){
                          
                    }else{      
                           $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%" AND p.pns_revision="'.$arr_code[2].'"';
+                          $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
                          $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
                      
                    }                     
@@ -263,7 +263,7 @@ else
                        $arr_code = explode("-", trim($keyword));          
                    //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
                        $db->setQuery("SELECT * FROM apdm_pns WHERE ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
-                       $rs_pns = $db->loadObjectList();
+                       $rs_pns = $db->loadObjectList();                       
                        $array_pns_id_find = array();
                        if (count($rs_pns) > 0){
                            foreach ($rs_pns as $pn){
@@ -293,7 +293,7 @@ else
                          
                    }else{      
                           $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%" AND p.pns_revision="'.$arr_code[2].'"';
+                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
                          $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
                      
                    }             
