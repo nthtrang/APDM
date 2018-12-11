@@ -203,6 +203,10 @@ function numbersOnlyEspecia222(myfield, e, dec){
 					$pns_image = JText::_('None image for preview');
 				}                
                                  $stoList = PNsController::GetStoFrommPns($row->pns_id,$sto_id);
+                                 if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
                                  
                                 ?>
                                         <tr>
@@ -211,7 +215,7 @@ function numbersOnlyEspecia222(myfield, e, dec){
                                                 <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
                                                 <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
-					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->parent_pns_code;?></a>
+					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span></td>
                                                 <td><?php echo $row->pns_description; ?></td>
                                                 <td><?php echo $row->pns_uom; ?></td>

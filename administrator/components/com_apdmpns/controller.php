@@ -4568,11 +4568,13 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 $datenow = & JFactory::getDate();
                 $sto_code = JRequest::getVar('sto_code');
+                $sto_code_prefix = JRequest::getVar('sto_code_prefix');
                 $sto_description = JRequest::getVar('sto_description');
                 $sto_state = "Create"; //JRequest::getVar('sto_state');
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');                
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $sto_code = $sto_code.'-'.$sto_code_prefix;
                 //check exist first
                 $db->setQuery("select count(*) from apdm_pns_sto where sto_code = '" . $sto_code."'");
                 $check_exist = $db->loadResult();
@@ -4612,11 +4614,13 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 $datenow = & JFactory::getDate();
                 $sto_code = JRequest::getVar('sto_code');
+                $sto_code_prefix = JRequest::getVar('sto_code_prefix');
                 $sto_description = JRequest::getVar('sto_description');
                 $sto_state = "Create"; //JRequest::getVar('sto_state');
                 $pns_created = $datenow->toMySQL();
                 $pns_created_by = $me->get('id');                
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
+                $sto_code = $sto_code.'-'.$sto_code_prefix;
                 //check exist first
                 $db->setQuery("select count(*) from apdm_pns_sto where sto_code = '" . $sto_code."'");
                 $check_exist = $db->loadResult();
@@ -5362,6 +5366,31 @@ class PNsController extends JController {
                 }
                 return $rows;*/
         }        
-        
+        function iesto_prefix_default() {
+                $db = & JFactory::getDBO();
+                $sto_type = JRequest::getVar('sto_type');
+
+                $query = "SELECT count(*)  FROM apdm_pns_sto  WHERE sto_type = '" . $sto_type . "'";
+                $db->setQuery($query);
+               $pns_latest = $db->loadResult();
+               
+                $next_pns_code = (int) $pns_latest;
+                $next_pns_code++;
+                $number = strlen($next_pns_code);
+                switch ($number) {
+                        case '1':
+                                $new_pns_code = '0' . $next_pns_code;
+                                break;
+                        case '2':
+                                $new_pns_code = $next_pns_code;
+                                break;
+                       
+                        default:
+                                $new_pns_code = $next_pns_code;
+                                break;
+                }
+                echo $new_pns_code;
+                exit;
+        }
 }
 

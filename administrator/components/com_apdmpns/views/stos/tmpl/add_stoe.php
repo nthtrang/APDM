@@ -18,7 +18,15 @@ function UpdatePnsRevWindow(){
      //   setTimeout("window.parent.document.getElementById('sbox-window').close();",1000);
        //setTimeout( "window.document.getElementById('sbox-window').close();window.parent.document.location.reload();", 2000 );
 }
-
+function get_default_ito_prefix(){		
+		var url = 'index.php?option=com_apdmpns&task=iesto_prefix_default&sto_type=2';				
+		var MyAjax = new Ajax(url, {
+			method:'get',
+			onComplete:function(result){				
+				$('sto_code_prefix').value = result.trim();
+			}
+		}).request();
+	}
 </script>
 
 <form action="index.php?option=com_apdmpns&task=save_stoe&time=<?php echo time();?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
@@ -38,7 +46,9 @@ function UpdatePnsRevWindow(){
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code;?>"/>						
+						<input type="text"  name="sto_code" id="sto_code"  size="10" value="E<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('dmy');?>"/>						
+                                                <input type="text"  name="sto_code_prefix" id="sto_code_prefix"  size="10" value=""/>
+                                                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_ito_prefix();"><?php echo JText::_('Get Default ITO')?></a>
 					</td>
 				</tr>
                                  
