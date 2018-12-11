@@ -4129,7 +4129,7 @@ class PNsController extends JController {
                 {
                         $location="";
                         $partstate="";
-                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1 order by stofk.id desc limit 1");
+                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
                         $row = $db->loadObject();        
                         $location = $row->location;
                         $partstate = $row->partstate;                        

@@ -115,7 +115,7 @@ $search .=         "<button onclick='document.adminForm.text_search.value='';doc
 $search .=         "</form></span>";
 $output[] = "";
 //Print the logged in users message
-$output[] = "<span class=\"loggedin-users\">".$user->get('name')."</span>";
+$output[] = "<span class=\"loggedin-users\"><a href=\"index.php?option=com_apdmusers&amp;view=apdmuser&amp;task=profile&amp;cid[]=".$user->get('id')."\">".$user->get('name')."</a></span>";
 
 if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu') ) {
 	 // Print the logout message
