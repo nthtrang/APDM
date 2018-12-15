@@ -80,6 +80,8 @@ class pnsViewstos extends JView
         $lists['pns_id']        = $cid[0];       
         $this->assignRef('stos',        $list_stos);
         
+        $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
+	$list_user = $db->loadObjectList();	
 //         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
 //         $pos_list = $db->loadObjectList();         
 //         $this->assignRef('pos_list',        $pos_list);     
@@ -98,7 +100,8 @@ class pnsViewstos extends JView
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);
-        $this->assignRef('pagination',    $pagination);    
+        $this->assignRef('pagination',    $pagination);  
+        $this->assignRef('list_user',	$list_user);
 		parent::display($tpl);
 	}
 }

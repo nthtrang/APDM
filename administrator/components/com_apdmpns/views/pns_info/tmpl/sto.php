@@ -96,37 +96,39 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 foreach($arrayPartState as $partState)
                                 {
                                         $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
+                                        if(count($location))
+                                        {
                                ?>
-                                <tr rowspan="<?php echo count($location);?>">
-                                         <td ><?php echo $partState?></td>  
-                                         <td>
-                                                 <table class="adminlist" cellspacing="1" width="400">
-                                         <?php
-                                         foreach($location as $row){
-                                                 ?><tr><td>
-                                          
-                                                 <?php 
-                                         //  $QtyIn = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,1);
-                                           //$QtyOut = PNsController::GetQtyFromPartStatePns($partState,$this->row->pns_id,2);
-                                          //      echo $QtyIn-$QtyOut; 
-                                          echo $row->qty;
-                                          ?></td>
-                                            </tr>
-                                                
-                                           <?php }?></table></td>  
-                                         <td>
-                                                 <table class="adminlist" cellspacing="1" width="400">
-                                         <?php
-                                         foreach($location as $row){
-                                                 ?><tr>
-                                           <td><?php 
-                                           echo $row->location_code;
-                                           //echo implode(",",$location);
-                                           ?></td> </tr>
-                                                
-                                           <?php }?></table></td>                                         
-                                </tr>
+                                        <tr rowspan="<?php echo count($location); ?>">
+                                                                <td ><?php echo $partState ?></td>  
+                                                                <td>
+                                                                        <table class="adminlist" cellspacing="1" width="400">
+                                                                                <?php
+                                                                                foreach ($location as $keyloc => $valoc) {
+                                                                                        if ($valoc)
+                                                                                        {
+                                                                                                ?><tr><td> <?php echo $valoc;?></td></tr>     
+                                                                                <?php
+                                                                                        }
+                                                                                }
+                                                                                ?>
+                                                                        </table>
+                                                                </td>  
+                                                                <td>
+                                                                        <table class="adminlist" cellspacing="1" width="400">
+                                                                                <?php
+                                                                                foreach ($location as $keyloc => $valoc) {
+                                                                                        if ($valoc) 
+                                                                                        {
+                                                                                                ?><tr><td><?php echo $keyloc;?></td></tr>
+                                                                                        <?php                                                                                                 
+                                                                                        }
+                                                                                } ?>
+                                                                        </table>
+                                                                </td>                                         
+                                                        </tr>
                                 <?php 
+                                }
                                 }
                                 ?>        
                                 </tbody>

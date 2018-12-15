@@ -234,7 +234,7 @@ function numbersOnlyEspecia222(myfield, e, dec){
                                                                 <?php 
                                                                 foreach ($this->sto_pn_list2 as $rw) {
                                                                         if($rw->pns_id==$row->pns_id)
-                                                                        {
+                                                                        {                                                                                
                                                                 ?>
                                                                 <tr><td align="center" width="74px">
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>

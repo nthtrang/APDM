@@ -421,7 +421,6 @@ class pnsViewgetpnsforeco extends JView
         
         $db->setQuery("SELECT pns_status from apdm_pns WHERE pns_id=".$id);                    
         $this->assignRef('pns_status',$db->loadResult());
-      
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;

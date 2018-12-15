@@ -4,6 +4,7 @@
 
 <?php
 $cid = JRequest::getVar( 'cid', array(0), '', 'array' );
+
 // clean item data
 JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );	
 ?>
@@ -44,7 +45,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_eco_init&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_eco_init&tmpl=component&cid[]=<?php echo $cid[0];?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -111,6 +112,7 @@ function UpdatePnsEco(){
 		</tfoot>
 		<tbody>
 		<?php
+              
 			$path_image = '../uploads/pns/images/';
 			$k = 0;
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
@@ -176,7 +178,7 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-        <input type="hidden" name="eco_id" id="eco_id" value="<?php echo $eco_id; ?>" />
+        <input type="hidden" name="eco_id" id="eco_id" value="<?php echo $cid[0]; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

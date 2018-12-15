@@ -7,7 +7,7 @@ $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-	
+ $eco_id =$cid[0];	
 ?>
 <script language="javascript">
 function CheckForm() {
@@ -46,7 +46,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_eco&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_eco&tmpl=component&cid[]=<?php echo $eco_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>

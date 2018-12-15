@@ -49,7 +49,27 @@
 						<textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
 					</td>
 				</tr>             
-                               
+                               <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Owner' ); ?>
+						</label>
+					</td>
+                                 <td>
+                                                                <select name="sto_owner" id="sto_owner" >
+                                                                        <option value="">Select Owner</option>
+                                        <?php 
+                                                
+                                                foreach ($this->list_user as $list) { 
+                                                $selected="";
+                                                if($list->id==$this->sto_row->sto_owner)
+                                                        $selected ="selected";
+                                                ?>
+                                                  <option value="<?php echo $list->id; ?>" <?php echo $selected;?>><?php echo $list->name; ?></option>
+                                                <?php } ?>
+                                                                </select>
+                                                        </td>
+                                 </tr>
                                 <tr>
 					<td class="key">
 						<label for="name">

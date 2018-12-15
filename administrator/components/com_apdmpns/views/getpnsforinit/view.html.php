@@ -371,7 +371,7 @@ class pnsViewgetpnsforinit extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
+       $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            

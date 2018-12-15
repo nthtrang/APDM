@@ -46,7 +46,7 @@ function get_default_ito_prefix(){
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="sto_code" id="sto_code"  size="10" value="I<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('dmy');?>"/>
+						<input type="text"  name="sto_code" id="sto_code"  size="10" value="I<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('ymd');?>"/>
                                                 <input type="text"  name="sto_code_prefix" id="sto_code_prefix"  size="10" value=""/>
                                                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_ito_prefix();"><?php echo JText::_('Get Default ITO')?></a>
 					</td>
@@ -61,8 +61,22 @@ function get_default_ito_prefix(){
 					<td>						
 						<textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_code?></textarea>
 					</td>
-				</tr>             
-                               
+				</tr>   
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Owner' ); ?>
+						</label>
+					</td>
+                                 <td  width="16%">
+                                                                <select name="sto_owner" id="sto_owner" >
+                                                                        <option value="">Select Owner</option>
+                                        <?php foreach ($this->list_user as $list) { ?>
+                                                                                <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
+                                                <?php } ?>
+                                                                </select>
+                                                        </td>
+                                 </tr>
                                 <tr>
 					<td class="key">
 						<label for="name">
