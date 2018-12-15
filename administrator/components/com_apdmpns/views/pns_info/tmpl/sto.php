@@ -153,6 +153,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th width="100"><?php echo JText::_('Created By'); ?></th>
 <!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
                                 </tr>
                         </thead>
@@ -178,8 +179,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td>
-                                                        <?php echo GetValueUser($sto->sto_create_by, "username"); ?>
-                                                </td>                                                  
+                                                        <?php echo GetValueUser($sto->sto_owner, "name"); ?>
+                                                </td> 
+                                                <td>
+                                                        <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
+                                                </td>                                                                                                                                                      
 <!--                                                <td>
                                                         <?php if(in_array("D", $role)){?>
                                                         <a href="index.php?option=com_apdmpns&task=remove_po&id=<?php echo $sto->pns_sto_id; ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>

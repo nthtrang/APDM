@@ -93,25 +93,25 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
-                                                <td><?php echo $sto->sto_description; ?></td>                                                
+                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
                                                 <td>
                                                 <?php if ($sto->sto_file) { ?>
-                                                                <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
+                                                                <a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                
-                                                <td>
+                                                <td style="<?php echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
+                                                <td style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td> 
-                                                <td>
+                                                <td style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
                                                 </td>                                                  
-                                                <td><?php if (in_array("E", $role)) {
+                                                <td style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
                                                         
                                                         ?>
-                                                        <a href="index.php?option=com_apdmpns&task=edit_sto&id=<?php echo $sto->pns_sto_id; ?>&sto_type=<?php echo $sto->sto_type; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=edit_sto&id=<?php echo $sto->pns_sto_id; ?>&sto_type=<?php echo $sto->sto_type; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>                                                        

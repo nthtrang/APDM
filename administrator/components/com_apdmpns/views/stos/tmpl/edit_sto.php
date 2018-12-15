@@ -36,7 +36,7 @@
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="sto_code" id="sto_code"  size="60" value="<?php echo $this->sto_row->sto_code;?>"/>						
+						<input type="text"  name="sto_code" id="sto_code" readonly size="60" value="<?php echo $this->sto_row->sto_code;?>"/>						
 					</td>
 				</tr>                       
                                 <tr>
