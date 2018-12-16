@@ -172,7 +172,7 @@ class pnsViewlistwhereused extends JView
         $rows = $db->loadObjectList();        
         //for list filter type
         $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');        
-        $type[] = JHTML::_('select.option', 5, JText::_('Part Number Code'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
         

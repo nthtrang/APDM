@@ -278,7 +278,7 @@ class pnsViewpns extends JView
         $type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
         $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
         $type[] = JHTML::_('select.option', 4, JText::_('Manufactory'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 5, JText::_('Part Number Code'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
         $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
         

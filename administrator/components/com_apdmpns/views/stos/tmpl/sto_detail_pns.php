@@ -140,6 +140,20 @@ function numbersOnlyEspecia222(myfield, e, dec){
 	 else
 		return false;
 }
+function getLocationPartState(pnsId,fkId,currentLoc,partState)
+{	
+        var url = 'index.php?option=com_apdmpns&task=ajax_getlocpn_partstate&partstate='+partState+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLoc;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+//                       /alert(result.trim());
+                       document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();        
+                        //$('#ajax_location_'+pnsId+'_'+fkId).value = result.trim();                                
+                }
+        }).request();
+        
+}
+
 </script>
 <div class="clr"></div>
 <form action="index.php?option=com_apdmpns&task=stomanagement&t=<?php echo time();?>"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
@@ -242,14 +256,31 @@ function numbersOnlyEspecia222(myfield, e, dec){
                                                 </td> 
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?PNsController::GetCodeLocation($rw->location):"";?></span>
-                                                         <?php                                         
-                                                         echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-                                                        ?>
+                                                        <span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
+                                                        <?php 
+                                                        if($rw->sto_type==1)
+                                                         {
+                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
+                                                         }
+                                                         else{
+                                                                 $locationArr = PNsController::getLocationPartStatePn($rw->partstate,$row->pns_id);
+                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
+                                                         }
+                                                        ?></span> 
                                                 </td>	
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?$rw->partstate:"";?></span>
-                                                         <?php                                         
-                                                         echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
+                                                         <?php       
+                                                         if($rw->sto_type==1)
+                                                         {
+                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
+                                                         }
+                                                         else{                                                                 
+                                                                 $partStateArr = PNsController::getPartStatePn($rw->partstate,$row->pns_id);
+                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
+                                                                 
+                                                         }
+                                                        
                                                         ?>
                                                 </td>
                                                 <td align="center" width="75px">					

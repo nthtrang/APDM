@@ -228,11 +228,11 @@
 				<tr>
 					
 					<td colspan="4" align="center">
-<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_images&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+					<a href="index.php?option=com_apdmpns&task=download_all_images_pns&tmpl=component&pns_id=<?php echo $this->row->pns_id;?>" title="Download All Files">
                                         <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-                                        </a>&nbsp;&nbsp;-->
+                                        </a>&nbsp;&nbsp;
 
-					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
 				</tr>
 								
 					</table>
@@ -333,11 +333,11 @@
 				<tr>
 					
 					<td colspan="4" align="center">
-<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_pdfs&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
+				<a href="index.php?option=com_apdmpns&task=download_all_pdfs_pns&tmpl=component&pns_id=<?php echo $this->row->pns_id;?>" title="Download All Files">
                                         <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-                                        </a>&nbsp;&nbsp;-->
+                                        </a>&nbsp;&nbsp;
 
-					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_pdfs&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_pdfs&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
 				</tr>
 								
 					</table>
@@ -438,11 +438,11 @@
 				<tr>
 					
 					<td colspan="4" align="center">
-<!--					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=download_all_cads&tmpl=component&zdir=<?php echo $this->row->ccs_code.'-'.$this->row->pns_code.'-'.$this->row->pns_revision;?>" title="Image">
-<input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-</a>&nbsp;&nbsp;-->
+                                                <a href="index.php?option=com_apdmpns&task=download_all_cads_pns&tmpl=component&pns_id=<?php echo $this->row->pns_id;?>" title="Download All Files">
+                                                <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                                </a>&nbsp;&nbsp;
 				
-					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					
+<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
 				</tr>
 				
 					</table>

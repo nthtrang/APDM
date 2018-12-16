@@ -44,7 +44,7 @@
 			return false;
 		}
 		if (form.pns_code.value=="" ){
-			alert("Please input Part Number Code Correctly");
+			alert("Please input Part Number correctly");
 			form.pns_code.focus();
 			return false;
 		}

@@ -52,7 +52,7 @@
 			return false;
 		}
 		if (form.pns_code.value=="" || !checkpnscode(form.pns_code.value)){
-			alert("Please input Part Number Code Correctly (exp: xxxxxx no special character)");
+			alert("Please input Part Number Correctly (exp: xxxxxx no special character)");
 			form.pns_code.focus();
 			return false;
 		}

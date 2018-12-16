@@ -2462,10 +2462,13 @@ class PNsController extends JController {
                                 if($stoChecker->sto_type==2)//if is out stock
                                 {                                       
                                         $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");                                     
-                                        $qtyCheck = $db->loadResult();
-                                        if($stock > $qtyCheck)
+                                        $qtyInCheck = $db->loadResult();
+                                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);                                     
+                                        $qtyOutCheck = $db->loadResult();
+                                        $currentOutStock = $stock+$qtyOutCheck;
+                                        if($currentOutStock > $qtyInCheck)
                                         {
-                                                $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $qtyCheck";
+                                                $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $qtyInCheck";
                                                 return $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail&id=' . $fkid, $msg);
                                         }                                         
                                 }
@@ -5226,7 +5229,7 @@ class PNsController extends JController {
                 $db->query();  
                 $rows = $db->loadObjectList();
                 $StockOut = $rows[0]->qty_out;      
-                return $CurrentStock + ($StockIn-$StockOut);
+                return round($CurrentStock + ($StockIn-$StockOut),2);
                 exit;                
         }
         function CalculateQtyUsedValue($pns_id)
@@ -5236,7 +5239,7 @@ class PNsController extends JController {
                 $db->setQuery("select  sum(qty) as qty_out from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id='".$pns_id."'");
                 $db->query();  
                 $rows = $db->loadObjectList();
-                $StockOut = $rows[0]->qty_out;      
+                $StockOut = round($rows[0]->qty_out,2);      
                 return $StockOut;
                 exit;                
         }        
@@ -5417,6 +5420,387 @@ class PNsController extends JController {
                                 break;
                 }
                 echo $new_pns_code;
+                exit;
+        }
+        function getPartStatePn($partState,$pns_id)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate ".
+                        " from apdm_pns_sto_fk fk  ".
+                        "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                        " where fk.pns_id = ".$pns_id." and sto.sto_type=1 and fk.partstate != '' group by fk.partstate ";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $partStateArr=array();
+                        foreach ($result as $obj) {
+                                if($obj->sto_type==1 )
+                                {
+                                    //$array_partstate[$obj->partstate] = $obj->partstate;                                
+                                    $partStateArr[] = JHTML::_('select.option', $obj->partstate, $obj->partstate , 'value', 'text');                                                                          
+                                }
+                        }
+                }
+                
+                return $partStateArr;
+        }
+        function ajax_getlocpn_partstate($pnsId,$fkId,$currentLoc,$partState)
+        {
+                //&partstate='+partState+'&pnsid='+pnsId+'&fkid'+fkId+'&currentloc='+currentLoc;
+                
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $pnsId = JRequest::getVar('pnsid');
+                $fkId = JRequest::getVar('fkid');
+                $currentLoc = JRequest::getVar('currentloc');
+                $partState = JRequest::getVar('partstate');
+                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+                        " from apdm_pns_sto_fk fk  ".
+                        " inner join apdm_pns_location loc on loc.pns_location_id=location ".
+                        " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."'";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $locationArr=array();
+                        foreach ($result as $obj) {
+                                if($obj->sto_type==1 )
+                                {
+                                    //$array_partstate[$obj->partstate] = $obj->partstate;                                
+                                    $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');                                                                          
+                                }
+                        }
+                }
+                
+               echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox" size="1" ', 'value', 'text', $currentLoc); 
+                exit;
+                //return $locationArr;  
+        }
+        function getLocationPartStatePn($partState,$pnsId)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+                        " from apdm_pns_sto_fk fk  ".
+                        " inner join apdm_pns_location loc on loc.pns_location_id=location ".
+                        " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' group by loc.location_code";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $locationArr=array();
+                        foreach ($result as $obj) {
+                                if($obj->sto_type==1 )
+                                {
+                                    //$array_partstate[$obj->partstate] = $obj->partstate;                                
+                                    $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');                                                                          
+                                }
+                        }
+                }
+                return $locationArr;
+        }
+        function download_all_images_pns() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $pns_id = JRequest::getVar('pns_id');
+                $querypn = "SELECT p.ccs_code,p.ccs_code, p.pns_code, p.pns_revision FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+//                $pns_code = $pns->pns_code;
+//                if (substr($pns_code, -1) == "-") {
+//                        $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
+//                }
+                if ($pns->pns_revision) {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code . '-' . $pns->pns_revision;
+                } else {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $folder . DS;
+                //getall images belong PN
+                $query = "SELECT img.pns_id,img.image_file,p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns_image img inner join apdm_pns p on img.pns_id = p.pns_id WHERE p.pns_id=" . $pns_id;
+                $db->setQuery($query);                
+                $rows = $db->loadObjectList();
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->image_file;
+                        }
+                }                                                
+                $zdir[] = $path_pns;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $pns_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]=' . $pns_id);
+                exit;
+        }
+        function download_all_pdfs_pns() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $pns_id = JRequest::getVar('pns_id');
+                $querypn = "SELECT p.ccs_code,p.ccs_code, p.pns_code, p.pns_revision FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+//                $pns_code = $pns->pns_code;
+//                if (substr($pns_code, -1) == "-") {
+//                        $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
+//                }
+                if ($pns->pns_revision) {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code . '-' . $pns->pns_revision;
+                } else {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $folder . DS;
+                //getall images belong PN
+                $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_code,p.ccs_code,p.pns_revision FROM apdm_pns_pdf pdf inner join apdm_pns p on pdf.pns_id = p.pns_id WHERE p.pns_id=" . $pns_id;
+                $db->setQuery($query);                            
+                $rows = $db->loadObjectList();
+                $arrPdfs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrPdfs[] = $row->pdf_file;
+                        }
+                }                                                
+                $zdir[] = $path_pns;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrPdfs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $pns_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]=' . $pns_id);
+                exit;
+        }        
+        function download_all_cads_pns() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $pns_id = JRequest::getVar('pns_id');
+                $querypn = "SELECT p.ccs_code,p.ccs_code, p.pns_code, p.pns_revision FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+//                $pns_code = $pns->pns_code;
+//                if (substr($pns_code, -1) == "-") {
+//                        $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
+//                }
+                if ($pns->pns_revision) {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code . '-' . $pns->pns_revision;
+                } else {
+                        $folder = $pns->ccs_code . '-' . $pns->pns_code;
+                }
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $folder . DS;
+                //getall images belong PN
+                $query = "SELECT * FROM apdm_pn_cad WHERE pns_id=" . $pns_id;
+                $db->setQuery($query);                            
+                $rows = $db->loadObjectList();
+                $arrCads = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrCads[] = $row->cad_file;
+                        }
+                }           
+                $zdir[] = $path_pns;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrCads))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $pns_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=specification&cid[]=' . $pns_id);
                 exit;
         }
 }
