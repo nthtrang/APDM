@@ -58,32 +58,6 @@ function saveApproveTask(id){
 
 </script>
 
-<style>
-.scroll {
-   width: 200px;
-   height: 300px;
-   overflow: scroll;
-}
-/* width */
-.scroll::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-.scroll::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
- 
-/* Handle */
-.scroll::-webkit-scrollbar-thumb {
-    background: #888; 
-}
-
-/* Handle on hover */
-.scroll::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-}
-</style>
 
                         <fieldset class="adminform">
                         <legend><?php echo JText::_( 'My task' ); ?></legend>

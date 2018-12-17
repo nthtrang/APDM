@@ -82,7 +82,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		<legend><?php echo JText::_( 'Location and Quatity' ); ?></legend>
                 <?php              
                 $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
-                ?>
+                ?><div class="col width-100 scroll">
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
@@ -96,7 +96,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 foreach($arrayPartState as $partState)
                                 {
                                         $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
-                                        if(count($location))
+                                        
+                                        if(count($location)>0)
                                         {
                                ?>
                                         <tr rowspan="<?php echo count($location); ?>">
@@ -134,13 +135,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </tbody>
                         
                 </table>
-                
+                </div>
 </fieldset>
 
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'History Transaction' ); ?></legend>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
 <?php if (count($this->stos) > 0) { ?>
+         <div class="col width-100 scroll">
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
@@ -192,9 +194,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 </td>-->
                                         </tr>
                                                 <?php }
-                                        } ?>
+                                         ?>
                 </tbody>
-        </table>		
+        </table>
+         </div>
+                 <?php 
+                 }
+                 ?>
 
         <div style="display:none"><?php
                                         echo $editor->display('text', $row->text, '10%', '10', '10', '3');

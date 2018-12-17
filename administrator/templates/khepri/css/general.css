@@ -604,3 +604,27 @@ a img.calendar {
 #system-message dd.notice ul { color: #c00; background: #EFE7B8 url(../images/notice-note.png) 4px top no-repeat; border-top: 3px solid #F0DC7E; border-bottom: 3px solid #F0DC7E;}
 
 
+.scroll {
+   width: 200px;
+   height: 300px;
+   overflow: scroll;
+}
+/* width */
+.scroll:-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.scroll:-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+.scroll:-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+.scroll:-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}

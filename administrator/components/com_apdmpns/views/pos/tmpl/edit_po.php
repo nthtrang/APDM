@@ -32,7 +32,7 @@ $role = JAdministrator::RoleOnComponent(7);
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="po_code" id="po_code"  size="60" value="<?php echo $this->po_row->po_code;?>"/>						
+						<input type="text" readonly name="po_code" id="po_code"  size="60" value="<?php echo $this->po_row->po_code;?>"/>						
 					</td>
 				</tr>                       
                                 <tr>

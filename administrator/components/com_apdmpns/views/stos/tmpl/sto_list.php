@@ -11,6 +11,7 @@ $role = JAdministrator::RoleOnComponent(8);
 if (in_array("W", $role)) {
         JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
         JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
+        JToolBarHelper::addMoveLocation("Move Location", $this->row->pns_id);
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -88,10 +89,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td>
                                                         <?php
                                                                 $style="";
-                                                                if($sto->sto_type==2)
+                                                                if($sto->sto_type==2){
                                                                         $style="color: #f00";
+                                                                }
+                                                                $link = "index.php?option=com_apdmpns&task=sto_detail&id=".$sto->pns_sto_id;
+                                                                if($sto->sto_type==3){
+                                                                        $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
+                                                                }
                                                                 ?>
-                                                        <a style="<?php echo $style?>" href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
+                                                        <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
                                                 <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
                                                 <td>

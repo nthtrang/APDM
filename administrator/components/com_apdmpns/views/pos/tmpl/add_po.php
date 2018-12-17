@@ -7,20 +7,26 @@
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
+JToolBarHelper::title( JText::_( 'PO' ) . ': <small><small>[ New ]</small></small>' , 'cpanel.png' );
 	
 ?>
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){        				
-        window.parent.document.getElementById('sbox-window').close();	       
-     // window.parent.document.location.reload(true);
+        window.parent.document.getElementById('sbox-window').close();	            
         window.parent.document.location.href = "index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>";
-     //   setTimeout("window.parent.document.getElementById('sbox-window').close();",1000);
-       //setTimeout( "window.document.getElementById('sbox-window').close();window.parent.document.location.reload();", 2000 );
 }
-
+function get_default_po_prefix(){		
+		var url = 'index.php?option=com_apdmpns&task=po_prefix_default';				
+		var MyAjax = new Ajax(url, {
+			method:'get',
+			onComplete:function(result){				
+				$('po_code_prefix').value = result.trim();
+			}
+		}).request();
+	}
 </script>
-
+<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Add PO' ); ?></legend>
 <form action="index.php?option=com_apdmpns&task=save_po&time=<?php echo time();?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
@@ -38,7 +44,9 @@ function UpdatePnsRevWindow(){
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="po_code" id="po_code"  size="10" value="<?php echo $this->po_row->po_code;?>"/>						
+						<input type="text"  name="po_code" id="po_code"  size="10" value="P<?php echo $this->po_row->po_code?$this->po_row->po_code:date('ymd');?>"/>						
+                                                <input type="text"  name="po_code_prefix" id="po_code_prefix"  size="10" value=""/>
+                                                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_po_prefix();"><?php echo JText::_('Get Default PO')?></a>
 					</td>
 				</tr>
                                  
