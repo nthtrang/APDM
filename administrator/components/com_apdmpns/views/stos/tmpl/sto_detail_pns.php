@@ -256,17 +256,21 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                 </td> 
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?PNsController::GetCodeLocation($rw->location):"";?></span>
-                                                        <span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
-                                                        <?php 
+                                                       <?php 
                                                         if($rw->sto_type==1)
                                                          {
-                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
-                                                         }
-                                                         else{
-                                                                 $locationArr = PNsController::getLocationPartStatePn($rw->partstate,$row->pns_id);
                                                                 echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
                                                          }
-                                                        ?></span> 
+                                                         else{
+															 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
+															 <?php 
+                                                                 $locationArr = PNsController::getLocationPartStatePn($rw->partstate,$row->pns_id);
+                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
+																?>
+																</span> 
+																<?php 
+                                                         }
+                                                        ?>
                                                 </td>	
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?$rw->partstate:"";?></span>
