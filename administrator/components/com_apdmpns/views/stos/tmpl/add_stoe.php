@@ -48,7 +48,7 @@ function get_default_ito_prefix(){
 					<td>
 						<input type="text"  name="sto_code" id="sto_code"  size="10" value="E<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('ymd');?>"/>						
                                                 <input type="text"  name="sto_code_prefix" id="sto_code_prefix"  size="10" value=""/>
-                                                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_ito_prefix();"><?php echo JText::_('Get Default ITO')?></a>
+                                                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_ito_prefix();"><?php echo JText::_('Get Default ETO')?></a>
 					</td>
 				</tr>
                                  

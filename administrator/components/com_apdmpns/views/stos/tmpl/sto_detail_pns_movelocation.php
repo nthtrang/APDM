@@ -183,6 +183,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         
         $locationArr = array();
         $location = PNsController::GetLocationCodeList();
+        $locationArr[] = JHTML::_('select.option',0,"Select", 'value', 'text');   
         foreach($location as $rowcode)
         {
               $locationArr[] = JHTML::_('select.option',$rowcode->pns_location_id ,$rowcode->location_code, 'value', 'text');   
@@ -244,8 +245,8 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                                                                 ?>
                                                                                                 <tr>
                                                                                                         <td align="center" width="74px">
-                                                                                                                <span  id="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"><?php echo $rw->qty_from; ?></span>
-                                                                                                                <input onKeyPress="return numbersOnlyEspecialy(this, event);" type="hidden" value="<?php echo $rw->qty_from; ?>" id="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"  name="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>" />                                                        
+                                                                                                                <span  id="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"><?php echo $rw->qty_from;?> </span>
+                                                                                                                <input onKeyPress="return numbersOnlyEspecialy(this, event);" type="hidden" value="<?php echo round($rw->qty_from - $rw->qty,2) ; ?>" id="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"  name="source_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>" />                                                        
                                                                                                         </td>
                                                                                                          <td align="center" width="74px">
                                                                                                                 <span style="display:block" id="text_qty_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"><?php echo $rw->qty; ?></span>
@@ -272,7 +273,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                                                                                 ?>
                                                                                                         </td>
                                                                                                         <td align="center" width="75px">					
-                                                                                                                <a href="index.php?option=com_apdmpns&task=removepnsstos&cid[]=<?php echo $rw->id; ?>&sto_id=<?php echo $sto_id; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>">Remove</a>
+                                                                                                                <a href="index.php?option=com_apdmpns&task=removepnsstos_movelocation&cid[]=<?php echo $rw->id; ?>&sto_id=<?php echo $sto_id; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>">Remove</a>
                                                                                                         </td>
                                                                                                 </tr>
                                                                                                         
