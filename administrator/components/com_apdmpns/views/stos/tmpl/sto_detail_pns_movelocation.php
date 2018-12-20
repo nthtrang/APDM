@@ -266,7 +266,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                                                                
                                                                                                         </td>	
                                                                                                         <td align="center" width="77px">					
-                                                                                                                <span style="display:block" id="text_partstate_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"><?php echo $rw->partstate ? $rw->partstate : ""; ?></span>
+                                                                                                                <span style="display:block" id="text_partstate_<?php echo $row->pns_id; ?>_<?php echo $rw->id; ?>"><?php echo $rw->partstate ? strtoupper($rw->partstate) : ""; ?></span>
                                                                                                                 <?php
                                                                                                                 $partStateArr = PNsController::getPartStatePn($rw->partstate, $row->pns_id);
                                                                                                                 echo JHTML::_('select.genericlist', $partStateArr, 'partstate_' . $row->pns_id . '_' . $rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState(' . $row->pns_id . ',' . $rw->id . ',' . $rw->location . ',this.value);"', 'value', 'text', $rw->partstate);

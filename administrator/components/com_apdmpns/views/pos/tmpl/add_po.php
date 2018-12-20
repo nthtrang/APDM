@@ -81,3 +81,4 @@ function get_default_po_prefix(){
 	<input type="hidden" name="return" value="po"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
+</fieldset>

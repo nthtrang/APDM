@@ -200,7 +200,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         $partStateArr[] = JHTML::_('select.option', 'IT-G', "IT-G" , 'value', 'text'); 
         $partStateArr[] = JHTML::_('select.option', 'IT-D', "IT-D" , 'value', 'text'); 
         $partStateArr[] = JHTML::_('select.option', 'OO', "OO" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'Prototype', "Prototype" , 'value', 'text'); 
+        $partStateArr[] = JHTML::_('select.option', 'Prototype', "PROTOTYPE" , 'value', 'text'); 
         
 
         $i = 0;       
@@ -273,7 +273,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                         ?>
                                                 </td>	
                                                 <td align="center" width="77px">					
-                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?$rw->partstate:"";?></span>
+                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
                                                          <?php       
                                                          if($rw->sto_type==1)
                                                          {

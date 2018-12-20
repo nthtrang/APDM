@@ -4168,16 +4168,24 @@ class PNsController extends JController {
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $stoId = JRequest::getVar('sto_id');
                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');        
-                //innsert to FK table                
+                //innsert to FK table      
                 foreach($pns as $pn_id)
-                {                        
+                {             
+                         $get_status = "select count(id) from apdm_pns_sto_fk where pns_id = '".$pn_id."' and sto_id = '".$stoId."'";
+                        $db->setQuery($get_status);
+                        $status = $db->loadResult();  
+                        if($status)
+                        {
+                              return $msg = JText::_('The PN already add into MTO');
+                              die;
+                        }
                         foreach($partStateArr as $partState){
                                 //get total qty                
-                               $query = "select loc.location_code,fk.qty,fk.sto_id,fk.location ,sto.sto_type ".
+                               $query = "select fk.pns_id,loc.location_code,fk.qty,fk.sto_id,fk.location ,sto.sto_type ".
                                         "from apdm_pns_sto_fk fk ".
                                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                                        "where fk.pns_id = ".$pn_id." and fk.partstate = '".$partState."'";
+                                        "where fk.pns_id = ".$pn_id." and fk.partstate = '".$partState."' and sto.sto_type in (1,2)";
                                 $db->setQuery($query);
                                 $result = $db->loadObjectList();
                                 if (count($result) > 0) {
@@ -4189,6 +4197,38 @@ class PNsController extends JController {
                                                      $array_loacation[$obj->location] =$array_loacation[$obj->location] - $obj->qty;   
 
                                         }                                                                        
+                                                                    
+                                }
+                                //get calculate move location
+                                $query = "select loc.location_code,fk.qty,fk.sto_id ,sto.sto_type,fk.location,fk.location_from ".
+                                        "from apdm_pns_sto_fk fk ".
+                                        "inner join apdm_pns_location loc on fk.location_from=loc.pns_location_id ".
+                                        "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                                        "where fk.pns_id = ".$pn_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+                                $db->setQuery($query);
+                                $result = $db->loadObjectList();
+                                if (count($result) > 0) {
+                                        //$array_loacation=array();
+                                        foreach ($result as $obj) {
+                                                $array_loacation[$obj->location_from] =$array_loacation[$obj->location_from] - $obj->qty;   
+                                        }
+                                }
+                                 //get calculate move location
+                                $query = "select loc.location_code,fk.qty,fk.sto_id ,sto.sto_type,fk.location,fk.location_from  ".
+                                        "from apdm_pns_sto_fk fk ".
+                                        "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
+                                        "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                                        "where fk.pns_id = ".$pn_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+                                $db->setQuery($query);
+                                $result = $db->loadObjectList();
+                                if (count($result) > 0) {
+                                        //$array_loacation=array();
+                                        foreach ($result as $obj) {
+                                                $array_loacation[$obj->location] =$array_loacation[$obj->location] + $obj->qty;   
+                                        }
+                                }
+                                if(isset($array_loacation) && sizeof($array_loacation)>0)
+                                {
                                         foreach($array_loacation as $location=>$qty)
                                         {
                                                 if($qty)
@@ -4197,13 +4237,10 @@ class PNsController extends JController {
                                                         $db->query();                         
                                                 }
 
-                                        }                                
+                                        }
                                 }
-                                else
-                                {
-                                        return $msg = JText::_('The PN not exist any Stock.');                                        
-                                }
-                        }                                               
+                                ///end calculate movelocation
+                        }                                              
                 }                                
                 return $msg = JText::_('Have add pns successfull.');
         }                     
@@ -5520,7 +5557,7 @@ class PNsController extends JController {
                         foreach ($result as $obj) {
                                 if($obj->sto_type==1 )
                                     $array_loacation[$obj->location_code] = $array_loacation[$obj->location_code] + $obj->qty;
-                                elseif($obj->sto_type==2 || $obj->sto_type==3)
+                                elseif($obj->sto_type==2)
                                      $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] - $obj->qty;   
                                 
                         }
@@ -5536,11 +5573,7 @@ class PNsController extends JController {
                 if (count($result) > 0) {
                         //$array_loacation=array();
                         foreach ($result as $obj) {
-                                if($obj->sto_type==1 )
-                                    $array_loacation[$obj->location_code] = $array_loacation[$obj->location_code] + $obj->qty;
-                                elseif($obj->sto_type==2 || $obj->sto_type==3)
-                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] - $obj->qty;   
-                                
+                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] - $obj->qty;                                   
                         }
                 }
                 //get row fromlocation display newline
@@ -5555,8 +5588,7 @@ class PNsController extends JController {
                 if (count($result) > 0) {
                         //$array_loacation=array();
                         foreach ($result as $obj) {
-                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] + $obj->qty;   
-                                
+                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] + $obj->qty;                                   
                         }
                 }
                 
@@ -5614,7 +5646,7 @@ class PNsController extends JController {
                                 if($obj->sto_type==1 )
                                 {
                                     //$array_partstate[$obj->partstate] = $obj->partstate;                                
-                                    $partStateArr[] = JHTML::_('select.option', $obj->partstate, $obj->partstate , 'value', 'text');                                                                          
+                                    $partStateArr[] = JHTML::_('select.option', $obj->partstate, strtoupper($obj->partstate) , 'value', 'text');                                                                          
                                 }
                         }
                 }
@@ -6042,6 +6074,7 @@ class PNsController extends JController {
                                         $msg = "Must choose Destination Location and input Qty together";
                                         return $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail_movelocation&id=' . $fkid, $msg);                                       
                                 }
+                                
                                 $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "' WHERE  id = " . $id);                        
                                 $db->query();
                                 //updatestock from
@@ -6052,5 +6085,24 @@ class PNsController extends JController {
                 $msg = "Successfully Saved Part Number";
                 $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail_movelocation&id=' . $fkid, $msg);
         }                    
+        /*
+         * List SO
+         */
+
+        function somanagement() {            
+                JRequest::setVar('layout', 'so_list');
+                JRequest::setVar('view', 'so');
+                parent::display();
+        }    
+        function add_so() {
+                JRequest::setVar('layout', 'add_so');
+                JRequest::setVar('view', 'so');
+                parent::display();
+        }   
+        function add_wo() {
+                JRequest::setVar('layout', 'add_wo');
+                JRequest::setVar('view', 'wo');
+                parent::display();
+        }           
 }
 
