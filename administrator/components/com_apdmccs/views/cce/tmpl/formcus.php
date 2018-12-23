@@ -97,7 +97,18 @@
 					<td>
                                                 <input type="text"  name="ccs_name" id="ccs_name" class="inputbox" size="50" value="<?php echo $this->row->ccs_name;?>"/>						
 					</td>
-				</tr>                                
+				</tr>  
+                                <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( "Coordinator" ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input type="text"  name="ccs_coordinator" id="ccs_coordinator" class="inputbox" size="50" value="<?php echo $this->row->ccs_coordinator;?>"/>						
+					</td>
+				</tr>                                  
+                                
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

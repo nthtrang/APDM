@@ -212,12 +212,14 @@ class CCsController extends JController
                 $ccs_description = strtoupper(JRequest::getVar('ccs_description'));	
                 $ccs_code1 = strtoupper(JRequest::getVar('ccs_code1'));	
                 $ccs_code2 = strtoupper(JRequest::getVar('ccs_code2'));
+                $ccs_coordinator = JRequest::getVar('ccs_coordinator');
                 $ccs_code = $ccs_code1.$ccs_code2;
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError( 500, $db->stderr() );
 			return false;
 		}
                 $row->ccs_cpn = 1;
+                $row->ccs_coordinator = $ccs_coordinator;
                 $row->ccs_description = $ccs_description;
 		$row->ccs_code = $ccs_code;
                 $row->ccs_id = (int) $row->ccs_id;
@@ -272,6 +274,8 @@ class CCsController extends JController
 				    $msg = JText::sprintf( 'ALERT_SAVE_1', $row->ccs_code );
                                     if(JRequest::getVar('back')=="mpn")
                                         $this->setRedirect( 'index.php?option=com_apdmpns&task=addpncus', $msg );                                            
+                                    elseif(JRequest::getVar('back')=="so")
+                                        $this->setRedirect( 'index.php?option=com_apdmpns&task=add_so', $msg );                                            
                                     else
                                         $this->setRedirect( 'index.php?option=com_apdmccs&view=cce&task=detailmpn&cid[]='. $row->ccs_id, $msg );                                        
 				    //$this->setRedirect( 'index.php?option=com_apdmccs', $msg );
@@ -596,4 +600,16 @@ class CCsController extends JController
             header('Cache-control: private, must-revalidate');
             print($content);
         }
+        function getcoordinator()
+	{
+		$db =& JFactory::getDBO();
+                $ccs_code = JRequest::getVar('ccs_code');
+                $ccs_coordinator = 0;
+                $query = " SELECT ccs_coordinator FROM apdm_ccs WHERE ccs_code='".$ccs_code."'";
+		$db->setQuery($query);
+                $ccs_coordinator = $db->loadResult();
+		echo $ccs_coordinator;
+                exit;
+	}        
+                    
 }

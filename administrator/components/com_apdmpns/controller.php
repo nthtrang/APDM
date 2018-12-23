@@ -54,6 +54,8 @@ class PNsController extends JController {
                 $this->registerTask('po', 'po');
                 $this->registerTask('pomanagement', 'pomanagement');
                 $this->registerTask('locatecode', 'locatecode');
+                $this->registerTask('save_sales_order', 'save_sales_order');
+                
                 
                 
         }
@@ -6104,7 +6106,7 @@ class PNsController extends JController {
         }    
         function add_so() {
                 JRequest::setVar('layout', 'add_so');
-                JRequest::setVar('view', 'so');
+                JRequest::setVar('view', 'so');                      
                 parent::display();
         }   
         function add_wo() {
@@ -6112,5 +6114,905 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'wo');
                 parent::display();
         } 
-}
+        /*
+         * Asign template for get list child PNS  for PNS
+         */
 
+        function get_list_pns_so() {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsso');
+                parent::display();
+        }   
+        /**
+         *
+          funcntion get list PNs child for ajax request
+         */
+        function ajax_list_pns_so() {
+
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+                $query = "select pns_id,pns_uom,pns_description, CONCAT_WS( '-', ccs_code, pns_code, pns_revision) AS pns_full_code,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . implode(",", $cid) . ")";
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();
+                $str = '<table class="admintable" cellspacing="1" width="60%"><tr>'.
+                        '<td class="key">#</td>'.
+                        '<td class="key">TOP ASSY PN</td>'.
+                        '<td class="key">Description</td>'.
+                        '<td class="key">Qty</td>'.
+                        '<td class="key">UOM</td>'.
+                        '<td class="key">Unit Price</td>'.
+                        '<td class="key">F.A Required</td>'.
+                        '<td class="key">ESD Required</td>'.
+                        '<td class="key">COC Required</td></tr>';                                                                  
+                foreach ($rows as $row) {
+                         if ($row->pns_revision) {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+                        }                        
+                        $str .= '<tr>'.
+                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
+                                ' <td class="key">'.$pnNumber.'</td>'.
+                                ' <td class="key">'.$row->pns_description.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key">'.$row->pns_uom.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="esd_required['.$row->pns_id.']" value="1" /> </td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="coc_required['.$row->pns_id.']" value="1" /> </td>';
+                }
+                $str .='</table>';
+                echo $str;
+                exit;
+        }        
+        function save_sales_order()
+        {
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');         
+                //var_dump($post);die;
+                $soNumber = $post['so_cuscode'];
+                $db->setQuery("INSERT INTO apdm_pns_so (customer_id,so_coordinator,so_cuscode,so_shipping_date,so_start_date,so_state,so_created,so_created_by,so_updated,so_updated_by,so_type) VALUES ('" . $post['customer_id'] . "', '" . $post['so_coordinator'] . "', '" . $post['so_cuscode'] . "', '" . $post['so_shipping_date'] . "', '" . $post['so_start_date'] . "', '" .  $post['so_state']. "','" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $datenow->toMySQL() . "', " . $me->get('id') . ",0)");
+                $db->query();     
+                //getLast SO ID
+                $so_id = $db->insertid();
+                if($so_id)
+                {
+                        $listPns = $post['pns_child'];
+                        //insert to PN ASYY
+                        if($listPns)
+                        {
+                                foreach($listPns as $pnId)
+                                {
+                                      $db->setQuery("INSERT INTO apdm_pns_so_fk (pns_id,so_id,qty,price,fa_required,esd_required,coc_required) VALUES ('" . $pnId . "', '" . $so_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $post['fa_required'][$pnId] . "', '" .  $post['esd_required'][$pnId]. "','" . $post['coc_required'][$pnId]. "') on duplicate key update qty = '". $post['qty'][$pnId]."',price='".$post['price'][$pnId]."' ");
+                                      $db->getQuery();
+                                      $db->query();                                   
+                                }                                
+                        }
+                        $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' . DS;
+                        $folder = $so_id."-".$post['so_cuscode'];
+
+                        $path_so_zips = $path_upload  .DS. $folder . DS .'zips'. DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_so_zips, 0777);                        
+                        $arr_file_upload = array();
+                        $arr_error_upload_zips = array();
+                        for ($i = 1; $i <= 20; $i++) {
+                                if ($_FILES['pns_zip' . $i]['size'] > 0) {
+                                        if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
+                                                $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
+                                        } else {
+                                                $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
+                                        }
+                                }
+                        }
+
+                        if (count($arr_file_upload) > 0) {
+                                foreach ($arr_file_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pn_cad (so_id, cad_file, date_create, created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }
+                        //for upload file image
+                        ///for pns cads/image/pdf
+                       //upload new images
+                        $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_so_images, 0777);
+                        $arr_error_upload_image = array();
+                        $arr_image_upload = array();
+                        for ($i = 1; $i <= 20; $i++) {
+                                if ($_FILES['pns_image' . $i]['size'] > 0) {
+                                        $imge = new upload($_FILES['pns_image' . $i]);
+                                        $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;    
+                                        if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                                @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                        }
+                                        if ($imge->uploaded) {
+                                                $imge->Process($path_so_images);
+                                                if ($imge->processed) {
+                                                        $arr_image_upload[] = $imge->file_dst_name;
+                                                } else {
+                                                        $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
+                                                }
+                                        }
+                                }
+                        }
+                        if (count($arr_image_upload) > 0) {
+                                foreach ($arr_image_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_image (so_id,image_file,date_created,created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }        
+
+                        //upload new pdf
+                        $path_so_pdfs = $path_upload  .DS. $folder . DS .'pdfs'. DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_so_pdfs, 0777);
+                        $arr_error_upload_pdf = array();
+                        $arr_pdf_upload = array();
+                        for ($i = 1; $i <= 20; $i++) {
+                                if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+                                        $imge = new upload($_FILES['pns_pdf' . $i]);
+                                        $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;                                       
+
+                                        if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                                @unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                        }
+                                        if ($imge->uploaded) {
+                                                $imge->Process($path_so_pdfs);
+                                                if ($imge->processed) {
+                                                        $arr_pdf_upload[] = $imge->file_dst_name;
+                                                } else {
+                                                        $arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+                                                }
+                                        }
+                                }
+                        }
+                        if (count($arr_pdf_upload) > 0) {
+                                foreach ($arr_pdf_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_pdf (so_id,pdf_file,date_created,created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }                        
+                        
+                     
+                }//for save database of pns 
+               
+                $msg = JText::_('Successfully Saved So') . $text_mess;
+                $return = JRequest::getVar('return');
+               
+                if ($return) {
+                       return $this->setRedirect('index.php?option=com_apdmpns&task=somanagement', $msg);
+                } else {
+                       return $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $so_id, $msg);
+                }
+                               
+        }
+        function so_detail()
+        {
+                JRequest::setVar('layout', 'so_detail');
+                JRequest::setVar('view', 'so');
+                 parent::display();
+        }
+        function getCcsDescription($ccs_code)
+	{
+		$db =& JFactory::getDBO();               
+                $ccs_description = "";
+                $query = " SELECT ccs_description FROM apdm_ccs WHERE ccs_code='".$ccs_code."'";
+		$db->setQuery($query);
+		return $db->loadResult();
+                
+	}    
+        /*
+         * Remove SO
+         */
+        function deleteso() {
+                $db = & JFactory::getDBO();                
+                $so_id = JRequest::getVar('so_id');
+                $db->setQuery("DELETE FROM apdm_pns_so WHERE pns_so_id = '" . $so_id . "'");
+                $db->query();                    
+                $db->setQuery("DELETE FROM apdm_pns_so_fk WHERE so_id = '" . $so_id . "'");
+                $db->query();                    
+                $msg = JText::_('Have removed successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=somanagement', $msg);
+        }            
+        function editso()
+        {
+                JRequest::setVar('layout', 'edit_so');
+                JRequest::setVar('view', 'so');
+                JRequest::setVar('edit', true);
+                parent::display();
+        }
+/**
+         * @desc Read file size
+         */
+        function readfilesizeSo($folder_so, $filename,$type) {
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'so' . DS;
+                $filesize = '';               
+                $path_so .= $folder_so . DS . $type . DS;
+                if (file_exists($path_so . $filename)) {
+                        $filesize = ceil(filesize($path_so . $filename) / 1000);
+                } else {
+                        $filesize = 0;
+                }
+                return $filesize;
+        }      
+        /**
+         * @desc Download imge of PNs
+         */
+        function download_img_so() {
+                $db = & JFactory::getDBO();
+                $so_id = JRequest::getVar('soid');
+                $image_id = JRequest::getVar('id');
+                $query = "SELECT img.so_id,img.image_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_image img inner join apdm_pns_so p on img.so_id = p.pns_so_id WHERE pns_image_id=" . $image_id;
+                $db->setQuery($query);
+                $row = $db->loadObject();                
+                ///for pns cads/image/pdf              
+                $folder = $row->pns_so_id . '-' . $row->so_cuscode;                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'so' . DS;
+                $path_images = $path_so  . DS . $folder . DS . 'images' . DS;                                                   
+                $file_name = $row->image_file;
+                $dFile = new DownloadFile($path_images, $file_name);
+                exit;
+        }        
+      
+/**
+         * @desc Download imge of PNs
+         */
+        function download_pdfs_so() {
+                $db = & JFactory::getDBO();
+                $so_id = JRequest::getVar('soid');
+                $image_id = JRequest::getVar('id');
+                $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_pdf pdf inner join apdm_pns_so p on pdf.so_id = p.pns_so_id WHERE pns_pdf_id=" . $image_id;
+                $db->setQuery($query);
+                $row = $db->loadObject();                
+               ///for pns cads/image/pdf              
+                $folder = $row->pns_so_id . '-' . $row->so_cuscode;                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'so' . DS;
+                $path_pdfs = $path_so  . DS . $folder . DS . 'pdfs' . DS;                          
+                $file_name = $row->pdf_file;
+                //$path_pns = $path_cads;
+                $dFile = new DownloadFile($path_pdfs, $file_name);
+                exit;
+        }        
+  /**
+         * @desc Download cad file of PNs
+         */
+        function download_zip_so() {
+                $db = & JFactory::getDBO();
+                $zip_id = JRequest::getVar('id');
+                $query = "SELECT zip.cad_file,p.pns_so_id,p.so_cuscode FROM apdm_pn_cad zip inner join apdm_pns_so p on zip.so_id = p.pns_so_id WHERE pns_cad_id=" . $zip_id;
+                $db->setQuery($query);
+                $row = $db->loadObject();    
+                ///for pns cads/image/pdf              
+                $folder = $row->pns_so_id . '-' . $row->so_cuscode;                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'so' . DS;
+                $path_cads = $path_so  . DS . $folder . DS . 'zips' . DS;                          
+                $file_name = $row->cad_file; 
+                $dFile = new DownloadFile($path_cads, $file_name);
+                exit;
+        }       
+        function so_detail_support_doc()
+        {
+                JRequest::setVar('layout', 'so_detail_doc');
+                JRequest::setVar('view', 'so');
+                 parent::display();
+        }
+        function save_doc_so()
+        {
+                global $mainframe;
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $row = & JTable::getInstance('apdmpns');
+                $datenow = & JFactory::getDate();                
+                $so_id = JRequest::getVar('so_id');        
+                
+                //get so info
+                $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
+                $so_row =  $db->loadObject();                
+                $soNumber = $so_row->so_cuscode;
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $so_id."-".$so_row->so_cuscode;
+
+                $path_so_zips = $path_upload  .DS. $folder . DS .'zips'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_zips, 0777);                        
+                $arr_file_upload = array();
+                $arr_error_upload_zips = array();
+                for ($i = 1; $i <= 20; $i++) {
+                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
+                                if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
+                                        $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
+                                } else {
+                                        $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
+                                }
+                        }
+                }
+                if (count($arr_file_upload) > 0) {
+                        foreach ($arr_file_upload as $file) {
+                                $db->setQuery("INSERT INTO apdm_pn_cad (so_id, cad_file, date_create, created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                $db->query();
+                        }
+                }
+               //upload new images
+                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_images, 0777);
+                $arr_error_upload_image = array();
+                $arr_image_upload = array();
+                for ($i = 1; $i <= 20; $i++) {
+                        if ($_FILES['pns_image' . $i]['size'] > 0) {
+                                $imge = new upload($_FILES['pns_image' . $i]);
+                                $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;    
+                                if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                        @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                }
+                                if ($imge->uploaded) {
+                                        $imge->Process($path_so_images);
+                                        if ($imge->processed) {
+                                                $arr_image_upload[] = $imge->file_dst_name;
+                                        } else {
+                                                $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
+                                        }
+                                }
+                        }
+                }
+                if (count($arr_image_upload) > 0) {
+                        foreach ($arr_image_upload as $file) {
+                                $db->setQuery("INSERT INTO apdm_pns_image (so_id,image_file,date_created,created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                $db->query();
+                        }
+                }        
+
+                //upload new pdf
+                $path_so_pdfs = $path_upload  .DS. $folder . DS .'pdfs'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_pdfs, 0777);
+                $arr_error_upload_pdf = array();
+                $arr_pdf_upload = array();
+                for ($i = 1; $i <= 20; $i++) {
+                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+                                $imge = new upload($_FILES['pns_pdf' . $i]);
+                                $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;                                       
+
+                                if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                        @unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                }
+                                if ($imge->uploaded) {
+                                        $imge->Process($path_so_pdfs);
+                                        if ($imge->processed) {
+                                                $arr_pdf_upload[] = $imge->file_dst_name;
+                                        } else {
+                                                $arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+                                        }
+                                }
+                        }
+                }
+                if (count($arr_pdf_upload) > 0) {
+                        foreach ($arr_pdf_upload as $file) {
+                                $db->setQuery("INSERT INTO apdm_pns_pdf (so_id,pdf_file,date_created,created_by) VALUES (" . $so_id . ", '" . $file . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                $db->query();
+                        }
+                }     
+                $msg = JText::_('Successfully Saved So Supporting Doc');
+                $return = JRequest::getVar('return');
+               
+                if ($return) {
+                       return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);
+                } else {
+                       return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
+                }                
+                                        
+        }
+        function download_all_images_so() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $so_id = JRequest::getVar('so_id');
+                $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
+                $so_row =  $db->loadObject();                
+                $soNumber = $so_row->so_cuscode;
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $so_id."-".$so_row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;                
+                               
+                //getall images belong PN
+                
+                $query = "SELECT img.so_id,img.image_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_image img inner join apdm_pns_so p on img.so_id = p.pns_so_id WHERE img.so_id=" . $so_id;                
+                $db->setQuery($query);                
+                $rows = $db->loadObjectList();
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->image_file;
+                        }
+                }                                                
+                $zdir[] = $path_so_images;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $soNumber;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id);
+                exit;
+        }                
+        function download_all_pdfs_so() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $so_id = JRequest::getVar('so_id');
+                $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
+                $so_row =  $db->loadObject();                
+                $soNumber = $so_row->so_cuscode;
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $so_id."-".$so_row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'pdfs'. DS;                
+                               
+                //getall images belong PN
+                $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_pdf pdf inner join apdm_pns_so p on pdf.so_id = p.pns_so_id WHERE pdf.so_id =" . $so_id;
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();                 
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->pdf_file;
+                        }
+                }                                                
+                $zdir[] = $path_so_images;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $soNumber;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id);
+                exit;
+        }                
+        
+        function download_all_cads_so() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $so_id = JRequest::getVar('so_id');
+                $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
+                $so_row =  $db->loadObject();                
+                $soNumber = $so_row->so_cuscode;
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $so_id."-".$so_row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'zips'. DS;                
+                               
+                //getall images belong PN
+                $query = "SELECT zip.cad_file,p.pns_so_id,p.so_cuscode FROM apdm_pn_cad zip inner join apdm_pns_so p on zip.so_id = p.pns_so_id WHERE zip.so_id =" . $so_id;
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();                                                
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->cad_file;
+                        }
+                }                                                
+                $zdir[] = $path_so_images;
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $soNumber;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id);
+                exit;
+        }         
+/**
+         * @desc  Remove file cads
+         */
+        function remove_imgs_so() {
+                $db = & JFactory::getDBO();
+                $id = JRequest::getVar('id');
+                $so_id = JRequest::getVar('soid');
+                //unlink first
+                //get name file cad
+                $query = "SELECT img.so_id,img.image_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_image img inner join apdm_pns_so p on img.so_id = p.pns_so_id WHERE img.pns_image_id=" . $id;
+                $db->setQuery($query);
+                $row = $db->loadObject();                 
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $row->so_id."-".$row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;                                 
+                $file_name = $row->image_file;
+                //get folder file cad          
+                $handle = new upload($path_so_images . $file_name);
+                $handle->file_dst_pathname = $path_so_images . $file_name;
+                $handle->clean();                               
+                
+                $db->setQuery("DELETE FROM apdm_pns_image WHERE pns_image_id=" . $id);
+                $db->query();
+                $msg = JText::_('Have successfuly delete image file');
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id, $msg);
+        }              
+ /**
+         * @desc  Remove file cads
+         */
+        function remove_pdfs_so() {
+                $db = & JFactory::getDBO();
+                $id = JRequest::getVar('id');
+                $so_id = JRequest::getVar('soid');
+                $query = "SELECT pdf.so_id,pdf.pdf_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_pdf pdf inner join apdm_pns_so p on pdf.so_id = p.pns_so_id WHERE pdf.pns_pdf_id=" . $id;
+                $db->setQuery($query);
+                $row = $db->loadObject();
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $row->so_id."-".$row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'pdfs'. DS;                                 
+                $file_name = $row->pdf_file;
+                //get folder file cad          
+                $handle = new upload($path_so_images . $file_name);
+                $handle->file_dst_pathname = $path_so_images . $file_name;
+                $handle->clean();                                                     
+                $db->setQuery("DELETE FROM apdm_pns_pdf WHERE pns_pdf_id=" . $id);
+                $db->query();
+                $msg = JText::_('Have successfuly delete pdf file');
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id, $msg);
+        }        
+/**
+         * @desc  Remove file cads
+         */
+        function remove_zip_so() {
+                $db = & JFactory::getDBO();
+                $id = JRequest::getVar('id');
+                $so_id = JRequest::getVar('soid');           
+                $query = "SELECT zip.so_id,zip.cad_file,p.pns_so_id,p.so_cuscode FROM apdm_pn_cad zip inner join apdm_pns_so p on zip.so_id = p.pns_so_id WHERE zip.pns_cad_id =" . $id;
+                $db->setQuery($query);
+                $row = $db->loadObject(); 
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'so' ;
+                $folder = $row->so_id."-".$row->so_cuscode;
+                $path_so_images = $path_upload  .DS. $folder . DS .'zips'. DS;                                 
+                $file_name = $row->cad_file;
+                //get folder file cad          
+                $handle = new upload($path_so_images . $file_name);
+                $handle->file_dst_pathname = $path_so_images . $file_name;
+                $handle->clean();                     
+                
+                $db->setQuery("DELETE FROM apdm_pn_cad WHERE pns_cad_id=" . $id);
+                $db->query();
+                $msg = JText::_('Have successfuly delete zip file');
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id, $msg);
+        }      
+        /*
+         * Asign template for get list child PNS  for PNS
+         */
+
+        function get_list_pns_so_edit() {
+                JRequest::setVar('layout', 'pn_child_editso');
+                JRequest::setVar('view', 'getpnsso');
+                parent::display();
+        }           
+    /**
+         *
+          funcntion get list PNs child for ajax request
+         */
+        function ajax_list_pns_so_edit() {
+
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+                $so_id = JRequest::getVar('soid');   
+                $str = '<table class="admintable" cellspacing="1" width="80%"><tr>'.
+                        '<td class="key">#</td>'.
+                        '<td class="key">TOP ASSY PN</td>'.
+                        '<td class="key">Description</td>'.
+                        '<td class="key">Qty</td>'.
+                        '<td class="key">UOM</td>'.
+                        '<td class="key">Unit Price</td>'.
+                        '<td class="key">F.A Required</td>'.
+                        '<td class="key">ESD Required</td>'.
+                        '<td class="key">COC Required</td></tr>';                     
+                //get curent pns
+                $db->setQuery("SELECT fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);                
+                $rows = $db->loadObjectList();
+                $arrPnsExist=array();
+                foreach ($rows as $row) {
+                        $arrPnsExist[]=$row->pns_id;
+                         if ($row->pns_revision) {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+                        }  
+                        $fachecked="";
+                        if($row->fa_required)
+                        {
+                                $fachecked = 'checked="checked"';
+                        }
+                        $esdchecked="";
+                        if($row->esd_required)
+                        {
+                                $esdchecked = 'checked="checked"';
+                        }
+                        $cocchecked="";
+                        if($row->coc_required)
+                        {
+                                $cocchecked = 'checked="checked"';
+                        }
+                                
+                        $str .= '<tr>'.
+                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
+                                ' <td class="key">'.$pnNumber.'</td>'.
+                                ' <td class="key">'.$row->pns_description.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="'.$row->qty.'" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key">'.$row->pns_uom.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="'.$row->price.'" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input '.$fachecked.' type="checkbox" name="fa_required['.$row->pns_id.']" value="'.$row->fa_required.'" /> </td>'.
+                                ' <td class="key"><input '.$esdchecked.'  type="checkbox" name="esd_required['.$row->pns_id.']" value="'.$row->esd_required.'" /> </td>'.
+                                ' <td class="key"><input '.$cocchecked.'  type="checkbox" name="coc_required['.$row->pns_id.']" value="'.$row->coc_required.'" /> </td>';
+                }                
+                 
+                $query = "select pns_id,pns_uom,pns_description, CONCAT_WS( '-', ccs_code, pns_code, pns_revision) AS pns_full_code,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . implode(",", $cid) . ") and pns_id not in (" . implode(",", $arrPnsExist) . ")";
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();                                                              
+                foreach ($rows as $row) {
+                         if ($row->pns_revision) {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+                        }                        
+                        $str .= '<tr>'.
+                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
+                                ' <td class="key">'.$pnNumber.'</td>'.
+                                ' <td class="key">'.$row->pns_description.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key">'.$row->pns_uom.'</td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="esd_required['.$row->pns_id.']" value="1" /> </td>'.
+                                ' <td class="key"><input checked="checked" type="checkbox" name="coc_required['.$row->pns_id.']" value="1" /> </td>';
+                }                
+                echo $str ."</table>";
+                exit;
+        }             
+        function save_editso()
+        {
+                 // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');                     
+                $so_id = $post['so_id'];
+                $soNumber = $post['so_cuscode'];
+                $sql= " update apdm_pns_so set customer_id ='" . $post['customer_id'] . "'".
+                        ",so_coordinator = '" . $post['so_coordinator'] . "'".
+                        ",so_cuscode = '" . $post['so_cuscode'] . "'".
+                        ",so_shipping_date = '" . $post['so_shipping_date'] . "'".
+                        ",so_start_date = '" . $post['so_start_date'] . "'".
+                        ",so_updated = '" . $datenow->toMySQL() . "'".
+                        ",so_updated_by = '" . $me->get('id') . "'".
+                        " where pns_so_id ='".$so_id."' ";
+                $db->query();     
+                // SO ID                
+                if($so_id)
+                {
+                        $listPns = $post['pns_child'];
+                        //insert to PN ASYY
+                        if($listPns)
+                        {
+                                foreach($listPns as $pnId)
+                                {
+                                        //'" . $post['fa_required'][$pnId] . "', '" .  $post['esd_required'][$pnId]. "','" . $post['coc_required'][$pnId]. "'                                        
+                                       $fa=0;
+                                       if($post['fa_required'][$pnId])
+                                               $fa = 1;
+                                       $esd=0;
+                                       if($post['esd_required'][$pnId])
+                                               $esd = 1; 
+                                       $coc=0;
+                                       if($post['coc_required'][$pnId])
+                                               $coc = 1; 
+                                      $db->setQuery("INSERT INTO apdm_pns_so_fk (pns_id,so_id,qty,price,fa_required,esd_required,coc_required) VALUES ('" . $pnId . "', '" . $so_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $fa . "', '" .  $esd. "','" . $coc. "') on duplicate key update qty = '". $post['qty'][$pnId]."',price='".$post['price'][$pnId]."',fa_required= '" . $fa . "',esd_required='" . $esd . "',coc_required='" . $coc. "'");
+                                      $db->getQuery();
+                                      $db->query();                                   
+                                }                                
+                        }
+                     
+                }//for save database of pns 
+               
+                $msg = JText::_('Successfully Updated So') . $text_mess;
+                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);                
+        }
+}

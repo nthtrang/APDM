@@ -613,8 +613,8 @@ class JToolBarHelper
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmpns&task=add_location&tmpl=component", 600,300 );
-	}               
-         
+	}        
+            
 }
 
 /**

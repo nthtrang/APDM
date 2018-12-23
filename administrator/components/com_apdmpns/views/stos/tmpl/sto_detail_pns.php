@@ -114,7 +114,7 @@ function isCheckedPosPn(isitchecked,id,sto){
                 
 	}
 }        
-function numbersOnlyEspecia222(myfield, e, dec){
+function numbersOnlyEspecialFloat(myfield, e, dec){
        
 	 var key;
 	 var keychar;
@@ -252,7 +252,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                                 ?>
                                                                 <tr><td align="center" width="74px">
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
-                                                        <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecia222(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
+                                                        <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
                                                 </td> 
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?PNsController::GetCodeLocation($rw->location):"";?></span>

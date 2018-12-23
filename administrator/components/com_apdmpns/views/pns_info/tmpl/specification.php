@@ -287,7 +287,7 @@
                                         </tr>  
                                         
                                         
-                                        <tr>  
+                                       
                                 <?php if (isset($this->lists['pdf_files'])&& count($this->lists['pdf_files'])>0) {?>
 				<tr>
                                         <td colspan="2" >
