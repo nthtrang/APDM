@@ -70,13 +70,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 }       
 
 </script>
-<style type="text/css" media="print">
-    @page 
-    {
-        size: auto;   /* auto is the initial value */
-        margin: 0mm;  /* this affects the margin in the printer settings */
-    }
-</style>
 <div class="submenu-box">
             <div class="t">
                 <div class="t">

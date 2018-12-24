@@ -100,6 +100,12 @@ class JTableApdmccs  extends JTable
 	 * @var string
 	 */
 	var $ccs_name			= null;	        
+	/**
+	 * The ccs_coordinator for mpn
+	 *
+	 * @var string
+	 */
+	var $ccs_coordinator  			= null;	                
 
 	/**
 	* @param database A database connector object

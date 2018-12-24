@@ -12,11 +12,12 @@ $edit = JRequest::getVar('edit', true);
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(13);      
 if (in_array("W", $role)) {	
-        JToolBarHelper::apply('save_doc_so', 'Save');
+        JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);
+        JToolBarHelper::newWoSo("NEW WO#", $this->so_row->pns_so_id);
         
 }
 if (in_array("D", $role)) {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
+        JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO#");
 }
 
 $cparams = JComponentHelper::getParams('com_media');
@@ -30,7 +31,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <script language="javascript" type="text/javascript">
         function submitbutton(pressbutton) {  
                 var form = document.adminForm;      
-                if(pressbutton == 'deleteso')
+                if(pressbutton == 'removewoso')
                 {                       
                      submitform( pressbutton );
                      return;
@@ -111,8 +112,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
-                        <li><a id="bom" class="active"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
+			<li><a id="bom" class="active"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -138,7 +139,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						
 						<thead>
-							<th colspan="4"><?php echo JText::_('List Images')?></th>
+							<th colspan="4"><?php echo JText::_('List P/N Images')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -187,7 +188,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <tr>
 					<td class="key">
 						<label for="ccs_create">
-							Image
+							<?php echo JText::_('IMAGE')?>
 						</label>
 					</td>
 					<td>
@@ -236,7 +237,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List PDF')?></th>
+							<th colspan="4"><?php echo JText::_('List P/N PDF')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -284,7 +285,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				<?php } ?>  
                                         <tr><td class="key">
 						<label for="ccs_create">
-							PDF
+							<?php echo JText::_('P/N PDF')?>
 						</label>
 					</td>
 					<td>
@@ -334,7 +335,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List ZIP')?></th>
+							<th colspan="4"><?php echo JText::_('P/N ZIP')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -383,7 +384,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <tr>
 					<td class="key" valign="top">
 						<label for="ccs_create">
-							<?php echo JText::_('ZIP')?>
+							<?php echo JText::_('P/N Zip')?>
 						</label>
 					</td>
 					<td>
@@ -457,9 +458,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </fieldset>
 </div>	
         </fieldset>
-        <input type="hidden" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
+        <input type="text" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
-        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+        <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="so_detail_support_doc"  />
         <input type="hidden" name="boxchecked" value="1" />

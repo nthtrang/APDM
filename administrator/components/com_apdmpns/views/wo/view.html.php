@@ -5,7 +5,7 @@
 defined('_JEXEC') or die( 'Restricted access' );
 jimport( 'joomla.application.component.view');
 
-class pnsViewso extends JView
+class pnsViewwo extends JView
 {
 	function display($tpl = null)
 	{
@@ -27,15 +27,14 @@ class pnsViewso extends JView
         if (isset( $search ) && $search!= '')
         {
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
-            $where[] = 'so.so_cuscode LIKE '.$searchEscaped.'';        
+            $where[] = 'p.po_code LIKE '.$searchEscaped.' or p.po_description LIKE '.$searchEscaped.'';        
            
         }  
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $orderby = ' ORDER BY so.pns_so_id desc';        
-        $query = 'SELECT COUNT(so.pns_so_id)'
-        . ' FROM apdm_pns_so AS so inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id '
-        . ' inner join apdm_pns AS p on p.pns_id = fk.pns_id '
+        $orderby = ' ORDER BY p.pns_po_id desc';        
+        $query = 'SELECT COUNT(p.pns_po_id)'
+        . ' FROM apdm_pns_po AS p'
         . $where
         ;
 
@@ -45,18 +44,26 @@ class pnsViewso extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-         $query = 'SELECT  so.*,fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '
-            . ' FROM apdm_pns_so AS so inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id '
-            . ' inner join apdm_pns AS p on p.pns_id = fk.pns_id '
+        $query = 'SELECT p.* '
+            . ' FROM apdm_pns_po AS p'
             . $where
             . $orderby;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
-        $rows = $db->loadObjectList();                
-       
+        $rows = $db->loadObjectList(); 
+        
+        
+        $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_po AS po on p.pns_id = po.pns_id WHERE p.pns_deleted =0 AND po.pns_id=".$cid[0]." order by po.pns_rev_id desc limit 1");              
+        $list_pos = $db->loadObjectList();              
+        $lists['pns_id']        = $cid[0];       
+        $this->assignRef('pos',        $list_pos);
+        
+//         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
+//         $pos_list = $db->loadObjectList();         
+//         $this->assignRef('pos_list',        $pos_list);     
         //for PO detailid
-         $db->setQuery("SELECT fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);
+         $db->setQuery("SELECT fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);
          $pns_list = $db->loadObjectList();         
          $this->assignRef('so_pn_list',        $pns_list);     
          

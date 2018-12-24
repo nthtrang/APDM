@@ -6973,7 +6973,8 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');                     
+                $post = JRequest::get('post');             
+                
                 $so_id = $post['so_id'];
                 $soNumber = $post['so_cuscode'];
                 $sql= " update apdm_pns_so set customer_id ='" . $post['customer_id'] . "'".
@@ -6983,7 +6984,9 @@ class PNsController extends JController {
                         ",so_start_date = '" . $post['so_start_date'] . "'".
                         ",so_updated = '" . $datenow->toMySQL() . "'".
                         ",so_updated_by = '" . $me->get('id') . "'".
+                        ",so_log = '" . $post['so_log'] . "'".
                         " where pns_so_id ='".$so_id."' ";
+                $db->setQuery($sql);
                 $db->query();     
                 // SO ID                
                 if($so_id)
@@ -7004,8 +7007,7 @@ class PNsController extends JController {
                                        $coc=0;
                                        if($post['coc_required'][$pnId])
                                                $coc = 1; 
-                                      $db->setQuery("INSERT INTO apdm_pns_so_fk (pns_id,so_id,qty,price,fa_required,esd_required,coc_required) VALUES ('" . $pnId . "', '" . $so_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $fa . "', '" .  $esd. "','" . $coc. "') on duplicate key update qty = '". $post['qty'][$pnId]."',price='".$post['price'][$pnId]."',fa_required= '" . $fa . "',esd_required='" . $esd . "',coc_required='" . $coc. "'");
-                                      $db->getQuery();
+                                      $db->setQuery("INSERT INTO apdm_pns_so_fk (pns_id,so_id,qty,price,fa_required,esd_required,coc_required) VALUES ('" . $pnId . "', '" . $so_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $fa . "', '" .  $esd. "','" . $coc. "') on duplicate key update qty = '". $post['qty'][$pnId]."',price='".$post['price'][$pnId]."',fa_required= '" . $fa . "',esd_required='" . $esd . "',coc_required='" . $coc. "'");                                      
                                       $db->query();                                   
                                 }                                
                         }
@@ -7015,4 +7017,25 @@ class PNsController extends JController {
                 $msg = JText::_('Successfully Updated So') . $text_mess;
                 return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);                
         }
+         /*
+         * save RMA for SO/PN
+         */        
+        function savermafk() {
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+                $so_id = JRequest::getVar('so_id');               
+                foreach ($cid as $id) {
+                        $rma = JRequest::getVar('rma_' . $id);                     
+                        $db->setQuery("update apdm_pns_so_fk set rma=" . $rma . " WHERE  id = " . $id);
+                        $db->query();
+                }
+                $msg = "Successfully Saved RMA";
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
+        }        
+        function so_detail_wo()
+        {
+                JRequest::setVar('layout', 'so_detail_wo');
+                JRequest::setVar('view', 'so');
+                parent::display();
+        }        
 }

@@ -20,7 +20,7 @@ $editor = &JFactory::getEditor();
 <?php
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
-?>
+?>sss
 <script language="javascript" type="text/javascript">
        function submitbutton(pressbutton) {
                 var form = document.adminForm;
@@ -67,21 +67,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		</tr>
 					
 </table>        
-<?php 
-if (count($this->so_list) > 0) { ?>
+<?php if (count($this->pos_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('PN'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
-                                        <th width="100"><?php echo JText::_('UOM'); ?></th>
-                                        <th width="100"><?php echo JText::_('Task'); ?></th>
-                                        <th width="100"><?php echo JText::_('Time Remain'); ?></th>
-                                        <th width="100"><?php echo JText::_('Assigner'); ?></th>
+                                        <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th width="100"><?php echo JText::_('Action'); ?></th>
                                 </tr>
                         </thead>
 <tfoot>
@@ -94,40 +90,30 @@ if (count($this->so_list) > 0) { ?>
                         <tbody>					
         <?php
         $i = 0;
-        foreach ($this->so_list as $so) {
+        foreach ($this->pos_list as $po) {
                 $i++;
-                if ($row->pns_cpn == 1)
-                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $so->pns_id;
-                else
-                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $so->pns_id;
-                if ($so->pns_revision) {
-                        $pnNumber = $so->ccs_code . '-' . $so->pns_code . '-' . $so->pns_revision;
-                } else {
-                        $pnNumber = $so->ccs_code . '-' . $so->pns_code;
-                }
                 ?>
                                         <tr>
                                                 <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $so->so_cuscode; ?></a> </td>
-                                                <td>WO# TBD</td>     
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
-                                                                                        <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
-                                                </span></td>   
-                                                <td><?php echo $so->pns_description; ?></td>                                                
+                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td><?php echo $po->po_description; ?></td>                                                
                                                 <td>
-                                                <?php echo $so->qty; ?>
-                                                </td>     
-                                                 <td>
-                                                <?php echo $so->pns_uom; ?>
-                                                </td> 
+                <?php if ($po->po_file) { ?>
+                                                                <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
+                                                        <?php } ?>
+                                                </td>                                                
                                                 <td>
-                                                        Task TBD
+                                                        <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td>
-                                                        Time Remain TBD
+                                                        <?php echo GetValueUser($po->po_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td>
-                                                        Assigner TBD
+                                                <td><?php if (in_array("E", $role)) {
+                                                        ?>
+                                                        <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $po->pns_po_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <?php
+                                                }
+                                                        ?>                                                        
                                                 </td></tr>
                                                 <?php }
                                         } ?>
@@ -143,7 +129,7 @@ if (count($this->so_list) > 0) { ?>
         <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
         <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
         <input type="hidden" name="option" value="com_apdmpns" />
-        <input type="hidden" name="task" value="somanagement" />
+        <input type="hidden" name="task" value="pomanagement" />
         <input type="hidden" name="redirect" value="mep" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
