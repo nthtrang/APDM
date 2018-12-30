@@ -153,7 +153,7 @@ function saveApproveTask(id){
 				</td>		
 					                                
 				<td   width="5%" align="center">
-					<?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y') ;?>
+					<?php echo JHTML::_('date', $row->route_due_date, '%m-%d-%Y') ;?>
 				</td>
 				
 				<td  width="5%" align="center">
@@ -280,7 +280,7 @@ function saveApproveTask(id){
                                               ?>
                                               <tr>
                                                     
-                                                        <td><?php echo JHTML::_('date', $row->due_date, '%m-%d-%Y'); ?></td>                                                  
+                                                        <td><?php echo JHTML::_('date', $row->route_due_date, '%m-%d-%Y'); ?></td>                                                  
                                               </tr>
                                               <?php }?>
                                                 </table>	

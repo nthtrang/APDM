@@ -10,7 +10,7 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(13);      
+$role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {        
         JToolBarHelper::customX('savermafk', 'save', '', 'RMA', false);
         JToolBarHelper::editListX("editso","Edit");	
@@ -108,7 +108,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <td class="key" width="28%"><?php echo JText::_('Customer'); ?></td>                                               
                                         <td width="30%" class="title"><?php echo PNsController::getCcsDescription($this->so_row->customer_id); ?></td>                                          
                                         <td class="key" width="18%"><?php echo JText::_('Coordinator'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo $this->so_row->so_coordinator; ?></td>
+                                        <td width="30%" class="title"><?php echo $this->so_row->ccs_coordinator; ?></td>
 				                                                                              
                                 </tr>
                                 <tr>

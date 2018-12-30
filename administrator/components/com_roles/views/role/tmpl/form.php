@@ -171,7 +171,27 @@
 
 		}
 	}
-	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPO) + count($this->arrPns) + count($this->arrSTO)+ count($this->arrLOC);
+        //for SO/WO
+	$swo1 = 0;
+	$swo2 = 0;
+	$swo3 = 0;
+	$swo4 = 0;
+	$swo5 = 0;
+        $swo6 = 0;        
+	$swoall=0;
+	if(count($this->arrSWO) > 0){
+		foreach ($this->arrSWO as $swo){
+			if ($swo=='V') {$swo1=1; $swoall++;}
+			if ($swo=='W') {$swo2=1; $swoall++;}
+			if ($swo=='E') {$swo3=1; $swoall++;}
+			if ($swo=='D') {$swo4=1; $swoall++;}
+			if ($swo=='R') {$swo5=1; $swoall++;}
+                        if ($swo=='S') {$swo6=1; $swoall++;}
+                        
+
+		}
+	}        
+	$checktotal = (int) count($this->arrCC) + count($this->arrVendor) + count($this->arrSupplier) + count($this->arrManufacture) + count($this->arrECO) + count($this->arrPO) + count($this->arrPns) + count($this->arrSTO)+ count($this->arrLOC)+ count($this->arrSWO);
 	//$cparams = JComponentHelper::getParams ('com_media');
 ?>
 
@@ -190,7 +210,7 @@
 		if (trim(form.role_name.value) == "") {
 			alert( "<?php echo JText::_( 'ALERT_NAME_ROLE', true ); ?>" );
 			form.role_name.focus();
-		} else if ((form.boxchecked.value == 0) && (form.boxcheckedcc.value==0) && (form.boxcheckedv.value==0) && (form.boxcheckeds.value==0) && (form.boxcheckedm.value==0) && (form.boxcheckedeco.value==0) && (form.boxcheckedpns.value==0) && (form.boxcheckedpo.value==0)&& (form.boxcheckedsto.value==0)&& (form.boxcheckedloc.value==0)) {
+		} else if ((form.boxchecked.value == 0) && (form.boxcheckedcc.value==0) && (form.boxcheckedv.value==0) && (form.boxcheckeds.value==0) && (form.boxcheckedm.value==0) && (form.boxcheckedeco.value==0) && (form.boxcheckedpns.value==0) && (form.boxcheckedpo.value==0)&& (form.boxcheckedsto.value==0)&& (form.boxcheckedloc.value==0)&& (form.boxcheckedswo.value==0)) {
 			alert( "<?php echo JText::_( 'ALERT_ROLE_VALUE', true ); ?>" );
 		} else {
 			submitform( pressbutton );
@@ -353,7 +373,7 @@
 						<input type="checkbox" name="loc[]" value="E" <?php echo ($loc3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="loc[]" value="D" <?php echo ($loc4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="loc[]" value="R" <?php echo ($loc5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="loc4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllLOC(5, 'loc');" value="" name="toggle8" <?php if ($locall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" onclick="checkAllLOC(5, 'loc');" value="" name="toggle9" <?php if ($locall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>	                                
 			<tr>
@@ -372,6 +392,22 @@
 						<input type="checkbox" onclick="checkAllVendor(5, 'v');" value="" name="toggle2" <?php if ($vdall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>
+                                <tr>
+					<td class="key">
+						<label for="email">
+							<?php echo JText::_( 'SO/WO' ); ?>
+							
+						</label>
+					</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="swo[]" value="V" <?php echo ($swo1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="swo0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="swo[]" value="W" <?php echo ($swo2) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="swo1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="swo[]" value="E" <?php echo ($swo3) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="swo2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="swo[]" value="D" <?php echo ($swo4) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="swo3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="swo[]" value="R" <?php echo ($swo5) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="swo4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllSwo(5, 'swo');" value="" name="toggle10" <?php if ($swoall==5) { ?> checked="checked" <?php } ?>/>
+					</td>
+				</tr>                                
 				
 			</table>
 		</fieldset>
@@ -450,5 +486,6 @@
         <input type="hidden" name="boxcheckedsto" value="0" />
         <input type="hidden" name="boxcheckedloc" value="0" />
 	<input type="hidden" name="boxcheckedpns" value="0" />
+        <input type="hidden" name="boxcheckedswo" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

@@ -429,7 +429,7 @@ function checkAllSTO( n, fldName ) {
 //for LOC
 function checkAllLOC( n, fldName ) {
 	var f = document.adminForm;
-	var c = f.toggle8.checked;
+	var c = f.toggle9.checked;
 	var n2 = 0;
 	for (i=0; i < n; i++) {
 		cb = eval( 'f.' + fldName + '' + i );
@@ -460,6 +460,24 @@ function checkAllPNS( n, fldName ) {
 		document.adminForm.boxcheckedpns.value = n2;
 	} else {
 		document.adminForm.boxcheckedpns.value = 0;
+	}
+}
+//for SO/WO
+function checkAllSwo( n, fldName ) {
+	var f = document.adminForm;
+	var c = f.toggle10.checked;
+	var n2 = 0;
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+			cb.checked = c;
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxcheckedswo.value = n2;
+	} else {
+		document.adminForm.boxcheckedswo.value = 0;
 	}
 }
 function listItemTask( id, task ) {

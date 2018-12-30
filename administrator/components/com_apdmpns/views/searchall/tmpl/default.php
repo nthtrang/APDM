@@ -768,23 +768,27 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
         $i = 0;
         foreach ($this->rs_sto as $sto) {
                 $i++;
+                $style="";
+                if($sto->sto_type==2){
+                        $style="color: #f00";
+                }
                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
-                                                <td><?php echo $sto->sto_description; ?></td>                                                
-                                                <td>
+                                                <td style="<?php echo $style?>" ><?php echo $i; ?></td>                                            
+                                                <td style="<?php echo $style?>" ><a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
+                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
+                                                <td style="<?php echo $style?>" >
                                                 <?php if ($sto->sto_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                
-                                                <td>
+                                                <td style="<?php echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
+                                                <td style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_create_by, "username"); ?>
                                                 </td>                                                  
-                                                <td><?php                                                
+                                                <td style="<?php echo $style?>" ><?php                                                
                                                 $role_sto = JAdministrator::RoleOnComponent(8);
                                                 if (in_array("E", $role_sto)) {
                                                         ?>

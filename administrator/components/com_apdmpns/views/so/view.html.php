@@ -27,15 +27,17 @@ class pnsViewso extends JView
         if (isset( $search ) && $search!= '')
         {
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
-            $where[] = 'so.so_cuscode LIKE '.$searchEscaped.'';        
+            $where[] = 'so.so_cuscode LIKE '.$searchEscaped.'';
+            $where[] = 'wo.wo_code LIKE '.$searchEscaped.'';
            
         }  
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $orderby = ' ORDER BY so.pns_so_id desc';        
-        $query = 'SELECT COUNT(so.pns_so_id)'
-        . ' FROM apdm_pns_so AS so inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id '
-        . ' inner join apdm_pns AS p on p.pns_id = fk.pns_id '
+        $query = 'SELECT COUNT(*)'
+        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
+        . ' inner join apdm_pns p on  p.pns_id = wo.pns_id  '                 
+        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
         . $where
         ;
 
@@ -45,9 +47,10 @@ class pnsViewso extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-         $query = 'SELECT  so.*,fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '
-            . ' FROM apdm_pns_so AS so inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id '
-            . ' inner join apdm_pns AS p on p.pns_id = fk.pns_id '
+         $query = 'SELECT  wo.wo_assigner,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+            . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
+            . ' inner join apdm_pns p on  p.pns_id = wo.pns_id '
+            . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
             . $where
             . $orderby;
         $lists['query'] = base64_encode($query);   
@@ -60,7 +63,7 @@ class pnsViewso extends JView
          $pns_list = $db->loadObjectList();         
          $this->assignRef('so_pn_list',        $pns_list);     
          
-         $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
+         $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$so_id);
          $so_row =  $db->loadObject();
          $this->assignRef('so_row',        $so_row);
         
@@ -108,6 +111,14 @@ class pnsViewso extends JView
                             $pdf_files[] = array('id'=>$r->pns_pdf_id, 'pdf_file'=>$r->pdf_file);
                         }
                 }  
+                //get list WO TAB
+                $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework ".
+                       " from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id ".
+                        "inner join apdm_pns p on  p.pns_id = wo.pns_id ".
+                        "where so.pns_so_id =".$so_row->pns_so_id;
+                $db->setQuery($sql);
+                $wo_lists = $db->loadObjectList();
+                $this->assignRef('wo_list',        $wo_lists);
                 $lists['zips_files'] = $zips_files;
                 $lists['image_files'] = $images_files;
                 $lists['pdf_files'] = $pdf_files;            

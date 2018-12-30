@@ -15,7 +15,7 @@ class pnsViewwo extends JView
         $option             = 'com_apdmpns_so';
         $db                =& JFactory::getDBO();
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
-        $so_id		= JRequest::getVar( 'id');       
+        $wo_id		= JRequest::getVar( 'id');       
         $me 		= JFactory::getUser();
         JArrayHelper::toInteger($cid, array(0));	       
          $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
@@ -59,18 +59,76 @@ class pnsViewwo extends JView
         $lists['pns_id']        = $cid[0];       
         $this->assignRef('pos',        $list_pos);
         
-//         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
-//         $pos_list = $db->loadObjectList();         
-//         $this->assignRef('pos_list',        $pos_list);     
-        //for PO detailid
-         $db->setQuery("SELECT fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);
-         $pns_list = $db->loadObjectList();         
-         $this->assignRef('so_pn_list',        $pns_list);     
+            
          
-         $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
-         $so_row =  $db->loadObject();
-         $this->assignRef('so_row',        $so_row);
-        
+         $query = "SELECT so.so_shipping_date,so.so_cuscode,ccs.ccs_coordinator,ccs.ccs_code,wo.* ".               
+                 " from apdm_pns_wo wo left join apdm_ccs AS ccs on  wo.wo_customer_id = ccs.ccs_code ".
+                 " left join apdm_pns_so as so on  so.pns_so_id = wo.so_id ".
+                 " where pns_wo_id=".$wo_id;
+         $db->setQuery($query);
+         $wo_row =  $db->loadObject();
+         $this->assignRef('wo_row',$wo_row);
+         
+         $query = "select pns_id,pns_uom,pns_description,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . $wo_row->pns_id . ") limit 1";
+         $db->setQuery($query);
+         $rows_part = $db->loadObject();
+         $this->assignRef('row_part',        $rows_part); 
+                
+         $query = "select fk.*,pns_uom,pns_description,ccs_code, pns_code, pns_revision FROM apdm_pns p inner join apdm_pns_wo wo on wo.top_pns_id = p.pns_id inner join apdm_pns_so_fk fk on wo.top_pns_id = fk.pns_id  WHERE fk.pns_id IN (" . $wo_row->top_pns_id . ") limit 1";
+         $db->setQuery($query);
+         $rows_top_assy = $db->loadObject();
+          $this->assignRef('row_top_assy',        $rows_top_assy); 
+          
+        //get operator
+        $query = "select * from apdm_pns_wo_op where wo_id = ".$wo_id;
+         $db->setQuery($query);
+         $op_rows =  $db->loadObjectList();
+         $op_arr = array();
+         foreach($op_rows as $rop)
+         {
+              $op_arr[$rop->op_code]   = array('op_comment' => $rop->op_comment,
+                                        'op_completed_date' => $rop->op_completed_date,
+                                        'op_assigner' => $rop->op_assigner,
+                                        'op_target_date' => $rop->op_target_date,
+                                        'pns_op_id' => $rop->pns_op_id);
+         }
+         $this->assignRef('op_arr',        $op_arr); 
+         
+         //GET DETAIL STEP 4
+         $query = "select op_as.* from apdm_pns_wo_op_assembly op_as inner join apdm_pns_wo_op op on op_as.pns_op_id=  op.pns_op_id where op_as.pns_wo_id =".$wo_id;
+         $db->setQuery($query);
+         $wo_assem_rows =  $db->loadObjectList();
+         $this->assignRef('wo_assem_rows',        $wo_assem_rows);
+         //GET DETAIL STEP 5
+         $query = "select op_vs.* from apdm_pns_wo_op_visual op_vs inner join apdm_pns_wo_op op on op_vs.pns_op_id=  op.pns_op_id where op_vs.pns_wo_id =".$wo_id;
+         $db->setQuery($query);
+         $wo_vs_rows =  $db->loadObjectList();
+         $opvs_arr = array();
+         foreach($wo_vs_rows as $rof)
+         {
+              $opvs_arr[$rof->op_visual_fail_times]   = array('op_visual_value1' => $rof->op_visual_value1,
+                                        'op_visual_value2' => $rof->op_visual_value2,
+                                        'op_visual_value3' => $rof->op_visual_value3,
+                                        'op_visual_value4' => $rof->op_visual_value4,
+                                        'op_visual_value5' => $rof->op_visual_value5);
+         }         
+         $this->assignRef('opvs_arr',        $opvs_arr);     
+        //GET DETAIL STEP 6
+         $query = "select op_fn.* from apdm_pns_wo_op_final op_fn inner join apdm_pns_wo_op op on op_fn.pns_op_id=  op.pns_op_id where op_fn.pns_wo_id =".$wo_id;
+         $db->setQuery($query);
+         $wo_fn_rows =  $db->loadObjectList();
+         $opfn_arr = array();
+         foreach($wo_fn_rows as $rov)
+         {
+              $opfn_arr[$rov->op_final_fail_times]   = array('op_final_value1' => $rov->op_final_value1,
+                                        'op_final_value2' => $rov->op_final_value2,
+                                        'op_final_value3' => $rov->op_final_value3,
+                                        'op_final_value4' => $rov->op_final_value4,
+                                        'op_final_value5' => $rov->op_final_value5,
+                                        'op_final_value6' => $rov->op_final_value6,
+                                        'op_final_value7' => $rov->op_final_value7);
+         }
+          $this->assignRef('opfn_arr',        $opfn_arr);     
          //Status
         $statusValue = array();
         $statusValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select' ) .' -', 'value', 'text'); 
@@ -79,50 +137,27 @@ class pnsViewwo extends JView
         $statusValue[] = JHTML::_('select.option',  'cancel',  JText::_( 'Cancel' ), 'value', 'text');
         $classDisabled = 'disabled = "disabled"';
         $defaultStatus = "inprogress";
-        if($so_row->so_state)
-                $defaultStatus=$so_row->so_state;
+        if($wo_row->wo_state)
+                $defaultStatus=$wo_row->wo_state;
         $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " '.$classDisabled.' size="1"', 'value', 'text',$defaultStatus);
         
          $arrStatus=array("inprogress"=>JText::_( 'In Progress' ),'onhold'=> JText::_( 'On hold' ),'cancel'=>  JText::_( 'Cancel' ));
 
+         $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
+	 $list_users = $db->loadObjectList();         
+        $assigners[] = JHTML::_('select.option', 0, JText::_('Select Assigner'), 'value', 'text');
+        $assigners = array_merge($assigners, $list_users);
+        $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'filter_created_by', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', $wo_row->wo_assigner );
+         
          //Customer
-         $cccpn[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
-		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
-		$ccscpn = array_merge($cccpn, $db->loadObjectList());
-                $lists['ccscpn'] = JHTML::_('select.genericlist',   $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id );        
                 //get ist imag/zip/pdf
-                ///get list cad files
-                $db->setQuery("SELECT * FROM apdm_pn_cad WHERE so_id=".$so_row->pns_so_id);
-                $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $zips_files[] = array('id'=>$r->pns_cad_id, 'zip_file'=>$r->cad_file);
-                        }
-                }
-                ///get list image files
-                $db->setQuery("SELECT * FROM apdm_pns_image WHERE so_id=".$so_row->pns_so_id);
-                $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $images_files[] = array('id'=>$r->pns_image_id, 'image_file'=>$r->image_file);
-                        }
-                }      
-                ///get list pdf files
-                $db->setQuery("SELECT * FROM apdm_pns_pdf WHERE so_id=".$so_row->pns_so_id);
-                $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $pdf_files[] = array('id'=>$r->pns_pdf_id, 'pdf_file'=>$r->pdf_file);
-                        }
-                }  
-                $lists['zips_files'] = $zips_files;
-                $lists['image_files'] = $images_files;
-                $lists['pdf_files'] = $pdf_files;            
+                $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
+                $list_user = $db->loadObjectList();      
                 $lists['search']= $search;    
                 $this->assignRef('lists',        $lists);
                 $this->assignRef('arr_status',        $arrStatus);
-
-                $this->assignRef('so_list',        $rows);
+                $this->assignRef('list_user',	$list_user);
+                $this->assignRef('wo_list',        $rows);
                 $this->assignRef('pagination',    $pagination);    
                 parent::display($tpl);
 	}

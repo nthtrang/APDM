@@ -7,7 +7,7 @@
         JToolBarHelper::title("Edit SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
         JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-        $role = JAdministrator::RoleOnComponent(13);     
+        $role = JAdministrator::RoleOnComponent(10);     
         JToolBarHelper::apply('save_editso', 'Save');
         if ( $edit ) {
         // for existing items the button is renamed `close`
@@ -84,7 +84,7 @@
                                                    <?php echo $this->lists['ccscpn'];?>       
                                                 <a href="index.php?option=com_apdmccs&task=addcustomer&back=so"><?php echo JText::_('Generate Customer')?></a>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="text"  name="so_coordinator" id="so_coordinator" class="inputbox" size="30" value="<?php echo $this->so_row->so_coordinator;?>"/>						
+                                                <input type="text"  name="so_coordinator" id="so_coordinator" class="inputbox" size="30" value="<?php echo $this->so_row->ccs_coordinator;?>"/>						
 					</td>
 				</tr>
                                  <tr>

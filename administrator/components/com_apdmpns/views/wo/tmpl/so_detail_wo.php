@@ -10,7 +10,7 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(13);      
+$role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {	
         JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);
         JToolBarHelper::newWoSo("NEW WO#", $this->so_row->pns_so_id);

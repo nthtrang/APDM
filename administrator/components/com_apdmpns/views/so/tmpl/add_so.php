@@ -9,7 +9,7 @@
         JToolBarHelper::apply('save_sales_order', 'Save');
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
-		JToolBarHelper::cancel( 'somanagement', 'Close' );
+		JToolBarHelper::cancel('somanagement', 'Close' );
 	} else {
 		JToolBarHelper::cancel();
 	}
@@ -33,7 +33,7 @@ function getccsCoordinator(ccs_code)
 		var form = document.adminForm;
 		if (pressbutton == 'cancel') {
 			submitform( pressbutton );
-			return;
+			return false;
 		}
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
 		if (form.customer_id.value==0){

@@ -7,7 +7,7 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO Management", 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(7);      
+$role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {
         //JToolBarHelper::addNew("add_so","New SO");
         JToolBarHelper::customX('add_so', 'new', '', 'New SO', false);
@@ -105,29 +105,43 @@ if (count($this->so_list) > 0) { ?>
                 } else {
                         $pnNumber = $so->ccs_code . '-' . $so->pns_code;
                 }
+                $soNumber = $so->so_cuscode;
+                if($so->ccs_coordinator)
+                {
+                       $soNumber .= "-".$so->ccs_coordinator;
+                }
+                $background="";
+                $remain_day = $so->wo_remain_date;
+                if($remain_day<=0)
+                {       
+                        $remain_day = 0;
+                        $background= "style='background-color:#f00;color:#fff'";
+                }
+                elseif($so->wo_remain_date<=3)
+                {                         
+                        $background= "style='background-color:#ff0;color:#fff'";
+                }
                 ?>
                                         <tr>
                                                 <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $so->so_cuscode; ?></a> </td>
-                                                <td>WO# TBD</td>     
+                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>     
                                                 <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
                                                                                         <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
                                                 </span></td>   
                                                 <td><?php echo $so->pns_description; ?></td>                                                
                                                 <td>
-                                                <?php echo $so->qty; ?>
+                                                <?php echo $so->wo_qty; ?>
                                                 </td>     
                                                  <td>
                                                 <?php echo $so->pns_uom; ?>
                                                 </td> 
                                                 <td>
-                                                        Task TBD
+                                                        <?php echo $so->wo_state; ?>
                                                 </td>
+                                                <td <?php echo $background?>><?php echo $remain_day;?></td>                                                
                                                 <td>
-                                                        Time Remain TBD
-                                                </td>                                                  
-                                                <td>
-                                                        Assigner TBD
+                                                     <?php echo GetValueUser($so->wo_assigner, "name"); ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

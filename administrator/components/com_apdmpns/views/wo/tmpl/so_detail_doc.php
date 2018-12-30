@@ -10,7 +10,7 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(13);      
+$role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {	
         JToolBarHelper::apply('save_doc_so', 'Save');
         
