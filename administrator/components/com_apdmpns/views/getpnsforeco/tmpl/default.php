@@ -36,8 +36,8 @@ function UpdatePnsEco(){
 			data:  $('adminFormPns').toQueryString(),
 			onComplete:function(result){
 			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
-				window.parent.document.getElementById('sbox-window').close();	
-                                window.parent.location.reload();
+				//window.parent.document.getElementById('sbox-window').close();	
+                        //        window.parent.location.reload();
 				
 
 			}
@@ -178,7 +178,7 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-        <input type="hidden" name="eco_id" id="eco_id" value="<?php echo $eco_id; ?>" />
+        <input type="text" name="eco_id" id="eco_id" value="<?php echo $eco_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

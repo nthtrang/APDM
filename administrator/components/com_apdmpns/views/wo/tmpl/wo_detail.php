@@ -108,8 +108,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <p>&nbsp;</p>
 
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
-        <fieldset class="adminform">
-		<legend><?php //echo JText::_( 'WO Detail' ); ?></legend>        
+     
+	      
         <table class="tgdetail">
   <tr>
           <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg"></img></th>
@@ -433,8 +433,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-0pky"><?php echo GetValueUser($op_arr['wo_step7']['op_assigner'], "name"); ?></td>
     <td class="tg-0pky"><?php echo JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
   </tr>
-</table>		
-        </fieldset>
+</table>		       
         <input type="text" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
         <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     

@@ -7324,39 +7324,43 @@ class PNsController extends JController {
                 //var_dump($post);die;
                 $partNumber = $post['pns_child'];
                 $wo_id = $post['wo_id'];
-                $soNumber = $post['so_cuscode'];
-                $sql= " update apdm_pns_wo set so_id ='" . $post['so_id'] . "'".
-                        ",wo_qty = '" . $post['wo_qty'] . "'".
-                        ",pns_id = '" .  $partNumber[0] . "'".
-                        ",top_pns_id = '" . $post['top_pns_id'] . "'".
-                        ",wo_customer_id = '" . $post['wo_customer_id'] . "'".
-                        ",wo_start_date = '" . $post['wo_start_date'] . "'".
-                        ",wo_completed_date = '" . $post['wo_completed_date'] . "'".
-                        ",so_updated = '" . $datenow->toMySQL() . "'".
-                        ",so_updated_by = '" . $me->get('id') . "'".
-                        ",wo_assigner = '" . $post['wo_assigner'] . "'".
-                        " where pns_wo_id ='".$wo_id."' ";
-                $db->setQuery($sql);
-                $db->query();     
+                $soNumber = $post['so_cuscode'];                 
                 // SO ID                
                 if($wo_id)
                 {
                        //Update step1
+                        $status = "label_printed";
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment1']."',op_completed_date = '".$post['op_completed_date1']."',op_assigner ='".$post['op_assigner1']."',op_target_date='".$post['op_target_date1']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step1' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
-                        $db->query();                        
+                        $db->query();      
+                        if($post['op_completed_date1']!="0000-00-00 00:00:00")
+                        {
+                                $status ="label_printed";
+                        }
                         //Update step2
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment2']."',op_completed_date = '".$post['op_completed_date2']."',op_assigner ='".$post['op_assigner2']."',op_target_date='".$post['op_target_date2']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        if($post['op_completed_date2']!="0000-00-00 00:00:00")
+                        {
+                                $status ="wire_cut";
+                        }
                         //Update step3
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment3']."',op_completed_date = '".$post['op_completed_date3']."',op_assigner ='".$post['op_assigner3']."',op_target_date='".$post['op_target_date3']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        if($post['op_completed_date3']!="0000-00-00 00:00:00")
+                        {
+                                $status ="kitted";
+                        }
                         //Update step4
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment4']."',op_completed_date = '".$post['op_completed_date4']."',op_assigner ='".$post['op_assigner4']."',op_target_date='".$post['op_target_date4']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        if($post['op_completed_date4']!="0000-00-00 00:00:00")
+                        {
+                                $status ="production";
+                        }
                         //update apdm_pns_wo_op_assembly
                         $op_assemble_id = $post['op_assemble_id'];
                         if(sizeof($op_assemble_id))
@@ -7372,6 +7376,10 @@ class PNsController extends JController {
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment5']."',op_completed_date = '".$post['op_completed_date5']."',op_assigner ='".$post['op_assigner5']."',op_target_date='".$post['op_target_date5']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        if($post['op_completed_date5']!="0000-00-00 00:00:00")
+                        {
+                                $status ="visual_inspection";
+                        }
                        //get op_id from step 5
                         $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step5' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7389,6 +7397,10 @@ class PNsController extends JController {
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment6']."',op_completed_date = '".$post['op_completed_date6']."',op_assigner ='".$post['op_assigner6']."',op_target_date='".$post['op_target_date6']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        if($post['op_completed_date6']!="0000-00-00 00:00:00")
+                        {
+                                $status ="final_inspection";
+                        }
                        //get op_id from step 6
                         $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7407,10 +7419,44 @@ class PNsController extends JController {
                         $sql = "update apdm_pns_wo_op set op_comment = '".$post['op_comment7']."',op_completed_date = '".$post['op_completed_date7']."',op_assigner ='".$post['op_assigner7']."',op_target_date='".$post['op_target_date7']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();   
-                     
+                        if($post['op_completed_date7']!="0000-00-00 00:00:00")
+                        {
+                                $status ="packaging";
+                        }
+                        
+                        $sql= " update apdm_pns_wo set so_id ='" . $post['so_id'] . "'".
+                                ",wo_qty = '" . $post['wo_qty'] . "'".
+                                ",pns_id = '" .  $partNumber[0] . "'".
+                                ",top_pns_id = '" . $post['top_pns_id'] . "'".
+                                ",wo_customer_id = '" . $post['wo_customer_id'] . "'".
+                                ",wo_state = '" . $status . "'".
+                                ",wo_start_date = '" . $post['wo_start_date'] . "'".
+                                ",wo_completed_date = '" . $post['wo_completed_date'] . "'".
+                                ",wo_updated = '" . $datenow->toMySQL() . "'".
+                                ",wo_updated_by = '" . $me->get('id') . "'".
+                                ",wo_assigner = '" . $post['wo_assigner'] . "'".
+                                " where pns_wo_id ='".$wo_id."' ";
+                        $db->setQuery($sql);
+                        $db->query();   
                 }//for save database of pns 
                
                 $msg = JText::_('Successfully Updated wo') . $text_mess;
                 return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id, $msg);                
+        }
+        function getWoStatus($code)
+        {
+                $statusValue = array();
+                $statusValue[0] = JText::_('Select');
+                $statusValue['done'] = JText::_('Done');
+                $statusValue['onhold'] = JText::_('On hold');
+                $statusValue['cancel'] =  JText::_('Cancel');
+                $statusValue['label_printed'] = JText::_('Label Printed');
+                $statusValue['wire_cut'] = JText::_('Wire Cut');
+                $statusValue['kitted'] = JText::_('Kitted');
+                $statusValue['production'] = JText::_('Production');
+                $statusValue['visual_inspection'] =  JText::_('Visual Inspection');
+                $statusValue['final_inspection'] =  JText::_('Final Inspection');
+                $statusValue['packaging'] = JText::_('Packaging');
+                echo $statusValue[$code];
         }
 }

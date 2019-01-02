@@ -137,7 +137,7 @@ if (count($this->so_list) > 0) { ?>
                                                 <?php echo $so->pns_uom; ?>
                                                 </td> 
                                                 <td>
-                                                        <?php echo $so->wo_state; ?>
+                                                        <?php echo PNsController::getWoStatus($so->wo_state); ?>
                                                 </td>
                                                 <td <?php echo $background?>><?php echo $remain_day;?></td>                                                
                                                 <td>

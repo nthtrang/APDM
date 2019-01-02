@@ -48,16 +48,16 @@ function getccsCoordinator(ccs_code)
 			form.wo_code.focus();
 			return false;
 		}
-//                if (form.so_code.value==0){
-//			alert("Please select SO Number");
-//			form.so_code.focus();
-//			return false;
-//		}  
-//                if (form.top_pns_id.value==0){
-//			alert("Please select Top ASSY PN");
-//			form.top_pns_id.focus();
-//			return false;
-//		}                  
+                if (form.so_code.value==0){
+			alert("Please select SO Number");
+			form.so_code.focus();
+			return false;
+		}  
+                if (form.top_pns_id.value==0){
+			alert("Please select Top ASSY PN");
+			form.top_pns_id.focus();
+			return false;
+		}                  
                 if (form.wo_start_date.value==0){
 			alert("Please select Start date");
 			form.wo_start_date.focus();
@@ -141,7 +141,7 @@ function getccsCoordinator(ccs_code)
                     alert("Invalid Date Range!\nStep 7: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }                
-		//submitform( pressbutton );
+		submitform( pressbutton );
 	}
         
    

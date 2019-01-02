@@ -1,134 +1,133 @@
 <?php
+
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
-defined('_JEXEC') or die( 'Restricted access' );
-jimport( 'joomla.application.component.view');
+defined('_JEXEC') or die('Restricted access');
+jimport('joomla.application.component.view');
 
-class pnsViewso extends JView
-{
-	function display($tpl = null)
-	{
-                
-	   // global $mainframe, $option;
-        global $mainframe, $option;
-        $option             = 'com_apdmpns_so';
-        $db                =& JFactory::getDBO();
-        $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
-        $so_id		= JRequest::getVar( 'id');       
-        $me 		= JFactory::getUser();
-        JArrayHelper::toInteger($cid, array(0));	       
-         $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
-        $keyword                = $search;
-        $search                = JString::strtolower( $search );
-        $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
-        $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
-        $where = array();      
-        if (isset( $search ) && $search!= '')
-        {
-            $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
-            $where[] = 'so.so_cuscode LIKE '.$searchEscaped.'';
-            $where[] = 'wo.wo_code LIKE '.$searchEscaped.'';
-           
-        }  
-      
-        $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $orderby = ' ORDER BY so.pns_so_id desc';        
-        $query = 'SELECT COUNT(*)'
-        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
-        . ' inner join apdm_pns p on  p.pns_id = wo.pns_id  '                 
-        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
-        . $where
-        ;
+class pnsViewso extends JView {
 
-        $db->setQuery( $query );
-        $total = $db->loadResult();
+        function display($tpl = null) {
 
-        jimport('joomla.html.pagination');
-        $pagination = new JPagination( $total, $limitstart, $limit );
-        
-         $query = 'SELECT  wo.wo_assigner,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
-            . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
-            . ' inner join apdm_pns p on  p.pns_id = wo.pns_id '
-            . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
-            . $where
-            . $orderby;
-        $lists['query'] = base64_encode($query);   
-        $lists['total_record'] = $total; 
-        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
-        $rows = $db->loadObjectList();                
-       
-        //for PO detailid
-         $db->setQuery("SELECT fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);
-         $pns_list = $db->loadObjectList();         
-         $this->assignRef('so_pn_list',        $pns_list);     
-         
-         $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$so_id);
-         $so_row =  $db->loadObject();
-         $this->assignRef('so_row',        $so_row);
-        
-         //Status
-        $statusValue = array();
-        $statusValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select' ) .' -', 'value', 'text'); 
-        $statusValue[] = JHTML::_('select.option',  'inprogress', JText::_( 'In Progress' ) , 'value', 'text'); 
-        $statusValue[] = JHTML::_('select.option',  'onhold', JText::_( 'On hold' ), 'value', 'text'); 
-        $statusValue[] = JHTML::_('select.option',  'cancel',  JText::_( 'Cancel' ), 'value', 'text');
-        $classDisabled = 'disabled = "disabled"';
-        $defaultStatus = "inprogress";
-        if($so_row->so_state)
-                $defaultStatus=$so_row->so_state;
-        $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " '.$classDisabled.' size="1"', 'value', 'text',$defaultStatus);
-        
-         $arrStatus=array("inprogress"=>JText::_( 'In Progress' ),'onhold'=> JText::_( 'On hold' ),'cancel'=>  JText::_( 'Cancel' ));
+                // global $mainframe, $option;
+                global $mainframe, $option;
+                $option = 'com_apdmpns_so';
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(0), '', 'array');
+                $so_id = JRequest::getVar('id');
+                $me = JFactory::getUser();
+                JArrayHelper::toInteger($cid, array(0));
+                $search = $mainframe->getUserStateFromRequest("$option.text_search", 'text_search', '', 'string');
+                $keyword = $search;
+                $search = JString::strtolower($search);
+                $limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
+                $limitstart = $mainframe->getUserStateFromRequest($option . '.limitstart', 'limitstart', 0, 'int');
+                $where = array();
+                if (isset($search) && $search != '') {
+                        $searchEscaped = $db->Quote('%' . $db->getEscaped($search, false) . '%', false);
+                        $where[] = 'so.so_cuscode LIKE ' . $searchEscaped . '';
+                        $where[] = 'wo.wo_code LIKE ' . $searchEscaped . '';
+                }
 
-         //Customer
-         $cccpn[0] = JHTML::_('select.option',  0, '- '. JText::_( 'SELECT_CCS' ) .' -', 'value', 'text');
-		$db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
-		$ccscpn = array_merge($cccpn, $db->loadObjectList());
-                $lists['ccscpn'] = JHTML::_('select.genericlist',   $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id );        
+                $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
+                $orderby = ' ORDER BY so.pns_so_id desc';
+                $query = 'SELECT COUNT(*)'
+                        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
+                        . ' left join apdm_pns p on  p.pns_id = wo.pns_id  '
+                        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
+                        . $where
+                ;
+
+                $db->setQuery($query);
+                $total = $db->loadResult();
+
+                jimport('joomla.html.pagination');
+                $pagination = new JPagination($total, $limitstart, $limit);
+
+                echo $query = 'SELECT  wo.wo_assigner,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+                        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
+                        . ' left join apdm_pns p on  p.pns_id = wo.pns_id '
+                        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
+                        . $where
+                        . $orderby;
+                $lists['query'] = base64_encode($query);
+                $lists['total_record'] = $total;
+                $db->setQuery($query, $pagination->limitstart, $pagination->limit);
+                $rows = $db->loadObjectList();
+
+                //for PO detailid
+                $db->setQuery("SELECT fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=" . $so_id);
+                $pns_list = $db->loadObjectList();
+                $this->assignRef('so_pn_list', $pns_list);
+
+                $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $so_id);
+                $so_row = $db->loadObject();
+                $this->assignRef('so_row', $so_row);
+
+                //Status
+                $statusValue = array();
+                $statusValue[] = JHTML::_('select.option', '', '- ' . JText::_('Select') . ' -', 'value', 'text');
+                $statusValue[] = JHTML::_('select.option', 'inprogress', JText::_('In Progress'), 'value', 'text');
+                $statusValue[] = JHTML::_('select.option', 'onhold', JText::_('On hold'), 'value', 'text');
+                $statusValue[] = JHTML::_('select.option', 'cancel', JText::_('Cancel'), 'value', 'text');
+                $classDisabled = 'disabled = "disabled"';
+                $defaultStatus = "inprogress";
+                if ($so_row->so_state)
+                        $defaultStatus = $so_row->so_state;
+                $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " ' . $classDisabled . ' size="1"', 'value', 'text', $defaultStatus);
+
+                $arrStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+
+                //Customer
+                $cccpn[0] = JHTML::_('select.option', 0, '- ' . JText::_('SELECT_CCS') . ' -', 'value', 'text');
+                $db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
+                $ccscpn = array_merge($cccpn, $db->loadObjectList());
+                $lists['ccscpn'] = JHTML::_('select.genericlist', $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id);
                 //get ist imag/zip/pdf
                 ///get list cad files
-                $db->setQuery("SELECT * FROM apdm_pn_cad WHERE so_id=".$so_row->pns_so_id);
+                $db->setQuery("SELECT * FROM apdm_pn_cad WHERE so_id=" . $so_row->pns_so_id);
                 $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $zips_files[] = array('id'=>$r->pns_cad_id, 'zip_file'=>$r->cad_file);
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $zips_files[] = array('id' => $r->pns_cad_id, 'zip_file' => $r->cad_file);
                         }
                 }
                 ///get list image files
-                $db->setQuery("SELECT * FROM apdm_pns_image WHERE so_id=".$so_row->pns_so_id);
+                $db->setQuery("SELECT * FROM apdm_pns_image WHERE so_id=" . $so_row->pns_so_id);
                 $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $images_files[] = array('id'=>$r->pns_image_id, 'image_file'=>$r->image_file);
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $images_files[] = array('id' => $r->pns_image_id, 'image_file' => $r->image_file);
                         }
-                }      
+                }
                 ///get list pdf files
-                $db->setQuery("SELECT * FROM apdm_pns_pdf WHERE so_id=".$so_row->pns_so_id);
+                $db->setQuery("SELECT * FROM apdm_pns_pdf WHERE so_id=" . $so_row->pns_so_id);
                 $res = $db->loadObjectList();
-                if (count($res)>0){
-                        foreach ($res as $r){
-                            $pdf_files[] = array('id'=>$r->pns_pdf_id, 'pdf_file'=>$r->pdf_file);
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $pdf_files[] = array('id' => $r->pns_pdf_id, 'pdf_file' => $r->pdf_file);
                         }
-                }  
+                }
                 //get list WO TAB
-                $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework ".
-                       " from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id ".
-                        "inner join apdm_pns p on  p.pns_id = wo.pns_id ".
-                        "where so.pns_so_id =".$so_row->pns_so_id;
+                $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                        " from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id " .
+                        "inner join apdm_pns p on  p.pns_id = wo.pns_id " .
+                        "where so.pns_so_id =" . $so_row->pns_so_id;
                 $db->setQuery($sql);
                 $wo_lists = $db->loadObjectList();
-                $this->assignRef('wo_list',        $wo_lists);
+                $this->assignRef('wo_list', $wo_lists);
                 $lists['zips_files'] = $zips_files;
                 $lists['image_files'] = $images_files;
-                $lists['pdf_files'] = $pdf_files;            
-                $lists['search']= $search;    
-                $this->assignRef('lists',        $lists);
-                $this->assignRef('arr_status',        $arrStatus);
+                $lists['pdf_files'] = $pdf_files;
+                $lists['search'] = $search;
+                $this->assignRef('lists', $lists);
+                $this->assignRef('arr_status', $arrStatus);
 
-                $this->assignRef('so_list',        $rows);
-                $this->assignRef('pagination',    $pagination);    
+                $this->assignRef('so_list', $rows);
+                $this->assignRef('pagination', $pagination);
                 parent::display($tpl);
-	}
+        }
+
 }
 
