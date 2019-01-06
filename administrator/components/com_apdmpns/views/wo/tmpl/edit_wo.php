@@ -2,16 +2,18 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php JHTML::_('behavior.modal'); ?>
 <?php	
+        $me = & JFactory::getUser();
         $edit = JRequest::getVar('edit',true);
         $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
         JToolBarHelper::title("Edit WO#: ".$this->wo_row->wo_code, 'cpanel.png');
         JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
         $role = JAdministrator::RoleOnComponent(10);     
+        
         JToolBarHelper::apply('save_editwo', 'Save');
         if ( $edit ) {
         // for existing items the button is renamed `close`
-                JToolBarHelper::cancel( 'cancel', 'Close' );
+                JToolBarHelper::cancel( 'cancelWo', 'Close' );
         } else {
                 JToolBarHelper::cancel();
         }
@@ -29,7 +31,7 @@
         }
         function submitbutton(pressbutton) {
                 var form = document.adminForm;
-                if (pressbutton == 'cancel') {
+                if (pressbutton == 'cancelWo') {
                         submitform( pressbutton );
                         return;
                 }
@@ -427,7 +429,17 @@
     <td class="tg-0pky"><label for="name">2</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Wire Cut By:</label></td>
     <td><textarea maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step2']['op_completed_date'], 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php     
+    if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step2']['op_completed_date'], 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));             
+    }
+    else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2" id="op_completed_date2" />
+    <?php }?>
+        
+    
+    </td>
     <td>
             <select  name="op_assigner2" id="op_assigner2" >
                 <option value="">Select Assigner</option>
@@ -448,7 +460,13 @@
     <td class="tg-0pky"><label for="name">3</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Kitted By:</label></td>
     <td><textarea maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step3']['op_completed_date'], 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php 
+     if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step3']['op_completed_date'], 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+     }else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
+    <?php }?></td>
     <td><select  name="op_assigner3" id="op_assigner3" >
                 <option value="">Select Assigner</option>
                 <?php foreach ($this->list_user as $list) { 
@@ -467,7 +485,13 @@
     <td class="tg-0pky"><label for="name">4</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Assembly performed by:</label></td>
     <td><textarea maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php 
+    if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+    }else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
+    <?php }?></td>
     <td>
             <select  name="op_assigner4" id="op_assigner4" >
                 <option value="">Select Assigner</option>
@@ -539,7 +563,13 @@
     <td class="tg-0pky" colspan="4"><label for="name">Visual Inspection(QC) By:</label></td>
     <td></td>
     <td></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php 
+    if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+    }else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
+    <?php }?></td>
     <td>
             <select  name="op_assigner5" id="op_assigne5" >
                 <option value="">Select Assigner</option>
@@ -604,7 +634,13 @@
     <td class="tg-0pky" colspan="4"><label for="name">Final&nbsp;&nbsp;Inspection(QC) By:</label></td>
     <td></td>
     <td></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php 
+    if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+    }else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
+    <?php }?></td>
     <td><select  name="op_assigner6" id="op_assigner6" >
                 <option value="">Select Assigner</option>
                 <?php foreach ($this->list_user as $list) { 
@@ -687,7 +723,13 @@
     <td class="tg-0pky"><label for="name">7</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Packaging by</label></td>
     <td><textarea maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step7']['op_completed_date'], 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td><?php                     
+    if($op_arr['wo_step6']['op_status']=="done" ){//&& $op_arr['wo_step7']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step7']['op_completed_date'], 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+    }else
+    {?>
+            <input type="hidden" value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
+    <?php }?></td>
     <td>
             <select  name="op_assigner7" id="op_assigner7" >
                 <option value="">Select Assigner</option>

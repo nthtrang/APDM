@@ -10,13 +10,18 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role)) {        
-        JToolBarHelper::customX('savermafk', 'save', '', 'RMA', false);
+$role = JAdministrator::RoleOnComponent(10);   
+JToolBarHelper::customX('savermafk', 'assign', '', 'RMA', false);
+if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {        
+        JToolBarHelper::customX("onholdso","unpublish",'',"On Hold",false);        
         JToolBarHelper::editListX("editso","Edit");	
-        
+        JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
 }
-if (in_array("D", $role)) {
+if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
+        JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     
+        JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
+}
+if (in_array("D", $role) && $this->so_row->so_state !="done") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
 }
 
@@ -43,8 +48,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 if (pressbutton == 'savermafk') {
                         submitform( pressbutton );
                         return;
-                }                 
+                }
+                if (pressbutton == 'onholdso') {
+                        submitform( pressbutton );
+                        return;
+                }
+                if (pressbutton == 'inprogressso') {
+                        submitform( pressbutton );
+                        return;
+                }                
 			
+                        
                         
         }
  function isCheckedSoPn(isitchecked,id){
@@ -113,7 +127,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </tr>
                                 <tr>
                                         <td  class="key" width="28%"><?php echo JText::_('PO# of Customer'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3"><?php echo $this->so_row->so_cuscode; ?></td>                                        
+                                        <td width="30%" class="title" colspan="3">
+                                        <?php 
+                                         $soNumber = $this->so_row->so_cuscode;
+                                        if($this->so_row->ccs_coordinator)
+                                        {
+                                               $soNumber .= "-".$this->so_row->ccs_coordinator;
+                                        }
+                                        echo $soNumber; ?></td>                                        
 				                                                                              
                                 </tr>  
                                 <tr>
@@ -301,9 +322,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				</tr>                
         </table>		
         </fieldset>
-        <input type="text" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
+        <input type="hidden" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
-        <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>

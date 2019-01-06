@@ -11,11 +11,11 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role)) {	
+if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {   
         JToolBarHelper::apply('save_doc_so', 'Save');
         
 }
-if (in_array("D", $role)) {
+if (in_array("D", $role) && $this->so_row->so_state !="done") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
 }
 

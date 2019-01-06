@@ -6,7 +6,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class pnsViewwo extends JView {
+class pnsViewuserinform extends JView {
 
         function display($tpl = null) {
 
@@ -52,7 +52,12 @@ class pnsViewwo extends JView {
                 $rows = $db->loadObjectList();
 
 
-             
+                $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_po AS po on p.pns_id = po.pns_id WHERE p.pns_deleted =0 AND po.pns_id=" . $cid[0] . " order by po.pns_rev_id desc limit 1");
+                $list_pos = $db->loadObjectList();
+                $lists['pns_id'] = $cid[0];
+                $this->assignRef('pos', $list_pos);
+
+
 
                 $query = "SELECT so.so_shipping_date,so.so_cuscode,ccs.ccs_coordinator,ccs.ccs_code,wo.* " .
                         " from apdm_pns_wo wo left join apdm_ccs AS ccs on  wo.wo_customer_id = ccs.ccs_code " .
@@ -140,16 +145,7 @@ class pnsViewwo extends JView {
                         $defaultStatus = $wo_row->wo_state;
                 $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " ' . $classDisabled . ' size="1"', 'value', 'text', $defaultStatus);
 
-                $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
-                $arrWoStatus = array(
-                        'wo_step1' => JText::_('Label Prin'), 
-                        'wo_step2' => JText::_('Wire Cut'),
-                        'wo_step3'=>JText::_('Kitted'),
-                        'wo_step4'=>JText::_('Wire Cut'),
-                        'wo_step5'=>JText::_('Kitted'),
-                        'wo_step6' =>JText::_('Production'),
-                        'wo_step7' => JText::_('Visual Inspection')
-                        );
+                $arrStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
 
                 $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
                 $list_users = $db->loadObjectList();
@@ -157,32 +153,13 @@ class pnsViewwo extends JView {
                 $assigners = array_merge($assigners, $list_users);
                 $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1"', 'value', 'text', $wo_row->wo_assigner);
 
-                //get wo po delay
-                $db->setQuery("select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.* from apdm_pns_wo_op op  where op.wo_id = ".$wo_id." and op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0");                                
-                $wo_delay = $db->loadObjectList();
-                $this->assignRef('wo_delay', $wo_delay);
-                
-                $queryRework = 'select op.*,vi.op_visual_fail_times as fail_time'.
-                               ' from apdm_pns_wo_op op '.
-                               ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
-                               ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "") '.
-                               ' and  op.wo_id ='.$wo_id.''.
-                               ' union'.
-                               ' select op.* ,fi.op_final_fail_times as fail_time'.
-                               ' from apdm_pns_wo_op op '.
-                               ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
-                               ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != "")'.
-                               ' and  op.wo_id ='.$wo_id.'';
-
-                $db->setQuery($queryRework);
-                $wo_rework = $db->loadObjectList();
-                $this->assignRef('wo_rework', $wo_rework);
+                //Customer
                 //get ist imag/zip/pdf
                 $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
                 $list_user = $db->loadObjectList();
                 $lists['search'] = $search;
                 $this->assignRef('lists', $lists);
-                $this->assignRef('arr_status', $arrSoStatus);
+                $this->assignRef('arr_status', $arrStatus);
                 $this->assignRef('list_user', $list_user);
                 $this->assignRef('wo_list', $rows);
                 $this->assignRef('pagination', $pagination);

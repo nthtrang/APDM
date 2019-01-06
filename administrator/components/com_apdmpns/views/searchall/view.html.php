@@ -178,6 +178,26 @@ else
                         
                     }                    
                 break;
+                case '12': //SO
+                     //SO
+                    $arr_so_id = array();
+                    $arr_code = explode("-", trim($keyword));
+                    //select table SO with keyword input                      
+                    $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
+                             ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
+                             ' inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
+                             ' inner join apdm_pns p on p.pns_id = fk.pns_id'.
+                             ' where (so.so_cuscode LIKE '.$searchEscaped.' OR  (so.so_cuscode = "'.$arr_code[0] .'" and so.so_coordinator  = "'.$arr_code[1] .'"))';
+                    $db->setQuery($query);
+                    $rs_so = $db->loadObjectList();
+                    if (count($rs_so) >0){
+                        foreach ($rs_so as $so){
+                           $pns_so_id[] = $so->pns_so_id; 
+                        }
+                        
+                    }                    
+                break;                
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
@@ -435,12 +455,13 @@ else
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;
         $lists['search']= $search;    
-        $this->assignRef('lists',        $lists);
+        $this->assignRef('lists',       $lists);
         $this->assignRef('rows',        $rows);
-        $this->assignRef('rs_eco',        $rs_eco);
-        $this->assignRef('rs_po',        $rs_po);
-        $this->assignRef('rs_sto',        $rs_sto);
-        
+        $this->assignRef('rs_eco',      $rs_eco);
+        $this->assignRef('rs_po',       $rs_po);
+        $this->assignRef('rs_sto',      $rs_sto);
+        $this->assignRef('rs_so',       $rs_so);
+        $this->assignRef('arr_sostatus', $arrSoStatus);
         $this->assignRef('rs_supplier',        $rs_supplier);
          $this->assignRef('rs_mf',        $rs_mf);
          $this->assignRef('rs_pns',        $rs_pns);

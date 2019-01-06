@@ -4,11 +4,10 @@
 
 <?php
 $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
- $eco_id =$cid[0];
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-	
+ $eco_id =$cid[0];	
 ?>
 <script language="javascript">
 function CheckForm() {
@@ -25,24 +24,24 @@ function CheckForm() {
 	
 }
 function UpdatePnsEco(){
-         var eco_id = $('eco_id').value;
+        var eco_id = $('eco_id').value;
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns&cid[]='+eco_id;			
+		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns&eco[]='+eco_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
-			onComplete:function(result){				
+			onComplete:function(result){
 			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
-				window.parent.document.getElementById('sbox-window').close();	
+				//window.parent.document.getElementById('sbox-window').close();	
+                        //        window.parent.location.reload();
 				
 
 			}
 		}).request();
-
 	}
 	
 }
@@ -61,11 +60,11 @@ function UpdatePnsEco(){
 			</td>
 			<tr align="right">
 			<td align="right"><?php
-                        if($this->pns_status!='Release')
-                        {
+                      //  if($this->pns_status!='Release')
+                       /// {
                                 ?><input type="button" name="btinsert" value="Save" onclick="UpdatePnsEco();" /> 
                         <?php
-                        }
+                     //   }
                         ?>
                         </td>	
 		</tr>
@@ -88,20 +87,26 @@ function UpdatePnsEco(){
 					<?php echo JText::_('ECO'); ?>
 				</th>
 				
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
-				</th>
+				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Type'); ?>
+					<?php echo JText::_('State'); ?>
+				</th>                                
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Make/Buy'); ?>
 				</th>
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
+				</th>
+                                <th class="title"  >
+					<?php echo JText::_( 'Manuafacture PN' ); ?>
 				</th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -142,15 +147,27 @@ function UpdatePnsEco(){
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>				
-				<td align="center">
+<!--				<td align="center">
 					<?php echo $row->pns_status;?>
-				</td>
+				</td>-->
+                                <td align="center">
+					<?php echo $row->pns_life_cycle;?>
+				</td>                                
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
 				<td>
 					<?php echo  $row->pns_description; ?>
-				</td>							
+				</td>	
+                                <td>
+					<?php
+                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                        if (count($mf) > 0){
+                                                foreach ($mf as $m){
+                                                        echo $m['v_mf'];
+                                                }					
+					} ?>
+				</td>	                                
 			</tr>
 			<?php
 				$k = 1 - $k;
@@ -161,7 +178,7 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-         <input type="hidden" name="eco_id" id="eco_id" value="<?php echo $eco_id; ?>" />
+        <input type="text" name="eco_id" id="eco_id" value="<?php echo $eco_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

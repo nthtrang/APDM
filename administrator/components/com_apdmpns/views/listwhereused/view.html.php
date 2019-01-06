@@ -196,7 +196,7 @@ class pnsViewlistwhereused extends JView
         $this->assignRef('rows',        $rows);     
         $this->assignRef('pagination',    $pagination);   
         $this->assignRef('id',    $id);       
-		parent::display($tpl);
+	parent::display($tpl);
 	}
 }
 

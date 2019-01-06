@@ -11,10 +11,10 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("WO#: ".$this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role)) {        
+if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold") {        
         JToolBarHelper::editListX("editwo","Edit WO");	        
 }
-if (in_array("D", $role)) {
+if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO#");
 }
 
@@ -123,7 +123,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">WO NUMBER:</span></td>
     <td class="tg-c3ow" colspan="3"><?php echo $this->wo_row->wo_code;?></td>
     <td class="tg-0pky"><span style="font-weight:bold">STATUS:</span></td>
-    <td class="tg-c3ow" colspan="3">FINAL</td>    
+    <td class="tg-c3ow" colspan="3"><?php echo PNsController::getWoStatus($this->wo_row->wo_state); ?></td>    
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">PART NUMBER</span></td>
@@ -221,7 +221,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-xldj"><?php echo $op_arr['wo_step1']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step1']['op_assigner'], "name"); ?></td>
-    <td class="tg-xldj"><?php echo JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-uys7">2</td>
@@ -229,7 +229,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-xldj"><?php echo $op_arr['wo_step2']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step2']['op_assigner'], "name"); ?></td>
-    <td class="tg-xldj"><?php echo JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-uys7">3</td>
@@ -237,7 +237,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-xldj"><?php echo $op_arr['wo_step3']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step3']['op_assigner'], "name"); ?></td>
-    <td class="tg-xldj"><?php echo JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-c3ow">4</td>
@@ -245,7 +245,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-xldj"><?php echo $op_arr['wo_step4']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step4']['op_assigner'], "name"); ?></td>
-    <td class="tg-xldj"><?php echo JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-c3ow">Process</td>
@@ -303,7 +303,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-xldj"></td>    
     <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step5']['op_assigner'], "name"); ?></td>
-    <td class="tg-xldj"><?php echo JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 <?php 
   $opvs_arr = $this->opvs_arr;
@@ -357,7 +357,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-0pky"></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-0pky"><?php echo GetValueUser($op_arr['wo_step6']['op_assigner'], "name"); ?></td>
-    <td class="tg-0pky"><?php echo JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <?php $opfn_arr = $this->opfn_arr;?>
   <tr>
@@ -431,7 +431,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-0pky"><?php echo $op_arr['wo_step7']['op_comment'];?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
     <td class="tg-0pky"><?php echo GetValueUser($op_arr['wo_step7']['op_assigner'], "name"); ?></td>
-    <td class="tg-0pky"><?php echo JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 </table>		       
         <input type="text" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />

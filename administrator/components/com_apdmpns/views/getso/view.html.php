@@ -16,8 +16,8 @@ class  pnsViewgetso extends JView
 		global $mainframe, $option;
 
 		$db				=& JFactory::getDBO();
-        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'so.so_cuscode',    'cmd' );
-        $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    '',            'word' );
+                $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'so.so_cuscode',    'cmd' );
+                $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    '',            'word' );
         
 		$search				= $mainframe->getUserStateFromRequest( "$option.search",			'search', 			'',			'string' );
 		$search				= JString::strtolower( $search );

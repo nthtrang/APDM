@@ -805,9 +805,111 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
          </fieldset>
         <?php
 }
-        
+if(($this->type_filter==0 || $this->type_filter==12) && count($this->rs_so))
+{      
         ?>
        
+      <fieldset class="adminform">
+		 <legend><?php echo JText::_("SO Result");?></legend>
+               
+<?php 
+if (count($this->rs_so) > 0) { ?>
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
+                                        <th width="100"><?php echo JText::_('Customer'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('TOP ASSYS PN'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>
+                                        <th width="100"><?php echo JText::_('Start date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Shipping request date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Required'); ?></th>
+                                        <th width="100"><?php echo JText::_('Status'); ?></th>
+                                        <th width="100"><?php echo JText::_('RMA'); ?></th>
+                                        <th width="100"><?php echo JText::_('LOG'); ?></th>                                        
+                                </tr>
+                        </thead>                  
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->rs_so as $so) {
+                $i++;
+                if ($so->pns_cpn == 1)
+                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $so->pns_id;
+                else
+                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $so->pns_id;
+                if ($so->pns_revision) {
+                        $pnNumber = $so->ccs_code . '-' . $so->pns_code . '-' . $so->pns_revision;
+                } else {
+                        $pnNumber = $so->ccs_code . '-' . $so->pns_code;
+                }
+                $soNumber = $so->so_cuscode;
+                if($so->ccs_coordinator)
+                {
+                       $soNumber .= "-".$so->ccs_coordinator;
+                }
+                $background="";
+                $remain_day = $so->wo_remain_date;
+                if($remain_day<=0)
+                {       
+                        $remain_day = 0;
+                        $background= "style='background-color:#f00;color:#fff'";
+                }
+                elseif($so->wo_remain_date<=3)
+                {                         
+                        $background= "style='background-color:#ff0;color:#fff'";
+                }
+                ?>
+                                        <tr>
+                                                <td><?php echo $i;?></td>                                            
+                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td><?php echo PNsController::getCcsDescription($so->customer_id); ?></td>                                                
+                                                <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
+                                                       <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
+                                                </span></td>   
+                                                <td><?php echo $so->pns_description; ?></td>                                                
+                                                <td>
+                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?>
+                                                </td>     
+                                                 <td>
+                                                <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?>
+                                                </td> 
+                                                <td>
+                                                        <?php
+                                                                                        $required = array();
+                                                                                        if ($so->fa_required) {
+                                                                                                $required[] = "F.A";
+                                                                                        }
+                                                                                        if ($so->esd_required) {
+                                                                                                $required[] = "ESD";
+                                                                                        }
+                                                                                        if ($so->coc_required) {
+                                                                                                $required[] = "COC";
+                                                                                        }
+                                                                                        echo implode(",", $required);
+                                                                                        ?>
+                                                </td>
+                                                <td>
+                                                        <?php 
+                                                        $arrSoStatus = $this->arr_sostatus;
+                                                        echo strtoupper($arrSoStatus[$so->so_state]);
+                                                        ?>
+                                                </td>
+                                                <td></td>                                                
+                                                <td>
+                                                     <?php echo $so->so_log; ?>
+                                                </td></tr>
+                                                <?php }
+                                        } ?>
+                </tbody>
+        </table>
+      </fieldset>
+
+  <?php
+}
+?>
+
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="searchall" />

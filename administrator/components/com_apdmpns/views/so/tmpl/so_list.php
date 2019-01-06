@@ -5,8 +5,8 @@
 <?php
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
-
-JToolBarHelper::title("SO Management", 'cpanel.png');
+$me = & JFactory::getUser();
+//JToolBarHelper::title("SO Management", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {
         //JToolBarHelper::addNew("add_so","New SO");
@@ -53,20 +53,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <form action="index.php?option=com_apdmpns&task=somanagement"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />        
-<table  width="100%">
-		<tr>
-			<td colspan="4"  >
-				<?php echo JText::_( 'Filter' ); ?>:
-                                <?php echo $this->lists['search'];?>
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 				
-				&nbsp;&nbsp;
-			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php echo JText::_( 'Go' ); ?></button>
-			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
-			</td>
-			
-		</tr>
-					
-</table>        
+
+      <fieldset class="adminform">
+		<legend><font style="size:14px"><?php echo JText::_( 'Employee ID#:' ). $me->get('id'); ?> </font></legend>                          
+                <div class="col width-100 scroll">
 <?php 
 if (count($this->so_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
@@ -83,20 +73,13 @@ if (count($this->so_list) > 0) { ?>
                                         <th width="100"><?php echo JText::_('Time Remain'); ?></th>
                                         <th width="100"><?php echo JText::_('Assigner'); ?></th>
                                 </tr>
-                        </thead>
-<tfoot>
-			<tr>
-				<td colspan="16">
-					<?php  echo $this->pagination->getListFooter(); ?>
-				</td>
-			</tr>
-		</tfoot>                        
+                        </thead>                  
                         <tbody>					
         <?php
         $i = 0;
         foreach ($this->so_list as $so) {
                 $i++;
-                if ($row->pns_cpn == 1)
+                if ($so->pns_cpn == 1)
                         $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $so->pns_id;
                 else
                         $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $so->pns_id;
@@ -146,9 +129,70 @@ if (count($this->so_list) > 0) { ?>
                                                 <?php }
                                         } ?>
                 </tbody>
-        </table>		
+        </table></div>
+      </fieldset>
 
-        <div style="display:none"><?php
+      
+<?php 
+if (count($this->report_list) > 0) { ?>
+<fieldset class="adminform">
+		<legend><font style="size:14px"><?php echo JText::_( 'Issue Report' ); ?> </font></legend>                          
+                <div class="col width-100 scroll">
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
+                                        <th width="100"><?php echo JText::_('WO#'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('Step'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Employee ID'); ?></th>
+                                        <th width="100"><?php echo JText::_('Delay times of Step'); ?></th>
+                                        <th width="100"><?php echo JText::_('Delay time of WO'); ?></th>
+                                        <th width="100"><?php echo JText::_('Rework Times'); ?></th>
+                                        <th width="100"><?php echo JText::_('Reason of Delay Step'); ?></th>                                        
+                                </tr>
+                        </thead>                  
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->report_list as $so) {
+                $i++;              
+                $soNumber = $so->so_cuscode;
+                if($so->ccs_coordinator)
+                {
+                       $soNumber .= "-".$so->ccs_coordinator;
+                }
+                ?>
+                                        <tr>
+                                                <td><?php echo $i?></td>                                            
+                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>     
+                                                <td><?php echo PNsController::getWoStep($so->op_code); ?></td>   
+                                                <td><?php echo $so->op_assigner; ?></td>                                                                                                
+                                                 <td><?php echo $so->step_delay_date; ?></td> 
+                                                <td><?php echo $so->step_delay_date; ?></td>
+                                                <td><?php echo PNsController::getReworkStep($so->pns_wo_id,$so->op_code);  ?></td>                                                
+                                                <td>
+                                                     <?php 
+                                                      $comment = PNsController::getWoStepLog($so->pns_op_id, 0);
+                                                      if ($comment) {
+                                                                        $str = "";
+                                                                        foreach ($comment as $r) {
+                                                                                $str .= "- " . $r->op_log_comment . " (" . JHTML::_('date', $r->op_log_updated, JText::_('DATE_FORMAT_LC3')) . ")<br>";
+                                                                        }
+                                                                        echo $str;
+                                                                }
+                                                     ?>
+                                                </td></tr>
+                                                <?php }
+                                                ?>
+                                                 </tbody>
+                                        </table></div>
+                                      </fieldset>
+                                                <?php
+                                        } ?>
+               
+                <div style="display:none"><?php
                                         echo $editor->display('text', $row->text, '10%', '10', '10', '3');
                                         ?></div>
         <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />

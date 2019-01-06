@@ -11,14 +11,12 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role)) {	
-        //JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
+if (in_array("W", $role) && $this->so_row->so_state =="inprogress") { 
+         JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
          JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false);	
-        
-}
-if (in_array("D", $role)) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO#");
 }
+
 
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -73,6 +71,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table width="100%" class="adminlist" cellpadding="1">
 	<thead>
 		<tr>
+                        
 			<th width="5%" class="title">
 					<?php echo JText::_('No.')?>
 			</th>
@@ -140,7 +139,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }
                 ?>
         <tr>		
-		<td><?php echo $level;?></td>
+		<td>					
+                <input type="checkbox" id = "pns_wo_id" value="<?php echo $row->pns_wo_id;?>" name="cid[]"  />
+                </td>
                 <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$row->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$row->wo_code.'</a> '; ?></td>                
 		<td><?php echo '<a href="'.$link.'" title="'.JText::_('Click to see detail PNs').'">'.$pnNumber.'</a> '; ?></td>		
 		<td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
@@ -149,9 +150,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <td><?php echo JHTML::_('date', $row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?></td>
                 <td><?php echo JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC3')); ?></td>
                 <td <?php echo $background?>><?php echo $remain_day;?></td>
-                <td><?php echo $row->so_state;?></td>
-                <td><?php echo round($row->wo_delay);?></td>
-                <td><?php echo round($row->wo_rework);?></td>                
+                <td><?php echo PNsController::getWoStatus($row->wo_state); ?></td>
+                <td><?php echo PNsController::getReworkStep($row->pns_wo_id);?></td>
+                <td><?php echo PNsController::getDelayTimes($row->pns_wo_id);?></td>                
 	</tr>
 <?php 
         }
@@ -160,9 +161,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </fieldset>
 </div>	
         </fieldset>
-        <input type="text" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
+        <input type="hidden" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
-        <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="so_detail_support_doc"  />
         <input type="hidden" name="boxchecked" value="1" />
