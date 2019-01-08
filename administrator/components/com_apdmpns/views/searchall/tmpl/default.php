@@ -847,33 +847,22 @@ if (count($this->rs_so) > 0) { ?>
                 $soNumber = $so->so_cuscode;
                 if($so->ccs_coordinator)
                 {
-                       $soNumber .= "-".$so->ccs_coordinator;
-                }
-                $background="";
-                $remain_day = $so->wo_remain_date;
-                if($remain_day<=0)
-                {       
-                        $remain_day = 0;
-                        $background= "style='background-color:#f00;color:#fff'";
-                }
-                elseif($so->wo_remain_date<=3)
-                {                         
-                        $background= "style='background-color:#ff0;color:#fff'";
-                }
+                       $soNumber = $so->ccs_coordinator."-".$soNumber;
+                }              
                 ?>
                                         <tr>
                                                 <td><?php echo $i;?></td>                                            
                                                 <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
-                                                <td><?php echo PNsController::getCcsDescription($so->customer_id); ?></td>                                                
+                                                <td><?php echo PNsController::getCcsName($so->customer_id); ?></td>                                                
                                                 <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
                                                        <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
                                                 </span></td>   
                                                 <td><?php echo $so->pns_description; ?></td>                                                
                                                 <td>
-                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?>
+                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>     
                                                  <td>
-                                                <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?>
+                                                <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td> 
                                                 <td>
                                                         <?php
@@ -899,6 +888,90 @@ if (count($this->rs_so) > 0) { ?>
                                                 <td></td>                                                
                                                 <td>
                                                      <?php echo $so->so_log; ?>
+                                                </td></tr>
+                                                <?php }
+                                        } ?>
+                </tbody>
+        </table>
+      </fieldset>
+
+  <?php
+}
+if(($this->type_filter==0 || $this->type_filter==13) && count($this->rs_wo))
+{      
+        ?>
+       
+      <fieldset class="adminform">
+		 <legend><?php echo JText::_("WO Result");?></legend>
+               
+<?php 
+if (count($this->rs_wo) > 0) { ?>
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('WO#'); ?></th>
+                                        <th width="100"><?php echo JText::_('PN'); ?></th>                                                                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
+                                        <th width="100"><?php echo JText::_('UOM'); ?></th>
+                                        <th width="100"><?php echo JText::_('Start date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Deadline'); ?></th>
+                                        <th width="100"><?php echo JText::_('Time Remain(days)'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Status'); ?></th>
+                                        <th width="100"><?php echo JText::_('Delay'); ?></th>
+                                        <th width="100"><?php echo JText::_('Rework'); ?></th>
+                                        <th width="100"><?php echo JText::_('LOG'); ?></th>                                        
+                                </tr>
+                        </thead>                  
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->rs_wo as $wo) {
+                $i++;
+                if ($so->pns_cpn == 1)
+                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $wo->pns_id;
+                else
+                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $wo->pns_id;
+                if ($so->pns_revision) {
+                        $pnNumber = $wo->ccs_code . '-' . $wo->pns_code . '-' . $wo->pns_revision;
+                } else {
+                        $pnNumber = $wo->ccs_code . '-' . $wo->pns_code;
+                }
+               
+                $background="";
+                $remain_day = $wo->wo_remain_date;
+                if($remain_day<=0)
+                {       
+                        $remain_day = 0;
+                        $background= "style='background-color:#f00;color:#fff'";
+                }
+                elseif($wo->wo_remain_date<=3)
+                {                         
+                        $background= "style='background-color:#ff0;color:#000'";
+                }
+                ?>
+                                        <tr>
+                                                <td><?php echo $i;?></td>                                            
+                                                <td><a href="index.php?option=com_apdmpns&task=wo_detail&id=<?php echo $wo->pns_wo_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $wo->wo_code; ?></a> </td>                                                                                                
+                                                <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
+                                                       <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
+                                                </span></td>   
+                                                <td><?php echo $wo->pns_description; ?></td>                    
+                                                <td><?php echo $wo->wo_qty; ?></td>         
+                                                <td><?php echo $wo->pns_uom; ?></td>         
+                                                <td>
+                                                 <?php echo JHTML::_('date', $wo->wo_start_date, JText::_('DATE_FORMAT_LC5')); ?>
+                                                </td>     
+                                                 <td>
+                                                <?php echo JHTML::_('date', $wo->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?>
+                                                </td> 
+                                                <td <?php echo $background?>><?php echo $remain_day;?></td>
+                                                  <td><?php echo PNsController::getWoStatus($wo->wo_state); ?></td>
+                                                <td><?php echo PNsController::getReworkStep($wo->pns_wo_id);?></td>
+                                                <td><?php echo PNsController::getDelayTimes($wo->pns_wo_id);?></td>                                          
+                                                <td>
+                                                     <?php echo $wo->wo_log; ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

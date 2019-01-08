@@ -11,7 +11,14 @@ $role = JAdministrator::RoleOnComponent(8);
 if (in_array("W", $role)) {
         JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
         JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
+        
+}
+if (in_array("S", $role)) {
         JToolBarHelper::addMoveLocation("Move Location", $this->row->pns_id);
+}
+if (in_array("D", $role)) {
+        //viet comment
+        JToolBarHelper::deletePns('Are you sure to delete it?',"removestos","Delete STO");
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -35,10 +42,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				
                         }
                 }
+                if (pressbutton == 'removestos') {
+                        submitform( pressbutton );
+                        return;
+                }
 			
         }
-
-
 </script>
 <div class="clr"></div>
 <form action="index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
@@ -61,7 +70,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('No'); ?></th>         
+                                        <th width="3%" class="title">
+					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->stos_list); ?>);" />
+                                        </th>                                        
                                         <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
@@ -86,6 +98,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 ?>
                                         <tr>
                                                 <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td>
+                                                        <?php echo JHTML::_('grid.id', $i, $sto->pns_sto_id ); ?>
+                                                </td>
                                                 <td>
                                                         <?php
                                                                 $style="";
@@ -138,6 +153,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="option" value="com_apdmpns" />
         <input type="hidden" name="task" value="stomanagement" />
         <input type="hidden" name="redirect" value="mep" />
+        <input type="hidden" name="boxchecked" value="0" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
 </form>

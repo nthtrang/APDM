@@ -91,7 +91,7 @@ if (count($this->so_list) > 0) { ?>
                 $soNumber = $so->so_cuscode;
                 if($so->ccs_coordinator)
                 {
-                       $soNumber .= "-".$so->ccs_coordinator;
+                       $soNumber = $so->ccs_coordinator."-".$soNumber;
                 }
                 $background="";
                 $remain_day = $so->wo_remain_date;
@@ -102,7 +102,7 @@ if (count($this->so_list) > 0) { ?>
                 }
                 elseif($so->wo_remain_date<=3)
                 {                         
-                        $background= "style='background-color:#ff0;color:#fff'";
+                        $background= "style='background-color:#ff0;color:#000'";
                 }
                 ?>
                                         <tr>
@@ -122,7 +122,7 @@ if (count($this->so_list) > 0) { ?>
                                                 <td>
                                                         <?php echo PNsController::getWoStatus($so->wo_state); ?>
                                                 </td>
-                                                <td <?php echo $background?>><?php echo $remain_day;?></td>                                                
+                                                <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                 <td>
                                                      <?php echo GetValueUser($so->wo_assigner, "name"); ?>
                                                 </td></tr>
@@ -160,7 +160,7 @@ if (count($this->report_list) > 0) { ?>
                 $soNumber = $so->so_cuscode;
                 if($so->ccs_coordinator)
                 {
-                       $soNumber .= "-".$so->ccs_coordinator;
+                       $soNumber = $so->ccs_coordinator."-".$soNumber;
                 }
                 ?>
                                         <tr>
@@ -178,7 +178,7 @@ if (count($this->report_list) > 0) { ?>
                                                       if ($comment) {
                                                                         $str = "";
                                                                         foreach ($comment as $r) {
-                                                                                $str .= "- " . $r->op_log_comment . " (" . JHTML::_('date', $r->op_log_updated, JText::_('DATE_FORMAT_LC3')) . ")<br>";
+                                                                                $str .= "- " . $r->op_log_comment . " (" . JHTML::_('date', $r->op_log_updated, JText::_('DATE_FORMAT_LC5')) . ")<br>";
                                                                         }
                                                                         echo $str;
                                                                 }

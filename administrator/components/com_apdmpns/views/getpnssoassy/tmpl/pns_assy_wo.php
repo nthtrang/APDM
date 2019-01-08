@@ -38,10 +38,11 @@ function UpdatePnsChild(){
 			onComplete:function(result){	
                                 var eco_result = result;
 				eco = eco_result.split('^');
-				window.parent.document.getElementById('pns_assy_so').innerHTML = eco[3];   
-                                window.parent.document.getElementById('top_pns_code').value = eco[2];
+				window.parent.document.getElementById('pns_assy_so').innerHTML = eco[4];   
+                                window.parent.document.getElementById('top_pns_code').value = eco[3];
                                 window.parent.document.getElementById('top_pns_id').value = eco[0];                                
                                 window.parent.document.getElementById('wo_customer_id').value = eco[1];
+                                window.parent.document.getElementById('wo_customer_name').value = eco[2];
 				window.parent.document.getElementById('sbox-window').close();	
 				
 

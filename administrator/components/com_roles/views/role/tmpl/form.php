@@ -324,7 +324,7 @@
 						<input type="checkbox" name="p[]" value="E" <?php echo ($pns3) ? 'checked="checked"' : ''?>  onclick="isChecked(this.checked);" id="p2"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="p[]" value="D" <?php echo ($pns4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="p[]" value="R" <?php echo ($pns5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="checkbox" name="p[]" value="S" <?php echo ($pns6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" name="p[]" value="S" <?php echo ($pns6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p5" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllPNS(6, 'p');" value="0" name="toggle6" <?php if ($pnsall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>		
@@ -356,8 +356,9 @@
 						<input type="checkbox" name="sto[]" value="W" <?php echo ($sto2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="sto[]" value="E" <?php echo ($sto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="sto[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="sto[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllSTO(5, 'sto');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" name="sto[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" name="sto[]" value="S" <?php echo ($sto6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto5" />(MTO Button)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" onclick="checkAllSTO(6, 'sto');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>	                                
 			<tr><tr>

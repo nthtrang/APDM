@@ -179,7 +179,6 @@ else
                     }                    
                 break;
                 case '12': //SO
-                     //SO
                     $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
                     //select table SO with keyword input                      
@@ -197,7 +196,24 @@ else
                         }
                         
                     }                    
-                break;                
+                break;       
+                case '13': //WO
+                    $arr_wo_id = array();                 
+                    //select table SO with keyword input                      
+                    $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+                    $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                        " from apdm_pns_wo wo " .
+                        " left join apdm_pns p on  p.pns_id = wo.pns_id " .
+                        " where wo.wo_code LIKE ".$searchEscaped;
+                    $db->setQuery($sql);                   
+                    $rs_wo = $db->loadObjectList();
+                    if (count($rs_wo) >0){
+                        foreach ($rs_wo as $wo){
+                           $pns_wo_id[] = $wo->pns_wo_id; 
+                        }
+                        
+                    }                    
+                break;                       
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
@@ -461,6 +477,7 @@ else
         $this->assignRef('rs_po',       $rs_po);
         $this->assignRef('rs_sto',      $rs_sto);
         $this->assignRef('rs_so',       $rs_so);
+        $this->assignRef('rs_wo',       $rs_wo);
         $this->assignRef('arr_sostatus', $arrSoStatus);
         $this->assignRef('rs_supplier',        $rs_supplier);
          $this->assignRef('rs_mf',        $rs_mf);

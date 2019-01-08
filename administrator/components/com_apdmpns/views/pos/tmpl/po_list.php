@@ -11,6 +11,10 @@ $role = JAdministrator::RoleOnComponent(7);
 if (in_array("W", $role)) {
         JToolBarHelper::addPos("Add PO", $this->row->pns_id);
 }
+if (in_array("D", $role)) {
+        //viet comment
+        JToolBarHelper::deletePns('Are you sure to delete it?',"removepos","Delete PO");
+}
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>
@@ -32,6 +36,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 submitform( pressbutton );
 				
                         }
+                }
+                if (pressbutton == 'removepos') {
+                        submitform( pressbutton );
+                        return;
                 }
 			
         }
@@ -60,7 +68,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('No'); ?></th>        
+                                         <th width="3%" class="title">
+					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->pos_list); ?>);" />
+                                        </th> 
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
@@ -84,6 +95,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 ?>
                                         <tr>
                                                 <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td>
+                                                        <?php echo JHTML::_('grid.id', $i, $po->pns_po_id ); ?>
+                                                </td>
                                                 <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
                                                 <td><?php echo $po->po_description; ?></td>                                                
                                                 <td>
@@ -120,6 +134,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="option" value="com_apdmpns" />
         <input type="hidden" name="task" value="pomanagement" />
         <input type="hidden" name="redirect" value="mep" />
+        <input type="hidden" name="boxchecked" value="0" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
 </form>

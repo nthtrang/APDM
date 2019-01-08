@@ -147,8 +147,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		<td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
                 <td><?php echo $row->wo_qty;?></td>
                 <td><?php echo $row->pns_uom;?></td>
-                <td><?php echo JHTML::_('date', $row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?></td>
-                <td><?php echo JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC3')); ?></td>
+                <td><?php echo JHTML::_('date', $row->wo_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>
+                <td><?php echo JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?></td>
                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                 <td><?php echo PNsController::getWoStatus($row->wo_state); ?></td>
                 <td><?php echo PNsController::getReworkStep($row->pns_wo_id);?></td>

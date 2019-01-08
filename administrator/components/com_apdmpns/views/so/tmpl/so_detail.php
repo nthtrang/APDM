@@ -120,7 +120,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <table class="admintable" cellspacing="1"  width="70%">
                               <tr>
                                         <td class="key" width="28%"><?php echo JText::_('Customer'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo PNsController::getCcsDescription($this->so_row->customer_id); ?></td>                                          
+                                        <td width="30%" class="title"><?php echo PNsController::getCcsName($this->so_row->customer_id); ?></td>                                          
                                         <td class="key" width="18%"><?php echo JText::_('Coordinator'); ?></td>                                               
                                         <td width="30%" class="title"><?php echo $this->so_row->ccs_coordinator; ?></td>
 				                                                                              
@@ -132,19 +132,19 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                          $soNumber = $this->so_row->so_cuscode;
                                         if($this->so_row->ccs_coordinator)
                                         {
-                                               $soNumber .= "-".$this->so_row->ccs_coordinator;
+                                               $soNumber = $this->so_row->ccs_coordinator."-".$soNumber;
                                         }
                                         echo $soNumber; ?></td>                                        
 				                                                                              
                                 </tr>  
                                 <tr>
                                         <td class="key"  width="28%"><?php echo JText::_('Shipping Requested Date'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?></td>                                        
+                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
 				                                                                              
                                 </tr>  
                                 <tr>
                                         <td  class="key" width="28%"><?php echo JText::_('Start Date'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?></td>                                        
+                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
 				                                                                              
                                 </tr>                                                                                 
                                 <tr>

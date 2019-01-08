@@ -178,7 +178,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CUSTOMER:</span></td>
-    <td class="tg-0pky" colspan="3"><?php echo PNsController::getCcsDescription($this->wo_row->wo_customer_id); ?></td>
+    <td class="tg-0pky" colspan="3"><?php echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?></td>
     <td class="tg-0pky"><span style="font-weight:bold">REQUEST DATE:</span></td>
     <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?></td>
   </tr>
