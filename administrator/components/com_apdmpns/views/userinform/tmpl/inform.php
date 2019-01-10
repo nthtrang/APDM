@@ -4,8 +4,8 @@
 
 <?php
 $me = & JFactory::getUser();
-echo $me->get('username');
- echo $so_id		= JRequest::getVar( 'id');
+$me->get('username');
+ $so_id		= JRequest::getVar( 'id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -85,7 +85,7 @@ function UpdateCancelSo(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-        <input type="text" name="so_id" id="po_id" value="<?php echo $so_id; ?>" />
+        <input type="hidden" name="so_id" id="so_id" value="<?php echo $so_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

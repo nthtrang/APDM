@@ -11,7 +11,7 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);   
-JToolBarHelper::customX('savermafk', 'assign', '', 'RMA', false);
+JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
 if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {        
         JToolBarHelper::customX("onholdso","unpublish",'',"On Hold",false);        
         JToolBarHelper::editListX("editso","Edit");	
@@ -45,7 +45,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         submitform( pressbutton );
                         return;
                 }      
-                if (pressbutton == 'savermafk') {
+                if (pressbutton == 'savermafk') {                        
+                        if (form.boxchecked.value==0){
+                                alert("Please check PN for edit RMA first");                               
+                                return false;
+                        }       
                         submitform( pressbutton );
                         return;
                 }
@@ -76,10 +80,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 document.getElementById('text_rma_'+id).style.display= 'block';
 
                 document.getElementById('rma_'+id).style.visibility= 'hidden';
-                document.getElementById('rma_'+id).style.display= 'none';
-             
-                
-                
+                document.getElementById('rma_'+id).style.display= 'none';    
 	}
 }       
 
@@ -130,9 +131,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <td width="30%" class="title" colspan="3">
                                         <?php 
                                          $soNumber = $this->so_row->so_cuscode;
-                                        if($this->so_row->ccs_coordinator)
+                                        if($this->so_row->ccs_code)
                                         {
-                                               $soNumber = $this->so_row->ccs_coordinator."-".$soNumber;
+                                               $soNumber = $this->so_row->ccs_code."-".$soNumber;
                                         }
                                         echo $soNumber; ?></td>                                        
 				                                                                              
@@ -144,7 +145,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </tr>  
                                 <tr>
                                         <td  class="key" width="28%"><?php echo JText::_('Start Date'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
+                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
 				                                                                              
                                 </tr>                                                                                 
                                 <tr>
@@ -326,6 +327,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="option" value="com_apdmpns" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
-        <input type="hidden" name="boxchecked" value="1" />
+        <input type="hidden" name="boxchecked" value="0" />
 <?php echo JHTML::_('form.token'); ?>
 </form>

@@ -89,9 +89,9 @@ if (count($this->so_list) > 0) { ?>
                         $pnNumber = $so->ccs_code . '-' . $so->pns_code;
                 }
                 $soNumber = $so->so_cuscode;
-                if($so->ccs_coordinator)
+                if($so->ccs_code)
                 {
-                       $soNumber = $so->ccs_coordinator."-".$soNumber;
+                       $soNumber = $so->ccs_code."-".$soNumber;
                 }
                 $background="";
                 $remain_day = $so->wo_remain_date;
@@ -158,9 +158,9 @@ if (count($this->report_list) > 0) { ?>
         foreach ($this->report_list as $so) {
                 $i++;              
                 $soNumber = $so->so_cuscode;
-                if($so->ccs_coordinator)
+                if($so->ccs_code)
                 {
-                       $soNumber = $so->ccs_coordinator."-".$soNumber;
+                       $soNumber = $so->ccs_code."-".$soNumber;
                 }
                 ?>
                                         <tr>

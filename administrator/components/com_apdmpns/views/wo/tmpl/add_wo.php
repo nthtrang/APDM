@@ -5,13 +5,11 @@
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
         $so_code = "";
-         $so_id=0;
+        $so_id=0;
         if(JRequest::getVar( 'so_id')){
               $so_id =  JRequest::getVar('so_id');
-        }
-        if(JRequest::getVar( 'so_code')){
-              $so_code =  JRequest::getVar('so_code');
-        }
+              $so_info = PNsController::getSofomId($so_id);                                
+        }              
         JToolBarHelper::title( JText::_( 'WO GENERATION' ) . ': <small><small>[ New ]</small></small>' , 'cpanel.png' );
         JToolBarHelper::apply('save_works_order', 'Save');
 	if ( $edit ) {
@@ -271,8 +269,8 @@ function check_so_first()
 						</label>
 					</td>
 					<td>
-					<input type="text" value="<?php echo $so_code;?>" name="so_code" id="so_code" readonly="readonly" />
-					<input type="hidden" name="so_id" id="so_id" value="<?php echo $so_id?>" />
+					<input type="text" value="<?php echo $so_info['so_code'];?>" name="so_code" id="so_code" readonly="readonly" />
+					<input type="hidden" name="so_id" id="so_id" value="<?php echo $so_info['so_id'];?>" />
 						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_so_ajax&tmpl=component" title="Image">
                                         <input type="button" name="addSO" value="<?php echo JText::_('Select SO')?>"/>
                                         </a>
@@ -285,7 +283,20 @@ function check_so_first()
 					</td>
                                         <td valign="top"><input type="text" value="" name="top_pns_code" id="top_pns_code" readonly="readonly" />
                                                 <input type="hidden" value="" name="top_pns_id" id="top_pns_id" readonly="readonly" />
-							<a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
+                                                <?php 
+                                                if($so_info['so_code'])
+                                                {
+                                                ?>
+                                                        <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&tmpl=component&so_id=<?php echo $so_info['so_id']?>" title="<?php echo JText::_('Select Top ASSY P/N')?>"><?php echo JText::_('Select Top ASSY P/N')?></a>
+                                                <?php
+                                                }
+                                                else
+                                                {
+                                                ?>
+                                                <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&tmpl=component" title="<?php echo JText::_('Select Top ASSY P/N')?>"></a>
+                                                <?php 
+                                                }
+                                                ?>							
 						
 					</td>
                                         </tr>  
@@ -323,7 +334,7 @@ function check_so_first()
 						</label>
 					</td>
 					<td>
-                                                <input type="text" value="" name="so_request_date" id="so_request_date" readonly="readonly" />
+                                                <input type="text" value="<?php echo $so_info['so_shipping_date']?>" name="so_request_date" id="so_request_date" readonly="readonly" />
 					</td>
 				</tr>
                                  <tr>

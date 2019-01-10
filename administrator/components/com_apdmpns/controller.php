@@ -6154,7 +6154,7 @@ class PNsController extends JController {
                                 ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
                                 ' <td class="key">'.$pnNumber.'</td>'.
                                 ' <td class="key">'.$row->pns_description.'</td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
                                 ' <td class="key">'.$row->pns_uom.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"><input checked="checked" type="checkbox" name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
@@ -6172,10 +6172,13 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');         
-                
+                $post = JRequest::get('post');                        
+                $startdate = new DateTime($post['so_start_date']);
+                $shipping_date = new DateTime($post['so_shipping_date']);
+                $so_start_date = $startdate->format('Y-m-d'); 
+                $so_shipping_date = $shipping_date->format('Y-m-d'); 
                 $soNumber = $post['so_cuscode'];
-                $db->setQuery("INSERT INTO apdm_pns_so (customer_id,so_coordinator,so_cuscode,so_shipping_date,so_start_date,so_state,so_created,so_created_by,so_updated,so_updated_by,so_type) VALUES ('" . $post['customer_id'] . "', '" . $post['so_coordinator'] . "', '" . $post['so_cuscode'] . "', '" . $post['so_shipping_date'] . "', '" . $post['so_start_date'] . "', '" .  $post['so_state']. "','" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $datenow->toMySQL() . "', " . $me->get('id') . ",0)");
+                $db->setQuery("INSERT INTO apdm_pns_so (customer_id,so_coordinator,so_cuscode,so_shipping_date,so_start_date,so_state,so_created,so_created_by,so_updated,so_updated_by,so_type) VALUES ('" . $post['customer_id'] . "', '" . $post['so_coordinator'] . "', '" . $post['so_cuscode'] . "', '" . $so_shipping_date . "', '" . $so_start_date . "', '" .  $post['so_state']. "','" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $datenow->toMySQL() . "', " . $me->get('id') . ",0)");
                 $db->query();     
                 //getLast SO ID
                 $so_id = $db->insertid();
@@ -6944,7 +6947,7 @@ class PNsController extends JController {
                                 ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
                                 ' <td class="key">'.$pnNumber.'</td>'.
                                 ' <td class="key">'.$row->pns_description.'</td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="'.$row->qty.'" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="'.$row->qty.'" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
                                 ' <td class="key">'.$row->pns_uom.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="'.$row->price.'" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"><input '.$fachecked.' type="checkbox" name="fa_required['.$row->pns_id.']" value="'.$row->fa_required.'" /> </td>'.
@@ -6965,7 +6968,7 @@ class PNsController extends JController {
                                 ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
                                 ' <td class="key">'.$pnNumber.'</td>'.
                                 ' <td class="key">'.$row->pns_description.'</td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
                                 ' <td class="key">'.$row->pns_uom.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"><input checked="checked" type="checkbox" name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
@@ -7047,9 +7050,14 @@ class PNsController extends JController {
                         $db->setQuery("update apdm_pns_so set so_state = 'inprogress'  WHERE  pns_so_id = ".$so_id);
                         $db->getQuery();
                         $db->query(); 
+                        $msg = "Successfully Saved RMA";
+                }
+                else
+                {
+                        $msg = "The SO not complete can not Saved RMA";
                 }
                
-                $msg = "Successfully Saved RMA";
+                
                 $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
         }        
         function so_detail_wo()
@@ -7113,9 +7121,9 @@ class PNsController extends JController {
                 $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$id);                
                 $row =  $db->loadObject();   
                 $soNumber = $row->so_cuscode;
-                if($row->ccs_coordinator)
+                if($row->ccs_code)
                 {
-                       $soNumber .= "-".$row->ccs_coordinator;
+                       $soNumber = $row->ccs_code."-".$soNumber;
                 }                     
                 $result = $id.'^'.$soNumber.'^'.$row->so_shipping_date;
                 echo $result;
@@ -7354,7 +7362,7 @@ class PNsController extends JController {
                         $wopoStatusTitle1="";
                         if($post['op_completed_date1']!="0000-00-00 00:00:00")
                         {
-                                $status ="label_printed";
+                                $status ="wire_cut";
                                 $wopoStatus1 = "done";
                                 $wopoStatusTitle1 = "Done";
                         }
@@ -7367,7 +7375,7 @@ class PNsController extends JController {
                         $wopoStatusTitle2="";
                         if($post['op_completed_date2']!="0000-00-00 00:00:00")
                         {
-                                $status ="wire_cut";
+                                $status ="kitted";
                                 $wopoStatus2 = "done";
                                 $wopoStatusTitle2 = "Done";
                         }                        
@@ -7380,7 +7388,7 @@ class PNsController extends JController {
                         $wopoStatusTitle3="";
                         if($post['op_completed_date3']!="0000-00-00 00:00:00")
                         {
-                                $status ="kitted";
+                                $status ="production";
                                 $wopoStatus3 = "done";
                                 $wopoStatusTitle3 = "Done";
                         }                       
@@ -7393,7 +7401,7 @@ class PNsController extends JController {
                         $wopoStatusTitle4="";
                         if($post['op_completed_date4']!="0000-00-00 00:00:00")
                         {
-                                $status ="production";
+                                $status ="visual_inspection";
                                 $wopoStatus4 = "done";
                                 $wopoStatusTitle4 = "Done";
                         }
@@ -7416,7 +7424,7 @@ class PNsController extends JController {
                         $wopoStatusTitle5="";
                         if($post['op_completed_date5']!="0000-00-00 00:00:00")
                         {
-                                $status ="visual_inspection";
+                                $status ="final_inspection";
                                 $wopoStatus5 = "done";
                                 $wopoStatusTitle5 = "Done";
                         }
@@ -7442,7 +7450,7 @@ class PNsController extends JController {
                         $wopoStatusTitle6 = "";
                         if($post['op_completed_date6']!="0000-00-00 00:00:00")
                         {
-                                $status ="final_inspection";
+                                $status ="done";
                                 $wopoStatus6 = "done";
                                 $wopoStatusTitle6 = "Done";
                         }
@@ -7776,5 +7784,21 @@ class PNsController extends JController {
                 }
                 $msg = JText::_('Have removed successfull.');
                 return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
+        }
+        function getSofomId($so_id)
+        {
+                $db = & JFactory::getDBO();
+                $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$so_id);                
+                $row =  $db->loadObject();   
+                $soNumber = $row->so_cuscode;
+                if($row->ccs_code)
+                {
+                       $soNumber = $row->ccs_code."-".$soNumber;
+                }  
+                $array = array();
+                $array['so_id'] = $so_id;
+                $array['so_code'] = $soNumber;
+                $array['so_shipping_date'] = $row->so_shipping_date;
+                return $array;                           
         }
 }

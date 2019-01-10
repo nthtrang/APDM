@@ -845,9 +845,9 @@ if (count($this->rs_so) > 0) { ?>
                         $pnNumber = $so->ccs_code . '-' . $so->pns_code;
                 }
                 $soNumber = $so->so_cuscode;
-                if($so->ccs_coordinator)
+                if($so->ccs_code)
                 {
-                       $soNumber = $so->ccs_coordinator."-".$soNumber;
+                       $soNumber = $so->ccs_code."-".$soNumber;
                 }              
                 ?>
                                         <tr>

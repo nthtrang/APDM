@@ -341,7 +341,8 @@
 						</label>
 					</td>
 					<td>
-                                                <input type="text" value="<?php echo $this->wo_row->wo_customer_id;?>" name="wo_customer_id" id="wo_customer_id" />
+                                                <input type="text" value="<?php echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?>" name="wo_customer_name" id="wo_customer_name" />
+                                                <input type="hidden" value="<?php echo $this->wo_row->wo_customer_id;?>" name="wo_customer_id" id="wo_customer_id" />
 					</td>
 				</tr>                                                                                 
                                        <tr>

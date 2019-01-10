@@ -35,7 +35,7 @@ function UpdateECO(){
 }
 </script>
 
-<form action="index.php?option=com_apdmeco&task=get_eco&tmpl=component" method="post" name="adminForm" id="adminFormEco">
+<form action="index.php?option=com_apdmpns&task=get_so_ajax&tmpl=component" method="post" name="adminForm" id="adminFormEco">
 	<table  width="100%">
 		<tr>
 			<td width="35%" >
@@ -82,9 +82,9 @@ function UpdateECO(){
 			{
 				$row 	=& $this->items[$i];
                                 $soNumber = $row->so_cuscode;
-                                if($row->ccs_coordinator)
+                                if($row->ccs_code)
                                 {
-                                       $soNumber .= "-".$row->ccs_coordinator;
+                                       $soNumber = $row->ccs_code."-".$soNumber;
                                 }
 				
 			?>

@@ -28,8 +28,10 @@ class  pnsViewgetso extends JView
 		$where = array();
 		if (isset( $search ) && $search!= '')
 		{
-			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );
-			$where[] = 'so.so_cuscode LIKE '.$searchEscaped.'  OR so.so_log LIKE '.$searchEscaped;
+                        $search1 = explode("-", $search);
+			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search1[1], true ).'%', false );
+                        $searchEscaped2 = $db->Quote( '%'.$db->getEscaped( $search1[1], true ).'%', false );
+			$where[] = 'so.so_cuscode LIKE '.$searchEscaped.'  OR so.so_cuscode LIKE '.$searchEscaped2.' or so.customer_id LIKE '.$searchEscaped.'  OR so.customer_id LIKE '.$searchEscaped2;
 		}	    
 		
 
@@ -49,7 +51,7 @@ class  pnsViewgetso extends JView
 		jimport('joomla.html.pagination');
 		$pagination = new JPagination( $total, $limitstart, $limit );
 
-		 $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code '
+		$query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code '
 			. ' FROM apdm_pns_so AS so'
                         .'  inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code '
 			. $filter

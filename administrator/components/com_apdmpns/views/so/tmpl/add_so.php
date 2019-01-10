@@ -31,7 +31,7 @@ function getccsCoordinator(ccs_code)
 }
 	function submitbutton(pressbutton) {
 		var form = document.adminForm;
-		if (pressbutton == 'cancel') {
+		if (pressbutton == 'somanagement') {
 			submitform( pressbutton );
 			return false;
 		}
@@ -41,6 +41,17 @@ function getccsCoordinator(ccs_code)
 			form.customer_id.focus();
 			return false;
 		}
+                var date = new Date();
+                current_month = date.getMonth()+1;
+                var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+                var current_date = new Date(current_date);
+                var so_shipping_date = new Date(form.so_shipping_date.value);
+                var so_start_date = new Date(form.so_start_date.value);              
+                if (so_shipping_date < so_start_date ) 
+                {
+                    alert("Invalid Date Range!\nShipping Date cannot be before StartDate!")
+                    return false;
+                }
 		submitform( pressbutton );
 	}
         
@@ -154,7 +165,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 
 	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
 	 // numbers
-	 else if ((("0123456789-").indexOf(keychar) > -1))
+	 else if ((("0123456789$").indexOf(keychar) > -1))
 		return true;
 	 // decimal point jump
 	 else if (dec && (keychar == "."))
@@ -202,7 +213,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->so_row->so_shipping_date, 'so_shipping_date', 'so_shipping_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+                                               <?php echo JHTML::_('calendar',$this->so_row->so_shipping_date, 'so_shipping_date', 'so_shipping_date', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>      
                                  <tr>
@@ -212,7 +223,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->so_row->so_start_date, 'so_start_date', 'so_start_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+                                               <?php echo JHTML::_('calendar',$this->so_row->so_start_date, 'so_start_date', 'so_start_date', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>    
                                 

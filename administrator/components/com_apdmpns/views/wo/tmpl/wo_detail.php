@@ -159,9 +159,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 $cocchecked = 'checked="checked"';
                         ?>
     </td>
-    <td class="tg-dvpl" colspan="2"><span style="font-weight:bold"><input <?php echo $fachecked?> type="checkbox" name="fa_required" value="1" />FA</span></td>
-    <td class="tg-dvpl" colspan="2"><span style="font-weight:bold"><input <?php echo $cocchecked?> type="checkbox" name="fa_required" value="1" />COC</span></td>
-    <td class="tg-dvpl" colspan="3"><span style="font-weight:bold"><input <?php echo $esdchecked?> type="checkbox" name="fa_required" value="1" />ESD</span></td>
+    <td class="tg-dvpl" colspan="2"><span style="font-weight:bold"><input <?php echo $fachecked?> type="checkbox" name="fa_required" value="1" onclick="return false;" onkeydown="return false;" />FA</span></td>
+    <td class="tg-dvpl" colspan="2"><span style="font-weight:bold"><input <?php echo $cocchecked?> type="checkbox" name="fa_required" value="1" onclick="return false;" onkeydown="return false;" />COC</span></td>
+    <td class="tg-dvpl" colspan="3"><span style="font-weight:bold"><input <?php echo $esdchecked?> type="checkbox" name="fa_required" value="1" onclick="return false;" onkeydown="return false;" />ESD</span></td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">TOP LEVEL ASSY P/N:</span></td>
@@ -184,7 +184,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">SO NUMBER:</span></td>
-    <td class="tg-0pky" colspan="3"><?php echo $this->wo_row->so_cuscode;?></td>
+    <td class="tg-0pky" colspan="3"><?php 
+     $soNumber = $this->wo_row->so_cuscode;
+                                if($this->wo_row->ccs_code)
+                                {
+                                       $soNumber = $this->wo_row->ccs_code."-".$soNumber;
+                                }
+    echo $soNumber;?></td>
     <td class="tg-0pky"><span style="font-weight:bold">WO# Started</span></td>
     <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?></td>
   </tr>

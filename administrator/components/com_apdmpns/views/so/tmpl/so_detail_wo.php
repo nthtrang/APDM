@@ -35,7 +35,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                      return;
                 }
                 if (pressbutton == 'add_wo') {
-                        submitform( pressbutton );
+                        window.location = "index.php?option=com_apdmpns&task=add_wo&so_id="+form.so_id.value;
                         return;
                 }                        
         }      
