@@ -58,7 +58,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <fieldset class="adminform">		
                                 <table class="admintable" cellspacing="1" width="100%">
                                         <tr>
-                                                <td>LOG:</td>
+                                                <td><strong>LOG:</strong></td>
                                         </tr>
                                         <tr>
                                                 <td>

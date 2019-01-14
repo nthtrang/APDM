@@ -810,8 +810,7 @@ if(($this->type_filter==0 || $this->type_filter==12) && count($this->rs_so))
         ?>
        
       <fieldset class="adminform">
-		 <legend><?php echo JText::_("SO Result");?></legend>
-               
+		 <legend><?php echo JText::_("SO Result");?></legend>                                            
 <?php 
 if (count($this->rs_so) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
@@ -845,9 +844,9 @@ if (count($this->rs_so) > 0) { ?>
                         $pnNumber = $so->ccs_code . '-' . $so->pns_code;
                 }
                 $soNumber = $so->so_cuscode;
-                if($so->ccs_code)
+                if($so->ccs_so_code)
                 {
-                       $soNumber = $so->ccs_code."-".$soNumber;
+                       $soNumber = $so->ccs_so_code."-".$soNumber;
                 }              
                 ?>
                                         <tr>
@@ -879,13 +878,10 @@ if (count($this->rs_so) > 0) { ?>
                                                                                         echo implode(",", $required);
                                                                                         ?>
                                                 </td>
-                                                <td>
-                                                        <?php 
-                                                        $arrSoStatus = $this->arr_sostatus;
-                                                        echo strtoupper($arrSoStatus[$so->so_state]);
-                                                        ?>
+                                                <td>                                                      
+                                                        <?php echo PNsController::getSoStatus($so->so_state); ?>
                                                 </td>
-                                                <td></td>                                                
+                                                <td><?php echo $so->so_is_rma; ?></td>                                                
                                                 <td>
                                                      <?php echo $so->so_log; ?>
                                                 </td></tr>
@@ -968,8 +964,8 @@ if (count($this->rs_wo) > 0) { ?>
                                                 </td> 
                                                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                   <td><?php echo PNsController::getWoStatus($wo->wo_state); ?></td>
-                                                <td><?php echo PNsController::getReworkStep($wo->pns_wo_id);?></td>
-                                                <td><?php echo PNsController::getDelayTimes($wo->pns_wo_id);?></td>                                          
+                                                 <td><?php echo PNsController::getDelayTimes($wo->pns_wo_id);?></td>
+                                                  <td><?php echo (PNsController::getReworkStep($wo->pns_wo_id))?PNsController::getReworkStep($wo->pns_wo_id):0;?></td>
                                                 <td>
                                                      <?php echo $wo->wo_log; ?>
                                                 </td></tr>

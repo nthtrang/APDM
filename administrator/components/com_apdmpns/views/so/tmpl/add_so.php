@@ -203,7 +203,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>                                                 
-                                                <input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->so_row->so_cuscode;?>"/>						
+                                                <input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->so_row->so_cuscode;?>"/>
 					</td>
 				</tr>                                
                                  <tr>

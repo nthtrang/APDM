@@ -313,7 +313,7 @@ function check_so_first()
 						</label>
 					</td>
 					<td>
-                                                <input checked="checked" type="checkbox" id ="wo_rma_active" name="wo_rma_active" value="1" /> 
+                                                <input type="checkbox" id ="wo_rma_active" name="wo_rma_active" value="1" /> 
 					</td>
 				</tr>                                              
                                        <tr>
@@ -677,7 +677,7 @@ function check_so_first()
 </div>
 	<input type="hidden" name="pns_id" value="<?php echo  $cid[0];?>" />	
 	<input type="hidden" name="option" value="com_apdmpns" />
-	<input type="hidden" name="return" value="wo"  />
+	<input type="hidden" name="return" value="<?php echo $so_id;?>"  />
 	<input type="hidden" name="task" value="save_works_order" />        
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

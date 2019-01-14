@@ -174,7 +174,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         }
         echo $toppnNumber;?>
     </td>
-    <td class="tg-dvpl" colspan="3">RMA</td>
+    <td class="tg-dvpl" colspan="3">
+            <?php 
+             if($this->wo_row->wo_rma_active)
+                $wo_rma_active = 'checked="checked"';
+            ?>
+           <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="<?php echo $this->wo_row->wo_rma_active;?>" onclick="return false;" onkeydown="return false;" /> RMA</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CUSTOMER:</span></td>

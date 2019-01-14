@@ -168,7 +168,7 @@ function UpdatePnsChild(){
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
-        <input type="text" name="so_id" id="so_id" value="<?php echo $so_id?>" />
+        <input type="hidden" name="so_id" id="so_id" value="<?php echo $so_id?>" />
                        
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

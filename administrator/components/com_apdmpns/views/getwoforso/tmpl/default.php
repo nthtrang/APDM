@@ -7,7 +7,7 @@ $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
- $eco_id =$cid[0];	
+  $eco_id =$cid[0];	
 ?>
 <script language="javascript">
 function CheckForm() {

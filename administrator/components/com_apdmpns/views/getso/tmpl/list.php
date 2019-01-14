@@ -11,7 +11,7 @@ function UpdateECO(){
 		return false;
 	}else{
 		var url = 'index.php?option=com_apdmpns&task=ajax_so_towo';		
-		var MyAjax = new Ajax(url, {
+		var MyAjax = new Ajax(url, { 
 			method:'post',
 			data:  $('adminFormEco').toQueryString(),
 			onComplete:function(result){	
@@ -20,8 +20,13 @@ function UpdateECO(){
 				window.parent.document.getElementById('so_code').value = eco[1];
 				window.parent.document.getElementById('so_id').value = eco[0];
                                 window.parent.document.getElementById('so_request_date').value = eco[2];
-				
-                                
+                                if(eco[3]==1)
+                                {
+                                        window.parent.document.getElementById('wo_rma_active').checked  =true;              
+                                }	
+                                else{
+                                        window.parent.document.getElementById('wo_rma_active').checked  =false;
+                                }
                                 window.parent.document.getElementById('get_assy_pn').innerHTML = "Select Top ASSY P/N";      
                                 window.parent.document.getElementById('get_assy_pn').setAttribute("href", "index.php?option=com_apdmpns&task=get_list_assy_wo&tmpl=component&so_id="+eco[0]);
                                 window.parent.document.getElementById('sbox-window').close();       

@@ -54,12 +54,13 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 		</div>
 	</div>
 	<div id="header-box">
+                <div id="module-menu">
+			<jdoc:include type="modules" name="menu" />
+		</div>
 		<div id="module-status">
 			<jdoc:include type="modules" name="status"  />
 		</div>
-		<div id="module-menu">
-			<jdoc:include type="modules" name="menu" />
-		</div>
+		
 		<div class="clr"></div>
 	</div>
 	<div id="content-box">

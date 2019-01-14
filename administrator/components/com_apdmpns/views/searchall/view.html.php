@@ -181,13 +181,19 @@ else
                 case '12': //SO
                     $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
-                    //select table SO with keyword input                      
+                    //select table SO with keyword input      
+                    $where = "";
                     $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
-                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
+                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
                              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
-                             ' inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
-                             ' inner join apdm_pns p on p.pns_id = fk.pns_id'.
-                             ' where (so.so_cuscode LIKE '.$searchEscaped.' OR  (so.so_cuscode = "'.$arr_code[0] .'" and so.so_coordinator  = "'.$arr_code[1] .'"))';
+                             ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
+                             ' left join apdm_pns p on p.pns_id = fk.pns_id'.
+                             ' where so.so_cuscode LIKE '.$searchEscaped;
+                             if($arr_code[0] && $arr_code[1])
+                             {
+                                $where =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';    
+                             }
+                    $query = $query. $where;           
                     $db->setQuery($query);
                     $rs_so = $db->loadObjectList();
                     if (count($rs_so) >0){
@@ -201,7 +207,7 @@ else
                     $arr_wo_id = array();                 
                     //select table SO with keyword input                      
                     $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
-                    $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                    $sql = "select wo.wo_log,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
                         " from apdm_pns_wo wo " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
                         " where wo.wo_code LIKE ".$searchEscaped;

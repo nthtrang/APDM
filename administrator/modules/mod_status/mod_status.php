@@ -115,7 +115,10 @@ $search .=         $type_filter;
 $search .=         "<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "<button onclick='document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();'>Reset</button>";
 $search .=         "</form></span>";
+
 $output[] = "";
+
+$output[] = "<a href='index.php?option=com_apdmpns&task=searchadvance&clean=all'><input type='button' style='margin-bottom:5px;line-height:15px;padding:4px 10px 0 22px' name='searchadvance' value='Advance Search' /></a>";
 //Print the logged in users message
 $output[] = "<span class=\"loggedin-users\"><a href=\"index.php?option=com_apdmusers&amp;view=apdmuser&amp;task=profile&amp;cid[]=".$user->get('id')."\">".$user->get('name')."</a></span>";
 
@@ -126,6 +129,7 @@ if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu') ) {
 	// Print the logout message
 	$output[] = "<span class=\"logout\"><a href=\"index.php?option=com_login&amp;task=logout\">".JText::_('Logout')."</a></span>";
 }
+
 $output[] = $search;
 // reverse rendering order for rtl display
 if ( $lang->isRTL() ) {

@@ -9,7 +9,7 @@ $cid[0];
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
 	
-?>test
+?>
 <script language="javascript">
 function CheckForm() {
 
@@ -47,7 +47,7 @@ function UpdateWoSo(){
 }
 </script>
 <form action="index.php?option=com_apdmpns&task=get_list_wo_so&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
-<input type="text" name="id" value="<?php echo $this->id?>" />
+<input type="hidden" name="id" value="<?php echo $this->id?>" />
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >

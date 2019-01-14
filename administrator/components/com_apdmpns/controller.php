@@ -55,6 +55,8 @@ class PNsController extends JController {
                 $this->registerTask('pomanagement', 'pomanagement');
                 $this->registerTask('locatecode', 'locatecode');
                 $this->registerTask('save_sales_order', 'save_sales_order');
+                $this->registerTask('searchadvance', 'searchadvance');
+                
                 
                 
                 
@@ -7047,7 +7049,7 @@ class PNsController extends JController {
                                 $db->setQuery("update apdm_pns_so_fk set rma=" . $rma . " WHERE  id = " . $id);
                                 $db->query();
                         }
-                        $db->setQuery("update apdm_pns_so set so_state = 'inprogress'  WHERE  pns_so_id = ".$so_id);
+                        $db->setQuery("update apdm_pns_so set so_state = 'inprogress',so_is_rma =1  WHERE  pns_so_id = ".$so_id);
                         $db->getQuery();
                         $db->query(); 
                         $msg = "Successfully Saved RMA";
@@ -7125,7 +7127,7 @@ class PNsController extends JController {
                 {
                        $soNumber = $row->ccs_code."-".$soNumber;
                 }                     
-                $result = $id.'^'.$soNumber.'^'.$row->so_shipping_date;
+                $result = $id.'^'.$soNumber.'^'.$row->so_shipping_date.'^'.$row->so_is_rma;
                 echo $result;
                 exit;
         }
@@ -7179,13 +7181,12 @@ class PNsController extends JController {
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');         
-               // var_dump($post);die;
+               // var_dump($post);die;               
                 $soNumber = $post['so_cuscode'];
                 $partNumber = $post['pns_child'];
                 $woStatus= "label_printed";//Label Printed
-                $sql = "INSERT INTO apdm_pns_wo (so_id,wo_code,wo_qty,pns_id,top_pns_id,wo_customer_id,wo_state,wo_start_date,wo_completed_date,wo_created,wo_created_by,wo_assigner,wo_updated,wo_updated_by) ".
-                       " VALUES ('" . $post['so_id'] . "', '" . $post['wo_code'] . "', '" . $post['wo_qty'] . "', '" . $partNumber[0] . "', '" . $post['top_pns_id'] . "', '" . $post['wo_customer_id'] . "', '" . $woStatus . "', '" .  $post['wo_start_date']. "', '" .  $post['wo_completed_date']. "','" . $datenow->toMySQL() . "', " . $me->get('id') . ",'".$post['wo_assigner']."','" . $datenow->toMySQL() . "', " . $me->get('id') . ")";
-              
+                $sql = "INSERT INTO apdm_pns_wo (so_id,wo_code,wo_qty,pns_id,top_pns_id,wo_customer_id,wo_state,wo_start_date,wo_completed_date,wo_created,wo_created_by,wo_assigner,wo_updated,wo_updated_by,wo_rma_active) ".
+                       " VALUES ('" . $post['so_id'] . "', '" . $post['wo_code'] . "', '" . $post['wo_qty'] . "', '" . $partNumber[0] . "', '" . $post['top_pns_id'] . "', '" . $post['wo_customer_id'] . "', '" . $woStatus . "', '" .  $post['wo_start_date']. "', '" .  $post['wo_completed_date']. "','" . $datenow->toMySQL() . "', '" . $me->get('id') . "','".$post['wo_assigner']."','" . $datenow->toMySQL() . "', '" . $me->get('id') . "','".$post['wo_rma_active']."')";
                 $db->setQuery($sql);
                 $db->query();     
                 //getLast SO ID
@@ -7263,10 +7264,10 @@ class PNsController extends JController {
                 }   
                 
                 $msg = JText::_('Successfully Saved WO');
-                $return = JRequest::getVar('return');
+                $return = JRequest::getVar('so_id');
                
                 if ($return) {
-                       return $this->setRedirect('index.php?option=com_apdmpns&task=somanagement', $msg);
+                       return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_wo&id='.$return, $msg);
                 } else {
                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id, $msg);
                 }                 
@@ -7450,7 +7451,7 @@ class PNsController extends JController {
                         $wopoStatusTitle6 = "";
                         if($post['op_completed_date6']!="0000-00-00 00:00:00")
                         {
-                                $status ="done";
+                                $status ="packaging";
                                 $wopoStatus6 = "done";
                                 $wopoStatusTitle6 = "Done";
                         }
@@ -7544,6 +7545,15 @@ class PNsController extends JController {
                 $stepValue['wo_step6'] =  JText::_('Final Inspection');
                 $stepValue['wo_step7'] = JText::_('Packaging');
                 echo $stepValue[$stepCode];
+        }
+        function getSoStatus($statusCode)
+        {
+                $arrSoStatus =array();   
+                $arrSoStatus['inprogress']= JText::_('In Progress');
+                $arrSoStatus['onhold'] = JText::_('On Hold');
+                $arrSoStatus['cancel'] = JText::_('Cancel');
+                $arrSoStatus['done']= JText::_('Done');                               
+                echo $arrSoStatus[$statusCode];
         }
         function wo_log()
         {
@@ -7800,5 +7810,15 @@ class PNsController extends JController {
                 $array['so_code'] = $soNumber;
                 $array['so_shipping_date'] = $row->so_shipping_date;
                 return $array;                           
+        }
+          /*
+         * 
+         * add bom tab in pn detail
+         */
+
+        function searchadvance() {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'searchsowo');
+                parent::display();
         }
 }

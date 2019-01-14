@@ -135,7 +135,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }
                 elseif($row->wo_remain_date<=3)
                 {
-                        $background= "style='background-color:#ff0;color:#fff'";
+                        $background= "style='background-color:#ff0;color:#000'";
                 }
                 ?>
         <tr>		

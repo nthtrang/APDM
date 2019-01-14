@@ -84,13 +84,13 @@
                     alert("Invalid Date Range!\nStep 1: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
-                //date complete step1
-                var op_completed_date1 = new Date(form.op_completed_date1.value); 
-                if(op_completed_date1 < op_target_date1)
-                {
-                    alert("Invalid Date Range!\nStep 1: Completed Date cannot be before Start Date!!")
-                    return false;
-                }                                
+//                //date complete step1
+//                var op_completed_date1 = new Date(form.op_completed_date1.value); 
+//                if(op_completed_date1 > op_target_date1)
+//                {
+//                    alert("Invalid Date Range!\nStep 1: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                }                                
                  //date step2 
                 var op_target_date2 = new Date(form.op_target_date2.value);                
                 if (op_target_date2 < start_date || op_target_date2 > complete_date) 
@@ -98,13 +98,13 @@
                     alert("Invalid Date Range!\nStep 2: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
-                //date complete step2
-                var op_completed_date2 = new Date(form.op_completed_date2.value); 
-                if(op_completed_date2 < op_target_date2)
-                {
-                    alert("Invalid Date Range!\nStep 2: Completed Date cannot be before Start Date!!")
-                    return false;
-                }                                
+//                //date complete step2
+//                var op_completed_date2 = new Date(form.op_completed_date2.value); 
+//                if(op_completed_date2 > op_target_date2)
+//                {
+//                    alert("Invalid Date Range!\nStep 2: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                }                                
                  //date step3 
                 var op_target_date3 = new Date(form.op_target_date3.value);                
                 if (op_target_date3 < start_date || op_target_date3 > complete_date) 
@@ -112,13 +112,13 @@
                     alert("Invalid Date Range!\nStep 3: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
-                //date complete step3
-                var op_completed_date3 = new Date(form.op_completed_date3.value); 
-                if(op_completed_date3 < op_target_date3)
-                {
-                    alert("Invalid Date Range!\nStep 3: Completed Date cannot be before Start Date!!")
-                    return false;
-                }                     
+//                //date complete step3
+//                var op_completed_date3 = new Date(form.op_completed_date3.value); 
+//                if(op_completed_date3 > op_target_date3)
+//                {
+//                    alert("Invalid Date Range!\nStep 3: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                }                     
                  //date step4 
                 var op_target_date4 = new Date(form.op_target_date4.value);                
                 if (op_target_date4 < start_date || op_target_date4 > complete_date) 
@@ -126,13 +126,13 @@
                     alert("Invalid Date Range!\nStep 4: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
-                //date complete step4
-                var op_completed_date4 = new Date(form.op_completed_date4.value); 
-                if(op_completed_date4 < op_target_date4)
-                {
-                    alert("Invalid Date Range!\nStep 4: Completed Date cannot be before Start Date!!")
-                    return false;
-                }                  
+//                //date complete step4
+//                var op_completed_date4 = new Date(form.op_completed_date4.value); 
+//                if(op_completed_date4 > op_target_date4)
+//                {
+//                    alert("Invalid Date Range!\nStep 4: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                }                  
                  //date step5 
                 var op_target_date5 = new Date(form.op_target_date5.value);                
                 if (op_target_date5 < start_date || op_target_date5 > complete_date) 
@@ -140,13 +140,13 @@
                     alert("Invalid Date Range!\nStep 5: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
-                //date complete step5
-                var op_completed_date5 = new Date(form.op_completed_date5.value); 
-                if(op_completed_date5 < op_target_date5)
-                {
-                    alert("Invalid Date Range!\nStep 5: Completed Date cannot be before Start Date!!")
-                    return false;
-                }  
+//                //date complete step5
+//                var op_completed_date5 = new Date(form.op_completed_date5.value); 
+//                if(op_completed_date5 > op_target_date5)
+//                {
+//                    alert("Invalid Date Range!\nStep 5: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                }  
                 //date step6
                 var op_target_date6 = new Date(form.op_target_date6.value);                
                 if (op_target_date6 < start_date || op_target_date6 > complete_date) 
@@ -154,13 +154,13 @@
                     alert("Invalid Date Range!\nStep 6: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }         
-                //date complete step6
-                var op_completed_date6 = new Date(form.op_completed_date6.value); 
-                if(op_completed_date6 < op_target_date6)
-                {
-                    alert("Invalid Date Range!\nStep 6: Completed Date cannot be before Start Date!!")
-                    return false;
-                } 
+//                //date complete step6
+//                var op_completed_date6 = new Date(form.op_completed_date6.value); 
+//                if(op_completed_date6 > op_target_date6)
+//                {
+//                    alert("Invalid Date Range!\nStep 6: Completed Date cannot be after Target  Date!!")
+//                    return false;
+//                } 
                 //date step7
                 var op_target_date7 = new Date(form.op_target_date7.value);                
                 if (op_target_date7 < start_date || op_target_date7 > complete_date) 
@@ -169,12 +169,12 @@
                     return false;
                 } 
                 //date complete step7
-                var op_completed_date7 = new Date(form.op_completed_date7.value); 
-                if(op_completed_date7 < op_target_date7)
-                {
-                    alert("Invalid Date Range!\nStep 7: Completed Date cannot be before Start Date!!")
-                    return false;
-                } 
+//                var op_completed_date7 = new Date(form.op_completed_date7.value); 
+//                if(op_completed_date7 > op_target_date7)
+//                {
+//                    alert("Invalid Date Range!\nStep 7: Completed Date cannot be after Target Date!!")
+//                    return false;
+//                } 
                 submitform( pressbutton );
         }                
         window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
@@ -330,8 +330,12 @@
 							<?php echo JText::_( 'RMA' ); ?>
 						</label>
 					</td>
-					<td>
-                                                <input checked="checked" type="checkbox" id ="wo_rma_active" name="wo_rma_active" value="1" /> 
+					<td>                                                
+                                                  <?php 
+                                                     if($this->wo_row->wo_rma_active)
+                                                        $wo_rma_active = 'checked="checked"';
+                                                    ?>
+                                                   <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="<?php echo $this->wo_row->wo_rma_active;?> onclick="return false;" onkeydown="return false;" /> RMA</td>
 					</td>
 				</tr>                                              
                                        <tr>
@@ -409,8 +413,29 @@
     ?>
     <td class="tg-0pky"><label for="name">1</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Label Print By:</label></td>
-    <td><textarea maxlength='40' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step1']['op_completed_date'], 'op_completed_date1', 'op_completed_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+    <?php
+    if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
+            <?php
+    }else
+    {
+            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
+    <td><?php
+    if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step1']['op_completed_date'], 'op_completed_date1', 'op_completed_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+    }else
+    {?>
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step1']['op_completed_date'];?>" name="op_completed_date1" id="op_completed_date1" />
+    <?php }?>
+    </td>
     <td> <select  name="op_assigner1" id="op_assigner1" >
                 <option value="">Select Assigner</option>
                  <?php foreach ($this->list_user as $list) { 
@@ -429,14 +454,28 @@
   <tr>
     <td class="tg-0pky"><label for="name">2</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Wire Cut By:</label></td>
-    <td><textarea maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea></td>
+    <td>
+    <?php
+    if($op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
+            <?php
+    }else
+    {
+            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
     <td><?php     
     if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step2']['op_completed_date'], 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));             
     }
     else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2" id="op_completed_date2" />
+            <input type="text" value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2" id="op_completed_date2" />
     <?php }?>
         
     
@@ -460,13 +499,26 @@
   <tr>
     <td class="tg-0pky"><label for="name">3</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Kitted By:</label></td>
-    <td><textarea maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea></td>
+    <td>            
+    <?php
+    if($op_arr['wo_step3']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
     <td><?php 
      if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step3']['op_completed_date'], 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
      }else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
+            <input type="text" value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
     <?php }?></td>
     <td><select  name="op_assigner3" id="op_assigner3" >
                 <option value="">Select Assigner</option>
@@ -485,13 +537,26 @@
   <tr>
     <td class="tg-0pky"><label for="name">4</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Assembly performed by:</label></td>
-    <td><textarea maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea></td>
+    <td>            
+     <?php
+    if($op_arr['wo_step4']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
     <td><?php 
     if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
+            <input type="text" value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
     <?php }?></td>
     <td>
             <select  name="op_assigner4" id="op_assigner4" >
@@ -566,10 +631,10 @@
     <td></td>
     <td><?php 
     if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
-        echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+        echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
     }else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
+            <input type="text" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
     <?php }?></td>
     <td>
             <select  name="op_assigner5" id="op_assigne5" >
@@ -604,7 +669,20 @@
     <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value2']?>" name="op_visual_value2[1]" id="op_visual_value2" /></td>
     <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value2']?>" name="op_visual_value2[2]" id="op_visual_value2" /></td>
    <td class="tg-0pky"></td>
-    <td colspan="2" rowspan="4"><textarea maxlength='40' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea></td>
+    <td colspan="2" rowspan="4">            
+     <?php
+    if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>    
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
@@ -640,7 +718,7 @@
         echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
+            <input type="text" value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
     <?php }?></td>
     <td><select  name="op_assigner6" id="op_assigner6" >
                 <option value="">Select Assigner</option>
@@ -673,7 +751,20 @@
     <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value2']?>" name="op_final_value2[1]" id="op_final_value2" /></td>
     <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value2']?>" name="op_final_value2[2]" id="op_final_value2" /></td>
     <td class="tg-0pky"></td>
-    <td colspan="2" rowspan="6"><textarea maxlength='40' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea></td>
+    <td colspan="2" rowspan="6">            
+     <?php
+    if($op_arr['wo_step6']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
@@ -723,13 +814,26 @@
   <tr>
     <td class="tg-0pky"><label for="name">7</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Packaging by</label></td>
-    <td><textarea maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea></td>
+    <td>            
+     <?php
+    if($op_arr['wo_step7']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
     <td><?php                     
     if($op_arr['wo_step6']['op_status']=="done" ){//&& $op_arr['wo_step7']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step7']['op_completed_date'], 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="hidden" value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
+            <input type="text" value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
     <?php }?></td>
     <td>
             <select  name="op_assigner7" id="op_assigner7" >
