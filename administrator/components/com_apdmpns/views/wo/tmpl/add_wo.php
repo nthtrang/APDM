@@ -235,8 +235,23 @@ function check_so_first()
 					<td class="tg-0pky" valign="top">
 						<?php echo JText::_( 'PART NUMBER' ); ?>
 					</td>
-					<td valign="top">						
-							<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('Select Part Number')?></a>			
+					<td valign="top">
+                                                
+                                                 <?php 
+                                                if($so_info['so_code'])
+                                                {
+                                                ?>                                                        
+                                                        <a class="modal-button" id="get_part_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id=<?php echo $so_info['so_id']?>" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('Select Part Number')?></a>
+                                                <?php
+                                                }
+                                                else
+                                                {
+                                                ?>                                                
+                                                        <a class="modal-button" id="get_part_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
+                                                <?php 
+                                                }
+                                                ?>	
+							
 						
 					</td>
 				</tr>  

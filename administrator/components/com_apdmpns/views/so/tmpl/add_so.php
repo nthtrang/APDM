@@ -40,13 +40,57 @@ function getccsCoordinator(ccs_code)
 			alert("Please select Commodity Code");
 			form.customer_id.focus();
 			return false;
+		}                
+                if (form.so_cuscode.value==0){
+			alert("Please input PO# of Customer");
+			form.so_cuscode.focus();
+			return false;
+		}  
+                if (form.boxcheckedpn.value==0){
+			alert("Please select a TOP ASSY PN");			
+			return false;
 		}
+                else
+                {
+                        var cpn = document.getElementsByName('pns_child[]');
+                        var len = cpn.length;
+                        for (var i=0; i<len; i++) {
+                               // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
+                                var qty_value = document.getElementById('qty[' +cpn[i].value+']').value;
+                                var price_value = document.getElementById('price[' +cpn[i].value+']').value;
+                                if(qty_value==0)
+                                {
+                                        alert("Please input QTY for PN");    
+                                        document.getElementById('qty[' +cpn[i].value+']').focus();
+                                        return false;
+                                }
+                                if(price_value==0)
+                                {
+                                        alert("Please input Price for PN");      
+                                        document.getElementById('price[' +cpn[i].value+']').focus();
+                                        return false;
+                                }
+                        }
+                       // submitform( pressbutton );
+                }
+                
+                
                 var date = new Date();
                 current_month = date.getMonth()+1;
                 var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
                 var current_date = new Date(current_date);
                 var so_shipping_date = new Date(form.so_shipping_date.value);
-                var so_start_date = new Date(form.so_start_date.value);              
+                var so_start_date = new Date(form.so_start_date.value);  
+                if (form.so_shipping_date.value==0){
+			alert("Please input Shipping Request Date");
+			form.so_shipping_date.focus();
+			return false;
+		}  
+                if (current_date > so_shipping_date ) 
+                {
+                    alert("Invalid Date Range!\nShipping Request Date cannot be before Today!")
+                    return false;
+                }
                 if (so_shipping_date < so_start_date ) 
                 {
                     alert("Invalid Date Range!\nShipping Date cannot be before StartDate!")
@@ -241,6 +285,9 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                                              <td class="key">COC Required</td>
                                                           
                                                 </tr>
+                                                <tr><td><input type="hidden" name="boxcheckedpn" value="0" />
+                                                                
+                                                        </td></tr>
                                                 </table>                                                                                                                                               
 					</td>
 					

@@ -6145,7 +6145,7 @@ class PNsController extends JController {
                         '<td class="key">Unit Price</td>'.
                         '<td class="key">F.A Required</td>'.
                         '<td class="key">ESD Required</td>'.
-                        '<td class="key">COC Required</td></tr>';                                                                  
+                        '<td class="key">COC Required</td><input type="hidden" name="boxcheckedpn" value="'.count($rows).'" /></tr>';                                                                  
                 foreach ($rows as $row) {
                          if ($row->pns_revision) {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
@@ -6153,7 +6153,7 @@ class PNsController extends JController {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code;
                         }                        
                         $str .= '<tr>'.
-                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /> </td>'.
+                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /></td>'.
                                 ' <td class="key">'.$pnNumber.'</td>'.
                                 ' <td class="key">'.$row->pns_description.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
@@ -6290,13 +6290,7 @@ class PNsController extends JController {
                 }//for save database of pns 
                
                 $msg = JText::_('Successfully Saved So') . $text_mess;
-                $return = JRequest::getVar('return');
-               
-                if ($return) {
-                       return $this->setRedirect('index.php?option=com_apdmpns&task=somanagement', $msg);
-                } else {
-                       return $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $so_id, $msg);
-                }
+                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
                                
         }
         function so_detail()
@@ -7039,7 +7033,8 @@ class PNsController extends JController {
                 $cid = JRequest::getVar('cid', array(), '', 'array');
                 $so_id = JRequest::getVar('so_id');           
                  //CHECK ALL WO DONE OR NOT
-                $query ="select count(*) from apdm_pns_so where so_state = 'done' and so_id = ".$so_id;
+                //tmp allow save RMA withstatus !=cancel
+                $query ="select count(*) from apdm_pns_so where so_state != 'cancel' and pns_so_id = ".$so_id;
                 $db->setQuery($query);
                 $soDone = $db->loadResult();
                 if($soDone)
@@ -7062,6 +7057,8 @@ class PNsController extends JController {
                 
                 $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
         }        
+        
+        
         function so_detail_wo()
         {
                 JRequest::setVar('layout', 'so_detail_wo');
@@ -7821,4 +7818,28 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'searchsowo');
                 parent::display();
         }
+        function rmTopAssysSo() {
+                $db = & JFactory::getDBO();
+                $cid = JRequest::getVar('cid', array(), '', 'array');
+                $so_id = JRequest::getVar('so_id');           
+                 //CHECK ALL WO DONE OR NOT
+                //tmp allow save RMA withstatus !=cancel
+                $query ="select count(*) from apdm_pns_so where so_state != 'done' and pns_so_id = ".$so_id;
+                $db->setQuery($query);
+                $soDone = $db->loadResult();
+                if($soDone)
+                {                                       
+                        foreach ($cid as $id) {                                                   
+                                $db->setQuery("delete from apdm_pns_so_fk  WHERE  id = " . $id . " and so_id = ".$so_id);
+                                $db->query();
+                        }                       
+                }
+                else
+                {
+                        $msg = "The SO Status is Doneso  can not remove PN";
+                }
+               
+                
+                $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
+        }             
 }

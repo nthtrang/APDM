@@ -14,7 +14,7 @@ $role = JAdministrator::RoleOnComponent(10);
 JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
 if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {        
         JToolBarHelper::customX("onholdso","unpublish",'',"On Hold",false);        
-        JToolBarHelper::editListX("editso","Edit");	
+        JToolBarHelper::customX("editso","edit",'',"Edit",false);
         JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
 }
 if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
@@ -23,6 +23,8 @@ if (in_array("W", $role) && $this->so_row->so_state =="onhold") {
 }
 if (in_array("D", $role) && $this->so_row->so_state !="done") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
+        
+        JToolBarHelper::customX('rmTopAssysSo', 'delete', '', 'Remove Top ASSYS', false);
 }
 
 $cparams = JComponentHelper::getParams('com_media');
@@ -46,10 +48,31 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         return;
                 }      
                 if (pressbutton == 'savermafk') {                        
-                        if (form.boxchecked.value==0){
+                        if (form.boxchecked.value==1){
                                 alert("Please check PN for edit RMA first");                               
                                 return false;
                         }       
+                        var cpn = document.getElementsByName('cid[]');
+                        var len = cpn.length;
+                        for (var i=0; i<len; i++) {
+                               // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
+                                var rma_value = document.getElementById('rma_' +cpn[i].value).value;
+                                var qty_value = document.getElementById('qty_' +cpn[i].value).value;
+                                if(rma_value>qty_value)
+                                {
+                                        alert("Qty RMA must equal or less than PN Qty");                               
+                                        return false;
+                                }
+                        }
+                        submitform( pressbutton );
+                        return;
+                }
+                if(pressbutton=='rmTopAssysSo')
+                {
+                        if (form.boxchecked.value==1){
+                                alert("Please check PN for remove out first");                               
+                                return false;
+                        }  
                         submitform( pressbutton );
                         return;
                 }
@@ -186,7 +209,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                 </span></td>
                                                                         <td><?php echo $row->pns_description; ?></td>                                                
                                                                         <td>                                                    
-                                                                                <span id="text_qty_<?php echo $row->id; ?>"><?php echo $row->qty; ?></span>                                                        
+                                                                                <span id="text_qty_<?php echo $row->id; ?>"><?php echo $row->qty; ?>
+                                                                                </span>
+                                                                                 <input type="hidden" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->id;?>"  name="qty_<?php echo $row->id;?>" />
                                                                         </td> 
                                                                         <td>
                                                                                 <span style="display:block" id="text_rma_<?php echo $row->id;?>"><?php echo $row->rma;?></span>
@@ -327,6 +352,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="option" value="com_apdmpns" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
-        <input type="hidden" name="boxchecked" value="0" />
+        <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>
 </form>

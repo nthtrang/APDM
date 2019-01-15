@@ -224,7 +224,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 </fieldset>
          </div>
                 
-	<input type="text" name="so_id" value="<?php echo $this->so_row->pns_so_id?>"  />	
+	<input type="hidden" name="so_id" value="<?php echo $this->so_row->pns_so_id?>"  />	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="return" value="so"  />
 	<input type="hidden" name="task" value="save_sales_order" />        

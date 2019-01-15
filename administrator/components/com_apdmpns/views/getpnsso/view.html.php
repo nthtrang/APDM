@@ -34,6 +34,7 @@ class pnsViewgetpnsso extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns&task=get_list_child';
         $id               = JRequest::getVar('id');
+        $so_id               = JRequest::getVar('so_id');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
@@ -355,12 +356,17 @@ class pnsViewgetpnsso extends JView
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
-        
+        $inner = "";
+        if ($so_id) {
+            $where[] = 'fk.so_id IN ('. $so_id.')';
+            $inner =  ' inner join apdm_pns_so_fk AS fk on p.pns_id = fk.pns_id ';
+        }
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
+        . $inner
         . $filter
         . $where
         ;
@@ -373,6 +379,7 @@ class pnsViewgetpnsso extends JView
         
         $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
+            . $inner
             . $filter
             . $where            
             . $orderby
@@ -427,6 +434,7 @@ class pnsViewgetpnsso extends JView
         $lists['order']        = $filter_order;
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
+        $this->assignRef('so_id',        $so_id);
         $this->assignRef('rows',        $rows);
         $this->assignRef('pagination',    $pagination);   
         $this->assignRef('id',    $id);       

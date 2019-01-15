@@ -30,8 +30,8 @@ function UpdatePnsChild(){
 		alert('Please choose only one PN. Thanks');
 		return false;
 	}else{
-	
-		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_wo';			
+                var so_id = $('so_id').value;
+		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_wo&so_id'+so_id;			
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -48,7 +48,8 @@ function UpdatePnsChild(){
 }
 </script>
 <form action="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
-<input type="hidden" name="id" value="<?=$this->id?>" />
+<input type="hidden" name="id" value="<?php echo $this->id?>" />
+<input type="hidden" name="so_id" id="so_id" value="<?php echo $this->so_id?>" />
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >

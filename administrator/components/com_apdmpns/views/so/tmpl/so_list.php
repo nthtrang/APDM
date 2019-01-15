@@ -70,6 +70,7 @@ if (count($this->so_list) > 0) { ?>
                                         <th width="100"><?php echo JText::_('Qty'); ?></th>
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>
                                         <th width="100"><?php echo JText::_('Task'); ?></th>
+                                        <th width="100"><?php echo JText::_('Target Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Time Remain'); ?></th>
                                         <th width="100"><?php echo JText::_('Assigner'); ?></th>
                                 </tr>
@@ -120,11 +121,12 @@ if (count($this->so_list) > 0) { ?>
                                                 <?php echo $so->pns_uom; ?>
                                                 </td> 
                                                 <td>
-                                                        <?php echo PNsController::getWoStatus($so->wo_state); ?>
+                                                        <?php echo PNsController::getWoStep($so->op_code); ?>
                                                 </td>
+                                                <td><?php echo JHTML::_('date', $so->op_target_date, JText::_('DATE_FORMAT_LC5')); ?></td>
                                                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                 <td>
-                                                     <?php echo GetValueUser($so->wo_assigner, "name"); ?>
+                                                     <?php echo GetValueUser($so->op_assigner, "name"); ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

@@ -37,6 +37,7 @@ function UpdateWoSo(){
 			onComplete:function(result){			
 			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
 				window.parent.document.getElementById('sbox-window').close();	
+                                window.parent.location.reload();
 				
 
 			}

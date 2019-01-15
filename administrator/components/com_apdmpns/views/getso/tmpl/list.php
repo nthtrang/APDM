@@ -29,6 +29,10 @@ function UpdateECO(){
                                 }
                                 window.parent.document.getElementById('get_assy_pn').innerHTML = "Select Top ASSY P/N";      
                                 window.parent.document.getElementById('get_assy_pn').setAttribute("href", "index.php?option=com_apdmpns&task=get_list_assy_wo&tmpl=component&so_id="+eco[0]);
+                                window.parent.document.getElementById('get_part_pn').innerHTML = "Select Part Number";      
+                                window.parent.document.getElementById('get_part_pn').setAttribute("href", "index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id="+eco[0]);
+                                
+                                
                                 window.parent.document.getElementById('sbox-window').close();       
 				
 

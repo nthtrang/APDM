@@ -29,7 +29,7 @@ class pnsViewso extends JView {
                         $where[] = 'so.so_cuscode LIKE ' . $searchEscaped . '';
                         $where[] = 'wo.wo_code LIKE ' . $searchEscaped . '';
                 }
-                $where[] ="wo.wo_assigner = ".$me->get('id');
+                $where[] ="wop.op_assigner = ".$me->get('id');
 
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
                 $orderby = ' ORDER BY so.pns_so_id desc';
@@ -45,9 +45,11 @@ class pnsViewso extends JView {
 
                 jimport('joomla.html.pagination');
                 $pagination = new JPagination($total, $limitstart, $limit);
-                //for task #somanagement
-                $query = 'SELECT  so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
-                        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
+                //for my task #somanagement
+                $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+                        . ' from apdm_pns_wo_op wop '
+                        .' inner join apdm_pns_wo wo on wo.pns_wo_id = wop.wo_id'
+                        .' inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
                         . ' left join apdm_pns p on  p.pns_id = wo.pns_id '
                         . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
                         . $where
@@ -123,7 +125,7 @@ class pnsViewso extends JView {
                         }
                 }
                 //get list WO TAB
-                $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                $sql = "select wo.pns_wo_id,wo.wo_log,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
                         " from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
                         "where so.pns_so_id =" . $so_row->pns_so_id;
