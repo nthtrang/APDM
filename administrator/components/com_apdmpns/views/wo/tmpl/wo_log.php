@@ -11,7 +11,7 @@ $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 JToolBarHelper::title("WO#: " . $this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);
-if (in_array("W", $role)) {
+if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
         JToolBarHelper::apply('save_log_wo', 'Save');
 }
 $cparams = JComponentHelper::getParams('com_media');
@@ -116,12 +116,16 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <th>Reason</th>
                                         </tr>
                                         <?php
+                                        $i = 0;
                                         foreach ($this->wo_rework as $rowre) {
+                                                $i++;
                                                 ?>
                                                 <tr>				
                                                         <td><?php echo PNsController::getWoStep($rowre->op_code); ?></td>
-                                                        <td><?php echo $rowre->fail_time; ?></td>				
-                                                        <td><?php echo $rowre->op_assigner; ?></td>               
+                                                        <td><?php echo $i;//$rowre->fail_time; ?></td>				
+                                                        <td>
+                                                        <?php echo  ($rowre->op_assigner) ? GetValueUser($rowre->op_assigner, "name") : ''; ?>
+                                                        </td>               
                                                         <td><?php                                                    
                                                 $op_arr = $this->op_arr;
                                                 if ($op_arr[$rowre->op_code]['op_assigner'] == $me->get('id')) {

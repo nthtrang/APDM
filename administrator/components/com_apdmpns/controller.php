@@ -7143,7 +7143,8 @@ class PNsController extends JController {
 
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
-                $db->setQuery("SELECT fk.*,ccs.ccs_code as customer_code,ccs.ccs_name as customer_name,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner join apdm_ccs ccs on  ccs.ccs_code = so.customer_id inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where p.pns_id IN (" . implode(",", $cid) . ") limit 1");                
+                $so_id = JRequest::getVar('so_id');
+                $db->setQuery("SELECT fk.*,ccs.ccs_code as customer_code,ccs.ccs_name as customer_name,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner join apdm_ccs ccs on  ccs.ccs_code = so.customer_id inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id IN (" . implode(",", $cid) . ") and so_id =".$so_id." limit 1");                
                 $rows = $db->loadObjectList();                         
                 $str = '<table class="admintable" cellspacing="1" width="60%">';                                                  
                 foreach ($rows as $row) {
@@ -7707,7 +7708,8 @@ class PNsController extends JController {
         function getReworkStep($wo_id,$step=0)
         {
                 $db = & JFactory::getDBO();
-                if($step=="wo_step5"){
+                if($step==="wo_step5"){
+                        
                  $queryRework = 'select max(vi.op_visual_fail_times) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
@@ -7716,7 +7718,7 @@ class PNsController extends JController {
                  $db->setQuery($queryRework);
                  $row = $db->loadResult();    
                 }    
-                elseif($step=="wo_step6"){
+                elseif($step==="wo_step6"){
                   $queryRework = ' select max(fi.op_final_fail_times) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
@@ -7727,20 +7729,22 @@ class PNsController extends JController {
                 }
                 else
                 {
-                        $queryRework = 'select max(vi.op_visual_fail_times) as rework_time'.
+                        
+                        $queryRework = 'select count(*) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
                                ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "") '.
                                ' and  op.wo_id ='.$wo_id.' and op.op_code = "wo_step5"';
                          $db->setQuery($queryRework);
-                         $rowStep5 = $db->loadResult(); 
-                         $queryRework = ' select max(fi.op_final_fail_times) as rework_time'.
+                          $rowStep5 = $db->loadResult(); 
+                          $queryRework = ' select count(*) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
                                ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != "")'.
                                ' and  op.wo_id ='.$wo_id.' and op.op_code = "wo_step6"';
-                         $rowStep6 = $db->loadResult(); 
-                         $row = max($rowStep5,$rowStep6);                                                  
+                           $db->setQuery($queryRework);
+                          $rowStep6 = $db->loadResult(); 
+                         $row = $rowStep5+$rowStep6;
                 }
                return $row;
                 

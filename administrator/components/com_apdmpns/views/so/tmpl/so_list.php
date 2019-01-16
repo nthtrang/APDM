@@ -126,7 +126,7 @@ if (count($this->so_list) > 0) { ?>
                                                 <td><?php echo JHTML::_('date', $so->op_target_date, JText::_('DATE_FORMAT_LC5')); ?></td>
                                                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                 <td>
-                                                     <?php echo GetValueUser($so->op_assigner, "name"); ?>
+                                                     <?php echo GetValueUser($so->wo_assigner, "name"); ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

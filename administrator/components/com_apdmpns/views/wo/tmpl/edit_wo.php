@@ -203,7 +203,32 @@
                         });
                 });
         });
-			
+function numbersOnlyEspecialFloat(myfield, e, dec){
+       
+	 var key;
+	 var keychar;
+	 if (window.event)
+		key = window.event.keyCode;
+	 else if (e)
+		key = e.which;
+	 else
+		return true;
+	 keychar = String.fromCharCode(key);
+	 // control keys
+
+	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+	 // numbers
+	 else if ((("0123456789").indexOf(keychar) > -1))
+		return true;
+	 // decimal point jump
+	 else if (dec && (keychar == "."))
+		{
+		myfield.form.elements[dec].focus();
+		return false;
+		}
+	 else
+		return false;
+}			
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >      
 	 <div class="col width-100">
@@ -263,7 +288,7 @@
 						</label>
 					</td>
 					<td>
-                                                <input type="text" value="<?php echo $this->wo_row->wo_qty;?>" name="wo_qty" id="wo_qty" <?php echo $classDisabled;?> />
+                                                <input type="text"  onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="wo_qty" id="wo_qty" <?php echo $classDisabled;?> />
 					</td>
 				</tr>   
                                 <tr>
@@ -601,11 +626,11 @@
   {
   ?>
   <tr>
-    <td><input type="text" size="6" value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
-    <td><input type="text" size="6" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
-    <td><input type="text" size="6" value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
-    <td><input type="text" size="6" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
-    <td><input type="text" size="6" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
+    <td><input type="text" size="6" onKeyPress="return numbersOnly(this, event);"  value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
+    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
+    <td><input type="text" size="6"  value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
+    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
+    <td><input type="text" size="6" onKeyPress="return numbersOnly(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
     <td class="tg-0pky">
             <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row->id ?>" />
     </td>

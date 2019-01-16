@@ -67,8 +67,9 @@ class pnsViewwo extends JView {
                 $rows_part = $db->loadObject();
                 $this->assignRef('row_part', $rows_part);
 
-                $query = "select fk.*,pns_uom,pns_description,ccs_code, pns_code, pns_revision FROM apdm_pns p inner join apdm_pns_wo wo on wo.top_pns_id = p.pns_id inner join apdm_pns_so_fk fk on wo.top_pns_id = fk.pns_id  WHERE fk.pns_id IN (" . $wo_row->top_pns_id . ") limit 1";
-                $db->setQuery($query);
+                //echo $query = "select fk.*,pns_uom,pns_description,ccs_code, pns_code, pns_revision FROM apdm_pns p inner join apdm_pns_wo wo on wo.top_pns_id = p.pns_id inner join apdm_pns_so_fk fk on wo.top_pns_id = fk.pns_id  WHERE fk.pns_id IN (" . $wo_row->top_pns_id . ") and  wo.so_id = ".$wo_row->so_id." limit 1";
+                //$db->setQuery($query);
+                $db->setQuery("SELECT fk.*,ccs.ccs_code as customer_code,ccs.ccs_name as customer_name,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner join apdm_ccs ccs on  ccs.ccs_code = so.customer_id inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = " .  $wo_row->top_pns_id . " and so_id =".$wo_row->so_id." limit 1");                                
                 $rows_top_assy = $db->loadObject();
                 $this->assignRef('row_top_assy', $rows_top_assy);
 
@@ -158,7 +159,12 @@ class pnsViewwo extends JView {
                 $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1"', 'value', 'text', $wo_row->wo_assigner);
 
                 //get wo po delay
-                $db->setQuery("select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.* from apdm_pns_wo_op op  where op.wo_id = ".$wo_id." and op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0");                                
+                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.* ".
+                        " from apdm_pns_wo_op op  ".
+                        " where op.wo_id = ".$wo_id."".
+                        " and (op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                        " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)";                                        
+                $db->setQuery($query);
                 $wo_delay = $db->loadObjectList();
                 $this->assignRef('wo_delay', $wo_delay);
                 

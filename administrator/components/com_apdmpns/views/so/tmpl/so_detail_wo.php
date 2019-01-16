@@ -8,8 +8,12 @@
 //error_reporting(E_ALL);
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
-
-JToolBarHelper::title("SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
+$soNumber = $this->so_row->so_cuscode;
+if($this->so_row->ccs_code)
+{
+       $soNumber = $this->so_row->ccs_code."-".$soNumber;
+}
+JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role) && $this->so_row->so_state =="inprogress") { 
          JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
@@ -155,7 +159,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                 <td><?php echo PNsController::getWoStatus($row->wo_state); ?></td>                
                 <td><?php echo PNsController::getDelayTimes($row->pns_wo_id);?></td>                
-                <td><?php echo PNsController::getReworkStep($row->pns_wo_id);?></td>
+                <td><?php echo PNsController::getReworkStep($row->pns_wo_id,0);?></td>
                  <td><?php echo $row->wo_log;?></td>
 	</tr>
 <?php 

@@ -186,7 +186,7 @@ if (count($this->rs_so) > 0) { ?>
                                                        <?php 
                                                        echo PNsController::getSoStatus($so->so_state); ?>
                                                 </td>
-                                                <td><?php echo $so->so_is_rma; ?></td>                                                
+                                                <td><?php echo $so->rma; ?></td>                                                
                                                 <td>
                                                      <?php echo $so->so_log; ?>
                                                 </td></tr>
