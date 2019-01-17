@@ -15,19 +15,30 @@ if($this->so_row->ccs_code)
 }
 JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);   
-JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
+$me = JFactory::getUser();
+$usertype	= $me->get('usertype');
 if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {        
         JToolBarHelper::customX("onholdso","unpublish",'',"On Hold",false);        
-        JToolBarHelper::customX("editso","edit",'',"Edit",false);
+        
         JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
+        if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->so_row->so_created_by  == $me->get('id') ) {
+                JToolBarHelper::customX("editso","edit",'',"Edit",false);
+                JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
+        }
+        
 }
 if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
         JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     
         JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
 }
-if (in_array("D", $role) && $this->so_row->so_state !="done") {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
-        
+//$arrSoStatus['inprogress']= JText::_('In Progress');
+//$arrSoStatus['onhold'] = JText::_('On Hold');
+//$arrSoStatus['cancel'] = JText::_('Cancel');
+//$arrSoStatus['done']= JText::_('Done');             
+
+if (in_array("D", $role) && $this->so_row->so_state =="inprogress") {
+       // JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");                
+        JToolBarHelper::deleteSo("Delete SO#",$this->so_row->pns_so_id);
         JToolBarHelper::customX('rmTopAssysSo', 'delete', '', 'Remove Top ASSYS', false);
 }
 

@@ -50,7 +50,7 @@ class pnsViewgetwoforso extends JView
         
         
         $where = array();  
-        //$where[] = 'w.so_id = 0';
+        $where[] = 'w.so_id = 0';
              
        if (isset( $search ) && $search!= '')
         {

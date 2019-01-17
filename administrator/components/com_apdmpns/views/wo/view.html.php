@@ -54,7 +54,7 @@ class pnsViewwo extends JView {
 
              
 
-                $query = "SELECT so.so_shipping_date,so.so_cuscode,ccs.ccs_coordinator,ccs.ccs_code,wo.* " .
+                $query = "SELECT DATEDIFF(wo.wo_start_date,CURDATE()) as allow_edit_qty,so.so_shipping_date,so.so_cuscode,ccs.ccs_coordinator,ccs.ccs_code,wo.* " .
                         " from apdm_pns_wo wo left join apdm_ccs AS ccs on  wo.wo_customer_id = ccs.ccs_code " .
                         " left join apdm_pns_so as so on  so.pns_so_id = wo.so_id " .
                         " where pns_wo_id=" . $wo_id;

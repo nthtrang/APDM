@@ -59,7 +59,7 @@ class pnsViewso extends JView {
                 $db->setQuery($query, $pagination->limitstart, $pagination->limit);
                 $rows = $db->loadObjectList();
                 //for issue report                                
-                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,ccs.ccs_code,ccs.ccs_coordinator,wo.wo_code,so.pns_so_id,wo.pns_wo_id".
+                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,ccs.ccs_code,ccs.ccs_coordinator,wo.wo_code,so.pns_so_id,wo.pns_wo_id,wo.wo_delay".
                           " from apdm_pns_wo_op op inner join apdm_pns_wo wo on op.wo_id = wo.pns_wo_id".
                           " inner join  apdm_pns_so so on so.pns_so_id = wo.so_id".
                           " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code".

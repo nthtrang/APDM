@@ -7,7 +7,11 @@
         $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
         JToolBarHelper::title("Edit WO#: ".$this->wo_row->wo_code, 'cpanel.png');
         JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
+        $usertype	= $me->get('usertype');
+        $allow_edit = 0;
+        if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->wo_row->wo_created_by  == $me->get('id') ) {
+                $allow_edit = 1;
+        }
         $role = JAdministrator::RoleOnComponent(10);     
         
         JToolBarHelper::apply('save_editwo', 'Save');
@@ -250,7 +254,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						<?php echo JText::_( 'PART NUMBER' ); ?>
 					</td>
 					<td valign="top">						
-							<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('Select Part Number')?></a>			
+                                                <?php 
+                                                $readonly = $style = "";
+                                                if($this->wo_row->allow_edit_qty)
+                                                {
+                                                        $readonly = 'readonly="readonly"';
+                                                        $style= 'style="display:none"';
+                                                }
+                                                ?>
+							<a  <?php echo $style ?> class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id=<?php echo $this->wo_row->so_id;?>" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('Select Part Number')?></a>
 						
 					</td>
 				</tr>  
@@ -288,7 +300,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>
-                                                <input type="text"  onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="wo_qty" id="wo_qty" <?php echo $classDisabled;?> />
+                                                
+                                                <input type="text" <?php echo $readonly;?>  onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="wo_qty" id="wo_qty" <?php echo $classDisabled;?> />
 					</td>
 				</tr>   
                                 <tr>
@@ -474,7 +487,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
         </select>
     </td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step1']['op_target_date'], 'op_target_date1', 'op_target_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+            <?php 
+            if($allow_edit)
+            {
+                    echo JHTML::_('calendar',$op_arr['wo_step1']['op_target_date'], 'op_target_date1', 'op_target_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step1']['op_target_date'];?>" name="op_target_date1" id="op_target_date1" />
+                <?php } ?>
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">2</label></td>
@@ -519,7 +541,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
         </select>
     </td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step2']['op_target_date'], 'op_target_date2', 'op_target_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>                
+    <?php 
+            if($allow_edit)
+            {
+                    echo JHTML::_('calendar',$op_arr['wo_step2']['op_target_date'], 'op_target_date2', 'op_target_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step2']['op_target_date'];?>" name="op_target_date2" id="op_target_date2" />
+                <?php } ?>
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">3</label></td>
@@ -557,7 +588,17 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select></td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step3']['op_target_date'], 'op_target_date3', 'op_target_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+    <?php 
+            if($allow_edit)
+            {
+                    echo JHTML::_('calendar',$op_arr['wo_step3']['op_target_date'], 'op_target_date3', 'op_target_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step3']['op_target_date'];?>" name="op_target_date3" id="op_target_date3" />
+                <?php } ?>
+            <?php  ?>    
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">4</label></td>
@@ -597,7 +638,17 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
         </select>
     </td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+        <?php 
+            if($allow_edit)
+            {
+                     echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step4']['op_target_date'];?>" name="op_target_date4" id="op_target_date4" />
+                <?php } ?>
+            <?php  ?>            
+    </td>
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">Process</label></td>
@@ -630,7 +681,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
     <td><input type="text" size="6"  value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
     <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
-    <td><input type="text" size="6" onKeyPress="return numbersOnly(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
+    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
     <td class="tg-0pky">
             <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row->id ?>" />
     </td>
@@ -675,7 +726,17 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
         </select>
     </td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+        <?php 
+            if($allow_edit)
+            {
+                    echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5" id="op_target_date5" />
+                <?php } ?>
+            <?php  ?>    
+    </td>
   </tr>
   <?php $opvs_arr = $this->opvs_arr;?>
   <tr>
@@ -757,7 +818,18 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select></td>
-    <td ><?php echo JHTML::_('calendar',$op_arr['wo_step6']['op_target_date'], 'op_target_date6', 'op_target_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+              
+      <?php 
+            if($allow_edit)
+            {
+                    echo JHTML::_('calendar',$op_arr['wo_step6']['op_target_date'], 'op_target_date6', 'op_target_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step6']['op_target_date'];?>" name="op_target_date6" id="op_target_date6" />
+                <?php } ?>
+            <?php  ?>
+    </td>
   </tr>
   <?php $opfn_arr = $this->opfn_arr;?>
   <tr>
@@ -874,7 +946,17 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
         </select>
     </td>
-    <td><?php echo JHTML::_('calendar',$op_arr['wo_step7']['op_target_date'], 'op_target_date7', 'op_target_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
+    <td>
+    <?php 
+            if($allow_edit)
+            {
+                   echo JHTML::_('calendar',$op_arr['wo_step7']['op_target_date'], 'op_target_date7', 'op_target_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step7']['op_target_date'];?>" name="op_target_date7" id="op_target_date7" />
+                <?php } ?>
+            <?php  ?>
+    </td>
   </tr>
 			
                                           </table>

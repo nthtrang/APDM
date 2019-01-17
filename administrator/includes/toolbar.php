@@ -626,6 +626,18 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'cancel', $alt, "index.php?option=com_apdmpns&task=cancelso&tmpl=component&id=$so_id", 300,150 );
 	} 
+        function newSointoWo($alt = 'New',$so_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Standard', 'new', $alt, "index.php?option=com_apdmpns&task=add_wo&so_id=$so_id", true,false );
+	}     
+         function deleteSo($alt = 'New',$so_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'cancel', $alt, "index.php?option=com_apdmpns&task=informDelSo&tmpl=component&id=$so_id", 300,150 );
+	} 
             
 }
 

@@ -158,7 +158,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <td><?php echo JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?></td>
                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                 <td><?php echo PNsController::getWoStatus($row->wo_state); ?></td>                
-                <td><?php echo PNsController::getDelayTimes($row->pns_wo_id);?></td>                
+                <td><?php echo $row->wo_delay;//PNsController::getDelayTimes($row->pns_wo_id);?></td>                
                 <td><?php echo PNsController::getReworkStep($row->pns_wo_id,0);?></td>
                  <td><?php echo $row->wo_log;?></td>
 	</tr>

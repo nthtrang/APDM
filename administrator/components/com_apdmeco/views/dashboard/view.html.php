@@ -81,7 +81,20 @@ class ecoViewdashboard extends JView
                  $this->assignRef('arr_pending',    $arr_pending);
                 
             //    $this->assignRef('lists',        $lists);
-
+                //PNsController::autoCountUpDelayWo();
+                // check wth wo status: done onhold cancel
+                 $query ="select * from apdm_pns_wo where  DATEDIFF(CURDATE(),wo_completed_date)>0 and  wo_delay_check  =0 and (wo_state !='done' or  wo_state !='cancel' or  wo_state !='onhold')";
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();
+                foreach($rows as $row)
+                {                        
+                        $sql= " update apdm_pns_wo set wo_delay = wo_delay + 1".
+                                 " ,wo_delay_check = 1".
+                                 " where pns_wo_id =".$row->pns_wo_id;
+                         $db->setQuery($sql);
+                         $db->query();  
+                }
+        
 	parent::display($tpl);
 	}
 }

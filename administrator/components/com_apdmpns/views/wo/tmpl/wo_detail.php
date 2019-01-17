@@ -14,7 +14,7 @@ $role = JAdministrator::RoleOnComponent(10);
 if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
         JToolBarHelper::editListX("editwo","Edit WO");	        
 }
-if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold") {
+if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO#");
 }
 

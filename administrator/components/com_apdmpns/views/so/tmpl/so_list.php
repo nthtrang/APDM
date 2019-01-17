@@ -172,7 +172,7 @@ if (count($this->report_list) > 0) { ?>
                                                 <td><?php echo PNsController::getWoStep($so->op_code); ?></td>   
                                                 <td><?php echo $so->op_assigner; ?></td>                                                                                                
                                                  <td><?php echo $so->step_delay_date; ?></td> 
-                                                <td><?php echo PNsController::getDelayTimes($so->pns_wo_id);  ?></td>
+                                                <td><?php echo  $so->wo_delay;////PNsController::getDelayTimes($so->pns_wo_id);  ?></td>
                                                 <td><?php echo PNsController::getReworkStep($so->pns_wo_id,$so->op_code);  ?></td>                                                
                                                 <td>
                                                      <?php 
