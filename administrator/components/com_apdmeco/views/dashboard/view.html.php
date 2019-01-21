@@ -82,8 +82,8 @@ class ecoViewdashboard extends JView
                 
             //    $this->assignRef('lists',        $lists);
                 //PNsController::autoCountUpDelayWo();
-                // check wth wo status: done onhold cancel
-                 $query ="select * from apdm_pns_wo where  DATEDIFF(CURDATE(),wo_completed_date)>0 and  wo_delay_check  =0 and (wo_state !='done' or  wo_state !='cancel' or  wo_state !='onhold')";
+                // check Delay or not update in WO and WO_OP wth wo status: done onhold cancel
+                $query ="select * from apdm_pns_wo where  DATEDIFF(CURDATE(),wo_completed_date)>0 and  wo_delay_check  =0 and (wo_state !='done' or  wo_state !='cancel' or  wo_state !='onhold')";
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 foreach($rows as $row)
@@ -91,6 +91,18 @@ class ecoViewdashboard extends JView
                         $sql= " update apdm_pns_wo set wo_delay = wo_delay + 1".
                                  " ,wo_delay_check = 1".
                                  " where pns_wo_id =".$row->pns_wo_id;
+                         $db->setQuery($sql);
+                         $db->query();  
+                }
+                //check wo
+                $query ="select * from apdm_pns_wo_op where  DATEDIFF(CURDATE(),op_target_date)>0 and  op_delay_check  =0 and (op_status ='pending' or  op_status ='' or op_completed_date = '0000-00-00 00:00:00')";
+                $db->setQuery($query);
+                $rows = $db->loadObjectList();
+                foreach($rows as $row)
+                {                        
+                        $sql= " update apdm_pns_wo_op set op_delay = op_delay + 1".
+                                 " ,op_delay_check = 1".
+                                 " where pns_op_id =".$row->pns_op_id;
                          $db->setQuery($sql);
                          $db->query();  
                 }

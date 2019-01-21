@@ -156,7 +156,17 @@ class pnsViewwo extends JView {
                 $list_users = $db->loadObjectList();
                 $assigners[] = JHTML::_('select.option', 0, JText::_('Select Assigner'), 'value', 'text');
                 $assigners = array_merge($assigners, $list_users);
-                $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1"', 'value', 'text', $wo_row->wo_assigner);
+              
+                if(strtotime(date("Y-m-d")) > strtotime($wo_row->wo_start_date))
+                {            
+                     $userAsign = GetValueUser($wo_row->wo_assigner, "name");
+                     $lists['assigners'] = '<input type = "hidden" value="'.$wo_row->wo_assigner.'" name="wo_assigner"><input type = "text" readonly="readonly" value="'.$userAsign.'" name="wo_assigner_text">';// JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1" '.$style.'', 'value', 'text', $wo_row->wo_assigner);
+                }  
+                else {
+                        $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1"', 'value', 'text', $wo_row->wo_assigner);
+                }
+                
+                
 
                 //get wo po delay
                 $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.* ".
@@ -192,6 +202,7 @@ class pnsViewwo extends JView {
                 $this->assignRef('list_user', $list_user);
                 $this->assignRef('wo_list', $rows);
                 $this->assignRef('pagination', $pagination);
+                             
                 parent::display($tpl);
         }
 

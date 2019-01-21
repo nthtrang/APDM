@@ -404,7 +404,18 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>                                                                                               
-                                               <?php echo JHTML::_('calendar',$this->wo_row->wo_start_date, 'wo_start_date', 'wo_start_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+                                               <?php 
+                                               if(strtotime(date("Y-m-d")) > strtotime($this->wo_row->wo_start_date))
+                                               {
+                                                ?>
+                                                <input type="text" value="<?php echo $this->wo_row->wo_start_date?>" name="wo_start_date" id="wo_start_date" readonly="readonly" />
+                                                <?php 
+                                               }
+                                               else
+                                               {
+                                                       echo JHTML::_('calendar',$this->wo_row->wo_start_date, 'wo_start_date', 'wo_start_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+                                               }                                                                                              
+                                               ?>	
 					</td>
 				</tr>      
                                  <tr>
@@ -413,8 +424,20 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 							<?php echo JText::_( 'WO# Finished Date' ); ?>
 						</label>
 					</td>
-					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->wo_row->wo_completed_date, 'wo_completed_date', 'wo_completed_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	                                               
+					<td>  
+                                                <?php                                                 
+                                               if(strtotime(date("Y-m-d")) > strtotime($this->wo_row->wo_start_date))
+                                               {
+                                                ?>
+                                                <input type="text" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date" id="wo_completed_date" readonly="readonly" />
+                                                <?php 
+                                               }
+                                               else
+                                               {
+                                                      echo JHTML::_('calendar',$this->wo_row->wo_completed_date, 'wo_completed_date', 'wo_completed_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+                                               }                                                                                              
+                                               ?>	                                                
+                                               
 					</td>
 				</tr>    
                                 
@@ -426,7 +449,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 					</td>
                                  <td>
                                                                 <?php echo $this->lists['assigners'];?> 
-                                                        </td>
+                                  </td>
                                  </tr>                                                                                                                      		
 			</table>
                 </fieldset>
@@ -712,7 +735,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     {?>
             <input type="text" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
     <?php }?></td>
-    <td>
+    <td>           
             <select  name="op_assigner5" id="op_assigne5" >
                 <option value="">Select Assigner</option>
                 <?php foreach ($this->list_user as $list) { 

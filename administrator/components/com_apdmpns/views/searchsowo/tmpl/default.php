@@ -269,8 +269,8 @@ if (count($this->rs_wo) > 0) { ?>
                                                 </td> 
                                                 <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                   <td><?php echo PNsController::getWoStatus($wo->wo_state); ?></td>
-                                                <td><?php echo PNsController::getReworkStep($wo->pns_wo_id);?></td>
-                                                <td><?php echo $wo->wo_delay;//PNsController::getDelayTimes($wo->pns_wo_id);?></td>                                          
+                                               <td><?php echo $wo->wo_delay;//PNsController::getDelayTimes($wo->pns_wo_id);?></td>
+                                               <td><?php echo (PNsController::getReworkStep($wo->pns_wo_id))?PNsController::getReworkStep($wo->pns_wo_id):0;?></td>
                                                 <td>
                                                      <?php echo $wo->wo_log; ?>
                                                 </td></tr>

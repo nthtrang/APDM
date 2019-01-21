@@ -17,15 +17,19 @@ JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);   
 $me = JFactory::getUser();
 $usertype	= $me->get('usertype');
-if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {        
+if (in_array("W", $role) && ($this->so_row->so_state =="inprogress")) { 
         JToolBarHelper::customX("onholdso","unpublish",'',"On Hold",false);        
         
         JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
         if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->so_row->so_created_by  == $me->get('id') ) {
-                JToolBarHelper::customX("editso","edit",'',"Edit",false);
-                JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
+                JToolBarHelper::customX("editso","edit",'',"Edit",false);                
         }
         
+}
+if (in_array("W", $role) && ($this->so_row->so_state =="inprogress" || $this->so_row->so_state =="done")) { 
+  if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->so_row->so_created_by  == $me->get('id') ) {                
+                JToolBarHelper::customX('savermafk', 'assign', '', 'Save RMA', false);
+        }      
 }
 if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
         JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     

@@ -43,14 +43,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 if (pressbutton == 'savermafk') {
                         submitform( pressbutton );
                         return;
-                }                 
-		if (pressbutton == 'printwopdf') {
-                       //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
-                       var url = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
-                       window.open(url, '_blank');
-                        return;
-                }    
-				
+                }     
+                
                         
         }
  function isCheckedSoPn(isitchecked,id){
@@ -74,7 +68,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 
 	}
 }       
-
+window.print();
 </script>
 <style type="text/css">
 .tgdetail  {border-collapse:collapse;border-spacing:0;}
@@ -93,34 +87,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 .tgdetail .tg-xldj{border-color:inherit;text-align:left}
 .tgdetail .tg-7btt{font-weight:bold;border-color:inherit;text-align:center;vertical-align:top}
 </style>
-<div class="submenu-box">
-            <div class="t">
-                <div class="t">
-                        <div class="t"></div>
-                </div>
-        </div>
-        <div class="m">
-		<ul id="submenu" class="configuration">
-			<li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>                        
-                </ul>
-		<div class="clr"></div>
-        </div>
-        <div class="b">
-                <div class="b">
-                        <div class="b"></div>
-                </div>
-        </div>
-</div>
-<div class="clr"></div>
-<p>&nbsp;</p>
+
 
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
      
 	      
         <table class="tgdetail">
   <tr>
-          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg"></img></th>
+          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
     <th class="tg-c3ow" colspan="4">barcode</th>
   </tr>

@@ -64,8 +64,9 @@ class pnsViewso extends JView {
                           " inner join  apdm_pns_so so on so.pns_so_id = wo.so_id".
                           " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code".
                           " where ".
-                          " (op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
-                          " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)";
+                          " ((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                          " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
+                          " or op_delay != 0";
                 $db->setQuery($query);
                 $report_list = $db->loadObjectList();
                 $usertype	= $me->get('usertype');

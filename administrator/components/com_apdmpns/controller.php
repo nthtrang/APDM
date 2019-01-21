@@ -7341,6 +7341,13 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'wo');
                  parent::display();
         }
+        function printwopdf()
+        {
+                JRequest::setVar('layout', 'wo_detail_print');
+                JRequest::setVar('view', 'wo');
+                 parent::display();
+        }
+        
         /*
          * Remove WO
          */
@@ -7393,9 +7400,24 @@ class PNsController extends JController {
                                 $wopoStatus1 = "done";
                                 $wopoStatusTitle1 = "Done";
                         }
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus1."', op_title ='".$wopoStatusTitle1."', op_comment = '".$post['op_comment1']."',op_delay_date = '".$post['op_completed_date1']."',op_completed_date = '".$post['op_completed_date1']."',op_assigner ='".$post['op_assigner1']."',op_target_date='".$post['op_target_date1']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step1' and wo_id = ".$wo_id;                        
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus1."', op_title ='".$wopoStatusTitle1."', op_comment = '".$post['op_comment1']."',op_delay_date = '".$post['op_completed_date1']."',op_completed_date = '".$post['op_completed_date1']."',op_assigner ='".$post['op_assigner1']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step1' and wo_id = ".$wo_id;                        
                         $db->setQuery($sql);
                         $db->query();      
+                        //check update op_target_date for implement count number delay step
+                        //op_target_date='".$post['op_target_date1']."',
+                        $query ="select DATEDIFF('".$post['op_target_date1']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step1' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date1'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step1' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 1
                         
                         //Update step2
                         $wopoStatus2="";
@@ -7406,9 +7428,24 @@ class PNsController extends JController {
                                 $wopoStatus2 = "done";
                                 $wopoStatusTitle2 = "Done";
                         }                        
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus2."', op_title ='".$wopoStatusTitle2."',op_comment = '".$post['op_comment2']."',op_delay_date = '".$post['op_completed_date2']."',op_completed_date = '".$post['op_completed_date2']."',op_assigner ='".$post['op_assigner2']."',op_target_date='".$post['op_target_date2']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus2."', op_title ='".$wopoStatusTitle2."',op_comment = '".$post['op_comment2']."',op_delay_date = '".$post['op_completed_date2']."',op_completed_date = '".$post['op_completed_date2']."',op_assigner ='".$post['op_assigner2']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date2']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step2' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date2'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step2' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 1
                         
                         //Update step3
                         $wopoStatus3="";
@@ -7419,9 +7456,24 @@ class PNsController extends JController {
                                 $wopoStatus3 = "done";
                                 $wopoStatusTitle3 = "Done";
                         }                       
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus3."', op_title ='".$wopoStatusTitle3."',op_comment = '".$post['op_comment3']."',op_delay_date = '".$post['op_completed_date3']."',op_completed_date = '".$post['op_completed_date3']."',op_assigner ='".$post['op_assigner3']."',op_target_date='".$post['op_target_date3']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus3."', op_title ='".$wopoStatusTitle3."',op_comment = '".$post['op_comment3']."',op_delay_date = '".$post['op_completed_date3']."',op_completed_date = '".$post['op_completed_date3']."',op_assigner ='".$post['op_assigner3']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date3']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step3' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date3'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step3' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 3
                         
                         //Update step4     
                         $wopoStatus4="";
@@ -7432,9 +7484,24 @@ class PNsController extends JController {
                                 $wopoStatus4 = "done";
                                 $wopoStatusTitle4 = "Done";
                         }
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus4."', op_title ='".$wopoStatusTitle4."',op_comment = '".$post['op_comment4']."',op_delay_date = '".$post['op_completed_date4']."',op_completed_date = '".$post['op_completed_date4']."',op_assigner ='".$post['op_assigner4']."',op_target_date='".$post['op_target_date4']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus4."', op_title ='".$wopoStatusTitle4."',op_comment = '".$post['op_comment4']."',op_delay_date = '".$post['op_completed_date4']."',op_completed_date = '".$post['op_completed_date4']."',op_assigner ='".$post['op_assigner4']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date4']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step4' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date4'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step4' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 4                      
                         //update apdm_pns_wo_op_assembly
                         $op_assemble_id = $post['op_assemble_id'];
                         if(sizeof($op_assemble_id))
@@ -7455,9 +7522,24 @@ class PNsController extends JController {
                                 $wopoStatus5 = "done";
                                 $wopoStatusTitle5 = "Done";
                         }
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus5."', op_title ='".$wopoStatusTitle5."',op_comment = '".$post['op_comment5']."',op_delay_date = '".$post['op_completed_date5']."',op_completed_date = '".$post['op_completed_date5']."',op_assigner ='".$post['op_assigner5']."',op_target_date='".$post['op_target_date5']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus5."', op_title ='".$wopoStatusTitle5."',op_comment = '".$post['op_comment5']."',op_delay_date = '".$post['op_completed_date5']."',op_completed_date = '".$post['op_completed_date5']."',op_assigner ='".$post['op_assigner5']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date5']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step5' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date5'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step5' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 5                                  
                        
                        //get op_id from step 5
                         $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step5' and wo_id = ".$wo_id;
@@ -7481,9 +7563,24 @@ class PNsController extends JController {
                                 $wopoStatus6 = "done";
                                 $wopoStatusTitle6 = "Done";
                         }
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus6."', op_title ='".$wopoStatusTitle6."',op_comment = '".$post['op_comment6']."',op_delay_date = '".$post['op_completed_date6']."',op_completed_date = '".$post['op_completed_date6']."',op_assigner ='".$post['op_assigner6']."',op_target_date='".$post['op_target_date6']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus6."', op_title ='".$wopoStatusTitle6."',op_comment = '".$post['op_comment6']."',op_delay_date = '".$post['op_completed_date6']."',op_completed_date = '".$post['op_completed_date6']."',op_assigner ='".$post['op_assigner6']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
-                        $db->query();                        
+                        $db->query();       
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date6']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date6'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step6' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 6                        
                        //get op_id from step 6
                         $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7507,9 +7604,24 @@ class PNsController extends JController {
                                 $wopoStatus7 = "done";
                                 $wopoStatusTitle7 = "Done";
                         }
-                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus7."', op_title ='".$wopoStatusTitle7."',op_comment = '".$post['op_comment7']."',op_delay_date = '".$post['op_completed_date7']."',op_completed_date = '".$post['op_completed_date7']."',op_assigner ='".$post['op_assigner7']."',op_target_date='".$post['op_target_date7']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus7."', op_title ='".$wopoStatusTitle7."',op_comment = '".$post['op_comment7']."',op_delay_date = '".$post['op_completed_date7']."',op_completed_date = '".$post['op_completed_date7']."',op_assigner ='".$post['op_assigner7']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();   
+                        //check update op_target_date for implement count number delay step
+                        //,op_target_date='".$post['op_target_date2']."'
+                        $query ="select DATEDIFF('".$post['op_target_date7']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step7' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $delayt = $db->loadResult();
+                        //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                        if($delayt>0)
+                        {
+                                $sql= " update apdm_pns_wo_op set op_target_date ='" . $post['op_target_date7'] . "'".
+                                         " ,op_delay_check = 0 ".
+                                         " where op_code = 'wo_step7' and wo_id = ".$wo_id;
+                                 $db->setQuery($sql);
+                                 $db->query();  
+                        }
+                        //end op 7                        
                         $sql= " update apdm_pns_wo set so_id ='" . $post['so_id'] . "'".
                                 ",wo_qty = '" . $post['wo_qty'] . "'".
                                 ",pns_id = '" .  $partNumber[0] . "'".
@@ -7524,7 +7636,7 @@ class PNsController extends JController {
                                 " where pns_wo_id ='".$wo_id."' ";
                         $db->setQuery($sql);
                         $db->query();   
-                        //check update wo_completed_date
+                        //check update wo_completed_date for implement count number delay
                         $query ="select DATEDIFF('".$post['wo_completed_date']."',date(wo_completed_date))  from apdm_pns_wo where pns_wo_id = ".$wo_id;
                         $db->setQuery($query);
                         $delayt = $db->loadResult();
@@ -7751,7 +7863,7 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 if($step==="wo_step5"){
                         
-                 $queryRework = 'select max(vi.op_visual_fail_times) as rework_time'.
+                 $queryRework = 'select count(*) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
                                ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "") '.
@@ -7760,7 +7872,7 @@ class PNsController extends JController {
                  $row = $db->loadResult();    
                 }    
                 elseif($step==="wo_step6"){
-                  $queryRework = ' select max(fi.op_final_fail_times) as rework_time'.
+                   $queryRework = 'select count(*) as rework_time'.
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
                                ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != "")'.
@@ -7768,7 +7880,7 @@ class PNsController extends JController {
                   $db->setQuery($queryRework);
                   $row = $db->loadResult();    
                 }
-                else
+                elseif($step===0)
                 {
                         
                         $queryRework = 'select count(*) as rework_time'.

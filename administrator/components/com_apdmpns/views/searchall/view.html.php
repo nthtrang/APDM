@@ -210,7 +210,7 @@ else
                     $sql = "select wo.wo_log,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
                         " from apdm_pns_wo wo " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
-                        " where 1";// wo.wo_code LIKE ".$searchEscaped;//temp
+                        " where wo.wo_code LIKE ".$searchEscaped;
                     $db->setQuery($sql);                   
                     $rs_wo = $db->loadObjectList();
                     if (count($rs_wo) >0){

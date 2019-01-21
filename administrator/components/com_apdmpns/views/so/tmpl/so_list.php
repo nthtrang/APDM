@@ -149,7 +149,7 @@ if (count($this->report_list) > 0) { ?>
                                         <th width="100"><?php echo JText::_('Step'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Employee ID'); ?></th>
                                         <th width="100"><?php echo JText::_('Delay times of Step'); ?></th>
-                                        <th width="100"><?php echo JText::_('Delay time of WO'); ?></th>
+                                        <th width="100"><?php echo JText::_('Delay times of WO'); ?></th>
                                         <th width="100"><?php echo JText::_('Rework Times'); ?></th>
                                         <th width="100"><?php echo JText::_('Reason of Delay Step'); ?></th>                                        
                                 </tr>
@@ -171,9 +171,9 @@ if (count($this->report_list) > 0) { ?>
                                                 <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>     
                                                 <td><?php echo PNsController::getWoStep($so->op_code); ?></td>   
                                                 <td><?php echo $so->op_assigner; ?></td>                                                                                                
-                                                 <td><?php echo $so->step_delay_date; ?></td> 
+                                                 <td><?php echo $so->op_delay; ?></td> 
                                                 <td><?php echo  $so->wo_delay;////PNsController::getDelayTimes($so->pns_wo_id);  ?></td>
-                                                <td><?php echo PNsController::getReworkStep($so->pns_wo_id,$so->op_code);  ?></td>                                                
+                                                <td><?php echo (PNsController::getReworkStep($so->pns_wo_id,$so->op_code))?PNsController::getReworkStep($so->pns_wo_id,$so->op_code):0;  ?></td>                                                
                                                 <td>
                                                      <?php 
                                                       $comment = PNsController::getWoStepLog($so->pns_op_id, 0);
