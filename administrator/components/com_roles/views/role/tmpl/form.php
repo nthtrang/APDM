@@ -123,6 +123,7 @@
 	$sto3 = 0;
 	$sto4 = 0;
 	$sto5 = 0;
+	$sto6 = 0;
 	$stoall=0;
 	if(count($this->arrSTO) > 0){
 		foreach ($this->arrSTO as $sto){
@@ -131,7 +132,7 @@
 			if ($sto=='E') {$sto3=1; $stoall++;}
 			if ($sto=='D') {$sto4=1; $stoall++;}
 			if ($sto=='R') {$sto5=1; $stoall++;}
-
+			if ($sto=='S') {$sto6=1; $stoall++;}
 		}
 	}    
         //for Location
@@ -358,7 +359,7 @@
 						<input type="checkbox" name="sto[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="sto[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <input type="checkbox" name="sto[]" value="S" <?php echo ($sto6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto5" />(MTO Button)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" onclick="checkAllSTO(6, 'sto');" value="" name="toggle8" <?php if ($stoall==5) { ?> checked="checked" <?php } ?>/>
+						<input type="checkbox" onclick="checkAllSTO(6, 'sto');" value="" name="toggle8" <?php if ($stoall==6) { ?> checked="checked" <?php } ?>/>
 					</td>
 				</tr>	                                
 			<tr><tr>
