@@ -72,8 +72,8 @@ window.print();
 </script>
 <style type="text/css">
 .tgdetail  {border-collapse:collapse;border-spacing:0;}
-.tgdetail td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
-.tgdetail th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tgdetail td{font-family:Arial, sans-serif;font-size:10px;padding:0px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tgdetail th{font-family:Arial, sans-serif;font-size:10px;font-weight:normal;padding:0px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tgdetail .tg-88nc{font-weight:bold;border-color:inherit;text-align:center}
 .tgdetail .tg-w9sc{font-size:13px;border-color:inherit;text-align:center}
 .tgdetail .tg-b2ze{font-weight:bold;font-size:13px;border-color:inherit;text-align:left;vertical-align:top}
@@ -427,9 +427,9 @@ window.print();
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 </table>		       
-        <input type="text" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
+        <input type="hidden" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
-        <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>
