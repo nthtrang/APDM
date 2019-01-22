@@ -172,8 +172,9 @@ class pnsViewwo extends JView {
                 $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.* ".
                         " from apdm_pns_wo_op op  ".
                         " where op.wo_id = ".$wo_id."".
-                        " and (op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
-                        " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)";                                        
+                        " and ((op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                        " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
+						 " or op_delay != 0)";
                 $db->setQuery($query);
                 $wo_delay = $db->loadObjectList();
                 $this->assignRef('wo_delay', $wo_delay);

@@ -81,7 +81,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <tr>				
                                                         <td><?php echo PNsController::getWoStep($rowde->op_code); ?></td>				
                                                         <td><?php echo $rowde->op_assigner . "-". GetValueUser($rowde->op_assigner, "name"); ?></td>
-                                                        <td><?php echo $rowde->step_delay_date; ?></td>
+                                                        <td><?php echo $rowde->op_delay; ?></td>
                                                         <td><?php
                                         //if($me->get('id');                
                                         $op_arr = $this->op_arr;
