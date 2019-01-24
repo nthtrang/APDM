@@ -17,7 +17,6 @@ if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo
 if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO#");
 }
- JToolBarHelper::editListX("editwo","Edit WO");
  JToolBarHelper::customX("printwopdf","print",'',"Print",false);        
 
 $cparams = JComponentHelper::getParams('com_media');

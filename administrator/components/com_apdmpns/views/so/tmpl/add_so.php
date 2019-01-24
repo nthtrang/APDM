@@ -96,7 +96,23 @@ function getccsCoordinator(ccs_code)
                     alert("Invalid Date Range!\nShipping Date cannot be before StartDate!")
                     return false;
                 }
-		submitform( pressbutton );
+                var url = 'index.php?option=com_apdmpns&task=check_so_exist&so_code='+form.so_cuscode.value+'&customer_id='+form.customer_id.value;				
+                var MyAjax = new Ajax(url, {
+                        method:'get',
+                        onComplete:function(result){				
+                                if( result.trim()==1)
+                                {
+                                        alert('The SO already exist please add another SO number');
+                                        form.so_cuscode.focus();
+                                        return false;
+                                }  
+                                else
+                                        {
+                                           submitform( pressbutton );       
+                                        }
+                        }
+                }).request();
+		 
 	}
         
         

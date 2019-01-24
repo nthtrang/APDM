@@ -46,7 +46,7 @@ class pnsViewso extends JView {
                 jimport('joomla.html.pagination');
                 $pagination = new JPagination($total, $limitstart, $limit);
                 //for my task #somanagement
-                $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+                $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
                         . ' from apdm_pns_wo_op wop '
                         .' inner join apdm_pns_wo wo on wo.pns_wo_id = wop.wo_id'
                         .' inner join apdm_pns_so so on wo.so_id = so.pns_so_id '

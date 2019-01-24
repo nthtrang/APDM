@@ -197,8 +197,13 @@ class pnsViewwo extends JView {
                 //get ist imag/zip/pdf
                 $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
                 $list_user = $db->loadObjectList();
+                //get file LOG uoload
+                $db->setQuery("SELECT * FROM apdm_pns_wo_files WHERE wo_id='".$wo_id."'");
+                $list_file_log = $db->loadObjectList();
+                
                 $lists['search'] = $search;
                 $this->assignRef('lists', $lists);
+                $this->assignRef('list_file_log', $list_file_log);
                 $this->assignRef('arr_status', $arrSoStatus);
                 $this->assignRef('list_user', $list_user);
                 $this->assignRef('wo_list', $rows);

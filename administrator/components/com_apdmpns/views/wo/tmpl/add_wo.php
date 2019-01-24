@@ -411,7 +411,7 @@ function check_so_first()
     <td><textarea maxlength='40' name="op_comment1" rows="3" cols="30"></textarea></td>
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date1', 'op_completed_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td> <select  name="op_assigner1" id="op_assigner1" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -426,7 +426,7 @@ function check_so_first()
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td>
             <select  name="op_assigner2" id="op_assigner2" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -440,7 +440,7 @@ function check_so_first()
     <td><textarea maxlength='40' name="op_comment3" rows="3" cols="30"></textarea></td>
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td><select  name="op_assigner3" id="op_assigner3" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -454,7 +454,7 @@ function check_so_first()
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td>
             <select  name="op_assigner4" id="op_assigner4" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -544,7 +544,7 @@ function check_so_first()
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date5', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td>
             <select  name="op_assigner5" id="op_assigne5" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -601,7 +601,7 @@ function check_so_first()
     <td></td>
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td><select  name="op_assigner6" id="op_assigner6" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>
@@ -678,7 +678,7 @@ function check_so_first()
     <td><?php echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td>
             <select  name="op_assigner7" id="op_assigner7" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
                 <?php } ?>

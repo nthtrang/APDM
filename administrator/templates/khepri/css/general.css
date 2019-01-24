@@ -607,7 +607,7 @@ a img.calendar {
 .scroll {
    width: 200px;
    height: 300px;
-   overflow: scroll;
+   overflow-y: scroll;
 }
 /* width */
 .scroll:-webkit-scrollbar {

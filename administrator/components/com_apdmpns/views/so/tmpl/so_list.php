@@ -49,6 +49,60 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 
 
 </script>
+<style>
+section {
+  position: relative;
+  padding-top: 30px;
+      text-align: center;
+    background: #f0f0f0;
+    color: #666;
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #fff;
+}
+section.positioned {
+  position: absolute;
+  top:100px;
+  left:100px;
+  width:800px;
+  box-shadow: 0 0 15px #333;
+}
+.container {
+  overflow-y: auto;
+  height: 160px;
+}
+table {
+  border-spacing: 0;
+  width:100%;
+}
+td + td {
+  border-left:1px solid #eee;
+}
+td, th {
+  border-bottom:1px solid #eee;
+  padding: 10px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  white-space: nowrap;
+}
+th div{
+  position: absolute;
+  background: transparent;
+     color: #666;
+  padding: 10px;
+  top: 0;
+  line-height: normal;
+    border-left: 1px solid #fff;
+}
+th:first-child div{
+  border: none;
+}
+</style>
 <div class="clr"></div>
 <form action="index.php?option=com_apdmpns&task=somanagement"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
@@ -56,23 +110,24 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 
       <fieldset class="adminform">
 		<legend><font style="size:14px"><?php echo JText::_( 'Employee ID#:' ). $me->get('id'); ?> </font></legend>                          
-                <div class="col width-100 scroll">
+                <section class="">
+                <div class="col width-100 scroll container">
 <?php 
 if (count($this->so_list) > 0) { ?>
-                <table class="adminlist" cellspacing="1" width="400">
+                <table class="adminlist1" cellspacing="1" width="400">
                         <thead>
-                                <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('PN'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
-                                        <th width="100"><?php echo JText::_('UOM'); ?></th>
-                                        <th width="100"><?php echo JText::_('Task'); ?></th>
-                                        <th width="100"><?php echo JText::_('Target Date'); ?></th>
-                                        <th width="100"><?php echo JText::_('Time Remain'); ?></th>
-                                        <th width="100"><?php echo JText::_('Assigner'); ?></th>
+                               <tr class="header">
+                                        <th width="100"><?php echo JText::_('No'); ?><div><?php echo JText::_('SO#'); ?></div></th>                                               
+                                        <th width="100"><?php echo JText::_('SO#'); ?><div>SO#</div></th>
+                                        <th width="100"><?php echo JText::_('WO#'); ?><div>WO#</div></th>                                                
+                                        <th width="100"><?php echo JText::_('PN'); ?><div>PN</div></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?><div>Description</div></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?><div>Qty</div></th>
+                                        <th width="100"><?php echo JText::_('UOM'); ?><div>UOM</div></th>
+                                        <th width="100"><?php echo JText::_('Task'); ?><div>Task</div></th>
+                                        <th width="100"><?php echo JText::_('Target Date'); ?><div>Target Date</div></th>
+                                        <th width="100"><?php echo JText::_('Time Remain'); ?><div>Time Remain</div></th>
+                                        <th width="100"><?php echo JText::_('Assigner'); ?><div>Assigner</div></th>
                                 </tr>
                         </thead>                  
                         <tbody>					
@@ -131,7 +186,7 @@ if (count($this->so_list) > 0) { ?>
                                                 <?php }
                                         } ?>
                 </tbody>
-        </table></div>
+                </table></div></section>
       </fieldset>
 
       
@@ -139,22 +194,23 @@ if (count($this->so_list) > 0) { ?>
 if (count($this->report_list) > 0) { ?>
 <fieldset class="adminform">
 		<legend><font style="size:14px"><?php echo JText::_( 'Issue Report' ); ?> </font></legend>                          
-                <div class="col width-100 scroll">
-                <table class="adminlist" cellspacing="1" width="400">
+                <section class="">
+                <div class="col width-100 scroll container">
+                <table class="adminlist1" cellspacing="1" width="400">
                         <thead>
-                                <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Step'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Employee ID'); ?></th>
-                                        <th width="100"><?php echo JText::_('Delay times of Step'); ?></th>
-                                        <th width="100"><?php echo JText::_('Delay times of WO'); ?></th>
-                                        <th width="100"><?php echo JText::_('Rework Times'); ?></th>
-                                        <th width="100"><?php echo JText::_('Reason of Delay Step'); ?></th>                                        
+                                 <tr class="header">
+                                        <th width="100"><?php echo JText::_('No'); ?><div><?php echo JText::_('No'); ?></div></th>                                               
+                                        <th width="100"><?php echo JText::_('SO#'); ?><div><?php echo JText::_('SO#'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('WO#'); ?><div><?php echo JText::_('WO#'); ?></div></th>                                                
+                                        <th width="100"><?php echo JText::_('Step'); ?><div><?php echo JText::_('Step'); ?></div></th>                                        
+                                        <th width="100"><?php echo JText::_('Employee ID'); ?><div><?php echo JText::_('Employee ID'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Delay times of Step'); ?><div><?php echo JText::_('Delay times of Step'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Delay times of WO'); ?><div><?php echo JText::_('Delay times of WO'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Rework Times'); ?><div><?php echo JText::_('Rework Times'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Reason of Delay Step'); ?><div><?php echo JText::_('Reason of Delay Step'); ?></div></th>                                        
                                 </tr>
                         </thead>                  
-                        <tbody>					
+                      <tbody style="height: 300px; overflow-y: auto"> 				
         <?php
         $i = 0;
         foreach ($this->report_list as $so) {
@@ -189,7 +245,7 @@ if (count($this->report_list) > 0) { ?>
                                                 <?php }
                                                 ?>
                                                  </tbody>
-                                        </table></div>
+                                        </table></div></section>
                                       </fieldset>
                                                 <?php
                                         } ?>

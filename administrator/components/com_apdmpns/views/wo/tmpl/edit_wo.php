@@ -332,7 +332,21 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 					</td>
                                         <td valign="top"><input type="text" value="<?php echo $pnNumber;?>" name="top_pns_code" id="top_pns_code" readonly="readonly" />
                                                 <input type="text" value="<?php echo $this->row_top_assy->pns_id;?>" name="top_pns_id" id="top_pns_id" readonly="readonly" />
-							<a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&so_id=<?php echo $this->wo_row->so_id;?>&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>">Select Top ASSY P/N</a>
+                                                <?php    
+                                               if(strtotime(date("Y-m-d")) >= strtotime($this->wo_row->wo_start_date))
+                                               {
+                                                ?>
+                                                <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&so_id=<?php echo $this->wo_row->so_id;?>&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
+                                                <?php 
+                                               }
+                                               else
+                                               {
+                                                       ?>
+                                                <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&so_id=<?php echo $this->wo_row->so_id;?>&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>">Select Top ASSY P/N</a>
+                                                <?php                                                
+                                               }                                                                                              
+                                               ?>
+                                                
 						
 					</td>
                                         </tr>  
@@ -478,13 +492,13 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php
     if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
             <?php
     }else
     {
             
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -497,8 +511,30 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step1']['op_completed_date'];?>" name="op_completed_date1" id="op_completed_date1" />
     <?php }?>
     </td>
-    <td> <select  name="op_assigner1" id="op_assigner1" >
-                <option value="">Select Assigner</option>
+    <td>
+             <?php
+    if($op_arr['wo_step1']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+             <select  name="op_assigner1" id="op_assigner1" >
+                <option value="">Select Assignee</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step1']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+                </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_assigner'];?>" name="op_assigner1" id="op_assigner1" />
+          <select  name="op_assigner1_dis" id="op_assigner1_dis" disabled="disabled">
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step1']['op_assigner'])
@@ -509,6 +545,10 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select>
+    <?php 
+    }          
+    ?>
+          
     </td>
     <td>
             <?php 
@@ -528,13 +568,13 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php
     if($op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
             <?php
     }else
     {
             
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment2" rows="3" cols="30"><?php echo $op_arr['wo_step2']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -551,8 +591,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     
     </td>
     <td>
+    <?php
+    if($op_arr['wo_step2']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
             <select  name="op_assigner2" id="op_assigner2" >
-                <option value="">Select Assigner</option>
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step2']['op_assigner'])
@@ -563,6 +606,27 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_assigner'];?>" name="op_assigner2" id="op_assigner2" />
+          <select  name="op_assigner2_dis" id="op_assigner2_dis" disabled="disabled">
+                <option value="">Select Assignee</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step2']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>
     </td>
     <td>                
     <?php 
@@ -582,12 +646,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php
     if($op_arr['wo_step3']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
             <?php
     }else
     {            
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment3" rows="3" cols="30"><?php echo $op_arr['wo_step3']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -599,8 +663,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     {?>
             <input type="text" value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
     <?php }?></td>
-    <td><select  name="op_assigner3" id="op_assigner3" >
-                <option value="">Select Assigner</option>
+    <td>            
+    <?php
+    if($op_arr['wo_step3']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <select  name="op_assigner3" id="op_assigner3" >
+                <option value="">Select Assignee</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step3']['op_assigner'])
@@ -610,7 +678,29 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                          ?>
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
-        </select></td>
+        </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_assigner'];?>" name="op_assigner3" id="op_assigner3" />
+          <select  name="op_assigner3_dis" id="op_assigner3_dis"  disabled="disabled">
+                <option value="">Select Assignee</option>
+                <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step3']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>
+    </td>
     <td>
     <?php 
             if($allow_edit)
@@ -630,12 +720,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
      <?php
     if($op_arr['wo_step4']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
             <?php
     }else
     {            
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -648,8 +738,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <input type="text" value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
     <?php }?></td>
     <td>
-            <select  name="op_assigner4" id="op_assigner4" >
-                <option value="">Select Assigner</option>
+    <?php
+    if($op_arr['wo_step4']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+           <select  name="op_assigner4" id="op_assigner4" >
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step4']['op_assigner'])
@@ -660,6 +753,27 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_assigner'];?>" name="op_assigner4" id="op_assigner4" />
+         <select  name="op_assigner4_dis" id="op_assigner4_dis"  disabled="disabled">
+                <option value="">Select Assignee</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step4']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>
     </td>
     <td>
         <?php 
@@ -700,7 +814,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
   {
   ?>
   <tr>
-    <td><input type="text" size="6" onKeyPress="return numbersOnly(this, event);"  value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
+    <td><input type="text" size="6"   value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
     <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
     <td><input type="text" size="6"  value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
     <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
@@ -736,8 +850,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <input type="text" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
     <?php }?></td>
     <td>           
-            <select  name="op_assigner5" id="op_assigne5" >
-                <option value="">Select Assigner</option>
+           
+<?php
+    if($op_arr['wo_step5']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+           <select  name="op_assigner5" id="op_assigne5" >
+                <option value="">Select Assignee</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step5']['op_assigner'])
@@ -748,6 +866,27 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_assigner'];?>" name="op_assigner5" id="op_assigner5" />
+          <select  name="op_assigner5_dis" id="op_assigner5_dis"  disabled="disabled">
+                <option value="">Select Assignee</option>
+                <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step5']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>            
     </td>
     <td>
         <?php 
@@ -782,12 +921,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
      <?php
     if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
             <?php
     }else
     {            
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
     <?php 
     }          
     ?>    
@@ -829,8 +968,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     {?>
             <input type="text" value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
     <?php }?></td>
-    <td><select  name="op_assigner6" id="op_assigner6" >
-                <option value="">Select Assigner</option>
+    <td>    
+     <?php
+    if($op_arr['wo_step6']['op_assigner'] === $me->get('id') || $this->wo_row->wo_assigner === $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+           <select  name="op_assigner6" id="op_assigner6" >
+                <option value="">Select Assignee</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step6']['op_assigner'])
@@ -840,7 +983,29 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                          ?>
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
-        </select></td>
+        </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_assigner'];?>" name="op_assigner6" id="op_assigner6" />
+         <select  name="op_assigner6" id="op_assigner6" disabled="disabled" >
+                <option value="">Select Assignee</option>
+                <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step6']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>              
+    </td>
     <td>
               
       <?php 
@@ -875,12 +1040,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
      <?php
     if($op_arr['wo_step6']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
             <?php
     }else
     {            
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment6" rows="16" cols="30"><?php echo $op_arr['wo_step6']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -938,12 +1103,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
      <?php
     if($op_arr['wo_step7']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-            <textarea maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
+            <textarea maxlength='200' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
             <?php
     }else
     {            
     ?>
-        <textarea readonly="readonly" maxlength='40' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
+        <textarea readonly="readonly" maxlength='200' name="op_comment7" rows="3" cols="30"><?php echo $op_arr['wo_step7']['op_comment'];?></textarea>
     <?php 
     }          
     ?>
@@ -956,8 +1121,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <input type="text" value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
     <?php }?></td>
     <td>
-            <select  name="op_assigner7" id="op_assigner7" >
-                <option value="">Select Assigner</option>
+        <?php
+    if($op_arr['wo_step7']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+           <select  name="op_assigner7" id="op_assigner7" >
+                <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step7']['op_assigner'])
@@ -968,6 +1136,27 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
                 <?php } ?>
         </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_assigner'];?>" name="op_assigner7" id="op_assigner7" />
+          <select  name="op_assigner7_dis" id="op_assigner7_dis"  disabled="disabled">
+                <option value="">Select Assignee</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step7']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>                     
     </td>
     <td>
     <?php 

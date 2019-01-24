@@ -59,13 +59,77 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 <table class="admintable" cellspacing="1" width="100%">
                                         <tr>
                                                 <td><strong>LOG:</strong></td>
+                                                <td><strong>Upload:</strong></td>
                                         </tr>
                                         <tr>
                                                 <td>
-                                                        <textarea maxlength='40' name="wo_log" rows="10" cols="100"><?php echo $this->wo_row->wo_log; ?></textarea>
+                                                        <textarea maxlength='200' name="wo_log" rows="10" cols="100"><?php echo $this->wo_row->wo_log; ?></textarea>
+                                                </td>
+                                                <td>
+                                                        <span id="1">
+							Zip:<input type="file" name="wo_log_zip" /> 
+        						</span>
+                                                        <span id="2">
+							PDF: <input type="file" name="wo_log_pdf" /> 
+                                                        </span>    
+                                                        <br>
+                                                        <table>
+                                                                         <?php if (count($this->list_file_log) > 0) {
+                                                                ?>				
+                                                                <tr>
+                                                                        <td colspan="2" >
+                                                                        <table width="100%"  class="adminlist" cellpadding="1">						
+                                                                                <thead>
+                                                                                        <th colspan="4"><?php echo JText::_('List File')?></th>
+                                                                                </thead>
+                                                                                <tr>
+                                                                                        <td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+                                                                                        <td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
+                                                                                        <td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
+                                                                                        <td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
+                                                                                </tr>
+                                                                <?php
+
+                                                                $i = 1;
+                                                                $folder_wo = $this->wo_row->pns_wo_id;                           
+                                                                foreach ($this->list_file_log as $rowf) {
+                                                                        $filesize = PNsController::readfilesizeWoLog($this->wo_row->pns_wo_id,$rowf->file_name);                                        				
+                                                                ?>
+                                                                <tr>
+                                                                        <td><?php echo $i?></td>
+                                                                        <td><?php echo $rowf->file_name?></td>
+                                                                        <td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
+                                                                        <td><a href="index.php?option=com_apdmpns&task=download_file_wo_log&id=<?php echo $rowf->id?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+                                                                                 <?php
+                                                                             //  if ($this->row->pns_life_cycle =='Create') {                       
+                                                                                ?>
+                                                                        <a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                                                         <?php
+                                                                          //     }
+                                                                                ?>
+                                                                        </td>
+                                                                </tr>
+                                                                <?php $i++; } ?>
+
+                                                                <tr>
+
+                                                                        <td colspan="4" align="center">
+                                                                                <a href="index.php?option=com_apdmpns&task=download_all_cads_so&tmpl=component&so_id=<?php echo $this->so_row->pns_so_id;?>" title="Download All Files">
+                                                                                <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                                                                </a>&nbsp;&nbsp;
+
+                                <!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
+                                                                </tr>
+
+                                                                        </table>
+                                                                        </td>
+                                                                </tr>
+                                                                <?php } ?>                      
+                                                                </table>        
                                                 </td>
                                         </tr>
                                 </table>
+                                
                                 <pre></pre>
                                 <strong>Delay of Steps</strong>
                                 <table class="adminlist" cellspacing="1" width="100%">

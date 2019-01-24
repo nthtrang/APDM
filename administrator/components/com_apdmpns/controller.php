@@ -6166,7 +6166,23 @@ class PNsController extends JController {
                 $str .='</table>';
                 echo $str;
                 exit;
-        }        
+        }      
+        function check_so_exist()
+        {
+                 $db = & JFactory::getDBO();
+                $so_code= JRequest::getVar('so_code');       
+                $customer_id  = JRequest::getVar('customer_id');     
+                 //check so exist or not
+                $db->setQuery('select count(*) from apdm_pns_so where  so_cuscode = "'.$so_code.'" and customer_id= "' .$customer_id.'"');               
+                $check_so_exist = $db->loadResult();
+                if ($check_so_exist!=0) { 
+                        echo 1;
+                        exit;
+                }
+                echo 0;
+                exit;
+                
+        }
         function save_sales_order()
         {
                 // Initialize some variables
@@ -6180,6 +6196,14 @@ class PNsController extends JController {
                 $so_start_date = $startdate->format('Y-m-d'); 
                 $so_shipping_date = $shipping_date->format('Y-m-d'); 
                 $soNumber = $post['so_cuscode'];
+                //check so exist or not
+                $db->setQuery('select count(*) from apdm_pns_so where  so_cuscode = "'.$soNumber.'" and customer_id= "' .$post['customer_id'].'"');               
+                $check_so_exist = $db->loadResult();
+                if ($check_so_exist!=0) {
+                        $msg = JText::_('The SO already exist please add another SO number');
+                         return $this->setRedirect('index.php?option=com_apdmpns&task=add_so', $msg);
+
+                }
                 $db->setQuery("INSERT INTO apdm_pns_so (customer_id,so_coordinator,so_cuscode,so_shipping_date,so_start_date,so_state,so_created,so_created_by,so_updated,so_updated_by,so_type) VALUES ('" . $post['customer_id'] . "', '" . $post['so_coordinator'] . "', '" . $post['so_cuscode'] . "', '" . $so_shipping_date . "', '" . $so_start_date . "', '" .  $post['so_state']. "','" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $datenow->toMySQL() . "', " . $me->get('id') . ",0)");
                 $db->query();     
                 //getLast SO ID
@@ -6205,7 +6229,7 @@ class PNsController extends JController {
                         $upload->r_mkdir($path_so_zips, 0777);                        
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
-                        for ($i = 1; $i <= 20; $i++) {
+                        for ($i = 1; $i <= 20; $i++) {                                
                                 if ($_FILES['pns_zip' . $i]['size'] > 0) {
                                         if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
                                                 $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
@@ -6380,6 +6404,20 @@ class PNsController extends JController {
                 return $filesize;
         }      
         /**
+         * @desc Read file size
+         */
+        function readfilesizeWoLog($folder_wo_id, $filename,$type=0) {
+                $path_wo = JPATH_SITE . DS . 'uploads' . DS . 'wo' . DS;
+                $filesize = '';               
+                $path_wo .=  $folder_wo_id . DS;                 
+                if (file_exists($path_wo . $filename)) {
+                        $filesize = ceil(filesize($path_wo . $filename) / 1000);
+                } else {
+                        $filesize = 0;
+                }
+                return $filesize;
+        }    
+        /**
          * @desc Download imge of PNs
          */
         function download_img_so() {
@@ -6434,6 +6472,23 @@ class PNsController extends JController {
                 $dFile = new DownloadFile($path_cads, $file_name);
                 exit;
         }       
+/**
+         * @desc Download cad file of PNs
+         */
+        function download_file_wo_log() {
+                $db = & JFactory::getDBO();
+                $file_id = JRequest::getVar('id');
+                $query = "SELECT * from apdm_pns_wo_files WHERE id=" . $file_id;
+                $db->setQuery($query);
+                $row = $db->loadObject();    
+                ///for pns cads/image/pdf              
+                $folder = $row->wo_id;                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'wo' . DS;
+                $path_cads = $path_so  . DS . $folder . DS;                          
+                $file_name = $row->file_name; 
+                $dFile = new DownloadFile($path_cads, $file_name);
+                exit;
+        }            
         function so_detail_support_doc()
         {
                 JRequest::setVar('layout', 'so_detail_doc');
@@ -6888,7 +6943,7 @@ class PNsController extends JController {
                 $msg = JText::_('Have successfuly delete pdf file');
                 $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id, $msg);
         }        
-/**
+        /**
          * @desc  Remove file cads
          */
         function remove_zip_so() {
@@ -6912,6 +6967,30 @@ class PNsController extends JController {
                 $msg = JText::_('Have successfuly delete zip file');
                 $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id=' . $so_id, $msg);
         }      
+ /**
+         * @desc  Remove file cads
+         */
+        function remove_file_wo_log() {
+                $db = & JFactory::getDBO();
+                $id = JRequest::getVar('id');
+                $wo_id = JRequest::getVar('woid');           
+                $query = "SELECT * from apdm_pns_wo_files WHERE id =" . $id;
+                $db->setQuery($query);
+                $row = $db->loadObject(); 
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo' ;
+                $folder = $row->wo_id;
+                $path_so_images = $path_upload  .DS. $folder . DS;                                 
+                $file_name = $row->file_name;
+                //get folder file cad          
+                $handle = new upload($path_so_images . $file_name);
+                $handle->file_dst_pathname = $path_so_images . $file_name;
+                $handle->clean();                     
+                
+                $db->setQuery("DELETE FROM apdm_pns_wo_files WHERE id=" . $id);
+                $db->query();
+                $msg = JText::_('Have successfuly delete file');
+                $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id=' . $wo_id, $msg);
+        }              
         /*
          * Asign template for get list child PNS  for PNS
          */
@@ -7834,6 +7913,57 @@ class PNsController extends JController {
                         $db->getQuery();
                         $db->query(); 
                 }
+               
+                if($_FILES['wo_log_zip']['size']>0){                                        
+                        $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo';
+                        $folder = $post['wo_id'];
+
+                        $path_wo_zips = $path_upload  .DS. $folder . DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_wo_zips, 0777);                        
+                        $arr_file_upload = array();
+                        $arr_error_upload_zips = array();
+                       // for ($i = 1; $i <= 20; $i++) {                                                                                    
+                        if (!move_uploaded_file($_FILES['wo_log_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_zip']['name'])) {
+                                $arr_error_upload_zips[] = $_FILES['wo_log_zip']['name'];
+                        } else {
+                                $arr_file_upload[] = $_FILES['wo_log_zip']['name'];
+                        }
+                        
+                       // }
+                        if (count($arr_file_upload) > 0) {
+                                foreach ($arr_file_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $post['wo_id'] . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }      
+                }
+                if($_FILES['wo_log_pdf']['size']>0){                                        
+                        $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo' . DS;
+                        $folder = $post['wo_id'];
+
+                        $path_wo_zips = $path_upload  .DS. $folder . DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_wo_zips, 0777);                        
+                        $arr_file_upload = array();
+                        $arr_error_upload_zips = array();
+                       // for ($i = 1; $i <= 20; $i++) {                                
+                                if ($_FILES['wo_log_pdf']['size'] > 0) {
+                                        if (!move_uploaded_file($_FILES['wo_log_pdf' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_pdf']['name'])) {
+                                                $arr_error_upload_zips[] = $_FILES['wo_log_pdf']['name'];
+                                        } else {
+                                                $arr_file_upload[] = $_FILES['wo_log_pdf']['name'];
+                                        }
+                                }
+                       // }
+
+                        if (count($arr_file_upload) > 0) {
+                                foreach ($arr_file_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $post['wo_id'] . ", '" . $file . "', 1,'" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }      
+                }                
                 //save log for delay
                 foreach($post['op_log_comment'] as $id=>$val)
                 {                     

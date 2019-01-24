@@ -94,7 +94,7 @@ window.print();
 	      
         <table class="tgdetail">
   <tr>
-          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg"></img></th>
+          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
     <th class="tg-c3ow" colspan="4">barcode</th>
   </tr>
