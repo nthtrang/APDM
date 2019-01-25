@@ -45,7 +45,8 @@ class pnsViewsearchsowo extends JView
                 $search_so = $search_wo = $so_status= $time_remain =$wo_status = $employee_id = $time_from =$time_to = $wo_op_status= "";  
         }
        
-        
+        $where = array();
+        $wherewo = array();
   
         if (isset( $search_so ) && $search_so!= '')
         {
@@ -54,12 +55,12 @@ class pnsViewsearchsowo extends JView
         }
         if (isset( $search_wo ) && $search_wo!= '')
         {
+                
             $searchWoEscaped = $db->Quote( '%'.$db->getEscaped( $search_wo, false ).'%', false );
             $wherewo[] = 'wo.wo_code LIKE '.$searchWoEscaped; 
            
         }
-        $where = array();
-        $wherewo = array();
+        
         
         $where[] = 'so.so_cuscode LIKE '.$searchSoEscaped;
           
@@ -158,7 +159,7 @@ class pnsViewsearchsowo extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
        
-        $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
+       $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
                ' ,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date'.
              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
              ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
@@ -173,9 +174,10 @@ class pnsViewsearchsowo extends JView
               
         //search WO
         $rs_wo = array();
+      //  var_dump($wherewo);
         
-        if(count( $wherewo )>1){
-        echo $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+        if(count( $wherewo )>0){
+        $sql = "select wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
                         " from apdm_pns_wo wo " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
                         $wherewo1;

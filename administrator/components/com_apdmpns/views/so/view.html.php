@@ -30,6 +30,7 @@ class pnsViewso extends JView {
                         $where[] = 'wo.wo_code LIKE ' . $searchEscaped . '';
                 }
                 $where[] ="wop.op_assigner = ".$me->get('id');
+                $where[] = " wop.op_status != 'done'";
 
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
                 $orderby = ' ORDER BY so.pns_so_id desc';
@@ -46,7 +47,7 @@ class pnsViewso extends JView {
                 jimport('joomla.html.pagination');
                 $pagination = new JPagination($total, $limitstart, $limit);
                 //for my task #somanagement
-                $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+              echo  $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
                         . ' from apdm_pns_wo_op wop '
                         .' inner join apdm_pns_wo wo on wo.pns_wo_id = wop.wo_id'
                         .' inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
@@ -65,8 +66,17 @@ class pnsViewso extends JView {
                           " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code".
                           " where ".
                           " ((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
-                          " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
+                       //   " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
+                        'or wo.pns_wo_id  in (select op.wo_id '.
+                               ' from apdm_pns_wo_op op '.
+                               ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
+                               ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "")) '.
+                        ' or wo.pns_wo_id  in (select op.wo_id '.
+                               ' from apdm_pns_wo_op op '.
+                               ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
+                               ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != ""))'.
                           " or op_delay != 0";
+               
                 $db->setQuery($query);
                 $report_list = $db->loadObjectList();
                 $usertype	= $me->get('usertype');

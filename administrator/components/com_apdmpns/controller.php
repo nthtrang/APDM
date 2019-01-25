@@ -7478,6 +7478,19 @@ class PNsController extends JController {
                                 $status ="wire_cut";
                                 $wopoStatus1 = "done";
                                 $wopoStatusTitle1 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date1']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step1' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date1'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step1' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }
                         }
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus1."', op_title ='".$wopoStatusTitle1."', op_comment = '".$post['op_comment1']."',op_delay_date = '".$post['op_completed_date1']."',op_completed_date = '".$post['op_completed_date1']."',op_assigner ='".$post['op_assigner1']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step1' and wo_id = ".$wo_id;                        
                         $db->setQuery($sql);
@@ -7494,7 +7507,7 @@ class PNsController extends JController {
                                          " ,op_delay_check = 0 ".
                                          " where op_code = 'wo_step1' and wo_id = ".$wo_id;
                                  $db->setQuery($sql);
-                                 $db->query();  
+                                 $db->query();                                   
                         }
                         //end op 1
                         
@@ -7506,6 +7519,19 @@ class PNsController extends JController {
                                 $status ="kitted";
                                 $wopoStatus2 = "done";
                                 $wopoStatusTitle2 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date2']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step2' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date2'] . "'".
+                                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step2' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }
                         }                        
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus2."', op_title ='".$wopoStatusTitle2."',op_comment = '".$post['op_comment2']."',op_delay_date = '".$post['op_completed_date2']."',op_completed_date = '".$post['op_completed_date2']."',op_assigner ='".$post['op_assigner2']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7534,6 +7560,19 @@ class PNsController extends JController {
                                 $status ="production";
                                 $wopoStatus3 = "done";
                                 $wopoStatusTitle3 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date3']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step3' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date3'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step3' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }
                         }                       
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus3."', op_title ='".$wopoStatusTitle3."',op_comment = '".$post['op_comment3']."',op_delay_date = '".$post['op_completed_date3']."',op_completed_date = '".$post['op_completed_date3']."',op_assigner ='".$post['op_assigner3']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7562,6 +7601,19 @@ class PNsController extends JController {
                                 $status ="visual_inspection";
                                 $wopoStatus4 = "done";
                                 $wopoStatusTitle4 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date4']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step4' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date4'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step4' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }
                         }
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus4."', op_title ='".$wopoStatusTitle4."',op_comment = '".$post['op_comment4']."',op_delay_date = '".$post['op_completed_date4']."',op_completed_date = '".$post['op_completed_date4']."',op_assigner ='".$post['op_assigner4']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7600,6 +7652,19 @@ class PNsController extends JController {
                                 $status ="final_inspection";
                                 $wopoStatus5 = "done";
                                 $wopoStatusTitle5 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date5']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step5' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date5'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step5' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }                                
                         }
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus5."', op_title ='".$wopoStatusTitle5."',op_comment = '".$post['op_comment5']."',op_delay_date = '".$post['op_completed_date5']."',op_completed_date = '".$post['op_completed_date5']."',op_assigner ='".$post['op_assigner5']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7641,6 +7706,19 @@ class PNsController extends JController {
                                 $status ="packaging";
                                 $wopoStatus6 = "done";
                                 $wopoStatusTitle6 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date6']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step6' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date6'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step6' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }                                 
                         }
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus6."', op_title ='".$wopoStatusTitle6."',op_comment = '".$post['op_comment6']."',op_delay_date = '".$post['op_completed_date6']."',op_completed_date = '".$post['op_completed_date6']."',op_assigner ='".$post['op_assigner6']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7682,6 +7760,19 @@ class PNsController extends JController {
                                 $status ="done";
                                 $wopoStatus7 = "done";
                                 $wopoStatusTitle7 = "Done";
+                                //check done with pass day target
+                                $query ="select DATEDIFF('".$post['op_completed_date7']."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step7' and op_delay_check=0 and wo_id = ".$wo_id;
+                                $db->setQuery($query);
+                                $delayt = $db->loadResult();
+                                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                                if($delayt>0)
+                                {
+                                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $post['op_completed_date7'] . "'".
+                                                 " ,op_delay_check = 1 , op_delay = op_delay + 1".
+                                                 " where op_code = 'wo_step7' and wo_id = ".$wo_id;
+                                         $db->setQuery($sql);
+                                         $db->query();  
+                                }                                 
                         }
                         $sql = "update apdm_pns_wo_op set op_status ='".$wopoStatus7."', op_title ='".$wopoStatusTitle7."',op_comment = '".$post['op_comment7']."',op_delay_date = '".$post['op_completed_date7']."',op_completed_date = '".$post['op_completed_date7']."',op_assigner ='".$post['op_assigner7']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
@@ -7923,11 +8014,18 @@ class PNsController extends JController {
                         $upload->r_mkdir($path_wo_zips, 0777);                        
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
-                       // for ($i = 1; $i <= 20; $i++) {                                                                                    
-                        if (!move_uploaded_file($_FILES['wo_log_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_zip']['name'])) {
-                                $arr_error_upload_zips[] = $_FILES['wo_log_zip']['name'];
-                        } else {
-                                $arr_file_upload[] = $_FILES['wo_log_zip']['name'];
+                       // for ($i = 1; $i <= 20; $i++) {       
+                        if ($_FILES['wo_log_zip']['size'] > 0 && $_FILES['wo_log_zip']['size']<20000000) {
+                                if (!move_uploaded_file($_FILES['wo_log_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_zip']['name'])) {
+                                        $arr_error_upload_zips[] = $_FILES['wo_log_zip']['name'];
+                                } else {
+                                        $arr_file_upload[] = $_FILES['wo_log_zip']['name'];
+                                }
+                        }
+                        else
+                        {
+                            $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
                         }
                         
                        // }
@@ -7947,13 +8045,18 @@ class PNsController extends JController {
                         $upload->r_mkdir($path_wo_zips, 0777);                        
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
-                       // for ($i = 1; $i <= 20; $i++) {                                
-                                if ($_FILES['wo_log_pdf']['size'] > 0) {
+                       // for ($i = 1; $i <= 20; $i++) {                              
+                                if ($_FILES['wo_log_pdf']['size'] > 0 && $_FILES['wo_log_pdf']['size']<20000000) {
                                         if (!move_uploaded_file($_FILES['wo_log_pdf' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_pdf']['name'])) {
                                                 $arr_error_upload_zips[] = $_FILES['wo_log_pdf']['name'];
                                         } else {
                                                 $arr_file_upload[] = $_FILES['wo_log_pdf']['name'];
                                         }
+                                }
+                                else
+                                {
+                                    $msg = JText::_('Please upload file less than 20MB.');
+                                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
                                 }
                        // }
 
@@ -7963,7 +8066,38 @@ class PNsController extends JController {
                                         $db->query();
                                 }
                         }      
-                }                
+                }       
+                if($_FILES['wo_log_image']['size']>0){                                        
+                        $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo' . DS;
+                        $folder = $post['wo_id'];
+
+                        $path_wo_zips = $path_upload  .DS. $folder . DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_wo_zips, 0777);                        
+                        $arr_file_upload = array();
+                        $arr_error_upload_zips = array();
+                       // for ($i = 1; $i <= 20; $i++) {                                
+                                if ($_FILES['wo_log_image']['size'] > 0 && $_FILES['wo_log_image']['size']<20000000) {
+                                        if (!move_uploaded_file($_FILES['wo_log_image' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_image']['name'])) {
+                                                $arr_error_upload_zips[] = $_FILES['wo_log_image']['name'];
+                                        } else {
+                                                $arr_file_upload[] = $_FILES['wo_log_image']['name'];
+                                        }
+                                }
+                                else
+                                {
+                                    $msg = JText::_('Please upload file less than 20MB.');
+                                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
+                                }
+                       // }
+
+                        if (count($arr_file_upload) > 0) {
+                                foreach ($arr_file_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $post['wo_id'] . ", '" . $file . "', 2,'" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                        $db->query();
+                                }
+                        }      
+                }                  
                 //save log for delay
                 foreach($post['op_log_comment'] as $id=>$val)
                 {                     

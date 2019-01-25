@@ -63,7 +63,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         </tr>
                                         <tr>
                                                 <td>
-                                                        <textarea maxlength='200' name="wo_log" rows="10" cols="100"><?php echo $this->wo_row->wo_log; ?></textarea>
+                                                        <textarea name="wo_log" rows="10" cols="70"><?php echo $this->wo_row->wo_log; ?></textarea>
                                                 </td>
                                                 <td>
                                                         <span id="1">
@@ -71,7 +71,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         						</span>
                                                         <span id="2">
 							PDF: <input type="file" name="wo_log_pdf" /> 
-                                                        </span>    
+                                                        </span>
+                                                         <span id="2">
+							Image: <input type="file" name="wo_log_image" /> 
+                                                        </span>  
                                                         <br>
                                                         <table>
                                                                          <?php if (count($this->list_file_log) > 0) {

@@ -150,7 +150,7 @@ if (count($this->so_list) > 0) { ?>
                        $soNumber = $so->ccs_so_code."-".$soNumber;
                 }
                 $background="";
-                $remain_day = $so->wo_remain_date;
+                $remain_day = $so->wo_remain_date+1;
                 if($remain_day<=0)
                 {       
                         $remain_day = 0;

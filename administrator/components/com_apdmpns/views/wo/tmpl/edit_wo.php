@@ -67,10 +67,16 @@
 		}                    
                 var date = new Date();
                 current_month = date.getMonth()+1;
-                var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+                current_day = date.getDate();
+                var current_date = date.getFullYear()+"-"+current_month+"-"+ (current_day < 10 ? "0"+current_day : current_day);                
                 var current_date = new Date(current_date);
                 var start_date = new Date(form.wo_start_date.value);
-                var complete_date = new Date(form.wo_completed_date.value);              
+                var complete_date = new Date(form.wo_completed_date.value);   
+                start_date = start_date.setHours(0,0,0,0);
+                complete_date = complete_date.setHours(0,0,0,0);
+                
+                
+                
 //                if (current_date > start_date ) 
 //                {
 //                    alert("Invalid Date Range!\nStart Date cannot be before Today!")
@@ -82,7 +88,8 @@
                     return false;
                 }          
                 //date step1 
-                var op_target_date1 = new Date(form.op_target_date1.value);                
+                var op_target_date1 = new Date(form.op_target_date1.value);   
+                op_target_date1 = op_target_date1.setHours(0,0,0,0);
                 if (op_target_date1 < start_date || op_target_date1 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 1: Target Date cannot be before Start Date or after Complete Date!!")
@@ -97,6 +104,7 @@
 //                }                                
                  //date step2 
                 var op_target_date2 = new Date(form.op_target_date2.value);                
+                op_target_date2 = op_target_date2.setHours(0,0,0,0);
                 if (op_target_date2 < start_date || op_target_date2 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 2: Target Date cannot be before Start Date or after Complete Date!!")
@@ -111,6 +119,7 @@
 //                }                                
                  //date step3 
                 var op_target_date3 = new Date(form.op_target_date3.value);                
+                 op_target_date3 = op_target_date3.setHours(0,0,0,0);
                 if (op_target_date3 < start_date || op_target_date3 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 3: Target Date cannot be before Start Date or after Complete Date!!")
@@ -124,7 +133,8 @@
 //                    return false;
 //                }                     
                  //date step4 
-                var op_target_date4 = new Date(form.op_target_date4.value);                
+                var op_target_date4 = new Date(form.op_target_date4.value);       
+                 op_target_date4 = op_target_date4.setHours(0,0,0,0);
                 if (op_target_date4 < start_date || op_target_date4 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 4: Target Date cannot be before Start Date or after Complete Date!!")
@@ -139,6 +149,7 @@
 //                }                  
                  //date step5 
                 var op_target_date5 = new Date(form.op_target_date5.value);                
+                 op_target_date5 = op_target_date5.setHours(0,0,0,0);
                 if (op_target_date5 < start_date || op_target_date5 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 5: Target Date cannot be before Start Date or after Complete Date!!")
@@ -153,6 +164,7 @@
 //                }  
                 //date step6
                 var op_target_date6 = new Date(form.op_target_date6.value);                
+                 op_target_date6 = op_target_date6.setHours(0,0,0,0);
                 if (op_target_date6 < start_date || op_target_date6 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 6: Target Date cannot be before Start Date or after Complete Date!!")
@@ -166,19 +178,21 @@
 //                    return false;
 //                } 
                 //date step7
-                var op_target_date7 = new Date(form.op_target_date7.value);                
+                var op_target_date7 = new Date(form.op_target_date7.value);        
+                 op_target_date7 = op_target_date7.setHours(0,0,0,0);
                 if (op_target_date7 < start_date || op_target_date7 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 7: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 } 
                 //date complete step7
-//                var op_completed_date7 = new Date(form.op_completed_date7.value); 
-//                if(op_completed_date7 > op_target_date7)
-//                {
-//                    alert("Invalid Date Range!\nStep 7: Completed Date cannot be after Target Date!!")
-//                    return false;
-//                } 
+                var op_completed_date7 = new Date(form.op_completed_date7.value); 
+                 op_completed_date7 = op_completed_date7.setHours(0,0,0,0);
+                if (current_date < op_completed_date7 || current_date > op_completed_date7 ) 
+                {
+                    alert("Invalid Date Range!\nStep 7: Complete Date cannot be less or greater than Today!")
+                    return false;
+                }
                 submitform( pressbutton );
         }                
         window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });

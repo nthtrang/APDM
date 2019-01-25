@@ -21,9 +21,7 @@ if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo
 
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
-?>
-
-<?php
+$generator = new BarcodeGeneratorHTML();        
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
@@ -119,9 +117,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 	      
         <table class="tgdetail">
   <tr>
-          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg"></img></th>
+          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
-    <th class="tg-c3ow" colspan="4">barcode</th>
+    <th class="tg-c3ow" colspan="4">
+            <?php 
+            // echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);            
+             //TYPE_EAN_13
+             //TYPE_CODE_128
+            ?>
+    </th>
   </tr>
   <tr>
     <td class="tg-7jts" colspan="10"><span style="font-weight:bold">JOB INFORMATION</span></td>

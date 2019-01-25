@@ -5,6 +5,8 @@
 //error_reporting(E_ALL);
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
+include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGenerator.php');
+include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGeneratorHTML.php');
 
 class pnsViewwo extends JView {
 
@@ -174,7 +176,7 @@ class pnsViewwo extends JView {
                         " where op.wo_id = ".$wo_id."".
                         " and ((op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
                         " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
-						 " or op_delay != 0)";
+			" or op_delay != 0)";
                 $db->setQuery($query);
                 $wo_delay = $db->loadObjectList();
                 $this->assignRef('wo_delay', $wo_delay);

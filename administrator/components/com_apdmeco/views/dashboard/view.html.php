@@ -95,7 +95,11 @@ class ecoViewdashboard extends JView
                          $db->query();  
                 }
                 //check wo
-                $query ="select * from apdm_pns_wo_op where  DATEDIFF(CURDATE(),op_target_date)>0 and  op_delay_check  =0 and (op_status ='pending' or  op_status ='' or op_completed_date = '0000-00-00 00:00:00')";
+                $query ="select * from apdm_pns_wo_op ".
+                        " where  DATEDIFF(CURDATE(),op_target_date)>0 and  op_delay_check  =0 ".
+                         " and ((op_status ='pending' and op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                        " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
+			" or op_delay != 0)";                        
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 foreach($rows as $row)

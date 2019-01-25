@@ -241,16 +241,22 @@ if (count($this->rs_wo) > 0) { ?>
                 }
                
                 $background="";
-                $remain_day = $wo->wo_remain_date;
+                $remain_day = $wo->wo_remain_date+1;
                 if($remain_day<=0)
-                {       
-                        $remain_day = 0;
-                        $background= "style='background-color:#f00;color:#fff'";
-                }
-                elseif($wo->wo_remain_date<=3)
-                {                         
-                        $background= "style='background-color:#ff0;color:#000'";
-                }
+                        {       
+                                $remain_day = 0;
+                                if($wo->wo_state != 'done')
+                                {
+                                        $background= "style='background-color:#f00;color:#fff'";
+                                }
+                        }
+                        elseif($wo->wo_remain_date<=3)
+                        {        
+                                if($wo->wo_state != 'done')
+                                {
+                                        $background= "style='background-color:#ff0;color:#000'";
+                                }
+                        }
                 ?>
                                         <tr>
                                                 <td><?php echo $i;?></td>                                            

@@ -112,6 +112,12 @@ function getccsCoordinator(ccs_code)
                                         }
                         }
                 }).request();
+                
+                var inpFiles = document.adminForm('#pns_image1');
+                for (var i = 0; i < 20; ++i) {
+                    var size = inpFiles.files.item(i).size;
+                    alert("File Size : " + size);
+                }
 		 
 	}
         
