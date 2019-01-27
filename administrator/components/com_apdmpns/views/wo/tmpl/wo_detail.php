@@ -21,7 +21,7 @@ if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo
 
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
-$generator = new BarcodeGeneratorHTML();        
+//$generator = new BarcodeGeneratorHTML();       
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
@@ -124,6 +124,18 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             // echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);            
              //TYPE_EAN_13
              //TYPE_CODE_128
+            $img			=	code128BarCode($this->wo_row->wo_code, 1);
+		
+        //Start output buffer to capture the image
+        //Output PNG image
+        
+		ob_start();
+		imagepng($img);
+		
+        //Get the image from the output buffer
+        
+		$output_img		=	ob_get_clean();
+                echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$this->wo_row->wo_code;
             ?>
     </th>
   </tr>
@@ -456,9 +468,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 </table>		       
-        <input type="text" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
+        <input type="hidden" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
-        <input type="text" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>

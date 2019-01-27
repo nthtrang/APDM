@@ -5,9 +5,9 @@
 //error_reporting(E_ALL);
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
-include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGenerator.php');
-include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGeneratorHTML.php');
-
+//include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGenerator.php');
+//include_once(JPATH_BASE .DS.'includes'.DS.'php-barcode-generator-master'.DS.'src'.DS.'BarcodeGeneratorHTML.php');
+include_once (JPATH_BASE .DS.'includes'.DS.'PHP-Barcode-111'.DS.'barcode.php');
 class pnsViewwo extends JView {
 
         function display($tpl = null) {

@@ -19,7 +19,7 @@ if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo
 }
  JToolBarHelper::editListX("editwo","Edit WO");
  JToolBarHelper::customX("printwopdf","print",'',"Print",false);        
-$generator = new BarcodeGeneratorHTML();      
+//$generator = new BarcodeGeneratorHTML();      
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>
@@ -96,11 +96,25 @@ window.print();
   <tr>
           <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
-    <th class="tg-c3ow" colspan="4">  <?php 
-          //   echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);
+    <th class="tg-c3ow" colspan="4">  
+             <?php 
+            // echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);            
              //TYPE_EAN_13
              //TYPE_CODE_128
-            ?></th>
+            $img			=	code128BarCode($this->wo_row->wo_code, 1);
+		
+        //Start output buffer to capture the image
+        //Output PNG image
+        
+		ob_start();
+		imagepng($img);
+		
+        //Get the image from the output buffer
+        
+		$output_img		=	ob_get_clean();
+                echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$this->wo_row->wo_code;
+            ?>
+    </th>
   </tr>
   <tr>
     <td class="tg-7jts" colspan="10"><span style="font-weight:bold">JOB INFORMATION</span></td>
@@ -276,7 +290,7 @@ window.print();
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value3; ?></td>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
-    <td class="tg-0pky"></td>
+    <td class="tg-0pky">&nbsp;</td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
