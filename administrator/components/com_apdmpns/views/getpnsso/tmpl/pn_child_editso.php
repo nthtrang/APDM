@@ -3,7 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
-        $so_id		= JRequest::getVar( 'soid');
+         $so_id		= JRequest::getVar( 'soid');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 

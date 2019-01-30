@@ -37,6 +37,11 @@ class pnsViewsearchall extends JView
         $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
         
         
+        $clean = JRequest::getVar('clean');
+         if($clean=="all")
+        {
+                $search = $filter_order = $filter_status= $filter_type =$filter_modified_by = $filter_created_by = $type_filter = "";  
+        }
         $where = array();  
         
         

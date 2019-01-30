@@ -34,7 +34,7 @@ class pnsViewgetpnsso extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns&task=get_list_child';
         $id               = JRequest::getVar('id');
-        $so_id               = JRequest::getVar('so_id');
+        $so_id               = JRequest::getVar('soid');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
@@ -77,7 +77,7 @@ class pnsViewgetpnsso extends JView
 //            $inner =  ' inner join apdm_pns_so_fk AS fk on p.pns_id = fk.pns_id ';
 //        }	
         if ($so_id){ //get pns_child have exist
-                
+           
 // function DisplayPnsAllChildId($pns_id) {
 //                $db = & JFactory::getDBO();
 //                $rows = array();

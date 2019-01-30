@@ -20,6 +20,8 @@ function UpdateECO(){
 				window.parent.document.getElementById('so_code').value = eco[1];
 				window.parent.document.getElementById('so_id').value = eco[0];
                                 window.parent.document.getElementById('so_request_date').value = eco[2];
+                                window.parent.document.getElementById('so_start_date').value = eco[4];
+                                
                                 if(eco[3]==1)
                                 {
                                         window.parent.document.getElementById('wo_rma_active').checked  =true;              

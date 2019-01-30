@@ -72,8 +72,8 @@ window.print();
 </script>
 <style type="text/css">
 .tgdetail  {border-collapse:collapse;border-spacing:0;}
-.tgdetail td{font-family:Arial, sans-serif;font-size:10px;padding:0px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
-.tgdetail th{font-family:Arial, sans-serif;font-size:10px;font-weight:normal;padding:0px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tgdetail td{font-family:Arial, sans-serif;font-size:11px;padding:2.5px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tgdetail th{font-family:Arial, sans-serif;font-size:11px;font-weight:normal;padding:0px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tgdetail .tg-88nc{font-weight:bold;border-color:inherit;text-align:center}
 .tgdetail .tg-w9sc{font-size:13px;border-color:inherit;text-align:center}
 .tgdetail .tg-b2ze{font-weight:bold;font-size:13px;border-color:inherit;text-align:left;vertical-align:top}
@@ -94,9 +94,9 @@ window.print();
 	      
         <table class="tgdetail">
   <tr>
-          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg"></img></th>
+          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg" width="150px"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
-    <th class="tg-c3ow" colspan="4">  
+    <th class="tg-c3ow" colspan="4">  <br>
              <?php 
             // echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);            
              //TYPE_EAN_13

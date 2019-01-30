@@ -154,12 +154,18 @@ if (count($this->so_list) > 0) { ?>
                 if($remain_day<=0)
                 {       
                         $remain_day = 0;
-                        $background= "style='background-color:#f00;color:#fff'";
+                        if($so->wo_state != 'done' && $so->wo_state != 'cancel')
+                        {
+                                $background= "style='background-color:#f00;color:#fff'";
+                        }
                 }
-                elseif($so->wo_remain_date<=3)
-                {                         
-                        $background= "style='background-color:#ff0;color:#000'";
-                }
+                elseif($remain_day<=3)
+                {               
+                        if($so->wo_state != 'done' && $so->wo_state != 'cancel')
+                        {
+                                $background= "style='background-color:#ff0;color:#000'";
+                        }
+                }                
                 ?>
                                         <tr>
                                                 <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
@@ -216,9 +222,9 @@ if (count($this->report_list) > 0) { ?>
         foreach ($this->report_list as $so) {
                 $i++;              
                 $soNumber = $so->so_cuscode;
-                if($so->ccs_code)
+                if($so->ccs_so_code)
                 {
-                       $soNumber = $so->ccs_code."-".$soNumber;
+                       $soNumber = $so->ccs_so_code."-".$soNumber;
                 }
                 ?>
                                         <tr>

@@ -26,6 +26,7 @@ class  pnsViewgetso extends JView
 		$limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
 		$where = array();
+                $where[] = 'so.so_state not in ("done","cancel")';
 		if (isset( $search ) && $search!= '')
 		{
                         $search1 = explode("-", $search);

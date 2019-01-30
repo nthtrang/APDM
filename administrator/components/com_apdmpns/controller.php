@@ -304,7 +304,7 @@ class PNsController extends JController {
          * add bom tab in pn detail
          */
 
-        function searchall() {
+        function searchall() {                
                 JRequest::setVar('layout', 'default');
                 JRequest::setVar('view', 'searchall');
                 parent::display();
@@ -6503,7 +6503,7 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 $row = & JTable::getInstance('apdmpns');
                 $datenow = & JFactory::getDate();                
-                $so_id = JRequest::getVar('so_id');        
+                $so_id = JRequest::getVar('so_id');       
                 
                 //get so info
                 $db->setQuery("SELECT * from apdm_pns_so where pns_so_id=".$so_id);
@@ -6519,12 +6519,17 @@ class PNsController extends JController {
                 $arr_file_upload = array();
                 $arr_error_upload_zips = array();
                 for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
+                        if ($_FILES['pns_zip' . $i]['size'] > 0 && $_FILES['pns_zip' . $i]['size']<20000000) {
                                 if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
                                         $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
                                 } else {
                                         $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
                                 }
+                        }
+                        else
+                        {        
+                            $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);    
                         }
                 }
                 if (count($arr_file_upload) > 0) {
@@ -6571,7 +6576,7 @@ class PNsController extends JController {
                 $arr_error_upload_pdf = array();
                 $arr_pdf_upload = array();
                 for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+                        if ($_FILES['pns_pdf' . $i]['size'] > 0 && $_FILES['pns_pdf' . $i]['size']<20000000) {
                                 $imge = new upload($_FILES['pns_pdf' . $i]);
                                 $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;                                       
 
@@ -6587,6 +6592,11 @@ class PNsController extends JController {
                                                 $arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
                                         }
                                 }
+                        }
+                        else
+                        {
+                                $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);         
                         }
                 }
                 if (count($arr_pdf_upload) > 0) {
@@ -7019,10 +7029,10 @@ class PNsController extends JController {
                         '<td class="key">F.A Required</td>'.
                         '<td class="key">ESD Required</td>'.
                         '<td class="key">COC Required</td></tr>';                     
-                //get curent pns
+                //get curent pns was addinto SO
                 $db->setQuery("SELECT fk.*,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=".$so_id);                
                 $rows = $db->loadObjectList();
-                $arrPnsExist=array();
+                $arrPnsExist=array(0);
                 foreach ($rows as $row) {
                         $arrPnsExist[]=$row->pns_id;
                          if ($row->pns_revision) {
@@ -7060,8 +7070,8 @@ class PNsController extends JController {
                  
                 $query = "select pns_id,pns_uom,pns_description, CONCAT_WS( '-', ccs_code, pns_code, pns_revision) AS pns_full_code,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . implode(",", $cid) . ") and pns_id not in (" . implode(",", $arrPnsExist) . ")";
                 $db->setQuery($query);
-                $rows = $db->loadObjectList();                                                              
-                foreach ($rows as $row) {
+                $rows1 = $db->loadObjectList();                                                              
+                foreach ($rows1 as $row) {
                          if ($row->pns_revision) {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
                         } else {
@@ -7077,8 +7087,9 @@ class PNsController extends JController {
                                 ' <td class="key"><input checked="checked" type="checkbox" name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
                                 ' <td class="key"><input checked="checked" type="checkbox" name="esd_required['.$row->pns_id.']" value="1" /> </td>'.
                                 ' <td class="key"><input checked="checked" type="checkbox" name="coc_required['.$row->pns_id.']" value="1" /> </td>';
-                }                
-                echo $str ."</table>";
+                }      
+                $tol = count($rows)+count($rows1);
+                echo $str .'<tr><td><input type="text" name="boxcheckedpn" value="'.$tol.'" /></td></tr></table>';
                 exit;
         }             
         function save_editso()
@@ -7231,7 +7242,7 @@ class PNsController extends JController {
                 {
                        $soNumber = $row->ccs_code."-".$soNumber;
                 }                     
-                $result = $id.'^'.$soNumber.'^'.$row->so_shipping_date.'^'.$row->so_is_rma;
+                $result = $id.'^'.$soNumber.'^'.$row->so_shipping_date.'^'.$row->so_is_rma.'^'.$row->so_start_date;
                 echo $result;
                 exit;
         }
@@ -8227,6 +8238,7 @@ class PNsController extends JController {
                 $array['so_id'] = $so_id;
                 $array['so_code'] = $soNumber;
                 $array['so_shipping_date'] = $row->so_shipping_date;
+                $array['so_start_date'] = $row->so_start_date;
                 return $array;                           
         }
           /*

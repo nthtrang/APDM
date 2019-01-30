@@ -31,41 +31,31 @@ class pnsViewso extends JView {
                 }
                 $where[] ="wop.op_assigner = ".$me->get('id');
                 $where[] = " wop.op_status != 'done'";
-
+                $where[] = " so.so_state not in('done','cancel')";
+                
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
                 $orderby = ' ORDER BY so.pns_so_id desc';
-                $query = 'SELECT COUNT(*)'
-                        . ' from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
-                        . ' left join apdm_pns p on  p.pns_id = wo.pns_id  '
-                        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
-                        . $where
-                ;
 
-                $db->setQuery($query);
-                $total = $db->loadResult();
 
-                jimport('joomla.html.pagination');
-                $pagination = new JPagination($total, $limitstart, $limit);
                 //for my task #somanagement
-                $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,ccs.ccs_code as ccs_so_code,ccs.ccs_coordinator,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+               $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,so.customer_id as ccs_so_code,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
                         . ' from apdm_pns_wo_op wop '
                         .' inner join apdm_pns_wo wo on wo.pns_wo_id = wop.wo_id'
                         .' inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
                         . ' left join apdm_pns p on  p.pns_id = wo.pns_id '
-                        . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
+                      //  . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
                         . $where
                         . $orderby;
-                $lists['query'] = base64_encode($query);
-                $lists['total_record'] = $total;
-                $db->setQuery($query, $pagination->limitstart, $pagination->limit);
+
+                $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 //for issue report                                
-                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,ccs.ccs_code,ccs.ccs_coordinator,wo.wo_code,so.pns_so_id,wo.pns_wo_id,wo.wo_delay".
+                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,so.customer_id as ccs_so_code,wo.wo_code,so.pns_so_id,wo.pns_wo_id,wo.wo_delay".
                           " from apdm_pns_wo_op op inner join apdm_pns_wo wo on op.wo_id = wo.pns_wo_id".
                           " inner join  apdm_pns_so so on so.pns_so_id = wo.so_id".
-                          " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code".
+                         # " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code". //ccs.ccs_code,ccs.ccs_coordinator,
                           " where ".
-                          " ((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                          " (((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
                        //   " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
                         'or wo.pns_wo_id  in (select op.wo_id '.
                                ' from apdm_pns_wo_op op '.
@@ -75,7 +65,7 @@ class pnsViewso extends JView {
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
                                ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != ""))'.
-                          " or op_delay != 0";
+                          " or op_delay != 0) and op_status != 'done'";
                
                 $db->setQuery($query);
                 $report_list = $db->loadObjectList();
@@ -89,7 +79,7 @@ class pnsViewso extends JView {
                 $pns_list = $db->loadObjectList();
                 $this->assignRef('so_pn_list', $pns_list);
 
-                $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $so_id);
+                $db->setQuery("SELECT so.*,max(date(wo.wo_completed_date)) as max_wo_completed,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $so_id);
                 $so_row = $db->loadObject();
                 $this->assignRef('so_row', $so_row);
 
@@ -99,13 +89,14 @@ class pnsViewso extends JView {
                 $statusValue[] = JHTML::_('select.option', 'inprogress', JText::_('In Progress'), 'value', 'text');
                 $statusValue[] = JHTML::_('select.option', 'onhold', JText::_('On hold'), 'value', 'text');
                 $statusValue[] = JHTML::_('select.option', 'cancel', JText::_('Cancel'), 'value', 'text');
+                $statusValue[] = JHTML::_('select.option', 'done', JText::_('Done'), 'value', 'text');
                 $classDisabled = 'disabled = "disabled"';
                 $defaultStatus = "inprogress";
                 if ($so_row->so_state)
                         $defaultStatus = $so_row->so_state;
                 $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " ' . $classDisabled . ' size="1"', 'value', 'text', $defaultStatus);
 
-                $arrStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+                $arrStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'), 'done' => JText::_('Done'));
 
                 //Customer
                 $cccpn[0] = JHTML::_('select.option', 0, '- ' . JText::_('SELECT_CCS') . ' -', 'value', 'text');
@@ -141,7 +132,7 @@ class pnsViewso extends JView {
                 $sql = "select wo.pns_wo_id,wo.wo_log,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
                         " from apdm_pns_wo wo inner join apdm_pns_so so on wo.so_id = so.pns_so_id " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
-                        "where so.pns_so_id =" . $so_row->pns_so_id;
+                        " where so.pns_so_id =" . $so_row->pns_so_id;
                 $db->setQuery($sql);
                 $wo_lists = $db->loadObjectList();
                 $this->assignRef('wo_list', $wo_lists);                

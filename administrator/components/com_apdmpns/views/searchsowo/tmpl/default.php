@@ -241,18 +241,19 @@ if (count($this->rs_wo) > 0) { ?>
                 }
                
                 $background="";
-                $remain_day = $wo->wo_remain_date+1;
-                if($remain_day<=0)
+                 $remain_day = $wo->wo_remain_date+1;
+                
+                        if($remain_day<=0)
                         {       
                                 $remain_day = 0;
-                                if($wo->wo_state != 'done')
+                                if($wo->wo_state != 'done' && $wo->wo_state != 'cancel')
                                 {
                                         $background= "style='background-color:#f00;color:#fff'";
                                 }
                         }
-                        elseif($wo->wo_remain_date<=3)
+                        elseif($remain_day<=3)
                         {        
-                                if($wo->wo_state != 'done')
+                                if($wo->wo_state != 'done' && $wo->wo_state != 'cancel')
                                 {
                                         $background= "style='background-color:#ff0;color:#000'";
                                 }

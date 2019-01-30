@@ -454,7 +454,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 						</span>
 					</div>
 						<br />
-						<a href="javascript:;"id="lnkfichier" title="<?php echo JText::_('Click here to add more ZIP files');?>" ><?php echo JText::_('Click here to add more CAD files');?></a>
+						<a href="javascript:;"id="lnkfichier" title="<?php echo JText::_('Click here to add more ZIP files');?>" ><?php echo JText::_('Click here to add more ZIP files');?></a>
 					</td>
 				</tr>                                
                                           </table>

@@ -12,12 +12,10 @@
         }              
         JToolBarHelper::title( JText::_( 'WO GENERATION' ) . ': <small><small>[ New ]</small></small>' , 'cpanel.png' );
         JToolBarHelper::apply('save_works_order', 'Save');
-	if ( $edit ) {
-		// for existing items the button is renamed `close`
-		JToolBarHelper::cancel( 'somanagement', 'Close' );
-	} else {
-		JToolBarHelper::cancel();
-	}
+
+	JToolBarHelper::cancel( 'cancelWo', 'Close' );
+	
+         
         // clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 	
@@ -39,7 +37,11 @@ function getccsCoordinator(ccs_code)
 		if (pressbutton == 'cancel') {
 			submitform( pressbutton );
 			return;
-		}                
+		}            
+                if (pressbutton == 'cancelWo') {
+                        submitform( pressbutton );
+                        return;
+                }
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
 		if (form.wo_code.value==0){
 			alert("Please select WO Number");
@@ -72,6 +74,32 @@ function getccsCoordinator(ccs_code)
                 var current_date = new Date(current_date);
                 var start_date = new Date(form.wo_start_date.value);
                 var complete_date = new Date(form.wo_completed_date.value);              
+                
+                var so_start_date = new Date(form.so_start_date.value);   
+                so_start_date = so_start_date.setHours(0,0,0,0);
+                var so_shipping_date = new Date(form.so_request_date.value);   
+                so_shipping_date = so_shipping_date.setHours(0,0,0,0);
+                 
+                if (so_start_date > start_date ) 
+                {
+                    alert("Invalid Date Range!\nStart Date cannot be before SO start!" + form.so_start_date.value)
+                    return false;
+                }
+                if (start_date > so_shipping_date ) 
+                {
+                    alert("Invalid Date Range!\nStart Date cannot be after SO Finish!"+ form.so_request_date.value)
+                    return false;
+                }
+                if (complete_date < start_date ) 
+                {
+                    alert("Invalid Date Range!\nFinished Date cannot be before SO start!"+form.so_start_date.value)
+                    return false;
+                }
+                if (complete_date > so_shipping_date ) 
+                {
+                    alert("Invalid Date Range!\nFinished Date cannot be after SO Finish!"+form.so_request_date.value)
+                    return false;
+                }                
                 if (current_date > start_date ) 
                 {
                     alert("Invalid Date Range!\nStart Date cannot be before Today!")
@@ -283,7 +311,8 @@ function check_so_first()
 							<?php echo JText::_( 'SO NUMBER' ); ?>
 						</label>
 					</td>
-					<td>
+					<td>                                          
+                                          <input type="hidden" value="<?php echo  $so_info['so_start_date'];?>" name="so_start_date" id="so_start_date" readonly="readonly" />                                                
 					<input type="text" value="<?php echo $so_info['so_code'];?>" name="so_code" id="so_code" readonly="readonly" />
 					<input type="hidden" name="so_id" id="so_id" value="<?php echo $so_info['so_id'];?>" />
 						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_so_ajax&tmpl=component" title="Image">

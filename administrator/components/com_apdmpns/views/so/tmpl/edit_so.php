@@ -39,6 +39,74 @@
                         form.customer_id.focus();
                         return false;
                 }
+                if (form.so_cuscode.value==0){
+			alert("Please input PO# of Customer");
+			form.so_cuscode.focus();
+			return false;
+		}  
+                if (form.boxcheckedpn.value==0){
+			alert("Please select a TOP ASSY PN");			
+			return false;
+		}
+                else
+                {
+                        var cpn = document.getElementsByName('pns_child[]');
+                        var len = cpn.length;
+                        for (var i=0; i<len; i++) {
+                               // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
+                                var qty_value = document.getElementById('qty[' +cpn[i].value+']').value;
+                                var price_value = document.getElementById('price[' +cpn[i].value+']').value;
+                                if(qty_value==0)
+                                {
+                                        alert("Please input QTY for PN");    
+                                        document.getElementById('qty[' +cpn[i].value+']').focus();
+                                        return false;
+                                }
+                                if(price_value==0)
+                                {
+                                        alert("Please input Price for PN");      
+                                        document.getElementById('price[' +cpn[i].value+']').focus();
+                                        return false;
+                                }
+                        }
+                       // submitform( pressbutton );
+                }                
+                var date = new Date();
+                current_month = date.getMonth()+1;
+                var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+                var current_date = new Date(current_date);
+                var so_shipping_date = new Date(form.so_shipping_date.value);
+                so_shipping_date = so_shipping_date.setHours(0,0,0,0);
+                var so_start_date = new Date(form.so_start_date.value);  
+                so_start_date = so_start_date.setHours(0,0,0,0);
+                if (form.so_shipping_date.value==0){
+			alert("Please input Shipping Request Date");
+			form.so_shipping_date.focus();
+			return false;
+		}  
+//                if (current_date > so_shipping_date ) 
+//                {
+//                    alert("Invalid Date Range!\nShipping Request Date cannot be before Today!")
+//                    return false;
+//                }
+                if (so_shipping_date < so_start_date ) 
+                {
+                    alert("Invalid Date Range!\nShipping Date cannot be before StartDate!")
+                    return false;
+                }
+                //check max WO finish date
+                var max_wo_completed  = new Date(form.max_wo_completed.value);
+                max_wo_completed = max_wo_completed.setHours(0,0,0,0);                
+                if(max_wo_completed)
+                {
+                      if (so_shipping_date < max_wo_completed ) 
+                        {
+                            alert("Invalid Date Range!\nShipping Date cannot be before WO Complete belong this SO!")
+                            return false;
+                        }  
+
+                }
+                
                 submitform( pressbutton );
         }                
         window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
@@ -138,7 +206,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 							<?php echo JText::_( 'Start Date' ); ?>
 						</label>
 					</td>
-					<td>                                                 
+					<td>   
+                                                 <input type="text" maxlength="20" name="max_wo_completed"  id="max_wo_completed" class="inputbox" size="30" value="<?php echo $this->so_row->max_wo_completed;?>"/>
                                                <?php echo JHTML::_('calendar',$this->so_row->so_start_date, 'so_start_date', 'so_start_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>    
@@ -155,7 +224,9 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         '<td class="key">Unit Price</td>'.
                         '<td class="key">F.A Required</td>'.
                         '<td class="key">ESD Required</td>'.
-                        '<td class="key">COC Required</td></tr>';
+                        '<td class="key">COC Required</td></tr>'.
+                        '<tr><td><input type="text" name="boxcheckedpn" value="'.count($this->so_pn_list).'" /></td></tr>';
+                                                
                 foreach ($this->so_pn_list as $row) {
                          if ($row->pns_revision) {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;

@@ -74,14 +74,33 @@
                 var complete_date = new Date(form.wo_completed_date.value);   
                 start_date = start_date.setHours(0,0,0,0);
                 complete_date = complete_date.setHours(0,0,0,0);
+
+                var so_start_date = new Date(form.so_start_date.value);   
+                so_start_date = so_start_date.setHours(0,0,0,0);
+                var so_shipping_date = new Date(form.so_request_date.value);   
+                so_shipping_date = so_shipping_date.setHours(0,0,0,0);
+                 
+                if (so_start_date > start_date ) 
+                {
+                    alert("Invalid Date Range!\nStart Date cannot be before SO start!"+form.so_start_date.value)
+                    return false;
+                }
+                if (start_date > so_shipping_date ) 
+                {
+                    alert("Invalid Date Range!\nStart Date cannot be after SO Finish!"+form.so_request_date.value)
+                    return false;
+                }
+                if (complete_date < start_date ) 
+                {
+                    alert("Invalid Date Range!\nFinished Date cannot be before SO start!"+form.so_start_date.value)
+                    return false;
+                }
+                if (complete_date > so_shipping_date ) 
+                {
+                    alert("Invalid Date Range!\nFinished Date cannot be after SO Finish!"+form.so_request_date.value)
+                    return false;
+                }
                 
-                
-                
-//                if (current_date > start_date ) 
-//                {
-//                    alert("Invalid Date Range!\nStart Date cannot be before Today!")
-//                    return false;
-//                }
                 if (start_date > complete_date ) 
                 {
                     alert("Invalid Date Range!\nStart Date cannot be after Complete Date!!")
@@ -93,6 +112,15 @@
                 if (op_target_date1 < start_date || op_target_date1 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 1: Target Date cannot be before Start Date or after Complete Date!!")
+                    return false;
+                }
+                //date complete step1
+                var op_completed_date1 = new Date(form.op_completed_date1.value); 
+                op_completed_date1 = op_completed_date1.setHours(0,0,0,0);
+                var op_status1_check = form.op_status1_check.value;                                 
+                if ((op_status1_check != 'done') && (current_date < op_completed_date1 || current_date > op_completed_date1 )) 
+                {
+                    alert("Invalid Date Range!\nStep 1: Complete Date cannot be less or greater than Today!")
                     return false;
                 }
 //                //date complete step1
@@ -110,6 +138,15 @@
                     alert("Invalid Date Range!\nStep 2: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
+                //date complete step2
+                var op_completed_date2 = new Date(form.op_completed_date2.value); 
+                op_completed_date2 = op_completed_date2.setHours(0,0,0,0);
+                var op_status2_check = form.op_status2_check.value;  
+                if ((op_status2_check != 'done') && (current_date < op_completed_date2 || current_date > op_completed_date2 )) 
+                {
+                    alert("Invalid Date Range!\nStep 2: Complete Date cannot be less or greater than Today!")
+                    return false;
+                }
 //                //date complete step2
 //                var op_completed_date2 = new Date(form.op_completed_date2.value); 
 //                if(op_completed_date2 > op_target_date2)
@@ -123,6 +160,15 @@
                 if (op_target_date3 < start_date || op_target_date3 > complete_date) 
                 {
                     alert("Invalid Date Range!\nStep 3: Target Date cannot be before Start Date or after Complete Date!!")
+                    return false;
+                }
+                //date complete step3
+                var op_completed_date3 = new Date(form.op_completed_date3.value); 
+                op_completed_date3 = op_completed_date3.setHours(0,0,0,0);
+                var op_status3_check = form.op_status3_check.value;  
+                if ((op_status3_check != 'done') && (current_date < op_completed_date3 || current_date > op_completed_date3 )) 
+                {
+                    alert("Invalid Date Range!\nStep 3: Complete Date cannot be less or greater than Today!")
                     return false;
                 }
 //                //date complete step3
@@ -140,6 +186,15 @@
                     alert("Invalid Date Range!\nStep 4: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
+                //date complete step4
+                var op_completed_date4 = new Date(form.op_completed_date4.value); 
+                op_completed_date4 = op_completed_date4.setHours(0,0,0,0);
+                var op_status4_check = form.op_status4_check.value;  
+                if ((op_status4_check != 'done') && (current_date < op_completed_date4 || current_date > op_completed_date4 )) 
+                {
+                    alert("Invalid Date Range!\nStep 4: Complete Date cannot be less or greater than Today!")
+                    return false;
+                }                 
 //                //date complete step4
 //                var op_completed_date4 = new Date(form.op_completed_date4.value); 
 //                if(op_completed_date4 > op_target_date4)
@@ -155,6 +210,15 @@
                     alert("Invalid Date Range!\nStep 5: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
                 }
+                //date complete step5
+                var op_completed_date5 = new Date(form.op_completed_date5.value); 
+                op_completed_date5 = op_completed_date5.setHours(0,0,0,0);
+                var op_status5_check = form.op_status5_check.value;  
+                if ((op_status5_check != 'done') && (current_date < op_completed_date5 || current_date > op_completed_date5 )) 
+                {
+                    alert("Invalid Date Range!\nStep 5: Complete Date cannot be less or greater than Today!")
+                    return false;
+                }                  
 //                //date complete step5
 //                var op_completed_date5 = new Date(form.op_completed_date5.value); 
 //                if(op_completed_date5 > op_target_date5)
@@ -169,7 +233,16 @@
                 {
                     alert("Invalid Date Range!\nStep 6: Target Date cannot be before Start Date or after Complete Date!!")
                     return false;
-                }         
+                }   
+                //date complete step6
+                var op_completed_date6 = new Date(form.op_completed_date6.value); 
+                op_completed_date6 = op_completed_date6.setHours(0,0,0,0);
+                var op_status6_check = form.op_status6_check.value;                  
+                if ((op_status6_check != 'done') && (current_date < op_completed_date6 || current_date > op_completed_date6 )) 
+                {
+                    alert("Invalid Date Range!\nStep 6: Complete Date cannot be less or greater than Today!")
+                    return false;
+                }                
 //                //date complete step6
 //                var op_completed_date6 = new Date(form.op_completed_date6.value); 
 //                if(op_completed_date6 > op_target_date6)
@@ -187,8 +260,9 @@
                 } 
                 //date complete step7
                 var op_completed_date7 = new Date(form.op_completed_date7.value); 
-                 op_completed_date7 = op_completed_date7.setHours(0,0,0,0);
-                if (current_date < op_completed_date7 || current_date > op_completed_date7 ) 
+                op_completed_date7 = op_completed_date7.setHours(0,0,0,0);
+                var op_status7_check = form.op_status7_check.value;  
+                if ((op_status7_check != 'done') && (current_date < op_completed_date7 || current_date > op_completed_date7 )) 
                 {
                     alert("Invalid Date Range!\nStep 7: Complete Date cannot be less or greater than Today!")
                     return false;
@@ -423,6 +497,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 					</td>
 					<td>
                                                 <input type="text" value="<?php echo $this->wo_row->so_shipping_date?>" name="so_request_date" id="so_request_date" readonly="readonly" />
+                                                <input type="text" value="<?php echo $this->wo_row->so_start_date?>" name="so_start_date" id="so_start_date" readonly="readonly" />
 					</td>
 				</tr>
                                  <tr>
@@ -517,8 +592,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td><?php
-    if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    <td>
+    <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_status'];?>" name="op_status1_check" id="op_status1_check" />
+    <?php              
+    if($op_arr['wo_step1']['op_assigner'] == $me->get('id') && $op_arr['wo_step1']['op_status'] != 'done'){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step1']['op_completed_date'], 'op_completed_date1', 'op_completed_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
@@ -593,13 +671,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td><?php     
-    if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
+    <td>
+    <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_status'];?>" name="op_status2_check" id="op_status2_check" />
+    <?php     
+    if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')  && $op_arr['wo_step2']['op_status'] != 'done'){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step2']['op_completed_date'], 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));             
     }
     else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2" id="op_completed_date2" />
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2" id="op_completed_date2" />
     <?php }?>
         
     
@@ -670,12 +751,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td><?php 
-     if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
+    <td>
+        <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_status'];?>" name="op_status3_check" id="op_status3_check" />
+    <?php 
+     if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')  && $op_arr['wo_step3']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step3']['op_completed_date'], 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
      }else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3" id="op_completed_date3" />
     <?php }?></td>
     <td>            
     <?php
@@ -744,12 +828,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td><?php 
-    if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
+    <td>
+        <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_status'];?>" name="op_status4_check" id="op_status4_check" />    
+    <?php 
+    if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id') && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
     <?php }?></td>
     <td>
     <?php
@@ -856,12 +943,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky" colspan="4"><label for="name">Visual Inspection(QC) By:</label></td>
     <td></td>
     <td></td>
-    <td><?php 
-    if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
+    <td>
+          <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_status'];?>" name="op_status5_check" id="op_status5_check" />    
+  <?php 
+    if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
     }else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
     <?php }?></td>
     <td>           
            
@@ -975,12 +1065,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky" colspan="4"><label for="name">Final&nbsp;&nbsp;Inspection(QC) By:</label></td>
     <td></td>
     <td></td>
-    <td><?php 
-    if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id')){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
+    <td>
+          <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_status'];?>" name="op_status6_check" id="op_status6_check" />        
+    <?php 
+    if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6" id="op_completed_date6" />
     <?php }?></td>
     <td>    
      <?php
@@ -1127,12 +1220,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td><?php                     
-    if($op_arr['wo_step6']['op_status']=="done" ){//&& $op_arr['wo_step7']['op_assigner'] == $me->get('id')
+    <td>
+          <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_status'];?>" name="op_status7_check" id="op_status7_check" />            
+    <?php                     
+    if($op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_assigner'] == $me->get('id') && $op_arr['wo_step7']['op_status'] != 'done'){//
         echo JHTML::_('calendar',$op_arr['wo_step7']['op_completed_date'], 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
-            <input type="text" value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
+            <input type="text" readonly="readonly"  value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7" id="op_completed_date7" />
     <?php }?></td>
     <td>
         <?php
