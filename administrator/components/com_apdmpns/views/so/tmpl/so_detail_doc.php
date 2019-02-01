@@ -161,11 +161,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<td><?php echo $i?></td>
 					<td><img src="../uploads/so/<?php echo $folder_so . DS?>/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmpns&task=download_img_so&soid=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+					<td><a href="index.php?option=com_apdmpns&task=download_img_so&so_id=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                 <?php
                                             //   if ($this->so_row->pns_life_cycle =='Create') {                       
                                                 ?>
-					<a href="index.php?option=com_apdmpns&task=remove_imgs_so&soid=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+					<a href="index.php?option=com_apdmpns&task=remove_imgs_so&so_id=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                          <?php
                                                //}
                                                 ?>
@@ -259,11 +259,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<td><?php echo $i?></td>
 					<td><?php echo $pdf['pdf_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmpns&task=download_pdfs_so&soid=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+					<td><a href="index.php?option=com_apdmpns&task=download_pdfs_so&so_id=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                  <?php
                                            //    if ($this->row->pns_life_cycle =='Create') {                       
                                                 ?>
-					<a href="index.php?option=com_apdmpns&task=remove_pdfs_so&soid=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+					<a href="index.php?option=com_apdmpns&task=remove_pdfs_so&so_id=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                          <?php
                                            //    }
                                                 ?>
@@ -361,7 +361,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                  <?php
                                              //  if ($this->row->pns_life_cycle =='Create') {                       
                                                 ?>
-					<a href="index.php?option=com_apdmpns&task=remove_zip_so&soid=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+					<a href="index.php?option=com_apdmpns&task=remove_zip_so&so_id=<?php echo $this->so_row->pns_so_id?>&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                          <?php
                                           //     }
                                                 ?>

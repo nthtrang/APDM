@@ -24,6 +24,7 @@ function get_default_po_prefix(){
 			}
 		}).request();
 	}
+        get_default_po_prefix();
 </script>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Add PO' ); ?></legend>
@@ -44,7 +45,7 @@ function get_default_po_prefix(){
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="po_code" id="po_code"  size="10" value="P<?php echo $this->po_row->po_code?$this->po_row->po_code:date('ymd');?>"/>						
+						<input type="text" readonly="readonly"   name="po_code" id="po_code"  size="10" value="P<?php echo $this->po_row->po_code?$this->po_row->po_code:date('ymd');?>"/>						
                                                 <input type="text"  name="po_code_prefix" id="po_code_prefix"  size="10" value=""/>
                                                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_po_prefix();"><?php echo JText::_('Get Default PO')?></a>
 					</td>

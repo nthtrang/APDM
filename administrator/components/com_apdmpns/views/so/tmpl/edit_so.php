@@ -225,7 +225,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         '<td class="key">F.A Required</td>'.
                         '<td class="key">ESD Required</td>'.
                         '<td class="key">COC Required</td></tr>'.
-                        '<tr><td><input type="text" name="boxcheckedpn" value="'.count($this->so_pn_list).'" /></td></tr>';
+                        '<tr><td><input type="hidden" name="boxcheckedpn" value="'.count($this->so_pn_list).'" /></td></tr>';
                                                 
                 foreach ($this->so_pn_list as $row) {
                          if ($row->pns_revision) {
@@ -265,7 +265,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						
 					</td>
 					<td valign="top">						
-							<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_so_edit&tmpl=component&soid=<?php echo $this->so_row->pns_so_id?>" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('click here to add more PN')?></a>			
+							<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_so_edit&tmpl=component&so_id=<?php echo $this->so_row->pns_so_id?>" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('click here to add more PN')?></a>			
 						
 					</td>
 				</tr>

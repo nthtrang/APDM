@@ -27,6 +27,7 @@ function get_default_mto_prefix(){
 			}
 		}).request();
 	}
+        get_default_mto_prefix()
 </script>
 
 <form action="index.php?option=com_apdmpns&task=save_stom&time=<?php echo time();?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
@@ -46,7 +47,7 @@ function get_default_mto_prefix(){
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="sto_code" id="sto_code"  size="10" value="M<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('ymd');?>"/>						
+						<input type="text" readonly="readonly"  name="sto_code" id="sto_code"  size="10" value="M<?php echo $this->sto_row->sto_code?$this->sto_row->sto_code:date('ymd');?>"/>						
                                                 <input type="text"  name="sto_code_prefix" id="sto_code_prefix"  size="10" value=""/>
                                                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="get_default_mto_prefix();"><?php echo JText::_('Get Default MTO')?></a>
 					</td>

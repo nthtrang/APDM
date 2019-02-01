@@ -6422,7 +6422,7 @@ class PNsController extends JController {
          */
         function download_img_so() {
                 $db = & JFactory::getDBO();
-                $so_id = JRequest::getVar('soid');
+                $so_id = JRequest::getVar('so_id');
                 $image_id = JRequest::getVar('id');
                 $query = "SELECT img.so_id,img.image_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_image img inner join apdm_pns_so p on img.so_id = p.pns_so_id WHERE pns_image_id=" . $image_id;
                 $db->setQuery($query);
@@ -6441,7 +6441,7 @@ class PNsController extends JController {
          */
         function download_pdfs_so() {
                 $db = & JFactory::getDBO();
-                $so_id = JRequest::getVar('soid');
+                $so_id = JRequest::getVar('so_id');
                 $image_id = JRequest::getVar('id');
                 $query = "SELECT pdf.pns_id,pdf.pdf_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_pdf pdf inner join apdm_pns_so p on pdf.so_id = p.pns_so_id WHERE pns_pdf_id=" . $image_id;
                 $db->setQuery($query);
@@ -6910,7 +6910,7 @@ class PNsController extends JController {
         function remove_imgs_so() {
                 $db = & JFactory::getDBO();
                 $id = JRequest::getVar('id');
-                $so_id = JRequest::getVar('soid');
+                $so_id = JRequest::getVar('so_id');
                 //unlink first
                 //get name file cad
                 $query = "SELECT img.so_id,img.image_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_image img inner join apdm_pns_so p on img.so_id = p.pns_so_id WHERE img.pns_image_id=" . $id;
@@ -6936,7 +6936,7 @@ class PNsController extends JController {
         function remove_pdfs_so() {
                 $db = & JFactory::getDBO();
                 $id = JRequest::getVar('id');
-                $so_id = JRequest::getVar('soid');
+                $so_id = JRequest::getVar('so_id');
                 $query = "SELECT pdf.so_id,pdf.pdf_file,p.pns_so_id,p.so_cuscode FROM apdm_pns_pdf pdf inner join apdm_pns_so p on pdf.so_id = p.pns_so_id WHERE pdf.pns_pdf_id=" . $id;
                 $db->setQuery($query);
                 $row = $db->loadObject();
@@ -6959,7 +6959,7 @@ class PNsController extends JController {
         function remove_zip_so() {
                 $db = & JFactory::getDBO();
                 $id = JRequest::getVar('id');
-                $so_id = JRequest::getVar('soid');           
+                $so_id = JRequest::getVar('so_id');           
                 $query = "SELECT zip.so_id,zip.cad_file,p.pns_so_id,p.so_cuscode FROM apdm_pn_cad zip inner join apdm_pns_so p on zip.so_id = p.pns_so_id WHERE zip.pns_cad_id =" . $id;
                 $db->setQuery($query);
                 $row = $db->loadObject(); 
@@ -7018,7 +7018,7 @@ class PNsController extends JController {
 
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(), '', 'array');
-                $so_id = JRequest::getVar('soid');   
+                $so_id = JRequest::getVar('so_id');   
                 $str = '<table class="admintable" cellspacing="1" width="80%"><tr>'.
                         '<td class="key">#</td>'.
                         '<td class="key">TOP ASSY PN</td>'.
@@ -7089,7 +7089,7 @@ class PNsController extends JController {
                                 ' <td class="key"><input checked="checked" type="checkbox" name="coc_required['.$row->pns_id.']" value="1" /> </td>';
                 }      
                 $tol = count($rows)+count($rows1);
-                echo $str .'<tr><td><input type="text" name="boxcheckedpn" value="'.$tol.'" /></td></tr></table>';
+                echo $str .'<tr><td><input type="hidden" name="boxcheckedpn" value="'.$tol.'" /></td></tr></table>';
                 exit;
         }             
         function save_editso()

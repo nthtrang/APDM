@@ -34,7 +34,7 @@ class pnsViewgetpnsso extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns&task=get_list_child';
         $id               = JRequest::getVar('id');
-        $so_id               = JRequest::getVar('soid');
+        $so_id               = JRequest::getVar('so_id');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      

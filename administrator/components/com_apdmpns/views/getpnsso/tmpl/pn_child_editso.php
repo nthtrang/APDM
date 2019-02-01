@@ -3,7 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
-         $so_id		= JRequest::getVar( 'soid');
+         $so_id		= JRequest::getVar( 'so_id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -24,13 +24,13 @@ function CheckForm() {
 	
 }
 function UpdatePnsChild(){
-         var so_id = $('soid').value;
+         var so_id = $('so_id').value;
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_so_edit&soid='+so_id;			
+		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_so_edit&so_id='+so_id;			
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -46,7 +46,7 @@ function UpdatePnsChild(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_so_edit&tmpl=component&soid=<?php echo $so_id;?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_so_edit&tmpl=component&so_id=<?php echo $so_id;?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -160,7 +160,7 @@ function UpdatePnsChild(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmpns" />
-         <input type="text" name="soid" id="soid" value="<?php echo $so_id; ?>" />
+         <input type="hidden" name="so_id" id="so_id" value="<?php echo $so_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
