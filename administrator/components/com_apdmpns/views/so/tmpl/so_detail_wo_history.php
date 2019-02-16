@@ -14,28 +14,12 @@ if($this->so_row->ccs_code)
        $soNumber = $this->so_row->ccs_code."-".$soNumber;
 }
 JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role) && $this->so_row->so_state =="inprogress") { 
-        JToolBarHelper::customX("onholdwo","unpublish",'',"On Hold",true);      
-        JToolBarHelper::cancelSo("",$this->so_row->pns_so_id);//tmpforload modal
-        JToolBarHelper::customX("cancelwopop","cancel",'',"Cancel",true); 
-        JToolBarHelper::customX("inprogresswo","restore",'',"In PROGRESS",true); 
-        //function customX($task = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
-      //   JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
-         JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false);	
-        JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO#");
-}
-//if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
-//        JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     
-//        JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);
-//}
+
 
 
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
-?>
 
-<?php
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
@@ -139,9 +123,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" class="active"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
+			<li><a id="bom"  href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
                         <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
+                        <li><a id="bom" class="active"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -153,9 +137,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
-<a class="modal-button" id="onholdWO" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=onholdwopop&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
-<a class="modal-button" id="cancelWO" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=cancelwopop&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
-<a class="modal-button" id="inprogressWO" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=inprogresswopop&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >      
         <fieldset class="adminform">
 		 
@@ -163,16 +144,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		<fieldset class="adminform">		
                 <table width="100%" class="adminlist" cellpadding="1">
 	<thead>
-		<tr>
-                        
-			<th width="5%" class="title">
-					<?php echo JText::_('No.')?>
-			</th>
+		<tr>                        			
                         <th width="8%">
-				<?php echo JText::_('TOP ASSYS')?>
-			</th>
-                        <th width="8%">
-				<?php echo JText::_('WO#')?>
+				<?php echo JText::_('WO')?>
 			</th>
                          <th width="8%">
 				<?php echo JText::_('PN')?>
@@ -180,41 +154,28 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 			<th width="8%">
 				<?php echo JText::_('Description')?>
 			</th>
-			<th width="6%">
-				<?php echo JText::_('Qty')?>
-			</th>
-                        <th width="6%">
-				<?php echo JText::_('UOM')?>
-			</th>
-                        <th width="6%">
-				<?php echo JText::_('Start Date')?>
-			</th>
-                        <th width="6%">
-				<?php echo JText::_('Deadline')?>
-			</th>
+			
                          <th width="6%">
-				<?php echo JText::_('Time remain(day)')?>
+				<?php echo JText::_('Changed Status')?>
 			</th>                        
 			<th width="6%">
-				<?php echo JText::_('Status')?>
+				<?php echo JText::_('New Status')?>
 			</th>
 			<th>
-				<?php echo JText::_('Delay')?>				
+				<?php echo JText::_('Changed By')?>				
 			</th>
                         <th>
-				<?php echo JText::_('Rework')?>				
+				<?php echo JText::_('Changed Date')?>				
 			</th>
                         <th>
-				<?php echo JText::_('Log')?>				
-			</th>
-			
-			
+				<?php echo JText::_('Reason')?>				
+			</th>                      						
 		</tr>
 	</thead>
         <?php 
         //level1
         $level=0;
-        foreach ($this->wo_list as $row){
+        foreach ($this->wo_list_history as $row){
                 $level++;
                 if ($row->pns_cpn == 1)
                         $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
@@ -224,41 +185,19 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
                 } else {
                         $pnNumber = $row->ccs_code . '-' . $row->pns_code;
-                }  
-                $background="";
-                $remain_day = $row->wo_remain_date;
-                if($remain_day<=0)
-                {
-                        $remain_day = 0;
-                        $background= "style='background-color:#f00;color:#fff'";
-                }
-                elseif($row->wo_remain_date<=3)
-                {
-                        $background= "style='background-color:#ff0;color:#000'";
-                }
+                }                 
                 ?>
         <tr>		
                                               
-                <td>
-                        <?php echo JHTML::_('grid.id', $level, $row->pns_wo_id ); ?>
-                </td>
-<!--		<td>					
-                <input type="checkbox" id = "pns_wo_id" value="<?php echo $row->pns_wo_id;?>" name="cid[]"  />
-                </td>-->
-                
-                <td><?php echo PNsController::getTopAssysWo($row->pns_wo_id); ?></td>
                 <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$row->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$row->wo_code.'</a> '; ?></td>                
 		<td><?php echo '<a href="'.$link.'" title="'.JText::_('Click to see detail PNs').'">'.$pnNumber.'</a> '; ?></td>		
-		<td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
-                <td><?php echo $row->wo_qty;?></td>
-                <td><?php echo $row->pns_uom;?></td>
-                <td><?php echo JHTML::_('date', $row->wo_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>
-                <td><?php echo JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?></td>
-                <td <?php echo $background?>><?php echo $remain_day;?></td>
-                <td><?php echo PNsController::getWoStatus($row->wo_state); ?></td>                
-                <td><?php echo $row->wo_delay;//PNsController::getDelayTimes($row->pns_wo_id);?></td>                
-                <td><?php echo PNsController::getReworkStep($row->pns_wo_id,0);?></td>
-                 <td><?php echo $row->wo_log;?></td>
+		<td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>              
+                <td><?php echo PNsController::getWoStatus($row->pre_status); ?></td>                
+                <td><?php echo PNsController::getWoStatus($row->cur_status); ?></td>                
+                <td><?php echo GetValueUser($row->wo_log_created_by, "name"); ?></td>                
+                <td><?php echo JHTML::_('date', $row->wo_log_created, '%m-%d-%Y %H:%M:%S %p'); ?></td>                      
+                <td><?php echo $row->wo_log_content;?></td>
+                
 	</tr>
 <?php 
         }

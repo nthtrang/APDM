@@ -497,7 +497,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 					</td>
 					<td>
                                                 <input type="text" value="<?php echo $this->wo_row->so_shipping_date?>" name="so_request_date" id="so_request_date" readonly="readonly" />
-                                                <input type="text" value="<?php echo $this->wo_row->so_start_date?>" name="so_start_date" id="so_start_date" readonly="readonly" />
+                                                <input type="hidden" value="<?php echo $this->wo_row->so_start_date?>" name="so_start_date" id="so_start_date" readonly="readonly" />
 					</td>
 				</tr>
                                  <tr>
@@ -605,10 +605,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
              <?php
-    if($op_arr['wo_step1']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
              <select  name="op_assigner1" id="op_assigner1" >
                 <option value="">Select Assignee</option>
+                <?php 
+                $opNa= "";
+                if($op_arr['wo_step1']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step1']['op_assigner'])
@@ -620,13 +626,18 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
                 </select>
             <?php
-    }else
-    {
+    }else{
             
     ?>
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_assigner'];?>" name="op_assigner1" id="op_assigner1" />
           <select  name="op_assigner1_dis" id="op_assigner1_dis" disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step1']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step1']['op_assigner'])
@@ -644,7 +655,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
             <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                     echo JHTML::_('calendar',$op_arr['wo_step1']['op_target_date'], 'op_target_date1', 'op_target_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -687,10 +698,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <?php
-    if($op_arr['wo_step2']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id')|| $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
             <select  name="op_assigner2" id="op_assigner2" >
                 <option value="">Select Assignee</option>
+                <?php 
+                $opNa= "";
+                if($op_arr['wo_step2']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step2']['op_assigner'])
@@ -709,6 +726,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_assigner'];?>" name="op_assigner2" id="op_assigner2" />
           <select  name="op_assigner2_dis" id="op_assigner2_dis" disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step2']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step2']['op_assigner'])
@@ -725,7 +748,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>                
     <?php 
-            if($allow_edit)
+            if($allow_edit  || $this->wo_row->wo_assigner == $me->get('id'))
             {
                     echo JHTML::_('calendar',$op_arr['wo_step2']['op_target_date'], 'op_target_date2', 'op_target_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -763,10 +786,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php }?></td>
     <td>            
     <?php
-    if($op_arr['wo_step3']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
             <select  name="op_assigner3" id="op_assigner3" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step3']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step3']['op_assigner'])
@@ -785,6 +814,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_assigner'];?>" name="op_assigner3" id="op_assigner3" />
           <select  name="op_assigner3_dis" id="op_assigner3_dis"  disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step3']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step3']['op_assigner'])
@@ -801,7 +836,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                     echo JHTML::_('calendar',$op_arr['wo_step3']['op_target_date'], 'op_target_date3', 'op_target_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -840,10 +875,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php }?></td>
     <td>
     <?php
-    if($op_arr['wo_step4']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if( $this->wo_row->wo_created_by == $me->get('id')|| $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
            <select  name="op_assigner4" id="op_assigner4" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step4']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step4']['op_assigner'])
@@ -862,6 +903,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_assigner'];?>" name="op_assigner4" id="op_assigner4" />
          <select  name="op_assigner4_dis" id="op_assigner4_dis"  disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step4']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step4']['op_assigner'])
@@ -878,7 +925,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                      echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -956,10 +1003,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td>           
            
 <?php
-    if($op_arr['wo_step5']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
            <select  name="op_assigner5" id="op_assigne5" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step5']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step5']['op_assigner'])
@@ -978,6 +1031,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_assigner'];?>" name="op_assigner5" id="op_assigner5" />
           <select  name="op_assigner5_dis" id="op_assigner5_dis"  disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step5']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step5']['op_assigner'])
@@ -994,7 +1053,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                     echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
             }else{
@@ -1077,10 +1136,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php }?></td>
     <td>    
      <?php
-    if($op_arr['wo_step6']['op_assigner'] === $me->get('id') || $this->wo_row->wo_assigner === $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner === $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
            <select  name="op_assigner6" id="op_assigner6" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step6']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step6']['op_assigner'])
@@ -1099,6 +1164,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_assigner'];?>" name="op_assigner6" id="op_assigner6" />
          <select  name="op_assigner6" id="op_assigner6" disabled="disabled" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step6']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                 <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step6']['op_assigner'])
@@ -1116,7 +1187,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td>
               
       <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                     echo JHTML::_('calendar',$op_arr['wo_step6']['op_target_date'], 'op_target_date6', 'op_target_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
             }else{
@@ -1232,10 +1303,16 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <?php }?></td>
     <td>
         <?php
-    if($op_arr['wo_step7']['op_assigner'] == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
            <select  name="op_assigner7" id="op_assigner7" >
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step7']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step7']['op_assigner'])
@@ -1254,6 +1331,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_assigner'];?>" name="op_assigner7" id="op_assigner7" />
           <select  name="op_assigner7_dis" id="op_assigner7_dis"  disabled="disabled">
                 <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step7']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
                  <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step7']['op_assigner'])
@@ -1270,7 +1353,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <?php 
-            if($allow_edit)
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
             {
                    echo JHTML::_('calendar',$op_arr['wo_step7']['op_target_date'], 'op_target_date7', 'op_target_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{

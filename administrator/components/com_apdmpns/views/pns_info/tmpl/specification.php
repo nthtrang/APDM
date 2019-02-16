@@ -522,6 +522,25 @@
 						<a href="javascript:;"id="lnkfichier" title="<?php echo JText::_('Click here to add more CAD files');?>" ><?php echo JText::_('Click here to add more CAD files');?></a>
 					</td>
 				</tr>
+				<tr>
+    <td colspan="2">
+    <?php 
+	 $video = $partnumber.".mp4";
+	 JPATH_SITE.'/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/' . $video;
+		if (file_exists(JPATH_SITE.'/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/' . $video)) {
+	?>
+	
+	
+    <video width="400" controls="">
+  <source src="http://apdm2.ascenx.vn/AsxDP/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/<?php echo $video?>" type="video/mp4">
+  <source src="http://apdm2.ascenx.vn/AsxDP/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/<?php echo $video?>" type="video/ogg">
+  Your browser does not support HTML5 video.
+</video>
+		<?php 
+		}
+	?>
+    </td>
+</tr>
 							
 			</table>
 		</fieldset>		

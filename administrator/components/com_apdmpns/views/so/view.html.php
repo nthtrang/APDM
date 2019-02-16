@@ -135,7 +135,19 @@ class pnsViewso extends JView {
                         " where so.pns_so_id =" . $so_row->pns_so_id;
                 $db->setQuery($sql);
                 $wo_lists = $db->loadObjectList();
-                $this->assignRef('wo_list', $wo_lists);                
+                $this->assignRef('wo_list', $wo_lists);     
+                
+                //get WO LOG
+                //get list WO TAB HISTORY
+                $sql = "select  woh.*,wo.pns_wo_id,wo.wo_log,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                        " from apdm_pns_wo_history woh inner join apdm_pns_wo wo on woh.wo_id = wo.pns_wo_id ".
+                        " inner join apdm_pns_so so on wo.so_id = so.pns_so_id " .
+                        " left join apdm_pns p on  p.pns_id = wo.pns_id " .
+                        " where so.pns_so_id =" . $so_row->pns_so_id ." order by woh.id desc";
+                $db->setQuery($sql);
+                $wo_lists_history= $db->loadObjectList();
+                $this->assignRef('wo_list_history', $wo_lists_history);     
+                
                 $lists['zips_files'] = $zips_files;
                 $lists['image_files'] = $images_files;
                 $lists['pdf_files'] = $pdf_files;

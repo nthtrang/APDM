@@ -175,7 +175,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         <th width="100"><?php echo JText::_('Source Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Destination Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>  
+                                        <th width="100"><?php //echo JText::_('Action'); ?></th>  
                                 </tr>
                         </thead>
                         <tbody>					

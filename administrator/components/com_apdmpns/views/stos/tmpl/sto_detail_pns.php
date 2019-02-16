@@ -172,7 +172,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>  
+                                        <th width="100"><?php //echo JText::_('Action'); ?></th>  
                                 </tr>
                         </thead>
                         <tbody>					

@@ -35,9 +35,9 @@ function UpdatePnsEco(){
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
 			onComplete:function(result){
-			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
-				//window.parent.document.getElementById('sbox-window').close();	
-                        //        window.parent.location.reload();
+				//window.parent.document.getElementById('pns_child').innerHTML = result;				
+			//	window.parent.document.getElementById('sbox-window').close();	
+                         //       window.parent.location.reload();
 				
 
 			}

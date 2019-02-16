@@ -117,6 +117,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
 			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
                         <li><a id="bom" class="active"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
