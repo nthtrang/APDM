@@ -256,14 +256,8 @@ if (count($this->report_list) > 0) { ?>
                                                 <?php
                                         } ?>
                
-                <div style="display:none"><?php
-                                        echo $editor->display('text', $row->text, '10%', '10', '10', '3');
-                                        ?></div>
-        <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />
-        <input name="nspid" value="<?php echo $this->lists['count_sp']; ?>" type="hidden" />
-        <input name="nmfid" value="<?php echo $this->lists['count_mf']; ?>" type="hidden" />
-        <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
-        <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
+                
+
         <input type="hidden" name="option" value="com_apdmpns" />
         <input type="hidden" name="task" value="somanagement" />
         <input type="hidden" name="redirect" value="mep" />

@@ -203,7 +203,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                  ?>
 
         <div style="display:none"><?php
-                                        echo $editor->display('text', $row->text, '10%', '10', '10', '3');
+                             //           echo $editor->display('text', $row->text, '10%', '10', '10', '3');
                                         ?></div>
         <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />
         <input name="nspid" value="<?php echo $this->lists['count_sp']; ?>" type="hidden" />

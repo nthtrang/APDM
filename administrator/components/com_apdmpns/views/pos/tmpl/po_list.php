@@ -123,9 +123,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </tbody>
         </table>		
 
-        <div style="display:none"><?php
-                                        echo $editor->display('text', $row->text, '10%', '10', '10', '3');
-                                        ?></div>
         <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />
         <input name="nspid" value="<?php echo $this->lists['count_sp']; ?>" type="hidden" />
         <input name="nmfid" value="<?php echo $this->lists['count_mf']; ?>" type="hidden" />
