@@ -94,7 +94,7 @@ window.print();
 	      
         <table class="tgdetail">
   <tr>
-          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header1.jpg" width="150px"></img></th>
+          <th class="tg-0pky" colspan="3"><img src="./templates/khepri/images/h_green/header.jpg" width="150px"></img></th>
     <th class="tg-7jts" colspan="3"><span style="font-weight:bold">Production Traveler</span></th>
     <th class="tg-c3ow" colspan="4">  <br>
              <?php 
@@ -231,7 +231,7 @@ window.print();
     <td class="tg-0pky" colspan="5">Label Print By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step1']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step1']['op_assigner'], "name"); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_assigner']!=0)?GetValueUser($op_arr['wo_step1']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
@@ -239,7 +239,7 @@ window.print();
     <td class="tg-0pky" colspan="5">Wire Cut By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step2']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step2']['op_assigner'], "name"); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_assigner']!=0)?GetValueUser($op_arr['wo_step2']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
@@ -247,7 +247,7 @@ window.print();
     <td class="tg-0pky" colspan="5">Kitted By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step3']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step3']['op_assigner'], "name"); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_assigner']!=0)?GetValueUser($op_arr['wo_step3']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
@@ -255,7 +255,7 @@ window.print();
     <td class="tg-0pky" colspan="5">Assembly performed by:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step4']['op_comment'];?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step4']['op_assigner'], "name"); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_assigner']!=0)?GetValueUser($op_arr['wo_step4']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <tr>
@@ -313,7 +313,7 @@ window.print();
     <td class="tg-xldj"></td>
     <td class="tg-xldj"></td>    
     <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-xldj"><?php echo GetValueUser($op_arr['wo_step5']['op_assigner'], "name"); ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_assigner']!=0)?GetValueUser($op_arr['wo_step5']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 <?php 
@@ -367,7 +367,7 @@ window.print();
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-0pky"><?php echo GetValueUser($op_arr['wo_step6']['op_assigner'], "name"); ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_assigner']!=0)?GetValueUser($op_arr['wo_step6']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
   <?php $opfn_arr = $this->opfn_arr;?>
@@ -441,7 +441,7 @@ window.print();
     <td class="tg-0pky" colspan="5">Packaging by</td>
     <td class="tg-0pky"><?php echo $op_arr['wo_step7']['op_comment'];?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
-    <td class="tg-0pky"><?php echo GetValueUser($op_arr['wo_step7']['op_assigner'], "name"); ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_assigner']!=0)?GetValueUser($op_arr['wo_step7']['op_assigner'], "name"):"N/A"; ?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
   </tr>
 </table>		       

@@ -7484,7 +7484,7 @@ class PNsController extends JController {
                         $status = "label_printed";
                         $wopoStatus1="";
                         $wopoStatusTitle1="";
-                        if($post['op_completed_date1']!="0000-00-00 00:00:00" || $post['op_assigner1']==0)
+                        if(($post['op_completed_date1']!="0000-00-00 00:00:00" && $post['op_assigner1']!=0) ||  $post['op_assigner1']==0)
                         {
                                 $status ="wire_cut";
                                 $wopoStatus1 = "done";
@@ -7526,7 +7526,7 @@ class PNsController extends JController {
                         //Update step2
                         $wopoStatus2="";
                         $wopoStatusTitle2="";
-                        if($post['op_completed_date2']!="0000-00-00 00:00:00" || $post['op_assigner2']==0)
+                        if(($post['op_completed_date2']!="0000-00-00 00:00:00"  && $post['op_assigner2']!=0) || $post['op_assigner2']==0)
                         {
                                 $status ="kitted";
                                 $wopoStatus2 = "done";
@@ -7562,12 +7562,12 @@ class PNsController extends JController {
                                  $db->setQuery($sql);
                                  $db->query();  
                         }
-                        //end op 1
+                        //end op 2
                         
                         //Update step3
                         $wopoStatus3="";
                         $wopoStatusTitle3="";
-                        if($post['op_completed_date3']!="0000-00-00 00:00:00" || $post['op_assigner3']==0)
+                        if(($post['op_completed_date3']!="0000-00-00 00:00:00"  && $post['op_assigner3']!=0) || $post['op_assigner3']==0)
                         {
                                 $status ="production";
                                 $wopoStatus3 = "done";
@@ -7608,7 +7608,7 @@ class PNsController extends JController {
                         //Update step4     
                         $wopoStatus4="";
                         $wopoStatusTitle4="";
-                        if($post['op_completed_date4']!="0000-00-00 00:00:00" || $post['op_assigner4']==0)
+                        if(($post['op_completed_date4']!="0000-00-00 00:00:00" && $post['op_assigner4']!=0) || $post['op_assigner4']==0)
                         {
                                 $status ="visual_inspection";
                                 $wopoStatus4 = "done";
@@ -7659,7 +7659,7 @@ class PNsController extends JController {
                         //Update step5                       
                         $wopoStatus5="";
                         $wopoStatusTitle5="";
-                        if($post['op_completed_date5']!="0000-00-00 00:00:00" || $post['op_assigner5']==0)
+                        if(($post['op_completed_date5']!="0000-00-00 00:00:00" && $post['op_assigner5']!=0) || $post['op_assigner5']==0)
                         {
                                 $status ="final_inspection";
                                 $wopoStatus5 = "done";
@@ -7713,7 +7713,7 @@ class PNsController extends JController {
                         //Update step6                        
                         $wopoStatus6 = "";
                         $wopoStatusTitle6 = "";
-                        if($post['op_completed_date6']!="0000-00-00 00:00:00" || $post['op_assigner6']==0)
+                        if(($post['op_completed_date6']!="0000-00-00 00:00:00" && $post['op_assigner6']!=0) || $post['op_assigner6']==0)
                         {
                                 $status ="packaging";
                                 $wopoStatus6 = "done";
@@ -7767,7 +7767,7 @@ class PNsController extends JController {
                          //Update step7
                         $wopoStatus7 = "";
                         $wopoStatusTitle7 = "";
-                        if($post['op_completed_date7']!="0000-00-00 00:00:00" || $post['op_assigner7']==0)
+                        if(($post['op_completed_date7']!="0000-00-00 00:00:00" && $post['op_assigner7']!=0) || $post['op_assigner7']==0)
                         {
                                 $status ="done";
                                 $wopoStatus7 = "done";
@@ -7786,6 +7786,8 @@ class PNsController extends JController {
                                          $db->query();  
                                 }                                 
                         }
+                        
+                                
                         $sql = "update apdm_pns_wo_op set op_target_date='" . $post['op_target_date7'] . "',op_status ='".$wopoStatus7."', op_title ='".$wopoStatusTitle7."',op_comment = '".$post['op_comment7']."',op_delay_date = '".$post['op_completed_date7']."',op_completed_date = '".$post['op_completed_date7']."',op_assigner ='".$post['op_assigner7']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();   
@@ -7803,7 +7805,72 @@ class PNsController extends JController {
                                  $db->setQuery($sql);
                                  $db->query();  
                         }
-                        //end op 7                        
+                        //end op 7        
+                        //check lastest status 
+                        $sql = "select count(*) from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code desc";
+                        $db->setQuery($sql);                        
+                        $totalWodone = $db->loadResult();
+                        if($totalWodone==0)
+                        {
+                                $status ="done";
+                        }
+                        else
+                        {
+                                $sql = "select * from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status = 'done'   order by op_code desc limit 1";
+                                $db->setQuery($sql);    
+                                $woResult = $db->loadObjectList();
+                                foreach($woResult as $r)
+                                {
+                                        echo $r->op_code;
+                                        switch($r->op_code)
+                                        {
+                                                case 'wo_step1':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="wire_cut";
+                                                        }
+                                                        break;
+                                                case 'wo_step2':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="kitted";
+                                                        }
+                                                        break;    
+                                                case 'wo_step3':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="production";
+                                                        }
+                                                        break;
+                                                case 'wo_step4':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="visual_inspection";
+                                                        }
+                                                        break;    
+                                                case 'wo_step5':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="final_inspection";
+                                                        }
+                                                        break;
+                                                case 'wo_step6':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="packaging";
+                                                        }
+                                                        break;   
+                                                case 'wo_step7':
+                                                        if($r->op_status=='done')
+                                                        {
+                                                                $status ="done";
+                                                        }
+                                                        break;                                                
+
+                                        }
+                                }
+                        }
+
                         $sql= " update apdm_pns_wo set so_id ='" . $post['so_id'] . "'".
                                 ",wo_qty = '" . $post['wo_qty'] . "'".
                                 ",pns_id = '" .  $partNumber[0] . "'".
@@ -7936,12 +8003,14 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE so_id=" .$so_id);
                 $rows = $db->loadObjectList();              
-                foreach ($rows as $row) {                        
-                        $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ) ");                        
-                        $db->query();                       
-                        $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
-                        $db->getQuery();
-                        $db->query();   
+                foreach ($rows as $row) {       
+                        if($row->wo_state!='onhold'){
+                                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . ",'Onhold So') ");                        
+                                $db->query();                       
+                                $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
+                                $db->getQuery();
+                                $db->query();   
+                        }
                 }                                        
                 $db->setQuery("update apdm_pns_so set so_state = 'onhold'  WHERE  pns_so_id = ".$so_id);
                 $db->getQuery();
@@ -7958,19 +8027,22 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE so_id=" .$so_id);
                 $rows = $db->loadObjectList();              
-                foreach ($rows as $row) {                        
-                        $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','" . $row->wo_state_history . "','" . $datenow->toMySQL() . "'," . $me->get('id') . " ) ");                        
-                        $db->query();    
-                        $db->setQuery("update apdm_pns_wo set wo_state = '" . $row->wo_state_history . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
-                        $db->getQuery();
-                        $db->query(); 
+                foreach ($rows as $row) {  
+                        if($row->wo_state=='onhold')
+                        {
+                                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','" . $row->wo_state_history . "','" . $datenow->toMySQL() . "'," . $me->get('id') . ",'Inprogress So' ) ");                        
+                                $db->query();    
+                                $db->setQuery("update apdm_pns_wo set wo_state = '" . $row->wo_state_history . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
+                                $db->getQuery();
+                                $db->query(); 
+                        }
                 }                
                 
                 $db->setQuery("update apdm_pns_so set so_state = 'inprogress'  WHERE  pns_so_id = ".$so_id);
                 $db->getQuery();
                 $db->query(); 
                 $msg = JText::_('Have In Progress SO successfull.');
-                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
+                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);                                
         }        
         function cancelSo()
         {
@@ -7981,6 +8053,8 @@ class PNsController extends JController {
         function ajax_cancelso()
         {
                 $db = & JFactory::getDBO();
+                $datenow = & JFactory::getDate();
+                $me = & JFactory::getUser();  
                 $so_id = JRequest::getVar('so_id');
                 $password =  JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
                 $username = JRequest::getVar('username', '', 'method', 'username');
@@ -7989,9 +8063,19 @@ class PNsController extends JController {
                 $isLogin = $db->loadResult();
                 if($isLogin)
                 {
-                        $db->setQuery("update apdm_pns_wo set wo_state = 'cancel'  WHERE  so_id = ".$so_id);
-                        $db->getQuery();
-                        $db->query(); 
+                        
+                        $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE so_id = ".$so_id);                        
+                        $rows = $db->loadObjectList();              
+                        foreach ($rows as $row) {   
+                                if($row->wo_state!='cancel' && $row->wo_state!='done')
+                                {
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'Cancel So') ");                        
+                                        $db->query();                            
+                                        $db->setQuery("update apdm_pns_wo set wo_state ='cancel',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
+                                        $db->getQuery();
+                                        $db->query();                            
+                                }
+                        }                                  
                         $db->setQuery("update apdm_pns_so set so_state = 'cancel'  WHERE  pns_so_id = ".$so_id);
                         $db->getQuery();
                         $db->query();  
@@ -8320,12 +8404,14 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
-                foreach ($rows as $row) {                        
-                        $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
-                        $db->query();                            
-                        $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
-                        $db->getQuery();
-                        $db->query();   
+                foreach ($rows as $row) {     
+                        if($row->wo_state!='onhold'){
+                                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
+                                $db->query();                            
+                                $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
+                                $db->getQuery();
+                                $db->query();   
+                        }
                 }                                   
         }        
         function inprogresswopop()
@@ -8409,7 +8495,7 @@ class PNsController extends JController {
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
                 foreach ($rows as $row) {   
-                        if($row->wo_state!='cancel')
+                        if($row->wo_state!='cancel' && $row->wo_state!='done')
                         {
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            

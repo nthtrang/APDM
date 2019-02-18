@@ -79,10 +79,11 @@
                 so_start_date = so_start_date.setHours(0,0,0,0);
                 var so_shipping_date = new Date(form.so_request_date.value);   
                 so_shipping_date = so_shipping_date.setHours(0,0,0,0);
-                 
+
+                var is_edit_finish_date = form.is_edit_finish_date.value;
                 if (so_start_date > start_date ) 
                 {
-                    alert("Invalid Date Range!\nStart Date cannot be before SO start!"+form.so_start_date.value)
+                    alert("Invalid Date Range!\nStart Date cannot be before WO start!"+form.so_start_date.value)
                     return false;
                 }
                 if (start_date > so_shipping_date ) 
@@ -92,7 +93,7 @@
                 }
                 if (complete_date < start_date ) 
                 {
-                    alert("Invalid Date Range!\nFinished Date cannot be before SO start!"+form.so_start_date.value)
+                    alert("Invalid Date Range!\nFinished Date cannot be before WO start!"+form.so_start_date.value)
                     return false;
                 }
                 if (complete_date > so_shipping_date ) 
@@ -105,7 +106,15 @@
                 {
                     alert("Invalid Date Range!\nStart Date cannot be after Complete Date!!")
                     return false;
-                }          
+                }        
+                if(is_edit_finish_date<=0)
+                {
+                        if (current_date > complete_date ) 
+                        {
+                            alert("Invalid Date Range!\nFinished Date cannot be before ToDay!!")
+                            return false;
+                        }  
+                }
                 //date step1 
                 var op_target_date1 = new Date(form.op_target_date1.value);   
                 op_target_date1 = op_target_date1.setHours(0,0,0,0);
@@ -344,7 +353,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 					<td valign="top">						
                                                 <?php 
                                                 $readonly = $style = "";
-                                                if($this->wo_row->allow_edit_qty)
+                                                if($this->wo_row->allow_edit_qty > 0 )
                                                 {
                                                         $readonly = 'readonly="readonly"';
                                                         $style= 'style="display:none"';
@@ -506,9 +515,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 							<?php echo JText::_( 'WO# Start Date' ); ?>
 						</label>
 					</td>
-					<td>                                                                                               
+					<td>         
+                                                <input type="hidden" value="<?php echo $this->wo_row->allow_edit_qty?>" name="is_edit_finish_date" id="is_edit_finish_date" readonly="readonly" />
                                                <?php 
-                                               if(strtotime(date("Y-m-d")) > strtotime($this->wo_row->wo_start_date))
+         
+                                               if($this->wo_row->allow_edit_qty<=0)
                                                {
                                                 ?>
                                                 <input type="text" value="<?php echo $this->wo_row->wo_start_date?>" name="wo_start_date" id="wo_start_date" readonly="readonly" />
@@ -528,11 +539,13 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>  
-                                                <?php                                                 
-                                               if(strtotime(date("Y-m-d")) > strtotime($this->wo_row->wo_start_date))
+                                                <?php      
+                                                
+                                               if($this->wo_row->allow_edit_qty<=0)
                                                {
-                                                ?>
-                                                <input type="text" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date" id="wo_completed_date" readonly="readonly" />
+                                                       echo JHTML::_('calendar',$this->wo_row->wo_completed_date, 'wo_completed_date', 'wo_completed_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+                                                ?>                                                
+<!--                                                <input type="text" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date" id="wo_completed_date" readonly="readonly" />-->
                                                 <?php 
                                                }
                                                else
@@ -655,7 +668,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
             <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)//$this->wo_row->allow_edit_qty is  chỉ có thể sửa trước ngày start date
             {
                     echo JHTML::_('calendar',$op_arr['wo_step1']['op_target_date'], 'op_target_date1', 'op_target_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -748,8 +761,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>                
     <?php 
-            if($allow_edit  || $this->wo_row->wo_assigner == $me->get('id'))
-            {
+            if($allow_edit  || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
+            {                    
                     echo JHTML::_('calendar',$op_arr['wo_step2']['op_target_date'], 'op_target_date2', 'op_target_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
             ?>            
@@ -836,7 +849,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {
                     echo JHTML::_('calendar',$op_arr['wo_step3']['op_target_date'], 'op_target_date3', 'op_target_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -925,7 +938,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
             {
                      echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
@@ -1053,7 +1066,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
             {
                     echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
             }else{
@@ -1187,7 +1200,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td>
               
       <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty>0)
             {
                     echo JHTML::_('calendar',$op_arr['wo_step6']['op_target_date'], 'op_target_date6', 'op_target_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
             }else{
@@ -1353,7 +1366,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id'))
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {
                    echo JHTML::_('calendar',$op_arr['wo_step7']['op_target_date'], 'op_target_date7', 'op_target_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
