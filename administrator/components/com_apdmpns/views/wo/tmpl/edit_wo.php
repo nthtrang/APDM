@@ -107,14 +107,14 @@
                     alert("Invalid Date Range!\nStart Date cannot be after Complete Date!!")
                     return false;
                 }        
-                if(is_edit_finish_date<=0)
+                /*if(is_edit_finish_date<=0)
                 {
                         if (current_date > complete_date ) 
                         {
                             alert("Invalid Date Range!\nFinished Date cannot be before ToDay!!")
                             return false;
                         }  
-                }
+                }*/
                 //date step1 
                 var op_target_date1 = new Date(form.op_target_date1.value);   
                 op_target_date1 = op_target_date1.setHours(0,0,0,0);

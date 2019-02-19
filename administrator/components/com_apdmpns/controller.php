@@ -6518,19 +6518,23 @@ class PNsController extends JController {
                 $upload->r_mkdir($path_so_zips, 0777);                        
                 $arr_file_upload = array();
                 $arr_error_upload_zips = array();
-                for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_zip' . $i]['size'] > 0 && $_FILES['pns_zip' . $i]['size']<20000000) {
-                                if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
-                                        $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
-                                } else {
-                                        $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
-                                }
+                for ($i = 1; $i <= 20; $i++) {					
+                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
+								if($_FILES['pns_zip' . $i]['size']<20000000)
+								{
+									if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
+											$arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
+									} else {
+											$arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
+									}
+								}
+								else
+								{        
+									$msg = JText::_('Please upload file ZIP less than 20MB.');
+								        return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);    
+								}
                         }
-                        else
-                        {        
-                            $msg = JText::_('Please upload file less than 20MB.');
-                                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);    
-                        }
+                        
                 }
                 if (count($arr_file_upload) > 0) {
                         foreach ($arr_file_upload as $file) {
@@ -6576,28 +6580,32 @@ class PNsController extends JController {
                 $arr_error_upload_pdf = array();
                 $arr_pdf_upload = array();
                 for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_pdf' . $i]['size'] > 0 && $_FILES['pns_pdf' . $i]['size']<20000000) {
-                                $imge = new upload($_FILES['pns_pdf' . $i]);
-                                $imge->file_new_name_body = $soNumber . "_" . time()."_".$i;                                       
+                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+								if($_FILES['pns_pdf' . $i]['size']<20000000)
+								{
+									$imge = new upload($_FILES['pns_pdf' . $i]);
+									$imge->file_new_name_body = $soNumber . "_" . time()."_".$i;                                       
 
-                                if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+									if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
 
-                                        @unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
-                                }
-                                if ($imge->uploaded) {
-                                        $imge->Process($path_so_pdfs);
-                                        if ($imge->processed) {
-                                                $arr_pdf_upload[] = $imge->file_dst_name;
-                                        } else {
-                                                $arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
-                                        }
-                                }
+											@unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+									}
+									if ($imge->uploaded) {
+											$imge->Process($path_so_pdfs);
+											if ($imge->processed) {
+													$arr_pdf_upload[] = $imge->file_dst_name;
+											} else {
+													$arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+											}
+									}
+								}
+								else
+								{
+										$msg = JText::_('Please upload file PDF less than 20MB.');
+										return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);         
+								}
                         }
-                        else
-                        {
-                                $msg = JText::_('Please upload file less than 20MB.');
-                                return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$so_id, $msg);         
-                        }
+                        
                 }
                 if (count($arr_pdf_upload) > 0) {
                         foreach ($arr_pdf_upload as $file) {
@@ -8004,7 +8012,7 @@ class PNsController extends JController {
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE so_id=" .$so_id);
                 $rows = $db->loadObjectList();              
                 foreach ($rows as $row) {       
-                        if($row->wo_state!='onhold' && $row->wo_state!='done'){
+                        if($row->wo_state!='onhold' || $row->wo_state!='done'){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . ",'Onhold So') ");                        
                                 $db->query();                       
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8067,7 +8075,7 @@ class PNsController extends JController {
                         $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE so_id = ".$so_id);                        
                         $rows = $db->loadObjectList();              
                         foreach ($rows as $row) {   
-                                if($row->wo_state!='cancel' && $row->wo_state!='done')
+                                if($row->wo_state!='cancel' || $row->wo_state!='done')
                                 {
                                         $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'Cancel So') ");                        
                                         $db->query();                            
@@ -8130,18 +8138,22 @@ class PNsController extends JController {
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
                        // for ($i = 1; $i <= 20; $i++) {       
-                        if ($_FILES['wo_log_zip']['size'] > 0 && $_FILES['wo_log_zip']['size']<20000000) {
-                                if (!move_uploaded_file($_FILES['wo_log_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_zip']['name'])) {
-                                        $arr_error_upload_zips[] = $_FILES['wo_log_zip']['name'];
-                                } else {
-                                        $arr_file_upload[] = $_FILES['wo_log_zip']['name'];
-                                }
+                        if ($_FILES['wo_log_zip']['size'] > 0) {
+								if($_FILES['wo_log_zip']['size']<20000000)
+								{
+									if (!move_uploaded_file($_FILES['wo_log_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_zip']['name'])) {
+											$arr_error_upload_zips[] = $_FILES['wo_log_zip']['name'];
+									} else {
+											$arr_file_upload[] = $_FILES['wo_log_zip']['name'];
+									}
+								}
+								else
+								{
+									$msg = JText::_('Please upload file less than 20MB.');
+										return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
+								}
                         }
-                        else
-                        {
-                            $msg = JText::_('Please upload file less than 20MB.');
-                                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
-                        }
+                        
                         
                        // }
                         if (count($arr_file_upload) > 0) {
@@ -8161,18 +8173,22 @@ class PNsController extends JController {
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
                        // for ($i = 1; $i <= 20; $i++) {                              
-                                if ($_FILES['wo_log_pdf']['size'] > 0 && $_FILES['wo_log_pdf']['size']<20000000) {
+                                if ($_FILES['wo_log_pdf']['size'] > 0) {
+									if($_FILES['wo_log_pdf']['size']<20000000)
+									{
                                         if (!move_uploaded_file($_FILES['wo_log_pdf' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_pdf']['name'])) {
                                                 $arr_error_upload_zips[] = $_FILES['wo_log_pdf']['name'];
                                         } else {
                                                 $arr_file_upload[] = $_FILES['wo_log_pdf']['name'];
                                         }
+									}
+									else
+									{
+										$msg = JText::_('Please upload file less than 20MB.');
+											return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
+									}
                                 }
-                                else
-                                {
-                                    $msg = JText::_('Please upload file less than 20MB.');
-                                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
-                                }
+                                
                        // }
 
                         if (count($arr_file_upload) > 0) {
@@ -8192,18 +8208,22 @@ class PNsController extends JController {
                         $arr_file_upload = array();
                         $arr_error_upload_zips = array();
                        // for ($i = 1; $i <= 20; $i++) {                                
-                                if ($_FILES['wo_log_image']['size'] > 0 && $_FILES['wo_log_image']['size']<20000000) {
+                                if ($_FILES['wo_log_image']['size'] > 0) {
+									if($_FILES['wo_log_image']['size']<20000000)
+									{
                                         if (!move_uploaded_file($_FILES['wo_log_image' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_log_image']['name'])) {
                                                 $arr_error_upload_zips[] = $_FILES['wo_log_image']['name'];
                                         } else {
                                                 $arr_file_upload[] = $_FILES['wo_log_image']['name'];
                                         }
+									}
+									else
+									{
+										$msg = JText::_('Please upload file less than 20MB.');
+											return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
+									}
                                 }
-                                else
-                                {
-                                    $msg = JText::_('Please upload file less than 20MB.');
-                                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_log&id='.$post['wo_id'], $msg);    
-                                }
+                                
                        // }
 
                         if (count($arr_file_upload) > 0) {
@@ -8405,7 +8425,7 @@ class PNsController extends JController {
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
                 foreach ($rows as $row) {     
-                        if($row->wo_state!='onhold' && $row->wo_state!='done'){
+                        if($row->wo_state!='onhold' || $row->wo_state!='done'){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8494,8 +8514,9 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
+				
                 foreach ($rows as $row) {   
-                        if($row->wo_state!='cancel' && $row->wo_state!='done')
+                        if($row->wo_state!='cancel' || $row->wo_state!='done')
                         {
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            

@@ -77,6 +77,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
                                 var rma_value = document.getElementById('rma_' +cpn[i].value).value;
                                 var qty_value = document.getElementById('qty_' +cpn[i].value).value;
+								console.log(rma_value);
+								console.log(qty_value)
+								//alert(qty_value);
                                 if(rma_value>qty_value)
                                 {
                                         alert("Qty RMA must equal or less than PN Qty");                               

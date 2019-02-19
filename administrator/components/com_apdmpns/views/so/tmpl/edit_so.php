@@ -80,10 +80,10 @@
                 var so_start_date = new Date(form.so_start_date.value);  
                 so_start_date = so_start_date.setHours(0,0,0,0);
                 if (form.so_shipping_date.value==0){
-			alert("Please input Shipping Request Date");
-			form.so_shipping_date.focus();
-			return false;
-		}  
+					alert("Please input Shipping Request Date");
+					form.so_shipping_date.focus();
+					return false;
+				}  
 //                if (current_date > so_shipping_date ) 
 //                {
 //                    alert("Invalid Date Range!\nShipping Request Date cannot be before Today!")
@@ -96,16 +96,20 @@
                 }
                 //check max WO finish date
                 var max_wo_completed  = new Date(form.max_wo_completed.value);
-                max_wo_completed = max_wo_completed.setHours(0,0,0,0);                
-                if(max_wo_completed)
-                {
-                      if (so_shipping_date < max_wo_completed ) 
-                        {
-                            alert("Invalid Date Range!\nShipping Date cannot be before WO Complete belong this SO!")
-                            return false;
-                        }  
-
-                }
+                max_wo_completed = max_wo_completed.setHours(0,0,0,0);   
+				var so_start_date_old	= new Date(form.so_start_date_old.value);
+                so_start_date_old = so_start_date_old.setHours(0,0,0,0); 		
+				if(so_start_date_old!= so_shipping_date)
+				{
+					if(max_wo_completed)
+					{						
+							if (so_shipping_date < max_wo_completed ) 
+							{
+								alert("Invalid Date Range!\nShipping Date cannot be before WO Complete belong this SO!")
+								return false;
+							}  
+					}
+				}
                 
                 submitform( pressbutton );
         }                
@@ -207,7 +211,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>   
-                                                 <input type="text" maxlength="20" name="max_wo_completed"  id="max_wo_completed" class="inputbox" size="30" value="<?php echo $this->so_row->max_wo_completed;?>"/>
+                                                 <input type="hidden" maxlength="20" name="max_wo_completed"  id="max_wo_completed" class="inputbox" size="30" value="<?php echo $this->so_row->max_wo_completed;?>"/>
+												 <input type="hidden" maxlength="20" name="so_start_date_old"  id="so_start_date_old" class="inputbox" size="30" value="<?php echo $this->so_row->so_start_date;?>"/>
                                                <?php echo JHTML::_('calendar',$this->so_row->so_start_date, 'so_start_date', 'so_start_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>    
