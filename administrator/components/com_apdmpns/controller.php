@@ -7827,55 +7827,91 @@ class PNsController extends JController {
                                 $sql = "select * from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status = 'done'   order by op_code desc limit 1";
                                 $db->setQuery($sql);    
                                 $woResult = $db->loadObjectList();
-                                foreach($woResult as $r)
+                                if(count($woResult))
                                 {
-                                        echo $r->op_code;
-                                        switch($r->op_code)
-                                        {
-                                                case 'wo_step1':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="wire_cut";
-                                                        }
-                                                        break;
-                                                case 'wo_step2':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="kitted";
-                                                        }
-                                                        break;    
-                                                case 'wo_step3':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="production";
-                                                        }
-                                                        break;
-                                                case 'wo_step4':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="visual_inspection";
-                                                        }
-                                                        break;    
-                                                case 'wo_step5':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="final_inspection";
-                                                        }
-                                                        break;
-                                                case 'wo_step6':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="packaging";
-                                                        }
-                                                        break;   
-                                                case 'wo_step7':
-                                                        if($r->op_status=='done')
-                                                        {
-                                                                $status ="done";
-                                                        }
-                                                        break;                                                
+                                        foreach($woResult as $r)
+                                        {                                               
+                                                switch($r->op_code)
+                                                {
+                                                        case 'wo_step1':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="wire_cut";
+                                                                }
+                                                                break;
+                                                        case 'wo_step2':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="kitted";
+                                                                }
+                                                                break;    
+                                                        case 'wo_step3':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="production";
+                                                                }
+                                                                break;
+                                                        case 'wo_step4':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="visual_inspection";
+                                                                }
+                                                                break;    
+                                                        case 'wo_step5':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="final_inspection";
+                                                                }
+                                                                break;
+                                                        case 'wo_step6':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="packaging";
+                                                                }
+                                                                break;   
+                                                        case 'wo_step7':
+                                                                if($r->op_status=='done')
+                                                                {
+                                                                        $status ="done";
+                                                                }
+                                                                break;                                                
 
+                                                }
                                         }
+                                }
+                                else
+                                {
+                                     $sql = "select * from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code asc limit 1";
+                                     $db->setQuery($sql);                                              
+                                     $row = $db->loadObject();
+                                     switch($row->op_code)
+                                                {
+                                                        case 'wo_step1':
+                                                                $status ="label_printed";
+                                                                break;
+                                                        case 'wo_step2':
+                                                                $status ="wire_cut";                                                                
+                                                                break;    
+                                                        case 'wo_step3':
+                                                                $status ="kitted";
+                                                                break;
+                                                        case 'wo_step4':
+                                                                $status ="production";
+                                                                break;    
+                                                        case 'wo_step5':
+                                                                $status ="visual_inspection";
+                                                                break;
+                                                        case 'wo_step6':
+                                                                $status ="final_inspection";                                                                
+                                                                break;   
+                                                        case 'wo_step7':
+                                                                $status ="packaging";
+                                                                break;             
+                                                        default:
+                                                                $status ="done";
+
+                                                }
+                                     
                                 }
                         }
 

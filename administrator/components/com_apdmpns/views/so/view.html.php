@@ -31,6 +31,7 @@ class pnsViewso extends JView {
                 }
                 $where[] ="wop.op_assigner = ".$me->get('id');
                 $where[] = " wop.op_status != 'done'";
+                $where[] = " wo.wo_state not in('done','cancel')";
                 $where[] = " so.so_state not in('done','cancel')";
                 
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );

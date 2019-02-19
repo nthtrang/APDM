@@ -107,15 +107,20 @@
                     alert("Invalid Date Range!\nStart Date cannot be after Complete Date!!")
                     return false;
                 }        
-                /*if(is_edit_finish_date<=0)
+                if(is_edit_finish_date<=0)
                 {
-                        if (current_date > complete_date ) 
+                        var wo_completed_date_old	= new Date(form.wo_completed_date_old.value);               
+                        wo_completed_date_old = wo_completed_date_old.setHours(0,0,0,0); 		
+                        if(wo_completed_date_old!= complete_date)
                         {
-                            alert("Invalid Date Range!\nFinished Date cannot be before ToDay!!")
-                            return false;
-                        }  
-                }*/
-                //date step1 
+                                if (current_date > complete_date ) 
+                                {
+                                    alert("Invalid Date Range!\nFinished Date cannot be before ToDay!!")
+                                    return false;
+                                }  
+                         }
+                }
+                //vaidate date step1 
                 var op_target_date1 = new Date(form.op_target_date1.value);   
                 op_target_date1 = op_target_date1.setHours(0,0,0,0);
                 if (op_target_date1 < start_date || op_target_date1 > complete_date) 
@@ -539,13 +544,13 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>  
+                                                 <input type="hidden" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date_old" id="wo_completed_date_old" readonly="readonly" />
                                                 <?php      
                                                 
                                                if($this->wo_row->allow_edit_qty<=0)
                                                {
                                                        echo JHTML::_('calendar',$this->wo_row->wo_completed_date, 'wo_completed_date', 'wo_completed_date', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
                                                 ?>                                                
-<!--                                                <input type="text" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date" id="wo_completed_date" readonly="readonly" />-->
                                                 <?php 
                                                }
                                                else
@@ -597,8 +602,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <textarea maxlength='200' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
             <?php
     }else
-    {
-            
+    {            
     ?>
         <textarea readonly="readonly" maxlength='200' name="op_comment1" rows="3" cols="30"><?php echo $op_arr['wo_step1']['op_comment'];?></textarea>
     <?php 
@@ -607,6 +611,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <!-- for checking completed date changed-->
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_completed_date'];?>" name="op_completed_date1_old" id="op_completed_date1_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_status'];?>" name="op_status1_check" id="op_status1_check" />
     <?php              
     if($op_arr['wo_step1']['op_assigner'] == $me->get('id') && $op_arr['wo_step1']['op_status'] != 'done'){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
@@ -618,7 +623,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
              <?php
-    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($allow_edit || $this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
              <select  name="op_assigner1" id="op_assigner1" >
                 <option value="">Select Assignee</option>
@@ -667,6 +672,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           
     </td>
     <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step1']['op_target_date'];?>" name="op_target_date1_old" id="op_target_date1_old" />
             <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)//$this->wo_row->allow_edit_qty is  chỉ có thể sửa trước ngày start date
             {
@@ -697,6 +703,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
     <!-- for checking completed date changed-->
+    <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2_old" id="op_completed_date2_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_status'];?>" name="op_status2_check" id="op_status2_check" />
     <?php     
     if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')  && $op_arr['wo_step2']['op_status'] != 'done'){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
@@ -759,7 +766,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     }          
     ?>
     </td>
-    <td>                
+    <td>  
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_target_date'];?>" name="op_target_date2_old" id="op_target_date2_old" />
     <?php 
             if($allow_edit  || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {                    
@@ -789,6 +797,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <!-- for checking completed date changed-->
+        <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3_old" id="op_completed_date3_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_status'];?>" name="op_status3_check" id="op_status3_check" />
     <?php 
      if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')  && $op_arr['wo_step3']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
@@ -848,6 +857,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     ?>
     </td>
     <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_target_date'];?>" name="op_target_date3_old" id="op_target_date3_old" />
     <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {
@@ -878,6 +888,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
         <!-- for checking completed date changed-->
+        <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4_old" id="op_completed_date4_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_status'];?>" name="op_status4_check" id="op_status4_check" />    
     <?php 
     if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id') && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
@@ -937,6 +948,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     ?>
     </td>
     <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_target_date'];?>" name="op_target_date4_old" id="op_target_date4_old" />
         <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
             {
@@ -971,15 +983,20 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
   </tr>
   <?php 
+  $allow_step_edit ='readonly="readonly"';
+  //$allow_edit || for admin can edit
+  if($op_arr['wo_step4']['op_assigner'] == $me->get('id')){
+           $allow_step_edit = '';
+  }
   foreach ($this->wo_assem_rows as $a_row)
   {
   ?>
   <tr>
-    <td><input type="text" size="6"   value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
-    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
-    <td><input type="text" size="6"  value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
-    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
-    <td><input type="text" size="6" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
+    <td><input type="text" size="6"  <?php echo $allow_step_edit;?> value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
+    <td><input type="text" size="6"  <?php echo $allow_step_edit;?> value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
+    <td><input type="text" size="6"  <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
+    <td><input type="text" size="6"  <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
     <td class="tg-0pky">
             <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row->id ?>" />
     </td>
@@ -1005,6 +1022,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td></td>
     <td>
           <!-- for checking completed date changed-->
+          <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5_old" id="op_completed_date5_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_status'];?>" name="op_status5_check" id="op_status5_check" />    
   <?php 
     if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
@@ -1065,6 +1083,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     ?>            
     </td>
     <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5_old" id="op_target_date5_old" />
         <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
             {
@@ -1076,13 +1095,19 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <?php  ?>    
     </td>
   </tr>
-  <?php $opvs_arr = $this->opvs_arr;?>
+  <?php $opvs_arr = $this->opvs_arr;
+   $allow_step5_edit ='readonly="readonly"';
+  //$allow_edit || for admin can edit
+  if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){
+           $allow_step5_edit = '';
+  }
+  ?>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky"  colspan="3"><label for="name">Document not match</label></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value1']?>" name="op_visual_value1[1]" id="op_visual_value1" /></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value1']?>" name="op_visual_value1[2]" id="op_visual_value1" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value1']?>" name="op_visual_value1[1]" id="op_visual_value1" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value1']?>" name="op_visual_value1[2]" id="op_visual_value1" /></td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky" colspan="2"><label for="name">Comment</label></td>
   </tr>
@@ -1090,8 +1115,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Traveler incomplete</label></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value2']?>" name="op_visual_value2[1]" id="op_visual_value2" /></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value2']?>" name="op_visual_value2[2]" id="op_visual_value2" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value2']?>" name="op_visual_value2[1]" id="op_visual_value2" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value2']?>" name="op_visual_value2[2]" id="op_visual_value2" /></td>
    <td class="tg-0pky"></td>
     <td colspan="2" rowspan="4">            
      <?php
@@ -1112,24 +1137,24 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Wrong Dimension</label></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value3']?>" name="op_visual_value3[1]" id="op_visual_value3" /></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value3']?>" name="op_visual_value3[2]" id="op_visual_value3" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value3']?>" name="op_visual_value3[1]" id="op_visual_value3" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value3']?>" name="op_visual_value3[2]" id="op_visual_value3" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Label print error</label></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value4']?>" name="op_visual_value4[1]" id="op_visual_value4" /></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value4']?>" name="op_visual_value4[2]" id="op_visual_value4" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value4']?>" name="op_visual_value4[1]" id="op_visual_value4" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value4']?>" name="op_visual_value4[2]" id="op_visual_value4" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Missing Label / Wrong Location</label></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[1]['op_visual_value5']?>" name="op_visual_value5[1]" id="op_visual_value5" /></td>
-    <td><input type="text" size="6" value="<?php echo $opvs_arr[2]['op_visual_value5']?>" name="op_visual_value5[2]" id="op_visual_value5" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value5']?>" name="op_visual_value5[1]" id="op_visual_value5" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value5']?>" name="op_visual_value5[2]" id="op_visual_value5" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
@@ -1139,6 +1164,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td></td>
     <td>
           <!-- for checking completed date changed-->
+          <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6_old" id="op_completed_date6_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_status'];?>" name="op_status6_check" id="op_status6_check" />        
     <?php 
     if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
@@ -1198,7 +1224,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     ?>              
     </td>
     <td>
-              
+              <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_target_date'];?>" name="op_target_date6_old" id="op_target_date6_old" />
       <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty>0)
             {
@@ -1210,13 +1236,19 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <?php  ?>
     </td>
   </tr>
-  <?php $opfn_arr = $this->opfn_arr;?>
+  <?php $opfn_arr = $this->opfn_arr;
+   $allow_step6_edit ='readonly="readonly"';
+  //$allow_edit || for admin can edit
+  if($op_arr['wo_step6']['op_assigner'] == $me->get('id')){
+           $allow_step6_edit = '';
+  }
+  ?>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Document not match</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value1']?>" name="op_final_value1[1]" id="op_final_value1" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value1']?>" name="op_final_value1[2]" id="op_final_value1" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value1']?>" name="op_final_value1[1]" id="op_final_value1" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value1']?>" name="op_final_value1[2]" id="op_final_value1" /></td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky" colspan="2"><label for="name">COMMENTS</label></td>
   </tr>
@@ -1224,8 +1256,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Traveler incomplete</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value2']?>" name="op_final_value2[1]" id="op_final_value2" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value2']?>" name="op_final_value2[2]" id="op_final_value2" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value2']?>" name="op_final_value2[1]" id="op_final_value2" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value2']?>" name="op_final_value2[2]" id="op_final_value2" /></td>
     <td class="tg-0pky"></td>
     <td colspan="2" rowspan="6">            
      <?php
@@ -1246,40 +1278,40 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Wrong Dimension</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value3']?>" name="op_final_value3[1]" id="op_final_value3" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value3']?>" name="op_final_value3[2]" id="op_final_value3" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value3']?>" name="op_final_value3[1]" id="op_final_value3" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value3']?>" name="op_final_value3[2]" id="op_final_value3" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Label print error</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value4']?>" name="op_final_value4[1]" id="op_final_value4" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value4']?>" name="op_final_value4[2]" id="op_final_value4" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value4']?>" name="op_final_value4[1]" id="op_final_value4" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value4']?>" name="op_final_value4[2]" id="op_final_value4" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Missing Label / Wrong Location</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value5']?>" name="op_final_value5[1]" id="op_final_value5" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value5']?>" name="op_final_value5[2]" id="op_final_value5" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value5']?>" name="op_final_value5[1]" id="op_final_value5" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value5']?>" name="op_final_value5[2]" id="op_final_value5" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Miss Wire / Open Connection</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value6']?>" name="op_final_value6[1]" id="op_final_value6" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value6']?>" name="op_final_value6[2]" id="op_final_value6" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value6']?>" name="op_final_value6[1]" id="op_final_value6" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value6']?>" name="op_final_value6[2]" id="op_final_value6" /></td>
     <td class="tg-0pky"></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
     <td class="tg-0pky">&gt;</td>
     <td class="tg-0pky" colspan="3"><label for="name">Fail Hipot Test</label></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[1]['op_final_value7']?>" name="op_final_value7[1]" id="op_final_value7" /></td>
-    <td><input type="text" size="6" value="<?php echo $opfn_arr[2]['op_final_value7']?>" name="op_final_value7[2]" id="op_final_value7" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[1]['op_final_value7']?>" name="op_final_value7[1]" id="op_final_value7" /></td>
+    <td><input type="text" size="6" <?php echo $allow_step6_edit;?> value="<?php echo $opfn_arr[2]['op_final_value7']?>" name="op_final_value7[2]" id="op_final_value7" /></td>
   <tr>
     <td class="tg-0pky" colspan="6"></td>
     <td class="tg-0pky"><label for="name">COMMENTS</label></td>
@@ -1306,6 +1338,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
           <!-- for checking completed date changed-->
+          <input type="hidden" readonly="readonly"  value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7_old" id="op_completed_date7_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_status'];?>" name="op_status7_check" id="op_status7_check" />            
     <?php                     
     if($op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_assigner'] == $me->get('id') && $op_arr['wo_step7']['op_status'] != 'done'){//
@@ -1365,6 +1398,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     ?>                     
     </td>
     <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_target_date'];?>" name="op_target_date7_old" id="op_target_date7_old" />
     <?php 
             if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {
