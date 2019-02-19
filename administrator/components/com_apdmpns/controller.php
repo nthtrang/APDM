@@ -7486,7 +7486,7 @@ class PNsController extends JController {
                         $wopoStatusTitle1="";
                         if(($post['op_completed_date1']!="0000-00-00 00:00:00" && $post['op_assigner1']!=0) ||  $post['op_assigner1']==0)
                         {
-                                $status ="wire_cut";
+                                //$status ="wire_cut";
                                 $wopoStatus1 = "done";
                                 $wopoStatusTitle1 = "Done";
                                 //check done with pass day target
@@ -7528,7 +7528,7 @@ class PNsController extends JController {
                         $wopoStatusTitle2="";
                         if(($post['op_completed_date2']!="0000-00-00 00:00:00"  && $post['op_assigner2']!=0) || $post['op_assigner2']==0)
                         {
-                                $status ="kitted";
+                                //$status ="kitted";
                                 $wopoStatus2 = "done";
                                 $wopoStatusTitle2 = "Done";
                                 //check done with pass day target
@@ -7569,7 +7569,7 @@ class PNsController extends JController {
                         $wopoStatusTitle3="";
                         if(($post['op_completed_date3']!="0000-00-00 00:00:00"  && $post['op_assigner3']!=0) || $post['op_assigner3']==0)
                         {
-                                $status ="production";
+                               // $status ="production";
                                 $wopoStatus3 = "done";
                                 $wopoStatusTitle3 = "Done";
                                 //check done with pass day target
@@ -7610,7 +7610,7 @@ class PNsController extends JController {
                         $wopoStatusTitle4="";
                         if(($post['op_completed_date4']!="0000-00-00 00:00:00" && $post['op_assigner4']!=0) || $post['op_assigner4']==0)
                         {
-                                $status ="visual_inspection";
+                                //$status ="visual_inspection";
                                 $wopoStatus4 = "done";
                                 $wopoStatusTitle4 = "Done";
                                 //check done with pass day target
@@ -7661,7 +7661,7 @@ class PNsController extends JController {
                         $wopoStatusTitle5="";
                         if(($post['op_completed_date5']!="0000-00-00 00:00:00" && $post['op_assigner5']!=0) || $post['op_assigner5']==0)
                         {
-                                $status ="final_inspection";
+                                //$status ="final_inspection";
                                 $wopoStatus5 = "done";
                                 $wopoStatusTitle5 = "Done";
                                 //check done with pass day target
@@ -7715,7 +7715,7 @@ class PNsController extends JController {
                         $wopoStatusTitle6 = "";
                         if(($post['op_completed_date6']!="0000-00-00 00:00:00" && $post['op_assigner6']!=0) || $post['op_assigner6']==0)
                         {
-                                $status ="packaging";
+                                //$status ="packaging";
                                 $wopoStatus6 = "done";
                                 $wopoStatusTitle6 = "Done";
                                 //check done with pass day target
@@ -7769,7 +7769,7 @@ class PNsController extends JController {
                         $wopoStatusTitle7 = "";
                         if(($post['op_completed_date7']!="0000-00-00 00:00:00" && $post['op_assigner7']!=0) || $post['op_assigner7']==0)
                         {
-                                $status ="done";
+                               // $status ="done";
                                 $wopoStatus7 = "done";
                                 $wopoStatusTitle7 = "Done";
                                 //check done with pass day target
@@ -8004,7 +8004,7 @@ class PNsController extends JController {
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE so_id=" .$so_id);
                 $rows = $db->loadObjectList();              
                 foreach ($rows as $row) {       
-                        if($row->wo_state!='onhold'){
+                        if($row->wo_state!='onhold' && $row->wo_state!='done'){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . ",'Onhold So') ");                        
                                 $db->query();                       
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8405,7 +8405,7 @@ class PNsController extends JController {
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
                 foreach ($rows as $row) {     
-                        if($row->wo_state!='onhold'){
+                        if($row->wo_state!='onhold' && $row->wo_state!='done'){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
