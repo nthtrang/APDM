@@ -23,6 +23,8 @@ class pnsViewsearchsowo extends JView
       
            $post = JRequest::get('post');
            //var_dump($post);
+           
+        $search_type                = $mainframe->getUserStateFromRequest( "$option.search_swo_type", 'search_swo_type', '','string' );
         $search_so                = $mainframe->getUserStateFromRequest( "$option.so_cuscode", 'so_cuscode', '','string' );
         $search_wo                = $mainframe->getUserStateFromRequest( "$option.wo_cuscode", 'wo_cuscode', '','string' );
         $so_status                = $mainframe->getUserStateFromRequest( "$option.so_status", 'so_status', '','string' );
@@ -48,12 +50,12 @@ class pnsViewsearchsowo extends JView
         $where = array();
         $wherewo = array();
   
-        if (isset( $search_so ) && $search_so!= '')
+        if ($search_type = "searchso" && isset( $search_so ) && $search_so!= '')
         {
             $searchSoEscaped = $db->Quote( '%'.$db->getEscaped( $search_so, false ).'%', false );
            
         }
-        if (isset( $search_wo ) && $search_wo!= '')
+        if ($search_type = "searchwo" && isset( $search_wo ) && $search_wo!= '')
         {
                 
             $searchWoEscaped = $db->Quote( '%'.$db->getEscaped( $search_wo, false ).'%', false );
@@ -200,9 +202,12 @@ class pnsViewsearchsowo extends JView
         $this->assignRef('time_from',       $time_from);
         $this->assignRef('time_to',       $time_to);
         $this->assignRef('wo_op_status',       $wo_op_status);
-        
-        
-        
+        $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
+                $list_users = $db->loadObjectList();
+                $assigners[] = JHTML::_('select.option', 0, JText::_('Select Assigner'), 'value', 'text');
+                $assigners = array_merge($assigners, $list_users);
+        $list_user =  JHTML::_('select.genericlist', $assigners, 'employee_id', 'class="inputbox" size="1"', 'value', 'text', $employee_id);
+        $this->assignRef('list_assigners',       $list_user);
         
         $this->assignRef('pagination',    $pagination);       
 		parent::display($tpl);

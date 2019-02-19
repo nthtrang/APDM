@@ -53,7 +53,7 @@ function submitbutton(pressbutton) {
     <th>WO OPTION</th>
   </tr>
   <tr>
-    <td><input type="radio" name="search_type" value="searchso" <?php echo ($this->search_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
+    <td><input type="radio" name="search_swo_type" value="searchso" <?php echo ($this->search_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
     <td><input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->search_so?>"/></td>
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
@@ -61,7 +61,7 @@ function submitbutton(pressbutton) {
     <td><input type="radio" name="wo_op_status" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_type" value="searchwo" <?php echo ($this->search_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
+    <td><input type="radio" name="search_swo_type" value="searchwo" <?php echo ($this->search_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
     <td><input type="text" maxlength="20" name="wo_cuscode"  id="wo_cuscode" class="inputbox" size="30" value="<?php echo $this->search_wo?>"/></td>
     <td>Time From</td>
   <td>
@@ -73,7 +73,7 @@ function submitbutton(pressbutton) {
      <td><input type="radio" name="wo_op_status" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_type" value="searchstep" <?php echo ($this->search_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
+    <td><input type="radio" name="search_swo_type" value="searchstep" <?php echo ($this->search_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
     <td><input type="text" maxlength="20" name="step"  id="step" class="inputbox" size="30" value=""/></td>
     <td></td>
     <td></td>
@@ -82,7 +82,8 @@ function submitbutton(pressbutton) {
   </tr>
   <tr>
           <td>Employee ID#:</td>
-    <td><input type="text" maxlength="20" name="employee_id"  id="employee_id" class="inputbox" size="30" value="<?php echo $this->employee_id;?>"/></td>
+    <td>
+            <?php echo $this->list_assigners;?>            
     <td></td>
     <td></td>
     <td><input type="radio" name="so_status" value="cancel" <?php echo ($this->so_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
