@@ -37,6 +37,48 @@ function submitbutton(pressbutton) {
                         
 			
 		}
+                function controlStatusSearch(type_search)
+                {
+                        if(type_search=="searchso")
+                        {
+                                for(var i = 1;i<=12;i++){                                        
+                                        document.getElementById('wo_op_status'+i).setAttribute("onclick","javascript: return false;");                                        
+                                        if(i<=5){
+                                                document.getElementById('so_status'+i).setAttribute("onclick","");
+                                        }
+                                        if(i<=3){
+                                                document.getElementById('wo_step_status'+i).setAttribute("onclick","javascript: return false;");
+                                        }
+                                        
+                                        
+                                }
+                        }
+                        if(type_search=="searchwo")
+                        {
+                                for(var i = 1;i<=5;i++){                                        
+                                        document.getElementById('so_status'+i).setAttribute("onclick","javascript: return false;");
+                                        if(i<=3){
+                                                document.getElementById('wo_step_status'+i).setAttribute("onclick","javascript: return false;");
+                                        }
+                                        
+                                }
+                                 for(var i = 1;i<=12;i++){
+                                         document.getElementById('wo_op_status'+i).setAttribute("onclick","");
+                                 }
+                        }
+                         if(type_search=="searchstep")
+                        {                               
+                                 for(var i = 1;i<=12;i++){
+                                         document.getElementById('wo_op_status'+i).setAttribute("onclick","javascript: return false;");
+                                         if(i<=3){
+                                                document.getElementById('wo_step_status'+i).setAttribute("onclick","");
+                                        }
+                                         if(i<=5){
+                                                document.getElementById('so_status'+i).setAttribute("onclick","javascript: return false;");
+                                        }
+                                 }
+                        }
+                }
 
 </script>
 <form action="index.php?option=com_apdmpns&task=searchadvance" method="post" name="adminForm"  >
@@ -50,15 +92,15 @@ function submitbutton(pressbutton) {
     <td><strong>WO OPTION</strong></td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchso" <?php echo ($this->search_swo_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
+    <td><input type="radio" onclick="controlStatusSearch(this.value)" name="search_swo_type" value="searchso" <?php echo ($this->search_swo_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
     <td><input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->search_so?>"/></td>
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
-    <td><input type="radio" name="so_status" value="done" <?php echo ($this->so_status=='done')?"checked='checked'":"";?>>Done</td>
-    <td><input type="radio" name="wo_op_status" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
+    <td><input type="radio" name="so_status" id="so_status1" value="done" <?php echo ($this->so_status=='done')?"checked='checked'":"";?>>Done</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
+    <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
     <td><input type="text" maxlength="20" name="wo_cuscode"  id="wo_cuscode" class="inputbox" size="30" value="<?php echo $this->search_wo?>"/></td>
     <td>Time From</td>
   <td>
@@ -66,16 +108,16 @@ function submitbutton(pressbutton) {
       To 
       <?php echo JHTML::_('calendar',$this->time_to, 'time_to', 'time_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	     
   </td>
-     <td><input type="radio" name="so_status" value="onhold"  <?php echo ($this->so_status=='onhold')?"checked='checked'":"";?>>On Hold</td>
-     <td><input type="radio" name="wo_op_status" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
+     <td><input type="radio" name="so_status" id="so_status2" value="onhold"  <?php echo ($this->so_status=='onhold')?"checked='checked'":"";?>>On Hold</td>
+     <td><input type="radio" name="wo_op_status"  id="wo_op_status2" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchstep" <?php echo ($this->search_swo_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
+    <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchstep" <?php echo ($this->search_swo_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
     <td><input type="text" maxlength="20" name="step"  id="step" class="inputbox" size="30" value=""/></td>
     <td></td>
     <td></td>
-    <td><input type="radio" name="so_status" value="inprogress" <?php echo ($this->so_status=='inprogress')?"checked='checked'":"";?> >In Progress</td>
-    <td><input type="radio" name="wo_op_status" value="kitted" <?php echo ($this->wo_op_status=='kitted')?"checked='checked'":"";?>>Kitted</td>
+    <td><input type="radio" name="so_status" id="so_status3" value="inprogress" <?php echo ($this->so_status=='inprogress')?"checked='checked'":"";?> >In Progress</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status3" value="kitted" <?php echo ($this->wo_op_status=='kitted')?"checked='checked'":"";?>>Kitted</td>
   </tr>
   <tr>
           <td>Employee ID#:</td>
@@ -83,16 +125,16 @@ function submitbutton(pressbutton) {
             <?php echo $this->list_assigners;?>            
     <td></td>
     <td></td>
-    <td><input type="radio" name="so_status" value="cancel" <?php echo ($this->so_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
-    <td><input type="radio" name="wo_op_status" value="production" <?php echo ($this->wo_op_status=='production')?"checked='checked'":"";?>>Production</td>
+    <td><input type="radio" name="so_status" id="so_status4" value="cancel" <?php echo ($this->so_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status4" value="production" <?php echo ($this->wo_op_status=='production')?"checked='checked'":"";?>>Production</td>
   </tr>
   <tr>
     <td></td>
     <td></td>
     <td></td>
     <td></td>    
-    <td><input type="radio" name="wo_status" value="rma" <?php echo ($this->wo_status=='rma')?"checked='checked'":"";?>>RMA</td>
-    <td><input type="radio" name="wo_op_status" value="visual_inspection" <?php echo ($this->wo_op_status=='visual_inspection')?"checked='checked'":"";?>>Visual Inspection</td>
+    <td><input type="radio" name="so_status" id="so_status5" value="rma" <?php echo ($this->so_status=='rma')?"checked='checked'":"";?>>RMA</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status5" value="visual_inspection" <?php echo ($this->wo_op_status=='visual_inspection')?"checked='checked'":"";?>>Visual Inspection</td>
   </tr>
   <tr>
     <td></td>
@@ -100,7 +142,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td></td>
-    <td><input type="radio" name="wo_op_status" value="final_inspection" <?php echo ($this->wo_op_status=='final_inspection')?"checked='checked'":"";?>>Final Inspection</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status6" value="final_inspection" <?php echo ($this->wo_op_status=='final_inspection')?"checked='checked'":"";?>>Final Inspection</td>
   </tr>
   <tr>
     <td></td>
@@ -108,7 +150,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td></td>
-   <td><input type="radio" name="wo_op_status" value="packaging" <?php echo ($this->wo_op_status=='packaging')?"checked='checked'":"";?>>Packing</td>
+   <td><input type="radio" name="wo_op_status"  id="wo_op_status7" value="packaging" <?php echo ($this->wo_op_status=='packaging')?"checked='checked'":"";?>>Packing</td>
   </tr>
   <tr>
     <td></td>
@@ -116,7 +158,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td></td>
-    <td><input type="radio" name="wo_op_status" value="done" <?php echo ($this->wo_op_status=='done')?"checked='checked'":"";?>>Done</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status8" value="done" <?php echo ($this->wo_op_status=='done')?"checked='checked'":"";?>>Done</td>
   </tr>
   <tr>
     <td></td>
@@ -124,31 +166,31 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td><strong>STEP & EMP.OPTION</strong></td>
-    <td><input type="radio" name="wo_op_status" value="onhold" <?php echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>On hold</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status9" value="onhold" <?php echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>On hold</td>
   </tr>
   <tr>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
-    <td><input type="radio" name="wo_step_status" value="done" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>Done</td>
-    <td><input type="radio" name="wo_op_status" value="cancel" <?php echo ($this->wo_op_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
+    <td><input type="radio" name="wo_step_status" id="wo_step_status1" value="done" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>Done</td>
+    <td><input type="radio" name="wo_op_status"  id="wo_op_status10" value="cancel" <?php echo ($this->wo_op_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
   </tr>
   <tr>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
-   <td><input type="radio" name="wo_step_status" value="delay" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>Delay</td>
-    <td><input type="radio" name="wo_status" value="rework" <?php echo ($this->wo_status=='rework')?"checked='checked'":"";?>>Rework</td>
+   <td><input type="radio" name="wo_step_status" id="wo_step_status2"  value="delay" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>Delay</td>
+    <td><input type="radio"name="wo_op_status"  id="wo_op_status11"value="rework" <?php echo ($this->wo_status=='rework')?"checked='checked'":"";?>>Rework</td>
   </tr>
   <tr>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
-       <td><input type="radio" name="wo_step_status" value="inprogress" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>In Progress</td>
-        <td ><input type="radio" name="wo_status" value="delay" <?php echo ($this->wo_status=='delay')?"checked='checked'":"";?>>Delay</td>
+       <td><input type="radio" name="wo_step_status" id="wo_step_status3"  value="inprogress" <?php //echo ($this->wo_op_status=='onhold')?"checked='checked'":"";?>>In Progress</td>
+        <td ><input type="radio" name="wo_op_status"  id="wo_op_status12" value="delay" <?php echo ($this->wo_status=='delay')?"checked='checked'":"";?>>Delay</td>
   </tr>
  
 </table>

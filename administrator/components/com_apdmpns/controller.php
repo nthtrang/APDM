@@ -8105,7 +8105,6 @@ class PNsController extends JController {
                                      
                                // }
                         }
-
                         $sql= " update apdm_pns_wo set so_id ='" . $post['so_id'] . "'".
                                 ",wo_qty = '" . $post['wo_qty'] . "'".
                                 ",pns_id = '" .  $partNumber[0] . "'".
@@ -8117,6 +8116,7 @@ class PNsController extends JController {
                                 ",wo_updated = '" . $datenow->toMySQL() . "'".
                                 ",wo_updated_by = '" . $me->get('id') . "'".
                                 ",wo_assigner = '" . $post['wo_assigner'] . "'".
+                                ",wo_rma_active='".$post['wo_rma_active']."'".
                                 " where pns_wo_id ='".$wo_id."' ";
                         $db->setQuery($sql);
                         $db->query();   
@@ -8237,9 +8237,10 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();                
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE so_id=" .$so_id);
-                $rows = $db->loadObjectList();              
+                $rows = $db->loadObjectList();          
+                $statusAllowHold = array('onhold','done');
                 foreach ($rows as $row) {       
-                        if($row->wo_state!='onhold' || $row->wo_state!='done'){
+                        if(!in_array($row->wo_state,$statusAllowHold)){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . ",'Onhold So') ");                        
                                 $db->query();                       
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8297,13 +8298,12 @@ class PNsController extends JController {
                 $db->setQuery($query);
                 $isLogin = $db->loadResult();
                 if($isLogin)
-                {
-                        
+                {                        
                         $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE so_id = ".$so_id);                        
-                        $rows = $db->loadObjectList();              
+                        $rows = $db->loadObjectList();  
+                        $statusAllowCancel = array('cancel','done');
                         foreach ($rows as $row) {   
-                                if($row->wo_state!='cancel' || $row->wo_state!='done')
-                                {
+                                if(!in_array($row->wo_state,$statusAllowCancel)){
                                         $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'Cancel So') ");                        
                                         $db->query();                            
                                         $db->setQuery("update apdm_pns_wo set wo_state ='cancel',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8320,8 +8320,7 @@ class PNsController extends JController {
                 {
                         echo 0;
                 }
-                die;
-                
+                die;                
         }
  /**
          * Cancels an edit operation
@@ -8650,9 +8649,10 @@ class PNsController extends JController {
                 //write log changed wo                             
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
-                $rows = $db->loadObjectList();              
+                $rows = $db->loadObjectList();     
+                $StatusallowHold = array('onhold','done');
                 foreach ($rows as $row) {     
-                        if($row->wo_state!='onhold' || $row->wo_state!='done'){
+                        if(!in_array($row->wo_state, $StatusallowHold)){
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','onhold','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            
                                 $db->setQuery("update apdm_pns_wo set wo_state = 'onhold',wo_state_history ='" . $row->wo_state . "'  WHERE  pns_wo_id = ".$row->pns_wo_id);
@@ -8741,9 +8741,9 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $db->setQuery("SELECT pns_wo_id,so_id,wo_state,wo_state_history FROM apdm_pns_wo WHERE pns_wo_id in (" .$wo_ids.")");               
                 $rows = $db->loadObjectList();              
-				
+                $StatusallowCancel = array('cancel','done');                                       				
                 foreach ($rows as $row) {   
-                        if($row->wo_state!='cancel' || $row->wo_state!='done')
+                        if(!in_array($row->wo_state, $StatusallowCancel))
                         {
                                 $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id, pre_status,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $row->pns_wo_id . ", '" . $row->wo_state . "','cancel','" . $datenow->toMySQL() . "'," . $me->get('id') . " ,'".$wo_log_content."') ");                        
                                 $db->query();                            

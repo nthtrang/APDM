@@ -489,7 +489,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                                      if($this->wo_row->wo_rma_active)
                                                         $wo_rma_active = 'checked="checked"';
                                                     ?>
-                                                   <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="<?php echo $this->wo_row->wo_rma_active;?> onclick="return false;" onkeydown="return false;" /> RMA</td>
+                                                   <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="1" /> RMA</td>
 					</td>
 				</tr>                                              
                                        <tr>

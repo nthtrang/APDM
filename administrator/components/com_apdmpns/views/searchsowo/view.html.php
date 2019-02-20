@@ -70,7 +70,23 @@ class pnsViewsearchsowo extends JView
 
         if($so_status)
         {
-                $where[] = 'so.so_state = "'.$so_status.'"'; 
+                if($so_status !='rma')
+                {
+                        $where[] = 'so.so_state = "'.$so_status.'"'; 
+                }
+                else {
+                        /*$query = "select so_id from apdm_pns_so_fk where rma is not null group by so_id ";
+                        $db->setQuery($query);                   
+                        $rso_is_rma = $db->loadObjectList();
+                        $arrSoRma = array();
+                        foreach($rso_is_rma as $r)
+                        {
+                                $arrSoRma[]=$r->so_id;
+                        }
+                        $where[] = 'so.pns_so_id IN ('.implode(',', $arrSoRma).')';*/
+                        
+                         $where[] ='fk.rma is not null';                       
+                }                
         }
         if($time_remain)
         {
