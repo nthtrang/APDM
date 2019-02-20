@@ -9,9 +9,9 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $soNumber = $this->so_row->so_cuscode;
-if($this->so_row->ccs_code)
+if($this->so_row->ccs_so_code)
 {
-       $soNumber = $this->so_row->ccs_code."-".$soNumber;
+       $soNumber = $this->so_row->ccs_so_code."-".$soNumber;
 }
 JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 

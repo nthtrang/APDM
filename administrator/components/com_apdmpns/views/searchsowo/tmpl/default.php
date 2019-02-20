@@ -9,9 +9,6 @@
         JToolBarHelper::customX("searchadvance","search",'',"Search",false);  
         JToolBarHelper::customX("cancelsearch","cancel",'',"Reset",false);  
 	$cparams = JComponentHelper::getParams ('com_media');
-?>
-
-<?php
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -47,13 +44,13 @@ function submitbutton(pressbutton) {
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />-->
 <table class="admintable" cellspacing="1" width="100%" border="0">           
   <tr>
-    <th colspan="2">OBJECT</th>
-    <th colspan="2">TIME<br></th>
-    <th>SO OPTION</th>
-    <th>WO OPTION</th>
+    <td colspan="2"><strong>OBJECT</strong></td>
+    <td colspan="2"><strong>TIME</strong><br></td>
+    <td><strong>SO OPTION</strong></td>
+    <td><strong>WO OPTION</strong></td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchso" <?php echo ($this->search_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
+    <td><input type="radio" name="search_swo_type" value="searchso" <?php echo ($this->search_swo_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
     <td><input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->search_so?>"/></td>
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
@@ -61,7 +58,7 @@ function submitbutton(pressbutton) {
     <td><input type="radio" name="wo_op_status" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchwo" <?php echo ($this->search_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
+    <td><input type="radio" name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
     <td><input type="text" maxlength="20" name="wo_cuscode"  id="wo_cuscode" class="inputbox" size="30" value="<?php echo $this->search_wo?>"/></td>
     <td>Time From</td>
   <td>
@@ -73,7 +70,7 @@ function submitbutton(pressbutton) {
      <td><input type="radio" name="wo_op_status" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
   </tr>
   <tr>
-    <td><input type="radio" name="search_swo_type" value="searchstep" <?php echo ($this->search_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
+    <td><input type="radio" name="search_swo_type" value="searchstep" <?php echo ($this->search_swo_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
     <td><input type="text" maxlength="20" name="step"  id="step" class="inputbox" size="30" value=""/></td>
     <td></td>
     <td></td>

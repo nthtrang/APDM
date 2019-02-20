@@ -1166,7 +1166,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <!-- for checking completed date changed-->
           <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6_old" id="op_completed_date6_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_status'];?>" name="op_status6_check" id="op_status6_check" />        
-    <?php 
+    <?php 	
     if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else

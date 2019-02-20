@@ -50,12 +50,12 @@ class pnsViewsearchsowo extends JView
         $where = array();
         $wherewo = array();
   
-        if ($search_type = "searchso" && isset( $search_so ) && $search_so!= '')
+        if ($search_type == "searchso" && isset( $search_so ) && $search_so!= '')
         {
             $searchSoEscaped = $db->Quote( '%'.$db->getEscaped( $search_so, false ).'%', false );
            
         }
-        if ($search_type = "searchwo" && isset( $search_wo ) && $search_wo!= '')
+        if ($search_type == "searchwo" && isset( $search_wo ) && $search_wo!= '')
         {
                 
             $searchWoEscaped = $db->Quote( '%'.$db->getEscaped( $search_wo, false ).'%', false );
@@ -193,8 +193,10 @@ class pnsViewsearchsowo extends JView
         $lists['search']= $search;    
         $this->assignRef('rs_so',       $rows);
         $this->assignRef('rs_wo',       $rs_wo);
-        $this->assignRef('search_so',       $search_so);
-         $this->assignRef('search_wo',       $search_wo);
+		
+        $this->assignRef('search_swo_type',       $search_type);
+		$this->assignRef('search_so',       $search_so);
+        $this->assignRef('search_wo',       $search_wo);
         $this->assignRef('so_status',       $so_status);
         $this->assignRef('time_remain',       $time_remain);
         $this->assignRef('wo_status',       $wo_status);

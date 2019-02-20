@@ -9,10 +9,11 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $soNumber = $this->so_row->so_cuscode;
-if($this->so_row->ccs_code)
+if($this->so_row->ccs_so_code)
 {
-       $soNumber = $this->so_row->ccs_code."-".$soNumber;
+       $soNumber = $this->so_row->ccs_so_code."-".$soNumber;
 }
+
 JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);   
 $me = JFactory::getUser();
@@ -77,10 +78,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
                                 var rma_value = document.getElementById('rma_' +cpn[i].value).value;
                                 var qty_value = document.getElementById('qty_' +cpn[i].value).value;
+								rma_value = parseInt(rma_value);
+								qty_value = parseInt(qty_value);
 								console.log(rma_value);
 								console.log(qty_value)
 								//alert(qty_value);
-                                if(rma_value>qty_value)
+                                if(qty_value < rma_value)
                                 {
                                         alert("Qty RMA must equal or less than PN Qty");                               
                                         return false;
@@ -169,7 +172,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <td class="key" width="28%"><?php echo JText::_('Customer'); ?></td>                                               
                                         <td width="30%" class="title"><?php echo PNsController::getCcsName($this->so_row->customer_id); ?></td>                                          
                                         <td class="key" width="18%"><?php echo JText::_('Coordinator'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo $this->so_row->ccs_coordinator; ?></td>
+                                        <td width="30%" class="title"><?php echo PNsController::getcoordinatorso($this->so_row->ccs_so_code);?></td>
 				                                                                              
                                 </tr>
                                 <tr>

@@ -80,7 +80,7 @@ class pnsViewso extends JView {
                 $pns_list = $db->loadObjectList();
                 $this->assignRef('so_pn_list', $pns_list);
 
-                $db->setQuery("SELECT so.*,max(date(wo.wo_completed_date)) as max_wo_completed,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $so_id);
+                $db->setQuery("SELECT so.*,so.customer_id as ccs_so_code,max(date(wo.wo_completed_date)) as max_wo_completed,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $so_id);
                 $so_row = $db->loadObject();
                 $this->assignRef('so_row', $so_row);
 

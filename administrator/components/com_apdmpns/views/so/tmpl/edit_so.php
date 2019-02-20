@@ -181,7 +181,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                                    <?php echo $this->lists['ccscpn'];?>       
                                                 <a href="index.php?option=com_apdmccs&task=addcustomer&back=so"><?php echo JText::_('Generate Customer')?></a>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="text"  name="so_coordinator" id="so_coordinator" class="inputbox" size="30" value="<?php echo $this->so_row->ccs_coordinator;?>"/>						
+                                                <input type="text"  name="so_coordinator" id="so_coordinator" class="inputbox" size="30" value="<?php echo PNsController::getcoordinatorso($this->so_row->ccs_so_code);?>"/>						
 					</td>
 				</tr>
                                  <tr>
