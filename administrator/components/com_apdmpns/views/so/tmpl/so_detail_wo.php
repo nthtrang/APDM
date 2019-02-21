@@ -231,15 +231,22 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         $pnNumber = $row->ccs_code . '-' . $row->pns_code;
                 }  
                 $background="";
-                $remain_day = $row->wo_remain_date;
+                $remain_day = $row->wo_remain_date+1;
                 if($remain_day<=0)
                 {
-                        $remain_day = 0;
-                        $background= "style='background-color:#f00;color:#fff'";
+                        $remain_day = 0;                        
+						if($row->wo_state != 'done' && $row->wo_state != 'cancel')
+                        {
+                                $background= "style='background-color:#f00;color:#fff'";
+                        }
                 }
                 elseif($row->wo_remain_date<=3)
                 {
-                        $background= "style='background-color:#ff0;color:#000'";
+						if($row->wo_state != 'done' && $row->wo_state != 'cancel')
+                        {
+							$background= "style='background-color:#ff0;color:#000'";
+						}
+						
                 }
                 ?>
         <tr>		
