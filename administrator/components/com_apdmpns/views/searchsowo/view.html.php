@@ -27,6 +27,9 @@ class pnsViewsearchsowo extends JView
         $search_type                = $mainframe->getUserStateFromRequest( "$option.search_swo_type", 'search_swo_type', '','string' );
         $search_so                = $mainframe->getUserStateFromRequest( "$option.so_cuscode", 'so_cuscode', '','string' );
         $search_wo                = $mainframe->getUserStateFromRequest( "$option.wo_cuscode", 'wo_cuscode', '','string' );
+        $search_step                = $mainframe->getUserStateFromRequest( "$option.step", 'step', '','string' );
+        $search_emp               = $mainframe->getUserStateFromRequest( "$option.employee_id", 'employee_id', '','string' );
+        $wo_step_status         = $mainframe->getUserStateFromRequest( "$option.wo_step_status", 'wo_step_status', '','string' );
         $so_status                = $mainframe->getUserStateFromRequest( "$option.so_status", 'so_status', '','string' );
         $time_remain              = $mainframe->getUserStateFromRequest( "$option.time_remain", 'time_remain', '','string' );
         $wo_status                = $mainframe->getUserStateFromRequest( "$option.wo_status", 'wo_status', '','string' );
@@ -49,25 +52,25 @@ class pnsViewsearchsowo extends JView
        
         $where = array();
         $wherewo = array();
-  
+        $wherewop = array();
         if ($search_type == "searchso" && isset( $search_so ) && $search_so!= '')
         {
             $searchSoEscaped = $db->Quote( '%'.$db->getEscaped( $search_so, false ).'%', false );
-           
+            $where[] = 'so.so_cuscode LIKE '.$searchSoEscaped;           
         }
         if ($search_type == "searchwo" && isset( $search_wo ) && $search_wo!= '')
-        {
-                
+        {                
             $searchWoEscaped = $db->Quote( '%'.$db->getEscaped( $search_wo, false ).'%', false );
-            $wherewo[] = 'wo.wo_code LIKE '.$searchWoEscaped; 
-           
+            $wherewo[] = 'wo.wo_code LIKE '.$searchWoEscaped;            
         }
-        
-        
-        $where[] = 'so.so_cuscode LIKE '.$searchSoEscaped;
-          
-        
-
+        if ($search_type == "searchstep" && isset( $search_step ) && $search_step!= '')
+        {                           
+            $wherewop[] = 'wop.op_code = "'.$search_step.'"';
+        }
+        if ($search_type == "searchstep" && isset( $search_emp ) && $search_emp!= '')
+        {                            
+            $wherewop[] = 'wop.op_assigner = '.$search_emp;               
+        }
         if($so_status)
         {
                 if($so_status !='rma')
@@ -92,6 +95,7 @@ class pnsViewsearchsowo extends JView
         {
                 $where[] = 'DATEDIFF(so.so_shipping_date, CURDATE()) < '.$time_remain; 
                 $wherewo[] ='DATEDIFF(wo.wo_completed_date, CURDATE()) < '.$time_remain;  
+                $wherewop[] ='DATEDIFF(wop.op_target_date, CURDATE()) < '.$time_remain;  
         }
         $wo_id_delay = array();
         if(isset($wo_status) && $wo_status =="delay")
@@ -142,6 +146,7 @@ class pnsViewsearchsowo extends JView
                 $time_from = JHTML::_('date', $time_from, '%Y-%m-%d');
                 $time_to = JHTML::_('date', $time_to, '%Y-%m-%d');
                 $wherewo[] ="wo.wo_start_date > '".$time_from ."' and wo.wo_completed_date < '".$time_to."'";
+                $wherewop[] ="wop.op_start_date > '".$time_from ."' and (wop.op_target_date < '".$time_to."' or wop.op_completed_date < '".$time_to."')";
         }
         else
         {               
@@ -149,11 +154,13 @@ class pnsViewsearchsowo extends JView
                 {                        
                         $time_from = JHTML::_('date', $time_from, '%Y-%m-%d');
                         $wherewo[] ="wo.wo_start_date > ".$time_from;
+                        $wherewop[] ="wop.op_start_date > ".$time_from;
                 }
                 elseif($time_to)
                 {
                         $time_to = JHTML::_('date', $time_to, '%Y-%m-%d');
-                        $wherewo[] ="wo.wo_start_date > ".$time_from;
+                        $wherewo[] ="wo.wo_completed_date > ".$time_to;
+                        $wherewop[] ="wop.op_target_date > ".$time_to ." or wop.op_completed_date < '".$time_to."'";
                 }
         }
         
@@ -162,8 +169,23 @@ class pnsViewsearchsowo extends JView
                 $wherewo[] ="wo.wo_state = '".$wo_op_status."'";
         }
                 
+        if($wo_step_status)
+        {       if($wo_step_status=="done")
+                {
+                        $wherewop[] ="wop.op_status = 'done'";
+                }
+                elseif($wo_step_status=="inprogress")
+                {
+                        $wherewop[] ="wop.op_status != 'done'";
+                }
+                elseif($wo_step_status=="delay")
+                {
+                        $wherewop[] ="wop.op_delay !=0";
+                }                                
+        }
         $where = ( count( $where ) ? ' WHERE (' . implode( ') and (', $where ) . ')' : '' );
         $wherewo1 = ( count( $wherewo ) ? ' WHERE (' . implode( ') and (', $wherewo ) . ')' : '' );
+        $wherewop1 = ( count( $wherewop ) ? ' WHERE (' . implode( ') and (', $wherewop ) . ')' : '' );
 
         $query = 'SELECT count(*) '.
              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
@@ -203,15 +225,24 @@ class pnsViewsearchsowo extends JView
                 $rs_wo = $db->loadObjectList();    
              
         }
+        
+        if(count( $wherewop )>0){
+             $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
+                        " from apdm_pns_wo_op wop inner join apdm_pns_wo wo on wop.wo_id = wo.pns_wo_id " .                        
+                        $wherewop1;
+                $db->setQuery($sql);                   
+                $rs_step = $db->loadObjectList();      
+        }
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;
         $lists['search']= $search;    
         $this->assignRef('rs_so',       $rows);
         $this->assignRef('rs_wo',       $rs_wo);
+        $this->assignRef('rs_step',       $rs_step);
 		
         $this->assignRef('search_swo_type',       $search_type);
-		$this->assignRef('search_so',       $search_so);
+	$this->assignRef('search_so',       $search_so);
         $this->assignRef('search_wo',       $search_wo);
         $this->assignRef('so_status',       $so_status);
         $this->assignRef('time_remain',       $time_remain);
@@ -220,13 +251,25 @@ class pnsViewsearchsowo extends JView
         $this->assignRef('time_from',       $time_from);
         $this->assignRef('time_to',       $time_to);
         $this->assignRef('wo_op_status',       $wo_op_status);
+        $this->assignRef('wo_step_status',       $wo_step_status);
+        
         $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
                 $list_users = $db->loadObjectList();
                 $assigners[] = JHTML::_('select.option', 0, JText::_('Select Assigner'), 'value', 'text');
                 $assigners = array_merge($assigners, $list_users);
         $list_user =  JHTML::_('select.genericlist', $assigners, 'employee_id', 'class="inputbox" size="1"', 'value', 'text', $employee_id);
         $this->assignRef('list_assigners',       $list_user);
-        
+
+        $wostep[] = JHTML::_('select.option',  '',  JText::_( 'Select Step' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step1', JText::_( 'Label Printed' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step2', JText::_( 'Wire Cut' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step3', JText::_( 'Kitted' ) , 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step4', JText::_( 'Production' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step5',  JText::_( 'Visual Inspection' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step6',  JText::_( 'Final Inspection' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step7', JText::_( 'Packaging' ), 'value', 'text');  
+        $list_step =  JHTML::_('select.genericlist', $wostep, 'step', 'class="inputbox" size="1"', 'value', 'text', $search_step);
+        $this->assignRef('list_step',       $list_step);
         $this->assignRef('pagination',    $pagination);       
 		parent::display($tpl);
 	}
