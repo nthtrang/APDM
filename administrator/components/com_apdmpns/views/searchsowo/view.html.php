@@ -47,7 +47,7 @@ class pnsViewsearchsowo extends JView
         
         if($clean=="all")
         {
-                $search_so = $search_wo = $so_status= $time_remain =$wo_status = $employee_id = $time_from =$time_to = $wo_op_status= "";  
+             $wo_step_status = $search_emp= $wo_op_status= $search_step= $search_type = $search_so = $search_wo = $so_status= $time_remain =$wo_status = $employee_id = $time_from =$time_to = $wo_op_status= "";  
         }
        
         $where = array();
@@ -227,7 +227,7 @@ class pnsViewsearchsowo extends JView
         }
         
         if(count( $wherewop )>0){
-             $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
+            echo $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
                         " from apdm_pns_wo_op wop inner join apdm_pns_wo wo on wop.wo_id = wo.pns_wo_id " .                        
                         $wherewop1;
                 $db->setQuery($sql);                   

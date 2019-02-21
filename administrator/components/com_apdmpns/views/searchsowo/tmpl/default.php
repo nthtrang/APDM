@@ -413,7 +413,7 @@ if (count($this->rs_step) > 0) { ?>
                                                   elseif($wop->op_delay)
                                                           echo "Delay";
                                                     ?></td>
-                                                  <td><?php echo ($wop->wo_delay)?$wop->wo_delay:0;//PNsController::getDelayTimes($wo->pns_wo_id);?></td>
+                                                  <td><?php echo ($wop->op_delay)?$wop->op_delay:0;//PNsController::getDelayTimes($wo->pns_wo_id);?></td>
                                                
                                                 </tr>
                                                 <?php }
