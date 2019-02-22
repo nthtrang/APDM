@@ -293,7 +293,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>
-						<textarea maxlength='40' name="so_log" rows="10" cols="40"><?php echo $this->so_row->so_log?></textarea>
+						<textarea name="so_log" rows="10" cols="40"><?php echo $this->so_row->so_log?></textarea>
 					</td>
 				</tr>                                                               		
 			</table>

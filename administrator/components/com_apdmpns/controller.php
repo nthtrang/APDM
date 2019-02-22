@@ -8814,4 +8814,17 @@ class PNsController extends JController {
 			echo $ccs_coordinator;
 
 		}        
+		function checkStepBeforeDone($step,$wo_id)
+		{
+			$db =& JFactory::getDBO();	
+			$lastNumber = substr($step, -1);
+			$sql = "SELECT count(*) FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) < ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0  and op_status != 'done'";
+			$db->setQuery($sql);
+			$check_exist = $db->loadResult();
+			if ($check_exist==0) {				
+				return 1;
+			}			
+			return 0;
+											
+		}
 }

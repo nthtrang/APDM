@@ -184,7 +184,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
    <td><input type="radio" name="wo_step_status" id="wo_step_status2"  value="delay" <?php echo ($this->wo_step_status=='delay')?"checked='checked'":"";?>>Delay</td>
-    <td><input type="radio"name="wo_op_status"  id="wo_op_status11"value="rework" <?php echo ($this->wo_status=='rework')?"checked='checked'":"";?>>Rework</td>
+    <td><input type="radio"name="wo_op_status"  id="wo_op_status11"value="rework" <?php echo ($this->wo_op_status=='rework')?"checked='checked'":"";?>>Rework</td>
   </tr>
   <tr>
     <td></td>
@@ -192,7 +192,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
        <td><input type="radio" name="wo_step_status" id="wo_step_status3"  value="inprogress" <?php echo ($this->wo_step_status=='inprogress')?"checked='checked'":"";?>>In Progress</td>
-        <td ><input type="radio" name="wo_op_status"  id="wo_op_status12" value="delay" <?php echo ($this->wo_status=='delay')?"checked='checked'":"";?>>Delay</td>
+        <td ><input type="radio" name="wo_op_status"  id="wo_op_status12" value="delay" <?php echo ($this->wo_op_status=='delay')?"checked='checked'":"";?>>Delay</td>
   </tr>
  
 </table>
@@ -238,7 +238,24 @@ if (count($this->rs_so) > 0) { ?>
                 if($so->ccs_so_code)
                 {
                        $soNumber = $so->ccs_so_code."-".$soNumber;
-                }              
+                }            
+				$background="";
+                 $remain_day = $so->so_remain_date+1;                
+                        if($remain_day<=0)
+                        {       
+                                $remain_day = 0;
+                                if($so->so_state != 'done' && $so->so_state != 'cancel')
+                                {
+                                        $background= "style='background-color:#f00;color:#fff'";
+                                }
+                        }
+                        elseif($remain_day<=3)
+                        {        
+                                if($so->so_state != 'done' && $so->so_state != 'cancel')
+                                {
+                                        $background= "style='background-color:#ff0;color:#000'";
+                                }
+                        }				
                 ?>
                                         <tr>
                                                 <td><?php echo $i;?></td>                                            
@@ -249,7 +266,7 @@ if (count($this->rs_so) > 0) { ?>
                                                  <td>
                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td> 
-                                                <td><?php echo ($so->so_remain_date>=0)?$so->so_remain_date:0;?></td>
+                                                <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                 <td>
                                                        <?php 
                                                        echo PNsController::getSoStatus($so->so_state); ?>

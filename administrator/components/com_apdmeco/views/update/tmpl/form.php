@@ -498,7 +498,7 @@ function get_number_eco(){
 	<div class="clr"></div>
 <div style="display:none"><?php
 						// parameters : areaname, content, width, height, cols, rows
-echo $editor->display( 'text',  $row->text , '10%', '10', '10', '3' ) ;
+//echo $editor->display( 'text',  $row->text , '10%', '10', '10', '3' ) ;
 ?></div>
 	<input type="hidden" name="eco_id" value="<?php echo $this->row->eco_id?>" />
 	<input type="hidden" name="cid[]" value="<?php echo $this->row->eco_id?>" />

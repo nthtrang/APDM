@@ -706,7 +706,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step2']['op_completed_date'];?>" name="op_completed_date2_old" id="op_completed_date2_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step2']['op_status'];?>" name="op_status2_check" id="op_status2_check" />
     <?php     
-    if($op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')  && $op_arr['wo_step2']['op_status'] != 'done'){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
+    if(PNsController::checkStepBeforeDone('step2',$this->wo_row->pns_wo_id) && $op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')  && $op_arr['wo_step2']['op_status'] != 'done'){    // && $op_arr['wo_step2']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step2']['op_completed_date'], 'op_completed_date2', 'op_completed_date2', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));             
     }
     else
@@ -800,7 +800,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
         <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step3']['op_completed_date'];?>" name="op_completed_date3_old" id="op_completed_date3_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step3']['op_status'];?>" name="op_status3_check" id="op_status3_check" />
     <?php 
-     if($op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')  && $op_arr['wo_step3']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
+	$checkStepbefore =  PNsController::checkStepBeforeDone('step3',$this->wo_row->pns_wo_id);
+     if($checkStepbefore == 1 && $op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')  && $op_arr['wo_step3']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step3']['op_completed_date'], 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
      }else
     {?>
@@ -891,7 +892,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
         <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4_old" id="op_completed_date4_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_status'];?>" name="op_status4_check" id="op_status4_check" />    
     <?php 
-    if($op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id') && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
+    if(PNsController::checkStepBeforeDone('step4',$this->wo_row->pns_wo_id) && $op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id') && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
@@ -1025,7 +1026,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5_old" id="op_completed_date5_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_status'];?>" name="op_status5_check" id="op_status5_check" />    
   <?php 
-    if($op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
+    if(PNsController::checkStepBeforeDone('step5',$this->wo_row->pns_wo_id) && $op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
     }else
     {?>
@@ -1167,7 +1168,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step6']['op_completed_date'];?>" name="op_completed_date6_old" id="op_completed_date6_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step6']['op_status'];?>" name="op_status6_check" id="op_status6_check" />        
     <?php 	
-    if($op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
+    if(PNsController::checkStepBeforeDone('step6',$this->wo_row->pns_wo_id) && $op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
         echo JHTML::_('calendar',$op_arr['wo_step6']['op_completed_date'], 'op_completed_date6', 'op_completed_date6', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>
@@ -1341,7 +1342,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
           <input type="hidden" readonly="readonly"  value="<?php echo $op_arr['wo_step7']['op_completed_date'];?>" name="op_completed_date7_old" id="op_completed_date7_old" />
     <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step7']['op_status'];?>" name="op_status7_check" id="op_status7_check" />            
     <?php                     
-    if($op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_assigner'] == $me->get('id') && $op_arr['wo_step7']['op_status'] != 'done'){//
+    if(PNsController::checkStepBeforeDone('step7',$this->wo_row->pns_wo_id) && $op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_assigner'] == $me->get('id') && $op_arr['wo_step7']['op_status'] != 'done'){//
         echo JHTML::_('calendar',$op_arr['wo_step7']['op_completed_date'], 'op_completed_date7', 'op_completed_date7', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
     }else
     {?>

@@ -23,21 +23,22 @@ class pnsViewsearchsowo extends JView
       
            $post = JRequest::get('post');
            //var_dump($post);
-           
-        $search_type                = $mainframe->getUserStateFromRequest( "$option.search_swo_type", 'search_swo_type', '','string' );
+        $wo_op_status = 0;
+        $search_type               = JRequest::getVar('search_swo_type');// = $mainframe->getUserStateFromRequest( "$option.search_swo_type", 'search_swo_type', '','string' );
         $search_so                = $mainframe->getUserStateFromRequest( "$option.so_cuscode", 'so_cuscode', '','string' );
         $search_wo                = $mainframe->getUserStateFromRequest( "$option.wo_cuscode", 'wo_cuscode', '','string' );
         $search_step                = $mainframe->getUserStateFromRequest( "$option.step", 'step', '','string' );
         $search_emp               = $mainframe->getUserStateFromRequest( "$option.employee_id", 'employee_id', '','string' );
-        $wo_step_status         = $mainframe->getUserStateFromRequest( "$option.wo_step_status", 'wo_step_status', '','string' );
-        $so_status                = $mainframe->getUserStateFromRequest( "$option.so_status", 'so_status', '','string' );
+        
         $time_remain              = $mainframe->getUserStateFromRequest( "$option.time_remain", 'time_remain', '','string' );
         $wo_status                = $mainframe->getUserStateFromRequest( "$option.wo_status", 'wo_status', '','string' );
         $employee_id              = $mainframe->getUserStateFromRequest( "$option.employee_id", 'employee_id', '','string' );
         $time_from              = $mainframe->getUserStateFromRequest( "$option.time_from", 'time_from', '','string' );
         $time_to                = $mainframe->getUserStateFromRequest( "$option.time_to", 'time_to', '','string' );
-        $wo_op_status                = $mainframe->getUserStateFromRequest( "$option.wo_op_status", 'wo_op_status', '','string' );
-        
+      //  $wo_op_status        = $mainframe->getUserStateFromRequest( "$option.wo_op_status", 'wo_op_status', '','string' );
+		$wo_step_status         = JRequest::getVar('wo_step_status');//= $mainframe->getUserStateFromRequest( "$option.wo_step_status", 'wo_step_status', '','string' );
+        $so_status               = JRequest::getVar('so_status');// = $mainframe->getUserStateFromRequest( "$option.so_status", 'so_status', '','string' );
+        $wo_op_status 			= JRequest::getVar('wo_op_status');
         $keyword                = $search_so;
         $search_so                = JString::strtolower( $search_so );
         $search_wo                = JString::strtolower( $search_wo );
@@ -47,7 +48,7 @@ class pnsViewsearchsowo extends JView
         
         if($clean=="all")
         {
-             $wo_step_status = $search_emp= $wo_op_status= $search_step= $search_type = $search_so = $search_wo = $so_status= $time_remain =$wo_status = $employee_id = $time_from =$time_to = $wo_op_status= "";  
+             $wo_step_status = $search_emp= $search_step= $search_type = $search_so = $search_wo = $so_status= $time_remain =$wo_status = $employee_id = $time_from =$time_to = $wo_op_status= "";  
         }
        
         $where = array();
@@ -56,7 +57,8 @@ class pnsViewsearchsowo extends JView
         if ($search_type == "searchso" && isset( $search_so ) && $search_so!= '')
         {
             $searchSoEscaped = $db->Quote( '%'.$db->getEscaped( $search_so, false ).'%', false );
-            $where[] = 'so.so_cuscode LIKE '.$searchSoEscaped;           
+            $where[] = 'so.so_cuscode LIKE '.$searchSoEscaped .' or so.customer_id LIKE '.$searchSoEscaped;
+			
         }
         if ($search_type == "searchwo" && isset( $search_wo ) && $search_wo!= '')
         {                
@@ -64,7 +66,7 @@ class pnsViewsearchsowo extends JView
             $wherewo[] = 'wo.wo_code LIKE '.$searchWoEscaped;            
         }
         if ($search_type == "searchstep" && isset( $search_step ) && $search_step!= '')
-        {                           
+        {        
             $wherewop[] = 'wop.op_code = "'.$search_step.'"';
         }
         if ($search_type == "searchstep" && isset( $search_emp ) && $search_emp!= '')
@@ -91,52 +93,59 @@ class pnsViewsearchsowo extends JView
                          $where[] ='fk.rma is not null';                       
                 }                
         }
-        if($time_remain)
+        if($time_remain!="")
         {
                 $where[] = 'DATEDIFF(so.so_shipping_date, CURDATE()) < '.$time_remain; 
                 $wherewo[] ='DATEDIFF(wo.wo_completed_date, CURDATE()) < '.$time_remain;  
                 $wherewop[] ='DATEDIFF(wop.op_target_date, CURDATE()) < '.$time_remain;  
         }
-        $wo_id_delay = array();
-        if(isset($wo_status) && $wo_status =="delay")
+        
+        if(isset($wo_op_status) && $wo_op_status =="delay")
         {
-                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.wo_id".
-                          " from apdm_pns_wo_op op where op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0  group by wo_id";
-                $db->setQuery($query);                   
-                $rswo_id_delay = $db->loadObjectList();
-                if (count($rswo_id_delay) >0){
-                        foreach ($rswo_id_delay as $wo){
-                           $wo_id_delay[] = $wo->wo_id; 
-                        }
-                        $wherewo[] = 'wo.pns_wo_id IN ('.implode(',', $wo_id_delay).')';          
-                }   
+			/*$wo_id_delay = array();
+			$query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.wo_id".
+					  " from apdm_pns_wo_op op where op_completed_date = '0000-00-00 00:00:00'  and DATEDIFF(CURDATE(),op_target_date) > 0  group by wo_id";
+			$db->setQuery($query);                   
+			$rswo_id_delay = $db->loadObjectList();
+			if (count($rswo_id_delay) >0){
+					foreach ($rswo_id_delay as $wo){
+					   $wo_id_delay[] = $wo->wo_id; 
+					}
+					$wherewo[] = 'wo.pns_wo_id IN ('.implode(',', $wo_id_delay).')';          
+			}   */
+			$wherewo[] = 'wo.wo_delay !=0';
         }
-        if(isset($wo_status) && $wo_status =="rma")
+        elseif(isset($wo_op_status) && $wo_op_status =="rma")
         {
                  $wherewo[] = 'wo.wo_rma_active =1';
-        }
-         $wo_id_rework = array();
-        if(isset($wo_status) && $wo_status =="rework")
+        }         
+        elseif(isset($wo_op_status) && $wo_op_status =="rework")
         {
-                 $queryRework = 'select op.wo_id'.
-                               ' from apdm_pns_wo_op op '.
-                               ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
-                               ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "") '.
-                               ' and  op.op_code = "wo_step5"  group by op.wo_id';
-                                ' union select op.wo_id'.
-                                ' from apdm_pns_wo_op op '.
-                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
-                                ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != "")'.
-                                ' and  op.op_code = "wo_step6" group by op.wo_id';
-                $db->setQuery($queryRework);                   
-                $rswo_id_rework = $db->loadObjectList();
-                if (count($rswo_id_rework) >0){
-                        foreach ($rswo_id_rework as $wo){
-                           $wo_id_rework[] = $wo->wo_id; 
-                        }
-                        $wherewo[] = 'wo.pns_wo_id IN ('.implode(',', $wo_id_rework).')';          
-                }      
+			$wo_id_rework = array();
+			$queryRework = 'select op.wo_id'.
+						   ' from apdm_pns_wo_op op '.
+						   ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
+						   ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "") '.
+						   ' and  op.op_code = "wo_step5"  group by op.wo_id';
+							' union select op.wo_id'.
+							' from apdm_pns_wo_op op '.
+							' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
+							' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != "")'.
+							' and  op.op_code = "wo_step6" group by op.wo_id';
+			$db->setQuery($queryRework);                   
+			$rswo_id_rework = $db->loadObjectList();
+			if (count($rswo_id_rework) >0){
+					foreach ($rswo_id_rework as $wo){
+					   $wo_id_rework[] = $wo->wo_id; 
+					}
+					$wherewo[] = 'wo.pns_wo_id IN ('.implode(',', $wo_id_rework).')';          
+			}      
         }
+		else
+        {                
+                $wherewo[] ="wo.wo_state = '".$wo_op_status."'";
+        }
+		
         if($employee_id)
         {                
                 $wherewo[] ="wo.wo_assigner = ".$employee_id;
@@ -164,10 +173,7 @@ class pnsViewsearchsowo extends JView
                 }
         }
         
-        if($wo_op_status)
-        {                
-                $wherewo[] ="wo.wo_state = '".$wo_op_status."'";
-        }
+        
                 
         if($wo_step_status)
         {       if($wo_step_status=="done")
@@ -204,11 +210,12 @@ class pnsViewsearchsowo extends JView
              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
              ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
              ' left join apdm_pns p on p.pns_id = fk.pns_id'.
-              $where;
+              $where .
+			  ' group by so.pns_so_id';
       
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
-        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        $db->setQuery( $query, $pagination->limitstart, 5000 );
         //echo $db->getQuery();
         $rows = $db->loadObjectList(); 
               
@@ -227,7 +234,7 @@ class pnsViewsearchsowo extends JView
         }
         
         if(count( $wherewop )>0){
-            echo $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
+              $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
                         " from apdm_pns_wo_op wop inner join apdm_pns_wo wo on wop.wo_id = wo.pns_wo_id " .                        
                         $wherewop1;
                 $db->setQuery($sql);                   

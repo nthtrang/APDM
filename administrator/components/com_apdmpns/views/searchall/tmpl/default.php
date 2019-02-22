@@ -823,6 +823,7 @@ if (count($this->rs_so) > 0) { ?>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>
                                         <th width="100"><?php echo JText::_('Start date'); ?></th>
                                         <th width="100"><?php echo JText::_('Shipping request date'); ?></th>
+										<th width="100"><?php echo JText::_('Time Remain'); ?></th>
                                         <th width="100"><?php echo JText::_('Required'); ?></th>
                                         <th width="100"><?php echo JText::_('Status'); ?></th>
                                         <th width="100"><?php echo JText::_('RMA'); ?></th>
@@ -847,7 +848,24 @@ if (count($this->rs_so) > 0) { ?>
                 if($so->ccs_so_code)
                 {
                        $soNumber = $so->ccs_so_code."-".$soNumber;
-                }              
+                }       
+				$background="";
+                 $remain_day = $so->so_remain_date+1;                
+                        if($remain_day<=0)
+                        {       
+                                $remain_day = 0;
+                                if($so->so_state != 'done' && $so->so_state != 'cancel')
+                                {
+                                        $background= "style='background-color:#f00;color:#fff'";
+                                }
+                        }
+                        elseif($remain_day<=3)
+                        {        
+                                if($so->so_state != 'done' && $so->so_state != 'cancel')
+                                {
+                                        $background= "style='background-color:#ff0;color:#000'";
+                                }
+                        }						
                 ?>
                                         <tr>
                                                 <td><?php echo $i;?></td>                                            
@@ -863,6 +881,7 @@ if (count($this->rs_so) > 0) { ?>
                                                  <td>
                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td> 
+												 <td <?php echo $background?>><?php echo $remain_day;?></td>
                                                 <td>
                                                         <?php
                                                                                         $required = array();

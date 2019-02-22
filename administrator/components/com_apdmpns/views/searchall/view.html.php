@@ -189,11 +189,11 @@ else
                     //select table SO with keyword input      
                     $where = "";
                     $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
-                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
+                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision ,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date'.
                              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
                              ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
                              ' left join apdm_pns p on p.pns_id = fk.pns_id'.
-                             ' where so.so_cuscode LIKE '.$searchEscaped;
+                             ' where so.so_cuscode LIKE '.$searchEscaped .' or so.customer_id LIKE '.$searchEscaped;
                              if($arr_code[0] && $arr_code[1])
                              {
                                 $where =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';    
