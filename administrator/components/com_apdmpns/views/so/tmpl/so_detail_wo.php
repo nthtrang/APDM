@@ -16,7 +16,7 @@ if($this->so_row->ccs_so_code)
 JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 JToolBarHelper::cancelSo("",$this->so_row->pns_so_id);//tmpforload modal
-if (in_array("W", $role)) { 
+if (in_array("W", $role)  && $this->so_row->so_state !="done") { 
         JToolBarHelper::customX("onholdwo","unpublish",'',"On Hold",true);      
         JToolBarHelper::customX("inprogresswo","restore",'',"In PROGRESS",true);    
         JToolBarHelper::customX("cancelwopop","cancel",'',"Cancel",true); 
@@ -24,12 +24,13 @@ if (in_array("W", $role)) {
         //JToolBarHelper::customX("inprogresswo","restore",'',"In PROGRESS",true); 
         //function customX($task = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
       //   JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
-         JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false);	
+         //JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false);	
+       
+}
+if (in_array("E", $role) && $this->so_row->so_state =="inprogress") {
+       JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false); 
         JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO#");
 }
-//if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
-        
-//}
 //if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
 //        JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     
 //        JToolBarHelper::cancelSo("Cancel",$this->so_row->pns_so_id);

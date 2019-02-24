@@ -293,7 +293,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 						</label>
 					</td>
 					<td>
-						<textarea name="so_log" rows="10" cols="40"><?php echo $this->so_row->so_log?></textarea>
+<!--						<textarea name="so_log1" rows="10" cols="40"><?php echo $this->so_row->so_log?></textarea>-->                                                
+                                                <?php                                     
+                                                $editor =& JFactory::getEditor();                                                
+                                                     echo $editor->display('so_log', $this->so_row->so_log, '5%', '5', '10', '1',false);
+                                        ?>
 					</td>
 				</tr>                                                               		
 			</table>

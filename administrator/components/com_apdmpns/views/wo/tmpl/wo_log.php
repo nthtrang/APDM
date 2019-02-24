@@ -62,20 +62,29 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td><strong>Upload:</strong></td>
                                         </tr>
                                         <tr>
-                                                <td>
-                                                        <textarea name="wo_log" rows="10" cols="70"><?php echo $this->wo_row->wo_log; ?></textarea>
+                                                <td width="60%">
+<!--                                                        <textarea name="wo_log" rows="10" cols="70"><?php echo $this->wo_row->wo_log; ?></textarea>-->
+                                                        <?php                                     
+                                                                $editor =& JFactory::getEditor();                                                
+                                                     echo $editor->display('wo_log', $this->wo_row->wo_log, '5%', '5', '10', '1',false);
+                                                        ?>
                                                 </td>
                                                 <td>
-                                                        <span id="1">
-							Zip:<input type="file" name="wo_log_zip" /> 
-        						</span>
-                                                        <span id="2">
-							PDF: <input type="file" name="wo_log_pdf" /> 
-                                                        </span>
-                                                         <span id="2">
-							Image: <input type="file" name="wo_log_image" /> 
-                                                        </span>  
-                                                        <br>
+                                                        <table>
+                                                                <tr>
+                                                                        <td>Zip:</td>
+                                                                        <td><input type="file" name="wo_log_zip" /> </td>
+                                                                </tr>
+                                                                 <tr>
+                                                                        <td>PDF:</td>
+                                                                        <td><input type="file" name="wo_log_pdf" />  </td>
+                                                                </tr>
+                                                                 <tr>
+                                                                        <td>Image:</td>
+                                                                        <td><input type="file" name="wo_log_zip" /> </td>
+                                                                </tr>
+                                                        </table>
+                                                      
                                                         <table>
                                                                          <?php if (count($this->list_file_log) > 0) {
                                                                 ?>				
@@ -154,7 +163,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         $op_arr = $this->op_arr;
                                         if ($op_arr[$rowde->op_code]['op_assigner'] == $me->get('id')) {
                                                         ?>
-                                                                        <input type="text" size="30" value="" name="op_log_comment[<?php echo $rowde->pns_op_id; ?>]" id="op_log_comment" />
+                                                                        <input type="text" size="30" value="" name="op_log_comment[<?php echo $rowde->pns_op_id; ?>]" id="op_log_comment" />                                                                         
                                                                         </br>
                                                                         <?php
                                                                 }

@@ -7107,8 +7107,8 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');             
-                
+                $post = JRequest::get('post');    
+                $so_log =  JRequest::getVar( 'so_log', '', 'post', 'string', JREQUEST_ALLOWHTML );
                 $so_id = $post['so_id'];
                 $soNumber = $post['so_cuscode'];
                 $sql= " update apdm_pns_so set customer_id ='" . $post['customer_id'] . "'".
@@ -7118,7 +7118,7 @@ class PNsController extends JController {
                         ",so_start_date = '" . $post['so_start_date'] . "'".
                         ",so_updated = '" . $datenow->toMySQL() . "'".
                         ",so_updated_by = '" . $me->get('id') . "'".
-                        ",so_log = '" . $post['so_log'] . "'".
+                        ",so_log = '" . $so_log . "'".
                         " where pns_so_id ='".$so_id."' ";
                 $db->setQuery($sql);
                 $db->query();     
@@ -8376,9 +8376,10 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();                
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');  
-                if($post['wo_log'])
+                $wo_log =  JRequest::getVar( 'wo_log', '', 'post', 'string', JREQUEST_ALLOWHTML );
+                if($wo_log)
                 {
-                        $db->setQuery("update apdm_pns_wo set wo_log = '".$post['wo_log']."'  WHERE  pns_wo_id = ".$post['wo_id']);
+                        $db->setQuery("update apdm_pns_wo set wo_log = '".$wo_log."'  WHERE  pns_wo_id = ".$post['wo_id']);
                         $db->getQuery();
                         $db->query(); 
                 }
