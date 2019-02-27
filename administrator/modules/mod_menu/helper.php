@@ -289,7 +289,11 @@ class modMenuHelper
                         //SO
 			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
 				$menu->addChild(new JMenuNode(JText::_('SO'), 'index.php?option=com_apdmpns&task=somanagement', 'class:dashboard'));                        
-			}                          
+			}     
+                        //NEW STO
+			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
+				$menu->addChild(new JMenuNode(JText::_('NEWSTO'), 'index.php?option=com_apdmsto', 'class:dashboard'));                        
+			}  
 		}
 
 		/*
