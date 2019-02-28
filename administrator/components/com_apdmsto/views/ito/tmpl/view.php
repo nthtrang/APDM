@@ -6,7 +6,7 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);	
 	$role = JAdministrator::RoleOnComponent(1);	
-	JToolBarHelper::title( JText::_( 'COMMODITY_CODE_MAMANGEMENT' ) . ': <small><small>[ view ]</small></small>' , 'generic.png' );
+	JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 	if (in_array("E", $role)) {
                 if($this->row->ccs_cpn!=1)
                         JToolBarHelper::editListX();
@@ -59,101 +59,72 @@
 	}
 
 </script>
-<form action="index.php" method="post" name="adminForm" >
-	<div class="col width-60">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Comodity Code Detail' ); ?></legend>
-			<table class="admintable" cellspacing="1">
-				<tr>
-					<td class="key">
-						<label for="name">
-                                              
-							<?php echo JText::_( 'COMMODITY_CODE' ); ?>
-                                                       
-						</label>
-					</td>
-					<td>
-					<?php echo $this->row->ccs_code;?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_DESCRIPTION' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php echo $this->row->ccs_description?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_activate)? JText::_('Yes') : JText::_('No');?>
-					</td>
-				</tr>
-			</table>
-		</fieldset>
-	</div>
-	<div class="col width-40">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Parameters' ); ?></legend>
-			<table class="admintable">
-				<tr>
-					<td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('CCS_CREATE')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_id) ? JHTML::_('date', $this->row->ccs_create, '%Y-%m-%d %H:%M:%S') :'New document';?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key">
-						<label for="ccs_create_by">
-							<?php echo JText::_('CCS_CREATE_BY')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_id) ? GetValueUser($this->row->ccs_create_by, 'username') : 'New Document';?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('CCS_MODIFIED')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_modified !='0000-00-00 00:00:00') ? JHTML::_('date', $this->row->ccs_modified, '%Y-%m-%d %H:%M:%S') : 'None';?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key">
-						<label for="ccs_create_by">
-							<?php echo JText::_('CCS_MODIFIED_BY')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_modified_by) ? GetValueUser($this->row->ccs_modified_by, 'username') : 'None';?>
-					</td>
-				</tr>				
-				
-			</table>
-		</fieldset>
-		
-	</div>
-	<div class="clr"></div>
+<div class="submenu-box">
+            <div class="t">
+                <div class="t">
+                        <div class="t"></div>
+                </div>
+        </div>
+        <div class="m">
+		<ul id="submenu" class="configuration">
+			<li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
+			<li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_pns&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'AFFECTED PARTS' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_support_doc&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>                      
+                </ul>
+		<div class="clr"></div>
+        </div>
+        <div class="b">
+                <div class="b">
+                        <div class="b"></div>
+                </div>
+        </div>
+</div>
+<div class="clr"></div>
+<p>&nbsp;</p>
 
-	<input type="hidden" name="ccs_id" value="<?php echo $this->row->ccs_id?>" />
-	<input type="hidden" name="cid[]" value="<?php echo $this->row->ccs_id?>" />
-	<input type="hidden" name="option" value="com_apdmccs" />
-	<input type="hidden" name="task" value="" />
-	<input type="hidden" name="boxchecked" value="1" />
-	<?php echo JHTML::_( 'form.token' ); ?>
+<form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
+        <fieldset class="adminform">
+		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>        
+        <table class="admintable" cellspacing="1"  width="70%">
+                              <tr>
+                                        <td class="key" width="28%"><?php echo JText::_('ITO'); ?></td>                                               
+                                        <td width="30%" class="title"><?php echo $this->sto_row->sto_code; ?></td>                                          
+                                        <td class="key" width="18%"><?php echo JText::_('Supplier'); ?></td>                                               
+                                        <td width="30%" class="title"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
+				                                                                              
+                                </tr>
+                                <tr>
+                                        <td  class="key" width="28%"><?php echo JText::_('P.O Internal'); ?></td>                                               
+                                        <td width="30%" class="title"><?php echo $this->sto_row->sto_po_internal;?></td>                                        
+									   <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
+									   <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
+                                </tr>  
+                                <tr>
+                                        <td class="key"  width="28%"><?php echo JText::_('Created Date'); ?></td>                                               
+                                        <td width="30%" class="title">  <?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>  
+										<td  class="key" width="28%"><?php echo JText::_('Stocker'); ?></td>
+									   <td width="30%" class="title"><?php echo GetValueUser($this->sto_row->sto_stocker, "name"); ?></td>                                       
+				                                                                              
+                                </tr>  
+                                <tr>
+                                        <td  class="key" width="28%"><?php echo JText::_('Owner'); ?></td>                                               
+                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
+										<td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
+                                        <td width="30%" class="title"> 
+										 <?php 
+                                                     if($this->sto_row->sto_owner_confirm)
+                                                        $sto_owner_confirm = 'checked="checked"';
+                                                    ?>
+                                                   <input <?php echo $sto_owner_confirm?> type="checkbox" name="sto_owner_confirm" value="1" /> </td>                                        
+				                                                                              
+                                </tr>        
+        </table>		
+        </fieldset>
+        <input type="hidden" name="so_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
+        <input type="hidden" name="option" value="com_apdmsto" />     
+        <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
+	<input type="hidden" name="task" value="ito_detail" />	
+        <input type="hidden" name="boxchecked" value="1" />
+<?php echo JHTML::_('form.token'); ?>
 </form>
+

@@ -112,12 +112,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                         <td><?php echo $rowf->file_name?></td>
                                                                         <td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
                                                                         <td><a href="index.php?option=com_apdmpns&task=download_file_wo_log&id=<?php echo $rowf->id?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-                                                                                 <?php
-                                                                             //  if ($this->row->pns_life_cycle =='Create') {                       
+                                                                                 <?php                                                                               
+																			   if ($this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ){
                                                                                 ?>
                                                                         <a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                                                          <?php
-                                                                          //     }
+                                                                               }
                                                                                 ?>
                                                                         </td>
                                                                 </tr>

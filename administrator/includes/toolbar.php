@@ -638,6 +638,12 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'cancel', $alt, "index.php?option=com_apdmpns&task=informDelSo&tmpl=component&id=$so_id", 300,150 );
 	} 
+	 function addPnsIto($alt = 'New',$sto_id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&sto_id=$sto_id", 850,500 );
+	}   
             
 }
 

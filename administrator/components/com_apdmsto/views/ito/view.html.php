@@ -91,7 +91,7 @@ class SToViewito extends JView
         $csupplier[0] = JHTML::_('select.option', 0, '- ' . JText::_('Select Supplier') . ' -', 'value', 'text');
         $db->setQuery("SELECT info_id as value,info_name as text FROM apdm_supplier_info s WHERE s.info_type= 3 and s.info_deleted = 0 and s.info_activate = 1");                                      
         $csupplier = array_merge($csupplier, $db->loadObjectList());
-        $lists['ccsupplier'] = JHTML::_('select.genericlist', $csupplier, 'supplier_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $sto_row->customer_id);
+        $lists['ccsupplier'] = JHTML::_('select.genericlist', $csupplier, 'sto_supplier_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $sto_row->sto_supplier_id);
 
         //for PO detailid
 
@@ -102,8 +102,36 @@ class SToViewito extends JView
          $pns_list2 = $db->loadObjectList();                  
          $this->assignRef('sto_pn_list2',        $pns_list2);
          
+//get ist imag/zip/pdf
+                ///get list zip files
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 0 sto_id=" . $sto_row->pns_sto_id);
+                $res = $db->loadObjectList();
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $zips_files[] = array('id' => $r->id, 'zip_file' => $r->file_name);
+                        }
+                }
+                ///get list image files
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 2 sto_id=" . $sto_row->pns_sto_id);
+                $res = $db->loadObjectList();
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $images_files[] = array('id' => $r->id, 'image_file' => $r->file_name);
+                        }
+                }
+                ///get list pdf files
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 1 sto_id=" . $sto_row->pns_sto_id);
+                $res = $db->loadObjectList();
+                if (count($res) > 0) {
+                        foreach ($res as $r) {
+                                $pdf_files[] = array('id' => $r->id, 'pdf_file' => $r->file_name);
+                        }
+                }		 
          
-         $this->assignRef('sto_row',        $sto_row);
+        $this->assignRef('sto_row',        $sto_row);
+		$lists['zips_files'] = $zips_files;
+		$lists['image_files'] = $images_files;
+		$lists['pdf_files'] = $pdf_files;		
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);
