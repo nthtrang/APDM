@@ -108,7 +108,7 @@ function get_default_ito_prefix(){
 			});	                        
 		});        		
 </script>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>
@@ -141,7 +141,7 @@ function get_default_ito_prefix(){
 						</label>
 					</td>
 					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->so_row->so_shipping_date, 'so_shipping_date', 'so_shipping_date', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+                                               <?php echo JHTML::_('calendar',$this->sto_row->sto_created, 'sto_created', 'sto_created', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>      
                                 <tr>

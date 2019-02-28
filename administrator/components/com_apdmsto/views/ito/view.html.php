@@ -74,7 +74,7 @@ class SToViewito extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
         
-        $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$sto_id);
+        $db->setQuery("SELECT pns_sto_id,sto_code,sto_po_internal,sto_description,sto_state,sto_created,sto_create_by,sto_completed_date,sto_type,sto_owner,sto_stocker,sto_supplier_id,sto_owner_confirm  from apdm_pns_sto where pns_sto_id=".$sto_id);         
          $sto_row =  $db->loadObject();
         
         $db->setQuery("SELECT sto.*, p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_sto AS sto on p.pns_id = sto.pns_id WHERE p.pns_deleted =0 AND sto.pns_id=".$cid[0]." order by sto.pns_rev_id desc limit 1");              
@@ -90,9 +90,8 @@ class SToViewito extends JView
 //         get supplier         
         $csupplier[0] = JHTML::_('select.option', 0, '- ' . JText::_('Select Supplier') . ' -', 'value', 'text');
         $db->setQuery("SELECT info_id as value,info_name as text FROM apdm_supplier_info s WHERE s.info_type= 3 and s.info_deleted = 0 and s.info_activate = 1");                                      
-        $csupplier = array_merge($csupplier, $db->loadObjectList());
-        $lists['ccsupplier'] = JHTML::_('select.genericlist', $csupplier, 'sto_supplier_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $sto_row->sto_supplier_id);
-
+        $csupplier = array_merge($csupplier, $db->loadObjectList());        
+        $lists['ccsupplier'] = JHTML::_('select.genericlist', $csupplier, 'sto_supplier_id', 'class="inputbox" size="1"', 'value', 'text', $sto_row->sto_supplier_id);
         //for PO detailid
 
          $db->setQuery("SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." group by fk.pns_id order by fk.pns_id desc");
@@ -104,7 +103,7 @@ class SToViewito extends JView
          
 //get ist imag/zip/pdf
                 ///get list zip files
-                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 0 sto_id=" . $sto_row->pns_sto_id);
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 0 and sto_id=" . $sto_row->pns_sto_id);                 
                 $res = $db->loadObjectList();
                 if (count($res) > 0) {
                         foreach ($res as $r) {
@@ -112,7 +111,7 @@ class SToViewito extends JView
                         }
                 }
                 ///get list image files
-                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 2 sto_id=" . $sto_row->pns_sto_id);
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 2 and sto_id=" . $sto_row->pns_sto_id);
                 $res = $db->loadObjectList();
                 if (count($res) > 0) {
                         foreach ($res as $r) {
@@ -120,7 +119,7 @@ class SToViewito extends JView
                         }
                 }
                 ///get list pdf files
-                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 1 sto_id=" . $sto_row->pns_sto_id);
+                $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 1 and sto_id=" . $sto_row->pns_sto_id);
                 $res = $db->loadObjectList();
                 if (count($res) > 0) {
                         foreach ($res as $r) {

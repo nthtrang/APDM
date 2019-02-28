@@ -1,21 +1,17 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal'); ?>
 
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);	
-	$role = JAdministrator::RoleOnComponent(1);	
+	$role = JAdministrator::RoleOnComponent(8);	
 	JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-	if (in_array("E", $role)) {
-                if($this->row->ccs_cpn!=1)
-                        JToolBarHelper::editListX();
-                else
-                        JToolBarHelper::editListX("editmpn","Edit");
-	}
-	if (in_array("W", $role)) {
-		JToolBarHelper::addNew();
-	}
+	//if (in_array("E", $role)) {
+                        JToolBarHelper::customX("editito",'edit',"Edit","Edit");
+	//}
+	
 	
 	JToolBarHelper::cancel( 'cancel', 'Close' );
 	
@@ -39,7 +35,7 @@
 				submitform( pressbutton );
 				return;
 			}
-                if (pressbutton == 'edit') {
+                if (pressbutton == 'editito') {
                         submitform( pressbutton );
                         return;
                 }
@@ -48,16 +44,32 @@
                         return;
                 }                
                 
-		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
-
-		// do field validation
-		if (trim(form.ccs_code.value) == "") {
-			alert( "<?php echo JText::_( 'ALERT_COMODITY_CODE', true ); ?>" );		
-		} else {
-			submitform( pressbutton );
-		}
+		
 	}
+window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+		window.addEvent('domready', function() {
 
+			SqueezeBox.initialize({});
+
+			$$('a.modal-button').each(function(el) {
+				el.addEvent('click', function(e) {
+					new Event(e).stop();
+					SqueezeBox.fromElement(el);
+				});
+			});
+		});
+                
+                 window.addEvent('domready', function() {
+
+                SqueezeBox.initialize({});
+
+                $$('a.modal').each(function(el) {
+                        el.addEvent('click', function(e) {
+                                new Event(e).stop();
+                                SqueezeBox.fromElement(el);
+                        });
+                });
+        });
 </script>
 <div class="submenu-box">
             <div class="t">
@@ -105,25 +117,52 @@
 										<td  class="key" width="28%"><?php echo JText::_('Stocker'); ?></td>
 									   <td width="30%" class="title"><?php echo GetValueUser($this->sto_row->sto_stocker, "name"); ?></td>                                       
 				                                                                              
-                                </tr>  
+                                </tr>
+                                <tr>
+                                        <td class="key"  width="28%"><?php echo JText::_('Completed Date'); ?></td>                                               
+                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_completed_date)?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
+										<td  class="key" width="28%"><?php echo JText::_('Stocker Confirm'); ?></td>
+									   <td width="30%" class="title">
+                                                   <input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" />
+                                                                           </td>
+				                                                                              
+                                </tr>                                
                                 <tr>
                                         <td  class="key" width="28%"><?php echo JText::_('Owner'); ?></td>                                               
                                         <td width="30%" class="title">  <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
-										<td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
-                                        <td width="30%" class="title"> 
-										 <?php 
-                                                     if($this->sto_row->sto_owner_confirm)
+					<td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
+                                        
+                                         <td width="30%" class="title"> 
+										 <?php                                                                                  
+                                                             if($this->sto_row->sto_owner_confirm==0){
                                                         $sto_owner_confirm = 'checked="checked"';
                                                     ?>
-                                                   <input <?php echo $sto_owner_confirm?> type="checkbox" name="sto_owner_confirm" value="1" /> </td>                                        
+                                                  
+                                                   
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
+                                                         <input <?php echo $sto_owner_confirm?> onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
+                                                        <?php }
+                                                        else
+                                                        {
+                                                                       ?>
+                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
+                                                                       <?php
+                                                        }
+                                                        ?>
+                                        </td>  
 				                                                                              
-                                </tr>        
+                                </tr> 
+                                <tr>
+                                        <td class="key"  width="28%"><?php echo JText::_('Description'); ?></td>                                               
+                                             <td colspan="3"><?php echo $this->sto_row->sto_description; ?></td>                                 
+				                                                                              
+                                </tr>  
         </table>		
         </fieldset>
         <input type="hidden" name="so_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
         <input type="hidden" name="option" value="com_apdmsto" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
-	<input type="hidden" name="task" value="ito_detail" />	
+	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>
 </form>

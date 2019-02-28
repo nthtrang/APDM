@@ -117,7 +117,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 if($sto->sto_type==2){
                                                                         $style="color: #f00";
                                                                 }
-                                                                $link = "index.php?option=com_apdmpns&task=sto_detail&id=".$sto->pns_sto_id;
+                                                                $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
                                                                 if($sto->sto_type==3){
                                                                         $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
                                                                 }
@@ -142,7 +142,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
                                                         
                                                         ?>
-                                                        <a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=edit_sto&id=<?php echo $sto->pns_sto_id; ?>&sto_type=<?php echo $sto->sto_type; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <a style="<?php echo $style?>"  href="index.php?option=com_apdmsto&task=editito&id=<?php echo $sto->pns_sto_id; ?>&sto_type=<?php echo $sto->sto_type; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>                                                        

@@ -1,15 +1,17 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal'); ?>
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 
-	JToolBarHelper::title( JText::_( 'COMMODITY_CODE_MAMANGEMENT' ) . ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
+	JToolBarHelper::title( $this->sto_row->sto_code. ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
 	if (!intval($edit)) {
-		JToolBarHelper::save('save', 'Save & Add new');
-	}	JToolBarHelper::apply('apply', 'Save');
+	//	JToolBarHelper::save('save', 'Save & Add new');
+	}	
+	JToolBarHelper::apply('save_editito', 'Save');
 	
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
@@ -20,138 +22,146 @@
 	
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
-
-<?php
+<?php	
+//poup add rev roll
+	$edit		= JRequest::getVar('edit',true);
+	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
 	
 ?>
 <script language="javascript" type="text/javascript">
-	function submitbutton(pressbutton) {
-		var form = document.adminForm;
-		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
-			return;
-		}
-		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
-		//alert(form.ccs_code.length);
-		var cc = form.ccs_code.value;
-		//alert(cc.length);
-		// do field validation
-		if (trim(form.ccs_code.value) == "") {
-			alert( "<?php echo JText::_( 'ALERT_COMODITY_CODE', true ); ?>" );		
-		} else if (cc.length !=3){
-			alert("<?php echo JText::_( 'ALERT_COMODITY_CODE_LENGHT', true ); ?>" );
-		} else {
-			submitform( pressbutton );
-		}
-	}
-	function get_defautl_code(){
-		
-		var url = 'index.php?option=com_apdmccs&task=code_default';
-		var MyAjax = new Ajax(url, {
-			method:'get',
-			onComplete:function(result){
-				$('ccs_code').value = result;
-			}
-		}).request();
-	}
-</script>
+ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+		window.addEvent('domready', function() {
 
-<form action="index.php" method="post" name="adminForm" >
+			SqueezeBox.initialize({});
+
+			$$('a.modal-button').each(function(el) {
+				el.addEvent('click', function(e) {
+					new Event(e).stop();
+					SqueezeBox.fromElement(el);
+				});
+			});
+		});
+                
+                 window.addEvent('domready', function() {
+
+                SqueezeBox.initialize({});
+
+                $$('a.modal').each(function(el) {
+                        el.addEvent('click', function(e) {
+                                new Event(e).stop();
+                                SqueezeBox.fromElement(el);
+                        });
+                });
+        });
+</script>
+<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Comodity Code Detail' ); ?></legend>
+		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>
+		
 			<table class="admintable" cellspacing="1">
-				<tr>
+                                <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'COMMODITY_CODE' ); ?>
+							<?php echo JText::_( 'ITO Number' ); ?>
 						</label>
 					</td>
 					<td>
-						<input type="text" maxlength="3"  name="ccs_code" onKeyPress="return numbersOnly(this, event);" id="ccs_code" class="inputbox" size="5" value="<?php echo $this->row->ccs_code;?>" <?php echo ($this->row->ccs_id) ? 'readonly=""' : '';?>  /><?php if (!$this->row->ccs_id) {?>
-						&nbsp;&nbsp;<!--<a href="javascript:void(0)" onclick="get_defautl_code();"><?php //echo JText::_('DEFAULT_CODE')?></a>-->
-						<?php } ?>
+						<input type="text" readonly="readonly" name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code?>"/>                                               
 					</td>
 				</tr>
+                                <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'P.O Internal' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="po_inter_code" id="po_inter_code"  size="10" value="<?php echo $this->sto_row->sto_po_internal?>"/>                                               
+					</td>
+				</tr>                                
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Created Date' ); ?>
+						</label>
+					</td>
+					<td>                                                 
+                                               <?php echo JHTML::_('calendar',$this->sto_row->sto_created, 'sto_created', 'sto_created', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+					</td>
+				</tr>      
+                                <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Supplier' ); ?>
+						</label>                                                
+					</td>
+					<td>												 
+                                                <?php echo $this->lists['ccsupplier'];?>                                                                                                 
+					</td>
+				</tr>	
 				<tr>
 					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_DESCRIPTION' ); ?>
+						<label for="stocker">
+							<?php echo JText::_( 'Stoker confirm' ); ?>
 						</label>
 					</td>
 					<td>
-						<textarea name="ccs_description" rows="10" cols="60"><?php echo $this->row->ccs_description?></textarea>
+                            <input type="checkbox" id ="stocker_confirm" name="stocker_confirm" checked="checked" value="1" /> 
 					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php echo $this->lists['activate']?>
-					</td>
-				</tr>
-			</table>
-		</fieldset>
-	</div>
-	<div class="col width-40">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Parameters' ); ?></legend>
-			<table class="admintable">
-				<tr>
+				</tr>              				
+                                <tr>
 					<td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('CCS_CREATE')?>
+						<label for="name">
+							<?php echo JText::_( 'Description' ); ?>
 						</label>
 					</td>
-					<td>
-						<?php echo ($this->row->ccs_id) ? JHTML::_('date', $this->row->ccs_create, '%Y-%m-%d %H:%M:%S') :'New document';?>
+					<td>						
+						<textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
 					</td>
-				</tr>
-				<tr>
+				</tr>  
+                                <tr>
+                                        <td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
+                                        <td width="30%" class="title"> 
+										 <?php 
+                                                     if(!$this->sto_row->sto_owner_confirm){
+                                                        $sto_owner_confirm = 'checked="checked"';
+                                                    ?>
+                                                  
+                                                   
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
+                                                         <input <?php echo $sto_owner_confirm?> onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
+                                                        <?php }
+                                                        else
+                                                        {
+                                                                       ?>
+                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
+                                                                       <?php
+                                                        }
+                                                        ?>
+                                        </td>  
+                                </tr>
+                                
+                                 <tr>
 					<td class="key">
-						<label for="ccs_create_by">
-							<?php echo JText::_('CCS_CREATE_BY')?>
+						<label for="name">
+							<?php echo JText::_( 'Owner' ); ?>
 						</label>
 					</td>
-					<td>
-						<?php echo ($this->row->ccs_id) ? GetValueUser($this->row->ccs_create_by, 'username') : 'New Document';?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('CCS_MODIFIED')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_modified !='0000-00-00 00:00:00') ? JHTML::_('date', $this->row->ccs_modified, '%Y-%m-%d %H:%M:%S') : 'None';?>
-					</td>
-				</tr>
-				<tr>
-					<td class="key">
-						<label for="ccs_create_by">
-							<?php echo JText::_('CCS_MODIFIED_BY')?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_modified_by) ? GetValueUser($this->row->ccs_modified_by, 'username') : 'None';?>
-					</td>
-				</tr>				
-			</table>
-		</fieldset>
+                                 <td  width="16%">
+                                      <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?>
+                                                        </td>
+                                 </tr>                              
+			</table>                	
+        </fieldset>
+        </div>
 		
-	</div>
-	<div class="clr"></div>
-
-	<input type="hidden" name="ccs_id" value="<?php echo $this->row->ccs_id?>" />
-	<input type="hidden" name="cid[]" value="<?php echo $this->row->ccs_id?>" />
-	<input type="hidden" name="option" value="com_apdmccs" />
-	<input type="hidden" name="task" value="" />
+				<input type="text" name="pns_sto_id" value="<?php echo $this->sto_row->pns_sto_id?>" />	
+	<input type="hidden" name="option" value="com_apdmsto" />
+	<input type="hidden" name="return" value="sto"  />
+	<input type="hidden" name="task" value="ito_detail" />     
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

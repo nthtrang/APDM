@@ -11,8 +11,9 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title($this->sto_row->sto_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
-if (in_array("W", $role) && $this->sto_row->so_state =="inprogress") {   
-        JToolBarHelper::apply('save_doc_so', 'Save');
+ JToolBarHelper::apply('save_doc_sto', 'Save');
+if (in_array("W", $role) && $this->sto_row->so_state =="Create") {   
+        JToolBarHelper::apply('save_doc_sto', 'Save');
         
 }
 if (in_array("D", $role) && ($this->so_row->so_state !="done" || $this->so_row->so_state !="cancel" )) {
@@ -35,7 +36,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                      submitform( pressbutton );
                      return;
                 }
-                if (pressbutton == 'save_doc_so') {
+                if (pressbutton == 'save_doc_sto') {
                         submitform( pressbutton );
                         return;
                 }            
@@ -111,7 +112,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmsto&task=ito_detail&id=<?php echo $this->sto_row->pns_sto_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmpns&task=ito_detail_pns&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'AFFECTED PARTS' ); ?></a></li>
+			<li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_pns&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'AFFECTED PARTS' ); ?></a></li>
                         <li><a id="bom" class="active"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>                        
                 </ul>
 		<div class="clr"></div>
@@ -125,7 +126,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <div class="clr"></div>
 <p>&nbsp;</p>
 
-<form action="index.php?option=com_apdmpns&task=save_doc_so&time=<?php echo time();?>" method="post" name="adminForm" enctype="multipart/form-data" >      
+<form action="index.php?option=com_apdmsto&task=save_doc_sto&time=<?php echo time();?>" method="post" name="adminForm" enctype="multipart/form-data" >      
         <fieldset class="adminform">
 		 
         	<div class="col width-100">
@@ -149,13 +150,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				<?php
 				
 				$i = 1;
-				$folder_so = $this->sto_row->pns_sto_id.'-'.$this->so_row->so_cuscode;
+				$folder_sto = $this->sto_row->sto_code;
 				foreach ($this->lists['image_files'] as $image) {
-					$filesize = PNsController::readfilesizeSo($folder_so, $image['image_file'],'images');
+					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
 				?>
 				<tr>
 					<td><?php echo $i?></td>
-					<td><img src="../uploads/so/<?php echo $folder_so . DS?>/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
+					<td><img src="../uploads/sto/<?php echo $folder_sto . DS?>/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmpns&task=download_img_so&so_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                 <?php
@@ -246,10 +247,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 						</tr>
 				<?php
 				
-				$i = 1;
-				$folder_so = $this->sto_row->pns_sto_id.'-'.$this->so_row->so_cuscode;                           
+				$i = 1;				                   
 				foreach ($this->lists['pdf_files'] as $pdf) {
-					$filesize = PNsController::ReadfilesizeSo($folder_so, $pdf['pdf_file'],'pdfs');
+					$filesize = SToController::readfilesizeSto($folder_sto, $pdf['pdf_file'],'pdfs');
 				?>
 				<tr>
 					<td><?php echo $i?></td>
@@ -345,9 +345,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				<?php
 				
 				$i = 1;
-				$folder_so = $this->sto_row->pns_sto_id.'-'.$this->so_row->so_cuscode;                           
+				                        
 				foreach ($this->lists['zips_files'] as $cad) {
-					$filesize = PNsController::ReadfilesizeSo($folder_so, $cad['zip_file'],'zips');                                        				
+					$filesize = SToController::readfilesizeSto($folder_sto, $cad['zip_file'],'zips');                                        				
 				?>
 				<tr>
 					<td><?php echo $i?></td>
@@ -457,11 +457,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </fieldset>
 </div>	
         </fieldset>
-        <input type="hidden" name="so_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
-        <input type="hidden" name="option" value="com_apdmpns" />     
+        <input type="hidden" name="sto_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
+        <input type="hidden" name="option" value="com_apdmsto" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
-	<input type="hidden" name="task" value="" />	
-        <input type="hidden" name="return" value="so_detail_support_doc"  />
+	<input type="hidden" name="task" value="save_doc_sto" />	
+        <input type="hidden" name="return" value="ito_detail_support_doc"  />
         <input type="hidden" name="boxchecked" value="1" />
 <?php echo JHTML::_('form.token'); ?>
 </form>
