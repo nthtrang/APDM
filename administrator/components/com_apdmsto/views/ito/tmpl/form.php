@@ -175,22 +175,22 @@ function get_default_ito_prefix(){
 					</td>
 				</tr>  
                                  
-                                
+                                <!--
                                  <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Owner' ); ?>
+							<?php /*echo JText::_( 'Owner' ); */?>
 						</label>
 					</td>
                                  <td  width="16%">
                                                                 <select name="sto_owner" id="sto_owner" >
                                                                         <option value="">Select Owner</option>
-                                        <?php foreach ($this->list_user as $list) { ?>
-                                                                                <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>
-                                                <?php } ?>
+                                        <?php /*foreach ($this->list_user as $list) { */?>
+                                                                                <option value="<?php /*echo $list->id; */?>"><?php /*echo $list->name; */?></option>
+                                                <?php /*} */?>
                                                                 </select>
                                                         </td>
-                                 </tr>                              
+                                 </tr>         -->
 			</table>                	
         </fieldset>
         </div>

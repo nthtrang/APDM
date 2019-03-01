@@ -114,11 +114,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td>
                                                         <?php
                                                                 $style="";
+                                                                $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
                                                                 if($sto->sto_type==2){
                                                                         $style="color: #f00";
-                                                                }
-                                                                $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
-                                                                if($sto->sto_type==3){
+                                                                        $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
+                                                                }elseif($sto->sto_type==3){
                                                                         $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
                                                                 }
                                                                 ?>

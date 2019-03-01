@@ -1,20 +1,19 @@
 <?php
 /**
-* @version		$Id: view.html.php 10381 2008-06-01 03:35:53Z pasamio $
-* @package		Joomla
-* @subpackage	Users
-* @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
-* @license		GNU/GPL, see LICENSE.php
-* Joomla! is free software. This version may have been modified pursuant
-* to the GNU General Public License, and as distributed it includes or
-* is derivative of works licensed under the GNU General Public License or
-* other free or open source software licenses.
-* See COPYRIGHT.php for copyright notices and details.
-*/
+ * @version		$Id: view.html.php 10496 2008-07-03 07:08:39Z ircmaxell $
+ * @package		APDM
+ * @subpackage	PNS
+ * @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
+ * @license		GNU/GPL, see LICENSE.php
+ * Joomla! is free software. This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ * See COPYRIGHT.php for copyright notices and details.
+ */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
-
 jimport( 'joomla.application.component.view');
 
 /**
@@ -27,108 +26,127 @@ jimport( 'joomla.application.component.view');
  */
 class SToVieweto extends JView
 {
-	function display($tpl = null)
-	{
-		global $mainframe, $option;
+    function display($tpl = null)
+    {
 
-		$db				=& JFactory::getDBO();		
+        // global $mainframe, $option;
+        global $mainframe, $option;
+        $option             = 'com_apdmpns_sto';
+        $db                =& JFactory::getDBO();
+        $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
+        $sto_id		= JRequest::getVar( 'id');
+        $me 		= JFactory::getUser();
+        JArrayHelper::toInteger($cid, array(0));
+        $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
+        $keyword                = $search;
+        $search                = JString::strtolower( $search );
+        $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
+        $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+        $where = array();
+        if (isset( $search ) && $search!= '')
+        {
+            $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
+            $where[] = 'p.sto_code LIKE '.$searchEscaped.' or p.sto_description LIKE '.$searchEscaped.'';
 
-		$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",	'filter_order',	'c.ccs_code','cmd' );
-		$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",	'filter_order_Dir',	'',	'word' );
-		$filter_type		= $mainframe->getUserStateFromRequest( "$option.filter_type", 'filter_type', '', 'string' );
-		$filter_created_by	= $mainframe->getUserStateFromRequest( "$option.filter_created_by",	'filter_created_by', 0,	'int' );
-		$filter_modified_by	= $mainframe->getUserStateFromRequest( "$option.filter_modified_by", 'filter_modified_by', 0, 'int' );
-		$search				= $mainframe->getUserStateFromRequest( "$option.search", 'search', '', 'string' );
-		$search				= JString::strtolower( $search );
-		
-		$filter_date_created = $mainframe->getUserStateFromRequest("$option.filter_date_created", 'filter_date_created', '', 'string');
-		$filter_date_modified = $mainframe->getUserStateFromRequest("$option.filter_date_modified", 'filter_date_modified', '', 'string');
+        }
 
-		
+        $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
+        $orderby = ' ORDER BY p.pns_sto_id desc';
 
-		$limit		= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
+        $query = 'SELECT COUNT(p.pns_sto_id)'
+            . ' FROM apdm_pns_sto AS p'
+            . $where
+        ;
+        //echo $query;
+        $db->setQuery( $query );
+        $total = $db->loadResult();
 
-		$limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+        jimport('joomla.html.pagination');
+        $pagination = new JPagination( $total, $limitstart, $limit );
 
-		$where = array();
-		$where[] = ' c.ccs_deleted=0';
-		if (isset( $search ) && $search!= '')
-		{
-			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );
-			$where[] = 'c.ccs_code LIKE '.$searchEscaped.' OR c.ccs_description LIKE '.$searchEscaped;
-		}
-		if ( $filter_type !='')
-		{
-			$where[] = ' c.ccs_activate='.$filter_type;
-		}
-		if ( $filter_created_by )
-		{
-			$where[] = 'c.ccs_create_by ='.$filter_created_by;
-		}
-		if ( $filter_modified_by )
-		{
-			$where[] = 'c.ccs_modified_by ='.$filter_modified_by;
-		}
-		if ($filter_date_created !=''){
-			$date_array_created = explode('-',$filter_date_created);			
-			$where[] = 'DATE(c.ccs_create) = \''.$date_array_created[2].'-'.$date_array_created[0].'-'.$date_array_created[1].'\'';
-		}
-		if ($filter_date_modified !=''){
-			$date_array_modified = explode('-',$filter_date_modified);			
-			$where[] = 'DATE(c.ccs_modified) = \''.$date_array_modified[2].'-'.$date_array_modified[0].'-'.$date_array_modified[1].'\'';
-		}
-		$orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
-		$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
+        $query = 'SELECT p.* '
+            . ' FROM apdm_pns_sto AS p'
+            . $where
+            . $orderby;
+        $lists['query'] = base64_encode($query);
+        $lists['total_record'] = $total;
+        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        $rows = $db->loadObjectList();
 
-		$query = 'SELECT COUNT(c.ccs_id)'
-		. ' FROM apdm_ccs AS c'
-		. $filter
-		. $where
-		;
-		//echo $query;
-		$db->setQuery( $query );
-		$total = $db->loadResult();
+        $db->setQuery("select sto.*,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_sto sto inner join apdm_pns_wo wo on sto.sto_wo_id = wo.pns_wo_id left join apdm_pns_so so on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where sto.pns_sto_id =".$sto_id);
+        $sto_row =  $db->loadObject();
 
-		jimport('joomla.html.pagination');
-		$pagination = new JPagination( $total, $limitstart, $limit );
-		$query	= "SELECT c.*, u.username FROM apdm_ccs as c LEFT JOIN #__users as u ON u.id=c.ccs_create_by "
-			. $filter
-			. $where
-			. $orderby
-		;
-		//echo $query;
-		$lists['query'] = base64_encode($query);
-		$lists['total_record'] = $total;
-		$db->setQuery( $query, $pagination->limitstart, $pagination->limit );
-		$rows = $db->loadObjectList();
+        $db->setQuery("SELECT sto.*, p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_sto AS sto on p.pns_id = sto.pns_id WHERE p.pns_deleted =0 AND sto.pns_id=".$cid[0]." order by sto.pns_rev_id desc limit 1");
+        $list_stos = $db->loadObjectList();
+        $lists['pns_id']        = $cid[0];
+        $this->assignRef('stos',        $list_stos);
 
-		// get list of Status for dropdown filter
-		$active[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select Status' ) .' -');
-		$active[] = JHTML::_('select.option',  0, JText::_( 'INACTIVE' ) );
-		$active[] = JHTML::_('select.option',  1, JText::_( 'ACTIVE' ) );		
-		$lists['active'] = JHTML::_('select.genericlist',   $active, 'filter_type', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', "$filter_type" );
-		// Get list of Create By for dropdown filter
-		$create[] = JHTML::_('select.option', 0, '- '.JText::_('FILTER_CREATE_BY').' -');
-		$db->setQuery("select c.ccs_create_by as value, u.name as text FROM apdm_ccs as c LEFT JOIN #__users as u ON u.id=c.ccs_create_by GROUP BY ccs_create_by");
-		$creates  = array_merge($create, $db->loadObjectList());
-		$lists['create'] = JHTML::_('select.genericlist',   $creates, 'filter_created_by', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', "$filter_created_by" );
-		
-		$modified_by[] = JHTML::_('select.option', 0, '- '.JText::_('FILTER_MODIFIED_BY').' -');
-		$db->setQuery("select c.ccs_modified_by as value, u.name as text FROM apdm_ccs as c LEFT JOIN #__users as u ON u.id=c.ccs_modified_by WHERE c.ccs_modified_by!= 0 GROUP BY ccs_modified_by");
-		$modified_bys  = array_merge($modified_by, $db->loadObjectList());
-		$lists['modified'] = JHTML::_('select.genericlist',   $modified_bys, 'filter_modified_by', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', "$filter_modified_by" );
-		// table ordering
-		$lists['order_Dir']	= $filter_order_Dir;
-		$lists['order']		= $filter_order;
-		$lists['filter_date_created'] = $filter_date_created;
-		$lists['filter_date_modified'] = $filter_date_modified;
-		// search filter
-		$lists['search']= $search;
+        $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
+        $list_user = $db->loadObjectList();
+//         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
+//         $pos_list = $db->loadObjectList();
+//         $this->assignRef('pos_list',        $pos_list);
+//         get WO#
+        $wolist[0] = JHTML::_('select.option', 0, '- ' . JText::_('NA') . ' -', 'value', 'text');
+        $db->setQuery("SELECT pns_wo_id as value,wo_code as text FROM apdm_pns_wo");
+        $wolist = array_merge($wolist, $db->loadObjectList());
+        $lists['wolist'] = JHTML::_('select.genericlist', $wolist, 'sto_wo_id', 'class="inputbox" size="1" onchange="getccsPoCoordinator(this.value)"', 'value', 'text', $sto_row->sto_wo_id);
 
-		$this->assignRef('lists',		$lists);
-		$this->assignRef('items',		$rows);
-		$this->assignRef('pagination',	$pagination);
+//status delivery good
+        $statusValue = array();
+        $statusValue[] = JHTML::_('select.option', '', '- ' . JText::_('Select') . ' -', 'value', 'text');
+        $statusValue[] = JHTML::_('select.option', '1', JText::_('Yes'), 'value', 'text');
+        $statusValue[] = JHTML::_('select.option', '0', JText::_('No'), 'value', 'text');
+        $defaultStatus = "0";
+        if ($sto_row->sto_isdelivery_good)
+            $defaultStatus = $sto_row->sto_isdelivery_good;
+        $lists['stoDeliveryGood'] = JHTML::_('select.genericlist', $statusValue, 'sto_isdelivery_good', 'class="inputbox "  size="1"', 'value', 'text', $defaultStatus);
 
-		parent::display($tpl);
-	}
+
+
+        $db->setQuery("SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." group by fk.pns_id order by fk.pns_id desc");
+        $pns_list = $db->loadObjectList();
+        $this->assignRef('sto_pn_list',        $pns_list);
+        $db->setQuery("SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." order by fk.pns_id desc");
+        $pns_list2 = $db->loadObjectList();
+        $this->assignRef('sto_pn_list2',        $pns_list2);
+
+//get ist imag/zip/pdf
+        ///get list zip files
+        $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 0 and sto_id=" . $sto_row->pns_sto_id);
+        $res = $db->loadObjectList();
+        if (count($res) > 0) {
+            foreach ($res as $r) {
+                $zips_files[] = array('id' => $r->id, 'zip_file' => $r->file_name);
+            }
+        }
+        ///get list image files
+        $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 2 and sto_id=" . $sto_row->pns_sto_id);
+        $res = $db->loadObjectList();
+        if (count($res) > 0) {
+            foreach ($res as $r) {
+                $images_files[] = array('id' => $r->id, 'image_file' => $r->file_name);
+            }
+        }
+        ///get list pdf files
+        $db->setQuery("SELECT * FROM apdm_pns_sto_files WHERE  file_type = 1 and sto_id=" . $sto_row->pns_sto_id);
+        $res = $db->loadObjectList();
+        if (count($res) > 0) {
+            foreach ($res as $r) {
+                $pdf_files[] = array('id' => $r->id, 'pdf_file' => $r->file_name);
+            }
+        }
+
+        $this->assignRef('sto_row',        $sto_row);
+        $lists['zips_files'] = $zips_files;
+        $lists['image_files'] = $images_files;
+        $lists['pdf_files'] = $pdf_files;
+        $lists['search']= $search;
+        $this->assignRef('lists',        $lists);
+        $this->assignRef('stos_list',        $rows);
+        $this->assignRef('pagination',    $pagination);
+        $this->assignRef('list_user',	$list_user);
+        parent::display($tpl);
+    }
 }
+

@@ -61,7 +61,6 @@
 	<div class="col width-60">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>
-		
 			<table class="admintable" cellspacing="1">
                                 <tr>
 					<td class="key">
@@ -128,12 +127,12 @@
                                         <td width="30%" class="title"> 
 										 <?php 
                                                      if(!$this->sto_row->sto_owner_confirm){
-                                                        $sto_owner_confirm = 'checked="checked"';
+
                                                     ?>
                                                   
                                                    
                                                    <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
-                                                         <input <?php echo $sto_owner_confirm?> onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
+                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
                                                         <?php }
                                                         else
                                                         {
@@ -159,7 +158,7 @@
         </fieldset>
         </div>
 		
-				<input type="text" name="pns_sto_id" value="<?php echo $this->sto_row->pns_sto_id?>" />	
+				<input type="hidden" name="pns_sto_id" value="<?php echo $this->sto_row->pns_sto_id?>" />
 	<input type="hidden" name="option" value="com_apdmsto" />
 	<input type="hidden" name="return" value="sto"  />
 	<input type="hidden" name="task" value="ito_detail" />     

@@ -30,7 +30,7 @@ function UpdatePnsEco(){
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_stos&sto_id='+sto_id;
+		var url = 'index.php?option=com_apdmsto&task=ajax_add_pns_stos&sto_id='+sto_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -46,7 +46,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_sto&tmpl=component&sto_id=<?php echo $sto_id?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&sto_id=<?php echo $sto_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -177,7 +177,7 @@ function UpdatePnsEco(){
 	</table>
 
 	<div class="clr"></div>	
-	<input type="hidden" name="option" value="com_apdmpns" />
+	<input type="hidden" name="option" value="com_apdmsto" />
         <input type="hidden" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />

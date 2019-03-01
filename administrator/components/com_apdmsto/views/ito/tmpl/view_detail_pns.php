@@ -5,26 +5,23 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $sto_id = JRequest::getVar('id');
-
+$me = & JFactory::getUser();
 JToolBarHelper::title($this->sto_row->sto_code, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(8);      
-if (in_array("W", $role)) {
-        JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
-        JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save', false);	
-        
-}
- 
-if($this->sto_row->sto_file){        
-        JToolBarHelper::customX('download_sto', 'download', '', 'Download', false);
-}
-else
-{
-        JToolBarHelper::customX("Download", 'cannotdownload', '', 'Download', false);
+$usertype	= $me->get('usertype');
+$allow_edit = 0;
+$role = JAdministrator::RoleOnComponent(8);
+if (in_array("E", $role) && ($this->sto_row->sto_owner  == $me->get('id')) && ($this->sto_row->sto_state  != "Done")) {
+    $allow_edit = 1;
+    JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save', false);
 }
 
- 
+if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
+        JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
+
+}
+
                         
-if (in_array("D", $role)) {
+if (in_array("D", $role) && ($this->sto_row->sto_state  != "Done")) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
 }
 $cparams = JComponentHelper::getParams('com_media');
@@ -142,7 +139,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 }
 function getLocationPartState(pnsId,fkId,currentLoc,partState)
 {	
-        var url = 'index.php?option=com_apdmpns&task=ajax_getlocpn_partstate&partstate='+partState+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLoc;
+        var url = 'index.php?option=com_apdmsto&task=ajax_getlocpn_partstate&partstate='+partState+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLoc;
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
@@ -163,7 +160,13 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail"  href="index.php?option=com_apdmsto&task=ito_detail&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'DETAIL' ); ?></a></li>
+            <?php
+            $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$this->sto_row->pns_sto_id;
+            if($this->sto_row->sto_type==2){
+                $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$this->sto_row->pns_sto_id;
+            }
+            ?>
+			<li><a id="detail"  href="<?php echo $link;?>"><?php echo JText::_( 'DETAIL' ); ?></a></li>
 			<li><a id="bom" class="active"><?php echo JText::_( 'AFFECTED PARTS' ); ?></a></li>
                         <li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_support_doc&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>                      
                 </ul>
@@ -177,15 +180,13 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
-<form action="index.php?option=com_apdmpns&task=stomanagement&t=<?php echo time();?>"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
+<form action="index.php?option=com_apdmsto&task=sto&t=<?php echo time();?>"  onsubmit="submitbutton('')"  method="post" name="adminForm" >
 <?php if (count($this->sto_pn_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
                                         <th width="18"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="3%" class="title">
-<!--					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>-->
-				</th>                                        
+                                        <th width="3%" class="title"></th>
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>  
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
@@ -200,16 +201,6 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         <?php
         
         $locationArr = array();
-//        $Alpha=array("A010","A020","A030","A040","A010","B010","B020","B030","C010","C020","C030","C040","C050","C060","C070","C080","D010","D020","E010","E020","E030","E040","E050","E060","E070","E080");
-//
-//        foreach($Alpha as $val)
-//        {
-//                for($i =1;$i<=5;$i++)
-//                {
-//                        //$locationArr[$val.$i] = $val.$i;
-//                        $locationArr[] = JHTML::_('select.option', $val.$i, $val.$i , 'value', 'text'); 
-//                }
-//        }
         $location = SToController::GetLocationCodeList();
         foreach($location as $rowcode)
         {
@@ -224,7 +215,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         $partStateArr[] = JHTML::_('select.option', 'Prototype', "PROTOTYPE" , 'value', 'text'); 
         
 
-        $i = 0;       
+        $i = 0;
         foreach ($this->sto_pn_list as $row) {
                 $i++;
                                 if($row->pns_cpn==1)
@@ -301,7 +292,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
                                                          }
                                                          else{                                                                 
-                                                                 $partStateArr = PNsController::getPartStatePn($rw->partstate,$row->pns_id);
+                                                                 $partStateArr = SToController::getPartStatePn($rw->partstate,$row->pns_id);
                                                                  echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
                                                                  
                                                          }
@@ -309,7 +300,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                         ?>
                                                 </td>
                                                 <td align="center" width="75px">					
-                                                        <a href="index.php?option=com_apdmpns&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
+                                                        <a href="index.php?option=com_apdmsto&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
                                                 </td>
                                                                 </tr>
                                                                 
@@ -331,7 +322,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         </table>		
 
         <input type="hidden" name="sto_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
-        <input type="hidden" name="option" value="com_apdmpns" />     
+        <input type="hidden" name="option" value="com_apdmsto" />
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="boxchecked" value="0" />

@@ -11,12 +11,12 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title($this->sto_row->sto_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
- JToolBarHelper::apply('save_doc_sto', 'Save');
-if (in_array("W", $role) && $this->sto_row->so_state =="Create") {   
+
+if (in_array("W", $role) && $this->sto_row->sto_state !="Done") {
         JToolBarHelper::apply('save_doc_sto', 'Save');
         
 }
-if (in_array("D", $role) && ($this->so_row->so_state !="done" || $this->so_row->so_state !="cancel" )) {
+if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
 }
 

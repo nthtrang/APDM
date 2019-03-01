@@ -14,6 +14,8 @@
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
+#ini_set('display_errors', 1);
+#ini_set('display_startup_errors', 1);
 
 jimport( 'joomla.application.component.view');
 
