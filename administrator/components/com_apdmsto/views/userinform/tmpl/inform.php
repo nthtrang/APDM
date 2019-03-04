@@ -5,7 +5,7 @@
 <?php
 $me = & JFactory::getUser();
 $me->get('username');
- echo $sto_id		= JRequest::getVar( 'sto_id');
+$sto_id		= JRequest::getVar( 'sto_id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 

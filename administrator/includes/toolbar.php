@@ -542,7 +542,13 @@ class JToolBarHelper
 		} else {
 			$bar->appendButton( 'Standard', 'delete', $alt, $task, true, false );
 		}
-	}        
+	}   
+        function customXDel($msg = '', $task = 'removepns', $alt = 'Delete')
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add a standard button
+		$bar->appendButton( 'Confirm', $msg, 'delete', $alt, $task, false, false );
+	}
         function addPnsRev($alt = 'New',$id=0)
 	{
 		$bar = & JToolBar::getInstance('toolbar');

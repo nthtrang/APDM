@@ -10,17 +10,13 @@ JToolBarHelper::title($this->sto_row->sto_code, 'cpanel.png');
 $usertype	= $me->get('usertype');
 $allow_edit = 0;
 $role = JAdministrator::RoleOnComponent(8);
-if (in_array("E", $role) && ($this->sto_row->sto_owner  == $me->get('id')) && ($this->sto_row->sto_state  != "Done")) {
+if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
     $allow_edit = 1;
     JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save', false);
 }
-
 if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
         JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
-
-}
-
-                        
+}                     
 if (in_array("D", $role) && ($this->sto_row->sto_state  != "Done")) {
         JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
 }
@@ -64,13 +60,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         }
 
 function isCheckedPosPn(isitchecked,id,sto){
-        
        var arr_sto = sto.split(",");
 	if (isitchecked == true){
 		document.adminForm.boxchecked.value++;
                 arr_sto.forEach(function(sti) {
-    
-
                 document.getElementById('qty_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('qty_'+id+'_'+sti).style.display= 'block';
                 document.getElementById('text_qty_'+id+'_'+sti).style.visibility= 'hidden';

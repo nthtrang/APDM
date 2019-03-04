@@ -14,12 +14,10 @@ $role = JAdministrator::RoleOnComponent(10);
 
 if (in_array("W", $role) && $this->sto_row->sto_state !="Done") {
         JToolBarHelper::apply('save_doc_sto', 'Save');
-        
 }
 if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
         JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
 }
-
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>
@@ -127,8 +125,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <p>&nbsp;</p>
 
 <form action="index.php?option=com_apdmsto&task=save_doc_sto&time=<?php echo time();?>" method="post" name="adminForm" enctype="multipart/form-data" >      
-        <fieldset class="adminform">
-		 
+        <fieldset class="adminform">		 
         	<div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Image, Pdf, Zip files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>

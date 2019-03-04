@@ -302,7 +302,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </tr>
                                 <tr>
                                         <td class="key"  width="28%"><?php echo JText::_('Completed Date'); ?></td>                                               
-                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
+                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_completed_date)?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
 										<td  class="key" width="28%"><?php echo JText::_('Stocker Confirm'); ?></td>
 									   <td width="30%" class="title">
                                                    <input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" />

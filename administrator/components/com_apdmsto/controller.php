@@ -332,7 +332,7 @@ class SToController extends JController
                 }
                 return $rows;
         }
-		function getLocationPartStatePn($partState,$pnsId)
+        function getLocationPartStatePn($partState,$pnsId)
         {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -355,12 +355,12 @@ class SToController extends JController
                 }
                 return $locationArr;
         }		
-		function ito_detail_support_doc()
-		{
-			JRequest::setVar('layout', 'view_detail_doc');
-            JRequest::setVar('view', 'ito');
-            parent::display();
-		}
+        function ito_detail_support_doc()
+        {
+                JRequest::setVar('layout', 'view_detail_doc');
+                JRequest::setVar('view', 'ito');
+                parent::display();
+        }
                 /**
          * @desc Read file size
          */
@@ -406,19 +406,264 @@ class SToController extends JController
         }
         
         function save_editito() {
+                global $mainframe;
+                // Initialize some variables                                  
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');   
                 $sto_code = $post['sto_code'];
+                $ito_id = $post['pns_sto_id'];
                                             
                 $return = JRequest::getVar('return');
                 $db->setQuery("update apdm_pns_sto set sto_po_internal = '".$post['po_inter_code']."',sto_supplier_id = '".$post['sto_supplier_id']."',sto_description='" . $post['sto_description'] . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
-                $db->query();  
+                $db->query();
+                //upload file
+                //get so info
+                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$post['pns_sto_id']);
+                $sto_row =  $db->loadObject();                
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
+                $stoNumber = $folder = $sto_row->sto_code;                 
+
+                $path_so_zips = $path_upload  .DS. $folder . DS .'zips'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_zips, 0777);                        
+                $arr_file_upload = array();
+                $arr_error_upload_zips = array();
+                for ($i = 1; $i <= 20; $i++) {					
+                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
+                                if($_FILES['pns_zip' . $i]['size']<20000000)
+                                {
+                                        if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
+                                                        $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
+                                        } else {
+                                                        $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
+                                        }
+                                }
+                                else
+                                {
+                                        $msg = JText::_('Please upload file ZIP less than 20MB.');
+                                        return $this->setRedirect('index.php?option=com_apdmsto&task=editito&id='.$ito_id, $msg);    
+                                }
+                        }
+                        
+                }
+                if (count($arr_file_upload) > 0) {                        
+                        foreach ($arr_file_upload as $file) {
+                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
+                                 $db->query();
+                        }
+                }
+               //upload new images
+                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_images, 0777);
+                $arr_error_upload_image = array();
+                $arr_image_upload = array();
+                
+                for ($i = 1; $i <= 20; $i++) {                        
+                        if ($_FILES['pns_image' . $i]['size'] > 0) {
+                                $imge = new upload($_FILES['pns_image' . $i]);
+                                $imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;    
+                                if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                        @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                }
+                                if ($imge->uploaded) {
+                                        $imge->Process($path_so_images);
+                                        if ($imge->processed) {
+                                                $arr_image_upload[] = $imge->file_dst_name;
+                                        } else {
+                                                $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
+                                        }
+                                }
+                        }
+                }
+                                
+                if (count($arr_image_upload) > 0) {
+                        foreach ($arr_image_upload as $file) {
+                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',2, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                                                         
+                                 $db->query();
+                        }
+                }        
+
+                //upload new pdf
+                $path_so_pdfs = $path_upload  .DS. $folder . DS .'pdfs'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_pdfs, 0777);
+                $arr_error_upload_pdf = array();
+                $arr_pdf_upload = array();
+                for ($i = 1; $i <= 20; $i++) {
+                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+								if($_FILES['pns_pdf' . $i]['size']<20000000)
+								{
+									$imge = new upload($_FILES['pns_pdf' . $i]);
+									$imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;
+
+									if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+											@unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+									}
+									if ($imge->uploaded) {
+											$imge->Process($path_so_pdfs);
+											if ($imge->processed) {
+													$arr_pdf_upload[] = $imge->file_dst_name;
+											} else {
+													$arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+											}
+									}
+								}
+								else
+								{
+										$msg = JText::_('Please upload file PDF less than 20MB.');
+										return $this->setRedirect('index.php?option=com_apdmsto&task=editito&id='.$ito_id, $msg);   
+								}
+                        }
+                        
+                }
+                if (count($arr_pdf_upload) > 0) {
+                        foreach ($arr_pdf_upload as $file) {
+                                $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',1, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
+                                $db->query();
+                        }
+                } 
                 
                  $msg = "Successfully Saved Update ITO";
                 return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$post['pns_sto_id'], $msg);                
         }
+        function save_editeto() {
+                global $mainframe;
+                // Initialize some variables                                  
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');   
+                $sto_code = $post['sto_code'];
+                $ito_id = $post['pns_sto_id'];                
+                                            
+                $return = JRequest::getVar('return');
+                
+                $sto_state="Create";
+                if($post['sto_isdelivery_good'])
+                    $sto_state = "InTransit";
+        
+                $db->setQuery("update apdm_pns_sto set sto_isdelivery_good='".$post['sto_isdelivery_good']."',sto_wo_id ='".$post['sto_wo_id']."', sto_state = '".$sto_state."',sto_description='" . $post['sto_description'] . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
+                $db->query();
+                //upload file
+                //get so info
+                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$post['pns_sto_id']);
+                $sto_row =  $db->loadObject();                
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
+                $stoNumber = $folder = $sto_row->sto_code;                 
+
+                $path_so_zips = $path_upload  .DS. $folder . DS .'zips'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_zips, 0777);                        
+                $arr_file_upload = array();
+                $arr_error_upload_zips = array();
+                for ($i = 1; $i <= 20; $i++) {					
+                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
+                                if($_FILES['pns_zip' . $i]['size']<20000000)
+                                {
+                                        if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
+                                                        $arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
+                                        } else {
+                                                        $arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
+                                        }
+                                }
+                                else
+                                {
+                                        $msg = JText::_('Please upload file ZIP less than 20MB.');
+                                        return $this->setRedirect('index.php?option=com_apdmsto&task=editeto&id='.$ito_id, $msg);    
+                                }
+                        }
+                        
+                }
+                if (count($arr_file_upload) > 0) {                        
+                        foreach ($arr_file_upload as $file) {
+                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
+                                 $db->query();
+                        }
+                }
+               //upload new images
+                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_images, 0777);
+                $arr_error_upload_image = array();
+                $arr_image_upload = array();
+                
+                for ($i = 1; $i <= 20; $i++) {                        
+                        if ($_FILES['pns_image' . $i]['size'] > 0) {
+                                $imge = new upload($_FILES['pns_image' . $i]);
+                                $imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;    
+                                if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+                                        @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                                }
+                                if ($imge->uploaded) {
+                                        $imge->Process($path_so_images);
+                                        if ($imge->processed) {
+                                                $arr_image_upload[] = $imge->file_dst_name;
+                                        } else {
+                                                $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
+                                        }
+                                }
+                        }
+                }
+                                
+                if (count($arr_image_upload) > 0) {
+                        foreach ($arr_image_upload as $file) {
+                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',2, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                                                         
+                                 $db->query();
+                        }
+                }        
+
+                //upload new pdf
+                $path_so_pdfs = $path_upload  .DS. $folder . DS .'pdfs'. DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_so_pdfs, 0777);
+                $arr_error_upload_pdf = array();
+                $arr_pdf_upload = array();
+                for ($i = 1; $i <= 20; $i++) {
+                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
+								if($_FILES['pns_pdf' . $i]['size']<20000000)
+								{
+									$imge = new upload($_FILES['pns_pdf' . $i]);
+									$imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;
+
+									if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
+
+											@unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+									}
+									if ($imge->uploaded) {
+											$imge->Process($path_so_pdfs);
+											if ($imge->processed) {
+													$arr_pdf_upload[] = $imge->file_dst_name;
+											} else {
+													$arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
+											}
+									}
+								}
+								else
+								{
+										$msg = JText::_('Please upload file PDF less than 20MB.');
+										return $this->setRedirect('index.php?option=com_apdmsto&task=editeto&id='.$ito_id, $msg);   
+								}
+                        }
+                        
+                }
+                if (count($arr_pdf_upload) > 0) {
+                        foreach ($arr_pdf_upload as $file) {
+                                $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',1, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
+                                $db->query();
+                        }
+                } 
+                
+                 $msg = "Successfully Saved Update ETO";
+                return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$post['pns_sto_id'], $msg);                
+        }        
         function save_doc_sto()
         {
                 global $mainframe;
@@ -717,7 +962,7 @@ class SToController extends JController
             }
         }
         $msg = JText::_('Have removed Part successfull.');
-        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail_pns&id=' . $sto_id, $msg);
+        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
     }
     /*
      * Remove PNS out of STO in STO management
@@ -768,15 +1013,20 @@ class SToController extends JController
                     if($currentOutStock > $qtyInCheck)
                     {
                         $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $qtyInCheck";
-                        return $this->setRedirect('index.php?option=com_apdmpns&task=sto_detail&id=' . $fkid, $msg);
+                        return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
                 $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);
                 $db->query();
             }
         }
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$fkid."'");       
+        $sto_type = $db->loadResult();
+        $return = "ito_detail";
+        if($sto_type==2)
+                $return = "eto_detail";
         $msg = "Successfully Saved Part Number";
-        $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail_pns&id=' . $fkid, $msg);
+        $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $fkid, $msg);
     }
     /*
            * Remove PNS out of STO in STO management
@@ -793,7 +1043,7 @@ class SToController extends JController
             $db->query();
         }
         $msg = JText::_('Have removed successfull.');
-        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail_pns&id=' . $sto_id, $msg);
+        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
     }
     function removepnsstos_movelocation() {
         $db = & JFactory::getDBO();
@@ -1048,4 +1298,281 @@ class SToController extends JController
         JRequest::setVar('view', 'eto');
         parent::display();
     }
+    /*
+         * Remove STO
+         */
+        function deletesto() {
+                $db = & JFactory::getDBO();                
+                $sto_id = JRequest::getVar('sto_id');
+                $db->setQuery("DELETE FROM apdm_pns_sto WHERE pns_sto_id = '" . $sto_id . "'");
+                $db->query();                    
+                $db->setQuery("DELETE FROM apdm_pns_sto_files WHERE sto_id = '" . $sto_id . "'");
+                $db->query();     
+                 $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE sto_id = '" . $sto_id . "'");
+                $db->query();    
+                $msg = JText::_('Have removed successfull.');
+                return $this->setRedirect('index.php?option=com_apdmsto&task=sto', $msg);
+        }   
+        
+/**
+         * @desc  Remove file cads
+         */
+        function remove_doc_sto() {
+                $db = & JFactory::getDBO();
+                $id = JRequest::getVar('id');
+                $sto_id = JRequest::getVar('sto_id');
+                $type_of_doc = JRequest::getVar('type');
+                $task_back = JRequest::getVar('back');
+                //unlink first
+                //get name file cad
+                $query = "SELECT img.sto_id,img.file_name,sto.pns_sto_id,sto.sto_code FROM apdm_pns_sto_files img inner join apdm_pns_sto sto on img.sto_id= sto.pns_sto_id WHERE img.id=" . $id;
+                $db->setQuery($query);
+                $row = $db->loadObject();                 
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
+                $folder = $row->sto_code;
+                $path_so_images = $path_upload  .DS. $folder . DS . $type_of_doc . DS;                                 
+                $file_name = $row->file_name;
+                //get folder file cad          
+                $handle = new upload($path_so_images . $file_name);
+                $handle->file_dst_pathname = $path_so_images . $file_name;
+                $handle->clean();                               
+                
+                $db->setQuery("DELETE FROM apdm_pns_sto_files WHERE id=" . $id);
+                $db->query();
+                $msg = JText::_('Have successfuly delete image file');
+                $this->setRedirect('index.php?option=com_apdmsto&task='.$task_back.'&id=' . $sto_id, $msg);
+        }              
+
+        function download_all_doc_sto() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $sto_id = JRequest::getVar('sto_id');
+                $type_of_doc = JRequest::getVar('type');
+                $doc_type = 0;
+                if($type_of_doc=='images')
+                        $doc_type =2;
+                elseif($type_of_doc=='pdfs')
+                        $doc_type = 1;
+                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$sto_id);
+                $so_row =  $db->loadObject();           
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
+                $folder = $so_row->sto_code;
+                $path_sto_images = $path_upload  .DS. $folder . DS .$type_of_doc. DS;                
+              
+                               
+                //getall images belong PN                
+                $query = "SELECT img.sto_id,img.file_name,sto.pns_sto_id,sto.sto_code FROM apdm_pns_sto_files img inner join apdm_pns_sto sto on img.sto_id= sto.pns_sto_id WHERE img.file_type = '".$doc_type."' and img.sto_id=" . $sto_id;                
+                $db->setQuery($query);                
+                $rows = $db->loadObjectList();
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->file_name;
+                        }
+                }    
+                $zdir[] = $path_sto_images;                               
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' .  $so_row->sto_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = SToController::size_format($zdirsize);
+                $zipsize = SToController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id);
+                exit;
+        }      
+          function size_format($bytes="") {
+                $retval = "";
+                if ($bytes >= 1048576) {
+                        $retval = round($bytes / 1048576 * 100) / 100 . " MB";
+                } else if ($bytes >= 1024) {
+                        $retval = round($bytes / 1024 * 100) / 100 . " KB";
+                } else {
+                        $retval = $bytes . " bytes";
+                }
+                return $retval;
+        }
+       
+         /**
+         * @desc Download imge of PNs
+         */
+        function download_doc_sto() {
+                $db = & JFactory::getDBO();
+                $sto_id = JRequest::getVar('sto_id');
+                $image_id = JRequest::getVar('id');        
+                $type_of_file = JRequest::getVar('type');        
+                $query = "SELECT img.sto_id,img.file_name,sto.pns_sto_id,sto.sto_code FROM apdm_pns_sto_files img inner join apdm_pns_sto sto on img.sto_id= sto.pns_sto_id WHERE img.id=" . $image_id;
+                $db->setQuery($query);
+                $row = $db->loadObject();                
+                ///for pns cads/image/pdf              
+                $folder =  $row->sto_code;                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'sto' . DS;
+                $path_images = $path_so  . DS . $folder . DS . $type_of_file . DS;
+                $file_name = $row->file_name;
+                $dFile = new DownloadFile($path_images, $file_name);
+                exit;
+        }
+        function download_zip_sto() {
+                global $dirarray, $conf, $dirsize;
+
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $image_id = JRequest::getVar('id');      
+                $sto_id = JRequest::getVar('sto_id');
+                $type_of_doc = JRequest::getVar('type');
+                $doc_type = 0;
+                if($type_of_doc=='images')
+                        $doc_type =2;
+                elseif($type_of_doc=='pdfs')
+                        $doc_type = 1;
+                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$sto_id);
+                $so_row =  $db->loadObject();           
+                //Save upload new                
+                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
+                $folder = $so_row->sto_code;
+                $path_sto_images = $path_upload  .DS. $folder . DS .$type_of_doc. DS;                
+                //getall images belong PN                
+                $query = "SELECT img.sto_id,img.file_name,sto.pns_sto_id,sto.sto_code FROM apdm_pns_sto_files img inner join apdm_pns_sto sto on img.sto_id= sto.pns_sto_id WHERE img.file_type = '".$doc_type."' and img.id=" . $image_id;                
+                $db->setQuery($query);                
+                $rows = $db->loadObjectList();
+                $arrImgs = array();
+                if (count($rows) > 0) {
+                        foreach ($rows as $row) {
+                                $arrImgs[] = $row->file_name;
+                        }
+                }    
+                $zdir[] = $path_sto_images;                               
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        echo  $dirarray[$i];        
+                        $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                        if(in_array($fName, $arrImgs))                                
+                        {
+                                $zdir[] = $dirarray[$i];
+                        }
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                {
+                        @chmod($conf['dir'], 0777);
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' .  $so_row->sto_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = SToController::size_format($zdirsize);
+                $zipsize = SToController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id);
+                exit;
+        }      
 }

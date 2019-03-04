@@ -130,9 +130,9 @@ class SToViewito extends JView
                 }		 
          
         $this->assignRef('sto_row',        $sto_row);
-		$lists['zips_files'] = $zips_files;
-		$lists['image_files'] = $images_files;
-		$lists['pdf_files'] = $pdf_files;		
+        $lists['zips_files'] = $zips_files;
+        $lists['image_files'] = $images_files;
+        $lists['pdf_files'] = $pdf_files;		
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);
