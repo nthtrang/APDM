@@ -775,7 +775,14 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                 ?>
                                         <tr>
                                                 <td style="<?php echo $style?>" ><?php echo $i; ?></td>                                            
-                                                <td style="<?php echo $style?>" ><a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
+                                                <td style="<?php echo $style?>" >
+                                                    <?php
+                                                    $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
+                                                    if($sto->sto_type==2){
+                                                        $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
+                                                    }
+                                                    ?>
+                                                    <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
                                                 <td style="<?php echo $style?>" >
                                                 <?php if ($sto->sto_file) { ?>

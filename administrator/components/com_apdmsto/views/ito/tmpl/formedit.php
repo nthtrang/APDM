@@ -6,7 +6,7 @@
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-
+    $folder_sto = $this->sto_row->sto_code;
 	JToolBarHelper::title( $this->sto_row->sto_code. ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
 	if (!intval($edit)) {
 	//	JToolBarHelper::save('save', 'Save & Add new');
@@ -113,8 +113,19 @@
 					}
 				}
 			});	                        
-		});        
-                        
+		});
+ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+ window.addEvent('domready', function() {
+
+     SqueezeBox.initialize({});
+
+     $$('a.modal-button').each(function(el) {
+         el.addEvent('click', function(e) {
+             new Event(e).stop();
+             SqueezeBox.fromElement(el);
+         });
+     });
+ });
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-40">
@@ -137,20 +148,15 @@
 							<?php echo JText::_( 'P.O Internal' ); ?>
 						</label>
 					</td>
-					<td>
-						<input type="text" name="po_inter_code" id="po_inter_code"  size="10" value="<?php echo $this->sto_row->sto_po_internal?>"/>                                               
-					</td>
-				</tr>                                
-                                 <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Created Date' ); ?>
-						</label>
-					</td>
-					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->sto_row->sto_created, 'sto_created', 'sto_created', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
-					</td>
-				</tr>      
+                    <td>
+                        <?php //echo $this->lists['wolist'];?>
+                        <input type="hidden" value="" name="po_id" id="po_id" readonly="readonly" />
+                        <input type="text" name="po_inter_code" id="po_inter_code"  size="10" value="<?php echo $this->sto_row->sto_po_internal?>"/>
+                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_po_ajax&tmpl=component" title="Image">
+                            <input type="button" name="addPO" value="<?php echo JText::_('Insert P.O Internal')?>"/>
+                        </a>
+                    </td>
+				</tr>
                                 <tr>
 					<td class="key">
 						<label for="name">
@@ -237,7 +243,6 @@
 				<?php
 				
 				$i = 1;
-				$folder_sto = $this->sto_row->sto_code;
 				foreach ($this->lists['image_files'] as $image) {
 					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
 				?>

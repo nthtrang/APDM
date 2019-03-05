@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal'); ?>
 <?php
 $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);
@@ -118,6 +118,20 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             }
         }).request();
     }
+
+
+    window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+    window.addEvent('domready', function() {
+
+        SqueezeBox.initialize({});
+
+        $$('a.modal-button').each(function(el) {
+            el.addEvent('click', function(e) {
+                new Event(e).stop();
+                SqueezeBox.fromElement(el);
+            });
+        });
+    });
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
     <div class="col width-60">
@@ -142,7 +156,12 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                         </label>
                     </td>
                     <td>
-                        <?php echo $this->lists['wolist'];?>
+                        <?php //echo $this->lists['wolist'];?>
+                        <input type="text" value="" name="wo_code" id="wo_code" readonly="readonly" />
+                        <input type="hidden" name="sto_wo_id" id="sto_wo_id" value="" />
+                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" title="Image">
+                            <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
+                        </a>
                     </td>
                 </tr>
                 <tr>

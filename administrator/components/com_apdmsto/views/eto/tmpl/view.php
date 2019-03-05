@@ -8,6 +8,7 @@ $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);
 $role = JAdministrator::RoleOnComponent(8);
 $sto_id = JRequest::getVar('id');
+$folder_sto = $this->sto_row->sto_code;
 JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
 if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
@@ -294,7 +295,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         </table>
     </fieldset>
         <fieldset class="adminform">		 
-		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
                 <table class="adminlist">                        
               <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
@@ -313,7 +314,6 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 				<?php
 				
 				$i = 1;
-				$folder_sto = $this->sto_row->sto_code;
 				foreach ($this->lists['image_files'] as $image) {
 					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
 				?>

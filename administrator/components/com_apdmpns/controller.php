@@ -8605,28 +8605,29 @@ class PNsController extends JController {
                 return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
         }
         function getSofomId($so_id)
-        {
-                $db = & JFactory::getDBO();
-                $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$so_id);                
-                $row =  $db->loadObject();   
-                $soNumber = $row->so_cuscode;
-                if($row->ccs_code)
-                {
-                       $soNumber = $row->ccs_code."-".$soNumber;
-                }  
-                $array = array();
-                $array['so_id'] = $so_id;
-                $array['so_code'] = $soNumber;
-                $array['so_shipping_date'] = $row->so_shipping_date;
-                $array['so_start_date'] = $row->so_start_date;
-                return $array;                           
-        }
+{
+    $db = & JFactory::getDBO();
+    $db->setQuery("SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$so_id);
+    $row =  $db->loadObject();
+    $soNumber = $row->so_cuscode;
+    if($row->ccs_code)
+    {
+        $soNumber = $row->ccs_code."-".$soNumber;
+    }
+    $array = array();
+    $array['so_id'] = $so_id;
+    $array['so_code'] = $soNumber;
+    $array['so_shipping_date'] = $row->so_shipping_date;
+    $array['so_start_date'] = $row->so_start_date;
+    return $array;
+}
           /*
          * 
          * add bom tab in pn detail
          */
 
         function searchadvance() {
+                JRequest::setVar('layout', 'default');
                 JRequest::setVar('layout', 'default');
                 JRequest::setVar('view', 'searchsowo');
                 parent::display();
@@ -8828,4 +8829,10 @@ class PNsController extends JController {
 			return 0;
 											
 		}
+		function print_bom_pns()
+        {
+            JRequest::setVar('layout', 'bom_print');
+            JRequest::setVar('view', 'listpns');
+            parent::display();
+        }
 }

@@ -110,7 +110,7 @@
     </tr>
     <tr>
         <td class="tg-c3ow-desc" colspan="4" style="border-width:1px;border-style:solid">
-           Description:<?php $this->sto_row->sto_description?></td>
+           Description:<?php echo $this->sto_row->sto_description?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr"></td>
@@ -119,7 +119,7 @@
         <td class="tg-0pky-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr-title" colspan="4">Receiving Part</td>
+        <td class="tg-0pky-pr-title" colspan="4">Shipping Part</td>
     </tr>
     <tr>
         <td class="tg-0pky-pr" colspan="4">

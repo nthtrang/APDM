@@ -6,7 +6,7 @@
 $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);
 $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-
+$folder_sto = $this->sto_row->sto_code;
 JToolBarHelper::title( $this->sto_row->sto_code. ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
 if (!intval($edit)) {
     //	JToolBarHelper::save('save', 'Save & Add new');
@@ -153,7 +153,12 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                         </label>
                     </td>
                     <td>
-                        <?php echo $this->lists['wolist'];?>
+                        <?php //echo $this->lists['wolist'];?>
+                        <input type="text" value="<?php echo $this->sto_row->wo_code?>" name="wo_code" id="wo_code" readonly="readonly" />
+                        <input type="hidden" name="sto_wo_id" id="sto_wo_id" value="<?php echo $this->sto_row->sto_wo_id?>" />
+                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" title="Image">
+                            <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -283,7 +288,6 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 				<?php
 				
 				$i = 1;
-				$folder_sto = $this->sto_row->sto_code;
 				foreach ($this->lists['image_files'] as $image) {
 					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
 				?>

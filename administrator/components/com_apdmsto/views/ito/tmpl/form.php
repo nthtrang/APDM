@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal'); ?>
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
@@ -106,7 +106,19 @@ function get_default_ito_prefix(){
 					}
 				}
 			});	                        
-		});        		
+		});
+window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+window.addEvent('domready', function() {
+
+    SqueezeBox.initialize({});
+
+    $$('a.modal-button').each(function(el) {
+        el.addEvent('click', function(e) {
+            new Event(e).stop();
+            SqueezeBox.fromElement(el);
+        });
+    });
+});
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
@@ -130,19 +142,15 @@ function get_default_ito_prefix(){
 							<?php echo JText::_( 'P.O Internal' ); ?>
 						</label>
 					</td>
-					<td>
-						<input type="text" name="po_inter_code" id="po_inter_code"  size="10" value=""/>                                               
-					</td>
-				</tr>                                
-                                 <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Created Date' ); ?>
-						</label>
-					</td>
-					<td>                                                 
-                                               <?php echo JHTML::_('calendar',$this->sto_row->sto_created, 'sto_created', 'sto_created', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
-					</td>
+                        <td>
+                            <?php //echo $this->lists['wolist'];?>
+                            <input type="hidden" value="" name="po_id" id="po_id" readonly="readonly" />
+                            <input type="text" name="po_inter_code" id="po_inter_code"  size="10" value=""/>
+                            <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_po_ajax&tmpl=component" title="Image">
+                                <input type="button" name="addPO" value="<?php echo JText::_('Insert P.O Internal')?>"/>
+                            </a>
+                        </td>
+				</tr>
 				</tr>      
                                 <tr>
 					<td class="key">

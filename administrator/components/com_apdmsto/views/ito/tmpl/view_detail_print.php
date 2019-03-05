@@ -15,7 +15,7 @@
     window.print();
 </script>
 <style type="text/css">
-    .tgi  {border-collapse:collapse;border-spacing:0;}
+    .tgi  {border-collapse:collapse;border-spacing:0;align-content: center}
     .tgi td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
     .tgi th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
     .tgi .tg-88nc{font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4}
@@ -24,9 +24,10 @@
     .tgi .tg-c3ow-des{border-color:inherit;border-style:solid;border-width:1px;text-align:center;vertical-align:top}
     .tgi .tg-xldj-pr{border-color:inherit;text-align:left}
     .tgi .tg-0pky-pr{border-color:inherit;text-align:left;vertical-align:top}
-    .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 16px;color: #0B55C4}
+    .tgi .tg-0pky-border{border-width:1px;border-style:solid}
+    .tgi .tg-0pky-pr-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 16px;color: #0B55C4}
 </style>
-<table class="tgi">
+<table class="tgi" width="100%">
     <tr>
         <th class="tg-kiyi" colspan="2">
             ASCENX TECHNOLOGIES
@@ -47,9 +48,7 @@
         <td class="tg-xldj-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr-title" colspan="2">ITO# <?php echo $this->sto_row->sto_code; ?></td>
+        <td class="tg-0pky-pr-title" colspan="4">ITO# <?php echo $this->sto_row->sto_code; ?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr"></td>
@@ -58,28 +57,26 @@
         <td class="tg-0pky-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr">Created date:</td>
-        <td class="tg-0pky-pr"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-        <td class="tg-0pky-pr">Supplier#:</td>
-        <td class="tg-0pky-pr"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Created date:</td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Supplier#:</td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr">Completed date:</td>
-        <td class="tg-0pky-pr"><?php echo ($this->sto_row->sto_completed_date)?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
-        <td class="tg-0pky-pr">P.O INTERNAL:</td>
-        <td class="tg-0pky-pr"><?php echo $this->sto_row->sto_po_internal;?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Completed date:</td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo ($this->sto_row->sto_completed_date)?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border">P.O INTERNAL:</td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo $this->sto_row->sto_po_internal;?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr">State:</td>
-        <td class="tg-0pky-pr"><?php echo $this->sto_row->sto_state;?></td>
-        <td class="tg-0pky-pr">Stocker: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_stocker, "name"):""; ?></td>
-        <td class="tg-0pky-pr">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
+        <td class="tg-0pky-pr tg-0pky-border"  rowspan="2">State:</td>
+        <td class="tg-0pky-pr tg-0pky-border"  rowspan="2"><?php echo $this->sto_row->sto_state;?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Stocker: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_stocker, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr">Owner: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
-        <td class="tg-0pky-pr">Comfirm:
+        <td class="tg-0pky-pr tg-0pky-border">Owner: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border">Comfirm:
             <?php
             $checked ="";
             if($this->sto_row->sto_owner_confirm){
@@ -97,7 +94,7 @@
     </tr>
     <tr>
         <td class="tg-c3ow-desc" colspan="4" style="border-width:1px;border-style:solid">
-           Description:<?php $this->sto_row->sto_description?></td>
+           Description:<?php echo $this->sto_row->sto_description?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr"></td>

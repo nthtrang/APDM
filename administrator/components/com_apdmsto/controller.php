@@ -1574,5 +1574,62 @@ class SToController extends JController
                 readfile("$archive_file_name");
                 $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id);
                 exit;
-        }      
+        }
+    function getinfofomWoId($wo_id)
+    {
+        $db = & JFactory::getDBO();
+        $db->setQuery("select wo.pns_wo_id,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_wo wo left join apdm_pns_so so on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where wo.pns_wo_id = ".$wo_id);
+        $row =  $db->loadObject();
+        $soNumber = $row->so_cuscode;
+        if($row->ccs_code)
+        {
+            $soNumber = $row->ccs_code."-".$soNumber;
+        }
+        $array = array();
+        $array['sto_id'] = $wo_id;
+        $array['so_code'] = $soNumber;
+        $array['so_shipping_date'] = $row->so_shipping_date;
+        $array['so_start_date'] = $row->so_start_date;
+        return $array;
+    }
+
+    function ajax_wo_toeto()
+    {
+        $db = & JFactory::getDBO();
+        $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
+        $id = $cid[0];
+        $db->setQuery("SELECT so.pns_so_id,wo.pns_wo_id,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where wo.pns_wo_id=".$id);
+        $row =  $db->loadObject();
+        $soNumber = $row->so_cuscode;
+        if($row->ccs_code)
+        {
+            $soNumber = $row->ccs_code."-".$soNumber;
+        }
+        $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber.'^'.$row->pns_wo_id.'^'.$row->wo_code;
+        echo $result;
+        exit;
+    }
+    function get_wo_ajax()
+    {
+        JRequest::setVar( 'layout', 'list'  );
+        JRequest::setVar( 'view', 'getwo' );
+        parent::display();
+    }
+    function get_po_ajax()
+    {
+        JRequest::setVar( 'layout', 'list'  );
+        JRequest::setVar( 'view', 'getpo' );
+        parent::display();
+    }
+    function ajax_po_toito()
+    {
+        $db = & JFactory::getDBO();
+        $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
+        $id = $cid[0];
+        $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=".$id);
+        $row =  $db->loadObject();
+        $result = $row->pns_po_id.'^'.$row->po_code;
+        echo $result;
+        exit;
+    }
 }

@@ -9,28 +9,7 @@ $pns_code_full = $row->pns_code_full;
    $pns_code_full = substr($pns_code_full, 0, strlen($pns_code_full)-1);  
  }
 	$role = JAdministrator::RoleOnComponent(6);      
-	JToolBarHelper::title( $pns_code_full , 'cpanel.png' );
-	
-	if (in_array("V", $role)) {
-		JToolBarHelper::customX('export_bom_xls', 'excel', '', 'Export', false);
 
-	}
-    JToolBarHelper::customX("printbom","print",'',"Print",false);
-	if (in_array("V", $role)) { 	
-                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-                JToolBarHelper::customX('download', 'download', '', 'Download', false);	
-	}
-
-	if (in_array("D", $role)&& $row->pns_life_cycle =='Create') {
-		JToolBarHelper::deleteList('Are you sure to remove it(s)?','removepnbom',"Remove");
-	}
-        if (in_array("E", $role)&& $row->pns_life_cycle =='Create') {
-		JToolBarHelper::addPnsChild("Add Part Child",$this->lists['pns_id']);
-        }   
-	if (in_array("V", $role)&& $row->pns_life_cycle =='Create') { 	
-                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-                JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
-	}        
 
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
@@ -42,134 +21,15 @@ $pns_code_full = $row->pns_code_full;
 	
 ?>
 <script language="javascript">
-function submitbutton(pressbutton) {
-			var form = document.adminForm;
-			if (pressbutton == 'cancel_listpns') {				
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'export_bom') {				
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'export_bom_xls') {				
-				submitform( pressbutton );
-				return;
-			}                        
-			if (pressbutton == 'removepnbom') {
-				submitform( pressbutton );
-				return;
-			}
-			if (pressbutton == 'addbomchild') {
-				submitform( pressbutton );
-				return;
-			}             
-			if (pressbutton == 'saveref') {
-				submitform( pressbutton );
-				return;
-			}                              
-			if (pressbutton == 'download') {
-                                 window.location.assign("index.php?option=com_apdmpns&task=download_cad_all_pns&pns_id=<?php echo $this->lists['pns_id']?>")
-                                 //window.location.assign("../uploads/pns/cads/<?php echo $row->ccs_code?>/<?php echo $row->pns_code_full?>/zip.php?step=2")
-				//submitform( pressbutton );
-				//form.task.value = '';
-				return;
-			}
-            if (pressbutton == 'printbom') {
-                //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
-                var url = "index.php?option=com_apdmpns&task=print_bom_pns&id=<?php echo $this->lists['pns_id']?>&tmpl=component";
-                window.open(url, '_blank');
-                return;
-            }
-
-}
-
-function checkForm(){
-
-	if ($('boxchecked').value==0){
-		alert('Please select file.');
-		return false;
-	}
-	return true;
-}
-function isCheckedBom(isitchecked,id){
-       
-	if (isitchecked == true){
-		document.adminForm.boxchecked.value++;
-                document.getElementById('find_number_'+id).style.visibility= 'visible';
-                document.getElementById('find_number_'+id).style.display= 'block';
-                document.getElementById('ref_des_'+id).style.visibility= 'visible';
-                document.getElementById('ref_des_'+id).style.display= 'block';  
-                document.getElementById('stock_'+id).style.visibility= 'visible';
-                document.getElementById('stock_'+id).style.display= 'block';  
-                document.getElementById('note_ref_des_'+id).style.visibility= 'visible';
-                document.getElementById('note_ref_des_'+id).style.display= 'block';  
-
-                
-                
-                document.getElementById('text_find_number_'+id).style.visibility= 'hidden';
-                document.getElementById('text_find_number_'+id).style.display= 'none';
-                document.getElementById('text_ref_des_'+id).style.visibility= 'hidden';
-                document.getElementById('text_ref_des_'+id).style.display= 'none';        
-                document.getElementById('text_stock_'+id).style.visibility= 'hidden';
-                document.getElementById('text_stock_'+id).style.display= 'none';                  
-	}
-	else {
-		document.adminForm.boxchecked.value--;
-                document.getElementById('text_find_number_'+id).style.visibility= 'visible';
-                document.getElementById('text_find_number_'+id).style.display= 'block';
-                document.getElementById('text_ref_des_'+id).style.visibility= 'visible';
-                document.getElementById('text_ref_des_'+id).style.display= 'block'; 
-                document.getElementById('text_stock_'+id).style.visibility= 'visible';
-                document.getElementById('text_stock_'+id).style.display= 'block';   
-                
-
-                document.getElementById('find_number_'+id).style.visibility= 'hidden';
-                document.getElementById('find_number_'+id).style.display= 'none';
-                document.getElementById('ref_des_'+id).style.visibility= 'hidden';
-                document.getElementById('ref_des_'+id).style.display= 'none';                    
-                document.getElementById('stock_'+id).style.visibility= 'hidden';
-                document.getElementById('stock_'+id).style.display= 'none';   
-                document.getElementById('note_ref_des_'+id).style.visibility= 'hidden';
-                document.getElementById('note_ref_des_'+id).style.display= 'none';                   
-                
-                
-	}
-}
-
-		elem.style.visibility = 'hidden';
-		elem.style.display = 'none';
+    window.print();
 </script>
-<div class="submenu-box">
-	<div class="t">
-                <div class="t">
-                        <div class="t"></div>
-                </div>
-        </div>
-        <div class="m">
-		<ul id="submenu" class="configuration">
-			<li><a id="detail" href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Detail' ); ?></a></li>
-			<li><a id="bom"  class="active"><?php echo JText::_( 'BOM' ); ?></a></li>
-			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
-                        <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Specification' ); ?></a></li>
-                        <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'MEP' ); ?></a></li>
-                        <li><a id="rev" href="index.php?option=com_apdmpns&task=rev&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'REV' ); ?></a></li>
-                         <?php if($this->row->pns_cpn!=1){?>
-                        <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'DASH ROLL' ); ?></a></li>                        
-                        <?php } ?>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'PO' ); ?></a></li>
-                        <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO' ); ?></a></li>
-		</ul>
-		 <div class="clr"></div>
-        </div>
-        <div class="b">
-                <div class="b">
-                        <div class="b"></div>
-                </div>
-        </div>
-</div>
-<div class="clr"></div>
-<p>&nbsp;</p>
+<table width="100%" cellpadding="1">
+    <tr>
+        <th class="tg-kiyi"  style="text-align:left">
+            <img src="./templates/khepri/images/h_green/logo1.png" width="150px"></img></th>
+    </tr>
+    <tr><td style="text-align:center"><span style="font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4;align-content: center">Bill of Materials</span></td></tr>
+</table>
 <form action="index.php?option=com_apdmpns" method="post" name="adminForm">
 <?php 
 
@@ -215,7 +75,10 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 			</th>                        
                         <th width="6%">
 				<?php echo JText::_('MFG PN')?>
-			</th>                        
+			</th>
+            <th>
+                <?php echo JText::_('PN Barcode');?>
+            </th>
 			<th width="6%">
 				<?php echo JText::_('State')?>
 			</th>
@@ -255,6 +118,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td><?php echo $row->pns_uom;?></td>
                 <td><?php echo $manufacture[0]['mf'];?></td>
                 <td><?php echo $manufacture[0]['v_mf'];?></td>
+            <td><?php
+                $img			=	code128BarCode($row->text, 1);
+                //Start output buffer to capture the image
+                //Output PNG image
+                ob_start();
+                imagepng($img);
+                //Get the image from the output buffer
+                $output_img		=	ob_get_clean();
+                echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row->text;
+                ?></td>
 		<td><?php echo $row->pns_life_cycle;?></td>		
 	</tr>
         <?php
@@ -288,6 +161,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                 <td><?php echo $row2->pns_uom;?></td>
                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                 <td><?php echo $manufacture[0]['v_mf'];?></td>
+                               <td><?php
+                                   $img			=	code128BarCode($row2->text, 1);
+                                   //Start output buffer to capture the image
+                                   //Output PNG image
+                                   ob_start();
+                                   imagepng($img);
+                                   //Get the image from the output buffer
+                                   $output_img		=	ob_get_clean();
+                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row2->text;
+                                   ?></td>
                                 <td><?php echo $row2->pns_life_cycle;?></td>
                                 
                         </tr>
@@ -323,6 +206,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                 <td><?php echo $row3->pns_uom;?></td>
                                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                                  <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                               <td><?php
+                                                   $img			=	code128BarCode($row3->text, 1);
+                                                   //Start output buffer to capture the image
+                                                   //Output PNG image
+                                                   ob_start();
+                                                   imagepng($img);
+                                                   //Get the image from the output buffer
+                                                   $output_img		=	ob_get_clean();
+                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row3->text;
+                                                   ?></td>
                                                 <td><?php echo $row3->pns_life_cycle;?></td>                                                
                                         </tr>
                                                <?php
@@ -356,6 +249,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 <td><?php echo $row4->pns_uom;?></td>
                                                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                                                 <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                               <td><?php
+                                                                   $img			=	code128BarCode($row4->text, 1);
+                                                                   //Start output buffer to capture the image
+                                                                   //Output PNG image
+                                                                   ob_start();
+                                                                   imagepng($img);
+                                                                   //Get the image from the output buffer
+                                                                   $output_img		=	ob_get_clean();
+                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row4->text;
+                                                                   ?></td>
                                                                 <td><?php echo $row4->pns_life_cycle;?></td>                                                                
                                                         </tr>
                                                                         <?php
@@ -389,6 +292,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         <td><?php echo $row5->pns_uom;?></td>
                                                                                         <td><?php echo $manufacture[0]['mf'];?></td>
                                                                                         <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                       <td><?php
+                                                                                           $img			=	code128BarCode($row5->text, 1);
+                                                                                           //Start output buffer to capture the image
+                                                                                           //Output PNG image
+                                                                                           ob_start();
+                                                                                           imagepng($img);
+                                                                                           //Get the image from the output buffer
+                                                                                           $output_img		=	ob_get_clean();
+                                                                                           echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row5->text;
+                                                                                           ?></td>
                                                                                         <td><?php echo $row5->pns_life_cycle;?></td>
                                                                                         
                                                                                 </tr>
@@ -423,6 +336,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 <td><?php echo $row6->pns_uom;?></td>
                                                                                                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                 <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                                               <td><?php
+                                                                                                                   $img			=	code128BarCode($row6->text, 1);
+                                                                                                                   //Start output buffer to capture the image
+                                                                                                                   //Output PNG image
+                                                                                                                   ob_start();
+                                                                                                                   imagepng($img);
+                                                                                                                   //Get the image from the output buffer
+                                                                                                                   $output_img		=	ob_get_clean();
+                                                                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row6->text;
+                                                                                                                   ?></td>
                                                                                                                 <td><?php echo $row6->pns_life_cycle;?></td>
                                                                                                                 
                                                                                                         </tr>
@@ -457,6 +380,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                         <td><?php echo $row7->pns_uom;?></td>
                                                                                                                                          <td><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                        <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                                                                       <td><?php
+                                                                                                                                           $img			=	code128BarCode($row7->text, 1);
+                                                                                                                                           //Start output buffer to capture the image
+                                                                                                                                           //Output PNG image
+                                                                                                                                           ob_start();
+                                                                                                                                           imagepng($img);
+                                                                                                                                           //Get the image from the output buffer
+                                                                                                                                           $output_img		=	ob_get_clean();
+                                                                                                                                           echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row7->text;
+                                                                                                                                           ?></td>
                                                                                                                                         <td><?php echo $row7->pns_life_cycle;?></td>
                                                                                                                                         
                                                                                                                                 </tr>
@@ -491,6 +424,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 <td><?php echo $row8->pns_uom;?></td>
                                                                                                                                                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                                                         <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                                                                                               <td><?php
+                                                                                                                                                               $img			=	code128BarCode($row8->text, 1);
+                                                                                                                                                               //Start output buffer to capture the image
+                                                                                                                                                               //Output PNG image
+                                                                                                                                                               ob_start();
+                                                                                                                                                               imagepng($img);
+                                                                                                                                                               //Get the image from the output buffer
+                                                                                                                                                               $output_img		=	ob_get_clean();
+                                                                                                                                                               echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row8->text;
+                                                                                                                                                               ?></td>
                                                                                                                                                                 <td><?php echo $row8->pns_life_cycle;?></td>
                                                                                                                                                                 
                                                                                                                                                         </tr>

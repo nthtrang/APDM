@@ -9,12 +9,12 @@
         $sto_id = JRequest::getVar('id');
 	$role = JAdministrator::RoleOnComponent(8);	
 	JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-
+    $folder_sto = $this->sto_row->sto_code;
 	if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
                 JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
 	}
         //for PPN part
-        if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
+       /* if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
             $allow_edit = 1;
             JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save Receiving Part');
         }
@@ -25,7 +25,7 @@
                 JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
                 //JToolBarHelper::deletePns('Are you sure to delete it?',"deletesto","Delete ITO");
                 JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ITO');
-        }         
+        }     */
         //end PN part
         
         JToolBarHelper::customX("printitopdf","print",'',"Print",false);
@@ -342,7 +342,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         </table>                
         </fieldset>
 <fieldset class="adminform">		 
-		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
                 <table class="adminlist">                        
               <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
@@ -361,7 +361,6 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 				<?php
 				
 				$i = 1;
-				$folder_sto = $this->sto_row->sto_code;
 				foreach ($this->lists['image_files'] as $image) {
 					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
 				?>
@@ -508,6 +507,44 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 </fieldset>   
         <fieldset>
                 <legend>Receiving Part</legend>
+            <div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+<?php
+if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
+    ?>
+    <td class="button" id="toolbar-save">
+        <a href="#"
+           onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}"
+           class="toolbar">
+<span class="icon-32-save" title="Save Receiving Part">
+</span>
+            Save Receiving Part
+        </a>
+    </td>
+
+    <td class="button" id="toolbar-popup-Popup">
+        <a class="modal"
+           href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>"
+           rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+<span class="icon-32-new" title="Add Part">
+</span>
+            Add Part
+        </a>
+    </td>
+    <?php
+}
+if (in_array("D", $role)&& ($this->sto_row->sto_state  != "Done")) {
+    ?>
+                    <td class="button" id="toolbar-Are you sure to delete it?">
+                        <a href="#" onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsstos');}}" class="toolbar">
+<span class="icon-32-delete" title="Remove Part">
+</span>
+                            Remove Part
+                        </a>
+                    </td>
+                    <?php }?>
+
+                </tr></tbody></table></div>
                 <?php if (count($this->sto_pn_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
