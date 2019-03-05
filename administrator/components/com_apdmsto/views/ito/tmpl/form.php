@@ -52,23 +52,7 @@ function get_default_ito_prefix(){
       
 ///for add more file
 	window.addEvent('domready', function(){
-			//File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	
+			
                         
                         //for image
                         //File Input Generate
@@ -89,23 +73,7 @@ function get_default_ito_prefix(){
 				}
 			});	
                         //for pdf
-                        //File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier_pdf span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier_pdf').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier_pdf span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	                        
+                        
 		});
 window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
 window.addEvent('domready', function() {
@@ -204,16 +172,9 @@ window.addEvent('domready', function() {
         </div>
 		<div class="col width-100">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Image, Pdf, Zip files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
-                <table class="adminlist">
-                        
-              
+		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+                <table class="adminlist">             
                 <tr>
-					<td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('IMAGE')?>
-						</label>
-					</td>
 					<td>
 
 						<input type="hidden" name="old_pns_image" value="<?php echo $this->row->pns_image;?>" />
@@ -250,128 +211,9 @@ window.addEvent('domready', function() {
 						</span>                                                           
                                                 </div>
                                                 <br />
-                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more Images');?>" ><?php echo JText::_('Click here to add more Images');?></a>
+                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php echo JText::_('Click here to add more files');?></a>
 					</td>
-                                        </tr>  
-                                        <tr><td class="key">
-						<label for="ccs_create">
-							<?php echo JText::_('P/N PDF')?>
-						</label>
-					</td>
-					<td>
-<!--						<input type="file" name="pns_pdf" />-->
-						<input type="hidden" name="old_pns_pdf" value="<?php echo $this->row->pns_pdf;?>" />
-                                                
-					
-                                                <div class="iptfichier_pdf">
-                                                 <span id="1">
-							<input type="file" name="pns_pdf1" /> 
-						</span>
-						<span id="2">
-							<input type="file" name="pns_pdf2" /> 
-						</span>
-						<span id="3">
-							<input type="file" name="pns_pdf3" /> 
-						</span>
-						<span id="4">
-							<input type="file" name="pns_pdf4" /> 
-						</span>
-                                                 <span id="5">
-							<input type="file" name="pns_pdf5" /> 
-						</span>
-						<span id="6">
-							<input type="file" name="pns_pdf6" /> 
-						</span>
-						<span id="7">
-							<input type="file" name="pns_pdf7" /> 
-						</span>
-						<span id="8">
-							<input type="file" name="pns_pdf8" /> 
-						</span>
-						<span id="9">
-							<input type="file" name="pns_pdf9" /> 
-						</span>
-						<span id="10">
-							<input type="file" name="pns_pdf10" /> 
-						</span>                                                        
-                                                </div>
-                                                <br />
-                                                <a href="javascript:;"id="lnkfichier_pdf" title="<?php echo JText::_('Click here to add more pdf');?>" ><?php echo JText::_('Click here to add more pdf');?></a>
-                                        </td>
-				</tr>		
-<tr>
-					<td class="key" valign="top">
-						<label for="ccs_create">
-							<?php echo JText::_('P/N Zip')?>
-						</label>
-					</td>
-					<td>
-					<div class="iptfichier">
-						<span id="1">
-							<input type="file" name="pns_zip1" /> 
-						</span>
-						<span id="2">
-							<input type="file" name="pns_zip2" /> 
-						</span>
-						<span id="3">
-							<input type="file" name="pns_zip3" /> 
-						</span>
-						<span id="4">
-							<input type="file" name="pns_zip4" /> 
-						</span>
-						<span id="5">
-							<input type="file" name="pns_zip5" /> 
-						</span>
-						<span id="6">
-							<input type="file" name="pns_zip6" /> 
-						</span>
-						<span id="7">
-							<input type="file" name="pns_zip7" /> 
-						</span>
-						<span id="8">
-							<input type="file" name="pns_zip8" /> 
-						</span>
-						<span id="9">
-							<input type="file" name="pns_zip9" /> 
-						</span>
-						<span id="10">
-							<input type="file" name="pns_zip10" /> 
-						</span>
-						<span id="11">
-							<input type="file" name="pns_zip11" /> 
-						</span>
-						<span id="12">
-							<input type="file" name="pns_zip12" /> 
-						</span>
-						<span id="13">
-							<input type="file" name="pns_zip13" /> 
-						</span>
-						<span id="14">
-							<input type="file" name="pns_zip14" /> 
-						</span>
-						<span id="15">
-							<input type="file" name="pns_zip15" /> 
-						</span>
-						<span id="16">
-							<input type="file" name="pns_zip16" /> 
-						</span>
-						<span id="17">
-							<input type="file" name="pns_zip17" /> 
-						</span>
-						<span id="18">
-							<input type="file" name="pns_zip18" /> 
-						</span>
-						<span id="19">
-							<input type="file" name="pns_zip19" /> 
-						</span>
-						<span id="20">
-							<input type="file" name="pns_zip20" /> 
-						</span>
-					</div>
-						<br />
-						<a href="javascript:;"id="lnkfichier" title="<?php echo JText::_('Click here to add more CAD files');?>" ><?php echo JText::_('Click here to add more ZIP files');?></a>
-					</td>
-				</tr>                                
+                                        </tr>                                          	                           
                                           </table>
                 </fieldset>
 				</div>

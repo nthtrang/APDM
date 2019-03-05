@@ -73,7 +73,7 @@ class SToVieweto extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList();
 
-        $db->setQuery("select sto.*,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_sto sto inner join apdm_pns_wo wo on sto.sto_wo_id = wo.pns_wo_id left join apdm_pns_so so on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where sto.pns_sto_id =".$sto_id);
+        $db->setQuery("select sto.*,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code,delivery.* from apdm_pns_sto sto inner join apdm_pns_wo wo on sto.sto_wo_id = wo.pns_wo_id left join apdm_pns_so so on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code left join apdm_pns_sto_delivery delivery on sto.pns_sto_id = delivery.sto_id where sto.pns_sto_id =".$sto_id);
         $sto_row =  $db->loadObject();
 
         $db->setQuery("SELECT sto.*, p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_sto AS sto on p.pns_id = sto.pns_id WHERE p.pns_deleted =0 AND sto.pns_id=".$cid[0]." order by sto.pns_rev_id desc limit 1");
@@ -100,7 +100,7 @@ class SToVieweto extends JView
         $defaultStatus = "0";
         if ($sto_row->sto_isdelivery_good)
             $defaultStatus = $sto_row->sto_isdelivery_good;
-        $lists['stoDeliveryGood'] = JHTML::_('select.genericlist', $statusValue, 'sto_isdelivery_good', 'class="inputbox "  size="1"', 'value', 'text', $defaultStatus);
+        $lists['stoDeliveryGood'] = JHTML::_('select.genericlist', $statusValue, 'sto_isdelivery_good', 'class="inputbox"  size="1" onchange="getDeliveryAddress(this.value)"', 'value', 'text', $defaultStatus);
 
 
 

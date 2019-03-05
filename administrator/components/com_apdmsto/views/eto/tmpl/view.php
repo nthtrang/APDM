@@ -15,19 +15,22 @@ if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
     JToolBarHelper::customX("editeto",'edit',"Edit","Edit",false);
 }
 //for PPN part
-        if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
-            $allow_edit = 1;
-            JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save Shipping Part');
-        }
-        if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
-                JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
-        }                     
-        if (in_array("D", $role) && ($this->sto_row->sto_state  != "Done")) {
-                JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
-                //JToolBarHelper::deletePns('Are you sure to delete it?',"deletesto","Delete ITO");
-                JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ITO');
-        }         
+//        if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
+//            $allow_edit = 1;
+//            JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save Shipping Part');
+//        }
+//        if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
+//                JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
+//        }                     
+//        if (in_array("D", $role) && ($this->sto_row->sto_state  != "Done")) {
+//                JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
+//                //JToolBarHelper::deletePns('Are you sure to delete it?',"deletesto","Delete ITO");
+//                JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ITO');
+//        }         
         //end PN part
+if ($this->sto_row->sto_isdelivery_good) {
+         JToolBarHelper::customX("printetoDelivery","print",'',"Print Delivery",false);
+ }
 JToolBarHelper::customX("printetopdf","print",'',"Print",false);
 JToolBarHelper::cancel( 'cancel', 'Close' );
 $cparams = JComponentHelper::getParams ('com_media');
@@ -61,6 +64,13 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             window.open(url, '_blank');
             return;
         }
+         if (pressbutton == 'printetoDelivery') {
+            //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
+            var url = "index.php?option=com_apdmsto&task=printetoDelivery&id="+form.sto_id.value + "&tmpl=component";
+            window.open(url, '_blank');
+            return;
+        }
+        
          if (pressbutton == 'saveqtyStofk') {
                         submitform( pressbutton );
                         return;
@@ -217,7 +227,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 <p>&nbsp;</p>-->
 
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >
-    <fieldset class="adminform">
+    <fieldset>
         <legend><?php echo JText::_( 'ETO Detail' ); ?></legend>
         <table class="admintable" cellspacing="1"  width="70%">
             <tr>
@@ -294,8 +304,127 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
             </tr>
         </table>
     </fieldset>
-        <fieldset class="adminform">		 
-		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+        <?php
+                            $style='style="display: none"';
+                            if($this->sto_row->sto_isdelivery_good)
+                            {
+                                    $style='style="display: block"';
+                            }
+                            ?>
+                            <div id="delivery_info" <?php echo $style?> >
+                            <fieldset>               
+                                    <legend><?php echo JText::_( 'Delivery Note' ); ?></legend>
+                                   <table class="admintable" cellspacing="1" width="50%">
+                                           <tr><td  class="key">Delivery Method</td>
+                                           <td colspan="3"><?php  echo $this->sto_row->delivery_method; ?></td>
+                                           </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <label for="name" style="color:#0B55C4;font-size: 12px;font-weight: bold">
+                                                    <?php echo JText::_( 'Shipping Address' ); ?>
+                                                </label>
+                                            </td>
+                                          <td colspan="2">
+                                                <label for="name" style="color:#0B55C4;font-size: 12px;font-weight: bold">
+                                                    <?php echo JText::_( 'Invoice Address' ); ?>
+                                                </label>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_shipping_name; ?>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_billing_name; ?>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Company name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_shipping_company; ?>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Company name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_billing_company; ?>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Street address' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_shipping_street; ?>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Street address' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                               <?php  echo $this->sto_row->delivery_billing_street; ?>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'City,Zip code' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_shipping_zipcode; ?>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'City,Zip code' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                               <?php  echo $this->sto_row->delivery_billing_zipcode; ?>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Phone number' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_shipping_phone; ?>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Phone number' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <?php  echo $this->sto_row->delivery_billing_phone; ?>
+                                            </td>
+                                             </tr>
+                                           </table>
+                                    </fieldset>
+                            </div>
+        <fieldset>		 
+		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
                 <table class="adminlist">                        
               <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
@@ -303,7 +432,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 					<table width="100%"  class="adminlist" cellpadding="1">
 						
 						<thead>
-							<th colspan="4"><?php echo JText::_('List Images')?></th>
+							<th colspan="4"><?php echo JText::_('List Documents')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -319,7 +448,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 				?>
 				<tr>
 					<td><?php echo $i?></td>
-					<td><img src="../uploads/sto/<?php echo $folder_sto . DS?>/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
+					<td><?php echo $image['image_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                 <?php
@@ -459,7 +588,40 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                           </table>
                 </fieldset>   
         <fieldset>
-                <legend>Shipping Part</legend>
+                <legend>Shipping Part</legend>       
+<div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+<?php
+if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
+    ?>
+<td class="button" id="toolbar-save">
+<a href="#" onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save shipping part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}" class="toolbar">
+<span class="icon-32-save" title="Save Shipping Part">
+</span>
+Save Shipping Part
+</a>
+</td>
+<td class="button" id="toolbar-popup-Popup">
+<a class="modal" href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=24" rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+<span class="icon-32-new" title="Add Part">
+</span>
+Add Part
+</a>
+</td>
+    <?php
+}
+if (in_array("D", $role)&& ($this->sto_row->sto_state  != "Done")) {
+    ?>
+<td class="button" id="toolbar-Are you sure to delete it?">
+<a href="#" onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsstos');}}" class="toolbar">
+<span class="icon-32-delete" title="Remove Part">
+</span>
+Remove Part
+</a>
+</td>
+                    <?php }?>
+
+                </tr></tbody></table></div>                
                 <?php if (count($this->sto_pn_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>

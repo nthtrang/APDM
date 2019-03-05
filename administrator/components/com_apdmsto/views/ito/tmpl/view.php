@@ -195,63 +195,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         }).request();
         
 }
- ///for add more file
-	window.addEvent('domready', function(){
-			//File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	
-                        
-                        //for image
-                        //File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier_image span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier_image').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier_image span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	
-                        //for pdf
-                        //File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier_pdf span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier_pdf').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier_pdf span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	                        
-		});               
+ ///for add more file         
 </script>
 <!--<div class="submenu-box">
             <div class="t">
@@ -277,7 +221,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 <p>&nbsp;</p>-->
 
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
-        <fieldset class="adminform">
+        <fieldset>
 		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>        
         <table class="admintable" cellspacing="1"  width="70%">
                               <tr>
@@ -317,17 +261,14 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                          <td width="30%" class="title"> 
 										 <?php                                                                                  
                                                              if($this->sto_row->sto_owner_confirm==0){
-
-                                                    ?>
-                                                  
-                                                   
+                                                    ?>                                                                                                     
                                                    <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
                                                          <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
                                                         <?php }
                                                         else
                                                         {
                                                                        ?>
-                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
+                                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
                                                                        <?php
                                                         }
                                                         ?>
@@ -341,8 +282,8 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </tr>  
         </table>                
         </fieldset>
-<fieldset class="adminform">		 
-		<legend><?php echo JText::_( 'Document' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+<fieldset>		 
+		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
                 <table class="adminlist">                        
               <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
@@ -350,7 +291,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 					<table width="100%"  class="adminlist" cellpadding="1">
 						
 						<thead>
-							<th colspan="4"><?php echo JText::_('List Images')?></th>
+							<th colspan="4"><?php echo JText::_('List Documents')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -366,7 +307,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 				?>
 				<tr>
 					<td><?php echo $i?></td>
-					<td><img src="../uploads/sto/<?php echo $folder_sto . DS?>/images/<?php echo $image['image_file']?>" width="200" height="100"  /></td>
+					<td><?php echo  $image['image_file']?></td>
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                 <?php

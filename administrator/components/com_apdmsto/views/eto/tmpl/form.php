@@ -45,25 +45,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
     ///for add more file
     window.addEvent('domready', function(){
-        //File Input Generate
-        var mid=0;
-        var mclick=1;
-        $$(".iptfichier span").each(function(itext,id) {
-            if (mid!=0)
-                itext.style.display = "none";
-            mid++;
-        });
-        $('lnkfichier').addEvents ({
-            'click':function(){
-                if (mclick<mid) {
-                    $$(".iptfichier span")[mclick].style.display="block";
-                    //	alert($$(".iptfichier input")[mclick].style.display);
-                    mclick++;
-                }
-            }
-        });
-
-        //for image
+         //for image
         //File Input Generate
         var mid=0;
         var mclick=1;
@@ -76,24 +58,6 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             'click':function(){
                 if (mclick<mid) {
                     $$(".iptfichier_image span")[mclick].style.display="block";
-                    //	alert($$(".iptfichier input")[mclick].style.display);
-                    mclick++;
-                }
-            }
-        });
-        //for pdf
-        //File Input Generate
-        var mid=0;
-        var mclick=1;
-        $$(".iptfichier_pdf span").each(function(itext,id) {
-            if (mid!=0)
-                itext.style.display = "none";
-            mid++;
-        });
-        $('lnkfichier_pdf').addEvents ({
-            'click':function(){
-                if (mclick<mid) {
-                    $$(".iptfichier_pdf span")[mclick].style.display="block";
                     //	alert($$(".iptfichier input")[mclick].style.display);
                     mclick++;
                 }
@@ -132,6 +96,20 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             });
         });
     });
+     function getDeliveryAddress(is_delivery)
+    {
+        if(is_delivery==1)
+        {
+                document.getElementById('delivery_info').style.visibility= 'visible';
+                document.getElementById('delivery_info').style.display= 'block';
+        }
+        else
+        {
+                document.getElementById('delivery_info').style.visibility= 'hidden';
+                document.getElementById('delivery_info').style.display= 'none';
+        }
+           
+    }
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
     <div class="col width-60">
@@ -197,15 +175,122 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                     </td>
                 </tr>
                 <tr>
-                    <td class="key">
-                        <label for="name">
-                            <?php echo JText::_( 'Created Date' ); ?>
-                        </label>
+                    <td colspan="2">
+                            <div id="delivery_info" style="display: none">
+                            <fieldset>               
+                                    <legend><?php echo JText::_( 'Delivery Note' ); ?></legend>
+                                   <table class="admintable" cellspacing="1" width="100%">
+                                           <tr><td  class="key">Delivery Method</td>
+                                           <td colspan="3"><input type="text" name="sto_delivery_method" id="sto_delivery_method"  size="30" value=""/></td>
+                                           </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <label for="name" style="color:#0B55C4;font-size: 12px;font-weight: bold">
+                                                    <?php echo JText::_( 'Shipping Address' ); ?>
+                                                </label>
+                                            </td>
+                                          <td colspan="2">
+                                                <label for="name" style="color:#0B55C4;font-size: 12px;font-weight: bold">
+                                                    <?php echo JText::_( 'Invoice Address' ); ?>
+                                                </label>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_shipping_name" id="sto_delivery_shipping_name"  size="30" value=""/>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_billing_name" id="sto_delivery_billing_name"  size="30" value=""/>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Company name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_shipping_company" id="sto_delivery_shipping_company"  size="30" value=""/>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Company name' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_billing_company" id="sto_delivery_billing_company"  size="30" value=""/>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Street address' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_shipping_street" id="sto_delivery_shipping_street"  size="30" value=""/>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Street address' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_billing_street" id="sto_delivery_billing_street"  size="30" value=""/>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'City,Zip code' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_shipping_zipcode" id="sto_delivery_shipping_zipcode"  size="30" value=""/>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'City,Zip code' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_billing_zipcode" id="sto_delivery_billing_zipcode"  size="30" value=""/>
+                                            </td>
+                                             </tr>
+                                             <tr>
+                                            <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Phone number' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_shipping_phone" id="sto_delivery_shipping_phone"  size="30" value=""/>
+                                            </td>
+                                             <td class="key">
+                                                <label for="name">
+                                                    <?php echo JText::_( 'Phone number' ); ?>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="sto_delivery_billing_phone" id="sto_delivery_billing_phone"  size="30" value=""/>
+                                            </td>
+                                             </tr>
+                                           </table>
+                                    </fieldset>
+                            </div>
                     </td>
-                    <td>
-                        <?php echo JHTML::_('calendar',$this->sto_row->sto_created, 'sto_created', 'sto_created', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>
-                    </td>
-                </tr>
+                    
+                </tr>                               
                 <tr>
                     <td class="key" valign="top">
                         <label for="stocker">
@@ -246,20 +331,12 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             </table>
         </fieldset>
     </div>
-    <div class="col width-100">
+    <div class="col width-40">
         <fieldset class="adminform">
-            <legend><?php echo JText::_( 'Image, Pdf, Zip files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+            <legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
             <table class="adminlist">
-
-
                 <tr>
-                    <td class="key">
-                        <label for="ccs_create">
-                            <?php echo JText::_('IMAGE')?>
-                        </label>
-                    </td>
                     <td>
-
                         <input type="hidden" name="old_pns_image" value="<?php echo $this->row->pns_image;?>" />
                         <div class="iptfichier_image">
                                                  <span id="1">
@@ -294,128 +371,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</span>
                         </div>
                         <br />
-                        <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more Images');?>" ><?php echo JText::_('Click here to add more Images');?></a>
+                        <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php echo JText::_('Click here to add more files');?></a>
                     </td>
                 </tr>
-                <tr><td class="key">
-                        <label for="ccs_create">
-                            <?php echo JText::_('P/N PDF')?>
-                        </label>
-                    </td>
-                    <td>
-                        <!--						<input type="file" name="pns_pdf" />-->
-                        <input type="hidden" name="old_pns_pdf" value="<?php echo $this->row->pns_pdf;?>" />
-
-
-                        <div class="iptfichier_pdf">
-                                                 <span id="1">
-							<input type="file" name="pns_pdf1" />
-						</span>
-                            <span id="2">
-							<input type="file" name="pns_pdf2" />
-						</span>
-                            <span id="3">
-							<input type="file" name="pns_pdf3" />
-						</span>
-                            <span id="4">
-							<input type="file" name="pns_pdf4" />
-						</span>
-                            <span id="5">
-							<input type="file" name="pns_pdf5" />
-						</span>
-                            <span id="6">
-							<input type="file" name="pns_pdf6" />
-						</span>
-                            <span id="7">
-							<input type="file" name="pns_pdf7" />
-						</span>
-                            <span id="8">
-							<input type="file" name="pns_pdf8" />
-						</span>
-                            <span id="9">
-							<input type="file" name="pns_pdf9" />
-						</span>
-                            <span id="10">
-							<input type="file" name="pns_pdf10" />
-						</span>
-                        </div>
-                        <br />
-                        <a href="javascript:;"id="lnkfichier_pdf" title="<?php echo JText::_('Click here to add more pdf');?>" ><?php echo JText::_('Click here to add more pdf');?></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key" valign="top">
-                        <label for="ccs_create">
-                            <?php echo JText::_('P/N Zip')?>
-                        </label>
-                    </td>
-                    <td>
-                        <div class="iptfichier">
-						<span id="1">
-							<input type="file" name="pns_zip1" />
-						</span>
-                            <span id="2">
-							<input type="file" name="pns_zip2" />
-						</span>
-                            <span id="3">
-							<input type="file" name="pns_zip3" />
-						</span>
-                            <span id="4">
-							<input type="file" name="pns_zip4" />
-						</span>
-                            <span id="5">
-							<input type="file" name="pns_zip5" />
-						</span>
-                            <span id="6">
-							<input type="file" name="pns_zip6" />
-						</span>
-                            <span id="7">
-							<input type="file" name="pns_zip7" />
-						</span>
-                            <span id="8">
-							<input type="file" name="pns_zip8" />
-						</span>
-                            <span id="9">
-							<input type="file" name="pns_zip9" />
-						</span>
-                            <span id="10">
-							<input type="file" name="pns_zip10" />
-						</span>
-                            <span id="11">
-							<input type="file" name="pns_zip11" />
-						</span>
-                            <span id="12">
-							<input type="file" name="pns_zip12" />
-						</span>
-                            <span id="13">
-							<input type="file" name="pns_zip13" />
-						</span>
-                            <span id="14">
-							<input type="file" name="pns_zip14" />
-						</span>
-                            <span id="15">
-							<input type="file" name="pns_zip15" />
-						</span>
-                            <span id="16">
-							<input type="file" name="pns_zip16" />
-						</span>
-                            <span id="17">
-							<input type="file" name="pns_zip17" />
-						</span>
-                            <span id="18">
-							<input type="file" name="pns_zip18" />
-						</span>
-                            <span id="19">
-							<input type="file" name="pns_zip19" />
-						</span>
-                            <span id="20">
-							<input type="file" name="pns_zip20" />
-						</span>
-                        </div>
-                        <br />
-                        <a href="javascript:;"id="lnkfichier" title="<?php echo JText::_('Click here to add more CAD files');?>" ><?php echo JText::_('Click here to add more ZIP files');?></a>
-                    </td>
-                </tr>
+                
+                
             </table>
         </fieldset>
     </div>

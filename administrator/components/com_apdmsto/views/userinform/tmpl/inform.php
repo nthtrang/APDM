@@ -7,8 +7,8 @@ $me = & JFactory::getUser();
 $me->get('username');
 $sto_id		= JRequest::getVar( 'sto_id');
 	// clean item data
-	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
+JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
+$checkFullFill =  $this->checkFullFill;
 	
 ?>
 <script language="javascript">
@@ -63,6 +63,16 @@ function UpdateOwnerSto(sto_id){
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <div name="notice" style="color:#D30000" id ="notice"></div>
 <table class="adminlist" cellpadding="1">
+        <?php 
+        if(!$checkFullFill){
+             ?>
+        <tr>
+                <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('Please input all PN QTY before confirm done')?></strong></td>
+        </tr>
+        <?php
+        }
+        else{
+        ?>
         <tr>
                 <td colspan="2"><strong><?php echo JText::_('Please confirm your Username / password')?></strong></td>
         </tr>
@@ -92,7 +102,7 @@ function UpdateOwnerSto(sto_id){
                         
                         </td>	
 		</tr>	      
-				
+		<?php		}?>
 	</table>
 
 	<div class="clr"></div>	

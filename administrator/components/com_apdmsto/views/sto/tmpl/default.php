@@ -115,9 +115,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php
                                                                 $style="";
                                                                 $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
+                                                                $linkedit = "index.php?option=com_apdmsto&task=editito&id=".$sto->pns_sto_id."&sto_type=".$sto->sto_type;
                                                                 if($sto->sto_type==2){
                                                                         $style="color: #f00";
                                                                         $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
+                                                                        $linkedit = "index.php?option=com_apdmsto&task=editeto&id=".$sto->pns_sto_id."&sto_type=".$sto->sto_type;
                                                                 }elseif($sto->sto_type==3){
                                                                         $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
                                                                 }
@@ -142,7 +144,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
                                                         
                                                         ?>
-                                                        <a style="<?php echo $style?>"  href="index.php?option=com_apdmsto&task=editito&id=<?php echo $sto->pns_sto_id; ?>&sto_type=<?php echo $sto->sto_type; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <a style="<?php echo $style?>"  href="<?php echo $linkedit; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>                                                        

@@ -546,8 +546,11 @@ class SToController extends JController
                 
                 $sto_state="Create";
                 if($post['sto_isdelivery_good'])
-                    $sto_state = "InTransit";
-        
+                {
+                    $sto_state = "InTransit";                    
+                    $db->setQuery("update apdm_pns_sto_delivery set delivery_method='".$post['sto_delivery_method']."',delivery_shipping_name ='".$post['sto_delivery_shipping_name']."', delivery_shipping_company = '".$post['sto_delivery_shipping_company']."',delivery_shipping_street='" . $post['sto_delivery_shipping_street'] . "' ,delivery_shipping_zipcode='" . $post['sto_delivery_shipping_zipcode'] . "',delivery_shipping_phone='".$post['sto_delivery_shipping_phone']."',delivery_billing_name='".$post['sto_delivery_billing_name']."',delivery_billing_company='".$post['sto_delivery_billing_company']."',delivery_billing_street='".$post['sto_delivery_billing_street']."',delivery_billing_zipcode='".$post['sto_delivery_billing_zipcode']."',delivery_billing_phone='".$post['sto_delivery_billing_phone']."'  WHERE  sto_id = '".$post['pns_sto_id']."'");                    
+                    $db->query();
+                }        
                 $db->setQuery("update apdm_pns_sto set sto_isdelivery_good='".$post['sto_isdelivery_good']."',sto_wo_id ='".$post['sto_wo_id']."', sto_state = '".$sto_state."',sto_description='" . $post['sto_description'] . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
                 $db->query();
                 //upload file
@@ -1166,6 +1169,11 @@ class SToController extends JController
         $eto_id = $db->insertid();
         if($eto_id)
         {
+             if($post['sto_isdelivery_good']==1)
+             {
+                      $db->setQuery("INSERT INTO apdm_pns_sto_delivery (sto_id,delivery_method,delivery_shipping_name,delivery_shipping_company,delivery_shipping_street,delivery_shipping_zipcode,delivery_shipping_phone,delivery_billing_name,delivery_billing_company,delivery_billing_street,delivery_billing_zipcode,delivery_billing_phone) VALUES ('" . $eto_id . "', '" . $post['sto_delivery_method'] . "', '" . $post['sto_delivery_shipping_name'] . "', '" . $post['sto_delivery_shipping_company'] . "', '" . $post['sto_delivery_shipping_street'] . "','".$post['sto_delivery_shipping_zipcode']."','".$post['sto_delivery_shipping_phone']."','".$post['sto_delivery_billing_name']."','".$post['sto_delivery_billing_company']."','".$post['sto_delivery_billing_street']."','".$post['sto_delivery_billing_zipcode']."','".$post['sto_delivery_billing_phone']."')");
+                      $db->query();
+             }
 
             $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' . DS . $post['sto_code'];
             $path_so_zips = $path_upload  .DS .'zips'. DS;
@@ -1295,6 +1303,13 @@ class SToController extends JController
     function printetopdf()
     {
         JRequest::setVar('layout', 'view_detail_print');
+        JRequest::setVar('view', 'eto');
+        parent::display();
+    }
+    
+    function printetoDelivery()
+    {
+        JRequest::setVar('layout', 'view_delivery_print');
         JRequest::setVar('view', 'eto');
         parent::display();
     }
@@ -1631,5 +1646,9 @@ class SToController extends JController
         $result = $row->pns_po_id.'^'.$row->po_code;
         echo $result;
         exit;
+    }
+    function checkQtyFullField()
+    {
+            
     }
 }
