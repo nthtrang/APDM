@@ -94,10 +94,24 @@ window.addEvent('domready', function(){
                         }
                 }
         });	   
-});        
+});
+    function getDeliveryAddress(is_delivery)
+    {
+        if(is_delivery==1)
+        {
+            document.getElementById('delivery_info').style.visibility= 'visible';
+            document.getElementById('delivery_info').style.display= 'block';
+        }
+        else
+        {
+            document.getElementById('delivery_info').style.visibility= 'hidden';
+            document.getElementById('delivery_info').style.display= 'none';
+        }
+
+    }
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
-    <div class="col width-60">
+    <div class="col width-40">
         <fieldset class="adminform">
             <legend><?php echo JText::_( 'ETO Detail' ); ?></legend>
             <table class="admintable" cellspacing="1">
@@ -312,42 +326,42 @@ window.addEvent('domready', function(){
                 </tr>
 
 
-                <tr>
-                    <td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>
+<!--                <tr>
+                    <td  class="key" width="28%"><?php /*echo JText::_('Confirm'); */?></td>
                     <td width="30%" class="title">
                         <?php
-                        if(!$this->sto_row->sto_owner_confirm){
+/*                        if(!$this->sto_row->sto_owner_confirm){
 
-                            ?>
+                            */?>
 
 
-                            <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
+                            <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php /*echo $this->sto_row->pns_sto_id*/?>&tmpl=component" title="Image">
                                 <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
-                        <?php }
+                        <?php /*}
                         else
                         {
-                            ?>
+                            */?>
                             <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
                             <?php
-                        }
-                        ?>
+/*                        }
+                        */?>
                     </td>
                 </tr>
 
                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'Owner' ); ?>
+                            <?php /*echo JText::_( 'Owner' ); */?>
                         </label>
                     </td>
                     <td  width="16%">
-                        <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?>
+                        <?php /*echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; */?>
                     </td>
-                </tr>
+                </tr>-->
             </table>
 		</fieldset>
 	</div>
- <div class="col width-40">
+ <div class="col width-60">
                 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
                 <table class="adminlist">                        
@@ -439,7 +453,7 @@ window.addEvent('domready', function(){
 						</span>                                                           
                                                 </div>
                                                 <br />
-                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php echo JText::_('Click here to add more files');?></a>
+                                              <!--  <a href="javascript:;"id="lnkfichier_image" title="<?php /*echo JText::_('Click here to add more files');*/?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>-->
 					</td>
                                         </tr> 
                                           </table>

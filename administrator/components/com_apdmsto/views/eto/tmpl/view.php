@@ -466,7 +466,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 					
 					<td colspan="4" align="center">
 					<a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=images&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                        <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                       <!-- <input type="button" name="addVendor" value="<?php /*echo JText::_('Download All Files')*/?>"/>-->
                                         </a>&nbsp;&nbsp;
 
 <!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
@@ -602,7 +602,7 @@ Save Shipping Part
 </a>
 </td>
 <td class="button" id="toolbar-popup-Popup">
-<a class="modal" href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=24" rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+<a class="modal" href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>" rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Part">
 </span>
 Add Part

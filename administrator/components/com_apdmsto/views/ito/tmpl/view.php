@@ -325,7 +325,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 					
 					<td colspan="4" align="center">
 					<a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=images&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                        <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
+                                        <!--<input type="button" name="addVendor" value="<?php /*echo JText::_('Download All Files')*/?>"/>-->
                                         </a>&nbsp;&nbsp;
 
 <!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->

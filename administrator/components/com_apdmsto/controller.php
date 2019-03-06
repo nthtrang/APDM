@@ -464,20 +464,19 @@ class SToController extends JController
                 
                 for ($i = 1; $i <= 20; $i++) {                        
                         if ($_FILES['pns_image' . $i]['size'] > 0) {
-                                $imge = new upload($_FILES['pns_image' . $i]);
-                                $imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;    
-                                if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
-
-                                        @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
+                            if($_FILES['pns_image' . $i]['size']<20000000)
+                            {
+                                if (!move_uploaded_file($_FILES['pns_image' . $i]['tmp_name'], $path_so_images . $_FILES['pns_image' . $i]['name'])) {
+                                    $arr_error_upload_image[] = $_FILES['pns_image' . $i]['name'];
+                                } else {
+                                    $arr_image_upload[] = $_FILES['pns_image' . $i]['name'];
                                 }
-                                if ($imge->uploaded) {
-                                        $imge->Process($path_so_images);
-                                        if ($imge->processed) {
-                                                $arr_image_upload[] = $imge->file_dst_name;
-                                        } else {
-                                                $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
-                                        }
-                                }
+                            }
+                            else
+                            {
+                                $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=editito&id='.$ito_id, $msg);
+                            }
                         }
                 }
                                 
