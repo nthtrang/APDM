@@ -85,8 +85,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->stos_list); ?>);" />
                                         </th>                                        
                                         <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>
+                                        <th width="100"><?php echo JText::_('State'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Created By'); ?></th>
@@ -126,12 +126,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
-                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
-                                                <td>
-                                                <?php if ($sto->sto_file) { ?>
-                                                                <a style="<?php echo $style?>"  href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
-                                                        <?php } ?>
-                                                </td>                                                
+                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                                                             
+                                                <td style="<?php echo $style?>" >
+                                                    <?php echo $sto->sto_state; ?>
+                                                </td>
                                                 <td style="<?php echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>

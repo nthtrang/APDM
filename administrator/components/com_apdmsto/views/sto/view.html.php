@@ -49,7 +49,8 @@ class SToViewsto extends JView
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
             $where[] = 'p.sto_code LIKE '.$searchEscaped.' or p.sto_description LIKE '.$searchEscaped.'';        
            
-        }  
+        }
+        $where[] = 'p.sto_type =1 or p.sto_type = 2 and p.sto_state = "InTransit"';
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $orderby = ' ORDER BY p.pns_sto_id desc';        
