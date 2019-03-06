@@ -9,10 +9,13 @@
         $sto_id = JRequest::getVar('id');
 	$role = JAdministrator::RoleOnComponent(8);	
 	JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-    $folder_sto = $this->sto_row->sto_code;
+        $folder_sto = $this->sto_row->sto_code;
 	if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
                 JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
 	}
+        if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
+                JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
+        }        
         //for PPN part
        /* if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
             $allow_edit = 1;

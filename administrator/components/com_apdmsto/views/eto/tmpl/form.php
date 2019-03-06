@@ -371,7 +371,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</span>
                         </div>
                         <br />
-                       <!-- <a href="javascript:;"id="lnkfichier_image" title="<?php /*echo JText::_('Click here to add more files');*/?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>-->
+                        <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>
                     </td>
                 </tr>
                 

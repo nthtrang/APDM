@@ -23,6 +23,21 @@ $pns_code_full = $row->pns_code_full;
 <script language="javascript">
     window.print();
 </script>
+
+<style type="text/css">
+    .tgi  {border-collapse:collapse;border-spacing:0;align-content: center}
+    .tgi td{border-width:1px !important;font-family:Arial, Helvetica, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;text-align:center}
+    .tgi th{border-width:1px !important;font-family:Arial, Helvetica, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;text-align:center}
+    .tgi .tg-88nc{font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4}
+    .tgi .tg-kiyi{font-weight:bold;font-size: 11px;border-color:inherit;text-align:left}
+    .tgi .tg-c3ow{text-align:center;vertical-align:top}
+    .tgi .tg-c3ow-des{border-color:inherit;border-style:solid;border-width:1px;text-align:center;vertical-align:top}
+    .tgi .tg-xldj-pr{text-align:right}
+    .tgi .tg-0pky-pr{text-align:left;vertical-align:top}
+    .tgi .tg-0pky-border{border-width:1px;border-style:solid}
+    .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 16px;color: #0B55C4}
+    .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 16px;color: #0B55C4}
+</style>
 <table width="100%" cellpadding="1">
     <tr>
         <th class="tg-kiyi"  style="text-align:left">
@@ -38,17 +53,13 @@ $list_pns_id = PNsController::DisplayPnsChildId($this->lists['pns_id'], $this->l
 $new_pns = explode(",", $list_pns_id);
 $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 ?>
-<div> Level 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->lists['pns_id']?>&cd=<?php echo $this->lists['pns_id']?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong></a></a>
-        <table width="100%" class="adminlist" cellpadding="1">
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->lists['pns_id']?>&cd=<?php echo $this->lists['pns_id']?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong></a></a>
+        <table class="tgi" width="100%">
 	<thead>
 		<tr>
                          <th width="8%">				
-                             #
-                        </th>                        
-                        <th width="8%">
-				
-                                <input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.bom)"/>
-                        </th>
+                             No
+                        </th>                                             
                         <th width="8%">
 				<?php echo JText::_('Level')?>
 			</th>                        
@@ -97,23 +108,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 $manufacture = PNsController::GetManufacture($row->pns_id);
                 ?>
         <tr>
-                <td><?php echo $step;?></td>
-                <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row->pns_id."_".$step;?>');" value="<?php echo $row->pns_id."_".$step."_".$this->lists['pns_id'];?>" name="cid[]"  /></td>                
+                <td><?php echo $step;?></td>                
                  <td>1</td>
-		<td width="45%"><?php echo '<p style="height:25px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row->text.'</a></p> '; ?></td>		
-                <td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
+		<td width="45%"><?php echo $row->text; ?></td>		
+                <td><?php echo limit_text($row->pns_description, 15);?></td>
                 <td>
-                        <span style="display:block" id="text_find_number_<?php echo $row->pns_id."_".$step;?>"><?php echo $row->find_number;?></span>
-                        <input style="display:none" type="text" value="<?php echo $row->find_number;?>" id="find_number_<?php echo $row->pns_id."_".$step;?>"  name="find_number_<?php echo $row->pns_id."_".$step;?>" />
+                        <?php echo $row->find_number;?>                        
                 </td>
                 <td>
-                        <span style="display:block" id="text_ref_des_<?php echo $row->pns_id."_".$step;?>"><?php echo $row->ref_des;?></span>
-                        <input style="display:none" type="text" value="<?php echo $row->ref_des;?>" id="ref_des_<?php echo $row->pns_id."_".$step;?>"  name="ref_des_<?php echo $row->pns_id."_".$step;?>" />
-                        <span style="display:none" id="note_ref_des_<?php echo $row->pns_id."_".$step;?>">Each ref des split by ","</span>
+                        <?php echo $row->ref_des;?>                       
                 </td>
                 <td>
-                        <span style="display:block" id="text_stock_<?php echo $row->pns_id."_".$step;?>"><?php echo $row->stock;?></span>
-                        <input style="display:none" type="text" value="<?php echo $row->stock;?>" id="stock_<?php echo $row->pns_id."_".$step;?>"  name="stock_<?php echo $row->pns_id."_".$step;?>" />
+                       <?php echo $row->stock;?>                        
                 </td>
                 <td><?php echo $row->pns_uom;?></td>
                 <td><?php echo $manufacture[0]['mf'];?></td>
@@ -140,23 +146,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                         $manufacture = PNsController::GetManufacture($row2->pns_id);
                        ?>
                            <tr>
-                                   <td><?php echo $step;;?></td>
-                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row2->pns_id."_".$step;?>');" value="<?php echo $row2->pns_id."_".$step."_".$row->pns_id;?>" name="cid[]"  /></td>                                 
+                                   <td><?php echo $step;?></td>                                   
                                    <td>2</td>
-                                <td width="45%"><?php echo '<p style="margin-left:40px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row2->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row2->text.'</a></p> '; ?></td>                                
-                                <td><span class="editlinktip hasTip" title="<?php echo $row2->pns_description; ?>" ><?php echo limit_text($row2->pns_description, 15);?></span></td>
+                                <td width="45%"><?php echo $row2->text; ?></td>                                
+                                <td><?php echo limit_text($row2->pns_description, 15);?></td>
                                 <td>
-                                        <span style="display:block" id="text_find_number_<?php echo $row2->pns_id."_".$step;?>"><?php echo $row2->find_number;?></span>
-                                        <input style="display:none" type="text" value="<?php echo $row2->find_number;?>" id="find_number_<?php echo $row2->pns_id."_".$step;?>"  name="find_number_<?php echo $row2->pns_id."_".$step;?>" />
+                                        <?php echo $row2->find_number;?>                        
                                 </td>
                                 <td>
-                                        <span style="display:block" id="text_ref_des_<?php echo $row2->pns_id."_".$step;?>"><?php echo $row2->ref_des;?></span>
-                                        <input style="display:none" type="text" value="<?php echo $row2->ref_des;?>" id="ref_des_<?php echo $row2->pns_id."_".$step;?>"  name="ref_des_<?php echo $row2->pns_id."_".$step;?>" />
-                                        <span style="display:none" id="note_ref_des_<?php echo $row2->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                        <?php echo $row2->ref_des;?>                       
                                 </td>
                                 <td>
-                                        <span style="display:block" id="text_stock_<?php echo $row2->pns_id."_".$step;?>"><?php echo $row2->stock;?></span>
-                                        <input style="display:none" type="text" value="<?php echo $row2->stock;?>" id="stock_<?php echo $row2->pns_id."_".$step;?>"  name="stock_<?php echo $row2->pns_id."_".$step;?>" />
+                                       <?php echo $row2->stock;?>                        
                                 </td>
                                 <td><?php echo $row2->pns_uom;?></td>
                                 <td><?php echo $manufacture[0]['mf'];?></td>
@@ -185,23 +186,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                         $manufacture = PNsController::GetManufacture($row3->pns_id);
                                        ?>
                                            <tr>
-                                                   <td><?php echo $step;?></td>
-                                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row3->pns_id."_".$step;?>');" value="<?php echo $row3->pns_id."_".$step."_".$row2->pns_id;?>" name="cid[]"  /></td>
+                                                   <td><?php echo $step;?></td>                                                   
                                                     <td>3</td>
-                                                <td width="45%"><?php echo '<p style="margin-left:80px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row3->text.'</a></p> '; ?></td>                                               
-                                                <td><span class="editlinktip hasTip" title="<?php echo $row3->pns_description; ?>" ><?php echo limit_text($row3->pns_description, 15);?></span></td>
+                                                <td width="45%"><?php echo $row3->text; ?></td>                                
+                                                <td><?php echo limit_text($row3->pns_description, 15);?></td>
                                                 <td>
-                                                        <span style="display:block" id="text_find_number_<?php echo $row3->pns_id."_".$step;?>"><?php echo $row3->find_number;?></span>
-                                                        <input style="display:none" type="text" value="<?php echo $row3->find_number;?>" id="find_number_<?php echo $row3->pns_id."_".$step;?>"  name="find_number_<?php echo $row3->pns_id."_".$step;?>" />
+                                                        <?php echo $row3->find_number;?>                        
                                                 </td>
                                                 <td>
-                                                        <span style="display:block" id="text_ref_des_<?php echo $row3->pns_id."_".$step;?>"><?php echo $row3->ref_des;?></span>
-                                                        <input style="display:none" type="text" value="<?php echo $row3->ref_des;?>" id="ref_des_<?php echo $row3->pns_id."_".$step;?>"  name="ref_des_<?php echo $row3->pns_id."_".$step;?>" />
-                                                        <span style="display:none" id="note_ref_des_<?php echo $row3->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                                        <?php echo $row3->ref_des;?>                       
                                                 </td>
                                                 <td>
-                                                        <span style="display:block" id="text_stock_<?php echo $row3->pns_id."_".$step;?>"><?php echo $row3->stock;?></span>
-                                                        <input style="display:none" type="text" value="<?php echo $row3->stock;?>" id="stock_<?php echo $row3->pns_id."_".$step;?>"  name="stock_<?php echo $row3->pns_id."_".$step;?>" />
+                                                       <?php echo $row3->stock;?>                        
                                                 </td>
                                                 <td><?php echo $row3->pns_uom;?></td>
                                                 <td><?php echo $manufacture[0]['mf'];?></td>
@@ -228,24 +224,19 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 $manufacture = PNsController::GetManufacture($row4->pns_id);
                                                        ?>
                                                            <tr>
-                                                                   <td><?php echo $step;?></td>
-                                                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row4->pns_id."_".$step;?>');" value="<?php echo $row4->pns_id."_".$step."_".$row3->pns_id;?>" name="cid[]"  /></td>
+                                                                   <td><?php echo $step;?></td>                                                                  
                                                                    <td>4</td>
-                                                                <td width="45%"><?php echo '<p style="margin-left:120px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row4->text.'</a></p> '; ?></td>
-                                                                <td><span class="editlinktip hasTip" title="<?php echo $row4->pns_description; ?>" ><?php echo limit_text($row4->pns_description, 15);?></span></td>
-                                                                <td>
-                                                                        <span style="display:block" id="text_find_number_<?php echo $row4->pns_id."_".$step;?>"><?php echo $row4->find_number;?></span>
-                                                                        <input style="display:none" type="text" value="<?php echo $row4->find_number;?>" id="find_number_<?php echo $row4->pns_id."_".$step;?>"  name="find_number_<?php echo $row4->pns_id."_".$step;?>" />
-                                                                </td>
-                                                                <td>
-                                                                        <span style="display:block" id="text_ref_des_<?php echo $row4->pns_id."_".$step;?>"><?php echo $row4->ref_des;?></span>
-                                                                        <input style="display:none" type="text" value="<?php echo $row4->ref_des;?>" id="ref_des_<?php echo $row4->pns_id."_".$step;?>"  name="ref_des_<?php echo $row4->pns_id."_".$step;?>" />
-                                                                        <span style="display:none" id="note_ref_des_<?php echo $row4->pns_id."_".$step;?>">Each ref des split by ","</span>
-                                                                </td>
-                                                                <td>
-                                                                        <span style="display:block" id="text_stock_<?php echo $row4->pns_id."_".$step;?>"><?php echo $row4->stock;?></span>
-                                                                        <input style="display:none" type="text" value="<?php echo $row4->stock;?>" id="stock_<?php echo $row4->pns_id."_".$step;?>"  name="stock_<?php echo $row4->pns_id."_".$step;?>" />
-                                                                </td>
+                                                                        <td width="45%"><?php echo $row4->text; ?></td>                                
+                                                                        <td><?php echo limit_text($row4->pns_description, 15);?></td>
+                                                                        <td>
+                                                                                <?php echo $row4->find_number;?>                        
+                                                                        </td>
+                                                                        <td>
+                                                                                <?php echo $row4->ref_des;?>                       
+                                                                        </td>
+                                                                        <td>
+                                                                               <?php echo $row4->stock;?>                        
+                                                                        </td>
                                                                 <td><?php echo $row4->pns_uom;?></td>
                                                                 <td><?php echo $manufacture[0]['mf'];?></td>
                                                                 <td><?php echo $manufacture[0]['v_mf'];?></td>
@@ -271,23 +262,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         $manufacture = PNsController::GetManufacture($row5->pns_id);
                                                                                ?>
                                                                                    <tr>
-                                                                                           <td><?php echo $step;?></td>
-                                                                                           <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row5->pns_id."_".$step;?>');" value="<?php echo $row5->pns_id."_".$step."_".$row4->pns_id;?>" name="cid[]"  /></td>
+                                                                                           <td><?php echo $step;?></td>                                                                                           
                                                                                            <td>5</td>
-                                                                                        <td width="45%"><?php echo '<p style="margin-left:140px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row5->text.'</a></p> '; ?></td>
-                                                                                        <td><span class="editlinktip hasTip" title="<?php echo $row5->pns_description; ?>" ><?php echo limit_text($row5->pns_description, 15);?></span></td>
+                                                                                        <td width="45%"><?php echo $row5->text; ?></td>                                
+                                                                                        <td><?php echo limit_text($row5->pns_description, 15);?></td>
                                                                                         <td>
-                                                                                                <span style="display:block" id="text_find_number_<?php echo $row5->pns_id."_".$step;?>"><?php echo $row5->find_number;?></span>
-                                                                                                <input style="display:none" type="text" value="<?php echo $row5->find_number;?>" id="find_number_<?php echo $row5->pns_id."_".$step;?>"  name="find_number_<?php echo $row5->pns_id."_".$step;?>" />
+                                                                                                <?php echo $row5->find_number;?>                        
                                                                                         </td>
                                                                                         <td>
-                                                                                                <span style="display:block" id="text_ref_des_<?php echo $row5->pns_id."_".$step;?>"><?php echo $row5->ref_des;?></span>
-                                                                                                <input style="display:none" type="text" value="<?php echo $row5->ref_des;?>" id="ref_des_<?php echo $row5->pns_id."_".$step;?>"  name="ref_des_<?php echo $row5->pns_id."_".$step;?>" />
-                                                                                                <span style="display:none" id="note_ref_des_<?php echo $row5->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                                                                                <?php echo $row5->ref_des;?>                       
                                                                                         </td>
                                                                                         <td>
-                                                                                                <span style="display:block" id="text_stock_<?php echo $row5->pns_id."_".$step;?>"><?php echo $row5->stock;?></span>
-                                                                                                <input style="display:none" type="text" value="<?php echo $row5->stock;?>" id="stock_<?php echo $row5->pns_id."_".$step;?>"  name="stock_<?php echo $row5->pns_id."_".$step;?>" />
+                                                                                               <?php echo $row5->stock;?>                        
                                                                                         </td>
                                                                                         <td><?php echo $row5->pns_uom;?></td>
                                                                                         <td><?php echo $manufacture[0]['mf'];?></td>
@@ -315,23 +301,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 $manufacture = PNsController::GetManufacture($row6->pns_id);
                                                                                                        ?>
                                                                                                            <tr>
-                                                                                                                   <td><?php echo $step;?></td>
-                                                                                                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row6->pns_id."_".$step;?>');" value="<?php echo $row6->pns_id."_".$step."_".$row5->pns_id;?>" name="cid[]"  /></td>
+                                                                                                                   <td><?php echo $step;?></td>                                                                                                                   
                                                                                                                    <td>6</td>
-                                                                                                                <td width="45%"><?php echo '<p style="margin-left:180px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row6->text.'</a></p> '; ?></td>
-                                                                                                                <td><span class="editlinktip hasTip" title="<?php echo $row6->pns_description; ?>" ><?php echo limit_text($row6->pns_description, 15);?></span></td>
+                                                                                                                <td width="45%"><?php echo $row6->text; ?></td>                                
+                                                                                                                <td><?php echo limit_text($row6->pns_description, 15);?></td>
                                                                                                                 <td>
-                                                                                                                        <span style="display:block" id="text_find_number_<?php echo $row6->pns_id."_".$step;?>"><?php echo $row6->find_number;?></span>
-                                                                                                                        <input style="display:none" type="text" value="<?php echo $row6->find_number;?>" id="find_number_<?php echo $row6->pns_id."_".$step;?>"  name="find_number_<?php echo $row6->pns_id."_".$step;?>" />
+                                                                                                                        <?php echo $row6->find_number;?>                        
                                                                                                                 </td>
                                                                                                                 <td>
-                                                                                                                        <span style="display:block" id="text_ref_des_<?php echo $row6->pns_id."_".$step;?>"><?php echo $row6->ref_des;?></span>
-                                                                                                                        <input style="display:none" type="text" value="<?php echo $row6->ref_des;?>" id="ref_des_<?php echo $row6->pns_id."_".$step;?>"  name="ref_des_<?php echo $row6->pns_id."_".$step;?>" />
-                                                                                                                        <span style="display:none" id="note_ref_des_<?php echo $row6->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                                                                                                        <?php echo $row6->ref_des;?>                       
                                                                                                                 </td>
                                                                                                                 <td>
-                                                                                                                        <span style="display:block" id="text_stock_<?php echo $row6->pns_id."_".$step;?>"><?php echo $row6->stock;?></span>
-                                                                                                                        <input style="display:none" type="text" value="<?php echo $row6->stock;?>" id="stock_<?php echo $row6->pns_id."_".$step;?>"  name="stock_<?php echo $row6->pns_id."_".$step;?>" />
+                                                                                                                       <?php echo $row6->stock;?>                        
                                                                                                                 </td>
                                                                                                                 <td><?php echo $row6->pns_uom;?></td>
                                                                                                                 <td><?php echo $manufacture[0]['mf'];?></td>
@@ -359,23 +340,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                         $manufacture = PNsController::GetManufacture($row7->pns_id);
                                                                                                                                ?>
                                                                                                                                    <tr>
-                                                                                                                                           <td><?php echo $step;?></td>
-                                                                                                                                           <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row7->pns_id."_".$step;?>');" value="<?php echo $row7->pns_id."_".$step."_".$row6->pns_id;?>" name="cid[]"  /></td>
+                                                                                                                                           <td><?php echo $step;?></td>                                                                                                                                           
                                                                                                                                            <td>7</td>
-                                                                                                                                        <td width="45%"><?php echo '<p style="margin-left:220px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row7->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row7->text.'</a></p> '; ?></td>
-                                                                                                                                        <td><span class="editlinktip hasTip" title="<?php echo $row7->pns_description; ?>" ><?php echo limit_text($row7->pns_description, 15);?></span></td>
+                                                                                                                                        <td width="45%"><?php echo $row7->text; ?></td>                                
+                                                                                                                                        <td><?php echo limit_text($row7->pns_description, 15);?></td>
                                                                                                                                         <td>
-                                                                                                                                                <span style="display:block" id="text_find_number_<?php echo $row7->pns_id."_".$step;?>"><?php echo $row7->find_number;?></span>
-                                                                                                                                                <input style="display:none" type="text" value="<?php echo $row7->find_number;?>" id="find_number_<?php echo $row7->pns_id."_".$step;?>"  name="find_number_<?php echo $row7->pns_id."_".$step;?>" />
+                                                                                                                                                <?php echo $row7->find_number;?>                        
                                                                                                                                         </td>
                                                                                                                                         <td>
-                                                                                                                                                <span style="display:block" id="text_ref_des_<?php echo $row7->pns_id."_".$step;?>"><?php echo $row7->ref_des;?></span>
-                                                                                                                                                <input style="display:none" type="text" value="<?php echo $row7->ref_des;?>" id="ref_des_<?php echo $row7->pns_id."_".$step;?>"  name="ref_des_<?php echo $row7->pns_id."_".$step;?>" />
-                                                                                                                                                <span style="display:none" id="note_ref_des_<?php echo $row7->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                                                                                                                                <?php echo $row7->ref_des;?>                       
                                                                                                                                         </td>
                                                                                                                                         <td>
-                                                                                                                                                <span style="display:block" id="text_stock_<?php echo $row7->pns_id."_".$step;?>"><?php echo $row7->stock;?></span>
-                                                                                                                                                <input style="display:none" type="text" value="<?php echo $row7->stock;?>" id="stock_<?php echo $row7->pns_id."_".$step;?>"  name="stock_<?php echo $row7->pns_id."_".$step;?>" />
+                                                                                                                                               <?php echo $row7->stock;?>                        
                                                                                                                                         </td>
                                                                                                                                         <td><?php echo $row7->pns_uom;?></td>
                                                                                                                                          <td><?php echo $manufacture[0]['mf'];?></td>
@@ -403,23 +379,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 $manufacture = PNsController::GetManufacture($row8->pns_id);
                                                                                                                                                        ?>
                                                                                                                                                            <tr>
-                                                                                                                                                                   <td><?php echo $step;?></td>
-                                                                                                                                                                   <td><input  type="checkbox" id = "bom" onclick="isCheckedBom(this.checked,'<?php echo $row8->pns_id."_".$step;?>');" value="<?php echo $row8->pns_id."_".$step."_".$row7->pns_id;?>" name="cid[]"  /></td>
+                                                                                                                                                                   <td><?php echo $step;?></td>                                                                                                                                                                   
                                                                                                                                                                    <td>8</td>
-                                                                                                                                                                <td width="45%"><?php echo '<p style="margin-left:240px"> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row8->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'.$row8->text.'</a></p> '; ?></td>
-                                                                                                                                                                <td><span class="editlinktip hasTip" title="<?php echo $row8->pns_description; ?>" ><?php echo limit_text($row8->pns_description, 15);?></span></td>
+                                                                                                                                                                 <td width="45%"><?php echo $row8->text; ?></td>                                
+                                                                                                                                                                <td><?php echo limit_text($row8->pns_description, 15);?></td>
                                                                                                                                                                 <td>
-                                                                                                                                                                        <span style="display:block" id="text_find_number_<?php echo $row8->pns_id."_".$step;?>"><?php echo $row8->find_number;?></span>
-                                                                                                                                                                        <input style="display:none" type="text" value="<?php echo $row8->find_number;?>" id="find_number_<?php echo $row8->pns_id;?>"  name="find_number_<?php echo $row8->pns_id."_".$step;?>" />
+                                                                                                                                                                        <?php echo $row8->find_number;?>                        
                                                                                                                                                                 </td>
                                                                                                                                                                 <td>
-                                                                                                                                                                        <span style="display:block" id="text_ref_des_<?php echo $row8->pns_id."_".$step;?>"><?php echo $row8->ref_des;?></span>
-                                                                                                                                                                        <input style="display:none" type="text" value="<?php echo $row8->ref_des;?>" id="ref_des_<?php echo $row8->pns_id;?>"  name="ref_des_<?php echo $row8->pns_id."_".$step;?>" />
-                                                                                                                                                                        <span style="display:none" id="note_ref_des_<?php echo $row8->pns_id."_".$step;?>">Each ref des split by ","</span>
+                                                                                                                                                                        <?php echo $row8->ref_des;?>                       
                                                                                                                                                                 </td>
                                                                                                                                                                 <td>
-                                                                                                                                                                        <span style="display:block" id="text_stock_<?php echo $row8->pns_id."_".$step;?>"><?php echo $row8->stock;?></span>
-                                                                                                                                                                        <input style="display:none" type="text" value="<?php echo $row8->stock;?>" id="stock_<?php echo $row8->pns_id."_".$step;?>"  name="stock_<?php echo $row8->pns_id."_".$step;?>" />
+                                                                                                                                                                       <?php echo $row8->stock;?>                        
                                                                                                                                                                 </td>
                                                                                                                                                                 <td><?php echo $row8->pns_uom;?></td>
                                                                                                                                                                 <td><?php echo $manufacture[0]['mf'];?></td>

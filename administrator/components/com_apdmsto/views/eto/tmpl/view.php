@@ -14,6 +14,9 @@ JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small
 if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
     JToolBarHelper::customX("editeto",'edit',"Edit","Edit",false);
 }
+if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
+        JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
+}
 //for PPN part
 //        if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
 //            $allow_edit = 1;
@@ -234,25 +237,25 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 <td class="key" width="28%"><?php echo JText::_('ETO'); ?></td>
                 <td width="30%" class="title"><?php echo $this->sto_row->sto_code; ?></td>
                 <td class="key" width="18%"><?php echo JText::_('WO#'); ?></td>
-                <td width="30%" class="title"><?php echo $this->sto_row->wo_code;?></td>
+                <td width="30%" class="title"><?php echo ($this->sto_row->wo_code)?$this->sto_row->wo_code:"NA";?></td>
 
             </tr>
             <tr>
                 <td  class="key" width="28%"><?php echo JText::_('PO#'); ?></td>
-                <td width="30%" class="title"><?php
+                <td width="30%" class="title"><?php                    
                     $soNumber = $this->sto_row->so_cuscode;
                     if($this->sto_row->ccs_code)
                     {
                         $soNumber = $this->sto_row->ccs_code."-".$soNumber;
                     }
-                    echo $soNumber;
+                    echo ($soNumber)?$soNumber:"NA";
                     ?></td>
                 <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
                 <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
             </tr>
             <tr>
                 <td  class="key" width="28%"><?php echo JText::_('Customer#'); ?></td>
-                <td width="30%" class="title"><?php  echo $this->sto_row->ccs_name; ?></td>
+                <td width="30%" class="title"><?php  echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA"; ?></td>
                 <td  class="key" width="28%"><?php //echo JText::_('State'); ?></td>
                 <td width="30%" class="title"><?php //echo $this->sto_row->sto_state;?></td>
             </tr>

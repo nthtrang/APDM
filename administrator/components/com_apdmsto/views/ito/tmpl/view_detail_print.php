@@ -143,48 +143,20 @@
                         <td  style="border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
                         <td  style="border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
                         <td  style="border-left:1px;border-width:1px;border-style:solid" colspan="4">
-                            <table class="adminlist" cellspacing="0" width="200">
+                            <table class="adminlist" style="color:#000" cellspacing="0" width="200">
                                 <?php
                                 foreach ($this->sto_pn_list2 as $rw) {
                                     if($rw->pns_id==$row->pns_id)
                                     {
                                         ?>
                                         <tr><td align="center" width="74px">
-                                                <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
-                                                <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />
+                                               <?php echo $rw->qty;?>                                                
                                             </td>
                                              <td align="center" width="77px">
-                                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?></span>
-                                                       <?php 
-                                                        if($rw->sto_type==1)
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-                                                         }
-                                                         else{
-															 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
-															 <?php 
-                                                                 $locationArr = SToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-																?>
-																</span> 
-																<?php 
-                                                         }
-                                                        ?>
+                                                      <?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?>                                                     
                                                 </td>	
                                                 <td align="center" width="77px">
-                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
-                                                         <?php       
-                                                         if($rw->sto_type==1)
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
-                                                         }
-                                                         else{                                                                 
-                                                                 $partStateArr = SToController::getPartStatePn($rw->partstate,$row->pns_id);
-                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
-                                                                 
-                                                         }
-                                                        
-                                                        ?>
+                                                       <?php echo $rw->partstate?strtoupper($rw->partstate):"";?>                                                         
                                                 </td>
                                         </tr>
                                         <?php

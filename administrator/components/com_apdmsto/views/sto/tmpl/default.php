@@ -18,10 +18,10 @@ if (in_array("W", $role)) {
 if (in_array("S", $role)) {
         JToolBarHelper::addMoveLocation("Move Location", $this->row->pns_id);
 }
-if (in_array("D", $role)) {
-        //viet comment
-        JToolBarHelper::deletePns('Are you sure to delete it?',"removestos","Delete STO");
-}
+//if (in_array("D", $role)) {
+//        //viet comment
+//        JToolBarHelper::deletePns('Are you sure to delete it?',"removestos","Delete STO");
+//}
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
 ?>

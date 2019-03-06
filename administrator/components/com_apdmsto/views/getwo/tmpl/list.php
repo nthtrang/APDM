@@ -17,12 +17,12 @@ function UpdateECO(){
 			onComplete:function(result){	
 				var eco_result = result;
 				eco = eco_result.split('^');
-                window.parent.document.getElementById('po_customer').innerHTML =  eco[3];
-                window.parent.document.getElementById('ccs_name').innerHTML = eco[1];
-                window.parent.document.getElementById('so_cuscode').value = eco[2];
-                window.parent.document.getElementById('customer_id').value = eco[0];
-                window.parent.document.getElementById('sto_wo_id').value = eco[4];
-                window.parent.document.getElementById('wo_code').value = eco[5];
+                                window.parent.document.getElementById('po_customer').innerHTML =  eco[3];
+                                window.parent.document.getElementById('ccs_name').innerHTML = eco[1];
+                                window.parent.document.getElementById('so_cuscode').value = eco[2];
+                                window.parent.document.getElementById('customer_id').value = eco[0];
+                                window.parent.document.getElementById('sto_wo_id').value = eco[4];
+                                window.parent.document.getElementById('wo_code').value = eco[5];
 
 
                 window.parent.document.getElementById('sbox-window').close();
@@ -82,6 +82,25 @@ function UpdateECO(){
 			</tr>
 		</tfoot>
 		<tbody>
+                        <tr class="<?php echo "row-"; ?>">
+				<td>
+					<?php echo 0;?>
+				</td>
+				<td>
+					<?php echo JHTML::_('grid.id', -1, 0 ); ?>
+				</td>
+                                <td>
+                                    NA
+                                </td>
+                                <td>
+                                    Na
+                                </td>
+                                <td>
+                                                             NA
+				</td>				
+				
+				
+			</tr>
 		<?php
 			$k = 0;
 			for ($i=0, $n=count( $this->items ); $i < $n; $i++)

@@ -75,18 +75,43 @@ function get_default_ito_prefix(){
                         //for pdf
                         
 		});
-window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
-window.addEvent('domready', function() {
 
-    SqueezeBox.initialize({});
+                window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+		window.addEvent('domready', function() {
 
-    $$('a.modal-button').each(function(el) {
-        el.addEvent('click', function(e) {
-            new Event(e).stop();
-            SqueezeBox.fromElement(el);
+			SqueezeBox.initialize({});
+
+			$$('a.modal-button').each(function(el) {
+				el.addEvent('click', function(e) {
+					new Event(e).stop();
+					SqueezeBox.fromElement(el);
+				});
+			});
+		});
+                
+                 window.addEvent('domready', function() {
+
+                SqueezeBox.initialize({});
+
+                $$('a.modal').each(function(el) {
+                        el.addEvent('click', function(e) {
+                                new Event(e).stop();
+                                SqueezeBox.fromElement(el);
+                        });
+                });
         });
-    });
-});
+         window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+ window.addEvent('domready', function() {
+
+     SqueezeBox.initialize({});
+
+     $$('a.modal-button').each(function(el) {
+         el.addEvent('click', function(e) {
+             new Event(e).stop();
+             SqueezeBox.fromElement(el);
+         });
+     });
+ });
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
@@ -211,7 +236,7 @@ window.addEvent('domready', function() {
 						</span>                                                           
                                                 </div>
                                                 <br />
-                                               <!-- <a href="javascript:;"id="lnkfichier_image" title="<?php /*echo JText::_('Click here to add more files');*/?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>-->
+                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>
 					</td>
                                         </tr>                                          	                           
                                           </table>

@@ -1,7 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-
+<?php JHTML::_('behavior.modal'); ?>
 <?php
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
@@ -55,7 +55,18 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 var mf = document.getElementById(id).remove();
                 //parent.removeChild(mf);
         }
-	
+	    window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+    window.addEvent('domready', function() {
+
+        SqueezeBox.initialize({});
+
+        $$('a.modal-button').each(function(el) {
+            el.addEvent('click', function(e) {
+                new Event(e).stop();
+                SqueezeBox.fromElement(el);
+            });
+        });
+    });
 </script>
 <div class="submenu-box">
         <div class="t">
