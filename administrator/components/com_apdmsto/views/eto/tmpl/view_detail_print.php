@@ -14,6 +14,15 @@
 <script language="javascript" type="text/javascript">
     window.print();
 </script>
+<style type="text/css" media="print">
+    @page
+    {
+        size: auto;   /* auto is the current printer page size */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+
+
+</style>
 <style type="text/css">
     .tgi  {border-collapse:collapse;border-spacing:0;align-content: center;width:100%}
     .tgi td{font-family:Arial, Helvetica, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
@@ -25,7 +34,7 @@
     .tgi .tg-xldj-pr{text-align:right}
     .tgi .tg-0pky-pr{text-align:left;vertical-align:top}
     .tgi .tg-0pky-border{border-width:1px;border-style:solid}
-    .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 16px;color: #0B55C4}
+    .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 18px;color: #0B55C4}
     .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 16px;color: #0B55C4}
     .adminlist1 th{border-width:1px;border-style:solid}
     .adminlist1 td{border-width:1px;border-style:solid}
@@ -38,7 +47,7 @@
             <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
             <br>District 7, HCMC, Vietnam<br>ST ZIP Code: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
         <th class="tg-xldj-pr" colspan="2">
-            <img src="./templates/khepri/images/h_green/logo1.png" width="300px"></img>
+            <img src="./templates/khepri/images/h_green/logo1.png" width="200px"></img>
             <br></th>
     </tr>
     <tr>
@@ -67,7 +76,7 @@
     </tr>
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed date:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date)?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Customer:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php  echo $this->sto_row->ccs_name; ?></td>
     </tr>
@@ -108,7 +117,7 @@
     </tr>
     <tr>
         <td class="tg-c3ow-desc" colspan="4" style="border-width:1px;border-style:solid">
-           Description:<?php echo $this->sto_row->sto_description?></td>
+           Description:<?php echo strtoupper($this->sto_row->sto_description)?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr"></td>
@@ -119,9 +128,10 @@
     <tr>
         <td class="tg-0pky-pr-title" colspan="4">Shipping Part</td>
     </tr>
-</table>
+    <tr>
+        <td class="tg-0pky-pr" colspan="4">
             <?php if (count($this->sto_pn_list) > 0) { ?>
-            <table  class="tgi" width="100%">
+                <table class="tgi" width="100%">
                 <thead>
                 <tr>
                     <th width="18" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('#'); ?></th>
@@ -133,9 +143,6 @@
                 </thead>
                 <tbody>
                 <?php
-
-
-
                 $i = 0;
                 foreach ($this->sto_pn_list as $row) {
                     $i++;
@@ -152,26 +159,26 @@
                         <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_description; ?></td>
                         <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_uom; ?></td>
                         <td  class="tg-0pky-pr tg-0pky-border" colspan="2">
-                            <table class="adminlist" cellspacing="0" width="200">
+                            <!--<table class="adminlist" style="color:#000" cellspacing="0" width="200">-->
                                 <?php
+                                $totalQty = 0;
                                 foreach ($this->sto_pn_list2 as $rw) {
                                     if($rw->pns_id==$row->pns_id)
                                     {
+                                        $totalQty += $rw->qty;
                                         ?>
-                                        <tr><td align="center" width="74px">
-                                                <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
-                                                <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />
+                                       <!-- <tr><td align="center" width="74px">
+                                                <?php /*echo $rw->qty;*/?>
                                             </td>
-                                        </tr>
+                                        </tr>-->
                                         <?php
                                     }
                                 }
+                                echo $totalQty;
                                 ?>
-                            </table>
+                            <!--</table>-->
                         </td>
                     </tr>
-                    </tbody>
-                    </table>
                 <?php }
                 }
                 else
@@ -179,3 +186,8 @@
                     echo "Not found PNs";
                 }
                 ?>
+            </tbody>
+</table>
+</td>
+</tr>
+</table>

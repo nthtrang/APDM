@@ -156,7 +156,7 @@ class SToController extends JController
                         return;
                 }                                        
                 $return = JRequest::getVar('return');
-                $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_supplier_id,sto_po_internal) VALUES ('" . $sto_code . "', '" . $post['sto_description'] . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',1,'".$me->get('id')."','".$post['sto_supplier_id']."','".$post['po_inter_code']."')");
+                $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_supplier_id,sto_po_internal) VALUES ('" . $sto_code . "', '" . strtoupper($post['sto_description']) . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',1,'".$me->get('id')."','".$post['sto_supplier_id']."','".$post['po_inter_code']."')");
                 $db->query();
 				
                 //getLast ITO ID
@@ -372,7 +372,7 @@ class SToController extends JController
                 $ito_id = $post['pns_sto_id'];
                                             
                 $return = JRequest::getVar('return');
-                $db->setQuery("update apdm_pns_sto set sto_po_internal = '".$post['po_inter_code']."',sto_supplier_id = '".$post['sto_supplier_id']."',sto_description='" . $post['sto_description'] . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
+                $db->setQuery("update apdm_pns_sto set sto_po_internal = '".$post['po_inter_code']."',sto_supplier_id = '".$post['sto_supplier_id']."',sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
                 $db->query();
                 //upload file
                 //get so info
@@ -438,11 +438,11 @@ class SToController extends JController
                 
                
                 if($sto_row->sto_isdelivery_good)
-                {                                            
+                {
                     $db->setQuery("update apdm_pns_sto_delivery set delivery_method='".$post['sto_delivery_method']."',delivery_shipping_name ='".$post['sto_delivery_shipping_name']."', delivery_shipping_company = '".$post['sto_delivery_shipping_company']."',delivery_shipping_street='" . $post['sto_delivery_shipping_street'] . "' ,delivery_shipping_zipcode='" . $post['sto_delivery_shipping_zipcode'] . "',delivery_shipping_phone='".$post['sto_delivery_shipping_phone']."',delivery_billing_name='".$post['sto_delivery_billing_name']."',delivery_billing_company='".$post['sto_delivery_billing_company']."',delivery_billing_street='".$post['sto_delivery_billing_street']."',delivery_billing_zipcode='".$post['sto_delivery_billing_zipcode']."',delivery_billing_phone='".$post['sto_delivery_billing_phone']."'  WHERE  sto_id = '".$post['pns_sto_id']."'");                    
                     $db->query();
                 }        
-                $db->setQuery("update apdm_pns_sto set sto_wo_id ='".$post['sto_wo_id']."', sto_description='" . $post['sto_description'] . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
+                $db->setQuery("update apdm_pns_sto set sto_wo_id ='".$post['sto_wo_id']."', sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
                 $db->query();
                 //upload file
                             
@@ -466,7 +466,7 @@ class SToController extends JController
                                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$ito_id, $msg);                                        
                                   }
                                 $file_name = explode(".", $_FILES['pns_image' . $i]['name']);                                    
-                                if($file_name[0]!= "DELIVERY NOTE")
+                                if($sto_row->sto_isdelivery_good==1 && $sto_row->sto_state=="InTransit" && $sto_row->sto_owner_confirm && $file_name[0]!= "DELIVERY NOTE")
                                 {
                                         $msg = JText::_('Please upload file name is: DELIVERY NOTE');
                                         return $this->setRedirect('index.php?option=com_apdmsto&task=editeto&id='.$ito_id, $msg);                                        
@@ -497,7 +497,7 @@ class SToController extends JController
                                  $db->query();
                                  if( $sto_row->sto_state=="InTransit" && $sto_row->sto_owner_confirm)
                                  {
-                                        $db->setQuery("update apdm_pns_sto set sto_state = 'Done' WHERE  pns_sto_id = ".$sto_id);                        
+                                        $db->setQuery("update apdm_pns_sto set sto_state = 'Done',sto_completed_date= '" . $datenow->toMySQL() . "' WHERE  pns_sto_id = ".$ito_id);
                                         $db->query();  
                                  }
                         }
@@ -1000,7 +1000,7 @@ class SToController extends JController
         $sto_state="Create";
         if($post['sto_isdelivery_good'])
             $sto_state = "InTransit";
-        $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_wo_id,sto_isdelivery_good) VALUES ('" . $sto_code . "', '" . $post['sto_description'] . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',2,'".$me->get('id')."','".$post['sto_wo_id']."','".$post['sto_isdelivery_good']."')");
+        $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_wo_id,sto_isdelivery_good) VALUES ('" . $sto_code . "', '" . strtoupper($post['sto_description']) . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',2,'".$me->get('id')."','".$post['sto_wo_id']."','".$post['sto_isdelivery_good']."')");
         $db->query();
 
         //getLast ETO ID

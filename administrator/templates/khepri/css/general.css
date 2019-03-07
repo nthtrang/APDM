@@ -409,9 +409,12 @@ table.adminlist th { padding: 4px; }
 table.adminlist thead th {
 	text-align: center;
 	background: #f0f0f0;
-	color: #666;
+	color: #0B55C4;
 	border-bottom: 1px solid #999;
 	border-left: 1px solid #fff;
+}
+table.adminlist1 thead th div {
+	color: #0B55C4;
 }
 
 table.adminlist thead a:hover { text-decoration: none; }

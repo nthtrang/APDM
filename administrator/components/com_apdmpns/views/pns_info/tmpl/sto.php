@@ -101,14 +101,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         {
                                ?>
                                         <tr rowspan="<?php echo count($location); ?>">
-                                                                <td ><?php echo $partState ?></td>  
-                                                                <td>
+                                                                <td  align="center"><?php echo $partState ?></td>
+                                                                <td align="center">
                                                                         <table class="adminlist" cellspacing="1" width="400">
                                                                                 <?php
                                                                                 foreach ($location as $keyloc => $valoc) {
                                                                                         if ($valoc)
                                                                                         {
-                                                                                                ?><tr><td> <?php echo $valoc;?></td></tr>     
+                                                                                                ?><tr><td align="center"> <?php echo $valoc;?></td></tr>
                                                                                 <?php
                                                                                         }
                                                                                 }
@@ -121,7 +121,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                 foreach ($location as $keyloc => $valoc) {
                                                                                         if ($valoc) 
                                                                                         {
-                                                                                                ?><tr><td><?php echo $keyloc;?></td></tr>
+                                                                                                ?><tr><td align="center"><?php echo $keyloc;?></td></tr>
                                                                                         <?php                                                                                                 
                                                                                         }
                                                                                 } ?>
@@ -139,7 +139,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 </fieldset>
 
 <fieldset class="adminform">
-		<legend><?php echo JText::_( 'History Transaction' ); ?></legend>
+		<legend><?php echo JText::_( 'Transaction History' ); ?></legend>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
 <?php if (count($this->stos) > 0) { ?>
          <div class="col width-100 scroll">
@@ -149,7 +149,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
                                         <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Qty in/Qty out'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('QTY In/QTY Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>
@@ -166,24 +166,24 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 $i++;
                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>                                                
-                                                <td><?php echo $sto->sto_description; ?></td> 
-                                                <td><?php echo $sto->stock; ?></td>                                                 
-                                                <td>
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
+                                                <td align="center"><?php echo $sto->sto_description; ?></td>
+                                                <td align="center"><?php echo $sto->stock; ?></td>
+                                                <td align="center">
                                                 <?php if ($sto->sto_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>
-                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
-                                                <td><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
-                                                <td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
+                                                <td align="center">
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td> 
-                                                <td>
+                                                <td align="center">
                                                         <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
                                                 </td>                                                                                                                                                      
 <!--                                                <td>

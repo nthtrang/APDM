@@ -6,7 +6,7 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
-JToolBarHelper::title("STOCK Management", 'cpanel.png');
+//JToolBarHelper::title("STOCK Management", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
@@ -63,34 +63,32 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />        
-<table  width="100%">
+<!--<table  width="100%">
 		<tr>
 			<td colspan="4"  >
-				<?php echo JText::_( 'Filter' ); ?>:
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 				
+				<?php /*echo JText::_( 'Filter' ); */?>:
+				<input type="text" name="text_search" id="text_search" value="<?php /*echo $this->lists['search'];*/?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php /*echo JText::_('Filter With')*/?>
 				&nbsp;&nbsp;
-			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php echo JText::_( 'Go' ); ?></button>
-			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php /*echo JText::_( 'Go' ); */?></button>
+			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php /*echo JText::_( 'Reset' ); */?></button>
 			</td>
 			
 		</tr>
 					
-</table>        
+</table> -->
 <?php if (count($this->stos_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>         
-                                        <th width="3%" class="title">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->stos_list); ?>);" />
-                                        </th>                                        
-                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('State'); ?></th>
-                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
-                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Created By'); ?></th>
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('No'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('ITO/ETO'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Description'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('State'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Created By'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
+                                        <th style="color:#0B55C4" class="title" width="100"></th>
                                 </tr>
                         </thead>
 <tfoot>
@@ -107,11 +105,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 $i++;
                 ?>
                                         <tr>
-                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td>
-                                                        <?php echo JHTML::_('grid.id', $i, $sto->pns_sto_id ); ?>
-                                                </td>
-                                                <td>
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
+                                                <td align="center">
                                                         <?php
                                                                 $style="";
                                                                 $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
@@ -126,26 +121,27 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
-                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                                                             
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>
+                                                <td align="center" style="<?php echo $style?>" >
                                                     <?php echo $sto->sto_state; ?>
                                                 </td>
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td> 
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
-                                                </td>                                                  
-                                                <td style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
-                                                        
+                                                </td>
+                                                <td align="center" ></td>
+                                                <td align="center"  style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
+
                                                         ?>
                                                         <a style="<?php echo $style?>"  href="<?php echo $linkedit; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
-                                                        ?>                                                        
+                                                        ?>
                                                 </td></tr>
                                                 <?php }
                                         } ?>

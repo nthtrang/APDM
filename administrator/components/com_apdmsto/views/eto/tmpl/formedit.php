@@ -7,6 +7,13 @@ $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);
 $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
 $folder_sto = $this->sto_row->sto_code;
+$allow_edit = 1;
+$styleReadonly ="";
+if ($this->sto_row->sto_owner_confirm==1 && $this->sto_row->sto_owner)
+{
+    $styleReadonly ='readonly="readonly"';
+    $allow_edit = 0;
+}
 JToolBarHelper::title( $this->sto_row->sto_code. ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
 if (!intval($edit)) {
     //	JToolBarHelper::save('save', 'Save & Add new');
@@ -135,9 +142,11 @@ window.addEvent('domready', function(){
                         <?php //echo $this->lists['wolist'];?>
                         <input type="text" value="<?php echo $this->sto_row->wo_code?>" name="wo_code" id="wo_code" readonly="readonly" />
                         <input type="hidden" name="sto_wo_id" id="sto_wo_id" value="<?php echo $this->sto_row->sto_wo_id?>" />
+                        <?php if($allow_edit){?>
                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" title="Image">
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
                         </a>
+                        <?php }?>
                     </td>
                 </tr>
                 <tr>
@@ -172,7 +181,7 @@ window.addEvent('domready', function(){
                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'Delivery Good' ); ?>
+                            <?php echo JText::_( 'Delivery Goods' ); ?>
                         </label>
                     </td>
                     <td>
@@ -199,7 +208,7 @@ window.addEvent('domready', function(){
                                     <legend><?php echo JText::_( 'Delivery Note' ); ?></legend>
                                    <table class="admintable" cellspacing="1" width="100%">
                                            <tr><td  class="key">Delivery Method</td>
-                                           <td colspan="3"><input type="text" name="sto_delivery_method" id="sto_delivery_method"  size="20" value="<?php  echo $this->sto_row->delivery_method; ?>"/></td>
+                                           <td colspan="3"><input <?php echo $styleReadonly;?> type="text" name="sto_delivery_method" id="sto_delivery_method"  size="20" value="<?php  echo $this->sto_row->delivery_method; ?>"/></td>
                                            </tr>
                                         <tr>
                                             <td colspan="2">
@@ -220,7 +229,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_shipping_name" id="sto_delivery_shipping_name"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_name; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_shipping_name" id="sto_delivery_shipping_name"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_name; ?>"/>
                                             </td>
                                              <td class="key">
                                                 <label for="name">
@@ -228,7 +237,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_billing_name" id="sto_delivery_billing_name"  size="20" value="<?php  echo $this->sto_row->delivery_billing_name; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_billing_name" id="sto_delivery_billing_name"  size="20" value="<?php  echo $this->sto_row->delivery_billing_name; ?>"/>
                                             </td>
                                              </tr>
                                              <tr>
@@ -238,7 +247,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_shipping_company" id="sto_delivery_shipping_company"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_company; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_shipping_company" id="sto_delivery_shipping_company"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_company; ?>"/>
                                             </td>
                                              <td class="key">
                                                 <label for="name">
@@ -246,7 +255,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_billing_company" id="sto_delivery_billing_company"  size="20" value="<?php  echo $this->sto_row->delivery_billing_company; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_billing_company" id="sto_delivery_billing_company"  size="20" value="<?php  echo $this->sto_row->delivery_billing_company; ?>"/>
                                             </td>
                                              </tr>
                                              <tr>
@@ -256,7 +265,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_shipping_street" id="sto_delivery_shipping_street"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_street; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_shipping_street" id="sto_delivery_shipping_street"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_street; ?>"/>
                                             </td>
                                              <td class="key">
                                                 <label for="name">
@@ -264,7 +273,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_billing_street" id="sto_delivery_billing_street"  size="20" value="<?php  echo $this->sto_row->delivery_billing_street; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_billing_street" id="sto_delivery_billing_street"  size="20" value="<?php  echo $this->sto_row->delivery_billing_street; ?>"/>
                                             </td>
                                              </tr>
                                              <tr>
@@ -274,7 +283,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_shipping_zipcode" id="sto_delivery_shipping_zipcode"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_zipcode; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_shipping_zipcode" id="sto_delivery_shipping_zipcode"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_zipcode; ?>"/>
                                             </td>
                                              <td class="key">
                                                 <label for="name">
@@ -282,7 +291,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_billing_zipcode" id="sto_delivery_billing_zipcode"  size="20" value="<?php  echo $this->sto_row->delivery_billing_zipcode; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_billing_zipcode" id="sto_delivery_billing_zipcode"  size="20" value="<?php  echo $this->sto_row->delivery_billing_zipcode; ?>"/>
                                             </td>
                                              </tr>
                                              <tr>
@@ -292,7 +301,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_shipping_phone" id="sto_delivery_shipping_phone"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_phone; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_shipping_phone" id="sto_delivery_shipping_phone"  size="20" value="<?php  echo $this->sto_row->delivery_shipping_phone; ?>"/>
                                             </td>
                                              <td class="key">
                                                 <label for="name">
@@ -300,7 +309,7 @@ window.addEvent('domready', function(){
                                                 </label>
                                             </td>
                                             <td>
-                                                <input type="text" name="sto_delivery_billing_phone" id="sto_delivery_billing_phone"  size="20" value="<?php  echo $this->sto_row->delivery_billing_phone; ?>"/>
+                                                <input <?php echo $styleReadonly;?> type="text" name="sto_delivery_billing_phone" id="sto_delivery_billing_phone"  size="20" value="<?php  echo $this->sto_row->delivery_billing_phone; ?>"/>
                                             </td>
                                              </tr>
                                            </table>
@@ -317,7 +326,7 @@ window.addEvent('domready', function(){
                         </label>
                     </td>
                     <td>
-                        <input type="checkbox" id ="stocker_confirm" name="stocker_confirm" checked="checked" value="1" />
+                        <input type="checkbox" id ="stocker_confirm" name="stocker_confirm" checked="checked" value="1" onclick="return false;" onkeydown="return false;" />
                     </td>
                 </tr>
                 <tr>
@@ -327,7 +336,7 @@ window.addEvent('domready', function(){
                         </label>
                     </td>
                     <td>
-                        <textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
+                        <textarea <?php echo $styleReadonly;?> name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
                     </td>
                 </tr>
 

@@ -167,7 +167,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'Delivery Good' ); ?>
+                            <?php echo JText::_( 'Delivery Goods' ); ?>
                         </label>
                     </td>
                     <td>

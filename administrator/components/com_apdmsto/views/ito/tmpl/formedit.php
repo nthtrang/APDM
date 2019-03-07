@@ -152,38 +152,38 @@
 						<textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
 					</td>
 				</tr>  
-                                <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
+<!--                                <tr>
+                                        <td  class="key" width="28%"><?php /*echo JText::_('Confirm'); */?></td>
                                         <td width="30%" class="title"> 
-										 <?php 
+										 <?php /*
                                                      if(!$this->sto_row->sto_owner_confirm){
 
-                                                    ?>
+                                                    */?>
                                                   
                                                    
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php /*echo $this->sto_row->pns_sto_id*/?>&tmpl=component" title="Image">
                                                          <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
-                                                        <?php }
+                                                        <?php /*}
                                                         else
                                                         {
-                                                                       ?>
+                                                                       */?>
                                                 <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
                                                                        <?php
-                                                        }
-                                                        ?>
+/*                                                        }
+                                                        */?>
                                         </td>  
                                 </tr>
                                 
                                  <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Owner' ); ?>
+							<?php /*echo JText::_( 'Owner' ); */?>
 						</label>
 					</td>
                                  <td  width="16%">
-                                      <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?>
+                                      <?php /*echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; */?>
                                                         </td>
-                                 </tr>                              
+                                 </tr>   -->
 			</table>                	
         </fieldset>
         </div>

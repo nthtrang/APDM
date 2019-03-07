@@ -35,11 +35,9 @@ class SToViewsto extends JView
         $option             = 'com_apdmsto_sto';
         $db                =& JFactory::getDBO();
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
-        $sto_id		= JRequest::getVar( 'id');       
-        $me 		= JFactory::getUser();
+        $sto_id		= JRequest::getVar( 'id');
         JArrayHelper::toInteger($cid, array(0));	       
          $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
-        $keyword                = $search;
         $search                = JString::strtolower( $search );
         $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
         $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
@@ -50,7 +48,11 @@ class SToViewsto extends JView
             $where[] = 'p.sto_code LIKE '.$searchEscaped.' or p.sto_description LIKE '.$searchEscaped.'';        
            
         }
-        //$where[] = 'p.sto_type =1 or p.sto_type = 2 and p.sto_state = "InTransit"';
+        else
+        {
+                $where[] = 'p.sto_type = 2 and p.sto_state = "InTransit"';
+        }
+        
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $orderby = ' ORDER BY p.pns_sto_id desc';        

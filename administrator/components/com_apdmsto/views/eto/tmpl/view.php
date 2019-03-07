@@ -14,9 +14,8 @@ JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small
 if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
     JToolBarHelper::customX("editeto",'edit',"Edit","Edit",false);
 }
-if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
-        JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
-}
+
+JToolBarHelper::cancel( 'cancel', 'Close' );
 //for PPN part
 //        if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
 //            $allow_edit = 1;
@@ -35,7 +34,9 @@ if ($this->sto_row->sto_isdelivery_good) {
          JToolBarHelper::customX("printetoDelivery","print",'',"Print Delivery",false);
  }
 JToolBarHelper::customX("printetopdf","print",'',"Print",false);
-JToolBarHelper::cancel( 'cancel', 'Close' );
+if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
+    JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
+}
 $cparams = JComponentHelper::getParams ('com_media');
 // clean item data
 JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
@@ -256,8 +257,14 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
             <tr>
                 <td  class="key" width="28%"><?php echo JText::_('Customer#'); ?></td>
                 <td width="30%" class="title"><?php  echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA"; ?></td>
-                <td  class="key" width="28%"><?php //echo JText::_('State'); ?></td>
-                <td width="30%" class="title"><?php //echo $this->sto_row->sto_state;?></td>
+                <td  class="key" width="28%"><?php echo JText::_( 'Delivery Goods' ); ?></td>
+                <td width="30%" class="title"><?php
+                    if($this->sto_row->sto_isdelivery_good)
+                        echo "Yes";
+                    else {
+                        echo "No";
+                    }
+                    ?></td>
             </tr>
             <tr>
                 <td class="key"  width="28%"><?php echo JText::_('Created Date'); ?></td>
@@ -302,7 +309,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
             </tr>
             <tr>
                 <td class="key"  width="28%"><?php echo JText::_('Description'); ?></td>
-                <td colspan="3"><?php echo $this->sto_row->sto_description; ?></td>
+                <td colspan="3"><?php echo strtoupper($this->sto_row->sto_description); ?></td>
 
             </tr>
         </table>
@@ -595,34 +602,43 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 <div class="toolbar">
             <table class="toolbar"><tbody><tr>
 <?php
-if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
-    ?>
-<td class="button" id="toolbar-save">
-<a href="#" onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save shipping part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}" class="toolbar">
+if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
+    if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
+        ?>
+        <td class="button" id="toolbar-save">
+            <a href="#"
+               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save shipping part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}"
+               class="toolbar">
 <span class="icon-32-save" title="Save Shipping Part">
 </span>
-Save Shipping Part
-</a>
-</td>
-<td class="button" id="toolbar-popup-Popup">
-<a class="modal" href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>" rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+                Save Shipping Part
+            </a>
+        </td>
+        <td class="button" id="toolbar-popup-Popup">
+            <a class="modal"
+               href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>"
+               rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Part">
 </span>
-Add Part
-</a>
-</td>
-    <?php
-}
-if (in_array("D", $role)&& ($this->sto_row->sto_state  != "Done")) {
-    ?>
-<td class="button" id="toolbar-Are you sure to delete it?">
-<a href="#" onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsstos');}}" class="toolbar">
+                Add Part
+            </a>
+        </td>
+        <?php
+    }
+    if (in_array("D", $role) && ($this->sto_row->sto_state != "Done")) {
+        ?>
+        <td class="button" id="toolbar-Are you sure to delete it?">
+            <a href="#"
+               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsstos');}}"
+               class="toolbar">
 <span class="icon-32-delete" title="Remove Part">
 </span>
-Remove Part
-</a>
-</td>
-                    <?php }?>
+                Remove Part
+            </a>
+        </td>
+    <?php }
+}
+                    ?>
 
                 </tr></tbody></table></div>                
                 <?php if (count($this->sto_pn_list) > 0) { ?>
@@ -745,7 +761,8 @@ Remove Part
                                                 </td>
                                                 <td align="center" width="75px">	
                                                           <?php
-                                             if ($this->sto_row->sto_state  != "Done") {                  
+                                                          //if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
+                                             if ($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 ?>
                                                         <a href="index.php?option=com_apdmsto&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
                                                         <?php }?>

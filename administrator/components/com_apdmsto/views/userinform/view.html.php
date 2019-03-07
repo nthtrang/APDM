@@ -25,7 +25,7 @@ class SToViewuserinform extends JView {
                 $db->setQuery( $query );
                 $totalFullFill = $db->loadResult();
                 $checkFullFill =1;
-                if($total!=$totalFullFill)
+                if($total == 0 || $total!=$totalFullFill)
                 {
                       $checkFullFill=0;  
                 }

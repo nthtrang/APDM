@@ -750,7 +750,7 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
 {
 ?>
 <fieldset class="adminform">
-        <legend><?php echo JText::_("STO Result");?></legend>
+        <legend><?php echo JText::_("INVENTORY Result");?></legend>
    <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
