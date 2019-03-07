@@ -615,7 +615,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 </td>
                                                 <td align="center" width="75px">	
                                                           <?php
-                                                 if ($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
+                                                 if (in_array("D", $role) && $this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 ?>
                                                         <a href="index.php?option=com_apdmsto&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
                                                         <?php }?>

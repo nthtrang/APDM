@@ -462,7 +462,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
 					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
                                                 <?php
-                                               if ($this->sto_row->sto_state  != "Done") {                       
+                                               if (in_array("D", $role) && $this->sto_row->sto_state  != "Done") {                       
                                                 ?>
 					<a href="index.php?option=com_apdmsto&task=remove_doc_sto&back=eto_detail&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                          <?php
