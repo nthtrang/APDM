@@ -18,8 +18,8 @@ class pnsViewsearchall extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns_search';
        
-        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
-        $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
+        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );
+        $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
         
         $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
         $filter_type      = $mainframe->getUserStateFromRequest( "$option.filter_type",    'filter_type',     '',    'string' );
@@ -173,12 +173,17 @@ else
                 case '11': //STO
                      //STO
                     $arr_sto_id = array();
-                    //select table STO with keyword input                      
-                    $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
+                    //select table STO with keyword input
+                    $query = 'SELECT * FROM apdm_pns_sto p'
+                        . ' WHERE (p.sto_code LIKE '.$searchEscaped.' OR  p.sto_description LIKE '.$searchEscaped .' ) '
+                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
+                    ;
+                    $db->setQuery($query);
+                    //$db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
                     $rs_sto = $db->loadObjectList();
                     if (count($rs_sto) >0){
                         foreach ($rs_sto as $sto){
-                           $pns_sto_id[] = $sto->pns_po_id; 
+                           $pns_sto_id[] = $sto->pns_po_id;
                         }
                         
                     }                    

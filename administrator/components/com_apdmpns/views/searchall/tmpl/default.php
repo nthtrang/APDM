@@ -750,14 +750,16 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
 {
 ?>
 <fieldset class="adminform">
-        <legend><?php echo JText::_("INVENTORY Result");?></legend>
+        <legend><?php echo JText::_("Inventory Result");?></legend>
    <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('No'); ?></th>
+                                        <th class="title" width="15%">
+                                            <?php echo JHTML::_('grid.sort', 'ITO/ETO', 'sto_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+                                        </th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                                                        
-                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'),'sto_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Stocker'); ?></th>                                       
                                 </tr>
@@ -1012,5 +1014,6 @@ if (count($this->rs_wo) > 0) { ?>
 	<input type="hidden" name="task" value="searchall" />
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
+    <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

@@ -8,7 +8,7 @@ $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("Location Code Management", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(9);      
-if (in_array("W", $role) || in_array("V", $role)) {
+if (in_array("W", $role)) {
         JToolBarHelper::addLocation("New", $this->row->pns_location_id);
 }
 if (in_array("D", $role)) {           

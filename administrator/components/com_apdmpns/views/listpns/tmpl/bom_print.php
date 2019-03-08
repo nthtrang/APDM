@@ -23,7 +23,15 @@ $pns_code_full = $row->pns_code_full;
 <script language="javascript">
     window.print();
 </script>
+<style type="text/css" media="print">
+    @page
+    {
+        size: auto;   /* auto is the current printer page size */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
 
+
+</style>
 <style type="text/css">
     .tgi  {border-collapse:collapse;border-spacing:0;align-content: center}
     .tgi td{border-width:1px !important;font-family:Arial, Helvetica, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;text-align:center}
