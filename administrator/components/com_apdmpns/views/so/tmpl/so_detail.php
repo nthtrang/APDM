@@ -297,12 +297,43 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <td class="key">Qty</td>
                                                                 <td class="key">Status</td>                                                                                                                       
                                                         </tr>
-                                                         <tr>
-                                                                <td width="30%">...</td>
-                                                                <td>...</td>
-                                                                <td>...</td>
-                                                                <td>...</td>                                                                                                                       
-                                                        </tr>
+                                                        
+                                                                 <?php 
+                                                                 foreach ($this->so_pn_list as $row) {                                                                         
+                                                                 $rowEto = PNsController::GetEtoPns($row->pns_id);
+                                                                 
+                                                                 $totalEto= count($rowEto);
+                                                                 if($totalEto){
+                                                                 if ($row->pns_cpn == 1)
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
+                                                                 else
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $row->pns_id;
+                                                                $image = PNsController::GetImagePreview($row->pns_id);
+                                                                if ($row->pns_revision) {
+                                                                        $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                                                                } else {
+                                                                        $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+                                                                }
+                                                                 ?>
+                                                        
+                                                                 
+                                                                <td width="30%" > <?php echo $pnNumber;?></td>
+                                                                <td> <?php echo $totalEto;?></td>
+                                                                <td colspan="2"><table class="adminlist" cellspacing="0" width="200">                                                                
+                                                                <?php                                                             
+                                                                foreach ($rowEto as $r1) { 
+                                                                ?>
+                                                                <tr>
+                                                                <td width="95"><?php echo $r1->qty;?></td>
+                                                                <td><a href="index.php?option=com_apdmsto&task=eto_detail&id=<?php echo $r1->sto_id?>"><?php echo $r1->sto_state;?></a></td>
+                                                                 </tr>
+                                                                <?php 
+                                                                }?></table>
+                                                               </td> </tr>  
+                                                                <?php 
+                                                                 }}?>
+                                                              
+                                             
                                             </table>
                                         </td>
                                         <td colspan="2" >

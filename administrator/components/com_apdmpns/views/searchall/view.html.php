@@ -18,7 +18,7 @@ class pnsViewsearchall extends JView
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns_search';
        
-        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );
+        $filter_order        =  'p.pns_id';//$mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
         
         $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
@@ -174,7 +174,7 @@ else
                      //STO
                     $arr_sto_id = array();
                     //select table STO with keyword input
-                    $query = 'SELECT * FROM apdm_pns_sto p'
+                 echo   $query = 'SELECT * FROM apdm_pns_sto p'
                         . ' WHERE (p.sto_code LIKE '.$searchEscaped.' OR  p.sto_description LIKE '.$searchEscaped .' ) '
                         .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
                     ;
@@ -202,8 +202,8 @@ else
                              if($arr_code[0] && $arr_code[1])
                              {
                                 $where =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';    
-                             }
-                    $query = $query. $where;           
+                             }                         
+                    $query = $query. $where.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;           
                     $db->setQuery($query);
                     $rs_so = $db->loadObjectList();
                     if (count($rs_so) >0){

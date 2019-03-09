@@ -23,6 +23,12 @@ class pnsViewso extends JView {
                 $search = JString::strtolower($search);
                 $limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
                 $limitstart = $mainframe->getUserStateFromRequest($option . '.limitstart', 'limitstart', 0, 'int');
+                $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'so.pns_so_id',    'cmd' );
+                $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
+                // table ordering
+                $lists['order_Dir']    = $filter_order_Dir;
+                $lists['order']        = $filter_order;
+                
                 $where = array();
                 if (isset($search) && $search != '') {
                         $searchEscaped = $db->Quote('%' . $db->getEscaped($search, false) . '%', false);
@@ -35,7 +41,7 @@ class pnsViewso extends JView {
                 $where[] = " so.so_state not in('done','cancel')";
                 
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
-                $orderby = ' ORDER BY so.pns_so_id desc';
+               // $orderby = ' ORDER BY so.pns_so_id desc';
 
 
                 //for my task #somanagement
@@ -46,7 +52,7 @@ class pnsViewso extends JView {
                         . ' left join apdm_pns p on  p.pns_id = wo.pns_id '
                       //  . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
                         . $where
-                        . $orderby;
+                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
 
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
@@ -66,12 +72,14 @@ class pnsViewso extends JView {
                                ' from apdm_pns_wo_op op '.
                                ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
                                ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != ""))'.
-                          " or op_delay != 0) and op_status != 'done'";
+                          " or op_delay != 0) and op_status != 'done'"
+                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                
                 $db->setQuery($query);
                 $report_list = $db->loadObjectList();
                 $usertype	= $me->get('usertype');
-                if ($usertype =='Administrator' || $usertype=="Super Administrator") {
+                $role = JAdministrator::RoleOnComponent(10);                   
+                if (in_array("D", $role) ||  $usertype =='Administrator' || $usertype=="Super Administrator" ) {
                         $this->assignRef('report_list', $report_list);
                 }
                 

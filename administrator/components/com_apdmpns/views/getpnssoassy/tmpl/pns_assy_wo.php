@@ -44,6 +44,9 @@ function UpdatePnsChild(){
                                 window.parent.document.getElementById('wo_customer_id').value = eco[1];
                                 window.parent.document.getElementById('wo_customer_name').value = eco[2];
 				window.parent.document.getElementById('sbox-window').close();	
+                                window.parent.document.getElementById('get_part_pn').innerHTML = "Select Part Number11";      
+                                window.parent.document.getElementById('get_part_pn').setAttribute("href", "index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id="+eco[5]+"&pns_id="+eco[0]);
+
 				
 
 			}

@@ -43,6 +43,12 @@ class pnsViewpos extends JView
         $search                = JString::strtolower( $search );
         $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
         $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_po_id',    'cmd' );
+        $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
+        // table ordering
+        $lists['order_Dir']    = $filter_order_Dir;
+        $lists['order']        = $filter_order;
+         
         $where = array();      
         if (isset( $search ) && $search!= '')
         {
@@ -52,10 +58,11 @@ class pnsViewpos extends JView
         }  
       
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $orderby = ' ORDER BY p.pns_po_id desc';        
+     //   $orderby = ' ORDER BY p.pns_po_id desc';        
         $query = 'SELECT COUNT(p.pns_po_id)'
         . ' FROM apdm_pns_po AS p'
         . $where
+        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
         ;
 
         $db->setQuery( $query );
@@ -67,7 +74,7 @@ class pnsViewpos extends JView
         $query = 'SELECT p.* '
             . ' FROM apdm_pns_po AS p'
             . $where
-            . $orderby;
+            .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );

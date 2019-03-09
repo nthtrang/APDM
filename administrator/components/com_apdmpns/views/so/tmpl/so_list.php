@@ -197,7 +197,7 @@ if (count($this->so_list) > 0) { ?>
 
       
 <?php 
-if (count($this->report_list) > 0) { ?>
+if (in_array("W", $role) && count($this->report_list) > 0) { ?>
 <fieldset class="adminform">
 		<legend><font style="size:14px"><?php echo JText::_( 'Issue Report' ); ?> </font></legend>                          
                 <section class="">
@@ -262,5 +262,7 @@ if (count($this->report_list) > 0) { ?>
         <input type="hidden" name="task" value="somanagement" />
         <input type="hidden" name="redirect" value="mep" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
+        <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
+        <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 <?php echo JHTML::_('form.token'); ?>
 </form>

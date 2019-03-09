@@ -38,11 +38,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 alert("Please input keyword");	
                                 d.text_search.focus();
                                 return false;				
-                        }else{
+                        }else{                                
                                 document.adminForm.submit();
                                 submitform( pressbutton );
 				
                         }
+                }
+                
+                 if (pressbutton == 'search_qty') {
+                         alert(4)
+                        submitform( pressbutton );
+                        return;
                 }
                 if (pressbutton == 'removestos') {
                         submitform( pressbutton );
@@ -59,45 +65,83 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 			
         }
 </script>
+<style>
+section {
+  position: relative;
+  padding-top: 30px;
+      text-align: center;
+    background: #f0f0f0;
+    color: #666;
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #fff;
+}
+section.positioned {
+  position: absolute;
+  top:100px;
+  left:100px;
+  width:800px;
+  box-shadow: 0 0 15px #333;
+}
+.container {
+  overflow-y: auto;
+  height: 160px;
+}
+table {
+  border-spacing: 0;
+  width:100%;
+}
+td + td {
+  border-left:1px solid #eee;
+}
+td, th {
+  border-bottom:1px solid #eee;
+  padding: 4px 4px 4px 0px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  white-space: nowrap;
+}
+th div{
+  position: absolute;
+  background: transparent;
+     color: #666;
+  padding: 10px;
+  top: 0;
+  line-height: normal;
+    border-left: 1px solid #fff;
+}
+th:first-child div{
+  border: none;
+}
+</style>
 <div class="clr"></div>
 <form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
-<input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />        
-<!--<table  width="100%">
-		<tr>
-			<td colspan="4"  >
-				<?php /*echo JText::_( 'Filter' ); */?>:
-				<input type="text" name="text_search" id="text_search" value="<?php /*echo $this->lists['search'];*/?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php /*echo JText::_('Filter With')*/?>
-				&nbsp;&nbsp;
-			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php /*echo JText::_( 'Go' ); */?></button>
-			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php /*echo JText::_( 'Reset' ); */?></button>
-			</td>
-			
-		</tr>
-					
-</table> -->
+<input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
+ <fieldset class="adminform">
+		<legend><font style="size:14px"><?php echo JText::_( 'Delivery' ); ?> </font></legend>                          
+<section class="">
+<div class="col width-100 scroll container">
 <?php if (count($this->stos_list) > 0) { ?>
-                <table class="adminlist" cellspacing="1" width="400">
-                        <thead>
-                                <tr>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('No'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('ITO/ETO'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('State'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Created Date'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Created By'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
-                                        <th style="color:#0B55C4" class="title" width="100"></th>
+                <table class="adminlist1" cellspacing="1" width="400">
+                         <thead>
+                               <tr class="header">
+                                        <th  class="title" width="100"><?php echo JText::_('No'); ?><div><?php echo JText::_('No'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?><div><?php echo JText::_('ITO/ETO'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Description'); ?><div><?php echo JText::_('Description'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('State'); ?><div><?php echo JText::_('State'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Created Date'); ?><div><?php echo JText::_('Created Date'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Owner'); ?><div><?php echo JText::_('Owner'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Created By'); ?><div><?php echo JText::_('Created By'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?><div><?php echo JText::_('Time Remain'); ?></div></th>
+                                        <th  class="title" width="100"></th>
                                 </tr>
-                        </thead>
-<tfoot>
-			<tr>
-				<td colspan="16">
-					<?php  echo $this->pagination->getListFooter(); ?>
-				</td>
-			</tr>
-		</tfoot>                        
+                        </thead>                  
                         <tbody>					
         <?php
         $i = 0;
@@ -146,7 +190,183 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <?php }
                                         } ?>
                 </tbody>
-        </table>		
+                </table></div></section>
+      </fieldset>
+
+
+<fieldset class="adminform">
+		<legend><font style="size:14px"><?php echo JText::_( 'Warehouse Status' ); ?> </font></legend>                          
+                <table width="100%" border="0">
+                        <tr>
+                                <td align="right">
+                                        QTY From&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_from"  onKeyPress="return numbersOnly(this, event);" id="qty_from" class="inputbox" size="30" value="<?php echo $this->qty_from?>"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="text" maxlength="20" name="qty_to"  onKeyPress="return numbersOnly(this, event);" id="qty_to" class="inputbox" size="30" value="<?php echo $this->qty_to?>"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="submit"  onclick="submitbutton('search_qty')"  name="search_qty" value="Go">
+                                        <a href="index.php?option=com_apdmsto&amp;task=sto&amp;clean=all"><input type="button" value="Reset"></a>
+                                </td>
+                        </tr>
+                </table>
+                <section class="">
+                <div class="col width-100 scroll container">
+                        <?php if (count($this->warehouse_list) > 0) { ?>
+                        <table class="adminlist1" cellspacing="1" width="400">
+		<thead>
+			<tr>
+				<th  width="50" class="title">
+					<?php echo JText::_( 'No' ); ?><div><?php echo JText::_( 'No' ); ?></div>
+				</th>
+				<th class="title"  width="100">
+					<?php  JText::_('PART_NUMBER_CODE'); ?><div><?php echo JText::_( 'PART_NUMBER_CODE' ); ?></div>
+				</th>          
+				<th class="title"  width="100" >
+					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?><div><?php echo JText::_( 'PNS_DESCRIPTION' ); ?></div>
+				</th>
+                                <th  width="100"class="title" >
+					<?php echo JText::_( 'MFR Name' ); ?><div><?php echo JText::_( 'MFR Name' ); ?></div>
+				</th>
+                                <th width="100" class="title" >
+					<?php echo JText::_( 'MFR PN' ); ?><div><?php echo JText::_( 'MFR PN' ); ?></div>
+				</th>
+                                <th  width="100" class="title" >
+					<?php echo JText::_( 'Supplier' ); ?><div><?php echo JText::_( 'Supplier' ); ?></div>
+				</th>	
+                                 <th  width="100" class="title" >
+					<?php echo JText::_( 'Supplier PN' ); ?><div><?php echo JText::_( 'Supplier PN' ); ?></div>
+				</th>
+                                <th width="5%" class="title" >
+					<?php echo JText::_( 'Vendor' ); ?><div><?php echo JText::_( 'Vendor' ); ?></div>
+				</th>	
+                                 <th  width="100" class="title" >
+					<?php echo JText::_( 'Vendor PN' ); ?><div><?php echo JText::_( 'Vendor PN' ); ?></div>
+				</th>
+                                 <th width="100" class="title" >
+					<?php echo JText::_( 'Inventory' ); ?><div><?php echo JText::_( 'Inventory' ); ?></div>
+				</th>
+			</tr>
+		</thead>		
+		<tbody>
+		<?php
+			$path_image = '../uploads/pns/images/';
+			$k = 0;
+                                                                                                   
+			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++)
+			{
+				$row 	=& $this->warehouse_list[$i];
+                                if($row->pns_cpn==1)
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
+                                else
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
+                                $image = SToController::GetImagePreview($row->pns_id);
+				if ($image !=''){					
+                                        $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
+				}else{
+					$pns_image = JText::_('None image for preview');
+				}
+				$mf = SToController::GetManufacture($row->pns_id,4);//manufacture
+                                $ms = SToController::GetManufacture($row->pns_id,3);//Supplier 
+                                $mv = SToController::GetManufacture($row->pns_id,2);//vendor 
+                                $background="";
+                                if($row->inventory<=5)
+                                {
+                                        $background=  "style='background-color:#f00;color:#fff'";
+                                }
+                                
+                                  
+                                                                  				
+			?>
+			<tr class="<?php echo "row$k"; ?>">
+				<td width="50">
+					<?php echo $i+1+$this->pagination->limitstart;?>
+				</td>				
+				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
+				</span>
+				</td>	
+                                <td>
+					<?php echo  $row->pns_description; ?>
+				</td>
+				<td>
+					<?php 
+					if (count($mf) > 0){
+                                                foreach ($mf as $m){
+                                                        echo $m['mf'];
+                                                }					
+					}
+					 ?>
+				</td>	
+                                <td>
+					<?php 
+					if (count($mf) > 0){
+					foreach ($mf as $m){
+						echo $m['v_mf'];
+					}
+						
+					}else{
+						
+					}
+					 ?>
+				</td>	                                                                    
+				<td>
+					<?php 
+					if (count($ms) > 0){
+                                                foreach ($ms as $m){
+                                                        echo $m['mf'];
+                                                }					
+					}
+					 ?>
+				</td>	
+                                <td>
+					<?php 
+					if (count($ms) > 0){
+					foreach ($ms as $m){
+						echo $m['v_mf'];
+					}
+						
+					}else{
+						
+					}
+					 ?>
+				</td>	       
+                                <td>
+					<?php 
+					if (count($mv) > 0){
+                                                foreach ($mv as $m){
+                                                        echo $m['mf'];
+                                                }					
+					}
+					 ?>
+				</td>	
+                                <td>
+					<?php 
+					if (count($mv) > 0){
+					foreach ($mv as $m){
+						echo $m['v_mf'];
+					}
+						
+					}else{
+						
+					}
+					 ?>
+				</td>	       
+                                <td align="center" <?php echo $background;?>>
+					<?php echo $row->inventory;?>
+				</td>                                      
+			</tr>
+			<?php
+				$k = 1 - $k;
+				}
+			?>
+		</tbody>
+	</table>
+                        <?php 
+                        }?>
+                </div>
+                </section>
+</fieldset>
 
 
         <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />

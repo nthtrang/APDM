@@ -36,6 +36,8 @@ class SToViewsto extends JView
         $db                =& JFactory::getDBO();
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
         $sto_id		= JRequest::getVar( 'id');
+        
+        
         JArrayHelper::toInteger($cid, array(0));	       
          $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
         $search                = JString::strtolower( $search );
@@ -83,28 +85,51 @@ class SToViewsto extends JView
         $lists['pns_id']        = $cid[0];       
         $this->assignRef('stos',        $list_stos);
         
-        $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
-	$list_user = $db->loadObjectList();	
+
 //         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
 //         $pos_list = $db->loadObjectList();         
 //         $this->assignRef('pos_list',        $pos_list);     
         //for PO detailid
-
-         $db->setQuery("SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." group by fk.pns_id order by fk.pns_id desc");
-         $pns_list = $db->loadObjectList();         
-         $this->assignRef('sto_pn_list',        $pns_list);
-         $db->setQuery("SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where sto.pns_sto_id=".$sto_id." order by fk.pns_id desc");
-         $pns_list2 = $db->loadObjectList();                  
-         $this->assignRef('sto_pn_list2',        $pns_list2);
-         
-         $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$sto_id);
-         $sto_row =  $db->loadObject();
-         $this->assignRef('sto_row',        $sto_row);
+                //get list warehouse
+        $qty_from		= JRequest::getVar( 'qty_from');
+        $qty_to		= JRequest::getVar( 'qty_to');
+        $clean		= JRequest::getVar( 'clean');
+        if($clean=="all")
+        {
+           $qty_from = $qty_to="";     
+        }
+        $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= 10";
+        if($qty_from && $qty_to)
+        {
+                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
+                $where .= " and p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= ".$qty_to;
+        }
+        elseif($qty_to)
+        {
+                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= ".$qty_to;
+        }
+        elseif($qty_from)
+        {
+                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
+        }
+        $query = "select inventory_in.*,inventory_out.*,p.pns_stock,p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) as inventory,p.* from apdm_pns p "
+                ." inner join( select fk1.qty as qty_in,fk1.pns_id from  apdm_pns_sto_fk fk1 inner join apdm_pns_sto sto1 on sto1.pns_sto_id = fk1.sto_id where sto1.sto_type=1) inventory_in "
+                ." on p.pns_id = inventory_in.pns_id"
+                ." inner join( select fk2.qty as qty_out,fk2.pns_id  from  apdm_pns_sto_fk fk2 inner join apdm_pns_sto sto2 on sto2.pns_sto_id = fk2.sto_id and sto2.sto_type=2) inventory_out "
+                ." on p.pns_id = inventory_out.pns_id "
+                //." where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) < 10";
+                .$where;
+        $db->setQuery($query);
+        $warehouse = $db->loadObjectList();
+        
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);
+        $this->assignRef('qty_to',        $qty_to);
+        $this->assignRef('qty_from',        $qty_from);
+         $this->assignRef('warehouse_list',        $warehouse);
         $this->assignRef('pagination',    $pagination);  
-        $this->assignRef('list_user',	$list_user);
+
 		parent::display($tpl);
 	}
 }

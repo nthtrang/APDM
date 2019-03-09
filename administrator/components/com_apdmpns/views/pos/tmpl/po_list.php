@@ -72,10 +72,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                          <th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->pos_list); ?>);" />
                                         </th> 
-                                        <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('P.O Number'), 'po_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'), 'po_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Action'); ?></th>
                                 </tr>
@@ -109,7 +109,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td>
-                                                        <?php echo GetValueUser($po->po_create_by, "username"); ?>
+                                                        <?php echo GetValueUser($po->po_create_by, "name"); ?>
                                                 </td>                                                  
                                                 <td><?php if (in_array("E", $role)) {
                                                         ?>
@@ -133,5 +133,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="redirect" value="mep" />
         <input type="hidden" name="boxchecked" value="0" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
+        <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
+        <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
+
 <?php echo JHTML::_('form.token'); ?>
 </form>

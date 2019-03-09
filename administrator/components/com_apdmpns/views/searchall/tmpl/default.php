@@ -820,13 +820,13 @@ if (count($this->rs_so) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
-                                        <th width="100"><?php echo JText::_('Customer'); ?></th>                                                
+                                        <th width="100"><?php echo JHTML::_('grid.sort', 'SO#', 'so_cuscode', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
+                                        <th width="100"><?php echo JText::_('Customer'); ?></th>
                                         <th width="100"><?php echo JText::_('TOP ASSYS PN'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('Start date'); ?></th>
-                                        <th width="100"><?php echo JText::_('Shipping request date'); ?></th>
-										<th width="100"><?php echo JText::_('Time Remain'); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Start date'), 'so_start_date', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Shipping request date'), 'so_shipping_date', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
+					<th width="100"><?php echo JText::_('Time Remain'); ?></th>
                                         <th width="100"><?php echo JText::_('Required'); ?></th>
                                         <th width="100"><?php echo JText::_('Status'); ?></th>
                                         <th width="100"><?php echo JText::_('RMA'); ?></th>
@@ -879,7 +879,7 @@ if (count($this->rs_so) > 0) { ?>
                                                 </span></td>   
                                                 <td><?php echo $so->pns_description; ?></td>                                                
                                                 <td>
-                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>
+                                                 <?php echo JHTML::_('date', $so->so_start_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>     
                                                  <td>
                                                 <?php echo JHTML::_('date', $so->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?>

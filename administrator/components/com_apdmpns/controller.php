@@ -5410,7 +5410,10 @@ class PNsController extends JController {
                 $db->query();  
                 $rows = $db->loadObjectList();
                 $StockOut = $rows[0]->qty_out;      
-                return round($CurrentStock + ($StockIn-$StockOut),2);
+                $inventory =  round($CurrentStock + ($StockIn-$StockOut),2);
+                if($inventory<0)
+                     $inventory = 0;
+                return $inventory;                                
                 exit;                
         }
         function CalculateQtyUsedValue($pns_id)
@@ -7293,7 +7296,7 @@ class PNsController extends JController {
                                 ' <td class="key">COC<input '.$cocchecked.'  type="checkbox" name="coc_required['.$row->pns_id.']" value="1" /> </td></tr>';
                 }
                 $str .='</table>';
-                $result = $row->pns_id.'^'.$row->customer_code.'^'.$row->customer_name.'^'.$pnNumber.'^'.$str;                
+                $result = $row->pns_id.'^'.$row->customer_code.'^'.$row->customer_name.'^'.$pnNumber.'^'.$str.'^'.$so_id;                
                 echo $result;
                 exit;                                                                 
         }
@@ -8834,5 +8837,14 @@ class PNsController extends JController {
             JRequest::setVar('layout', 'bom_print');
             JRequest::setVar('view', 'listpns');
             parent::display();
+        }
+        function GetEtoPns($pns_id)
+        {
+                $db =& JFactory::getDBO();	
+                $sql = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_type = 2";
+                $db->setQuery($sql);
+                return $db->loadObjectList();
+
+                
         }
 }

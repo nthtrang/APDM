@@ -36,7 +36,7 @@ class pnsViewgetpnssoassy extends JView
         $id               = JRequest::getVar('id');
         
         $so_id               = JRequest::getVar('so_id');
-        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
+        $filter_order        = 'p.pns_id';//$mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
         
         $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
