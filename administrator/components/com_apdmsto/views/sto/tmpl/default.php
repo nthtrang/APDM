@@ -260,17 +260,12 @@ th:first-child div{
                                         $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
                                 else
                                         $pns_code = $row->ccs_code.'-'.$row->pns_code;
-                                $image = SToController::GetImagePreview($row->pns_id);
-				if ($image !=''){					
-                                        $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
-				}else{
-					$pns_image = JText::_('None image for preview');
-				}
+                               
 				$mf = SToController::GetManufacture($row->pns_id,4);//manufacture
                                 $ms = SToController::GetManufacture($row->pns_id,3);//Supplier 
                                 $mv = SToController::GetManufacture($row->pns_id,2);//vendor 
                                 $background="";
-                                if($row->inventory<=5)
+                                if($row->inventory<=3)
                                 {
                                         $background=  "style='background-color:#f00;color:#fff'";
                                 }
@@ -282,9 +277,8 @@ th:first-child div{
 				<td width="50">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>				
-				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
-					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
-				</span>
+				<td>
+					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>				
 				</td>	
                                 <td>
 					<?php echo  $row->pns_description; ?>
@@ -305,8 +299,6 @@ th:first-child div{
 						echo $m['v_mf'];
 					}
 						
-					}else{
-						
 					}
 					 ?>
 				</td>	                                                                    
@@ -325,8 +317,6 @@ th:first-child div{
 					foreach ($ms as $m){
 						echo $m['v_mf'];
 					}
-						
-					}else{
 						
 					}
 					 ?>
@@ -347,13 +337,13 @@ th:first-child div{
 						echo $m['v_mf'];
 					}
 						
-					}else{
-						
 					}
 					 ?>
 				</td>	       
                                 <td align="center" <?php echo $background;?>>
-					<?php echo $row->inventory;?>
+					<?php 
+                                        echo round($row->inventory,2);
+                                        ?>
 				</td>                                      
 			</tr>
 			<?php

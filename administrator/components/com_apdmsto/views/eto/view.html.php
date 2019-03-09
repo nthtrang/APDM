@@ -99,7 +99,9 @@ class SToVieweto extends JView
         $statusValue[] = JHTML::_('select.option', '0', JText::_('No'), 'value', 'text');
         $defaultStatus = "0";
         if ($sto_row->sto_isdelivery_good)
+        {
             $defaultStatus = $sto_row->sto_isdelivery_good;
+        }
         $lists['stoDeliveryGood'] = JHTML::_('select.genericlist', $statusValue, 'sto_isdelivery_good', 'class="inputbox"  size="1" onchange="getDeliveryAddress(this.value)"', 'value', 'text', $defaultStatus);
 
 

@@ -46,8 +46,8 @@ class SToViewsto extends JView
         $where = array();      
         if (isset( $search ) && $search!= '')
         {
-            $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
-            $where[] = 'p.sto_code LIKE '.$searchEscaped.' or p.sto_description LIKE '.$searchEscaped.'';        
+          //  $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
+        //    $where[] = 'p.sto_code LIKE '.$searchEscaped.' or p.sto_description LIKE '.$searchEscaped.'';        
            
         }
         else
@@ -80,17 +80,12 @@ class SToViewsto extends JView
         $rows = $db->loadObjectList(); 
         
         
-        $db->setQuery("SELECT sto.*, p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_sto AS sto on p.pns_id = sto.pns_id WHERE p.pns_deleted =0 AND sto.pns_id=".$cid[0]." order by sto.pns_rev_id desc limit 1");              
-        $list_stos = $db->loadObjectList();              
-        $lists['pns_id']        = $cid[0];       
-        $this->assignRef('stos',        $list_stos);
+//        $db->setQuery("SELECT sto.*, p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns AS p LEFT JOIN apdm_pns_sto AS sto on p.pns_id = sto.pns_id WHERE p.pns_deleted =0 AND sto.pns_id=".$cid[0]." order by sto.pns_rev_id desc limit 1");              
+//        $list_stos = $db->loadObjectList();              
+//        $lists['pns_id']        = $cid[0];       
+//        $this->assignRef('stos',        $list_stos);
         
-
-//         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
-//         $pos_list = $db->loadObjectList();         
-//         $this->assignRef('pos_list',        $pos_list);     
-        //for PO detailid
-                //get list warehouse
+        //get list warehouse
         $qty_from		= JRequest::getVar( 'qty_from');
         $qty_to		= JRequest::getVar( 'qty_to');
         $clean		= JRequest::getVar( 'clean');
@@ -98,19 +93,19 @@ class SToViewsto extends JView
         {
            $qty_from = $qty_to="";     
         }
-        $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= 10";
+        $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= 10";
         if($qty_from && $qty_to)
         {
-                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
+                $where = "where p.pns_deleted = 0 and  p.pns_deleted = 0 and p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
                 $where .= " and p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= ".$qty_to;
         }
         elseif($qty_to)
         {
-                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= ".$qty_to;
+                $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= ".$qty_to;
         }
         elseif($qty_from)
         {
-                $where = "where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
+                $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
         }
         $query = "select inventory_in.*,inventory_out.*,p.pns_stock,p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) as inventory,p.* from apdm_pns p "
                 ." inner join( select fk1.qty as qty_in,fk1.pns_id from  apdm_pns_sto_fk fk1 inner join apdm_pns_sto sto1 on sto1.pns_sto_id = fk1.sto_id where sto1.sto_type=1) inventory_in "
@@ -118,7 +113,8 @@ class SToViewsto extends JView
                 ." inner join( select fk2.qty as qty_out,fk2.pns_id  from  apdm_pns_sto_fk fk2 inner join apdm_pns_sto sto2 on sto2.pns_sto_id = fk2.sto_id and sto2.sto_type=2) inventory_out "
                 ." on p.pns_id = inventory_out.pns_id "
                 //." where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) < 10";
-                .$where;
+                .$where
+                ." order by p.pns_id desc limit 100";
         $db->setQuery($query);
         $warehouse = $db->loadObjectList();
         
