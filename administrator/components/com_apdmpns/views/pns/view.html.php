@@ -21,6 +21,7 @@ class pnsViewpns extends JView
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
         
         $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
+        $filter_state    = $mainframe->getUserStateFromRequest( "$option.filter_state",    'filter_state',     '',    'string' );
         $filter_type      = $mainframe->getUserStateFromRequest( "$option.filter_type",    'filter_type',     '',    'string' );
         
         $filter_created_by    = $mainframe->getUserStateFromRequest( "$option.filter_created_by",    'filter_created_by',     0,    'int' );
@@ -43,7 +44,9 @@ class pnsViewpns extends JView
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
         }
-        
+        if ($filter_state !=''){
+            $where[]='p.pns_life_cycle ="'.$filter_state.'"';
+        }
         if ($filter_type !=''){
             $where[]='p.pns_type ="'.$filter_type.'"';            
         }
@@ -189,9 +192,6 @@ class pnsViewpns extends JView
             }else{
                 $where[] = 'p.pns_id IN (0)';
             } 
-            
-            
-            
         }
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
@@ -219,9 +219,8 @@ class pnsViewpns extends JView
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
         . $filter
-        . $where
-        ;
-       //echo $query;
+        . $where;
+        
         $db->setQuery( $query );
         $total = $db->loadResult();
 
@@ -240,25 +239,26 @@ class pnsViewpns extends JView
         $rows = $db->loadObjectList(); 
          ///get information for filter
         $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
-//        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
-
         $status[] = JHTML::_('select.option',  'Active', JText::_( 'Active' ) , 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Inactive', JText::_( 'Inactive' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'Obsolete',  JText::_( 'Obsolete' ), 'value', 'text'); 
         $status[] = JHTML::_('select.option',  'DoNotUse',  JText::_( 'Do Not Use' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Engineering', JText::_( 'Engineering' ), 'value', 'text');          
-        
+        $status[] = JHTML::_('select.option',  'Engineering', JText::_( 'Engineering' ), 'value', 'text');                  
         $lists['status'] = JHTML::_('select.genericlist',   $status, 'filter_status', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_status );
         
+       //viet add life cycle
+        $lifeValue[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select' ) .' -', 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Create', JText::_( 'Create' ) , 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Inreview', JText::_( 'In Review' ), 'value', 'text'); 
+        $lifeValue[] = JHTML::_('select.option',  'Released',  JText::_( 'Released' ), 'value', 'text');
+        $classDisabled = 'disabled = "disabled"';
+        $lists['state'] = JHTML::_('select.genericlist',   $lifeValue, 'filter_state', 'class="inputbox " size="1" onchange="document.adminForm.submit( );"', 'value', 'text',$filter_state );
+
+        
         $pns_type[] = JHTML::_( 'select.option', '', JText::_('SELECT_TYPE'), 'value', 'text' );
+        $pns_type[] = JHTML::_( 'select.option', 'Unassign', 'Unassign', 'value', 'text' );          
         $pns_type[] = JHTML::_( 'select.option', 'Make', 'Make', 'value', 'text' );
-        $pns_type[] = JHTML::_( 'select.option', 'Buy', 'Buy', 'value', 'text' ); 
-        $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
+        $pns_type[] = JHTML::_( 'select.option', 'Buy', 'Buy', 'value', 'text' );         
         $lists['pns_type']   = JHTML::_('select.genericlist', $pns_type, 'filter_type', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_type );
         ///Cerated by
         $db->setQuery("SELECT p.pns_create_by as value, u.name as text FROM apdm_pns as p LEFT JOIN jos_users as u ON u.id=p.pns_create_by WHERE p.pns_deleted=0  GROUP BY p.pns_create_by ORDER BY text "); 

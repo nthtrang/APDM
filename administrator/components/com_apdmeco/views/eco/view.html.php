@@ -21,6 +21,7 @@ class ecoVieweco extends JView
 		$filter_activate	= $mainframe->getUserStateFromRequest( "$option.filter_activate",	'filter_activate', 	-1,	'int' );
 		
 		$filter_status		= $mainframe->getUserStateFromRequest( "$option.filter_status",	'filter_status', 	'',	'string' );
+                $filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",	'filter_state', 	'',	'string' );
 		
 		$filter_date_modified = $mainframe->getUserStateFromRequest("$option.filter_date_modified", 'filter_date_modified', '', 'string');
 		$filter_date_created = $mainframe->getUserStateFromRequest("$option.filter_date_created", 'filter_date_created', '', 'string');
@@ -44,10 +45,14 @@ class ecoVieweco extends JView
 		{
 			$where[] = 'e.eco_activate = \''.$filter_activate.'\''; 
 		}	
-		if ( $filter_status !='')
+//		if ( $filter_status !='')
+//		{
+//			$where[] = 'e.eco_status = \''.$filter_status.'\''; 
+//		}
+                if ( $filter_state !='')
 		{
-			$where[] = 'e.eco_status = \''.$filter_status.'\''; 
-		}		
+			$where[] = 'e.eco_status = \''.$filter_state.'\''; 
+		}
 			
 		
 		if ($filter_date_modified !=''){
@@ -102,6 +107,13 @@ class ecoVieweco extends JView
 		
 		$lists['status'] = JHTML::_('select.genericlist',   $status, 'filter_status', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', "$filter_status" );
 		
+		$state[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select' ) .' -');
+		$state[] = JHTML::_('select.option',  'Create', JText::_('Create') );
+		$state[] = JHTML::_('select.option',  'Inreview', JText::_('Inreview'));	
+		$state[] = JHTML::_('select.option',  'Released', JText::_('Released') );		
+		
+		$lists['state'] = JHTML::_('select.genericlist',   $state, 'filter_state', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', "$filter_state" );
+                
 		$active[] = JHTML::_('select.option',  '-1', '- '. JText::_( 'Select active' ) .' -');
 		$active[] = JHTML::_('select.option',  '1', JText::_('Active') );
 		$active[] = JHTML::_('select.option',  '0', JText::_('InActive'));	

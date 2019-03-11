@@ -227,33 +227,33 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				<th class="title" width="15%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
                                 </th>
-				<th  class="title" width="10%">
+				<th  class="title" width="20%">
 					<?php echo  JText::_('PNS_DESCRIPTION'); ?>
 				</th>
-                                <th width="5%" class="title" nowrap="nowrap">
+                                <th width="8%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
 				</th>	                                
-				<th width="5%" class="title" nowrap="nowrap">
+				<th width="8%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Plant Status'); ?>
 				</th>				
 
-				<th width="5%" class="title" nowrap="nowrap">
+				<th width="8%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
-                                <th class="title"  >
-					<?php echo JText::_( 'Lead time(Day)' ); ?>
+                                <th  width="8%" class="title"  >
+					<?php echo JText::_( 'Lead Time(Days)' ); ?>
 				</th>
-                                <th class="title"  >
+                                <th   width="8%" class="title"  >
 					<?php echo JText::_( 'Buyer' ); ?>
 				</th>                                
-				<th class="title"  >
+				<th  width="8%" class="title"  >
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>
-				<th class="title"  >
+				<th  width="10%" class="title"  >
 					<?php echo JText::_( 'Supplier' ); ?>
 				</th>				
 				<th class="title">
-					<?php echo JText::_( 'Action' ); ?>
+					&nbsp;
 				</th>                                
 			</tr>
 		</thead>
@@ -311,7 +311,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				</span>
 				</td>	
 				
-				<td align="center">
+				<td align="left">
 					<?php echo $row->pns_description; ?>
 				</td>	
                                 <td align="center">
@@ -374,7 +374,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
                                         </select>                                               
 				</td>
 			                             
-				<td>
+				<td align="center">
 					<?php 
      
 if ($row->pns_life_cycle =='Create' && ($this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview")) {

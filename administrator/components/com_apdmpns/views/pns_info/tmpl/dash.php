@@ -1,7 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal');
 
-<?php	
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);
 	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
@@ -60,7 +60,18 @@
 			}
 		}).request();
 	}
-	
+	    window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+    window.addEvent('domready', function() {
+
+        SqueezeBox.initialize({});
+
+        $$('a.modal-button').each(function(el) {
+            el.addEvent('click', function(e) {
+                new Event(e).stop();
+                SqueezeBox.fromElement(el);
+            });
+        });
+    });
 </script>
 <div class="submenu-box">
         <div class="t">
@@ -88,17 +99,15 @@
                 </div>
         </div>
 </div>
-<div class="clr"></div>
 <p>&nbsp;</p>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-60">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'PNs Detail' ); ?></legend>
 			<table class="admintable" cellspacing="1">
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'ASCENX_PNS' ); ?>
+							<?php echo JText::_( 'Ascenx Vietnam PN' ); ?>
 						</label>
 					</td>
 					<td><?php 
@@ -127,7 +136,7 @@
 						
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_CHILD' ); ?>
@@ -140,7 +149,7 @@
                                                 <div id='pns_child'>
 						</div>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -155,7 +164,7 @@
 </a>	
 					</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_TYPE' ); ?>
@@ -164,7 +173,7 @@
 					<td>
 						<?php echo $this->lists['pns_type']?>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">

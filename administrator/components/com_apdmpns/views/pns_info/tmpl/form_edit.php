@@ -1,6 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
-<?php JHTML::_('behavior.tooltip');
+<?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.modal');
 $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);
 $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
@@ -83,26 +84,18 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 		}).request();
 	}
 	///for add more file
-	window.addEvent('domready', function(){
-			//File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	
-		});
+    window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+    window.addEvent('domready', function() {
 
+        SqueezeBox.initialize({});
+
+        $$('a.modal-button').each(function(el) {
+            el.addEvent('click', function(e) {
+                new Event(e).stop();
+                SqueezeBox.fromElement(el);
+            });
+        });
+    });
 </script>
 
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
@@ -263,7 +256,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</label>
 					</td>
 					<td>
-						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+						<?php //echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 					</td>
 				</tr>
 				<tr>

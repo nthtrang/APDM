@@ -120,10 +120,10 @@ function submitbutton1(pressbutton) {
 
         
 $search = "<span class=\"search\"><form action=\"index.php?option=com_apdmpns&task=searchall\" method=\"post\" name=\"adminForm1\" onsubmit=\"submitbutton1('submit')\" >".
-$search .=         "Search what<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='25' />&nbsp;&nbsp;Filter With";
+$search .=         "Search &nbsp;&nbsp;<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='25' />&nbsp;&nbsp;Filter &nbsp;&nbsp;";
 $search .=         $type_filter;				
-$search .=         "<input type='submit' name='btinsersave' value='Go' />";
-$search .=         "<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
+$search .=         "&nbsp;&nbsp;<input type='submit' name='btinsersave' value='Go' />";
+$search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
 $search .=         "</form></span>";
 
 $output[] = "";

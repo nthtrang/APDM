@@ -60,7 +60,7 @@ function saveApproveTask(id){
 
 
                         <fieldset class="adminform">
-                        <legend><?php echo JText::_( 'My task' ); ?></legend>
+                        <legend><?php echo JText::_( 'My Task' ); ?></legend>
 <!--<form action="index.php?option=com_apdmeco" method="post" name="adminForm1" >-->
 <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm1" id="adminFormPns"  >
         <div class="col width-100 scroll">
@@ -68,14 +68,14 @@ function saveApproveTask(id){
 <thead>
 			<tr>
 				<th width="5%" class="title">
-					<?php echo JText::_( '#' ); ?>
+					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				
 				<th class="title" width="7%">
 					<?php echo  JText::_('Name'); ?>
                                 </th>
                                 <th class="title" width="6%">
-					<?php echo  JText::_('Eco'); ?>
+					<?php echo  JText::_('Eco Number'); ?>
                                 </th>
 				<th  class="title" width="20%">
 					<?php echo  JText::_('Description'); ?>
@@ -96,7 +96,7 @@ function saveApproveTask(id){
 					<?php echo JText::_('Comment'); ?>
 				</th>                                
                                 <th width="5%" lass="title"  >
-					<?php echo JText::_( 'Due date' ); ?>
+					<?php echo JText::_( 'Due Date' ); ?>
 				</th>
 				<th width="5%" class="title">
 					<?php echo JText::_( 'Action' ); ?>
@@ -114,18 +114,18 @@ function saveApproveTask(id){
                                 $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->eco_id.'&routes='.$row->routes_id;				
 			?>
 			<tr class="">
-				<td width="6%" >
+				<td align="center" width="3%" >
 					<?php echo $i;?>
 				</td>
-				<td width="16%"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
-				<td width="17%"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
-                                <td width="35%"width="15%"><?php echo $row->eco_description; ?></td>
-                                <td width="5%"><?php echo $row->eco_status; ?></td>
-                                <td width="5%"><?php echo $row->title; ?></td>
-                                <td  width="5%" align="center">
+				<td align="center" width="15%"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
+				<td align="center" width="8%"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
+                                <td align="left" width="25%"width="15%"><?php echo $row->eco_description; ?></td>
+                                <td align="center" width="5%"><?php echo $row->eco_status; ?></td>
+                                <td align="center" width="5%"><?php echo $row->title; ?></td>
+                                <td align="center" width="5%">
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
 				</td>
-                                <td width="5%"> 
+                                <td align="center" width="5%"> 
                                                                                 
                                                         <?php  
                                                         if($row->eco_status != 'Released'){                                                          
@@ -152,7 +152,7 @@ function saveApproveTask(id){
 					<?php } ?>
 				</td>		
 					                                
-				<td   width="5%" align="center">
+				<td   width="8%" align="center">
 					<?php echo JHTML::_('date', $row->route_due_date, '%m-%d-%Y') ;?>
 				</td>
 				
@@ -188,23 +188,23 @@ function saveApproveTask(id){
 
                 
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'My pending task' ); ?></legend>
+		<legend><?php echo JText::_( 'My Pending task' ); ?></legend>
                 <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
              		<div class="col width-100 scroll">
               <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
-				<th width="2%" class="title">
-					<?php echo JText::_( '#' ); ?>
+				<th width="5%" class="title">
+					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				
-				<th class="title" width="15%">
+				<th class="title" width="10%">
 					<?php echo  JText::_('Name'); ?>
                                 </th>
-                                <th class="title" width="15%">
-					<?php echo  JText::_('Eco'); ?>
+                                <th class="title" width="10%">
+					<?php echo  JText::_('Eco Number'); ?>
                                 </th>
-				<th  class="title" width="10%">
+				<th  class="title" width="25%">
 					<?php echo  JText::_('Description'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
@@ -213,13 +213,13 @@ function saveApproveTask(id){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Title'); ?>
 				</th>                             
-				<th width="5%" class="title" nowrap="nowrap">
+				<th width="7%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Approver'); ?>
 				</th>        				              
-                                <th class="title"  >
-					<?php echo JText::_( 'Due date' ); ?>
+                                <th  width="7%" class="title"  >
+					<?php echo JText::_( 'Due Date' ); ?>
 				</th>
-				<th class="title">
+				<th  width="10%" class="title">
 					<?php echo JText::_( 'Remind' ); ?>
 				</th>                                
 			</tr>
@@ -237,14 +237,14 @@ function saveApproveTask(id){
                                 $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->ecoid.'&routes='.$row->id;				
 			?>
 			<tr class="">
-				<td>
+				<td align="center">
 					<?php echo $i;?>
 				</td>
-				<td><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
-				<td><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
-                                <td><?php echo $row->description; ?></td>
-                                <td><?php echo $row->eco_status; ?></td>
-                                <td>
+				<td align="center"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
+				<td align="center"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
+                                <td align="left"><?php echo $row->description; ?></td>
+                                <td align="center"><?php echo $row->eco_status; ?></td>
+                                <td align="center">
                                 <?php                                 
                                 $arrAppver= ECOController::GetListApprover($row->id);                                                                 
                                 ?>
@@ -259,7 +259,8 @@ function saveApproveTask(id){
                                               </tr>
                                               <?php }?>
                                                 </table>					
-				</td><td>
+				</td>
+                                <td align="center">
                                  <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
                                               <?php 
                                               foreach($arrAppver as $rs)
@@ -272,7 +273,8 @@ function saveApproveTask(id){
                                               </tr>
                                               <?php }?>
                                                 </table>
-                                </td><td>
+                                </td>
+                                <td align="center">
                                 <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
                                               <?php 
                                               foreach($arrAppver as $rs)

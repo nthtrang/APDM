@@ -96,11 +96,11 @@ function UpdatePnsEco(){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Make/Buy'); ?>
 				</th>
-				<th class="title"  >
+				<th width="20%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
-                                <th class="title"  >
-					<?php echo JText::_( 'Manuafacture PN' ); ?>
+                                <th width="5%" class="title"  >
+					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>                                
 			</tr>
 		</thead>
@@ -133,13 +133,13 @@ function UpdatePnsEco(){
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
 				</span>
 				</td>	
@@ -156,10 +156,10 @@ function UpdatePnsEco(){
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>		
-                                <td>
+                                <td align="center">
 					<?php
                                         $mf = PNsController::GetManufacture($row->pns_id,4);
                                         if (count($mf) > 0){

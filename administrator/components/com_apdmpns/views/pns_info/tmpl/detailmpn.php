@@ -131,7 +131,7 @@
 					<td><?php echo $this->row->pns_revision;?>
 					</td>
 				</tr>	  
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_CHILD' ); ?>
@@ -155,7 +155,7 @@
 						?>
 						
 					</td>
-				</tr>
+				</tr>-->
 <!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -333,7 +333,7 @@
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">
-                                                        <?php echo JText::_('Date Create'); ?>
+                                                        <?php echo JText::_('Created Date'); ?>
                                                 </label>
                                         </td>
                                         <td>
@@ -345,18 +345,18 @@
 				
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'Create by' ); ?>
+							<?php echo JText::_( 'Created by' ); ?>
 						</label>
 					</td>
 					<td>
- 						<?php echo GetValueUser($this->row->pns_create_by, "username"); ?>
+ 						<?php echo GetValueUser($this->row->pns_create_by, "name"); ?>
 
 					</td>
 				</tr>
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'Date Modified' ); ?>
+							<?php echo JText::_( 'Modified Date' ); ?>
 						</label>
 					</td>
 					<td>
@@ -371,7 +371,7 @@
 						</label>
 					</td>
 					<td> 						
-						<?php echo  ($this->row->pns_modified_by) ? GetValueUser($this->row->pns_modified_by, "username") : ''; ?>
+						<?php echo  ($this->row->pns_modified_by) ? GetValueUser($this->row->pns_modified_by, "name") : ''; ?>
 
 					</td>
 				</tr>

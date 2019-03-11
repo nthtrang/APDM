@@ -188,7 +188,7 @@
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List P/N Images')?></th>
+							<th colspan="4"><?php echo JText::_('Images List')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -294,7 +294,7 @@
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List P/N PDF')?></th>
+							<th colspan="4"><?php echo JText::_('PDFs List')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
@@ -398,7 +398,7 @@
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('P/N CAD')?></th>
+							<th colspan="4"><?php echo JText::_('CADs List')?></th>
 						</thead>
 						<tr>
 							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>

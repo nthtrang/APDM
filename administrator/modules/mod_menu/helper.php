@@ -280,7 +280,7 @@ class modMenuHelper
                          	$menu->addSeparator();		 
                         //PO
 			if($user_apdm==0 &&  (in_array(7, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                               
-				$menu->addChild(new JMenuNode(JText::_('PO'), 'index.php?option=com_apdmpns&task=pomanagement', 'class:dashboard'));                               
+				$menu->addChild(new JMenuNode(JText::_('Internal PO'), 'index.php?option=com_apdmpns&task=pomanagement', 'class:dashboard'));                               
 			}                        
 			//STO
 			/*if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){

@@ -69,11 +69,9 @@ function submitbutton(pressbutton) {
 		<tr>
 			<td >
 				<?php echo JText::_( 'Filter' ); ?>:
-				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" size="40" />
-				
-				&nbsp;&nbsp;<?php echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
-				
-				&nbsp;&nbsp;<?php echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>
+				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" size="40" />				
+				&nbsp;&nbsp;<?php //echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>					
+				&nbsp;&nbsp;<?php //echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>
 				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>	
 				<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_activate').value='';this.form.getElementById('filter_date_created').value='';this.form.getElementById('filter_date_modified').value='';this.form.getElementById('filter_created_by').value='0';this.form.getElementById('filter_modified_by').value='0';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
@@ -111,14 +109,14 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   'Activate', 's.info_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Date Create', 's.info_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Created Date', 's.info_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
 				<th width="15%" class="title">
-					<?php echo JHTML::_('grid.sort',   'Create by', 's.info_created_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Created by', 's.info_created_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="15%" class="title">
-					<?php echo JHTML::_('grid.sort',   'Date Modified', 's.info_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Modified Date', 's.info_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Modified By', 's.info_modified_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
@@ -155,17 +153,17 @@ function submitbutton(pressbutton) {
 				}*/
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->info_id ); ?>
 				</td>
-				<td>
+				<td align="center">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail.')?>">
 						<?php echo $row->info_name; ?></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo $type; ?>
 				</td>
 				<td align="center">
@@ -175,17 +173,17 @@ function submitbutton(pressbutton) {
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_created_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
-				<td nowrap="nowrap">
+				<td align="center" nowrap="nowrap">
 						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_modified_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>
 				</td>
 			</tr>
 			<?php

@@ -295,7 +295,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <td width="30%" class="key">PN</td>
                                                                 <td class="key">Times</td>
                                                                 <td class="key">Qty</td>
-                                                                <td class="key">Status</td>                                                                                                                       
+                                                                <td class="key">State</td>
                                                         </tr>
                                                         
                                                                  <?php 
@@ -324,7 +324,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 foreach ($rowEto as $r1) { 
                                                                 ?>
                                                                 <tr>
-                                                                <td width="95"><?php echo $r1->qty;?></td>
+                                                                <td width="100"><?php echo $r1->qty;?></td>
                                                                 <td><a href="index.php?option=com_apdmsto&task=eto_detail&id=<?php echo $r1->sto_id?>"><?php echo $r1->sto_state;?></a></td>
                                                                  </tr>
                                                                 <?php 

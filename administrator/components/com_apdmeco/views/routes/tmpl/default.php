@@ -93,22 +93,22 @@ function submitbutton(pressbutton) {
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="15%">
+				<th class="title" width="10%">
 					<?php echo  JText::_('Name'); ?>
                                 </th>
-				<th  class="title" width="10%">
+				<th  class="title" width="20%">
 					<?php echo  JText::_('Description'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Status'); ?>
+					<?php echo JText::_('State'); ?>
 				</th>
-				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Due date'); ?>
+				<th width="10%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Due Date'); ?>
 				</th>
-                                <th class="title"  >
+                                <th  width="5%" class="title"  >
 					<?php echo JText::_( 'Owner' ); ?>
 				</th>
-				<th class="title">
+				<th  width="5%"  class="title">
 					<?php echo JText::_( 'Action' ); ?>
 				</th>                                
 			</tr>
@@ -127,10 +127,10 @@ function submitbutton(pressbutton) {
 				$edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1;?>
 				</td>
-				<td><input  type="checkbox" id = "route_id" onclick="isChecked(this.checked);" value="<?php echo $row->id;?>" name="route_id[]"  />					
+				<td align="center"><input  type="checkbox" id = "route_id" onclick="isChecked(this.checked);" value="<?php echo $row->id;?>" name="route_id[]"  />					
 				</td>
 				<td align="center">
                                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=add_approvers&cid[]=<?php echo $cid[0]?>&routes=<?php echo $row->id?>" title="Click here for add Approvers">
@@ -140,7 +140,7 @@ function submitbutton(pressbutton) {
 					
 					</p>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php echo $row->description; ?>
 				</td>		
 				<td align="center">

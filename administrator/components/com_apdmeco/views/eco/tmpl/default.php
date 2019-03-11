@@ -4,10 +4,10 @@
 
 <?php
 	$role = JAdministrator::RoleOnComponent(5);	
-	JToolBarHelper::title( JText::_( 'ECO_MANAGEMET' ), 'addedit.png' );
+	JToolBarHelper::title( JText::_( 'ECO Management' ), 'addedit.png' );
 	
 	if (in_array("V", $role)) {
-		JToolBarHelper::customX('export', 'excel', '', 'Export', false);
+		//JToolBarHelper::customX('export', 'excel', '', 'Export', false);
 	}	
 	if (in_array("D", $role)) {
 		//JToolBarHelper::deleteList('Are you sure to delete it(s)?');
@@ -67,9 +67,9 @@ function submitbutton(pressbutton) {
 			<td >
 				<?php echo JText::_( 'Filter' ); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" size="40" />
-				&nbsp;&nbsp;<?php echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+<!--				&nbsp;&nbsp;<?php //echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 				&nbsp;&nbsp;
-				<?php echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+				<?php //echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	-->
 				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
 				<button onclick="this.form.getElementById('search').value='';this.form.getElementById('filter_activate').value='-1';this.form.getElementById('filter_status').value='';this.form.getElementById('filter_date_created').value='';this.form.getElementById('filter_date_modified').value='';this.form.getElementById('filter_created_by').value='0';this.form.getElementById('filter_modified_by').value='0';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 				
@@ -78,10 +78,10 @@ function submitbutton(pressbutton) {
 		</tr>
 		<tr>
 			<td align="right"> 
-			<?php echo $this->lists['active'];?>
-			<?php echo $this->lists['status'];?>
+			<?php //echo $this->lists['active'];?>
+			<?php echo $this->lists['state'];?>
 			<?php echo $this->lists['create'];?>
-			<?php echo $this->lists['modified'];?>
+			<?php //echo $this->lists['modified'];?>
 			</td>
 		</tr>
 		
@@ -97,23 +97,23 @@ function submitbutton(pressbutton) {
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
 				<th class="title" width="10%">
-					<?php echo JHTML::_('grid.sort',   'Name', 'e.eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'ECO Number', 'e.eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th  class="title" >
+				<th  width="25%" class="title" >
 					<?php echo JText::_( 'Description' ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'State', 'e.eco_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Date Create', 'e.eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Created Date', 'e.eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
 				<th width="10%" class="title">
-					<?php echo JHTML::_('grid.sort',   'Create by', 'e.eco_create_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Created by', 'e.eco_create_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="7%" class="title">
-					<?php echo JHTML::_('grid.sort',   'Date Modified', 'e.eco_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'Modified Date', 'e.eco_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Modified By', 'e.eco_modified_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
@@ -148,7 +148,7 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->eco_id ); ?>
 				</td>
-				<td>
+				<td align="center">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail ECO')?>">
 						<?php echo $row->eco_name; ?></a>
 				</td>				
@@ -167,20 +167,20 @@ function submitbutton(pressbutton) {
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>-->
-				<td>
+				<td align="center">
 					<?php echo $row->eco_status ; ?>
 				</td>
 				<td align="center">
 					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->eco_create_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->eco_create_by, 'name'); ?>
 				</td>
 				<td align="center">
 						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->eco_modified_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->eco_modified_by, 'name'); ?>
 				</td>
 			</tr>
 			<?php

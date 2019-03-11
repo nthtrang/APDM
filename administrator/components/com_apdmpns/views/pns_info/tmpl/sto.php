@@ -150,7 +150,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('QTY In/QTY Out'); ?></th>
-                                        <th width="100"><?php echo JText::_('Attached'); ?></th>
+                                        <!--<th width="100"><?php /*echo JText::_('Attached'); */?></th>-->
                                         <th width="100"><?php echo JText::_('Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
@@ -164,19 +164,25 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         $i = 0;
         foreach ($this->stos as $sto) {
                 $i++;
+            $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
+            if($sto->sto_type==2){
+                $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
+            }elseif($sto->sto_type==3){
+                $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
+            }
                 ?>
                                         <tr>
                                                 <td align="center"><?php echo $i; ?></td>
-                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                <td align="center"><?php echo $sto->sto_description; ?></td>
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
+                                                <td style="text-align: center !important;"><?php echo $sto->sto_description; ?></td>
                                                 <td align="center"><?php echo $sto->stock; ?></td>
-                                                <td align="center">
-                                                <?php if ($sto->sto_file) { ?>
-                                                                <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
-                                                        <?php } ?>
-                                                </td>
-                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
-                                                <td align="center"><a href="index.php?option=com_apdmpns&task=sto_detail&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
+                                                <!--<td align="center">
+                                                <?php /*if ($sto->sto_file) { */?>
+                                                                <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php /*echo $sto->pns_sto_id; */?>" title="<?php /*echo JText::_('Click here to download') */?>" ><?php /*echo JText::_('Download') */?></a>&nbsp;&nbsp;
+                                                        <?php /*} */?>
+                                                </td>-->
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
                                                 <td align="center">
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>

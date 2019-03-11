@@ -645,12 +645,12 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="18"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="18"><?php echo JText::_('NUM'); ?></th>                                               
                                         <th width="3%" class="title"></th>
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>  
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>  
+                                        <th width="100"><?php echo JText::_('MFG PN'); ?></th>  
                                         <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  

@@ -76,10 +76,10 @@ function isCheckedBom(isitchecked,id){
                         <thead>
                                 <tr>
                                          <th width="8%">#</th>   
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('NUM'); ?></th>                                               
                                         <th width="100"><?php echo JText::_('Location Code'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Active'); ?></th>                                        
+<!--                                        <th width="100"><?php echo JText::_('Active'); ?></th>                                        -->
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Created By'); ?></th>
                                         <th width="100"><?php echo JText::_('Modified Date'); ?></th>
@@ -101,27 +101,27 @@ function isCheckedBom(isitchecked,id){
                 $i++;
                 ?>
                                         <tr>
-                                                <td><input  type="checkbox" id = "location"  onclick="isCheckedBom(this.checked,'<?php echo $loc->pns_location_id;?>');" value="<?php echo $loc->pns_location_id?>" name="cid[]"  /></td>
-                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
-                                                <td><?php echo $loc->location_description; ?></td>                                                
+                                                <td align="center"><input  type="checkbox" id = "location"  onclick="isCheckedBom(this.checked,'<?php echo $loc->pns_location_id;?>');" value="<?php echo $loc->pns_location_id?>" name="cid[]"  /></td>
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td align="left"><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
+                                                <td align="left"><?php echo $loc->location_description; ?></td>                                                
                                                
-                                                <td>
-                                                        <?php echo $loc->location_status ? '<img src="images/tick.png" width="16" height="16" border="0" alt="" />': '<img src="images/disabled.png" width="16" height="16" border="0" alt="" />'; ?>    
-                                                </td>
-                                                <td>
+<!--                                                <td align="center">
+                                                        <?php //echo $loc->location_status ? '<img src="images/tick.png" width="16" height="16" border="0" alt="" />': '<img src="images/disabled.png" width="16" height="16" border="0" alt="" />'; ?>    
+                                                </td>-->
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $loc->location_created, '%m-%d-%Y %H:%M:%S %p'); ?>
                                                 </td>
-                                                <td>
-                                                        <?php echo GetValueUser($loc->location_created_by, "username"); ?>
+                                                <td align="center">
+                                                        <?php echo GetValueUser($loc->location_created_by, "name"); ?>
                                                 </td>      
-                                                <td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $loc->location_updated, '%m-%d-%Y %H:%M:%S %p'); ?>
                                                 </td>
-                                                <td>
-                                                        <?php echo GetValueUser($loc->location_updated_by, "username"); ?>
+                                                <td align="center">
+                                                        <?php echo GetValueUser($loc->location_updated_by, "name"); ?>
                                                 </td>      
-                                                <td><?php if (in_array("E", $role)) {
+                                                <td align="center"><?php if (in_array("E", $role)) {
                                                         ?>
                                                         <a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php

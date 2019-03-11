@@ -57,7 +57,7 @@ function UpdateECO(){
 		<thead>
 			<tr>
 				<th width="2%" class="title">
-					<?php echo JText::_( 'No' ); ?>
+					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />

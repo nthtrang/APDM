@@ -96,16 +96,16 @@ function submitbutton(pressbutton) {
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
-                                <th width="8%">				
+                                <th width="4%">				
                                         <input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.cwhereused)"/>
                                 </th>                                
-                                <th width="8%">
+                                <th width="5%">
                                         <?php echo JText::_('Level')?>
                                 </th>					
-				<th class="title" width="15%">
+				<th class="title" width="10%">
 					<?php echo  JText::_('Part Number'); ?>
 				</th>			
-				<th class="title"  >
+				<th width="15%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>                                                                
 				<th width="5%" class="title" nowrap="nowrap">
@@ -158,12 +158,12 @@ function submitbutton(pressbutton) {
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-                                <td><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>
-				</td>	<td>-1</td>
-				<td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
+                                <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>				
+                                <td align="center">-1</td>
+				<td  align="center" width="15%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
                                 <?php    echo '<p style="margin-left:0px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $pns_code.'</a></p> '; ?>                                                
 				</span>				
-				<td>
+				<td width="20%">
 					<?php echo  $row->pns_description; ?>
 				</td>		                                        
 				<td align="center">

@@ -280,7 +280,7 @@ if($owner == $me->get('id'))
 				<tr>
 					<td class="key">
 						<label for="ccs_create">
-							<?php echo JText::_('INFO_CREATE')?>
+							<?php echo JText::_('Created Date')?>
 						</label>
 					</td>
 					<td>
@@ -300,7 +300,7 @@ if($owner == $me->get('id'))
 				<tr>
 					<td class="key">
 						<label for="ccs_create">
-							<?php echo JText::_('INFO_MODIFIED')?>
+							<?php echo JText::_('Modified Date')?>
 						</label>
 					</td>
 					<td>

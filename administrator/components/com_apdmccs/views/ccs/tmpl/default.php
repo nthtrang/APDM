@@ -75,8 +75,8 @@ function submitbutton(pressbutton) {
 			<td >
 				<?php echo JText::_( 'Filter' ); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" size="40" />&nbsp;&nbsp;
-				<?php echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>		
-				&nbsp;&nbsp;<?php echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>		
+				<?php //echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>		
+				&nbsp;&nbsp;<?php //echo  JText::_('FILTER_DATE_MODIFIED').' '.JHTML::_('calendar', $this->lists['filter_date_modified'], 'filter_date_modified', 'filter_date_modified', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>		
 				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
 				<button onclick="this.form.search.value='';this.form.filter_type.value='';this.form.filter_date_created.value='';this.form.filter_date_modified.value='';this.form.filter_created_by.value='0';this.form.filter_modified_by.value='0';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>						
 			</td>
@@ -84,9 +84,9 @@ function submitbutton(pressbutton) {
 		</tr>
 		<tr>
 			<td align="right">
-			<?php echo $this->lists['active'];?>
-			<?php echo $this->lists['create'];?>
-			<?php echo $this->lists['modified'];?>
+			<?php //echo $this->lists['active'];?>
+			<?php //echo $this->lists['create'];?>
+			<?php //echo $this->lists['modified'];?>
 			</td>
 		</tr>
 	</table>
@@ -106,10 +106,10 @@ function submitbutton(pressbutton) {
 				<th width="35%" class="title" >
 					<?php echo JText::_('COMMODITY_CODE_DESCRIPTION'); ?>
 				</th>
-				<th width="5%" class="title" nowrap="nowrap">
+<!--				<th width="5%" class="title" nowrap="nowrap">
 					
 					<?php echo JHTML::_('grid.sort',   'TEXT_ACTIVATE', 'c.ccs_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
-				</th>
+				</th>-->
 				<th width="10%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'DATE_CREATE', 'c.ccs_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
@@ -148,34 +148,34 @@ function submitbutton(pressbutton) {
 				$link_pns = "#";
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->ccs_id ); ?>
 				</td>
-				<td>
+				<td align="center">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail of Commodity Code')?>">
 						<?php echo $row->ccs_code; ?></a>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo $row->ccs_description; //echo ($npns) ? '<a href="'.$link_pns.'">'.$npns.'</a>' : 0; ?>
 				</td>				
-				<td align="center">
+<!--				<td align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
+				</td>-->
+				<td align="center">
+					<?php echo JHTML::_('date', $row->ccs_create, '%m-%d-%Y') ; ?>
 				</td>
-				<td>
-					<?php echo JHTML::_('date', $row->ccs_create, '%m/%d/%Y') ; ?>
+				<td align="center">					
+						<?php echo GetValueUser($row->ccs_create_by, 'name');?>
 				</td>
-				<td>					
-						<?php echo $row->username; ?>
+				<td align="center" nowrap="nowrap">
+					<?php echo ($row->ccs_modified) ? JHTML::_('date', $row->ccs_modified, '%m-%d-%Y') : '' ; ?>
 				</td>
-				<td nowrap="nowrap">
-					<?php echo ($row->ccs_modified_by) ? JHTML::_('date', $row->ccs_modified, '%m/%d/%Y') : '' ; ?>
-				</td>
-				<td>
-					<?php echo GetValueUser($row->ccs_modified_by, 'username');?>
+				<td align="center">
+					<?php echo GetValueUser($row->ccs_modified_by, 'name');?>
 				</td>
 				
 			</tr>

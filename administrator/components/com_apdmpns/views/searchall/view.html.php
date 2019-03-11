@@ -143,10 +143,12 @@ else
 {    
             switch($type_filter){
                 case '1': //ECO
+                    $filter_ordere        =  $mainframe->getUserStateFromRequest( "$option.filter_ordere",        'filter_order',        'eco_name',    'cmd' );
+                    $filter_order_Dire    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dire",    'filter_order_Dir',    'desc',       'word' );
                     $arr_eco_id = array();
                     //select table ECO with keyword input     
                  //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
-                        $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
+                        $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' ) ORDER BY '. $filter_ordere .' '. $filter_order_Dire);
                     $rs_eco = $db->loadObjectList();
                     if (count($rs_eco) >0){
                         foreach ($rs_eco as $eco){
@@ -157,10 +159,12 @@ else
                     break;
                       case '7': //PO
                      //POS
+                          $filter_order1        =  $mainframe->getUserStateFromRequest( "$option.filter_order1",        'filter_order',        'p.po_code',    'cmd' );
+                          $filter_order_Dir1    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir1",    'filter_order_Dir',    'desc',       'word' );
                     $arr_po_id = array();
                     //select table ECO with keyword input     
                  //   echo 'SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )';
-                    $db->setQuery('SELECT * FROM apdm_pns_po WHERE (po_code LIKE '.$searchEscaped.' OR  po_description LIKE '.$searchEscaped .' )');
+                    $db->setQuery('SELECT * FROM apdm_pns_po p WHERE (p.po_code LIKE '.$searchEscaped.' OR  p.po_description LIKE '.$searchEscaped .') ORDER BY '. $filter_order1 .' '. $filter_order_Dir1);
                     $rs_po = $db->loadObjectList();
                     if (count($rs_po) >0){
                         foreach ($rs_po as $po){
@@ -173,8 +177,10 @@ else
                 case '11': //STO
                      //STO
                     $arr_sto_id = array();
+                    $filter_order        =  $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.sto_code',    'cmd' );
+                    $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
                     //select table STO with keyword input
-                 echo   $query = 'SELECT * FROM apdm_pns_sto p'
+                    $query = 'SELECT * FROM apdm_pns_sto p'
                         . ' WHERE (p.sto_code LIKE '.$searchEscaped.' OR  p.sto_description LIKE '.$searchEscaped .' ) '
                         .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
                     ;

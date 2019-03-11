@@ -68,7 +68,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>        
+                                        <th width="100"><?php echo JText::_('No.'); ?></th>        
                                          <th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->pos_list); ?>);" />
                                         </th> 

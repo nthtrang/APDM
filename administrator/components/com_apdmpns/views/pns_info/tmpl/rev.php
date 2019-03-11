@@ -97,8 +97,8 @@
 		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>
-                                                <th width="100"><?php echo JText::_( 'No' ); ?></th>
-                                                <th width="200"><?php echo JText::_( 'P/N' ); ?></th>
+                                                <th width="100"><?php echo JText::_( 'NUM' ); ?></th>
+                                                <th width="200"><?php echo JText::_( 'Part Number' ); ?></th>
 					<th width="100"><?php echo JText::_( 'Revision' ); ?></th>
 						<th width="100"><?php echo JText::_( 'State' ); ?></th>
 						<th width="100"><?php echo JText::_( 'ECO' ); ?></th>

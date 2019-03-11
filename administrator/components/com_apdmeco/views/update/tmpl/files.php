@@ -114,20 +114,20 @@ function get_number_eco(){
 							<th colspan="4"><?php echo JText::_('List files ')?></th>
 						</thead>
 						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (bytes)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
+							<td width="5%" align="center" class="title"><strong style="color:#0B55C4;"><?php echo JText::_('No.')?></strong></td>
+							<td align="center" width="45%"><strong style="color:#0B55C4;"><?php echo JText::_('Name')?> </strong></td>
+							<td align="center" width="30%"><strong style="color:#0B55C4;"><?php echo JText::_('Size (bytes)')?> </strong></td>
+							<td align="center" width="20%"><strong style="color:#0B55C4;"><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
 						</tr>
 						<?php $i = 1; 
 					foreach ($this->arr_file as $file) { 
 						$filesize = ECOController::Readfilesize($file->file_name);
 					?>
 							<tr>
-							<td><?php echo $i?></td>
-							<td><?php echo $file->file_name;?></td>
-							<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-							<td><a href="index.php?option=com_apdmeco&task=download&id=<?php echo $file->id?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+							<td align="center" ><?php echo $i?></td>
+							<td align="center" ><?php echo $file->file_name;?></td>
+							<td align="center" ><?php echo number_format($filesize, 0, '.', ' '); ?></td>
+							<td align="center" ><a href="index.php?option=com_apdmeco&task=download&id=<?php echo $file->id?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
 							<a href="index.php?option=com_apdmeco&task=remove_file&id=<?php echo $file->id?>&id_eco=<?php echo $file->eco_id; ?>" title="Click to remove" onclick="if(confirm('Are you sure to delete it?')){ return true;}else{return false;}"><img src="images/cancel_f2.png" width="15" height="15" /></a></td>
 						</tr>
 						<?php $i++; } ?>

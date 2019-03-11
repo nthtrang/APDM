@@ -884,6 +884,12 @@ class SToController extends JController
             $db->query();
         }
         $msg = JText::_('Have removed successfull.');
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+        $sto_type = $db->loadResult();
+        if($sto_type==2)
+        {
+            return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $sto_id, $msg);
+        }
         return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
     }
     function removepnsstos_movelocation() {

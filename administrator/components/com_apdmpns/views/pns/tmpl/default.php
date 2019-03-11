@@ -3,16 +3,16 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
 	$role = JAdministrator::RoleOnComponent(6);
-	JToolBarHelper::title( JText::_( 'PNS_MAMANGEMENT' ) , 'cpanel.png' );
+	JToolBarHelper::title( JText::_( 'PN Management' ) , 'cpanel.png' );
 	if (in_array("W", $role)) {
 		JToolBarHelper::addNew("add","New PN");
                 JToolBarHelper::customX('addpncus', 'new', '', 'Mass Create PN', false);
 	}  
      
-	if (in_array("E", $role)) {
-		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
-		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);		
-	}     
+//	if (in_array("E", $role)) {
+//		JToolBarHelper::customX('next_upload_step1', 'upload', '', 'Multi Uploads CADs', false);
+//		JToolBarHelper::customX('next_upload_step2', 'upload', '', 'Multi Uploads PDF', false);		
+//	}     
 	if (in_array("V", $role)) { 	
                 JToolBarHelper::customX('export', 'excel', '', 'Export', false);	
 	}
@@ -125,11 +125,11 @@ function submitbutton(pressbutton) {
 		<tr>
 			
 			<td align="right">
-			<?php echo $this->lists['status'];?>
+			<?php echo $this->lists['state'];?>
 			
 			<?php echo $this->lists['pns_type'];?>
 			<?php echo $this->lists['pns_create_by'];?>
-			<?php echo $this->lists['pns_modified_by'];?></td>
+<!--			<?php echo $this->lists['pns_modified_by'];?></td>-->
 		</tr>
 			
 </table>
@@ -150,7 +150,7 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'BOM' ); ?>
 				</th>
                                 <th width="5%" class="title" >
-					<?php echo JText::_( 'PNS_PARENT' ); ?>
+					<?php echo JText::_( 'Where Used' ); ?>
 				</th>
 				<th  class="title" width="10%">
 					<?php echo JHTML::_('grid.sort',   JText::_('ECO'), 'p.eco_id', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
@@ -173,7 +173,10 @@ function submitbutton(pressbutton) {
 				</th>
 				
 				<th width="20%" class="title">
-					<?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+					<?php echo JText::_( 'MFR Name' ); ?>
+				</th>
+                                <th width="20%" class="title">
+					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>
 <!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Cost' ); ?>
@@ -234,10 +237,10 @@ function submitbutton(pressbutton) {
                                 
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td style="text-align: center !important;">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td style="text-align: center !important;">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
 				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
@@ -267,7 +270,7 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>
-				<td>
+				<td style="text-align: center !important;">
 					<?php 
                                         $exist_pdf =PNsController::checkexistSpec($row->pns_id);
                                         if($exist_pdf) { ?>
@@ -294,10 +297,18 @@ function submitbutton(pressbutton) {
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo '<strong>-'.$m['mf'].': </strong>&nbsp;&nbsp;'.$m['v_mf'].'<br />';
+						echo '<strong>'.$m['mf'].' </strong>&nbsp;&nbsp;<br />';
 					}
 						
-					}else{
+					}
+					 ?>
+				</td>	
+                                <td>
+					<?php 
+					if (count($mf) > 0){
+					foreach ($mf as $m){
+						echo '<strong>'.$m['v_mf'].' </strong>&nbsp;&nbsp;<br />';
+					}
 						
 					}
 					 ?>

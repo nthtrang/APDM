@@ -102,10 +102,10 @@ function submitbutton(pressbutton) {
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="15%">
+				<th class="title" width="12%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
                                 </th>
-				<th  class="title" width="10%">
+				<th class="title" width="17%">
 					<?php echo  JText::_('PNS_DESCRIPTION'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
@@ -117,26 +117,25 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
-                                <th class="title"  >
+                                <th width="8%" class="title"  >
 					<?php echo JText::_( 'Vendor' ); ?>
 				</th>
-                                <th class="title"  >
-					<?php echo JText::_( 'Vendor_PN' ); ?>
+                                <th width="8%" class="title"  >
+					<?php echo JText::_( 'Vendor PN' ); ?>
 				</th>                                
-				<th class="title"  >
+				<th width="8%" class="title"  >
 					<?php echo JText::_( 'Supplier' ); ?>
 				</th>
-				<th class="title"  >
-					<?php echo JText::_( 'Supplier_PN' ); ?>
+				<th width="8%" class="title"  >
+					<?php echo JText::_( 'Supplier PN' ); ?>
 				</th>				
-				<th width="20%" class="title">
+				<th width="8%" class="title">
 					<?php echo JText::_( 'MFR name' ); ?>
 				</th>
-				<th width="20%" class="title">
+				<th width="8%" class="title">
 					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>                                
-				<th class="title">
-					<?php echo JText::_( 'Action' ); ?>
+				<th width="10%"  class="title">&nbsp;
 				</th>                                
 			</tr>
 		</thead>
@@ -180,7 +179,7 @@ function submitbutton(pressbutton) {
 				</span>
 				</td>	
 				
-				<td align="center">
+				<td align="left">
 					<?php echo $row->pns_description; ?>
 				</td>
 				<td align="center">
@@ -252,7 +251,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>                                
-				<td>
+				<td align="center">
 					<?php 
      
 if ($row->pns_life_cycle =='Create') {

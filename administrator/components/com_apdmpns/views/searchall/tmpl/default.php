@@ -72,7 +72,7 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				<th class="title" width="10%">
-					<?php echo JText::_( 'Name'); ?>
+                    <?php echo JHTML::_('grid.sort', 'Name', 'eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th  class="title" >
 					<?php echo JText::_( 'Description' ); ?>
@@ -85,7 +85,7 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo JText::_('State'); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Date Create'); ?>
+                    <?php echo JHTML::_('grid.sort', 'Date Create', 'eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
 				<th width="10%" class="title">
@@ -144,13 +144,13 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
 				</td>
 				<td>
-					<?php echo GetValueUser($row->eco_create_by, 'username'); ?>
+					<?php echo GetValueUser($row->eco_create_by, 'name'); ?>
 				</td>
 				<td align="center">
 						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
 				</td>
 				<td>
-					<?php echo GetValueUser($row->eco_modified_by, 'username'); ?>
+					<?php echo GetValueUser($row->eco_modified_by, 'name'); ?>
 				</td>
 			</tr>
 			<?php
@@ -400,10 +400,12 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('No'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('P.O Number'); ?></th>
+                                        <th width="100">
+                                            <?php echo JHTML::_('grid.sort', 'P.O Number', 'po_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+                                        </th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
+                                        <th width="100"><?php echo JText::_('Attached'); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'),'po_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                         <th width="100"><?php echo JText::_('Action'); ?></th>
                                 </tr>
@@ -430,7 +432,7 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td>
-                                                        <?php echo GetValueUser($po->po_create_by, "username"); ?>
+                                                        <?php echo GetValueUser($po->po_create_by, "name"); ?>
                                                 </td>                                                  
                                                 <td><?php if (in_array("E", $role)) {
                                                         ?>

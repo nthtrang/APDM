@@ -46,7 +46,6 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }
                 
                  if (pressbutton == 'search_qty') {
-                         alert(4)
                         submitform( pressbutton );
                         return;
                 }
@@ -131,14 +130,14 @@ th:first-child div{
                 <table class="adminlist1" cellspacing="1" width="400">
                          <thead>
                                <tr class="header">
-                                        <th  class="title" width="100"><?php echo JText::_('No'); ?><div><?php echo JText::_('No'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?><div><?php echo JText::_('ITO/ETO'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Description'); ?><div><?php echo JText::_('Description'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('State'); ?><div><?php echo JText::_('State'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Created Date'); ?><div><?php echo JText::_('Created Date'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Owner'); ?><div><?php echo JText::_('Owner'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Created By'); ?><div><?php echo JText::_('Created By'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?><div><?php echo JText::_('Time Remain'); ?></div></th>
+                                        <th  class="title" width="50"><?php echo JText::_('No.'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('No.'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('ITO/ETO'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('State'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Created Date'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created Date'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Owner'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Created By'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created By'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Time Remain'); ?></div></th>
                                         <th  class="title" width="100"></th>
                                 </tr>
                         </thead>                  
@@ -165,7 +164,7 @@ th:first-child div{
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
-                                                <td align="center" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>
+                                                <td align="left" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>
                                                 <td align="center" style="<?php echo $style?>" >
                                                     <?php echo $sto->sto_state; ?>
                                                 </td>
@@ -200,7 +199,7 @@ th:first-child div{
                         <tr>
                                 <td align="right">
                                         QTY From&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_from"  onKeyPress="return numbersOnly(this, event);" id="qty_from" class="inputbox" size="30" value="<?php echo $this->qty_from?>"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input type="text" maxlength="20" name="qty_to"  onKeyPress="return numbersOnly(this, event);" id="qty_to" class="inputbox" size="30" value="<?php echo $this->qty_to?>"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        To&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_to"  onKeyPress="return numbersOnly(this, event);" id="qty_to" class="inputbox" size="30" value="<?php echo $this->qty_to?>"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="submit"  onclick="submitbutton('search_qty')"  name="search_qty" value="Go">
                                         <a href="index.php?option=com_apdmsto&amp;task=sto&amp;clean=all"><input type="button" value="Reset"></a>
                                 </td>
@@ -212,35 +211,35 @@ th:first-child div{
                         <table class="adminlist1" cellspacing="1" width="400">
 		<thead>
 			<tr>
-				<th  width="50" class="title">
-					<?php echo JText::_( 'No' ); ?><div><?php echo JText::_( 'No' ); ?></div>
+				<th  width="50" align="center" class="title">
+					<?php echo JText::_( 'No.' ); ?><div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_( 'No.' ); ?></div>
 				</th>
 				<th class="title"  width="100">
-					<?php  JText::_('PART_NUMBER_CODE'); ?><div><?php echo JText::_( 'PART_NUMBER_CODE' ); ?></div>
+					<?php  JText::_('PART_NUMBER_CODE'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'PART_NUMBER_CODE' ); ?></div>
 				</th>          
 				<th class="title"  width="100" >
-					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?><div><?php echo JText::_( 'PNS_DESCRIPTION' ); ?></div>
+					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'PNS_DESCRIPTION' ); ?></div>
 				</th>
                                 <th  width="100"class="title" >
-					<?php echo JText::_( 'MFR Name' ); ?><div><?php echo JText::_( 'MFR Name' ); ?></div>
+					<?php echo JText::_( 'MFR Name' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFR Name' ); ?></div>
 				</th>
                                 <th width="100" class="title" >
-					<?php echo JText::_( 'MFR PN' ); ?><div><?php echo JText::_( 'MFR PN' ); ?></div>
+					<?php echo JText::_( 'MFR PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFR PN' ); ?></div>
 				</th>
                                 <th  width="100" class="title" >
-					<?php echo JText::_( 'Supplier' ); ?><div><?php echo JText::_( 'Supplier' ); ?></div>
+					<?php echo JText::_( 'Supplier' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Supplier' ); ?></div>
 				</th>	
                                  <th  width="100" class="title" >
-					<?php echo JText::_( 'Supplier PN' ); ?><div><?php echo JText::_( 'Supplier PN' ); ?></div>
+					<?php echo JText::_( 'Supplier PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Supplier PN' ); ?></div>
 				</th>
-                                <th width="5%" class="title" >
-					<?php echo JText::_( 'Vendor' ); ?><div><?php echo JText::_( 'Vendor' ); ?></div>
+                                <th  width="100" class="title" >
+					<?php echo JText::_( 'Vendor' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Vendor' ); ?></div>
 				</th>	
                                  <th  width="100" class="title" >
-					<?php echo JText::_( 'Vendor PN' ); ?><div><?php echo JText::_( 'Vendor PN' ); ?></div>
+					<?php echo JText::_( 'Vendor PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Vendor PN' ); ?></div>
 				</th>
                                  <th width="100" class="title" >
-					<?php echo JText::_( 'Inventory' ); ?><div><?php echo JText::_( 'Inventory' ); ?></div>
+					<?php echo JText::_( 'Inventory' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Inventory' ); ?></div>
 				</th>
 			</tr>
 		</thead>		
@@ -249,106 +248,109 @@ th:first-child div{
 			$path_image = '../uploads/pns/images/';
 			$k = 0;
                                                                                                    
-			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++)
-			{
-				$row 	=& $this->warehouse_list[$i];
-                                if($row->pns_cpn==1)
-                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
-                                else
-                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
-                                if($row->pns_revision)
-                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
-                                else
-                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
-                               
-				$mf = SToController::GetManufacture($row->pns_id,4);//manufacture
-                                $ms = SToController::GetManufacture($row->pns_id,3);//Supplier 
-                                $mv = SToController::GetManufacture($row->pns_id,2);//vendor 
-                                $background="";
-                                if($row->inventory<=3)
-                                {
-                                        $background=  "style='background-color:#f00;color:#fff'";
+			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++) {
+                $row =& $this->warehouse_list[$i];
+                if ($row->inventory > 0) {
+                    if ($row->pns_cpn == 1)
+                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
+                    else
+                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $row->pns_id;
+                    if ($row->pns_revision)
+                        $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                    else
+                        $pns_code = $row->ccs_code . '-' . $row->pns_code;
+
+                    $mf = SToController::GetManufacture($row->pns_id, 4);//manufacture
+                    $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
+                    $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
+                    $background = "";
+                    if ($row->inventory <= 3) {
+                        $background = "style='background-color:#f00;color:#fff'";
+                    }
+
+
+                    ?>
+                    <tr class="<?php echo "row$k"; ?>">
+                        <td align="center" width="50">
+                            <?php echo $i + 1 + $this->pagination->limitstart; ?>
+                        </td>
+                        <td align="center" >
+                            <a href="<?php echo $link; ?>"
+                               title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pns_code; ?></a>
+                        </td>
+                        <td align="left" >
+                            <?php echo $row->pns_description; ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($mf) > 0) {
+                                foreach ($mf as $m) {
+                                    echo $m['mf'];
                                 }
-                                
-                                  
-                                                                  				
-			?>
-			<tr class="<?php echo "row$k"; ?>">
-				<td width="50">
-					<?php echo $i+1+$this->pagination->limitstart;?>
-				</td>				
-				<td>
-					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>				
-				</td>	
-                                <td>
-					<?php echo  $row->pns_description; ?>
-				</td>
-				<td>
-					<?php 
-					if (count($mf) > 0){
-                                                foreach ($mf as $m){
-                                                        echo $m['mf'];
-                                                }					
-					}
-					 ?>
-				</td>	
-                                <td>
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo $m['v_mf'];
-					}
-						
-					}
-					 ?>
-				</td>	                                                                    
-				<td>
-					<?php 
-					if (count($ms) > 0){
-                                                foreach ($ms as $m){
-                                                        echo $m['mf'];
-                                                }					
-					}
-					 ?>
-				</td>	
-                                <td>
-					<?php 
-					if (count($ms) > 0){
-					foreach ($ms as $m){
-						echo $m['v_mf'];
-					}
-						
-					}
-					 ?>
-				</td>	       
-                                <td>
-					<?php 
-					if (count($mv) > 0){
-                                                foreach ($mv as $m){
-                                                        echo $m['mf'];
-                                                }					
-					}
-					 ?>
-				</td>	
-                                <td>
-					<?php 
-					if (count($mv) > 0){
-					foreach ($mv as $m){
-						echo $m['v_mf'];
-					}
-						
-					}
-					 ?>
-				</td>	       
-                                <td align="center" <?php echo $background;?>>
-					<?php 
-                                        echo round($row->inventory,2);
-                                        ?>
-				</td>                                      
-			</tr>
-			<?php
-				$k = 1 - $k;
-				}
+                            }
+                            ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($mf) > 0) {
+                                foreach ($mf as $m) {
+                                    echo $m['v_mf'];
+                                }
+
+                            }
+                            ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($ms) > 0) {
+                                foreach ($ms as $m) {
+                                    echo $m['mf'];
+                                }
+                            }
+                            ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($ms) > 0) {
+                                foreach ($ms as $m) {
+                                    echo $m['v_mf'];
+                                }
+
+                            }
+                            ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($mv) > 0) {
+                                foreach ($mv as $m) {
+                                    echo $m['mf'];
+                                }
+                            }
+                            ?>
+                        </td>
+                        <td align="left" >
+                            <?php
+                            if (count($mv) > 0) {
+                                foreach ($mv as $m) {
+                                    echo $m['v_mf'];
+                                }
+
+                            }
+                            ?>
+                        </td>
+                        <td align="center" <?php echo $background; ?>>
+                            <?php
+                            $inventory = round($row->inventory, 2);
+                            if ($inventory <= 0)
+                                $inventory = 0;
+                            echo $inventory;
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+                    $k = 1 - $k;
+                }
+            }
 			?>
 		</tbody>
 	</table>

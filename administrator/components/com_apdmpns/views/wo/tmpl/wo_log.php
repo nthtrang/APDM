@@ -115,7 +115,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                  <?php                                                                               
 																			   if ($this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ){
                                                                                 ?>
-                                                                        <a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                                                        qq<a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                                                          <?php
                                                                                }
                                                                                 ?>
