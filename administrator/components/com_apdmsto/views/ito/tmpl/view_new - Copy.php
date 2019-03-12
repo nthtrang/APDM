@@ -512,7 +512,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="18"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="18"><?php echo JText::_('NUM'); ?></th>
                                         <th width="3%" class="title"></th>
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>  
@@ -563,16 +563,16 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                  
                                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>         
-                                                <td>					
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center">
                                                 <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span></td>
-                                                <td><?php echo $row->pns_description; ?></td>
-                                                <td><?php echo $row->pns_uom; ?></td>
-                                                <td>
+                                                <td align="left"><?php echo $row->pns_description; ?></td>
+                                                <td align="center"><?php echo $row->pns_uom; ?></td>
+                                                <td align="center">
                                                 <?php
                                                  $mf = SToController::GetManufacture($row->pns_id,4);
                                                 if (count($mf) > 0){
@@ -581,7 +581,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                         }					
                                                 } ?>
                                                 </td> 
-                                                <td colspan="4">  
+                                                <td  align="center" colspan="4">
                                                         
                                                         <table class="adminlist" cellspacing="0" width="200">
                                                                 <?php 
@@ -593,7 +593,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
                                                         <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
                                                 </td> 
-                                                <td align="center" width="77px">					
+                                                <td  align="center" align="center" width="77px">
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?></span>
                                                        <?php 
                                                         if($rw->sto_type==1)
@@ -611,7 +611,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                          }
                                                         ?>
                                                 </td>	
-                                                <td align="center" width="77px">					
+                                                <td  align="center" align="center" width="77px">
                                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
                                                          <?php       
                                                          if($rw->sto_type==1)

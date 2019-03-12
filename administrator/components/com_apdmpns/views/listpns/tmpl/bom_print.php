@@ -61,14 +61,14 @@ $list_pns_id = PNsController::DisplayPnsChildId($this->lists['pns_id'], $this->l
 $new_pns = explode(",", $list_pns_id);
 $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 ?>
-<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:14px"><?php echo $pns_code_full?> </strong>
+<div>&nbsp
         <table class="tgi" width="100%">
 	<thead>
 		<tr>
-                         <th width="5%">
-                             No
+                         <th width="2%">
+                             <?php echo JText::_('NUM')?>
                         </th>                                             
-                        <th width="5%">
+                        <th width="2%">
 				<?php echo JText::_('Level')?>
 			</th>                        
 			<th width="15%" >
@@ -89,14 +89,33 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 			<th width="10%">
 				<?php echo JText::_('MFG Name')?>
 			</th>
-            <th width="5%">
+            <th width="10%">
 				<?php echo JText::_('MFG PN')?>
 			</th>
-            <th width="25%">
-                <?php echo JText::_('PN Barcode');?>
-            </th>
 		</tr>
 	</thead>
+            <tr>
+                <td align="center">0</td>
+                <td>0</td>
+                <td  align="center" width="15%">
+                    <?php
+                    $img			=	code128BarCode($pns_code_full, 1);
+                    //Start output buffer to capture the image
+                    //Output PNG image
+                    ob_start();
+                    imagepng($img);
+                    //Get the image from the output buffer
+                    $output_img		=	ob_get_clean();
+                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$pns_code_full;
+                    ?>
+                </td>
+                <td style="text-align: left !important;"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
         <?php 
         //level1
         $level=0;
@@ -107,30 +126,32 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 $manufacture = PNsController::GetManufacture($row->pns_id);
                 ?>
         <tr>
-                <td><?php echo $step;?></td>                
-                 <td>1</td>
-		<td style="text-align: left !important;" width="15%"><?php echo $row->text; ?></td>
-                <td style="text-align: left !important;"><?php echo limit_text($row->pns_description, 15);?></td>
-                <td>
+                <td align="center"><?php echo $step;?></td>
+                 <td align="center">1</td>
+		<td  align="center" width="25%">
+            <?php
+            $img			=	code128BarCode($row->text, 1);
+            //Start output buffer to capture the image
+            //Output PNG image
+            ob_start();
+            imagepng($img);
+            //Get the image from the output buffer
+            $output_img		=	ob_get_clean();
+            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row->text;
+            ?>
+        </td>
+                <td align="left"  style="text-align: left !important;"><?php echo limit_text($row->pns_description, 15);?></td>
+                <td align="center" >
                         <?php echo $row->find_number;?>                        
                 </td>
 
-                <td>
+                <td align="center" >
                        <?php echo $row->stock;?>                        
                 </td>
-                <td><?php echo $row->pns_uom;?></td>
-                <td><?php echo $manufacture[0]['mf'];?></td>
-                <td><?php echo $manufacture[0]['v_mf'];?></td>
-            <td  width="25%"><?php
-                $img			=	code128BarCode($row->text, 1);
-                //Start output buffer to capture the image
-                //Output PNG image
-                ob_start();
-                imagepng($img);
-                //Get the image from the output buffer
-                $output_img		=	ob_get_clean();
-                echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row->text;
-                ?></td>
+                <td align="center" ><?php echo $row->pns_uom;?></td>
+                <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
 	</tr>
         <?php
                 //level2
@@ -142,20 +163,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                         $manufacture = PNsController::GetManufacture($row2->pns_id);
                        ?>
                            <tr>
-                                   <td><?php echo $step;?></td>                                   
-                                   <td>2</td>
-                                <td style="text-align: left !important;" width="15%"><?php echo $row2->text; ?></td>
-                                <td style="text-align: left !important;"><?php echo limit_text($row2->pns_description, 15);?></td>
-                                <td>
-                                        <?php echo $row2->find_number;?>                        
-                                </td>
-                                <td>
-                                       <?php echo $row2->stock;?>                        
-                                </td>
-                                <td><?php echo $row2->pns_uom;?></td>
-                                <td><?php echo $manufacture[0]['mf'];?></td>
-                                <td><?php echo $manufacture[0]['v_mf'];?></td>
-                               <td width="25%"><?php
+                                   <td align="center"><?php echo $step;?></td>
+                                   <td align="center">2</td>
+                               <td  align="center" width="25%"><?php
                                    $img			=	code128BarCode($row2->text, 1);
                                    //Start output buffer to capture the image
                                    //Output PNG image
@@ -165,6 +175,17 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                    $output_img		=	ob_get_clean();
                                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row2->text;
                                    ?></td>
+                                <td align="left"  style="text-align: left !important;"><?php echo limit_text($row2->pns_description, 15);?></td>
+                                <td align="center" >
+                                        <?php echo $row2->find_number;?>                        
+                                </td>
+                                <td align="center" >
+                                       <?php echo $row2->stock;?>                        
+                                </td>
+                                <td align="center" ><?php echo $row2->pns_uom;?></td>
+                                <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                                <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
 
                                 
                         </tr>
@@ -179,21 +200,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                         $manufacture = PNsController::GetManufacture($row3->pns_id);
                                        ?>
                                            <tr>
-                                                   <td><?php echo $step;?></td>                                                   
-                                                    <td>3</td>
-                                                <td style="text-align: left !important;" width="15%"><?php echo $row3->text; ?></td>
-                                                <td style="text-align: left !important;" width="15%"><?php echo limit_text($row3->pns_description, 15);?></td>
-                                                <td>
-                                                        <?php echo $row3->find_number;?>                        
-                                                </td>
-
-                                                <td>
-                                                       <?php echo $row3->stock;?>                        
-                                                </td>
-                                                <td><?php echo $row3->pns_uom;?></td>
-                                                <td><?php echo $manufacture[0]['mf'];?></td>
-                                                 <td><?php echo $manufacture[0]['v_mf'];?></td>
-                                               <td width="25%"><?php
+                                                   <td align="center" ><?php echo $step;?></td>
+                                                    <td align="center" >3</td>
+                                               <td align="center"  width="25%"><?php
                                                    $img			=	code128BarCode($row3->text, 1);
                                                    //Start output buffer to capture the image
                                                    //Output PNG image
@@ -203,6 +212,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                    $output_img		=	ob_get_clean();
                                                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row3->text;
                                                    ?></td>
+                                                <td align="center" style="text-align: left !important;" width="15%"><?php echo limit_text($row3->pns_description, 15);?></td>
+                                                <td align="center" >
+                                                        <?php echo $row3->find_number;?>                        
+                                                </td>
+
+                                                <td align="center" >
+                                                       <?php echo $row3->stock;?>                        
+                                                </td>
+                                                <td align="center" ><?php echo $row3->pns_uom;?></td>
+                                                <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                                                <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
                                         </tr>
                                                <?php
                                                 //level4
@@ -214,21 +235,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 $manufacture = PNsController::GetManufacture($row4->pns_id);
                                                        ?>
                                                            <tr>
-                                                                   <td><?php echo $step;?></td>                                                                  
-                                                                   <td>4</td>
-                                                                        <td style="text-align: left !important;" width="15%"><?php echo $row4->text; ?></td>
-                                                                        <td style="text-align: left !important;" width="15%"><?php echo limit_text($row4->pns_description, 15);?></td>
-                                                                        <td>
-                                                                                <?php echo $row4->find_number;?>                        
-                                                                        </td>
-
-                                                                        <td>
-                                                                               <?php echo $row4->stock;?>                        
-                                                                        </td>
-                                                                <td><?php echo $row4->pns_uom;?></td>
-                                                                <td><?php echo $manufacture[0]['mf'];?></td>
-                                                                <td><?php echo $manufacture[0]['v_mf'];?></td>
-                                                               <td width="25%"><?php
+                                                                   <td align="center" ><?php echo $step;?></td>
+                                                                   <td align="center" >4</td>
+                                                                    <td width="25%"><?php
                                                                    $img			=	code128BarCode($row4->text, 1);
                                                                    //Start output buffer to capture the image
                                                                    //Output PNG image
@@ -238,6 +247,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                    $output_img		=	ob_get_clean();
                                                                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row4->text;
                                                                    ?></td>
+                                                                        <td  align="left" style="text-align: left !important;" width="15%"><?php echo limit_text($row4->pns_description, 15);?></td>
+                                                                        <td align="center" >
+                                                                                <?php echo $row4->find_number;?>                        
+                                                                        </td>
+
+                                                                        <td align="center" >
+                                                                               <?php echo $row4->stock;?>                        
+                                                                        </td>
+                                                                <td><?php echo $row4->pns_uom;?></td>
+                                                                <td><?php echo $manufacture[0]['mf'];?></td>
+                                                                <td><?php echo $manufacture[0]['v_mf'];?></td>
+
 
                                                         </tr>
                                                                         <?php
@@ -250,20 +271,8 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         $manufacture = PNsController::GetManufacture($row5->pns_id);
                                                                                ?>
                                                                                    <tr>
-                                                                                           <td><?php echo $step;?></td>                                                                                           
+                                                                                           <td align="center" ><?php echo $step;?></td>
                                                                                            <td>5</td>
-                                                                                        <td style="text-align: left !important;" width="15%"><?php echo $row5->text; ?></td>
-                                                                                        <td style="text-align: left !important;" width="15%"><?php echo limit_text($row5->pns_description, 15);?></td>
-                                                                                        <td>
-                                                                                                <?php echo $row5->find_number;?>                        
-                                                                                        </td>
-
-                                                                                        <td>
-                                                                                               <?php echo $row5->stock;?>                        
-                                                                                        </td>
-                                                                                        <td><?php echo $row5->pns_uom;?></td>
-                                                                                        <td><?php echo $manufacture[0]['mf'];?></td>
-                                                                                        <td><?php echo $manufacture[0]['v_mf'];?></td>
                                                                                        <td width="25%"><?php
                                                                                            $img			=	code128BarCode($row5->text, 1);
                                                                                            //Start output buffer to capture the image
@@ -274,6 +283,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                            $output_img		=	ob_get_clean();
                                                                                            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row5->text;
                                                                                            ?></td>
+                                                                                        <td align="center" style="text-align: left !important;" width="15%"><?php echo limit_text($row5->pns_description, 15);?></td>
+                                                                                        <td align="center" >
+                                                                                                <?php echo $row5->find_number;?>                        
+                                                                                        </td>
+
+                                                                                        <td align="center" >
+                                                                                               <?php echo $row5->stock;?>                        
+                                                                                        </td>
+                                                                                        <td align="center" ><?php echo $row5->pns_uom;?></td>
+                                                                                        <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                                                                                        <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
 
                                                                                         
                                                                                 </tr>
@@ -287,21 +308,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 $manufacture = PNsController::GetManufacture($row6->pns_id);
                                                                                                        ?>
                                                                                                            <tr>
-                                                                                                                   <td><?php echo $step;?></td>                                                                                                                   
-                                                                                                                   <td>6</td>
-                                                                                                                <td style="text-align: left !important;" width="15%"><?php echo $row6->text; ?></td>
-                                                                                                                <td style="text-align: left !important;" width="15%"><?php echo limit_text($row6->pns_description, 15);?></td>
-                                                                                                                <td>
-                                                                                                                        <?php echo $row6->find_number;?>                        
-                                                                                                                </td>
-
-                                                                                                                <td>
-                                                                                                                       <?php echo $row6->stock;?>                        
-                                                                                                                </td>
-                                                                                                                <td><?php echo $row6->pns_uom;?></td>
-                                                                                                                <td><?php echo $manufacture[0]['mf'];?></td>
-                                                                                                                <td><?php echo $manufacture[0]['v_mf'];?></td>
-                                                                                                               <td width="25%"><?php
+                                                                                                                   <td align="center" ><?php echo $step;?></td>
+                                                                                                                   <td align="center" >6</td>
+                                                                                                               <td  align="center" width="25%"><?php
                                                                                                                    $img			=	code128BarCode($row6->text, 1);
                                                                                                                    //Start output buffer to capture the image
                                                                                                                    //Output PNG image
@@ -311,6 +320,18 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                    $output_img		=	ob_get_clean();
                                                                                                                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row6->text;
                                                                                                                    ?></td>
+                                                                                                                <td  align="center" style="text-align: left !important;" width="15%"><?php echo limit_text($row6->pns_description, 15);?></td>
+                                                                                                                <td align="center" >
+                                                                                                                        <?php echo $row6->find_number;?>                        
+                                                                                                                </td>
+
+                                                                                                                <td align="center" >
+                                                                                                                       <?php echo $row6->stock;?>                        
+                                                                                                                </td>
+                                                                                                                <td align="center" ><?php echo $row6->pns_uom;?></td>
+                                                                                                                <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                                                                                                                <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
 
                                                                                                                 
                                                                                                         </tr>
@@ -324,20 +345,9 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                         $manufacture = PNsController::GetManufacture($row7->pns_id);
                                                                                                                                ?>
                                                                                                                                    <tr>
-                                                                                                                                           <td><?php echo $step;?></td>                                                                                                                                           
-                                                                                                                                           <td>7</td>
-                                                                                                                                        <td style="text-align: left !important;" width="15%"><?php echo $row7->text; ?></td>
-                                                                                                                                        <td style="text-align: left !important;" width="15%"><?php echo limit_text($row7->pns_description, 15);?></td>
-                                                                                                                                        <td>
-                                                                                                                                                <?php echo $row7->find_number;?>                        
-                                                                                                                                        </td>
-                                                                                                                                        <td>
-                                                                                                                                               <?php echo $row7->stock;?>                        
-                                                                                                                                        </td>
-                                                                                                                                        <td><?php echo $row7->pns_uom;?></td>
-                                                                                                                                         <td><?php echo $manufacture[0]['mf'];?></td>
-                                                                                                                                       <td><?php echo $manufacture[0]['v_mf'];?></td>
-                                                                                                                                       <td width="25%"><?php
+                                                                                                                                           <td align="center" ><?php echo $step;?></td>
+                                                                                                                                           <td align="center" >7</td>
+                                                                                                                                       <td align="center"  width="25%"><?php
                                                                                                                                            $img			=	code128BarCode($row7->text, 1);
                                                                                                                                            //Start output buffer to capture the image
                                                                                                                                            //Output PNG image
@@ -347,6 +357,17 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                            $output_img		=	ob_get_clean();
                                                                                                                                            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row7->text;
                                                                                                                                            ?></td>
+                                                                                                                                        <td align="center"  style="text-align: left !important;" width="15%"><?php echo limit_text($row7->pns_description, 15);?></td>
+                                                                                                                                        <td align="center" >
+                                                                                                                                                <?php echo $row7->find_number;?>                        
+                                                                                                                                        </td>
+                                                                                                                                        <td align="center" >
+                                                                                                                                               <?php echo $row7->stock;?>                        
+                                                                                                                                        </td>
+                                                                                                                                        <td align="center" ><?php echo $row7->pns_uom;?></td>
+                                                                                                                                         <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
+                                                                                                                                       <td align="center" ><?php echo $manufacture[0]['v_mf'];?></td>
+
                                                                                                                                 </tr>
                                                                                                                                                   <?php
                                                                                                                                                 //level8
@@ -358,29 +379,29 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 $manufacture = PNsController::GetManufacture($row8->pns_id);
                                                                                                                                                        ?>
                                                                                                                                                            <tr>
-                                                                                                                                                                   <td><?php echo $step;?></td>                                                                                                                                                                   
-                                                                                                                                                                   <td>8</td>
-                                                                                                                                                                 <td style="text-align: left !important;" width="15%"><?php echo $row8->text; ?></td>
-                                                                                                                                                                <td style="text-align: left !important;" width="15%"><?php echo limit_text($row8->pns_description, 15);?></td>
-                                                                                                                                                                <td>
+                                                                                                                                                                   <td align="center" ><?php echo $step;?></td>
+                                                                                                                                                                   <td align="center" >8</td>
+                                                                                                                                                               <td align="center"  width="25%"><?php
+                                                                                                                                                                   $img			=	code128BarCode($row8->text, 1);
+                                                                                                                                                                   //Start output buffer to capture the image
+                                                                                                                                                                   //Output PNG image
+                                                                                                                                                                   ob_start();
+                                                                                                                                                                   imagepng($img);
+                                                                                                                                                                   //Get the image from the output buffer
+                                                                                                                                                                   $output_img		=	ob_get_clean();
+                                                                                                                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row8->text;
+                                                                                                                                                                   ?></td>
+                                                                                                                                                                <td align="center"  style="text-align: left !important;" width="15%"><?php echo limit_text($row8->pns_description, 15);?></td>
+                                                                                                                                                                <td align="center" >
                                                                                                                                                                         <?php echo $row8->find_number;?>                        
                                                                                                                                                                 </td>
-                                                                                                                                                                <td>
+                                                                                                                                                                <td align="center" >
                                                                                                                                                                        <?php echo $row8->stock;?>                        
                                                                                                                                                                 </td>
-                                                                                                                                                                <td><?php echo $row8->pns_uom;?></td>
-                                                                                                                                                                <td><?php echo $manufacture[0]['mf'];?></td>
+                                                                                                                                                                <td align="center" ><?php echo $row8->pns_uom;?></td>
+                                                                                                                                                                <td align="center" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                                                         <td><?php echo $manufacture[0]['v_mf'];?></td>
-                                                                                                                                                               <td width="25%"><?php
-                                                                                                                                                               $img			=	code128BarCode($row8->text, 1);
-                                                                                                                                                               //Start output buffer to capture the image
-                                                                                                                                                               //Output PNG image
-                                                                                                                                                               ob_start();
-                                                                                                                                                               imagepng($img);
-                                                                                                                                                               //Get the image from the output buffer
-                                                                                                                                                               $output_img		=	ob_get_clean();
-                                                                                                                                                               echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row8->text;
-                                                                                                                                                               ?></td>
+
                                                                                                                                                         </tr>
 
                                                                                                                                                 <?php

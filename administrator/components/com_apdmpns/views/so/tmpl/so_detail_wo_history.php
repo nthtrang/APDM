@@ -13,7 +13,7 @@ if($this->so_row->ccs_so_code)
 {
        $soNumber = $this->so_row->ccs_so_code."-".$soNumber;
 }
-JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
+JToolBarHelper::title("SO: ".$soNumber, 'cpanel.png');
 
 
 
@@ -122,10 +122,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom"  href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
-                        <li><a id="bom" class="active"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
+			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="bom"  href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Affected WO' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Supporting Doc' ); ?></a></li>
+                        <li><a id="bom" class="active"><?php echo JText::_( 'Status Changing History' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -151,23 +151,23 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                          <th width="8%">
 				<?php echo JText::_('PN')?>
 			</th>
-			<th width="8%">
+			<th width="25%">
 				<?php echo JText::_('Description')?>
 			</th>
 			
                          <th width="6%">
-				<?php echo JText::_('Changed Status')?>
+				<?php echo JText::_('Previous Status')?>
 			</th>                        
 			<th width="6%">
-				<?php echo JText::_('New Status')?>
+				<?php echo JText::_('Current Status')?>
 			</th>
-			<th>
+			<th width="8%">
 				<?php echo JText::_('Changed By')?>				
 			</th>
-                        <th>
+                        <th width="8%">
 				<?php echo JText::_('Changed Date')?>				
 			</th>
-                        <th>
+                        <th width="10%">
 				<?php echo JText::_('Reason')?>				
 			</th>                      						
 		</tr>
@@ -189,14 +189,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 ?>
         <tr>		
                                               
-                <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$row->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$row->wo_code.'</a> '; ?></td>                
-		<td><?php echo '<a href="'.$link.'" title="'.JText::_('Click to see detail PNs').'">'.$pnNumber.'</a> '; ?></td>		
-		<td><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>              
-                <td><?php echo PNsController::getWoStatus($row->pre_status); ?></td>                
-                <td><?php echo PNsController::getWoStatus($row->cur_status); ?></td>                
-                <td><?php echo GetValueUser($row->wo_log_created_by, "name"); ?></td>                
-                <td><?php echo JHTML::_('date', $row->wo_log_created, '%m-%d-%Y %H:%M:%S %p'); ?></td>                      
-                <td><?php echo $row->wo_log_content;?></td>
+                <td align="center"><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$row->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$row->wo_code.'</a> '; ?></td>
+		        <td align="left"><?php echo '<a href="'.$link.'" title="'.JText::_('Click to see detail PNs').'">'.$pnNumber.'</a> '; ?></td>
+		        <td align="left"><span class="editlinktip hasTip" title="<?php echo $row->pns_description; ?>" ><?php echo limit_text($row->pns_description, 15);?></span></td>
+                <td align="center"><?php echo PNsController::getWoStatus($row->pre_status); ?></td>
+                <td align="center"><?php echo PNsController::getWoStatus($row->cur_status); ?></td>
+                <td align="center"><?php echo GetValueUser($row->wo_log_created_by, "name"); ?></td>
+                <td align="center"><?php echo JHTML::_('date', $row->wo_log_created, '%m-%d-%Y %H:%M:%S %p'); ?></td>
+                <td align="center"><?php echo $row->wo_log_content;?></td>
                 
 	</tr>
 <?php 

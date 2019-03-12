@@ -93,7 +93,7 @@ class SToViewsto extends JView
         {
            $qty_from = $qty_to="";     
         }
-        $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= 10";
+        $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) <= 10 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >0";
         if($qty_from && $qty_to)
         {
                 $where = "where p.pns_deleted = 0 and  p.pns_deleted = 0 and p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;

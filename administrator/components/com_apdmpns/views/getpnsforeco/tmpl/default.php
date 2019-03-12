@@ -84,7 +84,7 @@ function UpdatePnsEco(){
 				</th>
 				
 				<th  class="title" width="10%">
-					<?php echo JText::_('ECO'); ?>
+					<?php echo JText::_('ECO Number'); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">

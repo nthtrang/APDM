@@ -99,7 +99,7 @@ function saveApproveTask(id){
 					<?php echo JText::_( 'Due Date' ); ?>
 				</th>
 				<th width="5%" class="title">
-					<?php echo JText::_( 'Action' ); ?>
+					<?php echo JText::_( '' ); ?>
 				</th>                                
 			</tr>
 		</thead>                
@@ -188,7 +188,7 @@ function saveApproveTask(id){
 
                 
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'My Pending task' ); ?></legend>
+		<legend><?php echo JText::_( 'My Pending Task' ); ?></legend>
                 <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
              		<div class="col width-100 scroll">
               <table class="adminlist" cellpadding="1">
@@ -248,41 +248,41 @@ function saveApproveTask(id){
                                 <?php                                 
                                 $arrAppver= ECOController::GetListApprover($row->id);                                                                 
                                 ?>
-                                      <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
+                                      <table class="adminlist" cellpadding="0">
                                               <?php 
                                               foreach($arrAppver as $rs)
                                               {
                                               ?>
                                               <tr>
-                                                      <td><?php echo $rs['title']; ?></td>
+                                                      <td align="center"><?php echo $rs['title']; ?></td>
                                                      
                                               </tr>
                                               <?php }?>
                                                 </table>					
 				</td>
                                 <td align="center">
-                                 <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
+                                 <table class="adminlist" cellpadding="0">
                                               <?php 
                                               foreach($arrAppver as $rs)
                                               {
                                               ?>
                                               <tr>
                                                       
-                                                      <td><?php echo $rs['approver']; ?></td>
+                                                      <td align="center"><?php echo $rs['approver']; ?></td>
                                                      
                                               </tr>
                                               <?php }?>
                                                 </table>
                                 </td>
                                 <td align="center">
-                                <table class="adminlist" cellpadding="0" style="background-color:#fff;border-bottom: 1px">
+                                <table class="adminlist" cellpadding="0">
                                               <?php 
                                               foreach($arrAppver as $rs)
                                               {
                                               ?>
                                               <tr>
                                                     
-                                                        <td><?php echo JHTML::_('date', $row->route_due_date    , '%m-%d-%Y'); ?></td>                                                  
+                                                        <td align="center"><?php echo JHTML::_('date', $row->route_due_date    , '%m-%d-%Y'); ?></td>
                                               </tr>
                                               <?php }?>
                                                 </table>	

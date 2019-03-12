@@ -77,12 +77,12 @@ function UpdatePnsChild(){
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="15%">
+				<th class="title" width="25%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
 				</th>
 				
 				<th  class="title" width="10%">
-					<?php echo JText::_('ECO'); ?>
+					<?php echo JText::_('ECO Number'); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">
@@ -125,18 +125,18 @@ function UpdatePnsChild(){
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td align="center"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
 				</span>
 				</td>	
 				
-				<td align="center">
+				<td align="center" align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>				
 <!--				<td align="center">
@@ -145,7 +145,7 @@ function UpdatePnsChild(){
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>							
 			</tr>

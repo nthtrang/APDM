@@ -57,7 +57,7 @@ function UpdateECO(){
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
 				<th class="title" width="20%">
-					<?php echo JHTML::_('grid.sort',   'Name', 'e.eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'ECO Number', 'e.eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th  class="title" >
 					<?php echo JText::_( 'Description' ); ?>
@@ -87,7 +87,7 @@ function UpdateECO(){
 				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->eco_id ); ?>
 				</td>
-				<td align="left">					
+				<td align="center">
 						<?php echo $row->eco_name; ?>
 				</td>				
 				<td align="left">

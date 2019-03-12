@@ -12,7 +12,7 @@ if (in_array("W", $role)) {
         JToolBarHelper::addLocation("New", $this->row->pns_location_id);
 }
 if (in_array("D", $role)) {           
-		JToolBarHelper::deleteList('Are you sure to remove it(s)?','removepnlocation',"Remove");
+		JToolBarHelper::deleteList('Are you sure to remove it(s)?','removepnlocation',"Delete");
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -75,16 +75,16 @@ function isCheckedBom(isitchecked,id){
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                         <th width="8%">#</th>   
-                                        <th width="100"><?php echo JText::_('NUM'); ?></th>                                               
+                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
+                                        <th width="3%"></th>
                                         <th width="100"><?php echo JText::_('Location Code'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="200"><?php echo JText::_('Description'); ?></th>
 <!--                                        <th width="100"><?php echo JText::_('Active'); ?></th>                                        -->
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Created By'); ?></th>
                                         <th width="100"><?php echo JText::_('Modified Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Modified By'); ?></th>
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+                                        <th width="100"><?php echo JText::_(''); ?></th>
                                 </tr>
                         </thead>
 <tfoot>
@@ -101,9 +101,9 @@ function isCheckedBom(isitchecked,id){
                 $i++;
                 ?>
                                         <tr>
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
                                                 <td align="center"><input  type="checkbox" id = "location"  onclick="isCheckedBom(this.checked,'<?php echo $loc->pns_location_id;?>');" value="<?php echo $loc->pns_location_id?>" name="cid[]"  /></td>
-                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td align="left"><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
                                                 <td align="left"><?php echo $loc->location_description; ?></td>                                                
                                                
 <!--                                                <td align="center">

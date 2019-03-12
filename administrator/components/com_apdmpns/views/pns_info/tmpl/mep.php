@@ -124,7 +124,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <td>
                                                                         <input size="40" type="text" value="<?php echo $v['v_value']; ?>" name="v_exist_value[]" />
                                                                 </td>
-                                                                <td>
+                                                                <td align="center">
                                                                         <a href="index.php?option=com_apdmpns&task=remove_info&id=<?php echo $v['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
                                                                 </td>
                                                         </tr>
@@ -178,7 +178,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <td>
                                                                         <input type="text" size="40" value="<?php echo $s['s_value']; ?>" name="s_exist_value[]" />
                                                                 </td>
-                                                                <td>
+                                                                <td align="center">
                                                                         <a href="index.php?option=com_apdmpns&task=remove_info&id=<?php echo $s['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
                                                                 </td>
                                                         </tr>
@@ -214,8 +214,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 <table class="adminlist" cellspacing="1" width="400">
                                         <thead>
                                                 <tr>
-                                                        <th width="200"><?php echo JText::_('Manufacturer Name'); ?></th>
-                                                        <th width="180"><?php echo JText::_('Manufacturing PN'); ?></th>
+                                                        <th width="200"><?php echo JText::_('MFR Name'); ?></th>
+                                                        <th width="180"><?php echo JText::_('MFG PN'); ?></th>
                                                         <th width="20">&nbsp;</th>
                                                 </tr>
                                         </thead>
@@ -230,7 +230,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <td>
                                                                         <input type="text" size="40" value="<?php echo $m['m_value']; ?>" name="m_exist_value[]" /> 
                                                                 </td>
-                                                                <td>
+                                                                <td align="center">
                                                                         <a href="index.php?option=com_apdmpns&task=remove_infomf&id=<?php echo $m['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove">
                                                                                 <?php echo JText::_('Remove') ?>
                                                                         </a>
@@ -243,8 +243,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <table class="admintable" cellspacing="1" width="400">
                                 <thead>
                                         <tr>
-                                                <th width="50%"><?php echo JText::_('Manufacturer Name'); ?></th>
-                                                <th><?php echo JText::_('Manufacturing PN'); ?></th>
+                                                <th width="50%"><?php echo JText::_('MFR Name'); ?></th>
+                                                <th><?php echo JText::_('MFG PN'); ?></th>
                                         </tr>
                                 </thead>
                                 <tbody id="manufacture_get">					

@@ -651,7 +651,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                         <th width="100"><?php echo JText::_('Description'); ?></th>  
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
                                         <th width="100"><?php echo JText::_('MFG PN'); ?></th>  
-                                        <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
+                                        <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('QTY In'):JText::_('QTY Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
                                         <th width="100"><?php //echo JText::_('Action'); ?></th>  
@@ -696,16 +696,16 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                  
                                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>         
-                                                <td>					
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center">
                                                 <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span></td>
-                                                <td><?php echo $row->pns_description; ?></td>
-                                                <td><?php echo $row->pns_uom; ?></td>
-                                                <td>
+                                                <td align="left"><?php echo $row->pns_description; ?></td>
+                                                <td align="center"><?php echo $row->pns_uom; ?></td>
+                                                <td align="center">
                                                 <?php
                                                  $mf = SToController::GetManufacture($row->pns_id,4);
                                                 if (count($mf) > 0){
@@ -714,7 +714,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         }					
                                                 } ?>
                                                 </td> 
-                                                <td colspan="4">  
+                                                <td align="center" colspan="4">
                                                         
                                                         <table class="adminlist" cellspacing="0" width="200">
                                                                 <?php 

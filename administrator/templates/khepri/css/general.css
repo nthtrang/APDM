@@ -133,7 +133,8 @@ textarea:focus { background-color: #ffd }
 
 /*
 #module-status { background: url(../images/mini_icon.png) 3px 5px no-repeat; }*/
-#module-status { float:right;}
+#module-status { float:right;width: 50%}
+#module-menu { float:left;width: 50%}
     
 .legacy-mode{ color: #c00;}
 #module-status .preview 			  { background: url(../images/menu/icon-16-media.png) 3px 3px no-repeat; }

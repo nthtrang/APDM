@@ -97,7 +97,7 @@
 		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>
-                                                <th width="100"><?php echo JText::_( 'NUM' ); ?></th>
+                                                <th width="2%"><?php echo JText::_( 'NUM' ); ?></th>
                                                 <th width="200"><?php echo JText::_( 'Part Number' ); ?></th>
 					<th width="100"><?php echo JText::_( 'Revision' ); ?></th>
 						<th width="100"><?php echo JText::_( 'State' ); ?></th>
@@ -121,14 +121,14 @@
                                                      
                                                 ?>
 					<tr>
-                                                <td><?php echo $i;?></td>
-                                                <td><input type="hidden" name="m_exist[]" value="<?php echo $rev->pns_rev_id;?>" >
+                                                <td align="center"><?php echo $i;?></td>
+                                                <td align="left"><input type="hidden" name="m_exist[]" value="<?php echo $rev->pns_rev_id;?>" >
                                                         <input type="hidden" name="m_exist_id[]" value="<?php echo $rev->pns_rev_id;?>" >
                                                         <a href="index.php?option=com_apdmpns&amp;task=detail&cid[0]=<?php echo $last_id;?>" title="Click here to view PN detail"><?php echo $rev->parent_pns_code?> </a>
                                                 </td>
-                                                <td><?php echo $rev->pns_revision;?><input type="hidden" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
-                                                <td><?php echo $rev->pns_life_cycle;?> </td>
-                                                <td><?php echo $rev->eco_name;?></td>
+                                                <td align="center"><?php echo $rev->pns_revision;?><input type="hidden" size="40" value="<?php echo $rev->pns_revision;?>" name="pns_revision[]" /> </td>
+                                                <td align="center"><?php echo $rev->pns_life_cycle;?> </td>
+                                                <td align="center"><?php echo $rev->eco_name;?></td>
 <!--                                                <td><a href="index.php?option=com_apdmpns&task=update_rev_roll&rev=<?php echo $rev->pns_revision;?>&id=<?php echo $rev->pns_rev_id;?>&pns_id=<?php echo $this->row->pns_id?>" title="Click to remove"><?php echo JText::_('Set rev')?></a></td>-->
                                         </tr>
 		<?php }

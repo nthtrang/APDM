@@ -78,12 +78,12 @@ function isCheckedPosPn(isitchecked,id){
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="18"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="3%"><?php echo JText::_('NUM'); ?></th>
                                         <th width="3%" class="title">
 <!--					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>-->
 				</th>                                        
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="200"><?php echo JText::_('Description'); ?></th>
                                         <th width="100"><?php echo JText::_('Qty'); ?></th>                                                                               
                                 </tr>
                         </thead>
@@ -104,15 +104,15 @@ function isCheckedPosPn(isitchecked,id){
 				}                
                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>         
-                                                <td>					
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center">
                                                 <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->id;?>');" value="<?php echo $row->id;?>" name="cid[]"  />
                                                 </td>                                                
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->parent_pns_code;?></a>
 				</span></td>
-                                                <td><?php echo $row->pns_description; ?></td>                                                
-                                                <td>                                                    
+                                                <td align="left"><?php echo $row->pns_description; ?></td>
+                                                <td align="center">
                                                         <span style="display:block" id="text_qty_<?php echo $row->id;?>"><?php echo $row->qty;?></span>
                                                         <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->id;?>"  name="qty_<?php echo $row->id;?>" />                                                        
                                                 </td>                                                 

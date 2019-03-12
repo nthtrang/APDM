@@ -162,20 +162,20 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="18"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
                                         <th width="3%" class="title">
 <!--					<input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.pns_po)"/>-->
 				</th>                                        
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>  
+                                        <th width="200"><?php echo JText::_('Description'); ?></th>
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Source Qty'); ?></th>
-                                        <th width="100"><?php echo JText::_('Destination Qty'); ?></th>
+                                        <th width="100"><?php echo JText::_('MFG PN'); ?></th>
+                                        <th width="50"><?php echo JText::_('Source Qty'); ?></th>
+                                        <th width="50"><?php echo JText::_('Destination Qty'); ?></th>
                                         <th width="100"><?php echo JText::_('Source Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Destination Location'); ?></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>  
+                                        <th width="100"><?php echo JText::_(''); ?></th>
                                 </tr>
                         </thead>
                         <tbody>					
@@ -218,16 +218,16 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                  
                                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>         
-                                                <td>					
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center">
                                                 <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span></td>
-                                                <td><?php echo $row->pns_description; ?></td>
-                                                <td><?php echo $row->pns_uom; ?></td>
-                                                <td>
+                                                <td align="left"><?php echo $row->pns_description; ?></td>
+                                                <td align="center"><?php echo $row->pns_uom; ?></td>
+                                                <td align="center">
                                                 <?php
                                                  $mf = PNsController::GetManufacture($row->pns_id,4);
                                                 if (count($mf) > 0){
@@ -236,7 +236,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                                         }					
                                                 } ?>
                                                 </td> 
-                                                <td colspan="6">  
+                                                <td align="center" colspan="6">
 
                                                                         <table class="adminlist" cellspacing="0" width="200">
                                                                                 <?php

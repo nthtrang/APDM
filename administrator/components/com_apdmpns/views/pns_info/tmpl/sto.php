@@ -79,7 +79,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <div class="clr"></div>
 <p>&nbsp;</p>
 <fieldset class="adminform">
-		<legend><?php echo JText::_( 'Location and Quatity' ); ?></legend>
+		<legend><?php echo JText::_( 'Location and Quantity' ); ?></legend>
                 <?php              
                 $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
                 ?><div class="col width-100 scroll">
@@ -146,7 +146,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
                                         <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('QTY In/QTY Out'); ?></th>
@@ -174,7 +174,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <tr>
                                                 <td align="center"><?php echo $i; ?></td>
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                <td style="text-align: center !important;"><?php echo $sto->sto_description; ?></td>
+                                                <td align="left"><?php echo $sto->sto_description; ?></td>
                                                 <td align="center"><?php echo $sto->stock; ?></td>
                                                 <!--<td align="center">
                                                 <?php /*if ($sto->sto_file) { */?>

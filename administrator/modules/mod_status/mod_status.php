@@ -127,8 +127,12 @@ $search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searc
 $search .=         "</form></span>";
 
 $output[] = "";
-
-$output[] = "<a href='index.php?option=com_apdmpns&task=searchadvance&clean=all'><input type='button' style='margin-bottom:5px;line-height:15px;padding:4px 10px 0 22px' name='searchadvance' value='Advance Search' /></a>";
+$gettask= JRequest::getVar('task');
+$array_task = array("so_detail","somanagement","so_detail_wo","so_detail_support_doc","so_detail_wo_history");
+if(in_array($gettask,$array_task))
+{
+    $output[] = "<a href='index.php?option=com_apdmpns&task=searchadvance&clean=all'><input type='button' style='margin-bottom:1px;line-height:17px;padding:1px 11px 0 18px;' name='searchadvance' value='Advance Search' /></a>";
+}
 //Print the logged in users message
 $output[] = "<span class=\"loggedin-users\"><a href=\"index.php?option=com_apdmusers&amp;view=apdmuser&amp;task=profile&amp;cid[]=".$user->get('id')."\">".$user->get('name')."</a></span>";
 

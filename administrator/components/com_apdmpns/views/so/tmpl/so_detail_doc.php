@@ -13,7 +13,7 @@ if($this->so_row->ccs_so_code)
 {
        $soNumber = $this->so_row->ccs_so_code."-".$soNumber;
 }
-JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
+JToolBarHelper::title("SO: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {   
         JToolBarHelper::apply('save_doc_so', 'Save');
@@ -114,10 +114,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
-                        <li><a id="bom" class="active"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
+			<li><a id="detail" href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $this->so_row->pns_so_id;?>" ><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Affected WO' ); ?></a></li>
+                        <li><a id="bom" class="active"><?php echo JText::_( 'Supporting Doc' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Status Changing History' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -143,10 +143,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						
 						<thead>
-							<th colspan="4"><?php echo JText::_('List Images')?></th>
+							<th colspan="4"><?php echo JText::_('Images List')?></th>
 						</thead>
 						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="5%"><strong><?php echo JText::_('NUM')?></strong></td>
 							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
 							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
 							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
@@ -241,10 +241,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List PDF')?></th>
+							<th colspan="4"><?php echo JText::_('PDFs List')?></th>
 						</thead>
 						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="5%"><strong><?php echo JText::_('NUM')?></strong></td>
 							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
 							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
 							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
@@ -339,10 +339,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 					<table width="100%"  class="adminlist" cellpadding="1">
 						<hr />
 						<thead>
-							<th colspan="4"><?php echo JText::_('List ZIP')?></th>
+							<th colspan="4"><?php echo JText::_('ZIPs List')?></th>
 						</thead>
 						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
+							<td width="5%"><strong><?php echo JText::_('NUM')?></strong></td>
 							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
 							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
 							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>

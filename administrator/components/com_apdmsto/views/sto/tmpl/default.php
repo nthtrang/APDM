@@ -94,7 +94,7 @@ td + td {
 }
 td, th {
   border-bottom:1px solid #eee;
-  padding: 4px 4px 4px 0px;
+  padding: 10px 10px 7px 0px;
 }
 th {
   height: 0;
@@ -250,7 +250,7 @@ th:first-child div{
                                                                                                    
 			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++) {
                 $row =& $this->warehouse_list[$i];
-                if ($row->inventory > 0) {
+               // if (($this->qty_from =="") && $row->inventory > 0) {
                     if ($row->pns_cpn == 1)
                         $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
                     else
@@ -274,7 +274,7 @@ th:first-child div{
                         <td align="center" width="50">
                             <?php echo $i + 1 + $this->pagination->limitstart; ?>
                         </td>
-                        <td align="center" >
+                        <td align="left" >
                             <a href="<?php echo $link; ?>"
                                title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pns_code; ?></a>
                         </td>
@@ -350,7 +350,7 @@ th:first-child div{
                     <?php
                     $k = 1 - $k;
                 }
-            }
+          //  }
 			?>
 		</tbody>
 	</table>

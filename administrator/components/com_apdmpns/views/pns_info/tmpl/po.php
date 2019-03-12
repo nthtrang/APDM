@@ -83,10 +83,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No'); ?></th>                                               
+                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
                                         <th width="100"><?php echo JText::_('P.O Number'); ?></th>
-                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="50"><?php echo JText::_('Qty'); ?></th>
+                                        <th width="200"><?php echo JText::_('Description'); ?></th>
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JText::_('Created Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
@@ -100,20 +100,20 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 $i++;
                 ?>
                                         <tr>
-                                                <td><?php echo $i; ?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
-                                                <td><?php echo $po->stock; ?></td> 
-                                                <td><?php echo $po->po_description; ?></td>                                                
-                                                <td>
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td align="center"><?php echo $po->stock; ?></td>
+                                                <td align="left"><?php echo $po->po_description; ?></td>
+                                                <td align="center">
                 <?php if ($po->po_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>
-                                                <td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
-                                                        <?php echo GetValueUser($po->po_create_by, "username"); ?>
+                                                <td align="center">
+                                                        <?php echo GetValueUser($po->po_create_by, "name"); ?>
                                                 </td>                                                  
 <!--                                                <td>
                                                         <?php if(in_array("D", $role)){?>

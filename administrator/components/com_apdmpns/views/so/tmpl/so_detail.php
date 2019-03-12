@@ -14,7 +14,7 @@ if($this->so_row->ccs_so_code)
        $soNumber = $this->so_row->ccs_so_code."-".$soNumber;
 }
 
-JToolBarHelper::title("SO#: ".$soNumber, 'cpanel.png');
+JToolBarHelper::title("SO: ".$soNumber, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);   
 $me = JFactory::getUser();
 $usertype	= $me->get('usertype');
@@ -148,10 +148,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'AFFECTED WO#' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'STATUS CHANGING HISTORY' ); ?></a></li>
+			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Affected WO' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_support_doc&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Supporting Doc' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=so_detail_wo_history&id=<?php echo $this->so_row->pns_so_id;?>"><?php echo JText::_( 'Status Changing History' ); ?></a></li>
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -166,51 +166,87 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <fieldset class="adminform">
-		<legend><?php echo JText::_( 'SO Detail' ); ?></legend>        
         <table class="admintable" cellspacing="1"  width="70%">
                               <tr>
                                         <td class="key" width="28%"><?php echo JText::_('Customer'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo PNsController::getCcsName($this->so_row->customer_id); ?></td>                                          
-                                        <td class="key" width="18%"><?php echo JText::_('Coordinator'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo PNsController::getcoordinatorso($this->so_row->ccs_so_code);?></td>
-				                                                                              
+                                        <td width="30%" class="title"><?php echo PNsController::getCcsName($this->so_row->customer_id); ?></td>
+                                        <td  class="key" width="28%"><?php echo JText::_('Status'); ?></td>
+                                        <td width="30%" class="title">
+                                          <?php
+                                          $arrStatus = $this->arr_status;
+                                          echo strtoupper($arrStatus[$this->so_row->so_state]);
+                                      ?></td>
+
+                              </tr>
+                                <tr>
+                                    <td class="key" width="18%"><?php echo JText::_('Coordinator'); ?></td>
+                                    <td width="30%" class="title"><?php echo PNsController::getcoordinatorso($this->so_row->ccs_so_code);?></td>
+                                    <td class="key" valign="top">
+                                        <label for="username">
+                                            <?php echo JText::_('Created Date'); ?>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <?php echo JHTML::_('date', $this->so_row->so_created, '%m-%d-%Y %H:%M:%S %p'); ?>
+
+                                    </td>
                                 </tr>
                                 <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('PO# of Customer'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">
+                                        <td  class="key" width="28%"><?php echo JText::_('External PO'); ?></td>
+                                        <td width="30%" class="title">
                                         <?php 
                                          $soNumber = $this->so_row->so_cuscode;
                                         if($this->so_row->ccs_code)
                                         {
                                                $soNumber = $this->so_row->ccs_code."-".$soNumber;
                                         }
-                                        echo $soNumber; ?></td>                                        
+                                        echo $soNumber; ?></td>
+                                    <td class="key" valign="top">
+                                        <label for="username">
+                                            <?php echo JText::_( 'Created by' ); ?>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <?php echo GetValueUser($this->so_row->so_created_by, "name"); ?>
+
+                                    </td>
 				                                                                              
                                 </tr>  
                                 <tr>
                                         <td class="key"  width="28%"><?php echo JText::_('Shipping Requested Date'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
-				                                                                              
+                                        <td width="30%" class="title">  <?php echo JHTML::_('date', $this->so_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                        <td class="key" valign="top">
+                                            <?php echo JText::_( 'Modified Date' ); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo  ($this->so_row->so_updated) ? JHTML::_('date', $this->so_row->so_updated, '%m-%d-%Y %H:%M:%S %p') : ''; ?>
+                                        </td>
                                 </tr>  
                                 <tr>
                                         <td  class="key" width="28%"><?php echo JText::_('Start Date'); ?></td>                                               
-                                        <td width="30%" class="title" colspan="3">  <?php echo JHTML::_('date', $this->so_row->so_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
-				                                                                              
+                                        <td width="30%" class="title">  <?php echo JHTML::_('date', $this->so_row->so_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                    <td class="key" valign="top"><?php echo JText::_( 'Modified By' ); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo  ($this->so_row->so_updated_by) ? GetValueUser($this->so_row->so_updated_by, "name") : ''; ?>
+
+                                    </td>
                                 </tr>                                                                                 
                                 <tr>
                                         <td colspan="4" >
 						<table class="adminlist" cellspacing="1" width="100%">
+                                    <thead>
                                                         <tr>
-                                                                <td class="key">#</td>
-                                                                <td width="30%" class="key">TOP ASSY PN</td>
-                                                                <td class="key">Description</td>
-                                                                <td class="key">Qty</td>
-                                                                <td class="key">RMA</td>
-                                                                <td class="key">UOM</td>
-                                                                <td class="key">Required</td>
-                                                                <td class="key">Unit Price</td>
-                                                                <td class="key">Delivery Times</td>                                                          
-                                                        </tr>
+                                                                <th align="center" class="title">#</th>
+                                                                <th  align="center" width="15%" class="title">TOP ASSY PN</th>
+                                                                <th  align="center" width="25%" class="title">Description</th>
+                                                                <th  align="center" width="6%" class="title">Qty</th>
+                                                                <th  align="center"  width="8%"  class="title">RMA</th>
+                                                                <th  align="center"  width="8%"  class="title">UOM</th>
+                                                                <th  align="center"  width="10%"  class="title">Required</th>
+                                                                <th  align="center"  width="10%"  class="title">Unit Price</th>
+                                                                <th align="center"  width="15%"   class="title">Delivery Times</th>
+                                                        </tr></thead>
                                                         <?php
                                                         $i = 0;
                                                         foreach ($this->so_pn_list as $row) {
@@ -227,26 +263,26 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 }
                                                                 ?>
                                                                 <tr>        
-                                                                        <td>
+                                                                        <td align="center" >
                                                                                 <input type="checkbox" id = "pns_so" onclick="isCheckedSoPn(this.checked,'<?php echo $row->id;?>');" value="<?php echo $row->id;?>" name="cid[]"  />
                                                                         </td>
-                                                                        <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
+                                                                        <td  align="left" ><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
                                                                                         <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
                                                                                 </span></td>
-                                                                        <td><?php echo $row->pns_description; ?></td>                                                
-                                                                        <td>                                                    
+                                                                        <td  align="left" ><?php echo $row->pns_description; ?></td>
+                                                                        <td align="center" >
                                                                                 <span id="text_qty_<?php echo $row->id; ?>"><?php echo $row->qty; ?>
                                                                                 </span>
                                                                                  <input type="hidden" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->id;?>"  name="qty_<?php echo $row->id;?>" />
                                                                         </td> 
-                                                                        <td>
+                                                                        <td align="center" >
                                                                                 <span style="display:block" id="text_rma_<?php echo $row->id;?>"><?php echo $row->rma;?></span>
                                                                                 <input style="display:none" onKeyPress="return numbersOnly(this, event);" type="text" value="<?php echo $row->rma;?>" id="rma_<?php echo $row->id;?>"  name="rma_<?php echo $row->id;?>" />
                                                                         </td>
-                                                                        <td>                                                    
+                                                                        <td align="center" >
                                                                                 <span id="text_qty_<?php echo $row->id; ?>"><?php echo $row->pns_uom; ?></span>                                                        
                                                                         </td>
-                                                                        <td>                                                    
+                                                                        <td align="center" >
                                                                                 <span id="text_qty_<?php echo $row->id; ?>">
                                                                                         <?php
                                                                                         $required = array();
@@ -264,10 +300,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                 
                                                                                 </span>                                                        
                                                                         </td>
-                                                                        <td>                                                    
+                                                                        <td align="center" >
                                                                                 <span style="display:block" id="text_qty_<?php echo $row->id; ?>"><?php echo $row->price; ?></span>                                                        
                                                                         </td>
-                                                                        <td>                                                    
+                                                                        <td align="center" >
                                                                                 <span style="display:block" id="text_qty_<?php echo $row->id; ?>"></span>                                                        
                                                                         </td>
                                                                 </tr>
@@ -279,24 +315,29 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         </td>
                                 </tr>
                         <tr>
+                            <td ><strong>LOG</strong></td>
+                            <td valign="top"></td>
                                 <td  valign="top"><strong>DELIVERY</strong></td>
                                         <td valign="top"></td>
-                                        <td ><strong>LOG</strong></td>
-                                        <td valign="top"></td>
+
                                         
                                         
                                 </tr>                                
                               
                          <tr>
                                  <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc">
+                                            <?php echo $this->so_row->so_log;?>
+                                        </td>
                                         <td  colspan="2" valign="top">
                                             <table class="adminlist" cellspacing="1" width="100%">
-                                                        <tr>
-                                                                <td width="30%" class="key">PN</td>
-                                                                <td class="key">Times</td>
-                                                                <td class="key">Qty</td>
-                                                                <td class="key">State</td>
-                                                        </tr>
+                                                <thead>
+                                                <tr>
+                                                                <th width="30%" class="title">PN</th>
+                                                                <th class="title">Times</th>
+                                                                <th class="title">Qty</th>
+                                                                <th class="title">State</th>
+                                                </tr>        </thead>
                                                         
                                                                  <?php 
                                                                  foreach ($this->so_pn_list as $row) {                                                                         
@@ -317,15 +358,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                  ?>
                                                         
                                                                  
-                                                                <td width="30%" > <?php echo $pnNumber;?></td>
-                                                                <td> <?php echo $totalEto;?></td>
-                                                                <td colspan="2"><table class="adminlist" cellspacing="0" width="200">                                                                
+                                                                <td  align="left"  width="30%" > <?php echo $pnNumber;?></td>
+                                                                <td align="center" > <?php echo $totalEto;?></td>
+                                                                <td  align="center"  colspan="2"><table class="adminlist" cellspacing="0" width="200">
                                                                 <?php                                                             
                                                                 foreach ($rowEto as $r1) { 
                                                                 ?>
                                                                 <tr>
-                                                                <td width="100"><?php echo $r1->qty;?></td>
-                                                                <td><a href="index.php?option=com_apdmsto&task=eto_detail&id=<?php echo $r1->sto_id?>"><?php echo $r1->sto_state;?></a></td>
+                                                                <td  align="center"  width="102"><?php echo $r1->qty;?></td>
+                                                                <td align="center" ><a href="index.php?option=com_apdmsto&task=eto_detail&id=<?php echo $r1->sto_id?>"><?php echo $r1->sto_state;?></a></td>
                                                                  </tr>
                                                                 <?php 
                                                                 }?></table>
@@ -336,73 +377,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                              
                                             </table>
                                         </td>
-                                        <td colspan="2" >
-                                             <?php echo $this->so_row->so_log;?>
-                                                        
-                                        </td>
-                                        
-                                </tr>                                
-                              
-                         <tr>                                 
-                        <td  class="key" width="28%"><?php echo JText::_('Status'); ?></td>                                               
-                        <td width="30%" class="title">  
-                        <?php 
-                        $arrStatus = $this->arr_status;
-                        echo strtoupper($arrStatus[$this->so_row->so_state]);
-                        ?></td> 
-                       <td></td>
-                       
 
-                </tr>         
-        
-               
-                        <tr>
-                                        <td class="key" valign="top">
-                                                <label for="username">
-                                                        <?php echo JText::_('Date Create'); ?>
-                                                </label>
-                                        </td>
-                                        <td>
-                                                <?php echo JHTML::_('date', $this->so_row->so_created, '%m-%d-%Y %H:%M:%S %p'); ?>
-                                                        
-                                        </td>
-                                        <td  colspan="2" rowspan="4"></td> 
+                                        
                                 </tr>
-				
-				
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Create by' ); ?>
-						</label>
-					</td>
-					<td>
- 						<?php echo GetValueUser($this->so_row->so_created_by, "name"); ?>
-
-					</td>
-                                        
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Date Modified' ); ?>
-						</label>
-					</td>
-					<td>
- 						<?php echo  ($this->so_row->so_updated) ? JHTML::_('date', $this->so_row->so_updated, '%m-%d-%Y %H:%M:%S %p') : ''; ?>
-
-					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Modified By' ); ?>
-						</label>
-					</td>
-					<td> 						
-						<?php echo  ($this->so_row->so_updated_by) ? GetValueUser($this->so_row->so_updated_by, "name") : ''; ?>
-
-					</td>
-				</tr>                
         </table>		
         </fieldset>
         <input type="hidden" name="so_id" value="<?php echo $this->so_row->pns_so_id; ?>" />

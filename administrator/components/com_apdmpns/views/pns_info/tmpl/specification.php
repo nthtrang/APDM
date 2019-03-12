@@ -180,7 +180,7 @@
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
 	<div class="col width-100">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Image, Pdf, CAD files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+		<legend><?php echo JText::_( 'Image, PDF, CAD files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
 			<table class="adminlist">
 				<?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
 				<tr>
@@ -243,7 +243,7 @@
                                 <tr>
 					<td class="key">
 						<label for="ccs_create">
-							<?php echo JText::_('IMAGE')?>
+							<?php echo JText::_('Image')?>
 						</label>
 					</td>
 					<td>
@@ -347,7 +347,7 @@
 				<?php } ?>                                                
 					<td class="key">
 						<label for="ccs_create">
-							<?php echo JText::_('P/N PDF')?>
+							<?php echo JText::_('PDF')?>
 						</label>
 					</td>
 					<td>

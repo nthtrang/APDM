@@ -68,7 +68,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('No.'); ?></th>        
+                                        <th width="3%"><?php echo JText::_('No.'); ?></th>
                                          <th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->pos_list); ?>);" />
                                         </th> 
@@ -94,24 +94,24 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 $i++;
                 ?>
                                         <tr>
-                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td>
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('grid.id', $i, $po->pns_po_id ); ?>
                                                 </td>
-                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
-                                                <td><?php echo $po->po_description; ?></td>                                                
-                                                <td>
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td align="left"><?php echo $po->po_description; ?></td>
+                                                <td align="center">
                 <?php if ($po->po_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                
-                                                <td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
+                                                <td align="center">
                                                         <?php echo GetValueUser($po->po_create_by, "name"); ?>
                                                 </td>                                                  
-                                                <td><?php if (in_array("E", $role)) {
+                                                <td align="center"><?php if (in_array("E", $role)) {
                                                         ?>
                                                         <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $po->pns_po_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php

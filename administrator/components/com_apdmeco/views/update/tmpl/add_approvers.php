@@ -184,21 +184,20 @@ if ($owner == $me->get('id')) {
 <div class="clr"></div>
 <p>&nbsp;</p>
 <form action="<?php echo $link; ?>" method="post" name="adminForm" >
-        <div class="col">
                 <fieldset class="adminform">
                         <legend><?php echo JText::_('Approvers'); ?></legend>
-
-                        <table class="admintable"  width="100%">			
-
+                    <table class="adminlist" cellpadding="1">
+<thead>
                                 <tr>
-                                        <td width="5%"><strong><?php echo JText::_('No.') ?></strong></td>
-                                        <td width="15%"><strong><?php echo JText::_('Title') ?> </strong></td>
-                                        <td width="15%"><strong><?php echo JText::_('Approver') ?> </strong></td>
-                                        <td width="20%"><strong><?php echo JText::_('Approve/Reject') ?> </strong></td>
-                                        <td width="25%"><strong><?php echo JText::_('Comment') ?> </strong></td>
-                                        <td width="20%"><strong><?php echo JText::_('Due Date') ?> </strong></td>
-                                        <td width="20%"><strong><?php echo JText::_('Action') ?> </strong></td>
+                                        <th class="title" width="2%"><strong><?php echo JText::_('NUM') ?></strong></th>
+                                        <th class="title" width="15%"><strong><?php echo JText::_('Title') ?> </strong></th>
+                                        <th class="title" width="15%"><strong><?php echo JText::_('Approver') ?> </strong></th>
+                                        <th class="title" width="20%"><strong><?php echo JText::_('Approve/Reject') ?> </strong></th>
+                                        <th class="title" width="25%"><strong><?php echo JText::_('Comment') ?> </strong></th>
+                                        <th class="title" width="20%"><strong><?php echo JText::_('Due Date') ?> </strong></th>
+                                        <th class="title" width="20%"><strong><?php echo JText::_('') ?> </strong></th>
                                 </tr>
+</thead>
 <?php
 $i = 1;
 if (count($this->arr_status) > 0) {
@@ -208,17 +207,17 @@ if (count($this->arr_status) > 0) {
                                                 if ($me->get('email') == $status->email || $owner == $me->get('id')) {
                                                         ?>
                                                         <tr>
-                                                                <td><?php echo $i ?></td>
-                                                                <td width="15%">    
+                                                                <td align="center"><?php echo $i ?></td>
+                                                                <td align="center" width="15%">
                                                                 <?php echo $status->title ?>
                                                                         <input type="hidden" name="title[]" id="title" value="<?php echo $status->title ?>" /></td>
-                                                                <td width="15%"><?php echo EcoController::GetNameApprover($status->email); ?>
+                                                                <td align="center" width="15%"><?php echo EcoController::GetNameApprover($status->email); ?>
                                                                         <input type="hidden" name="mail_user[]" id="title" value="<?php echo $status->email; ?>" />
                                                                 </td>
                                                                         <?php
                                                                         if ($status->eco_status == 'Inreview') {
                                                                                 ?>
-                                                                        <td width="20%">
+                                                                        <td align="center" width="20%">
                                                                         <?php                                                                        
                                                                                 $status_arr = array();
                                                                                 $status_arr[] = JHTML::_('select.option', 'Inreview', JText::_('Inreview'), 'value', 'text');
@@ -227,15 +226,15 @@ if (count($this->arr_status) > 0) {
                                                                                 echo JHTML::_('select.genericlist', $status_arr, 'approve_status[]', 'class="inputbox" size="1" ', 'value', 'text', $status->eco_status);
                                                                                                                                                 ?>                                                                                                    
                                                                         </td>                                                        
-                                                                        <td width="25%">     
+                                                                        <td align="center" width="25%">
 
                                                                                 <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]' <?php //echo $disabled; ?>><?php echo $status->note; ?></textarea>                                                       
                                                                         </td>
                                                                                 <?php
                                                                         } else {
                                                                                 ?>
-                                                                         <td width="20%"> <?php   echo ($status->eco_status=="Released")?"Approve":$status->eco_status;?></td>
-                                                                        <td width="25%">     
+                                                                         <td align="center" width="20%"> <?php   echo ($status->eco_status=="Released")?"Approve":$status->eco_status;?></td>
+                                                                        <td  align="center" width="25%">
                                                                                 <?php echo $status->note; ?>                                                   
                                                                         </td>
                                                                         <?php
@@ -243,10 +242,10 @@ if (count($this->arr_status) > 0) {
                                                                                 ?>
                                                                         
                                                                   
-                                                                <td width="20%">                                                                
+                                                                <td  align="center" width="20%">
                                                                 <?php echo JHTML::_('date', $status->route_due_date, '%m-%d-%Y %H:%M:%S'); ?>                                               
                                                                 </td>   
-                                                                <td width="25%">                                                                
+                                                                <td align="center" width="25%">
                                                                         <?php if ($status->route_status == "Create" && $owner == $me->get('id') && $status->eco_status=="Inreview") { ?>
                                                                                 <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id; ?>&id=<?php echo $status->id; ?>&time=<?php echo time(); ?>&routes=<?php echo JRequest::getVar('routes') ?>'>Remove</a>                                             
                                                                 <?php } ?>
@@ -257,34 +256,34 @@ if (count($this->arr_status) > 0) {
                                                         } else {
                                                                 ?>
                                                         <tr>
-                                                                <td><?php echo $i ?></td>
-                                                                <td><?php echo $status->title ?></td>
-                                                                <td><?php echo EcoController::GetNameApprover($status->email); ?>
+                                                                <td align="center"><?php echo $i ?></td>
+                                                                <td align="center"><?php echo $status->title ?></td>
+                                                                <td align="center"><?php echo EcoController::GetNameApprover($status->email); ?>
                                                                         <input type="hidden" name="mail_user[]" id="title" value="<?php echo $status->email; ?>" />
                                                                 </td>
                                                         <?php
                                                         if ($status->eco_status == 'Inreview') {
                                                                 ?>
-                                                                        <td width="20%"><?php echo $status->eco_status; ?></td>                                                        
-                                                                        <td width="25%">                                                                
+                                                                        <td align="center" width="20%"><?php echo $status->eco_status; ?></td>
+                                                                        <td  align="center" width="25%">
                                                                                 <textarea disabled="disabled" cols="25" rows="6" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>
                                                                         </td>
                                                                                 <?php
                                                                         } else {
                                                                                 ?>
-                                                                        <td width="20%">
+                                                                        <td align="center" width="20%">
                                                                                 <?php echo ($status->eco_status=="Released")?"Approve":$status->eco_status; ?>                                                         
                                                                         </td>                                                        
-                                                                        <td width="25%">                                                                
+                                                                        <td align="center" width="25%">
                                                                                 <?php echo $status->note; ?>                                                  
                                                                         </td>       
                                                                                 <?php
                                                                         }
                                                                         ?>  
-                                                                <td width="20%">                                                                
+                                                                <td align="center" width="20%">
                                                                 <?php echo JHTML::_('date', $status->route_due_date, '%m-%d-%Y %H:%M:%S'); ?>
                                                                 </td> 
-                                                                <td width="25%">  
+                                                                <td align="center" width="25%">
                                                                 <?php if ($status->route_status == "Create" && $owner == $me->get('id')) { ?>
                                                                                 <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id; ?>&id=<?php echo $status->id; ?>&time=<?php echo time(); ?>&routes=<?php echo JRequest::getVar('routes') ?>'>Remove</a>                                             
                                                                         <?php } ?>
@@ -308,9 +307,9 @@ if (count($this->arr_status) > 0) {
                                                                 ?>
 
                                                 <tr id="<?php echo $j; ?>" style="display:block">
-                                                        <td width="5%"><?php echo $j; ?></td>
-                                                        <td width="15%"><input type="text" name="title[]" id="title" value="" /></td>
-                                                        <td  width="16%">
+                                                        <td  align="center"width="5%"><?php echo $j; ?></td>
+                                                        <td align="center" width="15%"><input type="text" name="title[]" id="title" value="" /></td>
+                                                        <td  align="center" width="16%">
                                                                 <select name="mail_user[]" >
                                                                         <option value="">Select Approver</option>
                                         <?php foreach ($this->list_user as $list) { ?>
@@ -321,23 +320,23 @@ if (count($this->arr_status) > 0) {
                                                 <?php
                                                 if ($status->eco_status == 'Inreview') {
                                                         ?>
-                                                                <td width="20%">
+                                                                <td  align="center" width="20%">
                                                         <?php
                                                         echo JHTML::_('select.genericlist', $status_arr, 'approve_status[]', 'class="inputbox" size="1" ', 'value', 'text', "Inreview");
                                                         ?>
 
                                                                         <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id; ?>&time=<?php echo time(); ?>'></a>                                                                
                                                                 </td>                                                        
-                                                                <td width="25%">                                                                
+                                                                <td align="center" width="25%">
                                                                         <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>                                                       
                                                                 </td>
                                                                                 <?php
                                                                         } else {
                                                                                 ?>
-                                                                <td width="20%">
+                                                                <td align="center" width="20%">
                                                                          <?php echo ($status->eco_status=="Released")?"Approve":$status->eco_status; ?>                                                           
                                                                 </td>                                                        
-                                                                <td width="25%">                                                                
+                                                                <td align="center" width="25%">
                                                                 <?php echo $status->note; ?>                                                  
                                                                 </td>                                                                
                                                                         <?php
@@ -366,8 +365,6 @@ if (count($this->arr_status) > 0) {
                                                         $link = "index.php?option=com_apdmeco&amp;task=addapprove&amp;cid[]=" . $this->row->eco_id . "&amp;time=" . time();
                                                 }
                                                 ?>
-        </div>
-
         <div class="clr"></div>
 
         <input type="hidden" name="eco_id" value="<?php echo $this->row->eco_id ?>" />

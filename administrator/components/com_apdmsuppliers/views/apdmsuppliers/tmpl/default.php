@@ -14,7 +14,7 @@
 		JToolBarHelper::deleteList('Are you sure to delete it?');
 	}
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+	//	JToolBarHelper::editListX();
 	}else{
 		JToolBarHelper::editListX('detail', 'View');
 	}
@@ -96,26 +96,23 @@ function submitbutton(pressbutton) {
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
-				<th class="title">
+				<th  width="15%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Name', 's.info_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th class="title">
+				<th width="15%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Type', 's.info_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="15%" class="title" >
 					<?php echo JText::_( 'Description' ); ?>
 				</th>
-				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   'Activate', 's.info_activate', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
-				</th>
-				<th width="5%" class="title" nowrap="nowrap">
+				<th width="8%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   'Created Date', 's.info_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
-				<th width="15%" class="title">
+				<th width="10%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Created by', 's.info_created_by', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th width="15%" class="title">
+				<th width="8%" class="title">
 					<?php echo JHTML::_('grid.sort',   'Modified Date', 's.info_modified', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th width="10%" class="title">
@@ -159,19 +156,15 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->info_id ); ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail.')?>">
 						<?php echo $row->info_name; ?></a>
 				</td>
 				<td align="center">
 					<?php echo $type; ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php echo $row->info_description; ?>
-				</td>
-				<td align="center">
-					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
-						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
 				<td align="center">
 					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>

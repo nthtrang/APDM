@@ -168,14 +168,14 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th class="title"  >
+				<th width="25%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
 				
-				<th width="20%" class="title">
+				<th width="10%" class="title">
 					<?php echo JText::_( 'MFR Name' ); ?>
 				</th>
-                                <th width="20%" class="title">
+                <th width="10%" class="title">
 					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>
 <!--				<th width="20%" class="title">
@@ -184,7 +184,7 @@ function submitbutton(pressbutton) {
 <!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Date In' ); ?>
 				</th>       -->
-				<th width="20%" class="title">
+				<th width="10%" class="title">
 					<?php echo JText::_( 'Inventory' ); ?>
                                         <?php //echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>    
@@ -243,12 +243,12 @@ function submitbutton(pressbutton) {
 				<td style="text-align: center !important;">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+				<td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
                               
-				<td>
+				<td align="center">
 				<?php if ($bom) {                                       
                                 ?>
 				<a href="index.php?option=com_apdmpns&task=bom&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
@@ -258,7 +258,7 @@ function submitbutton(pressbutton) {
 				<?php } ?>
 	
 				</td>
-                                <td>
+                <td align="center">
 				<?php if ($wheruse) { ?>
 				<a href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
@@ -290,10 +290,10 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>
-				<td>
+				<td align="center">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
@@ -303,7 +303,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>	
-                                <td>
+                                <td align="center">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
