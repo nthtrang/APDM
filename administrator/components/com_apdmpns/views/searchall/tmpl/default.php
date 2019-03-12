@@ -72,7 +72,7 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				<th class="title" width="10%">
-                    <?php echo JHTML::_('grid.sort', 'Name', 'eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+                    <?php echo JHTML::_('grid.sort', 'ECO Number', 'eco_name', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th  class="title" >
 					<?php echo JText::_( 'Description' ); ?>
@@ -85,14 +85,14 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo JText::_('State'); ?>
 				</th>
 				<th width="7%" class="title" nowrap="nowrap">
-                    <?php echo JHTML::_('grid.sort', 'Date Create', 'eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+                    <?php echo JHTML::_('grid.sort', 'Created Date', 'eco_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				
 				<th width="10%" class="title">
-					<?php echo JText::_('Create by'); ?>
+					<?php echo JText::_('Created By'); ?>
 				</th>
 				<th width="7%" class="title">
-					<?php echo JText::_('Date Modified'); ?>
+					<?php echo JText::_('Modified Date'); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JText::_('Modified By'); ?>
@@ -118,7 +118,7 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				
-				<td>
+				<td align="center">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail ECO')?>">
 						<?php echo $row->eco_name; ?></a>
 				</td>				
@@ -137,19 +137,19 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>-->
-				<td>
+				<td align="center">
 					<?php echo $row->eco_status ; ?>
 				</td>
 				<td align="center">
 					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo GetValueUser($row->eco_create_by, 'name'); ?>
 				</td>
 				<td align="center">
 						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo GetValueUser($row->eco_modified_by, 'name'); ?>
 				</td>
 			</tr>
@@ -180,7 +180,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php echo JText::_( 'BOM' ); ?>
 				</th>
                                 <th width="5%" class="title" >
-					<?php echo JText::_( 'PNS_PARENT' ); ?>
+					<?php echo JText::_( 'Where Used' ); ?>
 				</th>
 				<th  class="title" width="10%">
 					<?php echo JText::_('ECO'); ?>
@@ -202,7 +202,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
                                 {
                                 ?>
                                         <th width="20%" class="title">
-                                                <?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+                                                <?php echo JText::_( 'MFR Name' ); ?>
                                         </th>
                                         <th width="20%" class="title">
                                                 <?php echo JText::_( 'MFG PN' ); ?>
@@ -230,7 +230,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
                                 else
                                 {
                                 ?><th width="20%" class="title">
-                                                <?php echo JText::_( 'PNS_MANUAFACTURE' ); ?>
+                                                <?php echo JText::_( 'MFR Name' ); ?>
                                         </th>
                                         <th width="20%" class="title">
                                                 <?php echo JText::_( 'MFG PN' ); ?>
@@ -293,14 +293,14 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
                                 
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
-				<td>
+				<td align="center">
 				<?php if ($bom) { ?>
 				<a href="index.php?option=com_apdmpns&task=bom&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
@@ -309,7 +309,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				<?php } ?>
 	
 				</td>
-                                <td>
+                                <td align="center">
 				<?php if ($wheruse) { ?>
 				<a href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $row->pns_id; ?>" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" >
 					<img src="images/search_f2.png" width="16" height="16" border="0" title="<?php echo JText::_('LINK_PART_HIERARCHY')?>" alt="<?php echo JText::_('LINK_PART_HIERARCHY')?>" /></a>
@@ -321,7 +321,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				<td align="center">
 					<?php echo PNsController::GetECO($row->eco_id); ?>
 				</td>                            
-				<td>
+				<td align="center">
                                         <?php 
                                         $exist_pdf =PNsController::checkexistSpec($row->pns_id);
                                         if($exist_pdf) { ?>
@@ -339,10 +339,10 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>
-				<td>
+				<td align="left">
 					<?php 
 					if (count($mf) > 0){
                                                 foreach ($mf as $m){
@@ -351,7 +351,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					}
 					 ?>
 				</td>	
-                                <td>
+                                <td align="left">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
@@ -399,7 +399,7 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
                 <table class="adminlist" cellpadding="1">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
+                                        <th width="10"><?php echo JText::_('NUM'); ?></th>
                                         <th width="100">
                                             <?php echo JHTML::_('grid.sort', 'P.O Number', 'po_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
                                         </th>
@@ -407,7 +407,7 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>
                                         <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'),'po_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+                                        <th width="100"><?php echo JText::_(''); ?></th>
                                 </tr>
                         </thead>
                  
@@ -420,21 +420,21 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
 
                 ?>
                                       <tr class="<?php echo "row$k"; ?>">
-                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
-                                                <td><?php echo $po->po_description; ?></td>                                                
-                                                <td>
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td align="center"><a href="index.php?option=com_apdmpns&task=po_detail&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $po->po_code; ?></a> </td>
+                                                <td align="left"><?php echo $po->po_description; ?></td>                                                
+                                                <td align="center">
                 <?php if ($po->po_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_po&id=<?php echo $po->pns_po_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                
-                                                <td>
+                                                <td align="center">
                                                         <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td>
+                                                <td align="center">
                                                         <?php echo GetValueUser($po->po_create_by, "name"); ?>
                                                 </td>                                                  
-                                                <td><?php if (in_array("E", $role)) {
+                                                <td align="center"><?php if (in_array("E", $role)) {
                                                         ?>
                                                         <a href="index.php?option=com_apdmpns&task=edit_po&id=<?php echo $po->pns_po_id; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
@@ -459,27 +459,27 @@ if(($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )&
 				<th width="2%" class="title">
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
-				<th class="title">
+				<th width="15%" class="title">
 					<?php echo JText::_('Name' ); ?>
 				</th>
-				<th class="title">
+				<th width="10%" class="title">
 					<?php echo JText::_('Type' ); ?>
 				</th>
-				<th width="15%" class="title" >
+				<th width="25%" class="title" >
 					<?php echo JText::_( 'Description' ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Activate' ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Date Create'); ?>
+					<?php echo JText::_('Created Date'); ?>
 				</th>
 				
 				<th width="15%" class="title">
-					<?php echo JText::_('Create by' ); ?>
+					<?php echo JText::_('Created By' ); ?>
 				</th>
 				<th width="15%" class="title">
-					<?php echo JText::_('Date Modified'); ?>
+					<?php echo JText::_('Modified Date'); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JText::_('Modified By' ); ?>
@@ -509,34 +509,34 @@ if(($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )&
 				}*/
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="left">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail.')?>">
 						<?php echo $row->info_name; ?></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo $type; ?>
 				</td>
-				<td align="center">
+				<td  align="left" align="center">
 					<?php echo $row->info_description; ?>
 				</td>
-				<td align="center">
+				<td  align="center" align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_created_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
-				<td nowrap="nowrap">
+				<td  align="center" nowrap="nowrap">
 						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_modified_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>
 				</td>
 			</tr>
 			<?php
@@ -572,14 +572,14 @@ if(($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )&&
 					<?php echo JText::_('Activate' ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Date Create'); ?>
+					<?php echo JText::_('Created Date'); ?>
 				</th>
 				
 				<th width="15%" class="title">
-					<?php echo JText::_('Create by' ); ?>
+					<?php echo JText::_('Create By' ); ?>
 				</th>
 				<th width="15%" class="title">
-					<?php echo JText::_('Date Modified'); ?>
+					<?php echo JText::_('Modified Date'); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JText::_('Modified By' ); ?>
@@ -648,7 +648,7 @@ if(($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )&&
 </fieldset>
 <?php 
 }
-if(($this->type_filter==00 || $this->type_filter==99 )&&count( $this->rs_vendor ))
+if(($this->type_filter==0 || $this->type_filter==2 || $this->type_filter==99 )&& count( $this->rs_vendor ))
 {
 ?>
 <fieldset class="adminform">
@@ -672,14 +672,14 @@ if(($this->type_filter==00 || $this->type_filter==99 )&&count( $this->rs_vendor 
 					<?php echo JText::_('Activate' ); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Date Create'); ?>
+					<?php echo JText::_('Created Date'); ?>
 				</th>
 				
 				<th width="15%" class="title">
-					<?php echo JText::_('Create by' ); ?>
+					<?php echo JText::_('Created By' ); ?>
 				</th>
 				<th width="15%" class="title">
-					<?php echo JText::_('Date Modified'); ?>
+					<?php echo JText::_('Modified Date'); ?>
 				</th>
 				<th width="10%" class="title">
 					<?php echo JText::_('Modified By' ); ?>
@@ -709,34 +709,34 @@ if(($this->type_filter==00 || $this->type_filter==99 )&&count( $this->rs_vendor 
 				}*/
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="left">
 					<a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail.')?>">
 						<?php echo $row->info_name; ?></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo $type; ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php echo $row->info_description; ?>
 				</td>
 				<td align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_created_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
-				<td nowrap="nowrap">
+				<td align="center" nowrap="nowrap">
 						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
 				</td>
-				<td>
-					<?php echo GetValueUser($row->info_modified_by, 'username'); ?>
+				<td align="center">
+					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>
 				</td>
 			</tr>
 			<?php
@@ -756,14 +756,14 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
    <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
-                                        <th class="title" width="15%">
+                                        <th align="center" width="10"><?php echo JText::_('NUM'); ?></th>
+                                        <th align="center" class="title" width="15%">
                                             <?php echo JHTML::_('grid.sort', 'ITO/ETO', 'sto_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
                                         </th>
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                                                        
-                                        <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'),'sto_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
-                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Stocker'); ?></th>                                       
+                                        <th align="center" width="100"><?php echo JText::_('Description'); ?></th>                                                                                        
+                                        <th align="center" width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'),'sto_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
+                                        <th align="center" width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th align="center" width="100"><?php echo JText::_('Stocker'); ?></th>                                       
                                 </tr>
                         </thead>
                         <tbody>					
@@ -777,8 +777,8 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                 }
                 ?>
                                         <tr>
-                                                <td style="<?php echo $style?>" ><?php echo $i; ?></td>                                            
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center" style="<?php echo $style?>" ><?php echo $i; ?></td>                                            
+                                                <td align="center" style="<?php echo $style?>" >
                                                     <?php
                                                     $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
                                                     if($sto->sto_type==2){
@@ -786,19 +786,19 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                                                     }
                                                     ?>
                                                     <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                <td style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
+                                                <td align="left" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
 <!--                                                <td style="<?php echo $style?>" >
                                                 <?php if ($sto->sto_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                -->
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center" style="<?php echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center" style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td>     
-                                                <td style="<?php echo $style?>" >
+                                                <td align="center" style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_stocker, "name"); ?>
                                                 </td>
                                                 

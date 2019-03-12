@@ -20,7 +20,7 @@
                 $partnumber .= '-'.$this->row->pns_revision;
         }
 	//JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
-        JToolBarHelper::title( $partnumber);
+        JToolBarHelper::title( $partnumber, 'cpanel.png');
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
 		JToolBarHelper::editListX();		

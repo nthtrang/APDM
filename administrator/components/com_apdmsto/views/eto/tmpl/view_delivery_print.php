@@ -87,7 +87,7 @@
                                                     <tr>
                                                         <td class="key" width="30%">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Name' ); ?>
+                                                                <?php echo JText::_( 'Name' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -97,7 +97,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Company name' ); ?>
+                                                                <?php echo JText::_( 'Company Name' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -107,7 +107,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Street address' ); ?>
+                                                                <?php echo JText::_( 'Street Address' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -117,7 +117,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'City,Zip code' ); ?>
+                                                                <?php echo JText::_( 'City,Zip Code' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -127,7 +127,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Phone number' ); ?>
+                                                                <?php echo JText::_( 'Phone Number' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -142,7 +142,7 @@
                                                     <tr>
                                                         <td class="key"  width="30%">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Name' ); ?>
+                                                                <?php echo JText::_( 'Name' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -152,7 +152,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Company name' ); ?>
+                                                                <?php echo JText::_( 'Company Name' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -162,7 +162,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Street address' ); ?>
+                                                                <?php echo JText::_( 'Street Address' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -172,7 +172,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'City,Zip code' ); ?>
+                                                                <?php echo JText::_( 'City,Zip Code' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -182,7 +182,7 @@
                                                     <tr>
                                                         <td class="key">
                                                             <label for="name">
-                                                                <?php echo JText::_( 'Phone number' ); ?>
+                                                                <?php echo JText::_( 'Phone Number' ); ?>:
                                                             </label>
                                                         </td>
                                                         <td>
@@ -204,11 +204,11 @@
             <table class="tgi" width="100%">
                 <thead>
                 <tr>
-                    <th width="18" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('#'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('PN'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Description'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('UOM'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Qty'); ?></th>
+                    <th width="18"  style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('NUM'); ?></th>
+                    <th width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('PN'); ?></th>
+                    <th width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Description'); ?></th>
+                    <th width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('UOM'); ?></th>
+                    <th width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Qty'); ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -227,11 +227,11 @@
 
                     ?>
                     <tr>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $i; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $pns_code;?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_description; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_uom; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border" colspan="2">
+                        <td style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo $i; ?></td>
+                        <td style="text-align:left;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo $pns_code;?></td>
+                        <td style="text-align:left;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_description; ?></td>
+                        <td style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_uom; ?></td>
+                        <td style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border" colspan="2">
                                 <?php
                                 $totalQty = 0;
                                 foreach ($this->sto_pn_list2 as $rw) {

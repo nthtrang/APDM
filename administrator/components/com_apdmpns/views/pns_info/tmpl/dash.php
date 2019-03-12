@@ -12,7 +12,7 @@
                 $partnumber .= '-'.$this->row->pns_revision;
         }
 	//JToolBarHelper::title( JText::_( 'PART NUMBER' ) . ': <small><small>[ '. JText::_('Detail') .' ]</small></small>' , 'cpanel.png' );
-        JToolBarHelper::title( $partnumber);	
+        JToolBarHelper::title( $partnumber, 'cpanel.png');	
         $role = JAdministrator::RoleOnComponent(6);      
 	if (in_array("E", $role)) {
                 if (!intval($edit)) {

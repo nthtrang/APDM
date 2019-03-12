@@ -69,20 +69,20 @@
         <td class="tg-0pky-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Created date:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO#</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;width:25%"">Created Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;width:25%""><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO#:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->wo_code;?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Customer:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php  echo $this->sto_row->ccs_name; ?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" rowspan="3" style="border-right:0px">State:</td>
-        <td class="tg-0pky-pr tg-0pky-border" rowspan="3" style="border-left:0px"><?php echo $this->sto_row->sto_state;?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">State:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->sto_state;?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">PO#:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php
             $soNumber = $this->sto_row->so_cuscode;
@@ -94,6 +94,8 @@
             ?></td>
     </tr>
     <tr>
+             <td class="tg-0pky-pr tg-0pky-border" colspan="2" rowspan="2" style="border-right:0px">Description:
+        <?php echo strtoupper($this->sto_row->sto_description)?></td>
         <td class="tg-0pky-pr tg-0pky-border">Stocker: <?php echo ($this->sto_row->sto_stocker)?GetValueUser($this->sto_row->sto_stocker, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
     </tr>
@@ -115,10 +117,7 @@
         <td class="tg-0pky-pr"></td>
         <td class="tg-0pky-pr"></td>
     </tr>
-    <tr>
-        <td class="tg-c3ow-desc" colspan="4" style="border-width:1px;border-style:solid">
-           Description:<?php echo strtoupper($this->sto_row->sto_description)?></td>
-    </tr>
+   
     <tr>
         <td class="tg-0pky-pr"></td>
         <td class="tg-0pky-pr"></td>
@@ -126,7 +125,7 @@
         <td class="tg-0pky-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr-title" colspan="4">Shipping Part</td>
+        <td class="tg-0pky-pr-title" colspan="4">Shipping Partddd</td>
     </tr>
     <tr>
         <td class="tg-0pky-pr" colspan="4">
@@ -134,11 +133,11 @@
                 <table class="tgi" width="100%">
                 <thead>
                 <tr>
-                    <th width="18" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('#'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('PN'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Description'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('UOM'); ?></th>
-                    <th width="100" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Qty'); ?></th>
+                    <th width="18"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('NUM'); ?></th>
+                    <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Part Number'); ?></th>
+                    <th width="100" align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Description'); ?></th>
+                    <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('UOM'); ?></th>
+                    <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Qty'); ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -154,11 +153,11 @@
 
                     ?>
                     <tr>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $i; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $pns_code;?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_description; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"><?php echo $row->pns_uom; ?></td>
-                        <td  class="tg-0pky-pr tg-0pky-border" colspan="2">
+                        <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $i; ?></td>
+                        <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $pns_code;?></td>
+                        <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
+                        <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
+                        <td  class="tg-0pky-pr tg-0pky-border" colspan="2" style="text-align:center;padding:0px">
                             <!--<table class="adminlist" style="color:#000" cellspacing="0" width="200">-->
                                 <?php
                                 $totalQty = 0;

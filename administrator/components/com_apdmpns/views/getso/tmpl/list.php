@@ -100,13 +100,13 @@ function UpdateECO(){
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_so_id ); ?>
 				</td>
-				<td>					
+				<td align="left">					
 						<?php echo $soNumber; ?>
 				</td>				
 				

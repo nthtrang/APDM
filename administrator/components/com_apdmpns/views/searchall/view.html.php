@@ -64,7 +64,7 @@ class pnsViewsearchall extends JView
            
         }
 if ($type_filter==0){      
-                $arr_eco_id = array();
+                    $arr_eco_id = array();
                     //select table ECO with keyword input     
                     $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
                     $rs_eco = $db->loadObjectList();
@@ -74,7 +74,7 @@ if ($type_filter==0){
                         }
                         
                     }
-                        $arr_po_id = array();
+                    $arr_po_id = array();
                     //select table ECO with keyword input     
                     $db->setQuery('SELECT * FROM apdm_pns_po WHERE (po_code LIKE '.$searchEscaped.' OR  po_description LIKE '.$searchEscaped .' )');
                     $rs_po = $db->loadObjectList();
@@ -85,7 +85,7 @@ if ($type_filter==0){
                         
                     }
                     
-                        $arr_sto_id = array();
+                    $arr_sto_id = array();
                     //select table STO with keyword input                      
                     $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
                     $rs_sto = $db->loadObjectList();
@@ -94,7 +94,78 @@ if ($type_filter==0){
                            $pns_sto_id[] = $sto->pns_po_id; 
                         }
                         
-                    }                         
+                    }    
+                    //so
+                      $arr_so_id = array();
+                    $arr_code = explode("-", trim($keyword));
+                    //select table SO with keyword input      
+                    $where = "";
+                    $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+                    $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision ,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date'.
+                             ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
+                             ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
+                             ' left join apdm_pns p on p.pns_id = fk.pns_id'.
+                             ' where so.so_cuscode LIKE '.$searchEscaped .' or so.customer_id LIKE '.$searchEscaped;
+                             if($arr_code[0] && $arr_code[1])
+                             {
+                                $where =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';    
+                             }                         
+                    $query = $query. $where.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;           
+                    $db->setQuery($query);
+                    $rs_so = $db->loadObjectList();
+                    if (count($rs_so) >0){
+                        foreach ($rs_so as $so){
+                           $pns_so_id[] = $so->pns_so_id; 
+                        }                        
+                    }   
+                    
+                    //wo
+                    $arr_wo_id = array();                 
+                    //select table SO with keyword input                      
+                    $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
+                    $sql = "select wo.wo_log,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework " .
+                        " from apdm_pns_wo wo " .
+                        " left join apdm_pns p on  p.pns_id = wo.pns_id " .
+                        " where wo.wo_code LIKE ".$searchEscaped;
+                    $db->setQuery($sql);                   
+                    $rs_wo = $db->loadObjectList();
+                    if (count($rs_wo) >0){
+                        foreach ($rs_wo as $wo){
+                           $pns_wo_id[] = $wo->pns_wo_id; 
+                        }
+                        
+                    }     
+                    //vendor/suppplier/manuafacure
+                      $arr_vendor_id = array();
+                    //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');                    
+                    $rs_vendor = $db->loadObjectList();
+                    if (count($rs_vendor) > 0){
+                        foreach ($rs_vendor as $vendor){
+                            $arr_vendor_id[] = $vendor->info_id;
+                        }
+                    }
+                    
+                    $arr_supplier_id = array();
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_supplier = $db->loadObjectList();
+                    
+                    if (count($rs_supplier) > 0){
+                        foreach ($rs_supplier as $supplier){
+                            $arr_supplier_id[] = $supplier->info_id;
+                        }
+                    }    
+                    $arr_mf_id = array();
+                      //   echo 'SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.')';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $rs_mf = $db->loadObjectList();
+                    
+                    if (count($rs_mf) > 0){
+                        foreach ($rs_mf as $mf){
+                            $arr_mf_id[] = $mf->info_id;
+                        }
+                    } 
+                    
                     
                     //pn
                     
@@ -140,9 +211,10 @@ if ($type_filter==0){
                    //}                     
 }
 else
-{    
+{           
             switch($type_filter){
-                case '1': //ECO
+                     case '0':
+                     case '1': //ECO
                     $filter_ordere        =  $mainframe->getUserStateFromRequest( "$option.filter_ordere",        'filter_order',        'eco_name',    'cmd' );
                     $filter_order_Dire    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dire",    'filter_order_Dir',    'desc',       'word' );
                     $arr_eco_id = array();
@@ -173,7 +245,7 @@ else
                         
                     }                    
                 break;
-                
+                case '0':
                 case '11': //STO
                      //STO
                     $arr_sto_id = array();
@@ -194,6 +266,7 @@ else
                         
                     }                    
                 break;
+                case '0':
                 case '12': //SO
                     $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
@@ -215,10 +288,10 @@ else
                     if (count($rs_so) >0){
                         foreach ($rs_so as $so){
                            $pns_so_id[] = $so->pns_so_id; 
-                        }
-                        
+                        }                        
                     }                    
-                break;       
+                break;  
+                case '0':
                 case '13': //WO
                     $arr_wo_id = array();                 
                     //select table SO with keyword input                      
@@ -235,7 +308,8 @@ else
                         }
                         
                     }                    
-                break;                       
+                break;           
+                
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
@@ -283,16 +357,17 @@ else
                 case '2': //Vendor    
                 case '3': //Supplier
                 case '4': //Manufacture                                                     
-                case '0':                         
+                case '0':   
                         $arr_vendor_id = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');                    
                     $rs_vendor = $db->loadObjectList();
                     if (count($rs_vendor) > 0){
                         foreach ($rs_vendor as $vendor){
                             $arr_vendor_id[] = $vendor->info_id;
                         }
                     }
+                    
                     $arr_supplier_id = array();
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
                     $rs_supplier = $db->loadObjectList();
@@ -313,9 +388,11 @@ else
                         }
                     } 
                     break;
+                case '0':
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
                 break;
+                case '0':
                 case '5': //for PNs code               
                  $leght = strlen (trim($keyword));                    
 //                 if ($leght==16){                                                                        
@@ -435,7 +512,7 @@ else
         $pagination = new JPagination( $total, $limitstart, $limit );
         $where_del = '';
        
-       $query = 'SELECT p.* '
+        $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            

@@ -130,7 +130,7 @@ function submitbutton(pressbutton) {
 					<?php echo JText::_( 'Supplier PN' ); ?>
 				</th>				
 				<th width="8%" class="title">
-					<?php echo JText::_( 'MFR name' ); ?>
+					<?php echo JText::_( 'MFR Name' ); ?>
 				</th>
 				<th width="8%" class="title">
 					<?php echo JText::_( 'MFG PN' ); ?>
@@ -168,13 +168,13 @@ function submitbutton(pressbutton) {
                                 $ms = EcoController::GetPnSupplier($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+				<td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
@@ -191,7 +191,7 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php 
 					if (count($mv) > 0){
                                                 foreach ($mv as $m){
@@ -200,7 +200,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php 
 					if (count($mv) > 0){
                                                 foreach ($mv as $m){
@@ -209,7 +209,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>   
-				<td align="center">
+				<td align="left">
 					<?php 
 					if (count($ms) > 0){
                                                 foreach ($ms as $m){
@@ -218,7 +218,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php 
 					if (count($ms) > 0){
                                                 foreach ($ms as $m){
@@ -227,7 +227,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>                                
-				<td>
+				<td align="left">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
@@ -239,7 +239,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>
-                                <td>
+                                <td align="left">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){

@@ -13,7 +13,7 @@
 		JToolBarHelper::deleteList('Are you sure to delete it?');
 	}
 	if (in_array("E", $role)) {
-		JToolBarHelper::editListX();
+	//	JToolBarHelper::editListX();
 	}
 	
 	if (in_array("W", $role)) {

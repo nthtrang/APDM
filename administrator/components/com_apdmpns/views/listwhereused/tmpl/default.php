@@ -78,7 +78,7 @@ function submitbutton(pressbutton) {
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
-				<th class="title"  >
+				<th width="20%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
 			</tr>
@@ -113,7 +113,7 @@ function submitbutton(pressbutton) {
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				
-				<td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
+				<td align="left" ><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >					
                                 <?php    echo '<p style="margin-left:0px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $pns_code.'</a></p> '; ?>                                                
 				</span>
 				</td>	<td>-1</td>
@@ -123,7 +123,7 @@ function submitbutton(pressbutton) {
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>							
 			</tr>
@@ -142,17 +142,18 @@ function submitbutton(pressbutton) {
                                                 <tr>
  
 
-                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                <?php    echo '<p style="margin-left:40px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row2->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row2->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row2->text.'</a></p> '; ?>
                                                         </span>
-                                                        </td><td>-2</td>	
+                                                        </td>
+                                                        <td align="center">-2</td>	
                                                         <td align="center">
                                                                 <?php echo $row2->pns_status;?>
                                                         </td>
                                                         <td align="center">
                                                                 <?php echo $row2->pns_type;?>
                                                         </td>
-                                                        <td>
+                                                        <td align="left">
                                                                 <?php echo  $row2->pns_description; ?>
                                                         </td>							
                                                 </tr>
@@ -171,17 +172,18 @@ function submitbutton(pressbutton) {
                                                                 <tr>
 
 
-                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                                <?php    echo '<p style="margin-left:80px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row3->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row3->text.'</a></p> '; ?>
                                                                         </span>
-                                                                        </td>	<td>-3</td>
+                                                                        </td>	
+                                                                        <td align="center">-3</td>
                                                                         <td align="center">
                                                                                 <?php echo $row3->pns_status;?>
                                                                         </td>
                                                                         <td align="center">
                                                                                 <?php echo $row3->pns_type;?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td align="left">
                                                                                 <?php echo  $row3->pns_description; ?>
                                                                         </td>							
                                                                 </tr>
@@ -200,17 +202,18 @@ function submitbutton(pressbutton) {
                                                                                 <tr>
 
 
-                                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                        <td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                                                <?php    echo '<p style="margin-left:120px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row4->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row4->text.'</a></p> '; ?>
                                                                                         </span>
-                                                                                        </td>	<td>-4</td>
+                                                                                        </td>	
+                                                                                        <td align="center">-4</td>
                                                                                         <td align="center">
                                                                                                 <?php echo $row4->pns_status;?>
                                                                                         </td>
                                                                                         <td align="center">
                                                                                                 <?php echo $row4->pns_type;?>
                                                                                         </td>
-                                                                                        <td>
+                                                                                        <td align="left">
                                                                                                 <?php echo  $row4->pns_description; ?>
                                                                                         </td>							
                                                                                 </tr>
@@ -227,17 +230,18 @@ function submitbutton(pressbutton) {
                                                                                                         }                                                
                                                                                                ?>
                                                                                                         <tr>
-                                                                                                                <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                <td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                                                                        <?php    echo '<p style="margin-left:160px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row5->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row5->text.'</a></p> '; ?>
                                                                                                                 </span>
-                                                                                                                </td><td>-5</td>	
+                                                                                                                </td>
+                                                                                                                <td align="center">-5</td>	
                                                                                                                 <td align="center">
                                                                                                                         <?php echo $row5->pns_status;?>
                                                                                                                 </td>
                                                                                                                 <td align="center">
                                                                                                                         <?php echo $row5->pns_type;?>
                                                                                                                 </td>
-                                                                                                                <td>
+                                                                                                                <td align="left">
                                                                                                                         <?php echo  $row5->pns_description; ?>
                                                                                                                 </td>							
                                                                                                         </tr>
@@ -254,17 +258,18 @@ function submitbutton(pressbutton) {
                                                                                                                                 }                                                
                                                                                                                        ?>
                                                                                                                                 <tr>
-                                                                                                                                        <td width="50%"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
                                                                                                                                                <?php    echo '<p style="margin-left:200px"><input  type="checkbox" onclick="isChecked(this.checked);" value="'.$row6->pns_id.'" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row6->text.'</a></p> '; ?>
                                                                                                                                         </span>
-                                                                                                                                        </td>	<td>-6</td>
+                                                                                                                                        </td>	
+                                                                                                                                        <td align="center">-6</td>
                                                                                                                                         <td align="center">
                                                                                                                                                 <?php echo $row6->pns_status;?>
                                                                                                                                         </td>
                                                                                                                                         <td align="center">
                                                                                                                                                 <?php echo $row6->pns_type;?>
                                                                                                                                         </td>
-                                                                                                                                        <td>
+                                                                                                                                        <td align="left">
                                                                                                                                                 <?php echo  $row6->pns_description; ?>
                                                                                                                                         </td>							
                                                                                                                                 </tr>

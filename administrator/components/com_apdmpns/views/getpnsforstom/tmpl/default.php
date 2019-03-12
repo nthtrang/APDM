@@ -51,8 +51,8 @@ function UpdatePnsEco(){
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >
-				<?php echo JText::_( 'Filter' ); ?>:
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 
+				<?php echo JText::_( 'Search' ); ?>:
+				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter')?> 
 				<?php echo $this->lists['type_filter'];?>
 				&nbsp;&nbsp;
 			<button onclick="javascript: return CheckForm()"><?php echo JText::_( 'Go' ); ?></button>

@@ -75,6 +75,30 @@ function checkForm(){
 	}
 	return true;
 }
+function checkAllInit(n, fldName )
+{
+  if (!fldName) {
+     fldName = 'initial';
+  }
+	var f = document.adminForm;
+	var c = f.toggle.checked;
+	var n2 = 0;
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+                       
+                                cb.click();
+                           
+			cb.checked = c;                       
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxchecked.value = n2;
+	} else {
+		document.adminForm.boxchecked.value = 0;
+	}
+}
 function isCheckedInitial(isitchecked,id,state){
         if(state!="Released")
         {
@@ -222,7 +246,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
 				<th width="3%" class="title">
-<!--					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />-->
+					<input type="checkbox" name="toggle" value="" onclick="checkAllInit(<?php echo count($this->rows); ?>);" />
 				</th>
 				<th class="title" width="15%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
@@ -300,13 +324,13 @@ function numbersOnlyEspecial111(myfield, e, dec){
                                 $ms = EcoController::GetPnSupplier($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1;?>
 				</td>
-				<td>					
-                                        <input type="checkbox" id = "initial" onclick="isCheckedInitial(this.checked,<?php echo $row->pns_id;?>,'<?php echo $row->pns_life_cycle;?>');" value="<?php echo $row->pns_id;?>" name="cid[]"  />
+				<td align="center">					
+                                        <input type="checkbox" id = "initial<?php echo $i?>" onclick="isCheckedInitial(this.checked,<?php echo $row->pns_id;?>,'<?php echo $row->pns_life_cycle;?>');" value="<?php echo $row->pns_id;?>" name="cid[]"  />
 				</td>
-				<td><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+				<td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
 				</span>
 				</td>	
@@ -351,7 +375,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 					 <span style="display:block" id="text_init_cost_<?php echo $row->pns_id;?>"><?php echo number_format((float)$row->init_cost, 2, '.', '');?></span>
                                          <input style="display:none" onKeyPress="return numbersOnlyEspecial111(this, event);" type="text" value="<?php echo $row->init_cost;?>" id="init_cost_<?php echo $row->pns_id;?>"  name="init_cost_<?php echo $row->pns_id;?>" />
 				</td>                                    
-				<td align="center">
+				<td align="left">
                                         <?php 
                                         $rowmf =& JTable::getInstance('apdmsupplierinfo');
                                         $rowmf->load($row->init_supplier);

@@ -79,13 +79,13 @@ function UpdateWoSo(){
 					<?php echo  JText::_('WO#'); ?>
 				</th>												
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('QUANTITY'); ?>
+					<?php echo JText::_('Quantity'); ?>
 				</th>
                                 <th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
 				</th>
                                 <th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('CUSTOMER'); ?>
+					<?php echo JText::_('Customer'); ?>
 				</th>
                                 <th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Started Date'); ?>
@@ -115,19 +115,19 @@ function UpdateWoSo(){
 				$row 	=& $this->rows[$i];
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_wo_id ); ?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo $row->wo_code;?>				
 				</td>	
-				<td>
+				<td align="center">
 					<?php echo $row->wo_qty;?>				
 				</td>
-                                <td>
+                                <td align="center">
                                         <?php echo PNsController::getWoStatus($row->wo_state); ?>
                                 </td>
 				<td align="center">
@@ -139,7 +139,7 @@ function UpdateWoSo(){
 				<td align="center">
 					<?php echo JHTML::_('date', $row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo GetValueUser($row->wo_assigner, "name"); ?>
 				</td>							
 			</tr>

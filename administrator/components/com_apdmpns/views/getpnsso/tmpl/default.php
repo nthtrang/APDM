@@ -49,8 +49,8 @@ function UpdatePnsChild(){
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >
-				<?php echo JText::_( 'Filter' ); ?>:
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 
+				<?php echo JText::_( 'Search' ); ?>:
+				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter')?> 
 				<?php echo $this->lists['type_filter'];?>
 				&nbsp;&nbsp;
 			<button onclick="javascript: return CheckForm()"><?php echo JText::_( 'Go' ); ?></button>
@@ -82,7 +82,7 @@ function UpdatePnsChild(){
 				</th>
 				
 				<th  class="title" width="10%">
-					<?php echo JText::_('ECO'); ?>
+					<?php echo JText::_('ECO Number'); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">
@@ -91,7 +91,7 @@ function UpdatePnsChild(){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Type'); ?>
 				</th>
-				<th class="title"  >
+				<th width="20%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
 			</tr>
@@ -125,13 +125,13 @@ function UpdatePnsChild(){
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
 				</td>
-				<td><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
 				</span>
 				</td>	
@@ -145,7 +145,7 @@ function UpdatePnsChild(){
 				<td align="center">
 					<?php echo $row->pns_type;?>
 				</td>
-				<td>
+				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>							
 			</tr>

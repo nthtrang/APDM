@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
-<?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTML::_('behavior.tooltip'); ?>sss
 <?php
 //bom
 $row = $this->rows[0];
@@ -11,26 +11,30 @@ $pns_code_full = $row->pns_code_full;
 	$role = JAdministrator::RoleOnComponent(6);      
 	JToolBarHelper::title( $pns_code_full , 'cpanel.png' );
 	
+        if (in_array("V", $role)&& $row->pns_life_cycle =='Create') { 	
+                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
+                JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
+	}   
+         if (in_array("E", $role)&& $row->pns_life_cycle =='Create') {
+		JToolBarHelper::addPnsChild("Add Part Child",$this->lists['pns_id']);
+        }  
+        if (in_array("D", $role)&& $row->pns_life_cycle =='Create') {
+		JToolBarHelper::deleteList('Are you sure to remove it(s)?','removepnbom',"Remove");
+	}
+        if (in_array("V", $role)) { 	
+                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
+                JToolBarHelper::customX('download', 'download', '', 'Download', false);	
+	}
 	if (in_array("V", $role)) {
 		JToolBarHelper::customX('export_bom_xls', 'excel', '', 'Export', false);
 
 	}
-    JToolBarHelper::customX("printbom","print",'',"Print",false);
-	if (in_array("V", $role)) { 	
-                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-                JToolBarHelper::customX('download', 'download', '', 'Download', false);	
-	}
+        JToolBarHelper::customX("printbom","print",'',"Print",false);
+	
 
-	if (in_array("D", $role)&& $row->pns_life_cycle =='Create') {
-		JToolBarHelper::deleteList('Are you sure to remove it(s)?','removepnbom',"Remove");
-	}
-        if (in_array("E", $role)&& $row->pns_life_cycle =='Create') {
-		JToolBarHelper::addPnsChild("Add Part Child",$this->lists['pns_id']);
-        }   
-	if (in_array("V", $role)&& $row->pns_life_cycle =='Create') { 	
-                // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-                JToolBarHelper::customX('saveref', 'save', '', 'Save', false);	
-	}        
+	
+        
+	     
 
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
@@ -195,7 +199,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 					<?php echo JText::_('Part Number')?>
 			</th>
 			<th width="20%">
-				<?php echo JText::_('Desctiption')?>				
+				<?php echo JText::_('Description')?>				
 			</th>
 			<th width="8%">
 				<?php echo JText::_('Find Number')?>

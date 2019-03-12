@@ -71,13 +71,13 @@
         <td class="tg-0pky-pr"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:25%">Created date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:25%">Created Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;border-right:0px;width:25%"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Supplier#:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">P.O INTERNAL:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->sto_po_internal;?></td>
@@ -89,8 +89,7 @@
         <td class="tg-0pky-pr tg-0pky-border">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Description:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo strtoupper($this->sto_row->sto_description)?></td>
+        <td class="tg-0pky-pr tg-0pky-border" colspan="2" style="border-right:0px">Description:<?php echo strtoupper($this->sto_row->sto_description)?></td>
         <td class="tg-0pky-pr tg-0pky-border">Owner: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border">Comfirm:
             <?php
@@ -153,7 +152,7 @@
                         <td class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $i; ?></td>
                         <td  class="tg-0pky-pr tg-0pky-border" align="center" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $pns_code;?></td>
                         <td class="tg-0pky-pr tg-0pky-border"  align="left" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
-                        <td  class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
+                        <td  class="tg-0pky-pr tg-0pky-border" align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
                         <td class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;padding:0px" colspan="3">
                             <table class="tgi" width="100%">
                                 <?php

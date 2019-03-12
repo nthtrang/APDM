@@ -297,9 +297,11 @@ class pnsViewgetpnsforpos extends JView
                          $where[] = 'p.ccs_code ='.$arr_code[0].' AND p.pns_code='.$arr_code[1];
                          
                    }else{      
+                           if($searchEscaped){
                      $arr_code = explode("-", trim($keyword));
                          $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
                          $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;                               
+                           }
                    }             
                 break;
             }
@@ -413,14 +415,14 @@ class pnsViewgetpnsforpos extends JView
         
         $lists['pns_modified_by'] = JHTML::_('select.genericlist', $modifieds, 'filter_modified_by', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_modified_by );
         //for list filter type
-        $type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
+       //$type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('PN'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 6, JText::_('Description'), 'value', 'text');
         $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 7, JText::_('Manufacture PN'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 5, JText::_('Part Number'), 'value', 'text');
-        $type[] = JHTML::_('select.option', 6, JText::_('PNs Description'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 7, JText::_('MFG PN'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');
         $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
         
         $db->setQuery("SELECT pns_status from apdm_pns WHERE pns_id=".$id);                    
