@@ -75,7 +75,7 @@ function saveApproveTask(id){
 					<?php echo  JText::_('Name'); ?>
                                 </th>
                                 <th class="title" width="6%">
-					<?php echo  JText::_('Eco Number'); ?>
+					<?php echo  JText::_('ECO Number'); ?>
                                 </th>
 				<th  class="title" width="20%">
 					<?php echo  JText::_('Description'); ?>
@@ -202,7 +202,7 @@ function saveApproveTask(id){
 					<?php echo  JText::_('Name'); ?>
                                 </th>
                                 <th class="title" width="10%">
-					<?php echo  JText::_('Eco Number'); ?>
+					<?php echo  JText::_('ECO Number'); ?>
                                 </th>
 				<th  class="title" width="25%">
 					<?php echo  JText::_('Description'); ?>

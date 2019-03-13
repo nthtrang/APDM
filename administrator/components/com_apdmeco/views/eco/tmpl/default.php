@@ -65,7 +65,7 @@ function submitbutton(pressbutton) {
 	<table  width="100%">
 		<tr>
 			<td >
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo JText::_( 'Search' ); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" size="40" />
 <!--				&nbsp;&nbsp;<?php //echo  JText::_('FILTER_DATE_CREATE').' '.JHTML::_('calendar', $this->lists['filter_date_created'], 'filter_date_created', 'filter_date_created', '%m-%d-%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
 				&nbsp;&nbsp;

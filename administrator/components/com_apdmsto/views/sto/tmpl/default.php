@@ -130,7 +130,7 @@ th:first-child div{
                 <table class="adminlist1" cellspacing="1" width="400">
                          <thead>
                                <tr class="header">
-                                        <th  class="title" width="50"><?php echo JText::_('No.'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('No.'); ?></div></th>
+                                        <th  class="title" width="50"><?php echo JText::_('NUM'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('No.'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('ITO/ETO'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('State'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>
@@ -212,7 +212,7 @@ th:first-child div{
 		<thead>
 			<tr>
 				<th  width="50" align="center" class="title">
-					<?php echo JText::_( 'No.' ); ?><div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_( 'No.' ); ?></div>
+					<?php echo JText::_( 'No.' ); ?><div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_( 'NUM' ); ?></div>
 				</th>
 				<th class="title"  width="100">
 					<?php  JText::_('PART_NUMBER_CODE'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'PART_NUMBER_CODE' ); ?></div>
@@ -224,7 +224,7 @@ th:first-child div{
 					<?php echo JText::_( 'MFR Name' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFR Name' ); ?></div>
 				</th>
                                 <th width="100" class="title" >
-					<?php echo JText::_( 'MFR PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFR PN' ); ?></div>
+					<?php echo JText::_( 'MFR PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFG PN' ); ?></div>
 				</th>
                                 <th  width="100" class="title" >
 					<?php echo JText::_( 'Supplier' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Supplier' ); ?></div>

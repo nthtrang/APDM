@@ -53,9 +53,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo JText::_( 'Search' ); ?>:
                                 <?php echo $this->lists['search'];?>
-				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter With')?> 				
+				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php //echo JText::_('Filter With')?>
 				&nbsp;&nbsp;
 			<button onclick="javascript: return submitbutton(this.form)" name="btnSubmit" id="btnSubmit"><?php echo JText::_( 'Go' ); ?></button>
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
@@ -77,7 +77,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('Attached'); ?></th>                                        
                                         <th width="100"><?php echo JHTML::_('grid.sort', JText::_('Created Date'), 'po_created', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Action'); ?></th>
+                                        <th width="100"><?php echo JText::_(''); ?></th>
                                 </tr>
                         </thead>
 <tfoot>

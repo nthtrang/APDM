@@ -155,8 +155,10 @@ class pnsViewpns extends JView
                          $arr_code = explode("-", trim($keyword));
                          $where[] = 'p.ccs_code ='.$arr_code[0].' AND p.pns_code='.$arr_code[1];
                          
-                   }else{      
-                     $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                   }else {
+                     if ($searchEscaped) {
+                        $where[] = 'p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                     }
                    }             
                 break;
             }

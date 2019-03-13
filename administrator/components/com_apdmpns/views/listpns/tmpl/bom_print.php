@@ -107,14 +107,16 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                     //Get the image from the output buffer
                     $output_img		=	ob_get_clean();
                     echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$pns_code_full;
+
+                    $manufacture = PNsController::GetManufacture($row->pns_id);
                     ?>
                 </td>
-                <td style="text-align: left !important;"></td>
-                <td align="center"></td>
-                <td align="center"></td>
-                <td align="center"></td>
-                <td align="center"></td>
-                <td align="center"></td>
+                <td style="text-align: left !important;"><?php echo limit_text($row->pns_description, 15);?></td>
+                <td align="center"><?php echo $row->find_number;?> </td>
+                <td align="center"><?php echo $row->stock;?></td>
+                <td align="center"><?php echo $row->pns_uom;?></td>
+                <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
+                <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
             </tr>
         <?php 
         //level1

@@ -64,7 +64,7 @@ class ecoViewdashboard extends JView
                // jimport('joomla.html.pagination');
                 //MY PENDING TASK
                // echo "SELECT rt.id,rt.status as route_status,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,rt.description,eco.eco_status FROM apdm_eco eco  inner join apdm_eco_routes rt on eco.eco_routes_id = rt.id WHERE rt.owner = '".$me->get('id')."' and eco.eco_status = 'Inreview'";
-                $query = "SELECT rt.due_date as route_due_date,rt.id,rt.status as route_status,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,rt.description,eco.eco_status FROM apdm_eco eco  inner join apdm_eco_routes rt on eco.eco_routes_id = rt.id WHERE rt.owner = '".$me->get('id')."' and eco.eco_status = 'Inreview'";
+                $query = "SELECT rt.due_date as route_due_date,rt.id,rt.status as route_status,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,rt.description,eco.eco_status FROM apdm_eco eco  inner join apdm_eco_routes rt on eco.eco_routes_id = rt.id WHERE  eco.eco_status = 'Inreview'";
                 //$db->setQuery("SELECT rt.id,rt.status as route_status,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,rt.description,eco.eco_status FROM apdm_eco eco  inner join apdm_eco_routes rt on eco.eco_routes_id = rt.id WHERE rt.owner = '".$me->get('id')."' and eco.eco_status = 'Inreview'");
                 $db->setQuery($query);
                 $arr_pending= $db->loadObjectList();  

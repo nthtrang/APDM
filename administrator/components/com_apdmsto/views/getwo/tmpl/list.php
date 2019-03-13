@@ -62,41 +62,39 @@ function UpdateECO(){
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
-				<th class="title" width="20%">
-					<?php echo JHTML::_('grid.sort',   'Name', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+				<th class="title" width="10%">
+					<?php echo JHTML::_('grid.sort',   'WO#', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-                <th width="2%" class="title">
-                    <?php echo JText::_( 'PO#' ); ?>
+                <th width="20%" class="title">
+                    <?php echo JText::_( 'SO#' ); ?>
                 </th>
-                <th width="2%" class="title">
+                <th width="10%" class="title">
                     <?php echo JText::_( 'Customer#' ); ?>
-                </th>
-					
+                </th>			
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="4">
+				<td colspan="5">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
 		</tfoot>
 		<tbody>
                         <tr class="<?php echo "row-"; ?>">
-				<td>
+				<td align="center">
 					<?php echo 0;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', -1, 0 ); ?>
 				</td>
-                                <td>
+                                <td align="center">
                                     NA
                                 </td>
-                                <td>
+                                <td align="center">
                                     NA
                                 </td>
-                                <td>
-                                                             NA
+                                <td align="center"> NA
 				</td>				
 				
 				
@@ -114,19 +112,19 @@ function UpdateECO(){
 				
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_wo_id ); ?>
 				</td>
-                <td>
+                <td align="center">
                     <?php echo $row->wo_code; ?>
                 </td>
-                <td>
+                <td align="center">
                     <?php echo $soNumber; ?>
                 </td>
-                <td>
+                <td align="center">
 						<?php echo $row->ccs_name; ?>
 				</td>				
 				

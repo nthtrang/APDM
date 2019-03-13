@@ -237,7 +237,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 						<table class="adminlist" cellspacing="1" width="100%">
                                     <thead>
                                                         <tr>
-                                                                <th align="center" class="title">#</th>
+                                                                <th align="center" class="title"><?php echo JText::_( 'NUM' ); ?></th>
                                                                 <th  align="center" width="15%" class="title">TOP ASSY PN</th>
                                                                 <th  align="center" width="25%" class="title">Description</th>
                                                                 <th  align="center" width="6%" class="title">Qty</th>
@@ -333,7 +333,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                             <table class="adminlist" cellspacing="1" width="100%">
                                                 <thead>
                                                 <tr>
-                                                                <th width="30%" class="title">PN</th>
+                                                                <th width="30%" class="title"><?php echo JText::_( 'Part Number' ); ?></th>
                                                                 <th class="title">Times</th>
                                                                 <th class="title">Qty</th>
                                                                 <th class="title">State</th>

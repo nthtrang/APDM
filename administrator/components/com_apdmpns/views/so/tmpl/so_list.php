@@ -210,8 +210,8 @@ if (in_array("W", $role) && count($this->report_list) > 0) { ?>
                                         <th width="100"><?php echo JText::_('WO#'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('WO#'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Step'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Step'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Employee ID'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Employee ID'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Delay times of Step'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay times of Step'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Delay times of WO'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay times of WO'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Delay Times of Step'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay Times of Step'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Delay Times of WO'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay Times of WO'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Rework Times'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Rework Times'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Reason of Delay Step'); ?><div style="width:100px;padding:10px 0px 0px 35px"><?php echo JText::_('Reason of Delay Step'); ?></div></th>
                                 </tr>

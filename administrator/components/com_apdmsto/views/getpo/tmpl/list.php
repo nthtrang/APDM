@@ -52,16 +52,16 @@ function UpdateECO(){
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
-				<th class="title" width="20%">
+				<th class="title" width="10%">
 					<?php echo JHTML::_('grid.sort',   'P.O Number', 'po.po_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-                <th width="2%" class="title">
+                <th width="20%" class="title">
                     <?php echo JText::_( 'Description' ); ?>
                 </th>
-                <th width="2%" class="title">
+                <th width="8%" class="title">
                     <?php echo JText::_( 'Created Date' ); ?>
                 </th>
-                <th width="2%" class="title">
+                <th width="6%" class="title">
                     <?php echo JText::_( 'Owner' ); ?>
                 </th>
 					
@@ -82,22 +82,22 @@ function UpdateECO(){
 				$row 	=& $this->items[$i];
 			?>
 			<tr class="<?php echo "row$k"; ?>">
-				<td>
+				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
-				<td>
+				<td align="center">
 					<?php echo JHTML::_('grid.id', $i, $row->pns_po_id ); ?>
 				</td>
-                <td>
+                <td align="center">
                     <?php echo $row->po_code; ?>
                 </td>
-                <td>
+                <td align="left">
                     <?php echo $row->po_description; ?>
                 </td>
-                <td>
+                <td align="center">
                     <?php echo JHTML::_('date', $row->po_created, '%m-%d-%Y %H:%M:%S'); ?>
                 </td>
-                <td>
+                <td align="center">
                     <?php echo GetValueUser($row->po_create_by, "name"); ?>
                 </td>
             </tr>
