@@ -128,10 +128,10 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';
-                document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'visible';
-                document.getElementById('tooltype_'+id+'_'+sti).style.display= 'block';
-                document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'none';
+//                document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'visible';
+//                document.getElementById('tooltype_'+id+'_'+sti).style.display= 'block';
+//                document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'hidden';
+//                document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'none';
                 });
 	}
 	else {
@@ -146,8 +146,8 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
 
-                 document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'visible';
-                 document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'block';
+//                 document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'visible';
+//                 document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'block';
 
                 document.getElementById('qty_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('qty_'+id+'_'+sti).style.display= 'none';
@@ -156,8 +156,8 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('location_'+id+'_'+sti).style.display= 'none';
                 document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';
-                 document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'hidden';
-                 document.getElementById('tooltype_'+id+'_'+sti).style.display= 'none';
+//                 document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'hidden';
+//                 document.getElementById('tooltype_'+id+'_'+sti).style.display= 'none';
              });
                 
                 
@@ -228,16 +228,23 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         <td class="key"><?php echo JText::_('Confirm'); ?></td>
                                         <td class="title"> 
 										 <?php                                                                                  
-                                                             if($this->tto_row->tto_owner_out_confirm==0){
+                                                             if($this->tto_row->tto_owner_out_confirm==0 && $this->tto_row->tto_state=="Create"){
                                                     ?>                                                                                                     
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->tto_row->pns_sto_id?>&tmpl=component" title="Image">
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=2" title="Image">
                                                          <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_out_confirm" value="1" /></a>
                                                         <?php }
                                                         else
                                                         {
+                                                                if($this->tto_row->tto_owner_out_confirm==1){
                                                                        ?>
                                                                 <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_out_confirm" value="1" />
                                                                        <?php
+                                                                }
+                                                                else{
+                                                                        ?>
+                                                                        <input  onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_out_confirm" value="0" />
+                                                                        <?php
+                                                                }
                                                         }
                                                         ?>
                                         </td>  
@@ -253,16 +260,23 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         <td  class="key"><?php echo JText::_('Confirm'); ?></td>
                                         <td  class="title"> 
 										 <?php                                                                                  
-                                                             if($this->tto_row->tto_owner_in_confirm==0){
+                                                             if($this->tto_row->tto_owner_in_confirm==0 && $this->tto_row->tto_state=="Using"){
                                                     ?>                                                                                                     
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component" title="Image">
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=1" title="Image">
                                                          <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_in_confirm" value="1" /></a>
                                                         <?php }
                                                         else
                                                         {
+                                                                 if($this->tto_row->tto_owner_in_confirm==1){
                                                                        ?>
                                                                 <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_in_confirm" value="1" />
                                                                        <?php
+                                                                 }
+                                                                 else{
+                                                                         ?>
+                                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_in_confirm" value="0" />
+                                                                         <?php 
+                                                                 }
                                                         }
                                                         ?>
                                         </td>  
@@ -283,7 +297,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         </table>                
         </fieldset>   
     <fieldset>
-        <legend>Tool</legend>
+        <legend>Tools</legend>
         <div class="toolbar">
             <table class="toolbar"><tbody><tr>
                     <?php
@@ -304,11 +318,20 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 <a class="modal"
                                    href="index.php?option=com_apdmtto&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>&amp;tto_type_inout=1"
                                    rel="{handler: 'iframe', size: {x: 850, y: 500}}">
-<span class="icon-32-new" title="Add Tools">
+<span class="icon-32-new" title="Add Tool-In">
 </span>
-                                    Add Tools
+                                    Add Tool-In
                                 </a>
                             </td>
+                            <td class="button" id="toolbar-popup-Popup">
+                                <a class="modal"
+                                   href="index.php?option=com_apdmtto&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>&amp;tto_type_inout=2"
+                                   rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+<span class="icon-32-new" title="Add Tool-Out">
+</span>
+                                    Add Tool-Out
+                                </a>
+                            </td>                            
                             <?php
                         }
                         if (in_array("D", $role) && ($this->tto_row->tto_state != "Done")) {
@@ -421,41 +444,38 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         <td align="center" width="77px">
                                             <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
                                             <?php
-                                            if($rw->tto_type==1)
-                                            {
+                                         //   if($rw->tto_type_inout==1)
+                                        //    {
                                                 echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location );
-                                            }
-                                            else{
-                                                ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
+                                          //  }
+                                           // else{
+                                                ?><!--<span  id="ajax_location_<?php //echo $row->pns_id;?>_<?php echo $rw->id;?>">-->
                                                 <?php
-                                                $locationArr = TToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
-                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location );
+                                               // $locationArr = TToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
+                                             //   echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location );
                                                 ?>
-                                                </span>
+                                                <!-- </span>-->
                                                 <?php
-                                            }
+                                            //}
                                             ?>
                                         </td>
                                         <td align="center" width="77px">
                                             <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
                                             <?php
-                                            if($rw->tto_type==1)
-                                            {
+                                            //if($rw->tto_type_inout==1)
+                                          //  {
                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate );
-                                            }
-                                            else{
-                                                $partStateArr = TToController::getPartStatePn($rw->partstate,$row->pns_id);
-                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate );
+                                         //   }
+                                         //   else{
+                                       //         $partStateArr = TToController::getPartStatePn($rw->partstate,$row->pns_id);
+                                       //         echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate );
 
-                                            }
+                                       //     }
 
                                             ?>
                                         </td>
                                         <td align="center" width="75px">
-                                            <span style="display:block" id="text_tooltype_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo ($rw->tto_type_inout==1)?"IN":"OUT";?></span>
-                                               <?php
-                                               echo JHTML::_('select.genericlist',   $toolType, 'tooltype_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->tto_type_inout );
-                                               ?>
+                                            <span style="display:block" id="text_tooltype_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo ($rw->tto_type_inout==1)?"IN":"OUT";?></span>                                               
                                         </td>
                                         <td align="center" width="75px">
                                             <?php

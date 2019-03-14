@@ -5,7 +5,9 @@
 <?php
 $me = & JFactory::getUser();
 $me->get('username');
-$sto_id		= JRequest::getVar( 'sto_id');
+$tto_id		= JRequest::getVar( 'tto_id');
+$tto_type_inout		= JRequest::getVar( 'tto_type_inout');
+
 	// clean item data
 JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 $checkFullFill =  $this->checkFullFill;
@@ -27,7 +29,8 @@ function CheckForm() {
 }
 function UpdateOwnerSto(sto_id){
         var form = document.adminForm;
-        var so_id = form.sto_id.value;
+        var tto_id = form.tto_id.value;
+        var tto_type_inout = form.tto_type_inout.value;
          if (form.username.value==""){
 		alert('Please type your username.');
 		return false;
@@ -36,7 +39,7 @@ function UpdateOwnerSto(sto_id){
 		alert('Please type your password.');
 		return false;
 	}else{	
-		var url = 'index.php?option=com_apdmsto&task=ajax_checkownersto&id='+so_id;                
+		var url = 'index.php?option=com_apdmtto&task=ajax_checkownertto&tto_id='+tto_id+'&tto_type_inout='+tto_type_inout;                
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminForm').toQueryString(),
@@ -48,7 +51,7 @@ function UpdateOwnerSto(sto_id){
 				else
                                 {                                    
                                        // window.parent.document.getElementById('sbox-window').close();	
-                                        window.parent.location.reload();
+                             //           window.parent.location.reload();
                                 }
 				
 				
@@ -59,7 +62,7 @@ function UpdateOwnerSto(sto_id){
 	
 }
 </script>
-<form action="index.php?option=com_apdmsto&task=checkownerso&tmpl=component&id=<?php echo $so_id?>" method="post" name="adminForm" id="adminForm"  >
+<form action="index.php?option=com_apdmtto&task=checkownertto&tmpl=component&id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminForm"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <div name="notice" style="color:#D30000" id ="notice"></div>
 <table class="adminlist" cellpadding="1">
@@ -106,8 +109,9 @@ function UpdateOwnerSto(sto_id){
 	</table>
 
 	<div class="clr"></div>	
-	<input type="hidden" name="option" value="com_apdmsto" />
-        <input type="hidden" name="sto_id" id="so_id" value="<?php echo $sto_id; ?>" />
+	<input type="hidden" name="option" value="com_apdmtto" />
+        <input type="text" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
+        <input type="text" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

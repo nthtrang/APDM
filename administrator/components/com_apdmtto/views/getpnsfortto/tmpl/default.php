@@ -4,7 +4,7 @@
 
 <?php
 $tto_id		= JRequest::getVar( 'tto_id');
-$tto_type_inout		= JRequest::getVar( 'tto_type_inout');
+echo $tto_type_inout		= JRequest::getVar( 'tto_type_inout');
 
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );

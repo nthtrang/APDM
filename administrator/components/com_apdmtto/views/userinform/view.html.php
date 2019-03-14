@@ -6,7 +6,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class SToViewuserinform extends JView {
+class TToViewuserinform extends JView {
 
         function display($tpl = null) {
 
@@ -15,13 +15,15 @@ class SToViewuserinform extends JView {
                 $option = 'com_apdmpns_sto';
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(0), '', 'array');
-                $sto_id = JRequest::getVar('sto_id');
+                $tto_id = JRequest::getVar('tto_id');
+                $tto_type_inout		= JRequest::getVar( 'tto_type_inout');
                 $me = JFactory::getUser();
                 JArrayHelper::toInteger($cid, array(0));
-                $query = 'select count(*) from apdm_pns_sto_fk where sto_id = '.$sto_id;
+
+                echo $query = 'select count(*) from apdm_pns_tto_fk where tto_id = '.$tto_id . ' and tto_type_inout = '.$tto_type_inout;
                 $db->setQuery( $query );
                 $total = $db->loadResult();
-                $query = 'select count(*) from apdm_pns_sto_fk where sto_id = '.$sto_id.' and qty!=0';
+                echo $query = 'select count(*) from apdm_pns_tto_fk where tto_id = '.$tto_id.' and tto_type_inout =  '.$tto_type_inout.' and qty!=0';
                 $db->setQuery( $query );
                 $totalFullFill = $db->loadResult();
                 $checkFullFill =1;
@@ -29,7 +31,7 @@ class SToViewuserinform extends JView {
                 {
                       $checkFullFill=0;  
                 }
-                $this->assignRef('checkFullFill',        $checkFullFill);
+                $this->assignRef('checkFullFill',        $checkFullFill);                
                 parent::display($tpl);
         }
 

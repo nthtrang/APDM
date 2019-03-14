@@ -288,36 +288,38 @@ class TToController extends JController
                 return $filesize;
         }      
         
-        function get_owner_confirm_sto()
+        function get_owner_confirm_tto()
         {
                 JRequest::setVar('layout', 'inform');
                 JRequest::setVar('view', 'userinform');
                 parent::display();
         }
-        function ajax_checkownersto()
+        function ajax_checkownertto()
         {
                 $db = & JFactory::getDBO();
                 $datenow = & JFactory::getDate();
-                $sto_id = JRequest::getVar('sto_id');
+                $tto_id = JRequest::getVar('tto_id');
+                $tto_type_inout = JRequest::getVar('tto_type_inout');
                 $password =  JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
                 $username = JRequest::getVar('username', '', 'method', 'username');
                 $query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
                 $userId = $db->loadResult();
-                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$sto_id);
+                $db->setQuery("SELECT * from apdm_pns_tto where pns_tto_id=".$tto_id);
                 $sto_row =  $db->loadObject();    
                 
                 if($userId)
                 {   
-                        if($sto_row->sto_state!="InTransit")
+                        if($sto_row->tto_state=="Create" && $tto_type_inout = 2)
                         {
-                                $db->setQuery("update apdm_pns_sto set sto_owner = '".$userId."',sto_state = 'Done',sto_completed_date='" . $datenow->toMySQL() . "' , sto_owner_confirm ='1' WHERE  pns_sto_id = ".$sto_id);                        
+                                $db->setQuery("update apdm_pns_tto set tto_owner_out = '".$userId."',tto_state = 'Using',tto_owner_out_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_out_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                                                        
                                 $db->query();     
                         }
-                        else {
-                                $db->setQuery("update apdm_pns_sto set sto_owner = '".$userId."', sto_owner_confirm ='1' WHERE  pns_sto_id = ".$sto_id);                        
+                        if($sto_row->tto_state=="Using" && $tto_type_inout = 1)
+                        {
+                                $db->setQuery("update apdm_pns_tto set tto_owner_in = '".$userId."',tto_state = 'Done',tto_completed_date='" . $datenow->toMySQL() . "' ,tto_owner_in_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_in_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                        
                                 $db->query();  
-                        }
+                        }                        
                         echo 1;
                 }
                 else
@@ -763,11 +765,11 @@ class TToController extends JController
                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
-                $tto_type_inout = JRequest::getVar('tooltype_' . $pns .'_' . $id);
+                //$tto_type_inout = JRequest::getVar('tooltype_' . $pns .'_' . $id);
                 //get sto_type
-                $db->setQuery("select fk.qty,tto.tto_type,fk.pns_id,fk.tto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
+                $db->setQuery("select fk.qty,fk.tto_type_inout,tto.tto_type,fk.pns_id,fk.tto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
                 $stoChecker= $db->loadObject();
-                if($stoChecker->sto_type==2)//if is out stock
+                if($stoChecker->tto_type_inout==3)//temp not clearly so not check
                 {
                     $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
                     $qtyInCheck = round($db->loadResult(),2);
@@ -780,7 +782,7 @@ class TToController extends JController
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
-                $db->setQuery("update apdm_pns_tto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "',tto_type_inout='".$tto_type_inout."' WHERE  id = " . $id);
+                $db->setQuery("update apdm_pns_tto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);
                 $db->query();
             }
         }
@@ -879,10 +881,10 @@ class TToController extends JController
         $msg = JText::_('Have removed successfull.');
         return $this->setRedirect('index.php?option=com_apdmsto&task=sto', $msg);
     }
-    function printitopdf()
+    function printttopdf()
     {
         JRequest::setVar('layout', 'view_detail_print');
-        JRequest::setVar('view', 'ito');
+        JRequest::setVar('view', 'itto');
         parent::display();
     }
     function getPoCoordinator()

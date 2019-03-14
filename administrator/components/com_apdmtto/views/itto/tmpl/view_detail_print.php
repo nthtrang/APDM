@@ -43,83 +43,81 @@
 </style>
 <table class="tgi" width="100%">
     <tr>
-        <th class="tg-kiyi" colspan="2">
+        <th class="tg-kiyi" colspan="3">
             ASCENX TECHNOLOGIES
             <br>Unit 5B, 5th Floor, Standard Factory Building
             <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
             <br>District 7, HCMC, Vietnam<br>ST ZIP Code: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
-        <th class="tg-xldj-pr" colspan="2">
+        <th class="tg-xldj-pr" colspan="3">
             <img src="./templates/khepri/images/h_green/logo1.png" width="200px"></img>
             <br></th>
     </tr>
     <tr>
-        <td class="tg-88nc" colspan="4">IMPORT TRANSACTION ORDER</td>
+        <td class="tg-88nc" colspan="6">TOOL TRANSACTION ORDER</td>
     </tr>
     <tr>
-        <td class="tg-xldj-pr"></td>
-        <td class="tg-xldj-pr"></td>
-        <td class="tg-xldj-pr"></td>
-        <td class="tg-xldj-pr"></td>
+        <td class="tg-xldj-pr" colspan="6"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-ito-title" colspan="4">ITO# <?php echo $this->sto_row->sto_code; ?></td>
+        <td class="tg-0pky-ito-title" colspan="6">TTO# <?php echo $this->tto_row->tto_code; ?></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
+        <td class="tg-0pky-pr" colspan="6"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:25%">Created Date:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;border-right:0px;width:25%"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Supplier#:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:15%">Created Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;border-right:0px;width:15%"><?php echo JHTML::_('date', $this->tto_row->tto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO#:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->wo_code)?$this->tto_row->wo_code:"NA";?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed Date:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">P.O INTERNAL:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->sto_po_internal;?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Due Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_due_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_due_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">State:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->sto_state;?></td>
-        <td class="tg-0pky-pr tg-0pky-border" width="150px">Stocker: <?php echo ($this->sto_row->sto_stocker)?GetValueUser($this->sto_row->sto_stocker, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Status:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->tto_row->tto_state;?></td>
+        <td class="tg-0pky-pr tg-0pky-border" width="250px">Tool Assigner: <?php echo ($this->tto_row->tto_create_by)?GetValueUser($this->tto_row->tto_create_by, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Date Out:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_owner_out_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_out_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>    
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" colspan="2" style="border-right:0px">Description:<?php echo strtoupper($this->sto_row->sto_description)?></td>
-        <td class="tg-0pky-pr tg-0pky-border">Owner: <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Description:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo strtoupper($this->tto_row->tto_description)?></td>
+        <td class="tg-0pky-pr tg-0pky-border" width="150px">Owner: <?php echo ($this->tto_row->tto_owner_in)?GetValueUser($this->tto_row->tto_owner_in, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border">Comfirm:
-            <?php
-            $checked ="";
-            if($this->sto_row->sto_owner_confirm){
-                $checked = 'checked="checked"';
-            }
-            ?>
-            <input <?php echo $checked;?> onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
-        </td>
+                <?php 
+                $style="";
+                if($this->tto_row->tto_owner_in_confirm)
+                {
+                         $style='checked="checked"';
+                }
+                ?>
+                <input <?php echo $style;?> type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Date In:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_owner_in_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_in_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>    
     </tr>
+    
     <tr>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
+        <td class="tg-0pky-pr" colspan="6"></td>
     </tr>
 
     <tr>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
-        <td class="tg-0pky-pr"></td>
+        <td class="tg-0pky-pr" colspan="6"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr-title" colspan="4">Receiving Part</td>
+        <td class="tg-0pky-pr-title" colspan="6">Tools</td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr" colspan="4">
-            <?php if (count($this->sto_pn_list) > 0) { ?>
+        <td class="tg-0pky-pr" colspan="6">
+            <?php if (count($this->tto_pn_list) > 0) { ?>
             <table class="tgi" width="100%">
                 <thead>
                 <tr>
@@ -139,9 +137,9 @@
 
 
                 $i = 0;
-                foreach ($this->sto_pn_list as $row) {
+                foreach ($this->tto_pn_list as $row) {
                     $i++;
-                    $stoList = SToController::GetStoFrommPns($row->pns_id,$sto_id);
+                    $ttoList = TToController::GetTtoFrommPns($row->pns_id,$tto_id);
                     if($row->pns_revision)
                         $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
                     else
@@ -156,7 +154,7 @@
                         <td class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;padding:0px" colspan="3">
                             <table class="tgi" width="100%">
                                 <?php
-                                foreach ($this->sto_pn_list2 as $rw) {
+                                foreach ($this->tto_pn_list2 as $rw) {
                                     if($rw->pns_id==$row->pns_id)
                                     {
                                         ?>
@@ -164,7 +162,7 @@
                                                <?php echo $rw->qty;?>                                                
                                             </td>
                                              <td width="80" class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;" align="center" width="77px">
-                                                      <?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?>                                                     
+                                                      <?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?>                                                     
                                                 </td>	
                                                 <td width="80" class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;"  align="center" width="77px">
                                                        <?php echo $rw->partstate?strtoupper($rw->partstate):"";?>                                                         
@@ -181,7 +179,7 @@
                 }
                 else
                 {
-                    echo "Not found PNs";
+                    echo "Not Found Tool";
                 }
                 ?>
                 </tbody>
