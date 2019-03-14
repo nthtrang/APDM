@@ -76,16 +76,17 @@ class TToViewitto extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
         
-        $db->setQuery("select tto.*,wo.wo_code from apdm_pns_tto tto left join apdm_pns_wo wo on tto.tto_wo_id = wo.pns_wo_id  where tto.pns_tto_id =".$tto_id);               
+        $db->setQuery("select tto.*,wo.wo_code from apdm_pns_tto tto left join apdm_pns_wo wo on tto.tto_wo_id = wo.pns_wo_id  where tto.pns_tto_id =".$tto_id);
+
         $tto_row =  $db->loadObject();
 
         $db->setQuery("SELECT * FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
 	$list_user = $db->loadObjectList();	
 
-         $db->setQuery("SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_ttock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where tto.pns_tto_id=".$tto_id." group by fk.pns_id order by fk.pns_id desc");
+         $db->setQuery("SELECT fk.id,fk.qty,fk.location,fk.partstate,fk.tto_type_inout,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where tto.pns_tto_id=".$tto_id." group by fk.pns_id order by fk.pns_id desc");
          $pns_list = $db->loadObjectList();         
          $this->assignRef('tto_pn_list',        $pns_list);
-         $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from , p.pns_description,p.pns_cpn,p.pns_id,p.pns_ttock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where tto.pns_tto_id=".$tto_id." order by fk.pns_id desc");
+         $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from,fk.tto_type_inout , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where tto.pns_tto_id=".$tto_id." order by fk.pns_id desc");
          $pns_list2 = $db->loadObjectList();                  
          $this->assignRef('tto_pn_list2',        $pns_list2);
           

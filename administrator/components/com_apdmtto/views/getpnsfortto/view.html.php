@@ -27,7 +27,7 @@ jimport( 'joomla.application.component.view');
  * @subpackage	Users
  * @since 1.0
  */
-class SToViewgetpnsforstos extends JView
+class TToViewgetpnsfortto extends JView
 {
 	function display($tpl = null)
 	{

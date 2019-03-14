@@ -315,7 +315,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         </td>
                                 </tr>
                         <tr>
-                            <td ><strong>LOG</strong></td>
+                            <td ><strong><?php echo JText::_('LOG'); ?></strong></td>
                             <td valign="top"></td>
                                 <td  valign="top"><strong>DELIVERY</strong></td>
                                         <td valign="top"></td>

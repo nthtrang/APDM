@@ -63,7 +63,8 @@ class pnsViewsearchall extends JView
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
            
         }
-if ($type_filter==0){      
+if ($type_filter==0){
+
                     $arr_eco_id = array();
                     //select table ECO with keyword input     
                     $db->setQuery('SELECT * FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
@@ -96,10 +97,10 @@ if ($type_filter==0){
                         
                     }    
                     //so
-                      $arr_so_id = array();
+                    $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
                     //select table SO with keyword input      
-                    $where = "";
+                    $whereso = "";
                     $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
                     $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision ,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date'.
                              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
@@ -108,9 +109,9 @@ if ($type_filter==0){
                              ' where so.so_cuscode LIKE '.$searchEscaped .' or so.customer_id LIKE '.$searchEscaped;
                              if($arr_code[0] && $arr_code[1])
                              {
-                                $where =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';    
+                                 $whereso =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';
                              }                         
-                    $query = $query. $where.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;           
+                    $query = $query. $whereso.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                     $db->setQuery($query);
                     $rs_so = $db->loadObjectList();
                     if (count($rs_so) >0){
@@ -145,7 +146,7 @@ if ($type_filter==0){
                             $arr_vendor_id[] = $vendor->info_id;
                         }
                     }
-                    
+
                     $arr_supplier_id = array();
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
                     $rs_supplier = $db->loadObjectList();
@@ -154,7 +155,8 @@ if ($type_filter==0){
                         foreach ($rs_supplier as $supplier){
                             $arr_supplier_id[] = $supplier->info_id;
                         }
-                    }    
+                    }
+
                     $arr_mf_id = array();
                       //   echo 'SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.')';
                     $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
@@ -164,56 +166,17 @@ if ($type_filter==0){
                         foreach ($rs_mf as $mf){
                             $arr_mf_id[] = $mf->info_id;
                         }
-                    } 
-                    
-                    
-                    //pn
-                    
-                $leght = strlen (trim($keyword));                    
-//                 if ($leght==16){                                                                        
-//                       $arr_code = explode("-", trim($keyword));          
-//                   //    echo "SELECT * FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'";
-//                       $db->setQuery("SELECT * FROM apdm_pns WHERE ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
-//                       $rs_pns = $db->loadObjectList();
-//                       $array_pns_id_find = array();
-//                       if (count($rs_pns) > 0){
-//                           foreach ($rs_pns as $pn){
-//                               $array_pns_id_find[] = $pn->pns_id;
-//                           }
-//                         
-//                       }
-//                       $where[] = 'p.pns_id IN ('.implode(",", $array_pns_id_find).') ';
-//                   }else
-//                           if ($leght==13){                       
-//                       $arr_code = explode("-", trim($keyword));                         
-//                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code='".$arr_code[0]."' AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
-//                       $rs_pns = $db->loadObjectList();                       
-//                       if (count($rs_pns) > 1){
-//                           foreach ($rs_pns as $obj) {
-//                                $arr_pns_id[] =  $obj->pns_id;
-//                           }            
-//                           $where[] = 'p.pns_id IN ('.implode(',', $arr_pns_id).')'; 
-//                       }else{
-//                            if(strlen($arr_code[0])==6){
-//                                 $where[] = 'p.pns_code="'.$arr_code[0].'-'.$arr_code[1].'" AND p.pns_revision="'.$arr_code[2].'"';
-//                            }
-//                       }
-//                        
-//                   }elseif($leght==10){
-//                         $arr_code = explode("-", trim($keyword));
-//                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
-//                         
-//                   }else{      
-                          $arr_code = explode("-", trim($keyword));
-                          $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
-                     
-                   //}                     
+                    }
+
+                    if($searchEscaped) {
+                        $arr_code = explode("-", trim($keyword));
+                        $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%"';
+                        $where[] = 'p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                    }
 }
 else
-{           
+{
             switch($type_filter){
-                     case '0':
                      case '1': //ECO
                     $filter_ordere        =  $mainframe->getUserStateFromRequest( "$option.filter_ordere",        'filter_order',        'eco_name',    'cmd' );
                     $filter_order_Dire    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dire",    'filter_order_Dir',    'desc',       'word' );
@@ -245,7 +208,6 @@ else
                         
                     }                    
                 break;
-                case '0':
                 case '11': //STO
                      //STO
                     $arr_sto_id = array();
@@ -266,7 +228,6 @@ else
                         
                     }                    
                 break;
-                case '0':
                 case '12': //SO
                     $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
@@ -290,8 +251,7 @@ else
                            $pns_so_id[] = $so->pns_so_id; 
                         }                        
                     }                    
-                break;  
-                case '0':
+                break;
                 case '13': //WO
                     $arr_wo_id = array();                 
                     //select table SO with keyword input                      
@@ -429,17 +389,18 @@ else
                          $arr_code = explode("-", trim($keyword));
                          $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
-                   }else{      
-                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
-                     
+                   }else{
+                               if($searchEscaped) {
+                                   $arr_code = explode("-", trim($keyword));
+                                   $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%"';
+                                   $where[] = 'p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                               }
                    }             
                 break;
                    }
             
         }
-        
+
         if(count($arr_vendor_id) > 0){           
             //get list pns have this vendor
             $pns_id_vendor = array();
@@ -518,6 +479,7 @@ else
             . $where            
             . $orderby
         ;
+
       //  echo $query;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 

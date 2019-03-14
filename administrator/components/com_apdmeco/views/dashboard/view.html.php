@@ -54,7 +54,7 @@ class ecoViewdashboard extends JView
                 $db->setQuery($query);
                 
                 $arr_inreview= $db->loadObjectList();
-                $total_inreview = count($arr_inrevieww);          
+                $total_inreview = count($arr_inreview);
                // $pagination_inreview = new JPagination( $total_inreview, $limitstart1, $limit1 );       
                // $this->assignRef('total_record_inreview',    $total_inreview);
              //   echo  $pagination_inreview->limit1;

@@ -31,7 +31,7 @@ class JConfig {
 	var $dbtype = 'mysql';
 	var $host = 'localhost';
 	var $user = 'root';
-	var $db = 'adpm1';
+	var $db = 'apdm';
 	var $dbprefix = 'jos_';
 	var $mailer = 'smtp';
 	var $mailfrom = 'trang.nguyen@ascenx.com';

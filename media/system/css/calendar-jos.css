@@ -7,12 +7,13 @@ div.calendar {
 }
 
 .calendar, .calendar table {
-  border: 1px solid #cccccc;
+  border: 0px solid #cccccc;
   font-size: 11px;
   color: #000;
   cursor: default;
   background: #efefef;
   font-family: arial,verdana,sans-serif;
+  position:absolute;
 }
 
 /* Header part -- contains navigation buttons and day names. */

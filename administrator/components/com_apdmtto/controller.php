@@ -178,9 +178,9 @@ class TToController extends JController
                 parent::display();
         }  
 		 //for sto
-        function get_list_pns_sto() {
+        function get_list_pns_tto() {
                 JRequest::setVar('layout', 'default');
-                JRequest::setVar('view', 'getpnsforstos');
+                JRequest::setVar('view', 'getpnsfortto');
                 parent::display();
         }
 		 function GetLocationCodeList() {
@@ -195,11 +195,11 @@ class TToController extends JController
                 $db->setQuery("SELECT location_code FROM apdm_pns_location WHERE pns_location_id=" . $pns_location_id);                
                 return $db->loadResult();
         }		
-		 function GetStoFrommPns($pns_id,$sto_id) {
+		 function GetTtoFrommPns($pns_id,$tto_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
-                $query = "SELECT pns_id,id FROM apdm_pns_sto_fk WHERE pns_id = ".$pns_id ." and sto_id = ".$sto_id;
+                $query = "SELECT pns_id,id FROM apdm_pns_tto_fk WHERE pns_id = ".$pns_id ." and tto_id = ".$tto_id;
 
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
@@ -230,6 +230,20 @@ class TToController extends JController
                 }
                 return $rows;
         }
+    function GetChildParentNumber($pns_id) {
+        $db = & JFactory::getDBO();
+        $result = 0;
+        $query = " SELECT COUNT(pr.id) FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p ON p.pns_id= pr.pns_id INNER JOIN apdm_ccs as c ON c.ccs_code = p.ccs_code WHERE p.pns_deleted = 0 AND c.ccs_deleted = 0 AND c.ccs_activate =1 AND pns_parent=" . $pns_id;
+        $db->setQuery($query);
+        $result = $db->loadResult();
+        return $result;
+    }
+    function GetECO($eco_id) {
+        $db = & JFactory::getDBO();
+        $db->setQuery("SELECT eco_name FROM apdm_eco WHERE eco_id=" . $eco_id);
+        return $db->loadResult();
+    }
+
         function getLocationPartStatePn($partState,$pnsId)
         {
                 $db = & JFactory::getDBO();
@@ -313,65 +327,20 @@ class TToController extends JController
                 exit;
         }
         
-        function save_editito() {
+        function save_edittto() {
                 global $mainframe;
                 // Initialize some variables                                  
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');   
-                $sto_code = $post['sto_code'];
-                $ito_id = $post['pns_sto_id'];
-                                            
-                $return = JRequest::getVar('return');
-                $db->setQuery("update apdm_pns_sto set sto_po_internal = '".$post['po_inter_code']."',sto_supplier_id = '".$post['sto_supplier_id']."',sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
-                $db->query();
-                //upload file
-                //get so info
-                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$post['pns_sto_id']);
-                $sto_row =  $db->loadObject();                
-                //Save upload new                
-                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
-                $stoNumber = $folder = $sto_row->sto_code;                 
-                
-               //upload new images
-                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
-                $upload = new upload($_FILES['']);
-                $upload->r_mkdir($path_so_images, 0777);
-                $arr_error_upload_image = array();
-                $arr_image_upload = array();
-                
-                for ($i = 1; $i <= 20; $i++) {                        
-                        if ($_FILES['pns_image' . $i]['size'] > 0) {
-                            if($_FILES['pns_image' . $i]['size']<20000000)
-                            {                              
-                                if (file_exists($path_so_images . $_FILES['pns_image' . $i]['name'])) {
+                $post = JRequest::get('post');
+                $due_date = new DateTime($post['tto_due_date']);
+                $tto_due_date = $due_date->format('Y-m-d');
 
-                                        @unlink($path_so_images .  $_FILES['pns_image' . $i]['name']);
-                                }
-                                if (!move_uploaded_file($_FILES['pns_image' . $i]['tmp_name'], $path_so_images . $_FILES['pns_image' . $i]['name'])) {
-                                    $arr_error_upload_image[] = $_FILES['pns_image' . $i]['name'];
-                                } else {
-                                    $arr_image_upload[] = $_FILES['pns_image' . $i]['name'];
-                                }
-                            }
-                            else
-                            {
-                                $msg = JText::_('Please upload file less than 20MB.');
-                                return $this->setRedirect('index.php?option=com_apdmsto&task=editito&id='.$ito_id, $msg);
-                            }
-                        }
-                }                                
-                if (count($arr_image_upload) > 0) {
-                        foreach ($arr_image_upload as $file) {
-                                $db->setQuery("DELETE FROM apdm_pns_sto_files where sto_id = " . $ito_id);
-                                $db->query();
-                                $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',2, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                                                         
-                                $db->query();                                 
-                        }
-                }                        
-                $msg = "Successfully Saved Update ITO";
-                return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$post['pns_sto_id'], $msg);                
+                $db->setQuery("update apdm_pns_tto set tto_description='" . strtoupper($post['tto_description']) . "',tto_due_date='".$tto_due_date."'  WHERE  pns_tto_id = '".$post['pns_tto_id']."'");
+                $db->query();
+                $msg = "Successfully Saved Update Tool";
+                return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id='.$post['pns_tto_id'], $msg);
         }
         function save_editeto() {
                 global $mainframe;
@@ -586,28 +555,29 @@ class TToController extends JController
                 }                
                                         
         }
-    function ajax_add_pns_stos() {
+    function ajax_add_pns_tto() {
         $db = & JFactory::getDBO();
         $pns = JRequest::getVar('cid', array(), '', 'array');
-        $sto_id = JRequest::getVar('sto_id');
+        $tto_id = JRequest::getVar('tto_id');
+        $tto_type_inout = JRequest::getVar('tto_type_inout'); //1 IN 2 OUT
         //innsert to FK table
         foreach($pns as $pn_id)
         {
             $location="";
             $partstate="";
-            $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+            $db->setQuery("select tto_type from apdm_pns_sto where pns_sto_id ='".$tto_id."'");
             $sto_type = $db->loadResult();
-            if($sto_type==2)
+            if($sto_type==3)//tempp
             {
-                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
+                $db->setQuery("SELECT stofk.* from apdm_pns_tto_fk ttofk inner join apdm_pns_tto tto on ttofk.sto_id = tto.pns_tto_id WHERE ttofk.pns_id= '".$pn_id."' and tto.tto_type = 1  AND ttofk.tto_id != '".$tto_id."' order by stofk.id desc limit 1");
                 $row = $db->loadObject();
                 $location = $row->location;
                 $partState = $row->partstate;
             }
-            $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pn_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
+            $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
             $db->query();
         }
-        return $msg = JText::_('Have add pns successfull.');
+        return $msg = JText::_('Have add Tool successfull.');
     }
     function ajax_add_pns_stos_movelocation() {
         $db = & JFactory::getDBO();
@@ -740,22 +710,22 @@ class TToController extends JController
     /*
         * Remove PNS out of STO in STO management
         */
-    function removeAllpnsstos() {
+    function removeAllpnsttos() {
         $db = & JFactory::getDBO();
         $pnsfk = JRequest::getVar('cid', array(), '', 'array');
-        $sto_id = JRequest::getVar('sto_id');
+        $tto_id = JRequest::getVar('tto_id');
         foreach($pnsfk as $fk_ids){
             $obj = explode("_", $fk_ids);
             $pns=$obj[0];
             $ids = explode(",",$obj[1]);
             foreach ($ids as $fk_id)
             {
-                $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE id = '" . $fk_id . "' AND sto_id = " . $sto_id . "");
+                $db->setQuery("DELETE FROM apdm_pns_tto_fk WHERE id = '" . $fk_id . "' AND tto_id = " . $tto_id . "");
                 $db->query();
             }
         }
-        $msg = JText::_('Have removed Part successfull.');
-        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
+        $msg = JText::_('Have removed Tool successfull.');
+        return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id=' . $tto_id, $msg);
     }
     /*
      * Remove PNS out of STO in STO management
@@ -780,7 +750,7 @@ class TToController extends JController
     /*
            * save stock for STO/PN
            */
-    function saveqtyStofk() {
+    function saveqtyTtofk() {
         $db = & JFactory::getDBO();
         $cid = JRequest::getVar('cid', array(), '', 'array');
 
@@ -793,8 +763,9 @@ class TToController extends JController
                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
+                $tto_type_inout = JRequest::getVar('tooltype_' . $pns .'_' . $id);
                 //get sto_type
-                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
+                $db->setQuery("select fk.qty,tto.tto_type,fk.pns_id,fk.tto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
                 $stoChecker= $db->loadObject();
                 if($stoChecker->sto_type==2)//if is out stock
                 {
@@ -809,40 +780,32 @@ class TToController extends JController
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
-                $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);
+                $db->setQuery("update apdm_pns_tto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "',tto_type_inout='".$tto_type_inout."' WHERE  id = " . $id);
                 $db->query();
             }
         }
-        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$fkid."'");       
+        $db->setQuery("select tto_type from apdm_pns_tto where pns_tto_id ='".$fkid."'");
         $sto_type = $db->loadResult();
-        $return = "ito_detail";
+        $return = "tto_detail";
         if($sto_type==2)
-                $return = "eto_detail";
+                $return = "tto_detail";
         $msg = "Successfully Saved Part Number";
-        $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $fkid, $msg);
+        $this->setRedirect('index.php?option=com_apdmtto&task='.$return.'&id=' . $fkid, $msg);
     }
     /*
            * Remove PNS out of STO in STO management
            */
-    function removepnsstos() {
+    function removepnstto() {
         $db = & JFactory::getDBO();
         $pnsfk = JRequest::getVar('cid', array(), '', 'array');
-        $sto_id = JRequest::getVar('sto_id');
-//                $db->setQuery("update apdm_pns set po_id = 0 WHERE  pns_id IN (" . implode(",", $pns) . ")");
-//                $db->query();
+        $tto_id = JRequest::getVar('tto_id');
         foreach($pnsfk as $fk_id)
         {
-            $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE id = '" . $fk_id . "' AND sto_id = " . $sto_id . "");
+            $db->setQuery("DELETE FROM apdm_pns_tto_fk WHERE id = '" . $fk_id . "' AND tto_id = " . $tto_id . "");
             $db->query();
         }
-        $msg = JText::_('Have removed successfull.');
-        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
-        $sto_type = $db->loadResult();
-        if($sto_type==2)
-        {
-            return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $sto_id, $msg);
-        }
-        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
+        $msg = JText::_('Have removed Tool successfull.');
+        return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id=' . $tto_id, $msg);
     }
     function removepnsstos_movelocation() {
         $db = & JFactory::getDBO();
@@ -1057,19 +1020,15 @@ class TToController extends JController
     /*
          * Remove STO
          */
-        function deletesto() {
+        function deletetto() {
                 $db = & JFactory::getDBO();                
-                $sto_id = JRequest::getVar('sto_id');
-                $db->setQuery("DELETE FROM apdm_pns_sto WHERE pns_sto_id = '" . $sto_id . "'");
-                $db->query();                    
-                $db->setQuery("DELETE FROM apdm_pns_sto_files WHERE sto_id = '" . $sto_id . "'");
-                $db->query();     
-                $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE sto_id = '" . $sto_id . "'");
+                $tto_id = JRequest::getVar('tto_id');
+                $db->setQuery("DELETE FROM apdm_pns_tto_fk WHERE tto_id = '" . $tto_id . "'");
                 $db->query();
-                $db->setQuery("DELETE FROM apdm_pns_sto_delivery WHERE sto_id = '" . $sto_id . "'");
+                $db->setQuery("DELETE FROM apdm_pns_tto WHERE pns_tto_id = '" . $tto_id . "'");
                 $db->query();
                 $msg = JText::_('Have removed successfull.');
-                return $this->setRedirect('index.php?option=com_apdmsto&task=sto', $msg);
+                return $this->setRedirect('index.php?option=com_apdmtto&task=tto', $msg);
         }   
         
 /**
@@ -1358,7 +1317,7 @@ class TToController extends JController
         $id = $cid[0];
         if($id)
         {
-                $db->setQuery("SELECT so.pns_so_id,wo.pns_wo_id,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where wo.pns_wo_id=".$id);
+                $db->setQuery("SELECT so.pns_so_id,wo.pns_wo_id,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_so so right join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where wo.pns_wo_id=".$id);
                 $row =  $db->loadObject();
                 $soNumber = $row->so_cuscode;
                 if($row->ccs_code)

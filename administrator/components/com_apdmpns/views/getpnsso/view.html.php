@@ -35,6 +35,7 @@ class pnsViewgetpnsso extends JView
         $option             = 'com_apdmpns&task=get_list_child';
         $id               = JRequest::getVar('id');
         $so_id               = JRequest::getVar('so_id');
+        $pns_id               = JRequest::getVar('pns_id');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
@@ -84,7 +85,12 @@ class pnsViewgetpnsso extends JView
 //                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
 //                return $result = $db->loadObjectList();
 //        }
-           $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id;
+            $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id;
+            if($pns_id)
+            {
+                $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id ." and pns_id = ".$pns_id;
+            }
+
             $db->setQuery($query);
             $row_pns = $db->loadObjectList();
             $arrPNsChild  = array(0);
@@ -400,6 +406,7 @@ class pnsViewgetpnsso extends JView
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        //$db->setQuery();
         $rows = $db->loadObjectList(); 
          ///get information for filter
         $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 

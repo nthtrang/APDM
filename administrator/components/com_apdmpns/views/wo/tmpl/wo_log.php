@@ -58,8 +58,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <fieldset class="adminform">		
                                 <table class="admintable" cellspacing="1" width="100%">
                                         <tr>
-                                                <td><strong>LOG:</strong></td>
-                                                <td><strong>Upload:</strong></td>
+                                                <td><strong><?php echo JText::_('LOG'); ?>:</strong></td>
+                                                <td><strong><?php echo JText::_('Upload'); ?>:</strong></td>
                                         </tr>
                                         <tr>
                                                 <td width="60%">

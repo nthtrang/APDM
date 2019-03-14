@@ -3,12 +3,14 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
- $sto_id		= JRequest::getVar( 'sto_id');
+$tto_id		= JRequest::getVar( 'tto_id');
+$tto_type_inout		= JRequest::getVar( 'tto_type_inout');
+
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
 	
-?>new
+?>
 <script language="javascript">
 function CheckForm() {
 
@@ -24,13 +26,14 @@ function CheckForm() {
 	
 }
 function UpdatePnsEco(){        
-        var sto_id = $('sto_id').value;
+        var tto_id = $('tto_id').value;
+        var tto_type_inout = $('tto_type_inout').value;
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmsto&task=ajax_add_pns_stos&sto_id='+sto_id;
+		var url = 'index.php?option=com_apdmtto&task=ajax_add_pns_tto&tto_id='+tto_id+'&tto_type_inout='+tto_type_inout;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -46,7 +49,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&sto_id=<?php echo $sto_id?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&tto_id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -129,8 +132,8 @@ function UpdatePnsEco(){
 					$pns_image = JText::_('NONE_IMAGE_PNS');
 				}
 				//echo $pns_image;
-				$mf = PNsController::GetManufacture($row->pns_id);
-				$bom = PNsController::GetChildParentNumber($row->pns_id);
+				$mf = TToController::GetManufacture($row->pns_id);
+				$bom = TToController::GetChildParentNumber($row->pns_id);
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
@@ -145,7 +148,7 @@ function UpdatePnsEco(){
 				</td>	
 				
 				<td align="center">
-					<?php echo PNsController::GetECO($row->eco_id); ?>
+					<?php echo TToController::GetECO($row->eco_id); ?>
 				</td>				
 <!--				<td align="center">
 					<?php echo $row->pns_status;?>
@@ -161,7 +164,7 @@ function UpdatePnsEco(){
 				</td>		
                                 <td align="center">
 					<?php
-                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                        $mf = TToController::GetManufacture($row->pns_id,4);
                                         if (count($mf) > 0){
                                                 foreach ($mf as $m){
                                                         echo $m['v_mf'];
@@ -177,8 +180,10 @@ function UpdatePnsEco(){
 	</table>
 
 	<div class="clr"></div>	
-	<input type="hidden" name="option" value="com_apdmsto" />
-        <input type="hidden" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
+	<input type="hidden" name="option" value="com_apdmtto" />
+        <input type="text" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
+    <input type="text" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
+
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

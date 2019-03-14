@@ -1,19 +1,17 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-<?php JHTML::_('behavior.modal'); ?>
+<?php JHTML::_('behavior.modal');
+$cid    = JRequest::getVar( 'cid', array(0) );
+$edit   = JRequest::getVar('edit',true);
+$tto_id = JRequest::getVar('id');
+$role   = JAdministrator::RoleOnComponent(8);
+JToolBarHelper::title($this->tto_row->tto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
-<?php
-	$cid = JRequest::getVar( 'cid', array(0) );
-	$edit		= JRequest::getVar('edit',true);	
-        $sto_id = JRequest::getVar('id');
-	$role = JAdministrator::RoleOnComponent(8);	
-	JToolBarHelper::title($this->tto_row->tto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-        $folder_sto = $this->tto_row->tto_code;
-	if (in_array("E", $role)&& ($this->tto_row->tto_state  != "Done")) {
-                JToolBarHelper::customX("edittto",'edit',"Edit","Edit",false);
-	}
-        JToolBarHelper::cancel( 'cancel', 'Close' );
+if (in_array("E", $role)&& ($this->tto_row->tto_state  != "Done")) {
+            JToolBarHelper::customX("edittto",'edit',"Edit","Edit",false);
+}
+    JToolBarHelper::cancel( 'cancel', 'Close' );
         //for PPN part
        /* if (in_array("E", $role) && ($this->tto_row->sto_state  != "Done")) {
             $allow_edit = 1;
@@ -129,7 +127,11 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';         
+                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';
+                document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('tooltype_'+id+'_'+sti).style.display= 'block';
+                document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'none';
                 });
 	}
 	else {
@@ -144,13 +146,18 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
 
+                 document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'visible';
+                 document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'block';
+
                 document.getElementById('qty_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('qty_'+id+'_'+sti).style.display= 'none';
                 
                 document.getElementById('location_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('location_'+id+'_'+sti).style.display= 'none';
                 document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';                
+                document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';
+                 document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'hidden';
+                 document.getElementById('tooltype_'+id+'_'+sti).style.display= 'none';
              });
                 
                 
@@ -215,7 +222,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </tr>
                                 <tr>
                                         <td class="key" ><?php echo JText::_('Created Date'); ?></td>                                               
-                                        <td  class="title"><?php echo JHTML::_('date', $this->tto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                        <td  class="title"><?php echo JHTML::_('date', $this->tto_row->tto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
 					<td  class="key"><?php echo JText::_('Owner'); ?></td>
                                         <td class="title"><?php echo GetValueUser($this->tto_row->tto_owner_out, "name"); ?></td>                                       
                                         <td class="key"><?php echo JText::_('Confirm'); ?></td>
@@ -275,198 +282,209 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </tr>  
         </table>                
         </fieldset>   
-        <fieldset>
-                <legend>Tool</legend>
-            <div class="toolbar">
+    <fieldset>
+        <legend>Tool</legend>
+        <div class="toolbar">
             <table class="toolbar"><tbody><tr>
-<?php
-if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
-    if (in_array("W", $role) && ($this->tto_row->tto_state != "Done")) {
-        ?>
-        <td class="button" id="toolbar-save">
-            <a href="#"
-               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyTtofk')}"
-               class="toolbar">
+                    <?php
+                    if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
+                        if (in_array("W", $role) && ($this->tto_row->tto_state != "Done")) {
+                            ?>
+                            <td class="button" id="toolbar-save">
+                                <a href="#"
+                                   onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyTtofk')}"
+                                   class="toolbar">
 <span class="icon-32-save" title="Save">
 </span>
-                Save
-            </a>
-        </td>
+                                    Save
+                                </a>
+                            </td>
 
-        <td class="button" id="toolbar-popup-Popup">
-            <a class="modal"
-               href="index.php?option=com_apdmpns&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>"
-               rel="{handler: 'iframe', size: {x: 850, y: 500}}">
-<span class="icon-32-new" title="Add Part">
+                            <td class="button" id="toolbar-popup-Popup">
+                                <a class="modal"
+                                   href="index.php?option=com_apdmtto&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>&amp;tto_type_inout=1"
+                                   rel="{handler: 'iframe', size: {x: 850, y: 500}}">
+<span class="icon-32-new" title="Add Tools">
 </span>
-                Add Tools
-            </a>
-        </td>
-        <?php
-    }
-    if (in_array("D", $role) && ($this->tto_row->tto_state != "Done")) {
-        ?>
-        <td class="button" id="toolbar-Are you sure to delete it?">
-            <a href="#"
-               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsttos');}}"
-               class="toolbar">
+                                    Add Tools
+                                </a>
+                            </td>
+                            <?php
+                        }
+                        if (in_array("D", $role) && ($this->tto_row->tto_state != "Done")) {
+                            ?>
+                            <td class="button" id="toolbar-Are you sure to delete it?">
+                                <a href="#"
+                                   onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllpnsttos');}}"
+                                   class="toolbar">
 <span class="icon-32-delete" title="Tool">
 </span>
-                Remove Tools
-            </a>
-        </td>
-    <?php }
-}
+                                    Remove Tools
+                                </a>
+                            </td>
+                        <?php }
+                    }
                     ?>
 
                 </tr></tbody></table></div>
-                <?php if (count($this->tto_pn_list) > 0) { ?>
-                <table class="adminlist" cellspacing="1" width="400">
-                        <thead>
-                                <tr>
-                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="3%" class="title"></th>
-                                        <th width="100"><?php echo JText::_('Part Number'); ?></th>
-                                        <th width="300"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('UOM'); ?></th>  
-                                        <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>  
-                                        <th width="100"><?php echo ($this->tto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
-                                        <th width="100"><?php echo JText::_('Location'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>  
-                                        <th width="100"><?php //echo JText::_('Action'); ?></th>  
-                                </tr>
-                        </thead>
-                        <tbody>					
-        <?php
-        
-        $locationArr = array();
-        $location = TToController::GetLocationCodeList();
-        foreach($location as $rowcode)
-        {
-              $locationArr[] = JHTML::_('select.option',$rowcode->pns_location_id ,$rowcode->location_code, 'value', 'text');   
-        }
-        $partStateArr   = array();
-        $partStateArr[] = JHTML::_('select.option', 'OH-G', "OH-G" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'OH-D', "OH-D" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'IT-G', "IT-G" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'IT-D', "IT-D" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'OO', "OO" , 'value', 'text'); 
-        $partStateArr[] = JHTML::_('select.option', 'Prototype', "PROTOTYPE" , 'value', 'text'); 
-        
+        <?php if (count($this->tto_pn_list) > 0) { ?>
+        <table class="adminlist" cellspacing="1" width="400">
+            <thead>
+            <tr>
+                <th width="2%"><?php echo JText::_('NUM'); ?></th>
+                <th width="3%" class="title"></th>
+                <th width="100"><?php echo JText::_('Part Number'); ?></th>
+                <th width="300"><?php echo JText::_('Description'); ?></th>
+                <th width="100"><?php echo JText::_('UOM'); ?></th>
+                <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>
+                <th width="100"><?php echo JText::_('Qty'); ?></th>
+                <th width="100"><?php echo JText::_('Location'); ?></th>
+                <th width="100"><?php echo JText::_('Part State'); ?></th>
+                <th width="100"><?php //echo JText::_('Action'); ?></th>
+                <th width="100"><?php //echo JText::_('Action'); ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
 
-        $i = 0;
-        foreach ($this->sto_pn_list as $row) {
+            $locationArr = array();
+            $location = TToController::GetLocationCodeList();
+            foreach($location as $rowcode)
+            {
+                $locationArr[] = JHTML::_('select.option',$rowcode->pns_location_id ,$rowcode->location_code, 'value', 'text');
+            }
+            $partStateArr   = array();
+            $partStateArr[] = JHTML::_('select.option', 'OH-G', "OH-G" , 'value', 'text');
+            $partStateArr[] = JHTML::_('select.option', 'OH-D', "OH-D" , 'value', 'text');
+            $partStateArr[] = JHTML::_('select.option', 'IT-G', "IT-G" , 'value', 'text');
+            $partStateArr[] = JHTML::_('select.option', 'IT-D', "IT-D" , 'value', 'text');
+            $partStateArr[] = JHTML::_('select.option', 'OO', "OO" , 'value', 'text');
+            $partStateArr[] = JHTML::_('select.option', 'Prototype', "PROTOTYPE" , 'value', 'text');
+
+            $toolType   = array();
+            $toolType[] = JHTML::_('select.option', '1', "IN" , 'value', 'text');
+            $toolType[] = JHTML::_('select.option', '2', "OUT" , 'value', 'text');
+
+
+
+            $i = 0;
+            foreach ($this->tto_pn_list as $row) {
                 $i++;
-                                if($row->pns_cpn==1)
-                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
-                                else
-                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;					
-                                $image = TToController::GetImagePreview($row->pns_id);
-				if ($image !=''){					
-                                        $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
-				}else{
-					$pns_image = JText::_('None image for preview');
-				}                
-                                 $stoList = TToController::GetStoFrommPns($row->pns_id,$sto_id);
-                                 if($row->pns_revision)
-                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
-                                else
-                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
-                                 
-                                ?>
-                                        <tr>
-                                                <td align="center"><?php echo $i; ?></td>
-                                                <td align="center">
-                                                <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
-                                                </td>                                                
-                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
-					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
-				</span></td>
-                                                <td align="left"><?php echo $row->pns_description; ?></td>
-                                                <td align="center"><?php echo $row->pns_uom; ?></td>
-                                                <td align="center">
-                                                <?php
-                                                 $mf = TToController::GetManufacture($row->pns_id,4);
-                                                if (count($mf) > 0){
-                                                        foreach ($mf as $m){
-                                                                echo $m['v_mf'];
-                                                        }					
-                                                } ?>
-                                                </td> 
-                                                <td align="center" colspan="4">
-                                                        
-                                                        <table class="adminlist" cellspacing="0" width="200">
-                                                                <?php 
-                                                                foreach ($this->sto_pn_list2 as $rw) {
-                                                                        if($rw->pns_id==$row->pns_id)
-                                                                        {                                                                                
-                                                                ?>
-                                                                <tr><td align="center" width="74px">
-                                                        <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
-                                                        <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
-                                                </td> 
-                                                <td align="center" width="77px">					
-                                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
-                                                       <?php 
-                                                        if($rw->sto_type==1)
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-                                                         }
-                                                         else{
-															 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
-															 <?php 
-                                                                 $locationArr = TToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-																?>
-																</span> 
-																<?php 
-                                                         }
-                                                        ?>
-                                                </td>	
-                                                <td align="center" width="77px">					
-                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
-                                                         <?php       
-                                                         if($rw->sto_type==1)
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
-                                                         }
-                                                         else{                                                                 
-                                                                 $partStateArr = TToController::getPartStatePn($rw->partstate,$row->pns_id);
-                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
-                                                                 
-                                                         }
-                                                        
-                                                        ?>
-                                                </td>
-                                                <td align="center" width="75px">	
-                                                          <?php
-                                                 if (in_array("D", $role) && $this->tto_row->sto_owner_confirm==0 && !$this->tto_row->sto_owner) {
-                                                ?>
-                                                        <a href="index.php?option=com_apdmsto&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
-                                                        <?php }?>
-                                                </td>
-                                                                </tr>
-                                                                
-                                                                <?php 
-                                                                }
-                                                                }
-                                                                ?>
-                                                        </table>
-                                                </td>
-                                               </tr>
-                                                <?php }
-                                        } 
-                                        else
-                                        {
-                                                echo "Not found PNs"; 
-                                        }
-                                        ?>
-                </tbody>
-        </table>		
+                if($row->pns_cpn==1)
+                    $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;
+                else
+                    $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;
+                $image = TToController::GetImagePreview($row->pns_id);
+                if ($image !=''){
+                    $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
+                }else{
+                    $pns_image = JText::_('None image for preview');
+                }
+                $ttoList = TToController::GetTtoFrommPns($row->pns_id,$tto_id);
+                if($row->pns_revision)
+                    $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                else
+                    $pns_code = $row->ccs_code.'-'.$row->pns_code;
 
-        </fieldset>
-        <input type="hidden" name="sto_id" value="<?php echo $this->tto_row->pns_sto_id; ?>" />
-        <input type="hidden" name="option" value="com_apdmsto" />     
+                ?>
+                <tr>
+                    <td align="center"><?php echo $i; ?></td>
+                    <td align="center">
+                        <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$ttoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$ttoList);?>" name="cid[]"  />
+                    </td>
+                    <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
+                                                    <a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
+                                                </span></td>
+                    <td align="left"><?php echo $row->pns_description; ?></td>
+                    <td align="center"><?php echo $row->pns_uom; ?></td>
+                    <td align="center">
+                        <?php
+                        $mf = TToController::GetManufacture($row->pns_id,4);
+                        if (count($mf) > 0){
+                            foreach ($mf as $m){
+                                echo $m['v_mf'];
+                            }
+                        } ?>
+                    </td>
+                    <td align="center" colspan="5">
+
+                        <table class="adminlist" cellspacing="0" width="200">
+                            <?php
+                            foreach ($this->tto_pn_list2 as $rw) {
+                                if($rw->pns_id==$row->pns_id)
+                                {
+                                    ?>
+                                    <tr><td align="center" width="74px">
+                                            <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
+                                            <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />
+                                        </td>
+                                        <td align="center" width="77px">
+                                            <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
+                                            <?php
+                                            if($rw->tto_type==1)
+                                            {
+                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location );
+                                            }
+                                            else{
+                                                ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
+                                                <?php
+                                                $locationArr = TToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
+                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location );
+                                                ?>
+                                                </span>
+                                                <?php
+                                            }
+                                            ?>
+                                        </td>
+                                        <td align="center" width="77px">
+                                            <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
+                                            <?php
+                                            if($rw->tto_type==1)
+                                            {
+                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate );
+                                            }
+                                            else{
+                                                $partStateArr = TToController::getPartStatePn($rw->partstate,$row->pns_id);
+                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate );
+
+                                            }
+
+                                            ?>
+                                        </td>
+                                        <td align="center" width="75px">
+                                            <span style="display:block" id="text_tooltype_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo ($rw->tto_type_inout==1)?"IN":"OUT";?></span>
+                                               <?php
+                                               echo JHTML::_('select.genericlist',   $toolType, 'tooltype_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->tto_type_inout );
+                                               ?>
+                                        </td>
+                                        <td align="center" width="75px">
+                                            <?php
+                                            if (in_array("D", $role) && $this->tto_row->sto_owner_confirm==0 && !$this->tto_row->sto_owner) {
+                                                ?>
+                                                <a href="index.php?option=com_apdmtto&task=removepnstto&cid[]=<?php echo $rw->id;?>&tto_id=<?php echo $tto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
+                                            <?php }?>
+                                        </td>
+                                    </tr>
+
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </table>
+                    </td>
+                </tr>
+            <?php }
+            }
+            else
+            {
+                echo "Not found PNs";
+            }
+            ?>
+            </tbody>
+        </table>
+    </fieldset>
+        <input type="hidden" name="tto_id" value="<?php echo $this->tto_row->pns_tto_id; ?>" />
+        <input type="hidden" name="option" value="com_apdmtto" />
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="boxchecked" value="0" />
