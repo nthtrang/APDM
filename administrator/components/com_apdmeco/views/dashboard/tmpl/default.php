@@ -119,7 +119,7 @@ function saveApproveTask(id){
 				</td>
 				<td align="left" width="15%"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
 				<td align="left" width="8%"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
-                                <td align="left" width="25%" width="15%"><?php echo $row->eco_description; ?></td>
+                                <td align="center" width="25%" width="15%"><?php echo $row->eco_description; ?></td>
                                 <td align="center" width="5%"><?php echo $row->eco_status; ?></td>
                                 <td align="center" width="5%"><?php echo $row->title; ?></td>
                                 <td align="center" width="5%">
@@ -241,7 +241,7 @@ function saveApproveTask(id){
 					<?php echo $i;?>
 				</td>
 				<td align="left"><a href='<?php echo $linkRoute;?>'><?php echo $row->route_name; ?></a></td>
-				<td align="left"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
+				<td align="center"><a href='<?php echo $linkEco;?>'><?php echo $row->eco_name; ?></a></td>
                                 <td align="left"><?php echo $row->description; ?></td>
                                 <td align="center"><?php echo $row->eco_status; ?></td>
                                 <td align="center">

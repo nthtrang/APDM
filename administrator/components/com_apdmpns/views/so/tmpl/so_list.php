@@ -118,8 +118,8 @@ if (count($this->so_list) > 0) { ?>
                         <thead>
                                <tr class="header">
                                         <th  width="10"><?php echo JText::_('NUM'); ?><div style="width:10px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
-                                        <th width="120"><?php echo JText::_('SO#'); ?><div style="width:120px;padding:10px 0px 0px 15px">SO#</div></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?><div style="width:100px;padding:10px 0px 0px 10px">WO#</div></th>
+                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 15px">SO#</div></th>
+                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 10px">WO#</div></th>
                                         <th width="100"><?php echo JText::_('PN'); ?><div style="width:100px;padding:10px 0px 0px 10px">PN</div></th>
                                         <th width="120"><?php echo JText::_('Description'); ?><div style="width:120px;padding:10px 0px 0px 30px">Description</div></th>
                                         <th width="20"><?php echo JText::_('Qty'); ?><div style="width:20px;padding:10px 0px 0px 5px">Qty</div></th>
@@ -168,25 +168,25 @@ if (count($this->so_list) > 0) { ?>
                 }                
                 ?>
                                         <tr>
-                                                <td><?php echo $i+$this->pagination->limitstart;?></td>                                            
-                                                <td><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
-                                                <td><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>     
-                                                <td><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
+                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>                                            
+                                                <td align="left"><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td align="center"><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>     
+                                                <td align="left"><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
                                                                                         <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
                                                 </span></td>   
-                                                <td><?php echo $so->pns_description; ?></td>                                                
-                                                <td>
+                                                <td align="left"><?php echo $so->pns_description; ?></td>                                                
+                                                <td align="center">
                                                 <?php echo $so->wo_qty; ?>
                                                 </td>     
-                                                 <td>
+                                                 <td align="center">
                                                 <?php echo $so->pns_uom; ?>
                                                 </td> 
-                                                <td>
+                                                <td align="left">
                                                         <?php echo PNsController::getWoStep($so->op_code); ?>
                                                 </td>
-                                                <td><?php echo JHTML::_('date', $so->op_target_date, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                <td <?php echo $background?>><?php echo $remain_day;?></td>
-                                                <td>
+                                                <td align="center"><?php echo JHTML::_('date', $so->op_target_date, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                <td  align="center"<?php echo $background?>><?php echo $remain_day;?></td>
+                                                <td align="center">
                                                      <?php echo GetValueUser($so->wo_assigner, "name"); ?>
                                                 </td></tr>
                                                 <?php }
@@ -206,8 +206,8 @@ if (in_array("W", $role) && count($this->report_list) > 0) { ?>
                         <thead>
                                  <tr class="header">
                                         <th width="10"><?php echo JText::_('NUM'); ?><div style="width:10px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
-                                        <th width="120"><?php echo JText::_('SO#'); ?><div style="width:120px;padding:10px 0px 0px 20px"><?php echo JText::_('SO#'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('WO#'); ?></div></th>
+                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 20px"><?php echo JText::_('SO#'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('WO#'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Step'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Step'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Employee ID'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Employee ID'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Delay Times of Step'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay Times of Step'); ?></div></th>
@@ -229,14 +229,14 @@ if (in_array("W", $role) && count($this->report_list) > 0) { ?>
                 ?>
                                         <tr>
                                                 <td align="center"><?php echo $i?></td>
-                                                <td align="center"><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td align="left"><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
                                                 <td align="center"><?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$so->wo_code.'</a> '; ?></td>
-                                                <td align="center"><?php echo PNsController::getWoStep($so->op_code); ?></td>
+                                                <td align="left"><?php echo PNsController::getWoStep($so->op_code); ?></td>
                                                 <td align="center"><?php echo $so->op_assigner; ?></td>
                                                  <td align="center"><?php echo $so->op_delay; ?></td>
                                                 <td align="center"><?php echo  $so->wo_delay;////PNsController::getDelayTimes($so->pns_wo_id);  ?></td>
                                                 <td align="center"><?php echo (PNsController::getReworkStep($so->pns_wo_id,$so->op_code))?PNsController::getReworkStep($so->pns_wo_id,$so->op_code):0;  ?></td>
-                                                <td align="center">
+                                                <td align="left">
                                                      <?php 
                                                       $comment = PNsController::getWoStepLog($so->pns_op_id, 0);
                                                       if ($comment) {

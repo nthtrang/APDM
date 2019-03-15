@@ -164,24 +164,24 @@ th:first-child div{
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 
-                                                <td align="left" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>
-                                                <td align="center" style="<?php echo $style?>" >
+                                                <td align="left" style="<?php //echo $style?>" ><?php echo $sto->sto_description; ?></td>
+                                                <td align="center" style="<?php //echo $style?>" >
                                                     <?php echo $sto->sto_state; ?>
                                                 </td>
-                                                <td align="center"  style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php //echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td align="center"  style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td> 
-                                                <td align="center"  style="<?php echo $style?>" >
+                                                <td align="center"  style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
                                                 </td>
                                                 <td align="center" ></td>
-                                                <td align="center"  style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
+                                                <td align="center"  style="<?php //echo $style?>" ><?php if (in_array("E", $role)) {
 
                                                         ?>
-                                                        <a style="<?php echo $style?>"  href="<?php echo $linkedit; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                                                        <a style="<?php //echo $style?>"  href="<?php echo $linkedit; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>

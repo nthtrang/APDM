@@ -136,46 +136,46 @@ function submitbutton(pressbutton) {
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
-				<th width="2%" class="title">
+				<th  align="center" width="2%" class="title">
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
-				<th width="3%" class="title">
+				<th align="center" width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="15%">
+				<th  align="center" class="title" width="15%">
 					<?php echo JHTML::_('grid.sort',   JText::_('PART_NUMBER_CODE'), 'p.pns_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
           
-				<th width="5%" class="title" >
+				<th align="center" width="5%" class="title" >
 					<?php echo JText::_( 'BOM' ); ?>
 				</th>
-                                <th width="5%" class="title" >
+                                <th align="center" width="5%" class="title" >
 					<?php echo JText::_( 'Where Used' ); ?>
 				</th>
-				<th  class="title" width="10%">
+				<th  align="center" class="title" width="10%">
 					<?php echo JHTML::_('grid.sort',   JText::_('ECO'), 'p.eco_id', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th width="5%" class="title" >
+				<th  align="center" width="5%" class="title" >
 					<?php echo JText::_( 'Download' ); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Status'), 'p.pns_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>-->
-				<th width="5%" class="title" nowrap="nowrap">
+				<th  align="center" width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('State'), 'p.pns_life_cycle', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>                                
-				<th width="5%" class="title" nowrap="nowrap">
+				<th  align="center" width="5%" class="title" nowrap="nowrap">
 					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-				<th width="25%" class="title"  >
+				<th align="center" width="25%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
 				
-				<th width="10%" class="title">
+				<th align="center" width="10%" class="title">
 					<?php echo JText::_( 'MFR Name' ); ?>
 				</th>
-                <th width="10%" class="title">
+                <th  align="left" width="10%" class="title">
 					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>
 <!--				<th width="20%" class="title">
@@ -184,7 +184,7 @@ function submitbutton(pressbutton) {
 <!--				<th width="20%" class="title">
 					<?php echo JText::_( 'Date In' ); ?>
 				</th>       -->
-				<th width="10%" class="title">
+				<th  align="center" width="10%" class="title">
 					<?php echo JText::_( 'Inventory' ); ?>
                                         <?php //echo JHTML::_('grid.sort',   JText::_('Stock'), 'p.pns_stock', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>    
@@ -293,7 +293,7 @@ function submitbutton(pressbutton) {
 				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>
-				<td align="center">
+				<td align="left">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
@@ -303,7 +303,7 @@ function submitbutton(pressbutton) {
 					}
 					 ?>
 				</td>	
-                                <td align="center">
+                                <td align="left">
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
