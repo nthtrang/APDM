@@ -1445,4 +1445,27 @@ class SToController extends JController
         echo $result;
         exit;
     }
+    function CalculateInventoryValue($pns_id)
+    {
+        $db = & JFactory::getDBO();
+        $db->setQuery("select pns_stock from apdm_pns where pns_id='".$pns_id."'");
+        $db->query();
+        $rows = $db->loadObjectList();
+        $CurrentStock = $rows[0]->pns_stock;
+        //get Stock IN
+        $db->setQuery("select  sum(qty) from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 1 where fk.pns_id='".$pns_id."'");
+        $db->query();
+        $StockIn = $db->loadResult();
+        //$StockIn = $rows->qty_in;
+        //get Stock OUT
+        $db->setQuery("select  sum(qty)  from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id='".$pns_id."'");
+        $db->query();
+        $StockOut = $db->loadResult();
+        //$StockOut = $rows->qty_out;
+        $inventory =  round($CurrentStock + ($StockIn-$StockOut),2);
+        if($inventory<0)
+            $inventory = 0;
+        return $inventory;
+        exit;
+    }
 }

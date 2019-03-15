@@ -217,7 +217,7 @@ class pnsViewpns_info extends JView
         $uomValue[] = JHTML::_('select.option',  'Undefined', JText::_( 'Undefined' ), 'value', 'text'); 
         $uomValue[] = JHTML::_('select.option',  'Meter',  JText::_( 'Meter (m)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Centimeter',  JText::_( 'Centimeter (cm)' ), 'value', 'text');
-        $uomValue[] = JHTML::_('select.option',  'Foot',  JText::_( 'Foot (ft)' ), 'value', 'text');
+        $uomValue[] = JHTML::_('select.option',  'Feet',  JText::_( 'Feet' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Inch',  JText::_( 'Inch (in)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Gram',  JText::_( 'Gram (g)' ), 'value', 'text');
         $uomValue[] = JHTML::_('select.option',  'Kilogram',  JText::_( 'Kilogram (Kg)' ), 'value', 'text');

@@ -276,15 +276,17 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					$pns_image = JText::_('NONE_IMAGE_PNS');
 				}
 				//echo $pns_image;
-                                if($this->type_filter==8){//manufacture
-                                        $mf = PNsController::GetManufacture($row->pns_id,4);
-                                }
-                                elseif($this->type_filter==9){//vendor 
-                                        $mf = PNsController::GetManufacture($row->pns_id,2);
-                                }
-                                elseif($this->type_filter==10){//Supplier 
-                                        $mf = PNsController::GetManufacture($row->pns_id,3);
-                                }                                        				
+                if($this->type_filter==8){//manufacture
+                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                }
+                elseif($this->type_filter==9){//vendor
+                        $mf = PNsController::GetManufacture($row->pns_id,2);
+                }
+                elseif($this->type_filter==10){//Supplier
+                        $mf = PNsController::GetManufacture($row->pns_id,3);
+                }
+                else
+                    $mf = PNsController::GetManufacture($row->pns_id,4);
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
                                 $wheruse = PNsController::GetChildWhereNumber($row->pns_id);
                         
@@ -346,7 +348,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php 
 					if (count($mf) > 0){
                                                 foreach ($mf as $m){
-                                                        echo $m['mf'];
+                                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
                                                 }					
 					}
 					 ?>
@@ -355,7 +357,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo $m['v_mf'];
+                        echo $m['v_mf'].' &nbsp;&nbsp;<br />';
 					}
 						
 					}else{
@@ -777,7 +779,7 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                 }
                 ?>
                                         <tr>
-                                                <td align="center" style="<?php echo $style?>" ><?php echo $i; ?></td>                                            
+                                                <td align="center" style="<?php //echo $style?>" ><?php echo $i; ?></td>
                                                 <td align="center" style="<?php echo $style?>" >
                                                     <?php
                                                     $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
@@ -786,19 +788,19 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                                                     }
                                                     ?>
                                                     <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                <td align="left" style="<?php echo $style?>" ><?php echo $sto->sto_description; ?></td>                                                
+                                                <td align="left" style="<?php //echo $style?>" ><?php echo $sto->sto_description; ?></td>
 <!--                                                <td style="<?php echo $style?>" >
                                                 <?php if ($sto->sto_file) { ?>
                                                                 <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php echo $sto->pns_sto_id; ?>" title="<?php echo JText::_('Click here to download') ?>" ><?php echo JText::_('Download') ?></a>&nbsp;&nbsp;
                                                         <?php } ?>
                                                 </td>                                                -->
-                                                <td align="center" style="<?php echo $style?>" >
+                                                <td align="center" style="<?php //echo $style?>" >
                                                         <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
-                                                <td align="center" style="<?php echo $style?>" >
+                                                <td align="center" style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
                                                 </td>     
-                                                <td align="center" style="<?php echo $style?>" >
+                                                <td align="center" style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_stocker, "name"); ?>
                                                 </td>
                                                 

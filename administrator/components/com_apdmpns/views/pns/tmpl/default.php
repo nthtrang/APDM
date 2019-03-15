@@ -297,7 +297,7 @@ function submitbutton(pressbutton) {
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo '<strong>'.$m['mf'].' </strong>&nbsp;&nbsp;<br />';
+						echo $m['mf'].' &nbsp;&nbsp;<br />';
 					}
 						
 					}
@@ -307,7 +307,7 @@ function submitbutton(pressbutton) {
 					<?php 
 					if (count($mf) > 0){
 					foreach ($mf as $m){
-						echo '<strong>'.$m['v_mf'].' </strong>&nbsp;&nbsp;<br />';
+						echo $m['v_mf'].' &nbsp;&nbsp;<br />';
 					}
 						
 					}

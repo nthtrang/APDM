@@ -108,16 +108,24 @@ class SToViewsto extends JView
                 $where = "where p.pns_deleted = 0 and  p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) >= ".$qty_from;
         }
         $query = "select inventory_in.*,inventory_out.*,p.pns_stock,p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) as inventory,p.* from apdm_pns p "
-                ." inner join( select sum(fk1.qty) as qty_in,fk1.pns_id from  apdm_pns_sto_fk fk1 inner join apdm_pns_sto sto1 on sto1.pns_sto_id = fk1.sto_id where sto1.sto_type=1 group by fk1.pns_id) inventory_in "
+                ." inner join( select sum(fk1.qty) as qty_in,fk1.pns_id from  apdm_pns_sto_fk fk1 left join apdm_pns_sto sto1 on sto1.pns_sto_id = fk1.sto_id where sto1.sto_type=1 group by fk1.pns_id) inventory_in "
                 ." on p.pns_id = inventory_in.pns_id"
-                ." inner join( select sum(fk2.qty) as qty_out,fk2.pns_id  from  apdm_pns_sto_fk fk2 inner join apdm_pns_sto sto2 on sto2.pns_sto_id = fk2.sto_id and sto2.sto_type=2 group by fk2.pns_id) inventory_out "
+                ." inner join( select sum(fk2.qty) as qty_out,fk2.pns_id  from  apdm_pns_sto_fk fk2 left join apdm_pns_sto sto2 on sto2.pns_sto_id = fk2.sto_id and sto2.sto_type=2 group by fk2.pns_id) inventory_out "
                 ." on p.pns_id = inventory_out.pns_id "
                 //." where p.pns_stock + (inventory_in.qty_in - inventory_out.qty_out) < 10";
                 .$where
                 ."  group by p.pns_id order by p.pns_id desc  limit 100";
         $db->setQuery($query);
         $warehouse = $db->loadObjectList();
-        
+
+
+        $query = 'SELECT p.* '
+            . ' FROM apdm_pns AS p'
+            . ' where p.pns_id in (select fk.pns_id from apdm_pns_sto_fk fk)'
+        ;
+        $db->setQuery($query);
+        $warehouse = $db->loadObjectList();
+
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);

@@ -267,7 +267,28 @@ th:first-child div{
                     if ($row->inventory <= 3) {
                         $background = "style='background-color:#f00;color:#fff'";
                     }
-
+                    $stock = SToController::CalculateInventoryValue($row->pns_id);
+                $qty_from =  $this->qty_from;
+                $qty_to =  $this->qty_to;
+                if($qty_from && $qty_to)
+                {
+                    if($stock<$qty_from || $stock>$qty_to)
+                        continue;
+                }
+                elseif($qty_to)
+                {
+                    if($stock>$qty_to)
+                        continue;
+                }
+                elseif($qty_from)
+                {
+                    if($stock<$qty_from )
+                        continue;
+                }
+                else{
+                    if($stock<=0 || $stock>10)
+                        continue;
+                }
 
                     ?>
                     <tr class="<?php echo "row$k"; ?>">
@@ -285,7 +306,7 @@ th:first-child div{
                             <?php
                             if (count($mf) > 0) {
                                 foreach ($mf as $m) {
-                                    echo $m['mf'];
+                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
                                 }
                             }
                             ?>
@@ -294,7 +315,7 @@ th:first-child div{
                             <?php
                             if (count($mf) > 0) {
                                 foreach ($mf as $m) {
-                                    echo $m['v_mf'];
+                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
                                 }
 
                             }
@@ -304,7 +325,7 @@ th:first-child div{
                             <?php
                             if (count($ms) > 0) {
                                 foreach ($ms as $m) {
-                                    echo $m['mf'];
+                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
                                 }
                             }
                             ?>
@@ -313,7 +334,7 @@ th:first-child div{
                             <?php
                             if (count($ms) > 0) {
                                 foreach ($ms as $m) {
-                                    echo $m['v_mf'];
+                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
                                 }
 
                             }
@@ -323,7 +344,7 @@ th:first-child div{
                             <?php
                             if (count($mv) > 0) {
                                 foreach ($mv as $m) {
-                                    echo $m['mf'];
+                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
                                 }
                             }
                             ?>
@@ -332,7 +353,7 @@ th:first-child div{
                             <?php
                             if (count($mv) > 0) {
                                 foreach ($mv as $m) {
-                                    echo $m['v_mf'];
+                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
                                 }
 
                             }
@@ -340,10 +361,11 @@ th:first-child div{
                         </td>
                         <td align="center" <?php echo $background; ?>>
                             <?php
+                            echo $stock;
                             $inventory = round($row->inventory, 2);
                             if ($inventory <= 0)
                                 $inventory = 0;
-                            echo $inventory;
+                            //echo $inventory;
                             ?>
                         </td>
                     </tr>
