@@ -7,10 +7,10 @@ $me = & JFactory::getUser();
 $me->get('username');
 $tto_id		= JRequest::getVar( 'tto_id');
 $tto_type_inout		= JRequest::getVar( 'tto_type_inout');
-
 	// clean item data
 JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 $checkFullFill =  $this->checkFullFill;
+$isOutConfirm =  $this->isOutConfirm;
 	
 ?>
 <script language="javascript">
@@ -50,8 +50,8 @@ function UpdateOwnerSto(sto_id){
                                 }
 				else
                                 {                                    
-                                       // window.parent.document.getElementById('sbox-window').close();	
-                             //           window.parent.location.reload();
+                                        window.parent.document.getElementById('sbox-window').close();	
+                                        window.parent.location.reload();
                                 }
 				
 				
@@ -67,7 +67,14 @@ function UpdateOwnerSto(sto_id){
 <div name="notice" style="color:#D30000" id ="notice"></div>
 <table class="adminlist" cellpadding="1">
         <?php 
-        if(!$checkFullFill){
+        
+        if(!$isOutConfirm){
+             ?>
+        <tr>
+                <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('Please confirm Tool Out before confirm Tool In')?></strong></td>
+        </tr>
+        <?php
+        }elseif(!$checkFullFill){
              ?>
         <tr>
                 <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('Please input all PN QTY before confirm done')?></strong></td>
@@ -110,8 +117,8 @@ function UpdateOwnerSto(sto_id){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmtto" />
-        <input type="text" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
-        <input type="text" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
+        <input type="hidden" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
+        <input type="hidden" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

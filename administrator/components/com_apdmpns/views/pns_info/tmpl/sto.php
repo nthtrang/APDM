@@ -16,9 +16,7 @@ if (in_array("E", $role)&& $this->row->pns_life_cycle =='Create') {
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
-?>
 
-<?php
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
@@ -137,7 +135,65 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </table>
                 </div>
 </fieldset>
-
+<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Tool-Out and Tool-In' ); ?></legend>
+                <table class="adminlist" cellspacing="1" width="400">
+                <?php if (count($this->tto_pn_list) > 0) { ?>                
+                        <thead>
+                                <tr>
+                                        <th width="100" colspan="6"><?php echo JText::_('Tool Out'); ?></th>
+                                </tr>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('Date Out'); ?></th>                                           
+                                        <th width="100"><?php echo JText::_('QTY Out'); ?></th>      
+                                        <th width="100"><?php echo JText::_('State'); ?></th>      
+                                        <th width="100"><?php echo JText::_('Part State'); ?></th>
+                                        <th width="100"><?php echo JText::_('Location'); ?></th>                                                                                
+                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                </tr>
+                        </thead>
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->tto_pn_list as $tto) {
+                $i++;
+            $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$tto->pns_tto_id;
+            if($sto->tto_type_inout==2){
+                $link = "index.php?option=com_apdmsto&task=tto_detail&id=".$tto->pns_tto_id;
+            }
+                ?>
+                                        <tr>
+                                                
+                                               <td align="center">
+                                                        <?php echo JHTML::_('date', $tto->tto_owner_out_confirm_date, '%m-%d-%Y %H:%M:%S'); ?>
+                                                </td>
+                                                <td align="center"><?php echo $tto->qty; ?></td>
+                                                <td align="center"><?php echo $tto->tto_state; ?></td>
+                                                
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $tto->location?PNsController::GetCodeLocation($tto->location):"";?></a></td>
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $tto->partstate; ?></a></td>
+                                                
+                                                <td align="center">
+                                                        <?php echo GetValueUser($tto->tto_owner_out, "name"); ?>
+                                                </td> 
+                                                
+                                        </tr>
+                                                <?php }
+                                         ?>
+                </tbody>
+     
+                 <?php 
+                 }
+                 ?>
+                 <tr>
+                                        <td width="100" align="center" colspan="6">
+                                        <?php 
+                                        echo JText::_('Tool Remain:'); 
+                                        echo PNsController::CalculateToolRemainValue($this->row->pns_id);
+                                        ?></td>
+                                </tr>
+                                   </table>
+</fieldset>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Transaction History' ); ?></legend>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	

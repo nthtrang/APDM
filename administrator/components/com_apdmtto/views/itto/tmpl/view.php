@@ -314,7 +314,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </a>
                             </td>
 
-                            <td class="button" id="toolbar-popup-Popup">
+<!--                            <td class="button" id="toolbar-popup-Popup">
                                 <a class="modal"
                                    href="index.php?option=com_apdmtto&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>&amp;tto_type_inout=1"
                                    rel="{handler: 'iframe', size: {x: 850, y: 500}}">
@@ -322,14 +322,14 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 </span>
                                     Add Tool-In
                                 </a>
-                            </td>
+                            </td>-->
                             <td class="button" id="toolbar-popup-Popup">
                                 <a class="modal"
                                    href="index.php?option=com_apdmtto&amp;task=get_list_pns_tto&amp;tmpl=component&amp;tto_id=<?php echo $this->tto_row->pns_tto_id; ?>&amp;tto_type_inout=2"
                                    rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Tool-Out">
 </span>
-                                    Add Tool-Out
+                                    Add Tool
                                 </a>
                             </td>                            
                             <?php
@@ -363,7 +363,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 <th width="100"><?php echo JText::_('Qty'); ?></th>
                 <th width="100"><?php echo JText::_('Location'); ?></th>
                 <th width="100"><?php echo JText::_('Part State'); ?></th>
-                <th width="100"><?php //echo JText::_('Action'); ?></th>
+<!--                <th width="100"><?php //echo JText::_('Action'); ?></th>-->
                 <th width="100"><?php //echo JText::_('Action'); ?></th>
             </tr>
             </thead>
@@ -474,9 +474,9 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 
                                             ?>
                                         </td>
-                                        <td align="center" width="75px">
-                                            <span style="display:block" id="text_tooltype_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo ($rw->tto_type_inout==1)?"IN":"OUT";?></span>                                               
-                                        </td>
+<!--                                        <td align="center" width="75px">
+                                            <span style="display:block" id="text_tooltype_<?php //echo $row->pns_id;?>_<?php //echo $rw->id;?>"><?php //echo ($rw->tto_type_inout==1)?"IN":"OUT";?></span>                                               
+                                        </td>-->
                                         <td align="center" width="75px">
                                             <?php
                                             if (in_array("D", $role) && $this->tto_row->sto_owner_confirm==0 && !$this->tto_row->sto_owner) {

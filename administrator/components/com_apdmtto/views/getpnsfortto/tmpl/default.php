@@ -4,12 +4,9 @@
 
 <?php
 $tto_id		= JRequest::getVar( 'tto_id');
-echo $tto_type_inout		= JRequest::getVar( 'tto_type_inout');
-
+$tto_type_inout		= JRequest::getVar( 'tto_type_inout');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
-	
 ?>
 <script language="javascript">
 function CheckForm() {
