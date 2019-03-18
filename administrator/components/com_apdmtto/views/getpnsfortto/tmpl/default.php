@@ -34,12 +34,9 @@ function UpdatePnsEco(){
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
-			onComplete:function(result){
-			//	window.parent.document.getElementById('pns_child').innerHTML = result;				
+			onComplete:function(result){			
 				window.parent.document.getElementById('sbox-window').close();	
                                 window.parent.location.reload();
-				
-
 			}
 		}).request();
 	}
@@ -97,6 +94,9 @@ function UpdatePnsEco(){
                                 <th width="5%" class="title"  >
 					<?php echo JText::_( 'Part State' ); ?>
 				</th> 
+                                <th width="5%" class="title"  >
+					<?php echo JText::_( 'QTY' ); ?>
+				</th> 
                                 
 			</tr>
 		</thead>
@@ -113,6 +113,7 @@ function UpdatePnsEco(){
 			$k = 0;
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
+                                
 				$row 	=& $this->rows[$i];								
                                 if($row->pns_revision)
                                         $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
@@ -126,6 +127,10 @@ function UpdatePnsEco(){
 				}
 				//echo $pns_image;							
                                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
+                                $qtyRemain = CalculateToolRemainValue($row->pns_id);
+                                if($qtyRemain<=0)
+                                        continue;
+                                        
                                 
 			?>
 			<tr class="<?php echo "row$k"; ?>">
@@ -133,7 +138,7 @@ function UpdatePnsEco(){
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>
 				</td>
 				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
@@ -153,30 +158,20 @@ function UpdatePnsEco(){
                                                         echo $m['v_mf'];
                                                 }					
 					} ?>
-				</td>	  
-					<td align="center" colspan="2">                                                        
-                                                        <table class="adminlist" cellspacing="0" width="200">
-                                                                <?php 
-                                                                foreach ($this->sto_pn_list2 as $rw) {
-                                                                        if($rw->pns_id==$row->pns_id)
-                                                                        {                                                                                
-                                                                ?>
-                                                                <tr>
-                                                                <td align="center" width="77px">					
-                                                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
+				</td>	
+                                 <td align="center" width="77px">					
+                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->location?TToController::GetCodeLocation($row->location):"";?></span>
 
-                                                                </td>	
-                                                                <td align="center" width="77px">					
-                                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
+                                </td>	
+                                <td align="center" width="77px">					
+                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->partstate?strtoupper($row->partstate):"";?></span>
 
-                                                                </td>                                               
-                                                                </tr>
-                                                                <?php 
-                                                                }
-                                                                }
-                                                                ?>
-                                                        </table>
-                                                </td>
+                                </td> 
+                                <td>
+                                        <?php  echo $qtyRemain;?>
+                                        
+                                </td>
+
 				
 			</tr>
 			<?php

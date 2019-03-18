@@ -120,8 +120,8 @@ class TToViewgetpnsfortto extends JView
                            if($keyword)
                            {
                                  $arr_code = explode("-", trim($keyword));
-                                 $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                                 $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                                 $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" and p.pns_code like "%'.$arr_code[1] .'-'.$arr_code[2].'%" and p.pns_revision LIKE "%'.$arr_code[3].'%"';
+                                 //$where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
                            }
                      
                    }          
@@ -151,10 +151,11 @@ class TToViewgetpnsfortto extends JView
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         //$where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
                 
-        $query = "SELECT  COUNT(p.pns_id)  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+//        $query = "SELECT  COUNT(p.pns_id)  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+          $query = "SELECT COUNT(fk.id) FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
                         . $filter
                         . $where                                          
-                        ." group by fk.pns_id"
+                        ." group by fk.id"
                         . $orderby ;
        //echo $query;
         $db->setQuery( $query );
@@ -170,19 +171,19 @@ class TToViewgetpnsfortto extends JView
 //            . $orderby
 //        ;
         
-        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_life_cycle,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
-                        . $filter
-                        . $where                                          
-                        ." group by fk.pns_id"
-                        . $orderby ;
+//        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_life_cycle,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+//                        . $filter
+//                        . $where                                          
+//                        ." group by fk.pns_id"
+//                        . $orderby ;
          
-         $query2 = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+         $query = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
                         . $filter
                         . $where                                                                  
                         . $orderby ;
-         $db->setQuery( $query2 );
-         $pns_list2 = $db->loadObjectList();                  
-         $this->assignRef('sto_pn_list2',        $pns_list2);
+//         $db->setQuery( $query2 );
+//         $pns_list2 = $db->loadObjectList();                  
+//         $this->assignRef('sto_pn_list2',        $pns_list2);
         
         
         $lists['query'] = base64_encode($query);   
@@ -190,21 +191,8 @@ class TToViewgetpnsfortto extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
          ///get information for filter
-        $status[] = JHTML::_('select.option',  '', '- '. JText::_( 'SELECT_STATUS' ) .' -', 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Approval', JText::_( 'Approval' ) , 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Cbsolete', JText::_( 'Cbsolete' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Pending',  JText::_( 'Pending' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Reject',  JText::_( 'Reject' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Release', JText::_( 'Release' ), 'value', 'text'); 
-        $status[] = JHTML::_('select.option',  'Submit', JText::_( 'Submit' ), 'value', 'text'); 
-        $lists['status'] = JHTML::_('select.genericlist',   $status, 'filter_status', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_status );
-        
-        $pns_type[] = JHTML::_( 'select.option', '', JText::_('SELECT_TYPE'), 'value', 'text' );
-        $pns_type[] = JHTML::_( 'select.option', 'Making', 'Making', 'value', 'text' );
-        $pns_type[] = JHTML::_( 'select.option', 'Buying', 'Buying', 'value', 'text' ); 
-        $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
-        $lists['pns_type']   = JHTML::_('select.genericlist', $pns_type, 'filter_type', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_type );
-        ///Cerated by
+          
+             ///Cerated by
         $db->setQuery("SELECT p.pns_create_by as value, u.name as text FROM apdm_pns as p LEFT JOIN jos_users as u ON u.id=p.pns_create_by WHERE p.pns_deleted=0  GROUP BY p.pns_create_by ORDER BY text "); 
         $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
         $create_bys = array_merge($create_by, $db->loadObjectList());

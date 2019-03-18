@@ -246,7 +246,7 @@ class pnsViewpns_info extends JView
                 $this->assignRef('stos',        $list_stos);
                 
                 //for TTO
-                $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.tto_type_inout FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id." and fk.tto_type_inout = 2 and tto.tto_state != 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");                
+                $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.tto_type_inout FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id." and fk.tto_type_inout = 2 and tto.tto_state != 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");                                
                 $pns_list = $db->loadObjectList();         
                 $this->assignRef('tto_pn_list',        $pns_list);
                 $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from,fk.tto_type_inout , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$row->pns_id." order by fk.pns_id desc");

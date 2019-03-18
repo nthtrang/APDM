@@ -147,8 +147,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <th width="100"><?php echo JText::_('Date Out'); ?></th>                                           
                                         <th width="100"><?php echo JText::_('QTY Out'); ?></th>      
                                         <th width="100"><?php echo JText::_('State'); ?></th>      
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>
-                                        <th width="100"><?php echo JText::_('Location'); ?></th>                                                                                
+                                        <th width="100"><?php echo JText::_('Tool ID'); ?></th>
+                                        <th width="100"><?php echo JText::_('Part State'); ?></th>                                                                                
                                         <th width="100"><?php echo JText::_('Owner'); ?></th>
                                 </tr>
                         </thead>
@@ -185,7 +185,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <td width="100" align="center" colspan="6">
                                         <?php 
                                         echo JText::_('Tool Remain:'); 
-                                        echo PNsController::CalculateToolRemainValue($this->row->pns_id);
+                                        echo CalculateToolRemainValue($this->row->pns_id);
                                         ?></td>
                                 </tr>
                  <?php 

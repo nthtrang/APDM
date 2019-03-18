@@ -583,26 +583,25 @@ class TToController extends JController
     }
     function ajax_add_pns_tto() {
         $db = & JFactory::getDBO();
-        $pns = JRequest::getVar('cid', array(), '', 'array');
+        $fks= JRequest::getVar('cid', array(), '', 'array');
         $tto_id = JRequest::getVar('tto_id');
         $tto_type_inout = JRequest::getVar('tto_type_inout'); //1 IN 2 OUT
         //innsert to FK table
-        foreach($pns as $pn_id)
+        foreach($fks as $id)
         {
                 $location="";
                 $partstate="";
-                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1   order by stofk.id desc");
+                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.id= '".$id."' and sto.sto_type = 1   order by stofk.id desc");
                 $rows = $db->loadObjectList();
                  if (count($rows) > 0) {                        
                         foreach ($rows as $obj) {
                                 $location = $obj->location;
                                 $partState = $obj->partstate;
+                                $pn_id =  $obj->pns_id;
                                 $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
                                 $db->query(); 
                         }
                  }
-            $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
-            $db->query();
         }
         return $msg = JText::_('Have add Tool successfull.');
     }
@@ -783,30 +782,31 @@ class TToController extends JController
 
         $fkid = JRequest::getVar('id');
         foreach ($cid as $pnsid) {
-            $obj = explode("_", $pnsid);
-            $pns=$obj[0];
-            $ids = explode(",",$obj[1]);
+                $obj = explode("_", $pnsid);
+                $pns=$obj[0];
+                $ids = explode(",",$obj[1]);
+
+                $qtyRemain = CalculateInventoryValue($pns);
+                $currentOutStock = 0;
+                foreach ($ids as $id) {
+                        $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
+                        $location = JRequest::getVar('location_' . $pns .'_' . $id);
+                        $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
+                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 2 and fk.id != ".$id);                
+                        $qtyOutCheck = $db->loadResult();
+                        $currentOutStock += $stock+$qtyOutCheck;
+                }
+                if($currentOutStock > $qtyRemain)
+                {
+                        $msg = "Total Qty just input must less than $qtyRemain";
+                        return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id=' . $fkid, $msg);
+                }    
             foreach ($ids as $id) {
                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
                 //$tto_type_inout = JRequest::getVar('tooltype_' . $pns .'_' . $id);
                 //get sto_type
-                $db->setQuery("select fk.qty,fk.tto_type_inout,tto.tto_type,fk.pns_id,fk.tto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
-                $stoChecker= $db->loadObject();
-                if($stoChecker->tto_type_inout==3)//temp not clearly so not check
-                {
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
-                    $qtyInCheck = round($db->loadResult(),2);
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);
-                    $qtyOutCheck = $db->loadResult();
-                    $currentOutStock = $stock+$qtyOutCheck;
-                    if($currentOutStock > $qtyInCheck)
-                    {
-                        $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $qtyInCheck";
-                        return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
-                    }
-                }
                 $db->setQuery("update apdm_pns_tto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);
                 $db->query();
             }

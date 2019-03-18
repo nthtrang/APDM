@@ -51,7 +51,7 @@ $pns_code_full = $row->pns_code_full;
         <th class="tg-kiyi"  style="text-align:left">
             <img src="./templates/khepri/images/h_green/logo1.png" width="150px"></img></th>
     </tr>
-    <tr><td style="text-align:center"><span style="font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4;align-content: center">Bill of Materials</span></td></tr>
+    <tr><td  colspan="10" style="text-align:center"><span style="font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4;align-content: center">Bill of Materials</span></td></tr>
 </table>
 <form action="index.php?option=com_apdmpns" method="post" name="adminForm">
 <?php 
@@ -77,7 +77,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 			<th width="15%">
 				<?php echo JText::_('Description')?>				
 			</th>
-			<th width="10%">
+			<th width="5%">
 				<?php echo JText::_('F.N')?>
 			</th>
 			<th width="5%">
@@ -89,8 +89,11 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 			<th width="10%">
 				<?php echo JText::_('MFR Name')?>
 			</th>
-            <th width="10%">
+                         <th width="10%">
 				<?php echo JText::_('MFG PN')?>
+			</th>
+                         <th width="10%">
+				<?php echo JText::_('Tool PN')?>
 			</th>
 		</tr>
 	</thead>
@@ -106,9 +109,10 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                     imagepng($img);
                     //Get the image from the output buffer
                     $output_img		=	ob_get_clean();
-                    echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$pns_code_full;
+                    echo '<img  height="30px"  src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$pns_code_full;
 
                     $manufacture = PNsController::GetManufacture($row->pns_id);
+                    
                     ?>
                 </td>
                 <td style="text-align: left !important;"><?php echo limit_text($row->pns_description, 15);?></td>
@@ -117,6 +121,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td align="center"><?php echo $row->pns_uom;?></td>
                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
+                <td align="left" ><?php                         
+                                $ToolPN = GetToolPnValue($row->pns_id);
+                                if($ToolPN)
+                                {
+                                    $img			=	code128BarCode($ToolPN, 1);
+                                    //Start output buffer to capture the image
+                                    //Output PNG image
+                                    ob_start();
+                                    imagepng($img);
+                                    //Get the image from the output buffer
+                                    $output_img		=	ob_get_clean();
+                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                }
+                ?>
+                </td>
             </tr>
         <?php 
         //level1
@@ -139,7 +158,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
             imagepng($img);
             //Get the image from the output buffer
             $output_img		=	ob_get_clean();
-            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row->text;
+            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row->text;
             ?>
         </td>
                 <td align="left"  style="text-align: left !important;"><?php echo limit_text($row->pns_description, 15);?></td>
@@ -153,7 +172,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td align="center" ><?php echo $row->pns_uom;?></td>
                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
-
+                <td align="left" ><?php                         
+                                $ToolPN = GetToolPnValue($row->pns_id);
+                                if($ToolPN)
+                                {
+                                    $img			=	code128BarCode($ToolPN, 1);
+                                    //Start output buffer to capture the image
+                                    //Output PNG image
+                                    ob_start();
+                                    imagepng($img);
+                                    //Get the image from the output buffer
+                                    $output_img		=	ob_get_clean();
+                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                }
+                ?>
+                </td>
 	</tr>
         <?php
                 //level2
@@ -175,7 +208,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                    imagepng($img);
                                    //Get the image from the output buffer
                                    $output_img		=	ob_get_clean();
-                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row2->text;
+                                   echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row2->text;
                                    ?></td>
                                 <td align="left"  style="text-align: left !important;"><?php echo limit_text($row2->pns_description, 15);?></td>
                                 <td align="center" >
@@ -187,7 +220,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                 <td align="center" ><?php echo $row2->pns_uom;?></td>
                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
-
+                                <td align="left" ><?php                         
+                                $ToolPN = GetToolPnValue($row2->pns_id);
+                                if($ToolPN)
+                                {
+                                    $img			=	code128BarCode($ToolPN, 1);
+                                    //Start output buffer to capture the image
+                                    //Output PNG image
+                                    ob_start();
+                                    imagepng($img);
+                                    //Get the image from the output buffer
+                                    $output_img		=	ob_get_clean();
+                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                }
+                                ?>
+                                </td>
 
                                 
                         </tr>
@@ -212,7 +259,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                    imagepng($img);
                                                    //Get the image from the output buffer
                                                    $output_img		=	ob_get_clean();
-                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row3->text;
+                                                   echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row3->text;
                                                    ?></td>
                                                 <td align="left" style="text-align: left !important;" width="15%"><?php echo limit_text($row3->pns_description, 15);?></td>
                                                 <td align="center" >
@@ -225,7 +272,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                 <td align="center" ><?php echo $row3->pns_uom;?></td>
                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
-
+                                                <td align="left" ><?php                         
+                                                $ToolPN = GetToolPnValue($row3->pns_id);
+                                                if($ToolPN)
+                                                {
+                                                    $img			=	code128BarCode($ToolPN, 1);
+                                                    //Start output buffer to capture the image
+                                                    //Output PNG image
+                                                    ob_start();
+                                                    imagepng($img);
+                                                    //Get the image from the output buffer
+                                                    $output_img		=	ob_get_clean();
+                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                }
+                                                ?>
+                                                </td>
                                         </tr>
                                                <?php
                                                 //level4
@@ -247,7 +308,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                    imagepng($img);
                                                                    //Get the image from the output buffer
                                                                    $output_img		=	ob_get_clean();
-                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row4->text;
+                                                                   echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row4->text;
                                                                    ?></td>
                                                                         <td  align="left" align="left" style="text-align: left !important;" width="15%"><?php echo limit_text($row4->pns_description, 15);?></td>
                                                                         <td align="center" >
@@ -260,7 +321,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 <td align="center"><?php echo $row4->pns_uom;?></td>
                                                                 <td align="left"><?php echo $manufacture[0]['mf'];?></td>
                                                                 <td align="left"><?php echo $manufacture[0]['v_mf'];?></td>
-
+                                                                <td align="left" ><?php                         
+                                                                        $ToolPN = GetToolPnValue($row4->pns_id);
+                                                                        if($ToolPN)
+                                                                        {
+                                                                            $img			=	code128BarCode($ToolPN, 1);
+                                                                            //Start output buffer to capture the image
+                                                                            //Output PNG image
+                                                                            ob_start();
+                                                                            imagepng($img);
+                                                                            //Get the image from the output buffer
+                                                                            $output_img		=	ob_get_clean();
+                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                        }
+                                                                        ?>
+                                                                        </td>
 
                                                         </tr>
                                                                         <?php
@@ -283,7 +358,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                            imagepng($img);
                                                                                            //Get the image from the output buffer
                                                                                            $output_img		=	ob_get_clean();
-                                                                                           echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row5->text;
+                                                                                           echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row5->text;
                                                                                            ?></td>
                                                                                         <td align="left" style="text-align: left !important;" width="15%"><?php echo limit_text($row5->pns_description, 15);?></td>
                                                                                         <td align="center" >
@@ -296,7 +371,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         <td align="center" ><?php echo $row5->pns_uom;?></td>
                                                                                         <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                         <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
-
+                                                                                        <td align="left" ><?php                         
+                                                                                        $ToolPN = GetToolPnValue($row5->pns_id);
+                                                                                        if($ToolPN)
+                                                                                        {
+                                                                                            $img			=	code128BarCode($ToolPN, 1);
+                                                                                            //Start output buffer to capture the image
+                                                                                            //Output PNG image
+                                                                                            ob_start();
+                                                                                            imagepng($img);
+                                                                                            //Get the image from the output buffer
+                                                                                            $output_img		=	ob_get_clean();
+                                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                                        }
+                                                                                        ?>
+                                                                                        </td>
 
                                                                                         
                                                                                 </tr>
@@ -320,7 +409,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                    imagepng($img);
                                                                                                                    //Get the image from the output buffer
                                                                                                                    $output_img		=	ob_get_clean();
-                                                                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row6->text;
+                                                                                                                   echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row6->text;
                                                                                                                    ?></td>
                                                                                                                 <td  align="left" style="text-align: left !important;" width="15%"><?php echo limit_text($row6->pns_description, 15);?></td>
                                                                                                                 <td align="center" >
@@ -333,6 +422,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 <td align="center" ><?php echo $row6->pns_uom;?></td>
                                                                                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                                                <td align="left" ><?php                         
+                                                                                                                $ToolPN = GetToolPnValue($row6->pns_id);
+                                                                                                                if($ToolPN)
+                                                                                                                {
+                                                                                                                    $img			=	code128BarCode($ToolPN, 1);
+                                                                                                                    //Start output buffer to capture the image
+                                                                                                                    //Output PNG image
+                                                                                                                    ob_start();
+                                                                                                                    imagepng($img);
+                                                                                                                    //Get the image from the output buffer
+                                                                                                                    $output_img		=	ob_get_clean();
+                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                                                                }
+                                                                                                                ?>
+                                                                                                                </td>
 
 
                                                                                                                 
@@ -357,7 +461,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                            imagepng($img);
                                                                                                                                            //Get the image from the output buffer
                                                                                                                                            $output_img		=	ob_get_clean();
-                                                                                                                                           echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row7->text;
+                                                                                                                                           echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row7->text;
                                                                                                                                            ?></td>
                                                                                                                                         <td align="left"  style="text-align: left !important;" width="15%"><?php echo limit_text($row7->pns_description, 15);?></td>
                                                                                                                                         <td align="center" >
@@ -369,7 +473,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                         <td align="center" ><?php echo $row7->pns_uom;?></td>
                                                                                                                                          <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                        <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
-
+                                                                                                                                        <td align="left" ><?php                         
+                                                                                                                                        $ToolPN = GetToolPnValue($row7->pns_id);
+                                                                                                                                        if($ToolPN)
+                                                                                                                                        {
+                                                                                                                                            $img			=	code128BarCode($ToolPN, 1);
+                                                                                                                                            //Start output buffer to capture the image
+                                                                                                                                            //Output PNG image
+                                                                                                                                            ob_start();
+                                                                                                                                            imagepng($img);
+                                                                                                                                            //Get the image from the output buffer
+                                                                                                                                            $output_img		=	ob_get_clean();
+                                                                                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                                                                                        }
+                                                                                                                                        ?>
+                                                                                                                                        </td>
                                                                                                                                 </tr>
                                                                                                                                                   <?php
                                                                                                                                                 //level8
@@ -391,7 +509,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                    imagepng($img);
                                                                                                                                                                    //Get the image from the output buffer
                                                                                                                                                                    $output_img		=	ob_get_clean();
-                                                                                                                                                                   echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row8->text;
+                                                                                                                                                                   echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$row8->text;
                                                                                                                                                                    ?></td>
                                                                                                                                                                 <td align="left"  style="text-align: left !important;" width="15%"><?php echo limit_text($row8->pns_description, 15);?></td>
                                                                                                                                                                 <td align="center" >
@@ -403,6 +521,21 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 <td align="left" ><?php echo $row8->pns_uom;?></td>
                                                                                                                                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                                                         <td><?php echo $manufacture[0]['v_mf'];?></td>
+                                                                                                                                                                        <td align="left" ><?php                         
+                                                                                                                                                                $ToolPN = GetToolPnValue($row8->pns_id);
+                                                                                                                                                                if($ToolPN)
+                                                                                                                                                                {
+                                                                                                                                                                    $img			=	code128BarCode($ToolPN, 1);
+                                                                                                                                                                    //Start output buffer to capture the image
+                                                                                                                                                                    //Output PNG image
+                                                                                                                                                                    ob_start();
+                                                                                                                                                                    imagepng($img);
+                                                                                                                                                                    //Get the image from the output buffer
+                                                                                                                                                                    $output_img		=	ob_get_clean();
+                                                                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                                                                                                                }
+                                                                                                                                                                ?>
+                                                                                                                                                                </td>
 
                                                                                                                                                         </tr>
 

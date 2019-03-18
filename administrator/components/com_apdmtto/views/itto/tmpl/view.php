@@ -305,7 +305,7 @@ function checkAllToolPn(n, fldName )
                                         <td  class="title"><?php echo ($this->tto_row->tto_owner_in_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_in_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>                           
                                 </tr>                                
                                 <tr>
-                                        <td class="key"><?php echo JText::_('WO#'); ?></td>
+                                        <td class="key"><?php echo JText::_('WO'); ?></td>
                                         <td  class="title"><?php echo ($this->tto_row->wo_code)?$this->tto_row->wo_code:"NA";?></td>
                                         <td class="key"><?php echo JText::_('State'); ?></td>
                                         <td  class="title"><?php echo ($this->tto_row->tto_state)?$this->tto_row->tto_state:"NA";?></td>
@@ -433,7 +433,7 @@ function checkAllToolPn(n, fldName )
 
                 ?>
                 <tr>
-                    <td align="center"><?php echo $i; ?></td>
+                    <td align="center"><?php echo $i+1; ?></td>
                     <td align="center">
                         <input type="checkbox" id = "toolpn<?php echo $i?>"  onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$ttoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$ttoList);?>" name="cid[]"  />                                                
                     </td>

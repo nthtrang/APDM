@@ -108,7 +108,7 @@
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Customer Code' ); ?>
+							<?php echo JText::_( 'Ascenx Vietnam PN' ); ?>
 						</label>
 					</td>
 					<td><?php 
@@ -300,36 +300,7 @@
 					</td>
                                         
 				</tr>	
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Quo#' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php 
-                                                foreach ($this->quos as $quo) {
-                                                        echo $quo->quo_code."</br>";
-                                                }                                                
-                                                ?>
-					</td>
-                                        
-				</tr>	
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'PO#' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php 
-                                                foreach ($this->pos as $po) {                                                        
-                                                        echo "#".$po->po_code."</br>";
-                                                }                                                
-                                                ?>
-					</td>
-                                        
-				</tr>	                                
+				                          
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">

@@ -206,6 +206,28 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         }).request();
         
 }
+function checkAllEtoPn(n, fldName )
+{
+  if (!fldName) {
+     fldName = 'etopn';
+  }
+	var f = document.adminForm;
+	var c = f.toggle.checked;
+	var n2 = 0;        
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+                        cb.click();                           
+			cb.checked = c;                       
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxchecked.value = n2;
+	} else {
+		document.adminForm.boxchecked.value = 0;
+	}
+}
 </script>
 <!--<div class="submenu-box">
     <div class="t">
@@ -646,7 +668,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                         <thead>
                                 <tr>
                                         <th width="18"><?php echo JText::_('NUM'); ?></th>                                               
-                                        <th width="3%" class="title"></th>
+                                        <th width="3%" class="title"><input type="checkbox" name="toggle" value="" onclick="checkAllEtoPn(<?php echo count($this->sto_pn_list); ?>);" /></th>
                                         <th width="100"><?php echo JText::_('Part Number'); ?></th>
                                         <th width="100"><?php echo JText::_('Description'); ?></th>  
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
@@ -677,7 +699,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
 
         $i = 0;
         foreach ($this->sto_pn_list as $row) {
-                $i++;
+                
                                 if($row->pns_cpn==1)
                                         $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
                                 else
@@ -696,9 +718,9 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                  
                                 ?>
                                         <tr>
-                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center"><?php echo $i+1; ?></td>
                                                 <td align="center">
-                                                <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
+                                                <input type="checkbox" id = "etopn<?php echo $i?>" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$stoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$stoList);?>" name="cid[]"  />
                                                 </td>                                                
                                                 <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
 					<a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
@@ -776,7 +798,9 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         </table>
                                                 </td>
                                                </tr>
-                                                <?php }
+                                                <?php 
+                                                $i++;
+                                                }
                                         } 
                                         else
                                         {

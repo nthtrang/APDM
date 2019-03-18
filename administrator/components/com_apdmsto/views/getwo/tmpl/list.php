@@ -69,7 +69,7 @@ function UpdateECO(){
                     <?php echo JText::_( 'SO' ); ?>
                 </th>
                 <th width="10%" class="title">
-                    <?php echo JText::_( 'Customer#' ); ?>
+                    <?php echo JText::_( 'Customer' ); ?>
                 </th>			
 			</tr>
 		</thead>
