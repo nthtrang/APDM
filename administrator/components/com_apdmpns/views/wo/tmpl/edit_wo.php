@@ -5,7 +5,7 @@
         $me = & JFactory::getUser();
         $edit = JRequest::getVar('edit',true);
         $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-        JToolBarHelper::title("Edit WO#: ".$this->wo_row->wo_code, 'cpanel.png');
+        JToolBarHelper::title("Edit WO: ".$this->wo_row->wo_code, 'cpanel.png');
         JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
         $usertype	= $me->get('usertype');
         $allow_edit = 0;
@@ -517,7 +517,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                  <tr>
 					<td class="tg-0pky">
 						<label for="name">
-							<?php echo JText::_( 'WO# Start Date' ); ?>
+							<?php echo JText::_( 'WO Start Date' ); ?>
 						</label>
 					</td>
 					<td>         
@@ -540,7 +540,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                  <tr>
 					<td class="tg-0pky">
 						<label for="name">
-							<?php echo JText::_( 'WO# Finished Date' ); ?>
+							<?php echo JText::_( 'WO Finished Date' ); ?>
 						</label>
 					</td>
 					<td>  

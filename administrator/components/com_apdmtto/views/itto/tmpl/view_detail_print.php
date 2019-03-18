@@ -39,7 +39,7 @@
     .tgi .tg-0pky-border{border-width:1px;border-style:solid}
     .tgi .tg-0pky-border-r{border-right:1px;border-bottom:1px;border-style:solid}
     .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 18px;color: #0B55C4}
-    .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 16px;color: #0B55C4}
+    .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 13px;color: #000}
 </style>
 <table class="tgi" width="100%">
     <tr>
@@ -59,40 +59,50 @@
         <td class="tg-xldj-pr" colspan="6"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-ito-title" colspan="6">TTO# <?php echo $this->tto_row->tto_code; ?></td>
+        <td class="tg-0pky-ito-title" colspan="6">
+         <?php
+            $img			=	code128BarCode($this->tto_row->tto_code, 1);
+            //Start output buffer to capture the image
+            //Output PNG image
+            ob_start();
+            imagepng($img);
+            //Get the image from the output buffer
+            $output_img		=	ob_get_clean();
+            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$this->tto_row->tto_code;
+             ?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr" colspan="6"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:15%">Created Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;border-right:0px;width:15%"><?php echo JText::_( 'Created Date' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;border-right:0px;width:15%"><?php echo JHTML::_('date', $this->tto_row->tto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO#:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'WO' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->wo_code)?$this->tto_row->wo_code:"NA";?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Completed Date' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Due Date:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Due Date' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_due_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_due_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"></td>
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Status:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Status' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->tto_row->tto_state;?></td>
-        <td class="tg-0pky-pr tg-0pky-border" width="250px">Tool Assigner: <?php echo ($this->tto_row->tto_create_by)?GetValueUser($this->tto_row->tto_create_by, "name"):""; ?></td>
-        <td class="tg-0pky-pr tg-0pky-border">Comfirm:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Date Out:</td>
+        <td class="tg-0pky-pr tg-0pky-border" width="250px"><?php echo JText::_( 'Tool Assigner' ); ?>: <?php echo ($this->tto_row->tto_create_by)?GetValueUser($this->tto_row->tto_create_by, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo JText::_( 'Comfirm' ); ?>:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Date Out' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_owner_out_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_out_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>    
     </tr>
     <tr>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Description:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Description' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo strtoupper($this->tto_row->tto_description)?></td>
-        <td class="tg-0pky-pr tg-0pky-border" width="150px">Owner: <?php echo ($this->tto_row->tto_owner_in)?GetValueUser($this->tto_row->tto_owner_in, "name"):""; ?></td>
-        <td class="tg-0pky-pr tg-0pky-border">Comfirm:
+        <td class="tg-0pky-pr tg-0pky-border" width="150px"><?php echo JText::_( 'Owner' ); ?>: <?php echo ($this->tto_row->tto_owner_in)?GetValueUser($this->tto_row->tto_owner_in, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border"><?php echo JText::_( 'Comfirm' ); ?>:
                 <?php 
                 $style="";
                 if($this->tto_row->tto_owner_in_confirm)
@@ -101,7 +111,7 @@
                 }
                 ?>
                 <input <?php echo $style;?> type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Date In:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Date In' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_owner_in_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_in_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>    
     </tr>
     
@@ -125,8 +135,8 @@
                     <th class="tg-0pky-pr tg-0pky-border" align="center" width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('PN'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="150" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Description'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('UOM'); ?></th>
-                    <th  class="tg-0pky-pr tg-0pky-border" align="center" width="60" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Qty'); ?></th>
-                    <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Location'); ?></th>
+                    <th  class="tg-0pky-pr tg-0pky-border" align="center" width="60" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('QTY'); ?></th>
+                    <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Tool ID'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Part State'); ?></th>
                     
                 </tr>

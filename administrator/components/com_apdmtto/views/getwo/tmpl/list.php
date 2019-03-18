@@ -63,13 +63,13 @@ function UpdateECO(){
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
 				<th class="title" width="10%">
-					<?php echo JHTML::_('grid.sort',   'WO#', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'WO', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
                 <th width="20%" class="title">
-                    <?php echo JText::_( 'SO#' ); ?>
+                    <?php echo JText::_( 'SO' ); ?>
                 </th>
                 <th width="10%" class="title">
-                    <?php echo JText::_( 'Customer#' ); ?>
+                    <?php echo JText::_( 'Customer' ); ?>
                 </th>			
 			</tr>
 		</thead>
@@ -91,10 +91,10 @@ function UpdateECO(){
                                 <td align="center">
                                     NA
                                 </td>
-                                <td align="center">
+                                <td align="left">
                                     NA
                                 </td>
-                                <td align="center"> NA
+                                <td align="left"> NA
 				</td>				
 				
 				
@@ -121,10 +121,10 @@ function UpdateECO(){
                 <td align="center">
                     <?php echo $row->wo_code; ?>
                 </td>
-                <td align="center">
+                <td align="left">
                     <?php echo $soNumber; ?>
                 </td>
-                <td align="center">
+                <td align="left">
 						<?php echo $row->ccs_name; ?>
 				</td>				
 				

@@ -130,7 +130,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'WO#' ); ?>
+                            <?php echo JText::_( 'WO' ); ?>
                         </label>
                     </td>
                     <td>

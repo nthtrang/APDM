@@ -8,7 +8,7 @@ $tto_id = JRequest::getVar('id');
 $role   = JAdministrator::RoleOnComponent(8);
 JToolBarHelper::title($this->tto_row->tto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
-if (in_array("E", $role)&& ($this->tto_row->tto_state  != "Done")) {
+if (in_array("E", $role)&& ($this->tto_row->tto_state  == "Create")) {
             JToolBarHelper::customX("edittto",'edit',"Edit","Edit",false);
 }
     JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -29,7 +29,7 @@ if (in_array("E", $role)&& ($this->tto_row->tto_state  != "Done")) {
         
         JToolBarHelper::customX("printttopdf","print",'',"Print",false);
 
-if (in_array("D", $role) && $this->tto_row->tto_state !="Done") {
+if (in_array("D", $role) && $this->tto_row->tto_state =="Create") {
     JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletetto', 'delete', 'Delete TTO');
 }
 $cparams = JComponentHelper::getParams ('com_media');
@@ -119,15 +119,15 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('text_qty_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('text_qty_'+id+'_'+sti).style.display= 'none';    
                 
-                document.getElementById('location_'+id+'_'+sti).style.visibility= 'visible';
-                document.getElementById('location_'+id+'_'+sti).style.display= 'block';
-                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('text_location_'+id+'_'+sti).style.display= 'none';    
-                
-                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'visible';
-                document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
-                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';
+//                document.getElementById('location_'+id+'_'+sti).style.visibility= 'visible';
+//                document.getElementById('location_'+id+'_'+sti).style.display= 'block';
+//                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'hidden';
+//                document.getElementById('text_location_'+id+'_'+sti).style.display= 'none';    
+//                
+//                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'visible';
+//                document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
+//                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
+//                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';
 //                document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'visible';
 //                document.getElementById('tooltype_'+id+'_'+sti).style.display= 'block';
 //                document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'hidden';
@@ -140,11 +140,11 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('text_qty_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('text_qty_'+id+'_'+sti).style.display= 'block';
 
-                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'visible';
-                document.getElementById('text_location_'+id+'_'+sti).style.display= 'block';
-
-                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
-                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
+//                document.getElementById('text_location_'+id+'_'+sti).style.visibility= 'visible';
+//                document.getElementById('text_location_'+id+'_'+sti).style.display= 'block';
+//
+//                document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
+//                document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
 
 //                 document.getElementById('text_tooltype_'+id+'_'+sti).style.visibility= 'visible';
 //                 document.getElementById('text_tooltype_'+id+'_'+sti).style.display= 'block';
@@ -152,10 +152,10 @@ function isCheckedPosPn(isitchecked,id,sto){
                 document.getElementById('qty_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('qty_'+id+'_'+sti).style.display= 'none';
                 
-                document.getElementById('location_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('location_'+id+'_'+sti).style.display= 'none';
-                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
-                document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';
+//                document.getElementById('location_'+id+'_'+sti).style.visibility= 'hidden';
+//                document.getElementById('location_'+id+'_'+sti).style.display= 'none';
+//                document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
+//                document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';
 //                 document.getElementById('tooltype_'+id+'_'+sti).style.visibility= 'hidden';
 //                 document.getElementById('tooltype_'+id+'_'+sti).style.display= 'none';
              });
@@ -202,14 +202,35 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         }).request();
         
 }
- ///for add more file         
+function checkAllToolPn(n, fldName )
+{
+  if (!fldName) {
+     fldName = 'toolpn';
+  }
+	var f = document.adminForm;
+	var c = f.toggle.checked;
+	var n2 = 0;        
+	for (i=0; i < n; i++) {
+		cb = eval( 'f.' + fldName + '' + i );
+		if (cb) {
+                        cb.click();                           
+			cb.checked = c;                       
+			n2++;
+		}
+	}
+	if (c) {
+		document.adminForm.boxchecked.value = n2;
+	} else {
+		document.adminForm.boxchecked.value = 0;
+	}
+}
 </script>
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <fieldset>
 		<legend><?php echo JText::_( 'Tool Detail' ); ?></legend>        
         <table class="admintable" cellspacing="1"  width="80%">
                               <tr>
-                                        <td class="key" width="11%"><?php echo JText::_('Tool Number'); ?></td>                                               
+                                        <td class="key" width="11%"><?php echo JText::_('TTO Number'); ?></td>                                               
                                         <td width="12%" class="title"><?php echo $this->tto_row->tto_code; ?></td>                                          
                                         <td class="key" width="20%"><?php echo JText::_('Tool Assigner'); ?></td>                                               
                                         <td width="20%" class="title"><?php echo GetValueUser($this->tto_row->tto_create_by, "name");?></td>
@@ -301,8 +322,8 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         <div class="toolbar">
             <table class="toolbar"><tbody><tr>
                     <?php
-                    if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
-                        if (in_array("W", $role) && ($this->tto_row->tto_state != "Done")) {
+                  //  if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
+                        if (in_array("W", $role) && ($this->tto_row->tto_state == "Create")) {
                             ?>
                             <td class="button" id="toolbar-save">
                                 <a href="#"
@@ -334,7 +355,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                             </td>                            
                             <?php
                         }
-                        if (in_array("D", $role) && ($this->tto_row->tto_state != "Done")) {
+                        if (in_array("D", $role) && ($this->tto_row->tto_state == "Create")) {
                             ?>
                             <td class="button" id="toolbar-Are you sure to delete it?">
                                 <a href="#"
@@ -346,7 +367,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                 </a>
                             </td>
                         <?php }
-                    }
+                    //}
                     ?>
 
                 </tr></tbody></table></div>
@@ -355,13 +376,15 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
             <thead>
             <tr>
                 <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                <th width="3%" class="title"></th>
+               <th width="3%" class="title">
+					<input type="checkbox" name="toggle" value="" onclick="checkAllToolPn(<?php echo count($this->tto_pn_list); ?>);" />
+		</th>
                 <th width="100"><?php echo JText::_('Part Number'); ?></th>
                 <th width="300"><?php echo JText::_('Description'); ?></th>
                 <th width="100"><?php echo JText::_('UOM'); ?></th>
-                <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>
-                <th width="100"><?php echo JText::_('Qty'); ?></th>
-                <th width="100"><?php echo JText::_('Location'); ?></th>
+                <th width="100"><?php echo JText::_('MFG PN'); ?></th>
+                <th width="100"><?php echo JText::_('QTY'); ?></th>
+                <th width="100"><?php echo JText::_('Tool ID'); ?></th>
                 <th width="100"><?php echo JText::_('Part State'); ?></th>
 <!--                <th width="100"><?php //echo JText::_('Action'); ?></th>-->
                 <th width="100"><?php //echo JText::_('Action'); ?></th>
@@ -391,8 +414,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
 
 
             $i = 0;
-            foreach ($this->tto_pn_list as $row) {
-                $i++;
+            foreach ($this->tto_pn_list as $row) {                
                 if($row->pns_cpn==1)
                     $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;
                 else
@@ -413,7 +435,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 <tr>
                     <td align="center"><?php echo $i; ?></td>
                     <td align="center">
-                        <input type="checkbox" id = "pns_po" onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$ttoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$ttoList);?>" name="cid[]"  />
+                        <input type="checkbox" id = "toolpn<?php echo $i?>"  onclick="isCheckedPosPn(this.checked,'<?php echo $row->pns_id;?>','<?php echo implode(",",$ttoList);?>');" value="<?php echo $row->pns_id;?>_<?php echo implode(",",$ttoList);?>" name="cid[]"  />                                                
                     </td>
                     <td align="left"><span class="editlinktip hasTip" title="<?php echo $pns_image;?>" >
                                                     <a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $pns_code;?></a>
@@ -479,7 +501,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                                         </td>-->
                                         <td align="center" width="75px">
                                             <?php
-                                            if (in_array("D", $role) && $this->tto_row->sto_owner_confirm==0 && !$this->tto_row->sto_owner) {
+                                            if (in_array("D", $role) && ($this->tto_row->tto_state == "Create")) {
                                                 ?>
                                                 <a href="index.php?option=com_apdmtto&task=removepnstto&cid[]=<?php echo $rw->id;?>&tto_id=<?php echo $tto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
                                             <?php }?>
@@ -493,7 +515,9 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                         </table>
                     </td>
                 </tr>
-            <?php }
+            <?php 
+            $i++;            
+            }
             }
             else
             {

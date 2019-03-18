@@ -118,8 +118,8 @@ if (count($this->so_list) > 0) { ?>
                         <thead>
                                <tr class="header">
                                         <th  width="10"><?php echo JText::_('NUM'); ?><div style="width:10px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
-                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 15px">SO#</div></th>
-                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 10px">WO#</div></th>
+                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 15px">SO</div></th>
+                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 10px">WO</div></th>
                                         <th width="100"><?php echo JText::_('PN'); ?><div style="width:100px;padding:10px 0px 0px 10px">PN</div></th>
                                         <th width="120"><?php echo JText::_('Description'); ?><div style="width:120px;padding:10px 0px 0px 30px">Description</div></th>
                                         <th width="20"><?php echo JText::_('Qty'); ?><div style="width:20px;padding:10px 0px 0px 5px">Qty</div></th>
@@ -206,8 +206,8 @@ if (in_array("W", $role) && count($this->report_list) > 0) { ?>
                         <thead>
                                  <tr class="header">
                                         <th width="10"><?php echo JText::_('NUM'); ?><div style="width:10px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
-                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 20px"><?php echo JText::_('SO#'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('WO#'); ?></div></th>
+                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 20px"><?php echo JText::_('SO'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('WO'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('WO'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Step'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Step'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Employee ID'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Employee ID'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Delay Times of Step'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Delay Times of Step'); ?></div></th>

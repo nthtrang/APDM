@@ -824,7 +824,7 @@ if (count($this->rs_so) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="20"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JHTML::_('grid.sort', 'SO#', 'so_cuscode', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
+                                        <th width="100"><?php echo JHTML::_('grid.sort', 'SO', 'so_cuscode', @$this->lists['order_Dir'], @$this->lists['order'] ); ?></th>
                                         <th width="100"><?php echo JText::_('Customer'); ?></th>
                                         <th width="100"><?php echo JText::_('TOP ASSYS PN'); ?></th>                                        
                                         <th width="200"><?php echo JText::_('Description'); ?></th>
@@ -932,7 +932,7 @@ if (count($this->rs_wo) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="50"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?></th>
+                                        <th width="100"><?php echo JText::_('WO'); ?></th>
                                         <th width="150"><?php echo JText::_('PN'); ?></th>
                                         <th width="250"><?php echo JText::_('Description'); ?></th>
                                         <th width="50"><?php echo JText::_('Qty'); ?></th>

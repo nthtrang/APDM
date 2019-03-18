@@ -63,10 +63,10 @@ function UpdateECO(){
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
 				<th class="title" width="10%">
-					<?php echo JHTML::_('grid.sort',   'WO#', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'WO', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
                 <th width="20%" class="title">
-                    <?php echo JText::_( 'SO#' ); ?>
+                    <?php echo JText::_( 'SO' ); ?>
                 </th>
                 <th width="10%" class="title">
                     <?php echo JText::_( 'Customer#' ); ?>

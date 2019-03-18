@@ -237,7 +237,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
             <tr>
                 <td class="key" width="28%"><?php echo JText::_('ETO'); ?></td>
                 <td width="30%" class="title"><?php echo $this->sto_row->sto_code; ?></td>
-                <td class="key" width="18%"><?php echo JText::_('WO#'); ?></td>
+                <td class="key" width="18%"><?php echo JText::_('WO'); ?></td>
                 <td width="30%" class="title"><?php echo ($this->sto_row->wo_code)?$this->sto_row->wo_code:"NA";?></td>
 
             </tr>

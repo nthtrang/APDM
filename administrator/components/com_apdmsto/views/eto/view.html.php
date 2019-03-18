@@ -86,7 +86,7 @@ class SToVieweto extends JView
 //         $db->setQuery("SELECT po.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_po AS po LEFT JOIN apdm_pns AS p on po.pns_id = p.pns_id");
 //         $pos_list = $db->loadObjectList();
 //         $this->assignRef('pos_list',        $pos_list);
-//         get WO#
+//         get WO
         $wolist[0] = JHTML::_('select.option', 0, '- ' . JText::_('NA') . ' -', 'value', 'text');
         $db->setQuery("SELECT pns_wo_id as value,wo_code as text FROM apdm_pns_wo");
         $wolist = array_merge($wolist, $db->loadObjectList());

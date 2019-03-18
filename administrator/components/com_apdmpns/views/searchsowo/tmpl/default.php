@@ -92,7 +92,7 @@ function submitbutton(pressbutton) {
     <td><strong>WO OPTION</strong></td>
   </tr>
   <tr>
-    <td><input type="radio" onclick="controlStatusSearch(this.value)" name="search_swo_type" value="searchso" <?php echo ($this->search_swo_type=='searchso')?"checked='checked'":"";?>>SO#:</td>
+    <td><input type="radio" onclick="controlStatusSearch(this.value)" name="search_swo_type" value="searchso" <?php echo ($this->search_swo_type=='searchso')?"checked='checked'":"";?>>SO:</td>
     <td><input type="text" maxlength="20" name="so_cuscode"  id="so_cuscode" class="inputbox" size="30" value="<?php echo $this->search_so?>"/></td>
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
@@ -100,7 +100,7 @@ function submitbutton(pressbutton) {
     <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
   </tr>
   <tr>
-    <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO#:</td>
+    <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO:</td>
     <td><input type="text" maxlength="20" name="wo_cuscode"  id="wo_cuscode" class="inputbox" size="30" value="<?php echo $this->search_wo?>"/></td>
     <td>Time From</td>
   <td>
@@ -212,7 +212,7 @@ if (count($this->rs_so) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('SO#'); ?></th>
+                                        <th width="100"><?php echo JText::_('SO'); ?></th>
                                         <th width="100"><?php echo JText::_('Start date'); ?></th>
                                         <th width="100"><?php echo JText::_('Shipping request date'); ?></th>                                      
                                         <th width="100"><?php echo JText::_('Time Remain'); ?></th>                                        
@@ -294,7 +294,7 @@ if (count($this->rs_wo) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('WO#'); ?></th>                                       
+                                        <th width="100"><?php echo JText::_('WO'); ?></th>                                       
                                         <th width="100"><?php echo JText::_('Start Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Finish Date'); ?></th>
                                         <th width="100"><?php echo JText::_('Time Remain(days)'); ?></th>                                        
@@ -374,7 +374,7 @@ if (count($this->rs_step) > 0) { ?>
                         <thead>
                                 <tr>
                                         <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                         <th width="100"><?php echo JText::_('WO#'); ?></th>
+                                         <th width="100"><?php echo JText::_('WO'); ?></th>
                                         <th width="100"><?php echo JText::_('Step'); ?></th>                                       
                                         <th width="100"><?php echo JText::_('Emp'); ?></th>
                                         <th width="100"><?php echo JText::_('Start Date'); ?></th>

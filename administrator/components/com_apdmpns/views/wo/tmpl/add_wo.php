@@ -384,7 +384,7 @@ function check_so_first()
                                  <tr>
 					<td class="tg-0pky">
 						<label for="name">
-							<?php echo JText::_( 'WO# Start Date' ); ?>
+							<?php echo JText::_( 'WO Start Date' ); ?>
 						</label>
 					</td>
 					<td>                                                 
@@ -394,7 +394,7 @@ function check_so_first()
                                  <tr>
 					<td class="tg-0pky">
 						<label for="name">
-							<?php echo JText::_( 'WO# Finished Date' ); ?>
+							<?php echo JText::_( 'WO Finished Date' ); ?>
 						</label>
 					</td>
 					<td>                                                 

@@ -20,7 +20,7 @@ if (in_array("W", $role) && $this->so_row->so_state =="inprogress") {
         
 }
 if (in_array("D", $role) && ($this->so_row->so_state !="done" || $this->so_row->so_state !="cancel" )) {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
+        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO");
 }
 
 $cparams = JComponentHelper::getParams('com_media');

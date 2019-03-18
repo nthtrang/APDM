@@ -238,9 +238,9 @@ class pnsViewpns_info extends JView
                 $this->assignRef('quos',        $list_quos);
 
                 //for STO Tracking
-                $query = "select sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id
+                $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id
                          ." union "
-                         ."select tto.pns_tto_id as pns_sto_id ,tto.tto_code as sto_code,tto.tto_description as sto_description ,tto.tto_state as sto_state,tto.tto_created as sto_created,tto.tto_create_by as sto_create_by ,tto.tto_owner_in as sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_tto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_tto tto on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id;
+                         ."select 4 as sto_type, tto.pns_tto_id as pns_sto_id ,tto.tto_code as sto_code,tto.tto_description as sto_description ,tto.tto_state as sto_state,tto.tto_created as sto_created,tto.tto_create_by as sto_create_by ,tto.tto_owner_in as sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_tto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_tto tto on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id;
                 $db->setQuery($query);
                 $list_stos = $db->loadObjectList();         
                 $this->assignRef('stos',        $list_stos);

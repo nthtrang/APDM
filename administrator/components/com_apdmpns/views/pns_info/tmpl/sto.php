@@ -136,7 +136,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </div>
 </fieldset>
 <fieldset class="adminform">
-		<legend><?php echo JText::_( 'Tool-Out and Tool-In' ); ?></legend>
+		<legend><?php echo JText::_( 'Tool-Out' ); ?></legend>
                 <table class="adminlist" cellspacing="1" width="400">
                 <?php if (count($this->tto_pn_list) > 0) { ?>                
                         <thead>
@@ -181,17 +181,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <?php }
                                          ?>
                 </tbody>
-     
-                 <?php 
-                 }
-                 ?>
-                 <tr>
+                <tr>
                                         <td width="100" align="center" colspan="6">
                                         <?php 
                                         echo JText::_('Tool Remain:'); 
                                         echo PNsController::CalculateToolRemainValue($this->row->pns_id);
                                         ?></td>
                                 </tr>
+                 <?php 
+                 }
+                 ?>
+                 
                                    </table>
 </fieldset>
 <fieldset class="adminform">
@@ -225,6 +225,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
             }elseif($sto->sto_type==3){
                 $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
+            }elseif($sto->sto_type==4){//for TTO
+                $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$sto->pns_sto_id;
             }
                 ?>
                                         <tr>

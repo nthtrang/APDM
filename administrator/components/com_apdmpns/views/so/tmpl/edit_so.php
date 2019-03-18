@@ -4,7 +4,7 @@
 <?php	
         $edit = JRequest::getVar('edit',true);
         $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-        JToolBarHelper::title("Edit SO#: ".$this->so_row->so_cuscode, 'cpanel.png');
+        JToolBarHelper::title("Edit SO: ".$this->so_row->so_cuscode, 'cpanel.png');
         JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
         $role = JAdministrator::RoleOnComponent(10);     

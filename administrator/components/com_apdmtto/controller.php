@@ -557,7 +557,7 @@ class TToController extends JController
                 }                
                                         
         }
-    function ajax_add_pns_tto() {
+    function ajax_add_pns_tto_old() {
         $db = & JFactory::getDBO();
         $pns = JRequest::getVar('cid', array(), '', 'array');
         $tto_id = JRequest::getVar('tto_id');
@@ -576,6 +576,31 @@ class TToController extends JController
                 $location = $row->location;
                 $partState = $row->partstate;
             }
+            $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
+            $db->query();
+        }
+        return $msg = JText::_('Have add Tool successfull.');
+    }
+    function ajax_add_pns_tto() {
+        $db = & JFactory::getDBO();
+        $pns = JRequest::getVar('cid', array(), '', 'array');
+        $tto_id = JRequest::getVar('tto_id');
+        $tto_type_inout = JRequest::getVar('tto_type_inout'); //1 IN 2 OUT
+        //innsert to FK table
+        foreach($pns as $pn_id)
+        {
+                $location="";
+                $partstate="";
+                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1   order by stofk.id desc");
+                $rows = $db->loadObjectList();
+                 if (count($rows) > 0) {                        
+                        foreach ($rows as $obj) {
+                                $location = $obj->location;
+                                $partState = $obj->partstate;
+                                $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
+                                $db->query(); 
+                        }
+                 }
             $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
             $db->query();
         }

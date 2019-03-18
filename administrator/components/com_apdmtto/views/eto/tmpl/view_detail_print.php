@@ -71,7 +71,7 @@
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;width:25%"">Created Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;width:25%""><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO#:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->wo_code;?></td>
     </tr>
     <tr>

@@ -43,7 +43,7 @@ if (in_array("W", $role) && $this->so_row->so_state =="onhold") {
 
 if (in_array("D", $role) && $this->so_row->so_state =="inprogress") {
        // JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");                
-        JToolBarHelper::deleteSo("Delete SO#",$this->so_row->pns_so_id);
+        JToolBarHelper::deleteSo("Delete SO",$this->so_row->pns_so_id);
         JToolBarHelper::customX('rmTopAssysSo', 'delete', '', 'Remove Top ASSYS', false);
 }
 

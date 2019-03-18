@@ -46,7 +46,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&tto_id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmtto&task=get_list_pns_tto&tmpl=component&tto_id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -79,29 +79,25 @@ function UpdatePnsEco(){
 				<th width="3%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="15%">
+				<th class="title" width="10%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
 				</th>
-				
-				<th  class="title" width="10%">
-					<?php echo JText::_('ECO'); ?>
-				</th>
-				
-<!--				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Status'); ?>
-				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
-				</th>                                
-				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Make/Buy'); ?>
-				</th>
+				</th>                                				
 				<th width="20%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
                                 <th width="5%" class="title"  >
 					<?php echo JText::_( 'MFG PN' ); ?>
-				</th>                                
+				</th> 
+                                <th width="5%" class="title"  >
+					<?php echo JText::_( 'Tool ID' ); ?>
+				</th> 
+                                <th width="5%" class="title"  >
+					<?php echo JText::_( 'Part State' ); ?>
+				</th> 
+                                
 			</tr>
 		</thead>
 		<tfoot>
@@ -128,9 +124,9 @@ function UpdatePnsEco(){
 				}else{
 					$pns_image = JText::_('NONE_IMAGE_PNS');
 				}
-				//echo $pns_image;
-				$mf = TToController::GetManufacture($row->pns_id);
-				$bom = TToController::GetChildParentNumber($row->pns_id);
+				//echo $pns_image;							
+                                $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
+                                
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
@@ -143,19 +139,9 @@ function UpdatePnsEco(){
 					<?php echo $pns_code;?>
 				</span>
 				</td>	
-				
-				<td align="center">
-					<?php echo TToController::GetECO($row->eco_id); ?>
-				</td>				
-<!--				<td align="center">
-					<?php echo $row->pns_status;?>
-				</td>-->
                                 <td align="center">
 					<?php echo $row->pns_life_cycle;?>
-				</td>                                
-				<td align="center">
-					<?php echo $row->pns_type;?>
-				</td>
+				</td>         
 				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>		
@@ -167,7 +153,31 @@ function UpdatePnsEco(){
                                                         echo $m['v_mf'];
                                                 }					
 					} ?>
-				</td>	                                
+				</td>	  
+					<td align="center" colspan="2">                                                        
+                                                        <table class="adminlist" cellspacing="0" width="200">
+                                                                <?php 
+                                                                foreach ($this->sto_pn_list2 as $rw) {
+                                                                        if($rw->pns_id==$row->pns_id)
+                                                                        {                                                                                
+                                                                ?>
+                                                                <tr>
+                                                                <td align="center" width="77px">					
+                                                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
+
+                                                                </td>	
+                                                                <td align="center" width="77px">					
+                                                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
+
+                                                                </td>                                               
+                                                                </tr>
+                                                                <?php 
+                                                                }
+                                                                }
+                                                                ?>
+                                                        </table>
+                                                </td>
+				
 			</tr>
 			<?php
 				$k = 1 - $k;
@@ -178,9 +188,8 @@ function UpdatePnsEco(){
 
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmtto" />
-        <input type="text" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
-    <input type="text" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
-
+        <input type="hidden" name="tto_id" id="tto_id" value="<?php echo $tto_id; ?>" />
+        <input type="hidden" name="tto_type_inout" id="tto_type_inout" value="<?php echo $tto_type_inout; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />

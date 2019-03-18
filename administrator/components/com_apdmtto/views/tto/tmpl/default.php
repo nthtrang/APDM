@@ -95,12 +95,19 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php
                                                                 $style="";
                                                                 $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$tto->pns_tto_id;
-                                                                $linkdelete = "index.php?option=com_apdmtto&task=deletetto&id=".$tto->pns_tto_id."&tto_type=".$tto->tto_type;
-                                                                if($tto->tto_type==2){
-                                                                        $style="color: #f00";
-                                                                        $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$tto->pns_tto_id;
-                                                                        $linkdelete = "index.php?option=com_apdmsto&task=deletetto&id=".$tto->pns_tto_id."&tto_type=".$tto->tto_type;
+                                                                $linkdelete = "index.php?option=com_apdmtto&task=deletetto&id=".$tto->pns_tto_id."&tto_type=".$tto->tto_type;                                                         
+                                                                $background="";
+                                                                $remain_day = $tto->tto_remain;
+                                                                if($remain_day<=0)
+                                                                {       
+                                                                        //$remain_day = 0;
+                                                                        $background= "style='background-color:#f00;color:#fff'";                                                                        
                                                                 }
+                                                                elseif($remain_day<=3)
+                                                                {
+                                                                        $background= "style='background-color:#ff0;color:#000'";   
+                                                                }                                                              
+                                                                
                                                                 ?>
                                                         <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $tto->tto_code; ?></a> </td>
                                                 
@@ -117,11 +124,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($tto->tto_create_by, "name"); ?>
                                                 </td>
-                                                <td align="center" > <?php echo $tto->tto_remain; ?></td>
+                                                <td align="center"  <?php echo $background;?>> <?php echo $tto->tto_remain; ?></td>
                                                 <td align="center"  style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
 
                                                         ?>
-                                                        <a style="<?php echo $style?>"  href="<?php echo $linkdelete; ?>" title="Click to edit"><?php echo JText::_('Delete') ?></a>
+                                                        <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
                                                         <?php
                                                 }
                                                         ?>

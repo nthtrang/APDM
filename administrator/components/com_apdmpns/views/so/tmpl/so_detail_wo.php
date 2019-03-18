@@ -23,13 +23,13 @@ if (in_array("W", $role)  && $this->so_row->so_state !="done") {
         
         //JToolBarHelper::customX("inprogresswo","restore",'',"In PROGRESS",true); 
         //function customX($task = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
-      //   JToolBarHelper::addWoSo("ADD WO#", $this->so_row->pns_so_id);       
-         //JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false);	
+      //   JToolBarHelper::addWoSo("ADD WO", $this->so_row->pns_so_id);       
+         //JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO', false);	
        
 }
 if (in_array("E", $role) && $this->so_row->so_state =="inprogress") {
-       JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO#', false); 
-        JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO#");
+       JToolBarHelper::customX('add_wo', 'new', '', 'NEW WO', false); 
+        JToolBarHelper::deletePns('Are you sure to delete it?',"removewoso","REMOVE WO");
 }
 //if (in_array("W", $role) && $this->so_row->so_state =="onhold") {        
 //        JToolBarHelper::customX("inprogressso","restore",'',"In PROGRESS",false);     
@@ -178,7 +178,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 				<?php echo JText::_('TOP ASSYS')?>
 			</th>
                         <th width="8%">
-				<?php echo JText::_('WO#')?>
+				<?php echo JText::_('WO')?>
 			</th>
                          <th width="12%">
 				<?php echo JText::_('PN')?>

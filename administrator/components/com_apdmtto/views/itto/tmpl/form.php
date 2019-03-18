@@ -78,6 +78,11 @@ function get_default_tto_prefix(){
          });
      });
  });
+ function upperCaseF(a){
+    setTimeout(function(){
+        a.value = a.value.toUpperCase();
+    }, 1);
+}
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
@@ -88,7 +93,7 @@ function get_default_tto_prefix(){
                                 <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Tool Number' ); ?>
+							<?php echo JText::_( 'TTO Number' ); ?>
 						</label>
 					</td>
 					<td>
@@ -98,7 +103,7 @@ function get_default_tto_prefix(){
                                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'WO#' ); ?>
+                            <?php echo JText::_( 'WO' ); ?>
                         </label>
                     </td>
                     <td>
@@ -139,7 +144,7 @@ function get_default_tto_prefix(){
 						</label>
 					</td>
 					<td>						
-						<textarea name="tto_description" rows="10" cols="60"><?php echo $this->tto_row->tto_code?></textarea>
+						<textarea  onkeydown="upperCaseF(this)" name="tto_description" rows="10" cols="60" maxlength="40"><?php echo $this->tto_row->tto_code?></textarea>
 					</td>
 				</tr>  
 			</table>                	

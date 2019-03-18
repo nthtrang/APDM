@@ -16,7 +16,7 @@ if (in_array("W", $role) && $this->sto_row->sto_state !="Done") {
         JToolBarHelper::apply('save_doc_sto', 'Save');
 }
 if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO#");
+        JToolBarHelper::deletePns('Are you sure to delete it?',"deleteso","Delete SO");
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();

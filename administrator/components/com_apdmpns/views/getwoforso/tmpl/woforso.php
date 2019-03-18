@@ -76,7 +76,7 @@ function UpdateWoSo(){
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
 				<th class="title" width="15%">
-					<?php echo  JText::_('WO#'); ?>
+					<?php echo  JText::_('WO'); ?>
 				</th>												
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Quantity'); ?>

@@ -9,13 +9,13 @@
 $id = JRequest::getVar('id');
 $edit = JRequest::getVar('edit', true);
 
-JToolBarHelper::title("WO#: ".$this->wo_row->wo_code, 'cpanel.png');
+JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
         JToolBarHelper::editListX("editwo","Edit WO");	        
 }
 if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
-        JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO#");
+        JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO");
 }
  JToolBarHelper::customX("printwopdf","print",'',"Print",false);        
 
@@ -219,13 +219,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                        $soNumber = $this->wo_row->ccs_code."-".$soNumber;
                                 }
     echo $soNumber;?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">WO# Started</span></td>
+    <td class="tg-0pky"><span style="font-weight:bold">WO Started</span></td>
     <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?></td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED BY:</span></td>
     <td class="tg-0pky" colspan="3"><?php echo GetValueUser($this->wo_row->wo_created_by, "name"); ?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">WO# Finished</span></td>
+    <td class="tg-0pky"><span style="font-weight:bold">WO Finished</span></td>
     <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_completed_date, JText::_('DATE_FORMAT_LC3')); ?></td>
   </tr>
   <tr>
