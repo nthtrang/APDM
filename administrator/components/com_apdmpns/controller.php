@@ -2589,7 +2589,7 @@ class PNsController extends JController {
          * Export BOM with format excel
          */
 
-        function export_bom() {
+        function export_bom() {                
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
@@ -2630,6 +2630,7 @@ class PNsController extends JController {
                     "v_mf" => $manufacture[0]['v_mf'],
                     "mf" => $manufacture[0]['mf'],
                    // "pns_life_cycle" => $row->pns_life_cycle,
+                    "tool_pn" => GetToolPnValue($row->pns_id),
                     "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
                 );                                                                                          
                 $pnsCodeLevelZero = $pns_code; 
@@ -2659,6 +2660,7 @@ class PNsController extends JController {
                             "v_mf" => $manufacture[0]['v_mf'],
                             "mf" => $manufacture[0]['mf'],
                             //"pns_life_cycle" => $row->pns_life_cycle,
+                            "tool_pn" => GetToolPnValue($row->pns_id),
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
                         );                
@@ -2685,8 +2687,9 @@ class PNsController extends JController {
                             "stock" => $result1->stock,
                             "pns_uom" => $result1->pns_uom,
                             "v_mf" => $manufacture[0]['v_mf'],
-                            "mf" => $manufacture[0]['mf'],
+                            "mf" => $manufacture[0]['mf'],                            
                       //      "pns_life_cycle" => $result1->pns_life_cycle,
+                            "tool_pn" => GetToolPnValue($result1->pns_id),
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -2716,6 +2719,7 @@ class PNsController extends JController {
                                             "v_mf" => $manufacture[0]['v_mf'],
                                                 "mf" => $manufacture[0]['mf'],
                                       //      "pns_life_cycle" => $result2->pns_life_cycle,
+                                            "tool_pn" => GetToolPnValue($result2->pns_id),
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         
@@ -2745,6 +2749,7 @@ class PNsController extends JController {
                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                 "mf" => $manufacture[0]['mf'],
                                           //                  "pns_life_cycle" => $result3->pns_life_cycle,
+                                                            "tool_pn" => GetToolPnValue($result3->pns_id),
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -2770,6 +2775,7 @@ class PNsController extends JController {
                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                 "mf" => $manufacture[0]['mf'],
                                                                          //   "pns_life_cycle" => $result4->pns_life_cycle,
+                                                                            "tool_pn" => GetToolPnValue($result4->pns_id),
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -2796,6 +2802,7 @@ class PNsController extends JController {
                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                             "mf" => $manufacture[0]['mf'],
                                                                                          //   "pns_life_cycle" => $result5->pns_life_cycle,
+                                                                                            "tool_pn" => GetToolPnValue($result5->pns_id),
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -2822,6 +2829,7 @@ class PNsController extends JController {
                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                             "mf" => $manufacture[0]['mf'],
                                                                                                           //  "pns_life_cycle" => $result6->pns_life_cycle,
+                                                                                                            "tool_pn" => GetToolPnValue($result6->pns_id),
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -2848,6 +2856,7 @@ class PNsController extends JController {
                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                             "mf" => $manufacture[0]['mf'],
                                                                                                                         //    "pns_life_cycle" => $result7->pns_life_cycle,
+                                                                                                                            "tool_pn" => GetToolPnValue($result7->pns_id),
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -2874,6 +2883,7 @@ class PNsController extends JController {
                                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                                                 "mf" => $manufacture[0]['mf'],
                                                                                                                                        //     "pns_life_cycle" => $result8->pns_life_cycle,
+                                                                                                                                            "tool_pn" => GetToolPnValue($result8->pns_id),
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -2900,6 +2910,7 @@ class PNsController extends JController {
                                                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                                                             "mf" => $manufacture[0]['mf'],
                                                                                                                                                        //     "pns_life_cycle" => $result9->pns_life_cycle,
+                                                                                                                                                            "tool_pn" => GetToolPnValue($result9->pns_id),
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -2957,22 +2968,22 @@ class PNsController extends JController {
                                 $j = 'J' . $ii;
                                 $k = 'K' . $ii;
                                 $l = 'L' . $ii;
-                                //$m = 'M' . $ii;
+                                $m = 'M' . $ii;
                                 //set heigh or row 
                                 $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
                                 $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
-                                $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['stock']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_uom']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['v_mf']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['mf']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
-                                //$objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_level']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_code']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_des']);//
+                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_uom']);//
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['v_mf']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['mf']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['tool_pn']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -2987,7 +2998,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -3002,7 +3013,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -3018,7 +3029,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                //$objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
@@ -3040,7 +3051,7 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                       // $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
                                 $ii++;
                                 $jj++;
@@ -4948,9 +4959,10 @@ class PNsController extends JController {
                             "v_mf" => $manufacture[0]['v_mf'],
                             "mf" => $manufacture[0]['mf'],
                        //     "pns_life_cycle" => $row->pns_life_cycle,
+                            "tool_pn" => GetToolPnValue($row->pns_id),
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
-                        );                                                                                          
+                        );                                 
                 $pnsCodeLevelZero = $pns_code; 
                 
                 //get childs
@@ -4980,6 +4992,7 @@ class PNsController extends JController {
                             "v_mf" => $manufacture[0]['v_mf'],
                             "mf" => $manufacture[0]['mf'],
                          //   "pns_life_cycle" => $row->pns_life_cycle,
+                            "tool_pn" => GetToolPnValue($row->pns_id),
                             "pns_date" => JHTML::_('date', $row->pns_create, '%m/%d/%Y')
 
                         );                
@@ -5009,6 +5022,7 @@ class PNsController extends JController {
                             "v_mf" => $manufacture[0]['v_mf'],
                             "mf" => $manufacture[0]['mf'],
                          //   "pns_life_cycle" => $result1->pns_life_cycle,
+                            "tool_pn" => GetToolPnValue($result1->pns_id),
                             "pns_date" => JHTML::_('date', $result1->pns_create, '%m/%d/%Y')
                         );
                         ///check for child of level 3
@@ -5037,6 +5051,7 @@ class PNsController extends JController {
                                              "v_mf" => $manufacture[0]['v_mf'],
                                                 "mf" => $manufacture[0]['mf'],
                                        //     "pns_life_cycle" => $result2->pns_life_cycle,
+                                            "tool_pn" => GetToolPnValue($result2->pns_id),
                                             "pns_date" => JHTML::_('date', $result2->pns_create, '%m/%d/%Y')
                                         );
                                         //check for level 4
@@ -5065,6 +5080,7 @@ class PNsController extends JController {
                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                 "mf" => $manufacture[0]['mf'],
                                                           //  "pns_life_cycle" => $result3->pns_life_cycle,
+                                                            "tool_pn" => GetToolPnValue($result3->pns_id),
                                                             "pns_date" => JHTML::_('date', $result3->pns_create, '%m/%d/%Y')
                                                         );
                                                         //check for level 5
@@ -5092,6 +5108,7 @@ class PNsController extends JController {
                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                              "mf" => $manufacture[0]['mf'],
                                                                          //   "pns_life_cycle" => $result4->pns_life_cycle,
+                                                                            "tool_pn" => GetToolPnValue($result4->pns_id),
                                                                             "pns_date" => JHTML::_('date', $result4->pns_create, '%m/%d/%Y')
                                                                         );
                                                                         //check for level 6
@@ -5119,6 +5136,7 @@ class PNsController extends JController {
                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                 "mf" => $manufacture[0]['mf'],
                                                                                         //    "pns_life_cycle" => $result5->pns_life_cycle,
+                                                                                            "tool_pn" => GetToolPnValue($result5->pns_id),
                                                                                             "pns_date" => JHTML::_('date', $result5->pns_create, '%m/%d/%Y')
                                                                                         );
                                                                                         //check for level 7
@@ -5146,6 +5164,7 @@ class PNsController extends JController {
                                                                                                              "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                 "mf" => $manufacture[0]['mf'],                                                                                                            
                                                                                                           //  "pns_life_cycle" => $result6->pns_life_cycle,
+                                                                                                            "tool_pn" => GetToolPnValue($result6->pns_id),
                                                                                                             "pns_date" => JHTML::_('date', $result6->pns_create, '%m/%d/%Y')
                                                                                                         );
                                                                                                         // check for level 8
@@ -5173,6 +5192,7 @@ class PNsController extends JController {
                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                                 "mf" => $manufacture[0]['mf'], 
                                                                                                                           //  "pns_life_cycle" => $result7->pns_life_cycle,
+                                                                                                                            "tool_pn" => GetToolPnValue($result7->pns_id),
                                                                                                                             "pns_date" => JHTML::_('date', $result7->pns_create, '%m/%d/%Y')
                                                                                                                         );
                                                                                                                         //check for level 9
@@ -5200,6 +5220,7 @@ class PNsController extends JController {
                                                                                                                                             "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                                                  "mf" => $manufacture[0]['mf'], 
                                                                                                                                           //  "pns_life_cycle" => $result8->pns_life_cycle,
+                                                                                                                                            "tool_pn" => GetToolPnValue($result18->pns_id),
                                                                                                                                             "pns_date" => JHTML::_('date', $result8->pns_create, '%m/%d/%Y')
                                                                                                                                         );
                                                                                                                                         //check for level 10;
@@ -5227,6 +5248,7 @@ class PNsController extends JController {
                                                                                                                                                              "v_mf" => $manufacture[0]['v_mf'],
                                                                                                                                                                 "mf" => $manufacture[0]['mf'], 
                                                                                                                                                           //  "pns_life_cycle" => $result9->pns_life_cycle,
+                                                                                                                                                            "tool_pn" => GetToolPnValue($result9->pns_id),
                                                                                                                                                             "pns_date" => JHTML::_('date', $result9->pns_create, '%m/%d/%Y')
                                                                                                                                                         );
                                                                                                                                                 }
@@ -5285,22 +5307,22 @@ class PNsController extends JController {
                                 $j = 'J' . $ii;
                                 $k = 'K' . $ii;
                                 $l = 'L' . $ii;
-                             //   $m = 'M' . $ii;
-                                //set heigh or row 
+                                $m = 'M' . $ii;
+                                //set heigh or row                                 
                                 $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
-                                $objPHPExcel->getActiveSheet()->setCellValue($a, $number);
-                                $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_code']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_level']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_type']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['pns_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['find_number']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['ref_des']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['stock']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['pns_uom']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['v_mf']);                                
-                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['mf']);
-                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['pns_date']);
-                              //  $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($a, $number );
+                                $objPHPExcel->getActiveSheet()->setCellValue($b, $pns['pns_level']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($c, $pns['pns_code']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($d, $pns['pns_des']);//
+                                $objPHPExcel->getActiveSheet()->setCellValue($e, $pns['find_number']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($f, $pns['stock']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($g, $pns['pns_uom']);//
+                                $objPHPExcel->getActiveSheet()->setCellValue($h, $pns['v_mf']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($i, $pns['mf']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($j, $pns['tool_pn']);                                
+                                $objPHPExcel->getActiveSheet()->setCellValue($k, $pns['pns_type']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($l, $pns['ref_des']);
+                                $objPHPExcel->getActiveSheet()->setCellValue($m, $pns['pns_date']);
 
                                 //set format
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -5315,7 +5337,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                            //    $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
                                 $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -5330,7 +5352,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                                //$objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -5346,7 +5368,7 @@ class PNsController extends JController {
                                 $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                               // $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
@@ -5368,7 +5390,7 @@ class PNsController extends JController {
                                         $objPHPExcel->getActiveSheet()->getStyle($j)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($k)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                         $objPHPExcel->getActiveSheet()->getStyle($l)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-                                     //   $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($m)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
                                 }
                                 $ii++;
                                 $jj++;
