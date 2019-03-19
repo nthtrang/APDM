@@ -47,7 +47,7 @@
             ASCENX TECHNOLOGIES
             <br>Unit 5B, 5th Floor, Standard Factory Building
             <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
-            <br>District 7, HCMC, Vietnam<br>ST ZIP Code: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
+            <br>District 7, HCMC, Vietnam<br>Tax ID: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
         <th class="tg-xldj-pr" colspan="2">
             <img src="./templates/khepri/images/h_green/logo1.png" width="200px"></img>
             <br></th>

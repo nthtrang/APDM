@@ -48,7 +48,7 @@
         <th class="tg-kiyi" rowspan="3">            
             <br>Unit 5B, 5th Floor, Standard Factory Building
             <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
-            <br>District 7, HCMC, Vietnam<br>ST ZIP Code: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
+            <br>District 7, HCMC, Vietnam<br>Tax ID: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
         <th class="tg-xldj-pr">PO#:<?php
             $soNumber = $this->sto_row->so_cuscode;
             if($this->sto_row->ccs_code)

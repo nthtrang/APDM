@@ -419,12 +419,12 @@ function GetNameCCs($ccs_id){
                 {
                      $inventory   = $inventory - $ToolOut;
                 }
-                $db->setQuery("SELECT sum(fk.qty) FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$pns_id." and fk.tto_type_inout = 2 and tto.tto_state = 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");                
+               /* $db->setQuery("SELECT sum(fk.qty) FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$pns_id." and fk.tto_type_inout = 2 and tto.tto_state = 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");
                 $ToolIn = $db->loadResult();   
                 if($ToolIn)
                 {
                      $inventory   = $inventory + $ToolIn;
-                }
+                }*/
                 if($inventory<0)
                      $inventory = 0;
                 return $inventory;                                                                
@@ -451,7 +451,26 @@ function GetNameCCs($ccs_id){
                      $inventory = 0;
                 return $inventory;                                
                 exit;                
-        }        
+        }
+        function CalculateInventoryLocationPartValue($pns_id,$location,$partState)
+        {
+            $db = & JFactory::getDBO();
+            //get Stock IN
+            $db->setQuery("select  sum(qty) from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 1 where fk.location='".$location."' and fk.partstate ='".$partState."'");
+            $db->query();
+            $StockIn = $db->loadResult();
+            //$StockIn = $rows->qty_in;
+            //get Stock OUT
+            $db->setQuery("select  sum(qty)  from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 where fk.pns_id = '".$pns_id."' and fk.location='".$location."' and fk.partstate ='".$partState."'");
+            $db->query();
+            $StockOut = $db->loadResult();
+            //$StockOut = $rows->qty_out;
+            $inventory =  round(($StockIn-$StockOut),2);
+            if($inventory<0)
+                $inventory = 0;
+            return $inventory;
+            exit;
+        }
 function getdir($path=".") {
   
 global $dirarray,$conf,$dirsize;    

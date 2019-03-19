@@ -94,9 +94,9 @@ function UpdatePnsEco(){
                                 <th width="5%" class="title"  >
 					<?php echo JText::_( 'Part State' ); ?>
 				</th> 
-                                <th width="5%" class="title"  >
-					<?php echo JText::_( 'QTY' ); ?>
-				</th> 
+                                <!--<th width="5%" class="title"  >
+					<?php /*echo JText::_( 'QTY' ); */?>
+				</th> -->
                                 
 			</tr>
 		</thead>
@@ -167,10 +167,10 @@ function UpdatePnsEco(){
                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->partstate?strtoupper($row->partstate):"";?></span>
 
                                 </td> 
-                                <td>
-                                        <?php  echo $qtyRemain;?>
+                               <!-- <td>
+                                        <?php /* echo $qtyRemain;*/?>
                                         
-                                </td>
+                                </td>-->
 
 				
 			</tr>
