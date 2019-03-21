@@ -44,7 +44,7 @@ class TToViewtto extends JView
         $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
         $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
         $where = array();      
-        $where[] = 'p.tto_state = "Using"';
+        $where[] = 'p.tto_state != "Done"';
         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $orderby = ' ORDER BY p.pns_tto_id desc';        
         

@@ -6,7 +6,7 @@
 <?php
 	$cid = JRequest::getVar( 'cid', array(0) );
 	$edit		= JRequest::getVar('edit',true);	
-	$role = JAdministrator::RoleOnComponent(8);
+	$role = JAdministrator::RoleOnComponent(11);
     $cparams = JComponentHelper::getParams ('com_media');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
@@ -37,7 +37,7 @@
     .tgi .tg-xldj-pr{text-align:right}
     .tgi .tg-0pky-pr{text-align:left;vertical-align:top}
     .tgi .tg-0pky-border{border-width:1px;border-style:solid}
-    .tgi .tg-0pky-border-r{border-right:1px;border-bottom:1px;border-style:solid}
+    .tgi .tg-0pky-border-r{border-right:1px;border-top:1px;border-style:solid}
     .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 18px;color: #0B55C4}
     .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 13px;color: #000}
 </style>

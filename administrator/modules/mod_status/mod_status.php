@@ -77,6 +77,7 @@ $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'typ
         $type[] = JHTML::_('select.option', 11, JText::_('Inventory'), 'value', 'text');
         $type[] = JHTML::_('select.option', 12, JText::_('SO'), 'value', 'text');
         $type[] = JHTML::_('select.option', 13, JText::_('WO'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 14, JText::_('Special Tool'), 'value', 'text');
         $type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');        
         $type[] = JHTML::_('select.option', 8, JText::_('Manufacture PN'), 'value', 'text');        
         $type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');

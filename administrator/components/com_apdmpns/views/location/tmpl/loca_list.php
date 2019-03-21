@@ -52,6 +52,28 @@ function isCheckedBom(isitchecked,id){
 		document.adminForm.boxchecked.value--;
    	}
 }
+function checkAllLocationList(n, fldName )
+       {
+           if (!fldName) {
+               fldName = 'location';
+           }
+           var f = document.adminForm;
+           var c = f.toggle.checked;
+           var n2 = 0;
+           for (i=0; i < n; i++) {
+               cb = eval( 'f.' + fldName + '' + i );
+               if (cb) {
+                   cb.click();
+                   cb.checked = c;
+                   n2++;
+               }
+           }
+           if (c) {
+               document.adminForm.boxchecked.value = n2;
+           } else {
+               document.adminForm.boxchecked.value = 0;
+           }
+       }
 </script>
 <div class="clr"></div>
 <form action="index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
@@ -76,7 +98,7 @@ function isCheckedBom(isitchecked,id){
                         <thead>
                                 <tr>
                                         <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="3%"></th>
+                                        <th width="3%"><input type="checkbox" name="toggle" value="" onclick="checkAllLocationList(<?php echo count($this->location_list); ?>);" /></th>
                                         <th width="100"><?php echo JText::_('Location Code'); ?></th>
                                         <th width="200"><?php echo JText::_('Description'); ?></th>
 <!--                                        <th width="100"><?php echo JText::_('Active'); ?></th>                                        -->
@@ -102,8 +124,8 @@ function isCheckedBom(isitchecked,id){
                 ?>
                                         <tr>
                                                 <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
-                                                <td align="center"><input  type="checkbox" id = "location"  onclick="isCheckedBom(this.checked,'<?php echo $loc->pns_location_id;?>');" value="<?php echo $loc->pns_location_id?>" name="cid[]"  /></td>
-                                                <td align="center"><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
+                                                <td align="center"><input  type="checkbox"  id = "location<?php echo $i?>" onclick="isCheckedBom(this.checked,'<?php echo $loc->pns_location_id;?>');" value="<?php echo $loc->pns_location_id?>" name="cid[]"  /></td>
+                                                <td align="left"><a href="index.php?option=com_apdmpns&task=edit_location&id=<?php echo $loc->pns_location_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $loc->location_code; ?></a> </td>
                                                 <td align="left"><?php echo $loc->location_description; ?></td>                                                
                                                
 <!--                                                <td align="center">

@@ -12,8 +12,9 @@
 ?>
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){        				
-        window.parent.document.getElementById('sbox-window').close();	       
+        //window.parent.document.getElementById('sbox-window').close();
      // window.parent.document.location.reload(true);
+     window.parent.location.reload();
         window.parent.document.location.href = "index.php?option=com_apdmpns&task=locatecode&time=<?php echo time();?>";
      //   setTimeout("window.parent.document.getElementById('sbox-window').close();",1000);
        //setTimeout( "window.document.getElementById('sbox-window').close();window.parent.document.location.reload();", 2000 );
@@ -51,28 +52,29 @@ function UpdatePnsRevWindow(){
 					<td>						
 						<textarea name="location_description" rows="10" cols="60"><?php echo $this->location_row->location_description?></textarea>
 					</td>
-				</tr>                                            
+				</tr>         <!--
                                <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'Status' ); ?>
+							<?php /*echo JText::_( 'Status' ); */?>
 						</label>
 					</td><td>
-                               <?php 
+                               <?php
                                
-                               $status_arr = array();
+                            /*   $status_arr = array();
                                                         $status_arr[] = JHTML::_('select.option', '1', JText::_('Yes'), 'value', 'text');
                                                         $status_arr[] = JHTML::_('select.option', '0', JText::_('No'), 'value', 'text');                                                        
-                                 echo JHTML::_('select.genericlist', $status_arr, 'location_status', 'class="inputbox" size="1" ', 'value', 'text',$this->location_row->location_status );
+                                 echo JHTML::_('select.genericlist', $status_arr, 'location_status', 'class="inputbox" size="1" ', 'value', 'text',$this->location_row->location_status );*/
                                 ?>
                                </td>
-                                </tr>  			
+                                </tr>  		-->
 			</table>
 	
 
 
 	<input type="hidden" name="pns_id" value="<?php echo  $cid[0];?>" />	
 	<input type="hidden" name="option" value="com_apdmpns" />
-	<input type="hidden" name="return" value="po"  />
+    <input type="hidden" name="task" value="save_location" />
+	<input type="hidden" name="return" value="save_location"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

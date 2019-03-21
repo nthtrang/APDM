@@ -134,8 +134,25 @@
 			if ($sto=='R') {$sto5=1; $stoall++;}
 			if ($sto=='S') {$sto6=1; $stoall++;}
 		}
-	}    
-        //for Location
+	}
+//for  TTO
+$tto1 = 0;
+$tto2 = 0;
+$tto3 = 0;
+$tto4 = 0;
+$tto5 = 0;
+$ttoall=0;
+if(count($this->arrTTO) > 0){
+    foreach ($this->arrTTO as $tto){
+        if ($tto=='V') {$tto1=1; $ttoall++;}
+        if ($tto=='W') {$tto2=1; $ttoall++;}
+        if ($tto=='E') {$tto3=1; $ttoall++;}
+        if ($tto=='D') {$tto4=1; $ttoall++;}
+        if ($tto=='R') {$tto5=1; $ttoall++;}
+
+    }
+}
+//for Location
 	$loc1 = 0;
 	$loc2 = 0;
 	$loc3 = 0;
@@ -328,8 +345,8 @@
                                                 <input type="checkbox" name="p[]" value="S" <?php echo ($pns6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="p5" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllPNS(6, 'p');" value="0" name="toggle6" <?php if ($pnsall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
-				</tr>		
-                                <tr>
+				</tr>
+                <tr>
 					<td valign="top" class="key">
 						<label for="gid">
 							<?php echo JText::_( 'PO' ); ?>
@@ -344,8 +361,8 @@
 						<input type="checkbox" name="po[]" value="R" <?php echo ($po5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="po4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllPO(5, 'po');" value="" name="toggle7" <?php if ($poall==5) { ?> checked="checked" <?php } ?>/>
 					</td>
-				</tr>	
-                                <tr>
+				</tr>
+                <tr>
 					<td valign="top" class="key">
 						<label for="gid">
 							<?php echo JText::_( 'STO' ); ?>
@@ -358,11 +375,27 @@
 						<input type="checkbox" name="sto[]" value="E" <?php echo ($sto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="sto[]" value="D" <?php echo ($sto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" name="sto[]" value="R" <?php echo ($sto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="checkbox" name="sto[]" value="S" <?php echo ($sto6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto5" />(MTO Button)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="sto[]" value="S" <?php echo ($sto6) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto5" />(MTO Button)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" onclick="checkAllSTO(6, 'sto');" value="" name="toggle8" <?php if ($stoall==6) { ?> checked="checked" <?php } ?>/>
 					</td>
-				</tr>	                                
-			<tr><tr>
+				</tr>
+                <tr>
+                    <td valign="top" class="key">
+                        <label for="gid">
+                            <?php echo JText::_( 'Special Tool' ); ?>
+
+                        </label>
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="tto[]" value="V" <?php echo ($tto1) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="tto0" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="tto[]" value="W" <?php echo ($tto2) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="tto1" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="tto[]" value="E" <?php echo ($tto3) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="tto2" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="tto[]" value="D" <?php echo ($tto4) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="tto3" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="tto[]" value="R" <?php echo ($tto5) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="tto4" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" onclick="checkAllTTO(5, 'tto');" value="" name="toggle11" <?php if ($ttoall==5) { ?> checked="checked" <?php } ?>/>
+                    </td>
+                </tr>
+			    <tr>
 					<td valign="top" class="key">
 						<label for="gid">
 							<?php echo JText::_( 'Code Location' ); ?>
@@ -484,10 +517,11 @@
 	<input type="hidden" name="boxcheckedm" value="0" />
 	<input type="hidden" name="boxcheckeds" value="0" />
 	<input type="hidden" name="boxcheckedeco" value="0" />
-        <input type="hidden" name="boxcheckedpo" value="0" />
-        <input type="hidden" name="boxcheckedsto" value="0" />
-        <input type="hidden" name="boxcheckedloc" value="0" />
-	<input type="hidden" name="boxcheckedpns" value="0" />
-        <input type="hidden" name="boxcheckedswo" value="0" />
+    <input type="hidden" name="boxcheckedpo" value="0" />
+    <input type="hidden" name="boxcheckedsto" value="0" />
+    <input type="hidden" name="boxcheckedtto" value="0" />
+    <input type="hidden" name="boxcheckedloc" value="0" />
+    <input type="hidden" name="boxcheckedpns" value="0" />
+    <input type="hidden" name="boxcheckedswo" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

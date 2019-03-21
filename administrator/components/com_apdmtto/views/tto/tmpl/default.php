@@ -6,14 +6,12 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
-//JToolBarHelper::title("STOCK Management", 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(8);      
+JToolBarHelper::title("Tools Management", 'cpanel.png');
+$role = JAdministrator::RoleOnComponent(11);
+
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
-        JToolBarHelper::customX('addtto', 'new', '', 'Tool', false);        
-        //JToolBarHelper::customX('addeto', 'new', '', 'New ETO', false);
-        //JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
-        
+        JToolBarHelper::customX('addtto', 'new', '', 'Tool', false);
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();
@@ -60,13 +58,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <div class="clr"></div>
 <form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
-<input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />                     
-<?php if (count($this->ttos_list) > 0) { ?>
+<input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
+    <fieldset class="adminform">
+        <legend><font style="size:14px"><?php echo JText::_( 'Tools Tracking' ); ?> </font></legend>
+        <?php if (count($this->ttos_list) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                          <thead>
                                <tr class="header">
                                         <th  class="title" width="50"><?php echo JText::_('NUM'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?></th>
+                                        <th  class="title" width="100"><?php echo JText::_('TTO'); ?></th>
                                         <th  class="title" width="100"><?php echo JText::_('Description'); ?></th>
                                         <th  class="title" width="100"><?php echo JText::_('State'); ?></th>
                                         <th  class="title" width="100"><?php echo JText::_('Created Date'); ?></th>
@@ -119,7 +119,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php echo JHTML::_('date', $tto->tto_created, '%m-%d-%Y %H:%M:%S'); ?>
                                                 </td>
                                                 <td align="center"  style="<?php echo $style?>" >
-                                                        <?php echo GetValueUser($tto->tto_owner_in, "name"); ?>
+                                                        <?php echo GetValueUser($tto->tto_owner_out, "name"); ?>
                                                 </td> 
                                                 <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($tto->tto_create_by, "name"); ?>
@@ -137,6 +137,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         } ?>
                 </tbody>
                 </table>
+    </fieldset>
         <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
         <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
         <input type="hidden" name="option" value="com_apdmtto" />
