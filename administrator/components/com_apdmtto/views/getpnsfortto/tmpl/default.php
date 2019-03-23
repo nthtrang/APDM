@@ -73,36 +73,39 @@ function UpdatePnsEco(){
 				<th width="2%" class="title">
 					<?php echo JText::_( 'NUM' ); ?>
 				</th>
-				<th width="3%" class="title">
+				<th width="2%" class="title">
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->rows); ?>);" />
 				</th>
-				<th class="title" width="10%">
+				<th class="title" width="12%">
 					<?php echo  JText::_('PART_NUMBER_CODE'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
-				</th>                                				
-				<th width="20%" class="title"  >
+				</th>       
+                                <th width="7%" class="title" nowrap="nowrap">
+					<?php echo JText::_('ITO'); ?>
+				</th>                                
+				<th width="17%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
                                 <th width="5%" class="title"  >
 					<?php echo JText::_( 'MFG PN' ); ?>
 				</th> 
-                                <th width="5%" class="title"  >
+                                <th width="4%" class="title"  >
 					<?php echo JText::_( 'Tool ID' ); ?>
 				</th> 
-                                <th width="5%" class="title"  >
+                                <th width="3%" class="title"  >
 					<?php echo JText::_( 'Part State' ); ?>
 				</th> 
-                                <!--<th width="5%" class="title"  >
-					<?php /*echo JText::_( 'QTY' ); */?>
-				</th> -->
+                               <th width="5%" class="title"  >
+					<?php echo JText::_( 'QTY' ); ?>
+				</th> 
                                 
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="8">
+				<td colspan="10">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -127,7 +130,7 @@ function UpdatePnsEco(){
 				}
 				//echo $pns_image;							
                                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
-                                $qtyRemain = CalculateToolRemainValue($row->pns_id);
+                                $qtyRemain = CalculateInventoryLocationPartValue($row->pns_id,$row->location,$row->partstate);
                                 if($qtyRemain<=0)
                                         continue;
                                         
@@ -146,7 +149,10 @@ function UpdatePnsEco(){
 				</td>	
                                 <td align="center">
 					<?php echo $row->pns_life_cycle;?>
-				</td>         
+				</td>     
+                                <td align="center">
+					<?php echo $row->sto_code;?>
+				</td> 
 				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>		
@@ -167,10 +173,10 @@ function UpdatePnsEco(){
                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->partstate?strtoupper($row->partstate):"";?></span>
 
                                 </td> 
-                               <!-- <td>
-                                        <?php /* echo $qtyRemain;*/?>
+                              <td>
+                                        <?php echo $qtyRemain;?>
                                         
-                                </td>-->
+                                </td>
 
 				
 			</tr>
