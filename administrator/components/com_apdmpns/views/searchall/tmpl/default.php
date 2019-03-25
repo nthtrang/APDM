@@ -812,6 +812,81 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
          </fieldset>
         <?php
 }
+if(($this->type_filter==0 || $this->type_filter==14) && count($this->rs_tto))
+{
+    ?>
+    <fieldset class="adminform">
+        <legend><?php echo JText::_("Tool Result");?></legend>
+        <table class="adminlist" cellspacing="1" width="400">
+            <thead>
+            <tr class="header">
+                <th  class="title" width="50"><?php echo JText::_('NUM'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('TTO'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('Description'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('State'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('Created Date'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('Owner'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('Created By'); ?></th>
+                <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
+                <th  class="title" width="100"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $i = 0;
+            foreach ($this->rs_tto as $tto) {
+                $i++;
+                ?>
+                <tr>
+                    <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
+                    <td align="center">
+                        <?php
+                        $style="";
+                        $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$tto->pns_tto_id;
+                        $background="";
+                        $remain_day = $tto->tto_remain;
+                        if($remain_day<=0)
+                        {
+                            //$remain_day = 0;
+                            $background= "style='background-color:#f00;color:#fff'";
+                        }
+                        elseif($remain_day<=3)
+                        {
+                            $background= "style='background-color:#ff0;color:#000'";
+                        }
+
+                        ?>
+                        <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $tto->tto_code; ?></a> </td>
+
+                    <td align="left" style="<?php echo $style?>" ><?php echo $tto->tto_description; ?></td>
+                    <td align="center" style="<?php echo $style?>" >
+                        <?php echo $tto->tto_state; ?>
+                    </td>
+                    <td align="center"  style="<?php echo $style?>" >
+                        <?php echo JHTML::_('date', $tto->tto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                    </td>
+                    <td align="center"  style="<?php echo $style?>" >
+                        <?php echo GetValueUser($tto->tto_owner_out, "name"); ?>
+                    </td>
+                    <td align="center"  style="<?php echo $style?>" >
+                        <?php echo GetValueUser($tto->tto_create_by, "name"); ?>
+                    </td>
+                    <td align="center"  <?php echo $background;?>> <?php echo $tto->tto_remain; ?></td>
+                    <td align="center"  style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
+
+                            ?>
+                            <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
+                            <?php
+                        }
+                        ?>
+                    </td></tr>
+            <?php }
+            ?>
+            </tbody>
+        </table>
+    </fieldset>
+    <?php
+}
 if(($this->type_filter==0 || $this->type_filter==12) && count($this->rs_so))
 {      
         ?>

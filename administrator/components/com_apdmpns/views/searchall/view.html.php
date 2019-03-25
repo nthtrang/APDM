@@ -85,17 +85,14 @@ if ($type_filter==0){
                         }
                         
                     }
-                    
-                    $arr_sto_id = array();
+
                     //select table STO with keyword input                      
                     $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
                     $rs_sto = $db->loadObjectList();
-                    if (count($rs_sto) >0){
-                        foreach ($rs_sto as $sto){
-                           $pns_sto_id[] = $sto->pns_po_id; 
-                        }
-                        
-                    }    
+
+                    $db->setQuery('SELECT * FROM apdm_pns_tto WHERE (tto_code LIKE '.$searchEscaped.' OR  tto_description LIKE '.$searchEscaped .' )');
+                    $rs_tto = $db->loadObjectList();
+
                     //so
                     $arr_so_id = array();
                     $arr_code = explode("-", trim($keyword));
@@ -268,7 +265,20 @@ else
                         }
                         
                     }                    
-                break;           
+                break;
+                case '14': //TTO
+                    //STO
+                    $filter_order        =  $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.tto_code',    'cmd' );
+                    $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
+                    //select table STO with keyword input
+                    $query = 'SELECT * FROM apdm_pns_tto p'
+                        . ' WHERE (p.tto_code LIKE '.$searchEscaped.' OR  p.tto_description LIKE '.$searchEscaped .' ) '
+                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
+                    ;
+                    $db->setQuery($query);
+                    //$db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
+                    $rs_tto = $db->loadObjectList();
+                    break;
                 
                 case '9': //Vendor PN
                     $pns_id_mf = array();
@@ -537,6 +547,7 @@ else
         $this->assignRef('rs_eco',      $rs_eco);
         $this->assignRef('rs_po',       $rs_po);
         $this->assignRef('rs_sto',      $rs_sto);
+        $this->assignRef('rs_tto',      $rs_tto);
         $this->assignRef('rs_so',       $rs_so);
         $this->assignRef('rs_wo',       $rs_wo);
         $this->assignRef('arr_sostatus', $arrSoStatus);

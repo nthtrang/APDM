@@ -1299,8 +1299,6 @@ class PNsController extends JController {
 //        } 
                         $row->pns_modified = $datenow->toMySQL();
                         $row->pns_modified_by = $me->get('id');
-                        $row->pns_image = $pns_imge;
-                        $row->pns_pdf = $pns_pdf;
                         $row->pns_description = $pns_description;
                         $row->pns_cost = JRequest::getVar('pns_cost');
                         $row->pns_stock = JRequest::getVar('pns_stock');
@@ -2135,7 +2133,7 @@ class PNsController extends JController {
                 
                 $pns_id = $row->pns_id;
                 $file_name = $row->image_file;
-                $dFile = new DownloadFile($path_cads, $file_name);
+                return $dFile = new DownloadFile($path_cads, $file_name);
                 exit;
         }
 
@@ -2159,7 +2157,7 @@ class PNsController extends JController {
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                 $path_cads = $path_pns . 'cads' . DS . $row->ccs_code . DS . $folder . DS;   
                
-                $pns_id = $row->pns_id;
+                //$pns_id = $row->pns_id;
                 $file_name = $row->pdf_file;
                 //$path_pns = $path_cads;
                 $dFile = new DownloadFile($path_cads, $file_name);
@@ -5500,7 +5498,7 @@ class PNsController extends JController {
                 $currentUser = & JFactory::getUser();
                 $location_code = JRequest::getVar('location_code');
                 $location_description = JRequest::getVar('location_description');
-                $location_status = JRequest::getVar('location_status');
+                $location_status = 1;//JRequest::getVar('location_status');
               
                 //check exist first
                 $db->setQuery("select count(*) from apdm_pns_location where location_code = '" . $location_code."'");
@@ -5515,10 +5513,17 @@ class PNsController extends JController {
                 $return = JRequest::getVar('return');               
                 $db->setQuery("insert into `apdm_pns_location`(`location_code`,`location_description`,`location_status`,`location_created`,`location_updated`,`location_created_by`,`location_updated_by`) values ('" . $location_code . "','". $location_description . "', '" . $location_status . "','".$datenow->toMySQL()."', '".$datenow->toMySQL()."',".$currentUser->get('id').",".$currentUser->get('id').")");
                 $db->query();
-                $msg = "Successfully Saved Location ";
-                $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
-                exit;
-        }                
+  /*              return  $redirect = '<script language="javascript" type="text/javascript">'
+                            . 'window.parent.location.reload();'
+                            . '</script>';*/
+               // $msg = "Successfully Saved Location ";
+                return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode');
+        }
+        function locatecodetemp()
+        {
+            $msg = "Successfully Saved Location ";
+            return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+        }
         function GetLocationCodeList() {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -5551,7 +5556,7 @@ class PNsController extends JController {
                         $db->query();
                 }
                 $msg = "Have successfuly Remove Code Location";
-                 return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode&id=' . $return, $msg);
+                return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
         }    
         function GetStoFrommPns($pns_id,$sto_id) {
                 $db = & JFactory::getDBO();
@@ -7174,7 +7179,7 @@ class PNsController extends JController {
                      
                 }//for save database of pns 
                
-                $msg = JText::_('Successfully Updated So') . $text_mess;
+                $msg = JText::_('Successfully Updated So');
                 return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);                
         }
          /*

@@ -5,7 +5,7 @@
 $cid    = JRequest::getVar( 'cid', array(0) );
 $edit   = JRequest::getVar('edit',true);
 $tto_id = JRequest::getVar('id');
-$role   = JAdministrator::RoleOnComponent(8);
+$role   = JAdministrator::RoleOnComponent(11);
 JToolBarHelper::title($this->tto_row->tto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
 if (in_array("E", $role)&& ($this->tto_row->tto_state  == "Create")) {
@@ -323,7 +323,7 @@ function checkAllToolPn(n, fldName )
             <table class="toolbar"><tbody><tr>
                     <?php
                   //  if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
-                        if (in_array("W", $role) && ($this->tto_row->tto_state == "Create")) {
+                        if (in_array("E", $role) && ($this->tto_row->tto_state == "Create")) {
                             ?>
                             <td class="button" id="toolbar-save">
                                 <a href="#"

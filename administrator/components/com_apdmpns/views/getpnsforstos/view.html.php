@@ -299,9 +299,9 @@ class pnsViewgetpnsforstos extends JView
                          
                    }else{    
                            if($searchEscaped){
-                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                              $arr_code = explode("-", trim($keyword));
+                             $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" and p.pns_code like "%'.$arr_code[1] .'-'.$arr_code[2].'%" and p.pns_revision LIKE "%'.$arr_code[3].'%"';
+                             //$where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;
                            }
                    }          
                 break;
@@ -377,7 +377,7 @@ class pnsViewgetpnsforstos extends JView
             
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
         
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'

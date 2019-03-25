@@ -263,11 +263,12 @@ th:first-child div{
                     $mf = SToController::GetManufacture($row->pns_id, 4);//manufacture
                     $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
                     $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
-                    $background = "";
-                    if ($row->inventory <= 3) {
-                        $background = "style='background-color:#f00;color:#fff'";
-                    }
+
                     $stock = SToController::CalculateInventoryValue($row->pns_id);
+                $background = "";
+                if ($stock <= 3) {
+                    $background = "style='background-color:#f00;color:#fff'";
+                }
                 $qty_from =  $this->qty_from;
                 $qty_to =  $this->qty_to;
                 if($qty_from && $qty_to)
