@@ -791,7 +791,7 @@ class TToController extends JController
                     $location = JRequest::getVar('location_' . $pns . '_' . $id);
                     $partState = JRequest::getVar('partstate_' . $pns . '_' . $id);
                     $qtyRemain = CalculateInventoryLocationPartValue($pns, $location, $partState);
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where tto.tto_state != 'Done' and fk.partstate = '" . $partState . "' and fk.location = '" . $location . "' and fk.id != " . $id);
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where tto.tto_state != 'Done' and fk.pns_id = '" . $pns . "' and fk.partstate = '" . $partState . "' and fk.location = '" . $location . "' and fk.id != " . $id);
                     $qtyOutCheck = $db->loadResult();
                     $currentOutStock += $stock + $qtyOutCheck;
                     if ($currentOutStock > $qtyRemain) {

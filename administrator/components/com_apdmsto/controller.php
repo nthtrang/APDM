@@ -846,14 +846,19 @@ class SToController extends JController
                 $stoChecker= $db->loadObject();
                 if($stoChecker->sto_type==2)//if is out stock
                 {
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
                     $qtyInCheck = round($db->loadResult(),2);
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);
+                        //get QTY from TTO
+                        $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1");
+                        $qtyTtoCheck = round($db->loadResult(),2);   
+                        $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
+                        
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);
                     $qtyOutCheck = $db->loadResult();
-                    $currentOutStock = $stock+$qtyOutCheck;
-                    if($currentOutStock > $qtyInCheck)
+                     $currentOutStock = $stock+$qtyOutCheck;
+                    if($currentOutStock > $totalQtyCheck)
                     {
-                        $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $qtyInCheck";
+                        $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $totalQtyCheck";
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }

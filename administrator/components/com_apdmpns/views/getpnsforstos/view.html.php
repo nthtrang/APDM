@@ -299,9 +299,9 @@ class pnsViewgetpnsforstos extends JView
                          
                    }else{    
                            if($searchEscaped){
-                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                              $arr_code = explode("-", trim($keyword));
+                             $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" and p.pns_code like "%'.$arr_code[1] .'-'.$arr_code[2].'%" and p.pns_revision LIKE "%'.$arr_code[3].'%"';
+                             //$where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;
                            }
                    }          
                 break;
@@ -363,9 +363,21 @@ class pnsViewgetpnsforstos extends JView
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
         
+//check if exist in TTO with state USING will be exclude
+            $pns_id_tto = array();
+            $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
+            $rs_ps_tto = $db->loadObjectList();
+            if(count($rs_ps_tto) > 0){
+                foreach ($rs_ps_tto as $obj){
+                    $pns_id_tto[] = $obj->pns_id;        
+                }
+               $pns_id_tto = array_unique($pns_id_tto);
+                $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+            }   
+            
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
         
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'

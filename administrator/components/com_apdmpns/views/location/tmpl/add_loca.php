@@ -11,22 +11,26 @@
 	
 ?>
 <script language="javascript" type="text/javascript">
-function UpdatePnsRevWindow(){        				
+function UpdateLocationWindow(){
         //window.parent.document.getElementById('sbox-window').close();
      // window.parent.document.location.reload(true);
      window.parent.location.reload();
-        window.parent.document.location.href = "index.php?option=com_apdmpns&task=locatecode&time=<?php echo time();?>";
+        window.parent.document.location.href = "index.php?option=com_apdmpns&task=locatecodetemp&time=<?php echo time();?>";
      //   setTimeout("window.parent.document.getElementById('sbox-window').close();",1000);
        //setTimeout( "window.document.getElementById('sbox-window').close();window.parent.document.location.reload();", 2000 );
 }
-
+function upperCaseF(a){
+    setTimeout(function(){
+        a.value = a.value.toUpperCase();
+    }, 1);
+}
 </script>
 
 <form action="index.php?option=com_apdmpns&task=save_location&time=<?php echo time();?>" method="post" name="adminFormPnsrev" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
 			<td></td>
-			<td align="right"><input type="submit" name="btinsersave" value="Save"  onclick="UpdatePnsRevWindow();"/>
+			<td align="right"><input type="submit" name="btinsersave" value="Save"  onclick="UpdateLocationWindow();"/>
                         
                         </td>	
 		</tr>	
@@ -50,7 +54,7 @@ function UpdatePnsRevWindow(){
 						</label>
 					</td>
 					<td>						
-						<textarea name="location_description" rows="10" cols="60"><?php echo $this->location_row->location_description?></textarea>
+						<textarea  onkeydown="upperCaseF(this)" name="location_description" rows="10" cols="60"><?php echo $this->location_row->location_description?></textarea>
 					</td>
 				</tr>         <!--
                                <tr>

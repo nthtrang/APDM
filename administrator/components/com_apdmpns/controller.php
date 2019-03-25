@@ -5513,9 +5513,17 @@ class PNsController extends JController {
                 $return = JRequest::getVar('return');               
                 $db->setQuery("insert into `apdm_pns_location`(`location_code`,`location_description`,`location_status`,`location_created`,`location_updated`,`location_created_by`,`location_updated_by`) values ('" . $location_code . "','". $location_description . "', '" . $location_status . "','".$datenow->toMySQL()."', '".$datenow->toMySQL()."',".$currentUser->get('id').",".$currentUser->get('id').")");
                 $db->query();
-                $msg = "Successfully Saved Location ";
-                return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
-        }                
+  /*              return  $redirect = '<script language="javascript" type="text/javascript">'
+                            . 'window.parent.location.reload();'
+                            . '</script>';*/
+               // $msg = "Successfully Saved Location ";
+                return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode');
+        }
+        function locatecodetemp()
+        {
+            $msg = "Successfully Saved Location ";
+            return $this->setRedirect('index.php?option=com_apdmpns&task=locatecode', $msg);
+        }
         function GetLocationCodeList() {
                 $db = & JFactory::getDBO();
                 $rows = array();
