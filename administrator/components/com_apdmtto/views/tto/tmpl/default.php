@@ -147,3 +147,70 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
 </form>
+<fieldset class="adminform">
+		<legend><?php echo JText::_( 'Tools History' ); ?></legend>
+<?php if (count($this->tools) > 0) { ?>
+         <div class="col width-100 scroll">
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
+                                        <th width="100"><?php echo JText::_('TTO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('State'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Date-Out'); ?></th>
+                                        <th width="100"><?php echo JText::_('Date-In'); ?></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th width="100"><?php echo JText::_('Created By'); ?></th>
+                                        <th width="100"><?php echo JText::_('Time Remain'); ?></th>
+                                </tr>
+                        </thead>
+                        <tbody>					
+        <?php
+        $i = 0;
+        foreach ($this->tools as $sto) {
+                $i++;
+            $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$sto->pns_tto_id;
+            $background="";
+                                                                $remain_day = $sto->tto_remain;
+                                                                if($remain_day<=0)
+                                                                {       
+                                                                        //$remain_day = 0;
+                                                                        $background= "style='background-color:#f00;color:#fff'";                                                                        
+                                                                }
+                                                                elseif($remain_day<=3)
+                                                                {
+                                                                        $background= "style='background-color:#ff0;color:#000'";   
+                                                                }     
+                ?>
+                                        <tr>
+                                                <td align="center"><?php echo $i; ?></td>
+                                                <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->tto_code; ?></a> </td>
+                                                <td align="left"><?php echo $sto->tto_description; ?></td>
+                                                <td align="center"><?php echo $sto->tto_state; ?></td>                                                
+                                                <td align="center">
+                                                        <?php echo ($sto->tto_owner_out_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_out_confirm_date, '%m-%d-%Y %H:%M:%S'):""; ?>
+                                                </td>
+                                                <td align="center">
+                                                        <?php echo ($sto->tto_owner_in_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_in_confirm_date, '%m-%d-%Y %H:%M:%S'):""; ?>
+                                                </td>
+                                                
+                                                <td align="center">
+                                                        <?php echo GetValueUser($sto->tto_owner_out, "name"); ?>
+                                                </td> 
+                                                <td align="center">
+                                                        <?php echo GetValueUser($sto->tto_create_by, "name"); ?>
+                                                </td>                                                                                                                                                      
+                                              <td align="center"  <?php echo $background;?>> <?php echo $sto->tto_remain; ?></td>
+                                        </tr>
+                                                <?php }
+                                         ?>
+                </tbody>
+        </table>
+         </div>
+                 <?php 
+                 }
+                 ?>
+
+ 
+</fieldset>

@@ -59,7 +59,7 @@ class TToViewtto extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-         $query = 'SELECT p.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain '
+        $query = 'SELECT p.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain '
             . ' FROM apdm_pns_tto AS p'
             . $where
             . $orderby;
@@ -68,6 +68,11 @@ class TToViewtto extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
 
         $rows = $db->loadObjectList(); 
+        
+        $query = "select  tto.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain from apdm_pns_tto tto where tto.tto_state = 'Done'";
+        $db->setQuery($query);
+        $list_tools = $db->loadObjectList();         
+        $this->assignRef('tools', $list_tools);
 
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
