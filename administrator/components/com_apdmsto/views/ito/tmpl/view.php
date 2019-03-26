@@ -221,6 +221,16 @@ function checkAllItoPn(n, fldName )
 		document.adminForm.boxchecked.value = 0;
 	}
 }      
+function autoAddPartIto(pns,sto_id)
+{
+        var url = 'index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id='+sto_id+'&pns_code='+pns;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                      window.location.reload();                                    
+                }
+        }).request();        
+}
 </script>
 <!--<div class="submenu-box">
             <div class="t">
@@ -257,7 +267,7 @@ function checkAllItoPn(n, fldName )
 				                                                                              
                                 </tr>
                                 <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('P.O Internal'); ?></td>                                               
+                                        <td  class="key" width="28%"><?php echo JText::_('Internal PO'); ?></td>
                                         <td width="30%" class="title"><?php echo $this->sto_row->sto_po_internal;?></td>                                        
 									   <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
 									   <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
@@ -479,6 +489,9 @@ function checkAllItoPn(n, fldName )
 if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
         ?>
+                                    <td class="button" id="toolbar-addpnsave">           
+                Scan PN Barcode <input onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >     
+        </td>
         <td class="button" id="toolbar-save">
             <a href="#"
                onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}"

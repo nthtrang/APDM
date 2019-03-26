@@ -17,7 +17,7 @@ class  SToViewgetpo extends JView
 
 		$db				=& JFactory::getDBO();
         $filter_order = "";
-                $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'po.po_code',    'cmd' );
+                $filter_order        = "po.po_code";//$mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'po.po_code',    'cmd' );
                 $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    '',            'word' );
         
 		$search				= $mainframe->getUserStateFromRequest( "$option.search",			'search', 			'',			'string' );

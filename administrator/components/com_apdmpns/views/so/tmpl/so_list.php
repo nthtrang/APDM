@@ -111,21 +111,6 @@ th:first-child div{
 <div class="clr"></div>
 
 <form action="index.php?option=com_apdmpns&task=somanagement"   onsubmit="submitbutton('')"  method="post" name="adminForm" >
-<fieldset class="adminform">
-
-        <div class="col width-40">
-            <fieldset class="adminform">
-                <legend><font style="size:14px"><?php echo JText::_( 'Quick View WO' ); ?> </font></legend>
-                <table class="admintable" cellspacing="1" width="100%">
-                    <tr><td width="150px">Scan WO Barcode Here</td>
-                        <td><input type="text" name="wo_code1" value="" onkeyup="autoSearchWoF(this)"/></td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>
-    </fieldset>
-
-
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />        
 

@@ -107,7 +107,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
 				                                                                              
                                 </tr>
                                 <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('P.O Internal'); ?></td>                                               
+                                        <td  class="key" width="28%"><?php echo JText::_('Internal PO'); ?></td>
                                         <td width="30%" class="title"><?php echo $this->sto_row->sto_po_internal;?></td>                                        
 									   <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
 									   <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>

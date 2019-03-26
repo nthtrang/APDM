@@ -8893,4 +8893,40 @@ class PNsController extends JController {
             }
             return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
         }
+        function get_pntoolboom()
+        {                
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnstoolbom');
+                parent::display();
+        }
+        function ajax_add_pnstool_bom()
+        {
+                $db = & JFactory::getDBO();
+                $pns = JRequest::getVar('cid', array(), '', 'array');
+                $parent_id = JRequest::getVar('pns_id');                  
+                //innsert to FK table                
+                foreach($pns as $pn_id)
+                {
+                        $db->setQuery("INSERT INTO apdm_pns_tool_bom (pns_id,pns_tool_id) VALUES ( '" . $parent_id . "','" . $pn_id . "')");
+                        $db->query();                         
+                }                 
+                return $msg = JText::_('Have add Tool PN successfull.');
+        }
+        function getToolPnAddtoBom($pns_id)
+        {
+                $db = & JFactory::getDBO();
+                $db->setQuery("select tool.id, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$pns_id);
+                return $db->loadObjectList();                
+        }
+        function removetoolbom()
+        {
+                $db = & JFactory::getDBO();
+                $parent_id = JRequest::getVar('pns_id');      
+                $id = JRequest::getVar('id');  
+                $query = "Delete from apdm_pns_tool_bom WHERE id=" . $id ." and pns_id = ".$parent_id;                        
+                $db->setQuery($query);
+                $db->query();
+                $msg = JText::_('Have add remove Tool PN successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]='.$parent_id,$msg);
+        }
 }

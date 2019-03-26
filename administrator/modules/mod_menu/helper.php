@@ -296,7 +296,7 @@ class modMenuHelper
 			}  
                         //NEW STO
 			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
-				$menu->addChild(new JMenuNode(JText::_('Special Tool'), 'index.php?option=com_apdmtto', 'class:dashboard'));
+				$menu->addChild(new JMenuNode(JText::_('Tool Tracker'), 'index.php?option=com_apdmtto', 'class:dashboard'));
 			} 
 		}
 

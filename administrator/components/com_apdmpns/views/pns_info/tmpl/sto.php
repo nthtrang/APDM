@@ -203,7 +203,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('ITO/ETO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Transaction Number'); ?></th>                                        
                                         <th width="100"><?php echo JText::_('Description'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('QTY In/QTY Out'); ?></th>
                                         <!--<th width="100"><?php /*echo JText::_('Attached'); */?></th>-->

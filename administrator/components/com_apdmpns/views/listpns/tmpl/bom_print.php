@@ -122,19 +122,28 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                 <td align="left" ><?php                         
-                                $ToolPN = GetToolPnValue($row->pns_id);
-                                if($ToolPN)
-                                {
-                                    $img			=	code128BarCode($ToolPN, 1);
-                                    //Start output buffer to capture the image
-                                    //Output PNG image
-                                    ob_start();
-                                    imagepng($img);
-                                    //Get the image from the output buffer
-                                    $output_img		=	ob_get_clean();
-                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                }
-                ?>
+                               // $ToolPN = GetToolPnValue($row->pns_id);
+                                 $pntool =  PNsController::getToolPnAddtoBom($row->pns_id);
+                                                       
+                                                        foreach($pntool as $pn)
+                                                        {
+                                                                if($pn->pns_revision){
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                 }
+                                                                else{
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                }
+                                                                
+                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                    //Start output buffer to capture the image
+                                                                    //Output PNG image
+                                                                    ob_start();
+                                                                    imagepng($img);
+                                                                    //Get the image from the output buffer
+                                                                    $output_img		=	ob_get_clean();
+                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                        }
+                                ?>
                 </td>
             </tr>
         <?php 
@@ -173,19 +182,28 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                 <td align="left" ><?php                         
-                                $ToolPN = GetToolPnValue($row->pns_id);
-                                if($ToolPN)
-                                {
-                                    $img			=	code128BarCode($ToolPN, 1);
-                                    //Start output buffer to capture the image
-                                    //Output PNG image
-                                    ob_start();
-                                    imagepng($img);
-                                    //Get the image from the output buffer
-                                    $output_img		=	ob_get_clean();
-                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                }
-                ?>
+                               // $ToolPN = GetToolPnValue($row->pns_id);
+                                 $pntool =  PNsController::getToolPnAddtoBom($row->pns_id);
+                                                       
+                                                        foreach($pntool as $pn)
+                                                        {
+                                                                if($pn->pns_revision){
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                 }
+                                                                else{
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                }
+                                                                
+                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                    //Start output buffer to capture the image
+                                                                    //Output PNG image
+                                                                    ob_start();
+                                                                    imagepng($img);
+                                                                    //Get the image from the output buffer
+                                                                    $output_img		=	ob_get_clean();
+                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                        }
+                                ?>
                 </td>
 	</tr>
         <?php
@@ -221,18 +239,27 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                                 <td align="left" ><?php                         
-                                $ToolPN = GetToolPnValue($row2->pns_id);
-                                if($ToolPN)
-                                {
-                                    $img			=	code128BarCode($ToolPN, 1);
-                                    //Start output buffer to capture the image
-                                    //Output PNG image
-                                    ob_start();
-                                    imagepng($img);
-                                    //Get the image from the output buffer
-                                    $output_img		=	ob_get_clean();
-                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                }
+                               // $ToolPN = GetToolPnValue($row->pns_id);
+                                 $pntool =  PNsController::getToolPnAddtoBom($row2->pns_id);
+                                                       
+                                                        foreach($pntool as $pn)
+                                                        {
+                                                                if($pn->pns_revision){
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                 }
+                                                                else{
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                }
+                                                                
+                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                    //Start output buffer to capture the image
+                                                                    //Output PNG image
+                                                                    ob_start();
+                                                                    imagepng($img);
+                                                                    //Get the image from the output buffer
+                                                                    $output_img		=	ob_get_clean();
+                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                        }
                                 ?>
                                 </td>
 
@@ -273,18 +300,26 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                                                 <td align="left" ><?php                         
-                                                $ToolPN = GetToolPnValue($row3->pns_id);
-                                                if($ToolPN)
-                                                {
-                                                    $img			=	code128BarCode($ToolPN, 1);
-                                                    //Start output buffer to capture the image
-                                                    //Output PNG image
-                                                    ob_start();
-                                                    imagepng($img);
-                                                    //Get the image from the output buffer
-                                                    $output_img		=	ob_get_clean();
-                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                                }
+                                                       // $ToolPN = GetToolPnValue($row->pns_id);
+                                                         $pntool =  PNsController::getToolPnAddtoBom($row3->pns_id);                                                       
+                                                        foreach($pntool as $pn)
+                                                        {
+                                                                if($pn->pns_revision){
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                 }
+                                                                else{
+                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                }
+                                                                
+                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                    //Start output buffer to capture the image
+                                                                    //Output PNG image
+                                                                    ob_start();
+                                                                    imagepng($img);
+                                                                    //Get the image from the output buffer
+                                                                    $output_img		=	ob_get_clean();
+                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                        }
                                                 ?>
                                                 </td>
                                         </tr>
@@ -322,18 +357,26 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                 <td align="left"><?php echo $manufacture[0]['mf'];?></td>
                                                                 <td align="left"><?php echo $manufacture[0]['v_mf'];?></td>
                                                                 <td align="left" ><?php                         
-                                                                        $ToolPN = GetToolPnValue($row4->pns_id);
-                                                                        if($ToolPN)
-                                                                        {
-                                                                            $img			=	code128BarCode($ToolPN, 1);
-                                                                            //Start output buffer to capture the image
-                                                                            //Output PNG image
-                                                                            ob_start();
-                                                                            imagepng($img);
-                                                                            //Get the image from the output buffer
-                                                                            $output_img		=	ob_get_clean();
-                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                                                        }
+                                                                               // $ToolPN = GetToolPnValue($row->pns_id);
+                                                                                 $pntool =  PNsController::getToolPnAddtoBom($row4->pns_id);                                                       
+                                                                                foreach($pntool as $pn)
+                                                                                {
+                                                                                        if($pn->pns_revision){
+                                                                                                $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                                         }
+                                                                                        else{
+                                                                                                $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                                        }
+
+                                                                                        $img			=	code128BarCode($toolpns_code, 1);
+                                                                                            //Start output buffer to capture the image
+                                                                                            //Output PNG image
+                                                                                            ob_start();
+                                                                                            imagepng($img);
+                                                                                            //Get the image from the output buffer
+                                                                                            $output_img		=	ob_get_clean();
+                                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                                                }
                                                                         ?>
                                                                         </td>
 
@@ -372,19 +415,27 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                         <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                         <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                                                                                         <td align="left" ><?php                         
-                                                                                        $ToolPN = GetToolPnValue($row5->pns_id);
-                                                                                        if($ToolPN)
+                                                                                       // $ToolPN = GetToolPnValue($row->pns_id);
+                                                                                         $pntool =  PNsController::getToolPnAddtoBom($row5->pns_id);                                                       
+                                                                                        foreach($pntool as $pn)
                                                                                         {
-                                                                                            $img			=	code128BarCode($ToolPN, 1);
-                                                                                            //Start output buffer to capture the image
-                                                                                            //Output PNG image
-                                                                                            ob_start();
-                                                                                            imagepng($img);
-                                                                                            //Get the image from the output buffer
-                                                                                            $output_img		=	ob_get_clean();
-                                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
+                                                                                                if($pn->pns_revision){
+                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                                                 }
+                                                                                                else{
+                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                                                }
+
+                                                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                                                    //Start output buffer to capture the image
+                                                                                                    //Output PNG image
+                                                                                                    ob_start();
+                                                                                                    imagepng($img);
+                                                                                                    //Get the image from the output buffer
+                                                                                                    $output_img		=	ob_get_clean();
+                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
                                                                                         }
-                                                                                        ?>
+                                                                        ?>
                                                                                         </td>
 
                                                                                         
@@ -423,19 +474,27 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                 <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                                                                                                                 <td align="left" ><?php                         
-                                                                                                                $ToolPN = GetToolPnValue($row6->pns_id);
-                                                                                                                if($ToolPN)
-                                                                                                                {
-                                                                                                                    $img			=	code128BarCode($ToolPN, 1);
-                                                                                                                    //Start output buffer to capture the image
-                                                                                                                    //Output PNG image
-                                                                                                                    ob_start();
-                                                                                                                    imagepng($img);
-                                                                                                                    //Get the image from the output buffer
-                                                                                                                    $output_img		=	ob_get_clean();
-                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                                                                                                }
-                                                                                                                ?>
+                                                                                                                       // $ToolPN = GetToolPnValue($row->pns_id);
+                                                                                                                         $pntool =  PNsController::getToolPnAddtoBom($row6->pns_id);                                                       
+                                                                                                                        foreach($pntool as $pn)
+                                                                                                                        {
+                                                                                                                                if($pn->pns_revision){
+                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                                                                                 }
+                                                                                                                                else{
+                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                                                                                }
+
+                                                                                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                                                                                    //Start output buffer to capture the image
+                                                                                                                                    //Output PNG image
+                                                                                                                                    ob_start();
+                                                                                                                                    imagepng($img);
+                                                                                                                                    //Get the image from the output buffer
+                                                                                                                                    $output_img		=	ob_get_clean();
+                                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                                                                                        }
+                                                                                                                        ?>
                                                                                                                 </td>
 
 
@@ -474,19 +533,27 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                          <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                        <td align="left" ><?php echo $manufacture[0]['v_mf'];?></td>
                                                                                                                                         <td align="left" ><?php                         
-                                                                                                                                        $ToolPN = GetToolPnValue($row7->pns_id);
-                                                                                                                                        if($ToolPN)
-                                                                                                                                        {
-                                                                                                                                            $img			=	code128BarCode($ToolPN, 1);
-                                                                                                                                            //Start output buffer to capture the image
-                                                                                                                                            //Output PNG image
-                                                                                                                                            ob_start();
-                                                                                                                                            imagepng($img);
-                                                                                                                                            //Get the image from the output buffer
-                                                                                                                                            $output_img		=	ob_get_clean();
-                                                                                                                                            echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                                                                                                                        }
-                                                                                                                                        ?>
+                                                                                                                                                       // $ToolPN = GetToolPnValue($row->pns_id);
+                                                                                                                                                         $pntool =  PNsController::getToolPnAddtoBom($row7->pns_id);                                                       
+                                                                                                                                                        foreach($pntool as $pn)
+                                                                                                                                                        {
+                                                                                                                                                                if($pn->pns_revision){
+                                                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                                                                                                                 }
+                                                                                                                                                                else{
+                                                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                                                                                                                }
+
+                                                                                                                                                                $img			=	code128BarCode($toolpns_code, 1);
+                                                                                                                                                                    //Start output buffer to capture the image
+                                                                                                                                                                    //Output PNG image
+                                                                                                                                                                    ob_start();
+                                                                                                                                                                    imagepng($img);
+                                                                                                                                                                    //Get the image from the output buffer
+                                                                                                                                                                    $output_img		=	ob_get_clean();
+                                                                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                                                                                                                        }
+                                                                                                                                                ?>
                                                                                                                                         </td>
                                                                                                                                 </tr>
                                                                                                                                                   <?php
@@ -522,19 +589,27 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                                                                                                                                                                 <td align="left" ><?php echo $manufacture[0]['mf'];?></td>
                                                                                                                                                                         <td><?php echo $manufacture[0]['v_mf'];?></td>
                                                                                                                                                                         <td align="left" ><?php                         
-                                                                                                                                                                $ToolPN = GetToolPnValue($row8->pns_id);
-                                                                                                                                                                if($ToolPN)
-                                                                                                                                                                {
-                                                                                                                                                                    $img			=	code128BarCode($ToolPN, 1);
+                                                                                                                                                       // $ToolPN = GetToolPnValue($row->pns_id);
+                                                                                                                                                         $pntool =  PNsController::getToolPnAddtoBom($row8->pns_id);                                                       
+                                                                                                                                                        foreach($pntool as $pn)
+                                                                                                                                                        {
+                                                                                                                                                                if($pn->pns_revision){
+                                                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                                                                                                                                 }
+                                                                                                                                                                else{
+                                                                                                                                                                        $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                                                                                                                                }
+
+                                                                                                                                                                $img			=	code128BarCode($toolpns_code, 1);
                                                                                                                                                                     //Start output buffer to capture the image
                                                                                                                                                                     //Output PNG image
                                                                                                                                                                     ob_start();
                                                                                                                                                                     imagepng($img);
                                                                                                                                                                     //Get the image from the output buffer
                                                                                                                                                                     $output_img		=	ob_get_clean();
-                                                                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$ToolPN;
-                                                                                                                                                                }
-                                                                                                                                                                ?>
+                                                                                                                                                                    echo '<img height="30px"   src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$toolpns_code."<br>";
+                                                                                                                                                        }
+                                                                                                                                                ?>
                                                                                                                                                                 </td>
 
                                                                                                                                                         </tr>

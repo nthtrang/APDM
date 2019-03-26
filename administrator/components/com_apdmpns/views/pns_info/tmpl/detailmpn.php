@@ -69,7 +69,19 @@
 			}                               
 			
 	}	
+	///for add more file
+    window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+    window.addEvent('domready', function() {
 
+        SqueezeBox.initialize({});
+
+        $$('a.modal-button').each(function(el) {
+            el.addEvent('click', function(e) {
+                new Event(e).stop();
+                SqueezeBox.fromElement(el);
+            });
+        });
+    });
 </script>
 <div class="submenu-box">
             <div class="t">
@@ -301,7 +313,25 @@
 					</td>
                                         
 				</tr>	
-				   
+				                    <?php 
+                                        if($this->row->ccs_code=='206'){?>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Tool PN' ); ?>
+						</label>
+					</td>
+					<td>
+                                 
+					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
+                                                <input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>
+                                        
+                                        </td>
+                                        
+				</tr>	
+                                <?php
+                                        }
+                                        ?>       
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">

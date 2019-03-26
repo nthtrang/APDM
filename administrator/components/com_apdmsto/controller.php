@@ -1481,9 +1481,13 @@ class SToController extends JController
         $db = & JFactory::getDBO();
         $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
         $id = $cid[0];
-        $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=".$id);
-        $row =  $db->loadObject();
-        $result = $row->pns_po_id.'^'.$row->po_code;
+        if($id) {
+            $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=" . $id);
+            $row = $db->loadObject();
+            $result = $row->pns_po_id . '^' . $row->po_code;
+        }else {
+            $result = '0^NA';
+        }
         echo $result;
         exit;
     }
@@ -1542,4 +1546,43 @@ class SToController extends JController
         }
         return "NA";
     }    
+    function ajax_addpn_ito()
+    {
+                $db = & JFactory::getDBO();
+                $pns = JRequest::getVar('cid', array(), '', 'array');
+                
+                $sto_id = JRequest::getVar('sto_id');   
+                $pns_code = JRequest::getVar('pns_code');   
+                $arrPn = explode("-", $pns_code);
+               
+                $ccs_code = $arrPn[0];
+                $pns_code = $arrPn[1]."-".$arrPn[2];                
+                if($arrPn[3])
+                {
+                        $pns_revision = $arrPn[3];
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                }
+                else {
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                }
+                 $db->setQuery($query);
+                 echo $pns_id = $db->loadResult(); 
+                //innsert to FK table                
+                
+                $location="";
+                $partstate="";
+                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+                $sto_type = $db->loadResult(); 
+                if($sto_type==2)
+                {
+                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
+                        $row = $db->loadObject();        
+                        $location = $row->location;
+                        $partState = $row->partstate;                        
+                }
+                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
+                $db->query();                         
+                                 
+                return $msg = JText::_('Have add PN successfull.');
+        }             
 }

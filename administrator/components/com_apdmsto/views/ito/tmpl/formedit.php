@@ -110,7 +110,7 @@
                                 <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'P.O Internal' ); ?>
+							<?php echo JText::_( 'Internal PO' ); ?>
 						</label>
 					</td>
                     <td>
@@ -118,7 +118,7 @@
                         <input type="hidden" value="" name="po_id" id="po_id" readonly="readonly" />
                         <input type="text" name="po_inter_code" id="po_inter_code"  size="10" value="<?php echo $this->sto_row->sto_po_internal?>"/>
                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_po_ajax&tmpl=component" title="Image">
-                            <input type="button" name="addPO" value="<?php echo JText::_('Insert P.O Internal')?>"/>
+                            <input type="button" name="addPO" value="<?php echo JText::_('Select Internal PO')?>"/>
                         </a>
                     </td>
 				</tr>
