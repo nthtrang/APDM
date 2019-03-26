@@ -264,21 +264,36 @@ function checkAllEtoPn(n, fldName )
 
             </tr>
             <tr>
-                <td  class="key" width="28%"><?php echo JText::_('PO#'); ?></td>
-                <td width="30%" class="title"><?php                    
+                <td  class="key" width="28%"><?php echo JText::_('SO'); ?></td>
+                <td width="30%" class="title"><?php
+                if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                        echo SToController::getSoCodeFromId($this->sto_row->sto_so_id);
+                       
+                }
+                else
+                {
                     $soNumber = $this->sto_row->so_cuscode;
                     if($this->sto_row->ccs_code)
                     {
                         $soNumber = $this->sto_row->ccs_code."-".$soNumber;
                     }
                     echo ($soNumber)?$soNumber:"NA";
+                }
                     ?></td>
                 <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
                 <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
             </tr>
             <tr>
-                <td  class="key" width="28%"><?php echo JText::_('Customer#'); ?></td>
-                <td width="30%" class="title"><?php  echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA"; ?></td>
+                <td  class="key" width="28%"><?php echo JText::_('Customer'); ?></td>
+                <td width="30%" class="title"><?php 
+                if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                        echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
+                }
+                else
+                {
+                        echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";     
+                }
+                 ?></td>
                 <td  class="key" width="28%"><?php echo JText::_( 'Delivery Goods' ); ?></td>
                 <td width="30%" class="title"><?php
                     if($this->sto_row->sto_isdelivery_good)

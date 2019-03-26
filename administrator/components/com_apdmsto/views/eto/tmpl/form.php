@@ -102,11 +102,22 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
         {
                 document.getElementById('delivery_info').style.visibility= 'visible';
                 document.getElementById('delivery_info').style.display= 'block';
+                document.getElementById('delivery_info_so').style.visibility= 'visible';
+                document.getElementById('delivery_info_so').style.display= 'block';
+                document.getElementById('delivery_info_wo').style.visibility= 'hidden';
+                document.getElementById('delivery_info_wo').style.display= 'none';    
+                window.document.getElementById('customer_id').innerHTML ="";
+                
         }
         else
         {
                 document.getElementById('delivery_info').style.visibility= 'hidden';
                 document.getElementById('delivery_info').style.display= 'none';
+                document.getElementById('delivery_info_so').style.visibility= 'hidden';
+                document.getElementById('delivery_info_so').style.display= 'none';
+                document.getElementById('delivery_info_wo').style.visibility= 'visible';
+                document.getElementById('delivery_info_wo').style.display= 'block';        
+                
         }
            
     }
@@ -130,6 +141,20 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                 <tr>
                     <td class="key">
                         <label for="name">
+                            <?php echo JText::_( 'Delivery Goods' ); ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php echo $this->lists['stoDeliveryGood'];?>
+                    </td>
+                </tr>
+                <tr>
+                        <td colspan="2">
+                <div id="delivery_info_wo">
+                        <table>
+                <tr>
+                    <td class="key">
+                        <label for="name">
                             <?php echo JText::_( 'WO' ); ?>
                         </label>
                     </td>
@@ -141,18 +166,43 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
                         </a>
                     </td>
-                </tr>
+                </tr>                
                 <tr>
                     <td class="key">
                         <label for="name">
-                            <?php echo JText::_( 'PO#' ); ?>
+                            <?php echo JText::_( 'SO' ); ?>
                         </label>
                     </td>
                     <td>
-                        <input type="hidden" readonly="readonly" name="so_cuscode" id="so_cuscode"  size="10" value=""/>
+                        <input type="hidden" readonly="readonly" name="sto_so_id" id="sto_so_id"  size="10" value=""/>
                         <span id="po_customer"></span>
                     </td>
                 </tr>
+            </table>
+                        </div>
+                </td>
+                </tr>
+                <tr>
+                        <td colspan="2">
+                                <div id="delivery_info_so" style="display: none">
+                                        <table><tr>
+                    <td class="key">
+                        <label for="name">
+                            <?php echo JText::_( 'SO' ); ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php //echo $this->lists['wolist'];?>
+                        <input type="text" value="" name="so_code" id="so_code" readonly="readonly" />                        
+                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_so_ajax&tmpl=component" title="Image">
+                            <input type="button" name="addSO" value="<?php echo JText::_('Select SO')?>"/>
+                        </a>
+                    </td>
+                </tr>     </table>       
+                </div>
+                        </td>
+                </tr>
+                
                 <tr>
                     <td class="key">
                         <label for="name">
@@ -164,16 +214,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                       <span id="ccs_name"></span>
                     </td>
                 </tr>
-                <tr>
-                    <td class="key">
-                        <label for="name">
-                            <?php echo JText::_( 'Delivery Goods' ); ?>
-                        </label>
-                    </td>
-                    <td>
-                        <?php echo $this->lists['stoDeliveryGood'];?>
-                    </td>
-                </tr>
+                
                 <tr>
                     <td colspan="2">
                             <div id="delivery_info" style="display: none">

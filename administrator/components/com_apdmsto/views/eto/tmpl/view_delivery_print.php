@@ -59,7 +59,16 @@
             ?></th>            
     </tr>
     <tr>
-        <td class="tg-xldj-pr">Customer#:<?php  echo $this->sto_row->ccs_name; ?></td>
+        <td class="tg-xldj-pr">Customer:
+            <?php
+            if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
+            }
+            else
+            {
+                echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";
+            }
+            ?></td>
     </tr>
     <tr>
         <td class="tg-xldj-pr">Delivery Method:<?php  echo $this->sto_row->delivery_method; ?></td>      

@@ -828,7 +828,7 @@ if(($this->type_filter==0 || $this->type_filter==14) && count($this->rs_tto))
                 <th  class="title" width="100"><?php echo JText::_('Owner'); ?></th>
                 <th  class="title" width="100"><?php echo JText::_('Created By'); ?></th>
                 <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
-                <th  class="title" width="100"></th>
+
             </tr>
             </thead>
             <tbody>
@@ -872,14 +872,7 @@ if(($this->type_filter==0 || $this->type_filter==14) && count($this->rs_tto))
                         <?php echo GetValueUser($tto->tto_create_by, "name"); ?>
                     </td>
                     <td align="center"  <?php echo $background;?>> <?php echo $tto->tto_remain; ?></td>
-                    <td align="center"  style="<?php echo $style?>" ><?php if (in_array("E", $role)) {
-
-                            ?>
-                            <a style="<?php echo $style?>"  href="<?php echo $link; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
-                            <?php
-                        }
-                        ?>
-                    </td></tr>
+                   </tr>
             <?php }
             ?>
             </tbody>
@@ -938,6 +931,7 @@ if (count($this->rs_so) > 0) { ?>
                                 $remain_day = 0;
                                 if($so->so_state != 'done' && $so->so_state != 'cancel')
                                 {
+                                        $remain_day = $so->so_remain_date+1;   
                                         $background= "style='background-color:#f00;color:#fff'";
                                 }
                         }
@@ -945,6 +939,7 @@ if (count($this->rs_so) > 0) { ?>
                         {        
                                 if($so->so_state != 'done' && $so->so_state != 'cancel')
                                 {
+                                        $remain_day = $so->so_remain_date+1;   
                                         $background= "style='background-color:#ff0;color:#000'";
                                 }
                         }						

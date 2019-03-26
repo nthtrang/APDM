@@ -1,7 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-<?php
+<?php JHTML::_('behavior.modal');
         if($this->row->pns_cpn==1)
         {
                 $app =& JFactory::getApplication();
@@ -297,6 +297,7 @@
 					</td>
                                         
 				</tr>	
+                               
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">

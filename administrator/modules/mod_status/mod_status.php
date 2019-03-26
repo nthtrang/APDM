@@ -98,13 +98,12 @@ $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'typ
 ?>
 <script language="javascript">
 function submitbutton1(pressbutton) {
-        
 			var form = document.adminForm1;		
                        
 			if (pressbutton == 'submit') {
 				var d = document.adminForm1;                             
 				if (d.text_search.value==""){
-					alert("Please input keyword");	
+				//	alert("Please input keyword");
 					d.text_search.focus();
 					return;				
 				}else{
@@ -113,26 +112,36 @@ function submitbutton1(pressbutton) {
 			}
 			
 		}
-                
 
+function autoSearchWoView(a){
+    var form = document.adminForm1;
+    setTimeout(function(){
+       // submitform('getWoScan');
+        window.location = "index.php?option=com_apdmpns&task=getWoScan&wo_code="+a;
+    }, 1);
+}
 </script>
 <?php
        
 
         
 $search = "<span class=\"search\"><form action=\"index.php?option=com_apdmpns&task=searchall\" method=\"post\" name=\"adminForm1\" onsubmit=\"submitbutton1('submit')\" >".
-$search .=         "Search &nbsp;&nbsp;<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='25' />&nbsp;&nbsp;Filter &nbsp;&nbsp;";
+$search .=         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search &nbsp;&nbsp;<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='20' />&nbsp;&nbsp;Filter &nbsp;&nbsp;";
 $search .=         $type_filter;				
 $search .=         "&nbsp;&nbsp;<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
+$search .=         "&nbsp;&nbsp;<br>Scan WO Barcode <input autofocus type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
 $search .=         "</form></span>";
 
 $output[] = "";
 $gettask= JRequest::getVar('task');
-$array_task = array("so_detail","somanagement","so_detail_wo","so_detail_support_doc","so_detail_wo_history");
+$array_task = array("so_detail","somanagement","so_detail_wo","so_detail_support_doc","so_detail_wo_history","wo_detail");
 if(in_array($gettask,$array_task))
 {
     $output[] = "<a href='index.php?option=com_apdmpns&task=searchadvance&clean=all'><input type='button' style='margin-bottom:1px;line-height:17px;padding:1px 11px 0 18px;' name='searchadvance' value='Advance Search' /></a>";
+    //$output[] = "<form  onsubmit=\"submitbutton1('getWoScan')\" action=\"index.php?option=com_apdmpns&task=getWoScan\" method=\"post\" name=\"adminFormView\">Scan WO Barcode: <input type=\"text\" size =\"15\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"somanagement\" ></form>";
+//    $output[] = "<input type=\"hidden\" name=\"option\" value=\"com_apdmpns\">";
+  //  $output[] = "<input type="\hidden\" name=\"task\" value=\"somanagement\"></form>";
 }
 //Print the logged in users message
 $output[] = "<span class=\"loggedin-users\"><a href=\"index.php?option=com_apdmusers&amp;view=apdmuser&amp;task=profile&amp;cid[]=".$user->get('id')."\">".$user->get('name')."</a></span>";

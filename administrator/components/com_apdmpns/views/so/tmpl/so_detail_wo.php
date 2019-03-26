@@ -238,13 +238,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         $remain_day = 0;                        
 						if($row->wo_state != 'done' && $row->wo_state != 'cancel')
                         {
-                                $background= "style='background-color:#f00;color:#fff'";
+                            $remain_day = $row->wo_remain_date+1;
+                            $background= "style='background-color:#f00;color:#fff'";
                         }
                 }
                 elseif($row->wo_remain_date<=3)
                 {
 						if($row->wo_state != 'done' && $row->wo_state != 'cancel')
                         {
+                            $remain_day = $row->wo_remain_date+1;
 							$background= "style='background-color:#ff0;color:#000'";
 						}
 						

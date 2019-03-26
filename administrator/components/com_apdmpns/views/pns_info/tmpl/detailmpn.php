@@ -1,7 +1,8 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-<?php
+<?php JHTML::_('behavior.modal');
+
 	$cid = JRequest::getVar( 'cid', array(0) );
 	//$edit		= JRequest::getVar('edit',true);
 	//$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
@@ -300,7 +301,7 @@
 					</td>
                                         
 				</tr>	
-				                          
+				   
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">

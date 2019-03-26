@@ -72,25 +72,42 @@
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px;width:25%"">Created Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px;width:25%""><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">WO:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->wo_code;?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->wo_code)?$this->sto_row->wo_code:"NA";?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Completed Date:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">Customer:</td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php  echo $this->sto_row->ccs_name; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px">
+            <?php
+            if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
+            }
+            else
+            {
+                echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";
+            }
+            ?>
+            </td>
     </tr>
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">State:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->sto_row->sto_state;?></td>
-        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">PO#:</td>
+        <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px">SO:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php
-            $soNumber = $this->sto_row->so_cuscode;
-            if($this->sto_row->ccs_code)
-            {
-                $soNumber = $this->sto_row->ccs_code."-".$soNumber;
+            if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                echo SToController::getSoCodeFromId($this->sto_row->sto_so_id);
+
             }
-            echo $soNumber;
+            else
+            {
+                $soNumber = $this->sto_row->so_cuscode;
+                if($this->sto_row->ccs_code)
+                {
+                    $soNumber = $this->sto_row->ccs_code."-".$soNumber;
+                }
+                echo ($soNumber)?$soNumber:"NA";
+            }
             ?></td>
     </tr>
     <tr>

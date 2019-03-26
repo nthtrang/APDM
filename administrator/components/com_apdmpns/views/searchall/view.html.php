@@ -90,7 +90,7 @@ if ($type_filter==0){
                     $db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');
                     $rs_sto = $db->loadObjectList();
 
-                    $db->setQuery('SELECT * FROM apdm_pns_tto WHERE (tto_code LIKE '.$searchEscaped.' OR  tto_description LIKE '.$searchEscaped .' )');
+                    $db->setQuery('SELECT *,p.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain  FROM apdm_pns_tto WHERE (tto_code LIKE '.$searchEscaped.' OR  tto_description LIKE '.$searchEscaped .' )');
                     $rs_tto = $db->loadObjectList();
 
                     //so
@@ -268,12 +268,14 @@ else
                 break;
                 case '14': //TTO
                     //STO
+                    $filter_order ="";
+                    $filter_order_Dir="";
                     $filter_order        =  $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.tto_code',    'cmd' );
                     $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );
                     //select table STO with keyword input
-                    $query = 'SELECT * FROM apdm_pns_tto p'
+                   $query = 'SELECT p.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain  FROM apdm_pns_tto p'
                         . ' WHERE (p.tto_code LIKE '.$searchEscaped.' OR  p.tto_description LIKE '.$searchEscaped .' ) '
-                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir
+                        .  ' ORDER BY  p.tto_code '. $filter_order_Dir
                     ;
                     $db->setQuery($query);
                     //$db->setQuery('SELECT * FROM apdm_pns_sto WHERE (sto_code LIKE '.$searchEscaped.' OR  sto_description LIKE '.$searchEscaped .' )');

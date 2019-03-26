@@ -246,6 +246,7 @@ if (count($this->rs_so) > 0) { ?>
                                 $remain_day = 0;
                                 if($so->so_state != 'done' && $so->so_state != 'cancel')
                                 {
+                                        $remain_day = $so->so_remain_date+1;  
                                         $background= "style='background-color:#f00;color:#fff'";
                                 }
                         }
@@ -253,6 +254,7 @@ if (count($this->rs_so) > 0) { ?>
                         {        
                                 if($so->so_state != 'done' && $so->so_state != 'cancel')
                                 {
+                                        $remain_day = $so->so_remain_date+1;  
                                         $background= "style='background-color:#ff0;color:#000'";
                                 }
                         }				

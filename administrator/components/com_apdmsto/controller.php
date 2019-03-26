@@ -1009,10 +1009,18 @@ class SToController extends JController
         }
         $return = JRequest::getVar('return');
         $sto_state="Create";
-        if($post['sto_isdelivery_good'])
-            $sto_state = "InTransit";
-        $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_wo_id,sto_isdelivery_good) VALUES ('" . $sto_code . "', '" . strtoupper($post['sto_description']) . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',2,'".$me->get('id')."','".$post['sto_wo_id']."','".$post['sto_isdelivery_good']."')");
-        $db->query();
+        if($post['sto_isdelivery_good'])//save moew SO
+        {
+                $sto_state = "InTransit";
+                $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_so_id,sto_isdelivery_good) VALUES ('" . $sto_code . "', '" . strtoupper($post['sto_description']) . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',2,'".$me->get('id')."','".$post['sto_so_id']."','".$post['sto_isdelivery_good']."')");
+                $db->query();
+        }
+        else {
+                $sto_state="Create";
+                $db->setQuery("INSERT INTO apdm_pns_sto (sto_code,sto_description,sto_state,sto_created,sto_create_by,sto_type,sto_stocker,sto_wo_id,sto_so_id,sto_isdelivery_good) VALUES ('" . $sto_code . "', '" . strtoupper($post['sto_description']) . "', '" . $sto_state . "', '" . $datenow->toMySQL() . "', '" . $me->get('id') . "',2,'".$me->get('id')."','".$post['sto_wo_id']."','".$post['sto_so_id']."','".$post['sto_isdelivery_good']."')");
+                $db->query();
+        }
+       
 
         //getLast ETO ID
         $eto_id = $db->insertid();
@@ -1427,12 +1435,41 @@ class SToController extends JController
         echo $result;      
         exit;
     }
+ function ajax_so_toeto()
+    {
+        $db = & JFactory::getDBO();
+        $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
+        $id = $cid[0];
+        if($id)
+        {
+                $db->setQuery("SELECT so.pns_so_id, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=".$id);
+                $row =  $db->loadObject();
+                $soNumber = $row->so_cuscode;
+                if($row->ccs_code)
+                {
+                    $soNumber = $row->ccs_code."-".$soNumber;
+                }
+                $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber;
+                
+        }
+        else {
+               $result = '0^NA^0^NA'; 
+        }
+        echo $result;      
+        exit;
+    }    
     function get_wo_ajax()
     {
         JRequest::setVar( 'layout', 'list'  );
         JRequest::setVar( 'view', 'getwo' );
         parent::display();
     }
+        function get_so_ajax()
+    {
+        JRequest::setVar( 'layout', 'list'  );
+        JRequest::setVar( 'view', 'getso' );
+        parent::display();
+    }    
     function get_po_ajax()
     {
         JRequest::setVar( 'layout', 'list'  );
@@ -1473,4 +1510,36 @@ class SToController extends JController
         return $inventory;
         exit;
     }
+    function getSoCodeFromId($soId)
+    {
+        $db = & JFactory::getDBO();
+        $result  = "NA";
+        $query = 'SELECT  so.pns_so_id,so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code '
+                . ' from apdm_pns_so so'
+                . ' left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id='.$soId;
+        $db->setQuery($query);
+        $row =  $db->loadObject();
+        $soNumber = $row->so_cuscode;
+        if($row->ccs_code)
+        {
+            $soNumber = $row->ccs_code."-".$soNumber;
+        }
+        $result = $soNumber;
+        return  $result;      
+    } 
+    function getCustomerCodeFromSoId($soId)
+    {
+        $db = & JFactory::getDBO();
+        $result            = "NA";
+        $query = 'SELECT  so.pns_so_id,so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code '
+                . ' from apdm_pns_so so'
+                . ' left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id='.$soId;
+        $db->setQuery($query);
+        $row =  $db->loadObject();        
+        if($row->ccs_name)
+        {
+            return $row->ccs_name;
+        }
+        return "NA";
+    }    
 }

@@ -4,27 +4,23 @@
 <script language="javascript">
 function UpdateECO(){	
 	if ($('boxchecked').value==0){
-		alert('Please select one WO number.');
+		alert('Please select one SO number.');
 		return false;
 	}else if($('boxchecked').value > 1){
-		alert('Please choose only one WO. Thanks');
+		alert('Please choose only one SO. Thanks');
 		return false;
 	}else{
-		var url = 'index.php?option=com_apdmsto&task=ajax_wo_toeto';
+		var url = 'index.php?option=com_apdmsto&task=ajax_so_toeto';
 		var MyAjax = new Ajax(url, { 
 			method:'post',
 			data:  $('adminFormEco').toQueryString(),
 			onComplete:function(result){	
 				var eco_result = result;
 				eco = eco_result.split('^');
-                                window.parent.document.getElementById('po_customer').innerHTML =  eco[3];
-                                window.parent.document.getElementById('ccs_name').innerHTML = eco[1];
-                                window.parent.document.getElementById('sto_so_id').value = eco[2];
-                                window.parent.document.getElementById('customer_id').value = eco[0];
-                                window.parent.document.getElementById('sto_wo_id').value = eco[4];
-                                window.parent.document.getElementById('wo_code').value = eco[5];
-
-
+                window.parent.document.getElementById('customer_id').value = eco[0];
+                window.parent.document.getElementById('ccs_name').innerHTML = eco[1];
+                window.parent.document.getElementById('sto_so_id').value =  eco[2];
+                window.parent.document.getElementById('so_code').value = eco[3];
                 window.parent.document.getElementById('sbox-window').close();
 				
 
@@ -36,7 +32,7 @@ function UpdateECO(){
 }
 </script>
 
-<form action="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" method="post" name="adminForm" id="adminFormEco">
+<form action="index.php?option=com_apdmsto&task=get_so_ajax&tmpl=component" method="post" name="adminForm" id="adminFormEco">
 	<table  width="100%">
 		<tr>
 			<td width="35%" >
@@ -63,11 +59,8 @@ function UpdateECO(){
 					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 				</th>
 				<th class="title" width="10%">
-					<?php echo JHTML::_('grid.sort',   'WO', 'wo.wo_code', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   'SO', 'so.so_cuscode', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
-                <th width="20%" class="title">
-                    <?php echo JText::_( 'SO' ); ?>
-                </th>
                 <th width="10%" class="title">
                     <?php echo JText::_( 'Customer' ); ?>
                 </th>			
@@ -75,7 +68,7 @@ function UpdateECO(){
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="5">
+				<td colspan="4">
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -94,10 +87,6 @@ function UpdateECO(){
                                 <td align="center">
                                     NA
                                 </td>
-                                <td align="center"> NA
-				</td>				
-				
-				
 			</tr>
 		<?php
 			$k = 0;
@@ -116,19 +105,14 @@ function UpdateECO(){
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->pns_wo_id ); ?>
+					<?php echo JHTML::_('grid.id', $i, $row->pns_so_id ); ?>
 				</td>
-                <td align="center">
-                    <?php echo $row->wo_code; ?>
-                </td>
                 <td align="center">
                     <?php echo $soNumber; ?>
                 </td>
                 <td align="center">
 						<?php echo $row->ccs_name; ?>
-				</td>				
-				
-				
+				</td>
 			</tr>
 			<?php
 				$k = 1 - $k;

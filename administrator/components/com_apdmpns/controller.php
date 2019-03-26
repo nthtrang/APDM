@@ -8869,10 +8869,28 @@ class PNsController extends JController {
         function GetEtoPns($pns_id)
         {
                 $db =& JFactory::getDBO();	
-                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_type = 2 and sto.sto_state != 'Create'";
+                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state != 'Create'";
                 $db->setQuery($query);
                 return $db->loadObjectList();
 
                 
+        }
+        function quickViewWo()
+        {
+            JRequest::setVar('layout', 'scanscreen');
+            JRequest::setVar('view', 'wo');
+            parent::display();
+        }
+        function getWoScan()
+        {
+            $db =& JFactory::getDBO();
+            $wo_code = JRequest::getVar('wo_code');
+            $query = "SELECT pns_wo_id FROM apdm_pns_wo where wo_code  = '".trim($wo_code)."'";
+            $db->setQuery($query);
+            $pns_wo_id = $db->loadResult();
+            if ($pns_wo_id) {
+                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id='.$pns_wo_id);
+            }
+            return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
         }
 }
