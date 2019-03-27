@@ -8912,6 +8912,57 @@ class PNsController extends JController {
                 }                 
                 return $msg = JText::_('Have add Tool PN successfull.');
         }
+        function ajax_scanadd_pnstool_bom()
+        {
+                $db = & JFactory::getDBO();
+                $parent_id = JRequest::getVar('pns_id');   
+                $pns_code = JRequest::getVar('pns_code');   
+                $arrPn = explode("-", $pns_code);
+               
+                $ccs_code = $arrPn[0];
+                $pns_code = $arrPn[1]."-".$arrPn[2];                
+                if($arrPn[3])
+                {
+                        $pns_revision = $arrPn[3];
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                }
+                else {
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                }
+                $db->setQuery($query);
+                $pn_id = $db->loadResult();
+                $db->setQuery("INSERT INTO apdm_pns_tool_bom (pns_id,pns_tool_id) VALUES ( '" . $parent_id . "','" . $pn_id . "')");
+                $db->query(); 
+                 $msg = JText::_('Have add PN successfull.');                
+                $db = & JFactory::getDBO();
+                $db->setQuery("select tool.id, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$parent_id);
+                $rows= $db->loadObjectList();     
+                 $str = '<table class="adminlist" cellspacing="1" width="100%"><tr>'.
+                        '<td class="key">No.</td>'.
+                        '<td class="key">Tool PN</td>'.
+                        '<td class="key"></td>'.
+                        '</tr>';
+                 $i=0;
+                foreach ($rows as $row) {
+                        $i++;
+                         if ($row->pns_revision) {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                        } else {
+                                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+                        }           
+                      $link = "index.php?option=com_apdmpns&task=removetoolbom&id=".$row->id."&pns_id=". $parent_id;
+                        $str .= '<tr>'.
+                                ' <td width="2%"  align="center">'.$i.'</td>'.
+                                ' <td align="center" width="20%" class="title">'.$pnNumber.'</td>'.                                
+                                ' <td align="center"  width="15%" class="title"><a href="'.$link.'" />Remove</a></td></tr>';
+                }
+                $str .='</table>';
+                echo $str;
+                exit;
+                
+                
+        }        
+        
         function getToolPnAddtoBom($pns_id)
         {
                 $db = & JFactory::getDBO();
@@ -8927,6 +8978,13 @@ class PNsController extends JController {
                 $db->setQuery($query);
                 $db->query();
                 $msg = JText::_('Have add remove Tool PN successfull.');
-                return $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]='.$parent_id,$msg);
+                $query = "select pns_cpn from apdm_pns where pns_id = ".$parent_id;
+                $db->setQuery($query);
+                $pns_cpn = $db->loadResult();
+                if($$pns_cpn==1)
+                        $link 	= 'index.php?option=com_apdmpns&task=detailmpn&cid[0]='.$parent_id;	
+                else
+                        $link 	= 'index.php?option=com_apdmpns&task=detail&cid[0]='.$parent_id;	
+                return $this->setRedirect($link,$msg);
         }
 }

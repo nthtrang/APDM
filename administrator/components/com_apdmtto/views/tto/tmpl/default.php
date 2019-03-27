@@ -55,34 +55,85 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 			
         }
 </script>
+<style>
+section {
+  position: relative;
+  padding-top: 30px;
+      text-align: center;
+    background: #f0f0f0;
+    color: #666;
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #fff;
+}
+section.positioned {
+  position: absolute;
+  top:100px;
+  left:100px;
+  width:800px;
+  box-shadow: 0 0 15px #333;
+}
+.container {
+  overflow-y: auto;
+  height: 160px;
+}
+table {
+  border-spacing: 0;
+  width:100%;
+}
+td + td {
+  border-left:1px solid #eee;
+}
+td, th {
+  border-bottom:1px solid #eee;
+  padding: 10px 10px 7px 0px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  white-space: nowrap;
+}
+th div{
+  position: absolute;
+  background: transparent;
+     color: #666;
+  padding: 10px;
+  top: 0;
+  line-height: normal;
+    border-left: 1px solid #fff;
+}
+th:first-child div{
+  border: none;
+}
+</style>
 <div class="clr"></div>
 <form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
     <fieldset class="adminform">
         <legend><font style="size:14px"><?php echo JText::_( 'Tools Tracking' ); ?> </font></legend>
+        <section class="">
+                <div class="col width-100 scroll container">
         <?php if (count($this->ttos_list) > 0) { ?>
-                <table class="adminlist" cellspacing="1" width="400">
-                         <thead>
-                               <tr class="header">
-                                        <th  class="title" width="50"><?php echo JText::_('NUM'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('TTO'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Description'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('State'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Created Date'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Created By'); ?></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
-                                        <th  class="title" width="100"></th>
+                 
+               <table class="adminlist1" cellspacing="1" width="400">
+                        <thead>
+                               <tr class="header">                                   
+                                        <th width="100"><?php echo JText::_('NUM'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('NUM'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('TTO'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('TTO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('State'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>                                        
+                                        <th width="100"><?php echo JText::_('Created Date'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created Date'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Created By'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created By'); ?></th>
+                                        <th width="100"><?php echo JText::_('Time Remain'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Time Remain'); ?></th>
+                                        <th  class="title" width="100">&nbsp;<div style="width:100px;padding:10px 0px 0px 25px">&nbsp;</div></th>
                                 </tr>
                         </thead> 
-                        <tfoot>
-			<tr>
-				<td colspan="16">
-					<?php  echo $this->pagination->getListFooter(); ?>
-				</td>
-			</tr>
-		</tfoot>
+                        
                         <tbody>					
         <?php
         $i = 0;
@@ -137,6 +188,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         } ?>
                 </tbody>
                 </table>
+                        </div>
     </fieldset>
         <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
         <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
@@ -146,23 +198,26 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="boxchecked" value="0" />
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
-</form>
-<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Tools History' ); ?></legend>
+</form><fieldset class="adminform">
+<legend><?php echo JText::_( 'Tools History' ); ?></legend>
+<section class="">
+        <div class="col width-100 scroll container">
+
+		
 <?php if (count($this->tools) > 0) { ?>
-         <div class="col width-100 scroll">
-                <table class="adminlist" cellspacing="1" width="400">
+       
+                <table class="adminlist1" cellspacing="1" width="400">
                         <thead>
-                                <tr>
-                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('TTO'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('State'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Date-Out'); ?></th>
-                                        <th width="100"><?php echo JText::_('Date-In'); ?></th>
-                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Created By'); ?></th>
-                                        <th width="100"><?php echo JText::_('Time Remain'); ?></th>
+                               <tr class="header">
+                                        <th width="100"><?php echo JText::_('NUM'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('NUM'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('TTO'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('TTO'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></th>                                                
+                                        <th width="100"><?php echo JText::_('State'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>                                        
+                                        <th width="100"><?php echo JText::_('Date-Out'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Date-Out'); ?></th>
+                                        <th width="100"><?php echo JText::_('Date-In'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Date-In'); ?></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Created By'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created By'); ?></th>
+                                        <th width="100"><?php echo JText::_('Time Remain'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Time Remain'); ?></th>
                                 </tr>
                         </thead>
                         <tbody>					
@@ -211,6 +266,5 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                  <?php 
                  }
                  ?>
-
- 
-</fieldset>
+</div>
+</section></fieldset>

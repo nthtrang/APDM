@@ -321,13 +321,14 @@
                                                 <?php $pntool =  PNsController::getToolPnAddtoBom($this->row->pns_id);
                                                 if($pntool){
                                                 ?>
-                                               <table class="adminlist" cellspacing="1" width="100%">
-                                    <thead>
+                                                <div id="tool_pnlists">
+                                              <table class="adminlist" cellspacing="1" width="100%">
+                                   
                                                         <tr>
-                                                                <th width="2%"  align="center" class="title"><?php echo JText::_( 'NUM' ); ?></th>
-                                                                <th  align="center" width="20%" class="title">Tool PN</th>                                                               
-                                                                <th align="center"  width="15%"   class="title"></th>
-                                                        </tr></thead> 
+                                                                <th width="2%"  align="center" class="key"><?php echo JText::_( 'NUM' ); ?></th>
+                                                                <th  align="center" width="20%" class="key">Tool PN</th>                                                               
+                                                                <th align="center"  width="15%" class="key"></th>
+                                                        </tr> 
                                                 <?php 
                                                         $i=0;
                                                         foreach($pntool as $pn)
@@ -347,10 +348,10 @@
                                                         <?php 
                                                         }
                                                 ?>
-                                                        </table>
+                                                        </table></div>
                                                 <?php }?>
                                                 
-					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
+					<a class="modal-button" rel="{handler: 'iframe', size: {x: 850, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
                                                 <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/>
                                         
                                         </td>

@@ -76,7 +76,8 @@ class SToViewsto extends JView
             . $orderby;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
-        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+       // $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+         $db->setQuery( $query );
         $rows = $db->loadObjectList(); 
         
         

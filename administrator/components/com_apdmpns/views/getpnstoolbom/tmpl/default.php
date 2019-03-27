@@ -41,14 +41,29 @@ function UpdatePnsTool(){
 	}
 	
 }
+function autoAddPartTool(pns,parent_id)
+{
+        var url = 'index.php?option=com_apdmpns&task=ajax_scanadd_pnstool_bom&pns_id='+parent_id+'&pns_code='+pns;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                   document.getElementById('notice').innerHTML = "Have add PN successfull.";	       
+                   document.getElementById('pns_code').value ="";
+                    window.parent.document.getElementById('tool_pnlists').innerHTML =result;
+                   document.getElementById('pns_code').focus();
+                }
+        }).request();        
+}
 </script>
-<form action="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&tto_id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[]=<?php echo $pns_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
+<div name="notice" style="color:#D30000" id ="notice"></div>
 <table  width="100%">
 		<tr>
 			<td colspan="4"  >
 				<?php echo JText::_( 'Search' ); ?>:
 				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter')?> 
+                                
 				<?php echo $this->lists['type_filter'];?>
 				&nbsp;&nbsp;
 			<button onclick="javascript: return CheckForm()"><?php echo JText::_( 'Go' ); ?></button>
@@ -58,6 +73,10 @@ function UpdatePnsTool(){
 			<td align="right"><input type="button" name="btinsert" value="Save" onclick="UpdatePnsTool();" /> 
                         </td>	
 		</tr>
+                <tr>
+                        <td>
+                                Scan PN Barcode <input onchange="autoAddPartTool(this.value,'<?php echo $pns_id; ?>')"  onkeyup="autoAddPartTool(this.value,'<?php echo $pns_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+                        </td>
 		</tr>			
 </table>
     <table class="adminlist" cellpadding="1">
@@ -152,10 +171,7 @@ function UpdatePnsTool(){
                         }
                     } ?>
                 </td>
-                <td align="center" width="77px">
-                    <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->location?PNsController::GetCodeLocation($row->location):"";?></span>
-
-                </td>
+                
                 <td align="center" width="77px">
                     <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->location?PNsController::GetCodeLocation($row->location):"";?></span>
 

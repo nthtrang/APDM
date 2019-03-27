@@ -65,11 +65,11 @@ class TToViewtto extends JView
             . $orderby;
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
-        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        $db->setQuery( $query);
 
         $rows = $db->loadObjectList(); 
         
-        $query = "select  tto.*,DATEDIFF(p.tto_due_date, CURDATE()) + 1 as tto_remain from apdm_pns_tto tto where tto.tto_state = 'Done'";
+        $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain from apdm_pns_tto tto where tto.tto_state = 'Done'";
         $db->setQuery($query);
         $list_tools = $db->loadObjectList();         
         $this->assignRef('tools', $list_tools);
