@@ -72,7 +72,7 @@ class pnsViewgetpnstoolbom extends JView
         if($filter_modified_by){
             $where[] = 'p.pns_modified_by ='.$filter_modified_by;
         }
-		
+
        if (isset( $search ) && $search!= '')
         {
             $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
@@ -83,14 +83,19 @@ class pnsViewgetpnstoolbom extends JView
             switch($type_filter){
                case '9': //Manufacture
                     $arr_tool_id = array();
-                    $db->setQuery('select fk.pns_id from apdm_pns_sto_fk fk inner join apdm_pns_location apl on fk.location = apl.pns_location_id inner join apdm_pns_sto aps on fk.sto_id = aps.pns_sto_id and sto_type = 1 inner join apdm_pns p on fk.pns_id = p.pns_id and p.ccs_code = "206" AND ( apl.location_code LIKE '.$searchEscaped.' OR apl.location_description LIKE '.$searchEscaped.')');                    
+                    $db->setQuery('select fk.pns_id,fk.location from apdm_pns_sto_fk fk inner join apdm_pns_sto aps on fk.sto_id = aps.pns_sto_id inner join apdm_pns_location loc on loc.pns_location_id = fk.location inner join apdm_pns p on fk.pns_id = p.pns_id and p.ccs_code = "206" where loc.location_code  LIKE '.$searchEscaped);
+                  //  echo $db->getQuery();
                     $rs_mf = $db->loadObjectList();
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
-                            $arr_tool_id[] = $mf->pns_id;
+                            $arr_tool_id[] = $mf->location;
                         }
                         $arr_tool_id = array_unique($arr_tool_id);
-                        $where[] = 'p.pns_id IN ('.implode(',', $arr_tool_id).')';
+                        $where[] = 'fk.location IN ('.implode(',', $arr_tool_id).')';
+                    }
+                    else
+                    {
+                        $where[] = 'fk.location IN (0)';
                     }
                     
                 break;
@@ -152,12 +157,12 @@ class pnsViewgetpnstoolbom extends JView
         //$where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
                 
 //        $query = "SELECT  COUNT(p.pns_id)  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
-          $query = "SELECT COUNT(fk.id) FROM apdm_pns "
-                        . $filter
-                        . $where                                          
-                        ." group by fk.id"
-                        . $orderby ;
-       //echo $query;
+        $query = "SELECT COUNT(fk.id) FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+            . $filter
+            . $where
+            ." group by fk.id"
+            . $orderby ;
+
         $db->setQuery( $query );
         $total = $db->loadResult();
 
@@ -176,12 +181,12 @@ class pnsViewgetpnstoolbom extends JView
 //                        . $where                                          
 //                        ." group by fk.pns_id"
 //                        . $orderby ;
-         
-          $query = "SELECT p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM  apdm_pns AS p "
-                        . $filter
-                        . $where                                                                  
-                        . $orderby ;
-//         $db->setQuery( $query2 );
+
+        $query = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+            . $filter
+            . $where
+            . $orderby ;
+        //         $db->setQuery( $query2 );
 //         $pns_list2 = $db->loadObjectList();                  
 //         $this->assignRef('sto_pn_list2',        $pns_list2);
         

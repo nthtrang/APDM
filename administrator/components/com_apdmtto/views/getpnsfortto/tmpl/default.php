@@ -82,9 +82,6 @@ function UpdatePnsEco(){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
 				</th>       
-                                <th width="7%" class="title" nowrap="nowrap">
-					<?php echo JText::_('ITO'); ?>
-				</th>                                
 				<th width="17%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
@@ -150,9 +147,7 @@ function UpdatePnsEco(){
                                 <td align="center">
 					<?php echo $row->pns_life_cycle;?>
 				</td>     
-                                <td align="center">
-					<?php echo $row->sto_code;?>
-				</td> 
+
 				<td align="left">
 					<?php echo  $row->pns_description; ?>
 				</td>		

@@ -1365,12 +1365,17 @@ class TToController extends JController
     }
     function ajax_po_toito()
     {
+
         $db = & JFactory::getDBO();
         $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
         $id = $cid[0];
-        $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=".$id);
-        $row =  $db->loadObject();
-        $result = $row->pns_po_id.'^'.$row->po_code;
+        if($id) {
+            $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=" . $id);
+            $row = $db->loadObject();
+            $result = $row->pns_po_id . '^' . $row->po_code;
+        }else {
+            $result = '0^NA';
+        }
         echo $result;
         exit;
     }

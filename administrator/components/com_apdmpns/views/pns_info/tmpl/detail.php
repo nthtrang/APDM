@@ -23,7 +23,7 @@
         JToolBarHelper::title( $partnumber, 'cpanel.png');
 	JToolBarHelper::customX('export_detail', 'excel', '', 'Export', false);
 	if (in_array("E", $role) && $this->row->pns_life_cycle =='Create') {
-		JToolBarHelper::editListX();		
+		JToolBarHelper::editListX();
 	}
         else
         {
@@ -310,7 +310,7 @@
                                         
 				</tr>	
                                 <?php 
-                                        if($this->row->ccs_code=='206'){?>
+                                     //   if($this->row->ccs_code=='206'){?>
                                 <tr>
 					<td class="key" valign="top">
 						<label for="username">
@@ -357,7 +357,7 @@
                                         
 				</tr>	
                                 <?php
-                                        }
+                                  //      }
                                         ?>
                                 <tr>
                                         <td class="key" valign="top">

@@ -312,26 +312,57 @@
 						<?php echo $this->row->pns_uom; ?>
 					</td>
                                         
-				</tr>	
-				                    <?php 
-                                        if($this->row->ccs_code=='206'){?>
-                                <tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'Tool PN' ); ?>
-						</label>
-					</td>
-					<td>
-                                 
-					<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=get_eco&tmpl=component" title="Image">
-                                                <input type="button" name="addECO" value="<?php echo JText::_('Select ECO')?>"/>
-                                        
-                                        </td>
-                                        
-				</tr>	
-                                <?php
-                                        }
-                                        ?>       
+				</tr>
+                <?php
+             //   if($this->row->ccs_code=='206'){?>
+                    <tr>
+                        <td class="key" valign="top">
+                            <label for="username">
+                                <?php echo JText::_( 'Tool PN' ); ?>
+                            </label>
+                        </td>
+                        <td>
+                            <?php $pntool =  PNsController::getToolPnAddtoBom($this->row->pns_id);
+                            if($pntool){
+                                ?>
+                                <table class="adminlist" cellspacing="1" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th width="2%"  align="center" class="title"><?php echo JText::_( 'NUM' ); ?></th>
+                                        <th  align="center" width="20%" class="title">Tool PN</th>
+                                        <th align="center"  width="15%"   class="title"></th>
+                                    </tr></thead>
+                                    <?php
+                                    $i=0;
+                                    foreach($pntool as $pn)
+                                    {
+                                        $i++;
+                                        ?>
+                                        <tr><td><?php echo $i;?></td><td><?php
+                                                if($pn->pns_revision){
+                                                    $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
+                                                }
+                                                else{
+                                                    $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
+                                                }
+
+                                                echo $toolpns_code;
+                                                ?></td><td><a href="index.php?option=com_apdmpns&task=removetoolbom&id=<?php echo $pn->id;?>&pns_id=<?php echo $this->row->pns_id;?>">Remove</a></td></tr>
+                                        <?php
+                                    }
+                                    ?>
+                                </table>
+                            <?php }?>
+
+                            <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
+                                <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/>
+
+                        </td>
+
+                    </tr>
+                    <?php
+             //   }
+                ?>
                                 <tr>
                                         <td class="key" valign="top">
                                                 <label for="username">
