@@ -66,7 +66,7 @@ function autoAddPartTool(pns,parent_id)
                                 
 				<?php echo $this->lists['type_filter'];?>
 				&nbsp;&nbsp;
-			<button onclick="javascript: return CheckForm()"><?php echo JText::_( 'Go' ); ?></button>
+			<button><?php echo JText::_( 'Go' ); ?></button>
 			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value=='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
 			</td>
 			<tr align="right">

@@ -81,19 +81,24 @@ class TToViewgetpnsfortto extends JView
        
         if ($type_filter){           
             switch($type_filter){
-               case '9': //Manufacture
+                case '9': //Manufacture
                     $arr_tool_id = array();
-                    $db->setQuery('select fk.pns_id from apdm_pns_sto_fk fk inner join apdm_pns_location apl on fk.location = apl.pns_location_id inner join apdm_pns_sto aps on fk.sto_id = aps.pns_sto_id and sto_type = 1 inner join apdm_pns p on fk.pns_id = p.pns_id and p.ccs_code = "206" AND ( apl.location_code LIKE '.$searchEscaped.' OR apl.location_description LIKE '.$searchEscaped.')');                    
+                    $db->setQuery('select fk.pns_id,fk.location from apdm_pns_sto_fk fk inner join apdm_pns_sto aps on fk.sto_id = aps.pns_sto_id inner join apdm_pns_location loc on loc.pns_location_id = fk.location inner join apdm_pns p on fk.pns_id = p.pns_id and p.ccs_code = "206" where loc.location_code  LIKE '.$searchEscaped);
+                    //  echo $db->getQuery();
                     $rs_mf = $db->loadObjectList();
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
-                            $arr_tool_id[] = $mf->pns_id;
+                            $arr_tool_id[] = $mf->location;
                         }
                         $arr_tool_id = array_unique($arr_tool_id);
-                        $where[] = 'p.pns_id IN ('.implode(',', $arr_tool_id).')';
+                        $where[] = 'fk.location IN ('.implode(',', $arr_tool_id).')';
                     }
-                    
-                break;
+                    else
+                    {
+                        $where[] = 'fk.location IN (0)';
+                    }
+
+                    break;
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';

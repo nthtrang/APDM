@@ -82,6 +82,7 @@ function UpdatePnsEco(){
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('State'); ?>
 				</th>       
+                                                  
 				<th width="17%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>

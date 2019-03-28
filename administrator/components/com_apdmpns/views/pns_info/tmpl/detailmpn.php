@@ -321,11 +321,11 @@
                                 <?php echo JText::_( 'Tool PN' ); ?>
                             </label>
                         </td>
-                        <td>
+                        <td> <div id="tool_pnlists">
                             <?php $pntool =  PNsController::getToolPnAddtoBom($this->row->pns_id);
                             if($pntool){
                                 ?>
-                                <div id="tool_pnlists">
+
                                <table class="adminlist" cellspacing="1" width="100%">
                                    
                                                         <tr>
@@ -352,9 +352,9 @@
                                         <?php
                                     }
                                     ?>
-                                </table></div>
+                                </table>
                             <?php }?>
-
+                            </div>
                             <a class="modal-button" rel="{handler: 'iframe', size: {x: 850, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
                                 <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/>
 

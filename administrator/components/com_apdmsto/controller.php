@@ -1566,9 +1566,9 @@ class SToController extends JController
                         $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
                 }
                  $db->setQuery($query);
-                 $pns_id = $db->loadResult();
+                 echo $pns_id = $db->loadResult(); 
                 //innsert to FK table                
-
+                
                 $location="";
                 $partstate="";
                 $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
