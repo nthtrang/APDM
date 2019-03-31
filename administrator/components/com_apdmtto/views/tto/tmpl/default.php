@@ -119,7 +119,7 @@ th:first-child div{
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
 <table class="adminlist1" cellspacing="1" width="400">
         <tr><td align="right">
-Scan PN Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLoadTool(this.value)" type="text"  name="tool_code" id="tool_code" value="" >
+Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLoadTool(this.value)" type="text"  name="tool_code" id="tool_code" value="" >
                 </td></tr>
 </table>
     <fieldset class="adminform">

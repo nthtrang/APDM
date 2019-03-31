@@ -128,7 +128,7 @@ function UpdatePnsEco(){
 				}
 				//echo $pns_image;							
                                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
-                                $qtyRemain = CalculateInventoryLocationPartValue($row->pns_id,$row->location,$row->partstate);
+                                $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
                                 if($qtyRemain<=0)
                                         continue;
                                         
@@ -139,7 +139,7 @@ function UpdatePnsEco(){
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>                                        
 				</td>
 				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
@@ -162,11 +162,11 @@ function UpdatePnsEco(){
 					} ?>
 				</td>	
                                  <td align="center" width="77px">					
-                                        <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->location?TToController::GetCodeLocation($row->location):"";?></span>
+                                       <?php echo $row->location?TToController::GetCodeLocation($row->location):"";?>                                        
 
                                 </td>	
                                 <td align="center" width="77px">					
-                                        <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"><?php echo $row->partstate?strtoupper($row->partstate):"";?></span>
+                                       <?php echo $row->partstate?strtoupper($row->partstate):"";?>
 
                                 </td> 
                               <td>
