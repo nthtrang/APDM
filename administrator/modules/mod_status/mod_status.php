@@ -114,11 +114,11 @@ function submitbutton1(pressbutton) {
 		}
 
 function autoSearchWoView(a){
-    var form = document.adminForm1;
-    setTimeout(function(){
+  //  var form = document.adminForm1;
+   // setTimeout(function(){
        // submitform('getWoScan');
-        window.location = "index.php?option=com_apdmpns&task=getWoScan&wo_code="+a;
-    }, 1);
+        window.location = "index.php?option=com_apdmpns&task=getBarcodeScan&wo_code="+a+"&timem=<?php echo time();?>";
+  //  }, 1);
 }
 </script>
 <?php
@@ -130,7 +130,7 @@ $search .=         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 $search .=         $type_filter;				
 $search .=         "&nbsp;&nbsp;<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
-$search .=         "&nbsp;&nbsp;<br>Scan WO Barcode <input type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
+$search .=         "&nbsp;&nbsp;<br>Scan Barcode <input type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
 $search .=         "</form></span>";
 
 $output[] = "";

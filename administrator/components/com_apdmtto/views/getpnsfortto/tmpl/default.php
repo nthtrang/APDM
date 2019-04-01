@@ -119,14 +119,8 @@ function UpdatePnsEco(){
                                 if($row->pns_revision)
                                         $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
                                 else
-                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
-                                
-				if ($row->pns_image !=''){
-					$pns_image = $path_image.$row->pns_image;
-				}else{
-					$pns_image = JText::_('NONE_IMAGE_PNS');
-				}
-				//echo $pns_image;							
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;                                
+						
                                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
                                 $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
                                 if($qtyRemain<=0)
@@ -139,12 +133,10 @@ function UpdatePnsEco(){
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>                                        
-                    <?php echo $row->id; ?>
-                </td>
-				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
-					<?php echo $pns_code;?>
-				</span>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>                                                            
+                                </td>
+				<td align="left">
+					<?php echo $pns_code;?>				
 				</td>	
                                 <td align="center">
 					<?php echo $row->pns_life_cycle;?>

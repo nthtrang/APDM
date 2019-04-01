@@ -116,20 +116,17 @@ class TToViewgetpnsfortto extends JView
                     break;                
                 
                 case '5': //for code
-                    $leght = strlen (trim($keyword));                    
+                    $leght = strlen (trim($keyword));                      
                     if($leght==10){
                          $arr_code = explode("-", trim($keyword));
                          $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
-                   }else{  
-                           if($keyword)
-                           {
-                                 $arr_code = explode("-", trim($keyword));
-                                 $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" and p.pns_code like "%'.$arr_code[1] .'-'.$arr_code[2].'%" and p.pns_revision LIKE "%'.$arr_code[3].'%"';
-                                 //$where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
-                           }
-                     
-                   }          
+                   }else{
+                               if($searchEscaped) {                                       
+                                   $arr_code = explode("-", trim($keyword));
+                                   $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%" or p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                               }
+                   }        
                 break;
             }
             
@@ -169,26 +166,13 @@ class TToViewgetpnsfortto extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-//        $query = 'SELECT p.* '
-//            . ' FROM apdm_pns AS p'
-//            . $filter
-//            . $where            
-//            . $orderby
-//        ;
-        
-//        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,p.pns_life_cycle,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
-//                        . $filter
-//                        . $where                                          
-//                        ." group by fk.pns_id"
-//                        . $orderby ;
          
          $query = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
                         . $filter
-                        . $where                                                                  
-                        . $orderby ;
-//         $db->setQuery( $query2 );
-//         $pns_list2 = $db->loadObjectList();                  
-//         $this->assignRef('sto_pn_list2',        $pns_list2);
+                        . $where                                                                                          
+                        . " group by fk.location,fk.partstate "
+                        . $orderby;
+
         
         
         $lists['query'] = base64_encode($query);   

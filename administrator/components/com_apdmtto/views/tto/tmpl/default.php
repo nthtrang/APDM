@@ -36,7 +36,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         }
                 }
                 
-                 if (pressbutton == 'search_qty') {
+                 if (pressbutton == 'search_tool_out') {
                         submitform( pressbutton );
                         return;
                 }
@@ -199,16 +199,22 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                 </table>
                         </div>
     </fieldset>
-        <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
-        <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
-        <input type="hidden" name="option" value="com_apdmtto" />
-        <input type="hidden" name="task" value="tto" />
-        <input type="hidden" name="redirect" value="tto" />
-        <input type="hidden" name="boxchecked" value="0" />
-        <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
-<?php echo JHTML::_('form.token'); ?>
-</form><fieldset class="adminform">
+<fieldset class="adminform">
 <legend><?php echo JText::_( 'Tools History' ); ?></legend>
+<table width="80%" border="0">
+                        <tr>
+                                <td align="right">
+                                        Date Out From&nbsp;&nbsp
+                                        <?php echo JHTML::_('calendar',$this->date_out_from, 'tto_owner_out_confirm_date_from', 'tto_owner_out_confirm_date_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->date_out_to, 'tto_owner_out_confirm_date_to', 'tto_owner_out_confirm_date_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                        
+                           
+                                        <?php echo $this->lists['tto_create_by'];?>
+			<?php echo $this->lists['tto_owner_out'];?>
+                             <input type="submit"  onclick="submitbutton('search_tool_out')"  name="search_tool_out" value="Go">
+                                        <a href="index.php?option=com_apdmtto&amp;task=tto&amp;clean=all"><input type="button" value="Reset"></a></td>
+                        </tr>
+                </table>
 <section class="">
         <div class="col width-100 scroll container">
 
@@ -277,3 +283,13 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                  ?>
 </div>
 </section></fieldset>
+
+        <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
+        <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
+        <input type="hidden" name="option" value="com_apdmtto" />
+        <input type="hidden" name="task" value="tto" />
+        <input type="hidden" name="redirect" value="tto" />
+        <input type="hidden" name="boxchecked" value="0" />
+        <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
+<?php echo JHTML::_('form.token'); ?>
+</form>

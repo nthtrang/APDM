@@ -1566,23 +1566,23 @@ class SToController extends JController
                         $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
                 }
                  $db->setQuery($query);
-                 echo $pns_id = $db->loadResult(); 
+                 $pns_id = $db->loadResult(); 
                 //innsert to FK table                
-                
                 $location="";
                 $partstate="";
-                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
-                $sto_type = $db->loadResult(); 
-                if($sto_type==2)
-                {
-                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
-                        $row = $db->loadObject();        
-                        $location = $row->location;
-                        $partState = $row->partstate;                        
-                }
+//                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+//                $sto_type = $db->loadResult(); 
+//                if($sto_type==2)
+//                {
+//                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pn_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
+//                        $row = $db->loadObject();        
+//                        $location = $row->location;
+//                        $partState = $row->partstate;                        
+//                }
                 $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
-                $db->query();                         
-                                 
-                return $msg = JText::_('Have add PN successfull.');
+                $db->query();   
+                return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id);
+                //exit;
+               // return $msg = JText::_('Have add PN successfull.');
         }             
 }

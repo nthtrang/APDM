@@ -8987,4 +8987,51 @@ class PNsController extends JController {
                         $link 	= 'index.php?option=com_apdmpns&task=detail&cid[0]='.$parent_id;	
                 return $this->setRedirect($link,$msg);
         }
+        function getBarcodeScan()
+        {
+                // ECO,ITO,ETO,TTO,WO 
+                $db =& JFactory::getDBO();
+                $bar_code = JRequest::getVar('wo_code');
+                $leght = strlen (trim($bar_code));
+                if($leght==5)
+                {
+                        $query = "SELECT eco_id FROM apdm_eco where eco_name  = ' ".trim($bar_code)."'";
+                        $db->setQuery($query);
+                        $eco_id = $db->loadResult();
+                        return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $eco_id);
+                }
+                elseif($leght==8)
+                {
+                        $query = "SELECT pns_wo_id FROM apdm_pns_wo where wo_code =  '".trim($bar_code)."'";
+                        $db->setQuery($query);
+                        $wo_id = $db->loadResult();
+                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id);                        
+                }
+                else
+                {                        
+                        if(preg_match("/I/i",$bar_code))
+                        {
+                                $query = "SELECT pns_sto_id FROM apdm_pns_sto where sto_code  = '".trim($bar_code)."'";
+                                $db->setQuery($query);
+                                $ito_id = $db->loadResult();
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $ito_id);                                
+                        }
+                        elseif(preg_match("/E/i",$bar_code))
+                        {
+                                $query = "SELECT pns_sto_id FROM apdm_pns_sto where sto_code  = '".trim($bar_code)."'";
+                                $db->setQuery($query);
+                                $eto_id = $db->loadResult();
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $eto_id);                                                                
+                        }
+                         elseif(preg_match("/T/i",$bar_code))
+                         {
+                                 
+                                $query = "SELECT pns_tto_id FROM apdm_pns_tto where tto_code = '".trim($bar_code)."'";
+                                $db->setQuery($query);
+                                $tto_id = $db->loadResult();
+                                return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id=' . $tto_id);                                
+                        }
+                }
+            return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
+        }
 }

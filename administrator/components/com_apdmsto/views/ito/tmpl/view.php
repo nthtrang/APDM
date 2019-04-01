@@ -1,44 +1,27 @@
-<?php defined('_JEXEC') or die('Restricted access'); ?>
+<?php defined('_JEXEC') or die('Restricted access');
 
-<?php JHTML::_('behavior.tooltip'); ?>
-<?php JHTML::_('behavior.modal'); ?>
+JHTML::_('behavior.tooltip'); 
+JHTML::_('behavior.modal'); 
 
-<?php
-	$cid = JRequest::getVar( 'cid', array(0) );
-	$edit		= JRequest::getVar('edit',true);	
-        $sto_id = JRequest::getVar('id');
-	$role = JAdministrator::RoleOnComponent(8);	
-	JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-        $folder_sto = $this->sto_row->sto_code;
-	if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
-                JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
-	}
+$cid = JRequest::getVar( 'cid', array(0) );
+$edit		= JRequest::getVar('edit',true);	
+$sto_id = JRequest::getVar('id');
+$role = JAdministrator::RoleOnComponent(8);	
+JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
+$folder_sto = $this->sto_row->sto_code;
+if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
+        JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
+}
 JToolBarHelper::cancel( 'cancel', 'Close' );
-        //for PPN part
-       /* if (in_array("E", $role) && ($this->sto_row->sto_state  != "Done")) {
-            $allow_edit = 1;
-            JToolBarHelper::customX('saveqtyStofk', 'save', '', 'Save Receiving Part');
-        }
-        if (in_array("W", $role)&& ($this->sto_row->sto_state  != "Done")) {
-                JToolBarHelper::addPnsSto("Add Part", $this->sto_row->pns_sto_id);        
-        }                     
-        if (in_array("D", $role) && ($this->sto_row->sto_state  != "Done")) {
-                JToolBarHelper::deletePns('Are you sure to delete it?',"removeAllpnsstos","Remove Part");
-                //JToolBarHelper::deletePns('Are you sure to delete it?',"deletesto","Delete ITO");
-                JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ITO');
-        }     */
-        //end PN part
-        
-        JToolBarHelper::customX("printitopdf","print",'',"Print",false);
+JToolBarHelper::customX("printitopdf","print",'',"Print",false);
 
 if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
     JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
 }
 $cparams = JComponentHelper::getParams ('com_media');
-	// clean item data
-	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
+// clean item data
+JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-	
 ?>
 <script language="javascript" type="text/javascript">
 	function submitbutton(pressbutton) {
@@ -221,7 +204,7 @@ function checkAllItoPn(n, fldName )
 		document.adminForm.boxchecked.value = 0;
 	}
 }      
-function autoAddPartIto(pns,sto_id)
+function autoAddPartItobk(pns,sto_id)
 {
         var url = 'index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id='+sto_id+'&pns_code='+pns;
         var MyAjax = new Ajax(url, {
@@ -230,6 +213,9 @@ function autoAddPartIto(pns,sto_id)
                       window.location.reload();                                    
                 }
         }).request();        
+}
+function autoAddPartIto(pns,sto_id){
+        window.location = "index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
 }
 </script>
 <!--<div class="submenu-box">
@@ -490,7 +476,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
         ?>
                                     <td class="button" id="toolbar-addpnsave">           
-                Scan PN Barcode <input onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeydown="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
+                Scan PN Barcode <input onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
         </td>
         <td class="button" id="toolbar-save">
             <a href="#"
