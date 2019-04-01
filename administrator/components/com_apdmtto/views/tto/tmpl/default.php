@@ -54,6 +54,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }
 			
         }
+        
+function autoLoadTool(a){
+        window.location = "index.php?option=com_apdmtto&task=gettool_tracker_scan&tool_code="+a+"&time=<?php echo time();?>";
+}
 </script>
 <style>
 section {
@@ -113,6 +117,11 @@ th:first-child div{
 <form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
+<table class="adminlist1" cellspacing="1" width="400">
+        <tr><td align="right">
+Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLoadTool(this.value)" type="text"  name="tool_code" id="tool_code" value="" >
+                </td></tr>
+</table>
     <fieldset class="adminform">
         <legend><font style="size:14px"><?php echo JText::_( 'Tools Tracking' ); ?> </font></legend>
         <section class="">

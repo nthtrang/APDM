@@ -828,7 +828,7 @@ if(($this->type_filter==0 || $this->type_filter==14) && count($this->rs_tto))
                 <th  class="title" width="100"><?php echo JText::_('Owner'); ?></th>
                 <th  class="title" width="100"><?php echo JText::_('Created By'); ?></th>
                 <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?></th>
-
+              
             </tr>
             </thead>
             <tbody>

@@ -61,8 +61,21 @@
         <td class="tg-xldj-pr"></td>
         <td class="tg-xldj-pr"></td>
     </tr>
+    <!--<tr>
+        <td class="tg-0pky-ito-title" colspan="4">ITO# <?php /*echo $this->sto_row->sto_code; */?></td>
+    </tr>-->
     <tr>
-        <td class="tg-0pky-ito-title" colspan="4">ITO# <?php echo $this->sto_row->sto_code; ?></td>
+        <td class="tg-0pky-ito-title" colspan="4">
+            <?php
+            $img			=	code128BarCode($this->sto_row->sto_code, 1);
+            //Start output buffer to capture the image
+            //Output PNG image
+            ob_start();
+            imagepng($img);
+            //Get the image from the output buffer
+            $output_img		=	ob_get_clean();
+            echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$this->sto_row->sto_code;
+            ?></td>
     </tr>
     <tr>
         <td class="tg-0pky-pr"></td>

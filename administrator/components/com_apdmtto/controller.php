@@ -1365,18 +1365,24 @@ class TToController extends JController
     }
     function ajax_po_toito()
     {
-
         $db = & JFactory::getDBO();
         $cid             = JRequest::getVar( 'cid', array(), '', 'array' );
         $id = $cid[0];
-        if($id) {
-            $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=" . $id);
-            $row = $db->loadObject();
-            $result = $row->pns_po_id . '^' . $row->po_code;
-        }else {
-            $result = '0^NA';
-        }
+        $db->setQuery("SELECT p.*  FROM apdm_pns_po AS p where p.pns_po_id=".$id);
+        $row =  $db->loadObject();
+        $result = $row->pns_po_id.'^'.$row->po_code;
         echo $result;
         exit;
+    }
+    function gettool_tracker_scan()
+    {
+            $db = & JFactory::getDBO();
+            $tool_code = JRequest::getVar('tool_code');
+            $db->setQuery("select tto.pns_tto_id from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where loc.location_code = '".$tool_code."' and tto.tto_state = 'Using' order by tto.pns_tto_id desc limit 1");
+            $pns_tto_id =  $db->loadResult();             
+            if ($pns_tto_id) {
+                    return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id='.$pns_tto_id.'&test='.time());
+            }
+            return  $this->setRedirect('index.php?option=com_apdmtto');
     }
 }
