@@ -139,7 +139,7 @@ function UpdatePnsEco(){
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>                                        
                     <?php echo $row->id; ?>
                 </td>
 				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
