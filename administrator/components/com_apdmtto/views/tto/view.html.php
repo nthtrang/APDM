@@ -76,13 +76,13 @@ class TToViewtto extends JView
         $val_date_out_to="";
         if(JRequest::getVar( 'tto_owner_out_confirm_date_from')){
                 $date_out_from = new DateTime(JRequest::getVar( 'tto_owner_out_confirm_date_from'));                
-                $tto_date_out_from = $date_out_from->format('Y-m-d');    
+                $tto_date_out_from = $date_out_from->format('Y-m-d');
                 $val_date_out_from = $date_out_from->format('m/d/Y');
         }
         if(JRequest::getVar( 'tto_owner_out_confirm_date_to')){
                 $date_out_to = new DateTime(JRequest::getVar( 'tto_owner_out_confirm_date_to'));                
-                $tto_date_out_to = $date_out_from->format('Y-m-d');          
-                 $val_date_out_to = $date_out_from->format('m/d/Y');
+                $tto_date_out_to = $date_out_to->format('Y-m-d');
+                 $val_date_out_to = $date_out_to->format('m/d/Y');
         }
         $current = new DateTime(); 
         $current_out = $current->format('Y-m-d');          
@@ -94,21 +94,22 @@ class TToViewtto extends JView
         {                
            $tto_date_out_from = $tto_date_out_to=$filter_tto_created_by="";     
         }
-        $where = "where tto.tto_state = 'Done' and DATE(tto.tto_owner_out_confirm_date) = '".$current_out."'";
+        $where = "where tto.tto_state = 'Done'";
 
         if($tto_date_out_from && $tto_date_out_to)
         {
-                $where = "where DATE(tto.tto_owner_out_confirm_date) >= '".$tto_date_out_from."'";
+                $where .= " and DATE(tto.tto_owner_out_confirm_date) >= '".$tto_date_out_from."'";
                 $where .= " and DATE(tto.tto_owner_out_confirm_date) <= '".$tto_date_out_to."'";
         }
         elseif($tto_date_out_to)
         {
-                $where = "where DATE(tto.tto_owner_out_confirm_date <= '".$tto_date_out_to."'";
+                $where .= " and DATE(tto.tto_owner_out_confirm_date <= '".$tto_date_out_to."'";
         }
         elseif($tto_date_out_from)
         {
-                $where = "where DATE(tto.tto_owner_out_confirm_date  >= '".$tto_date_out_from."'";
-        }   
+                $where .= " and DATE(tto.tto_owner_out_confirm_date  >= '".$tto_date_out_from."'";
+        }
+
         if($filter_tto_created_by)
         {
                 $where .= " and tto.tto_create_by = '".$filter_tto_created_by."'";
@@ -117,8 +118,12 @@ class TToViewtto extends JView
         {
                 $where .= " and tto.tto_owner_out = '".$filter_tto_owner_out_by."'";
         }
+        if(!$tto_date_out_from && !$tto_date_out_to && !$filter_tto_created_by && !$filter_tto_owner_out_by)
+        {
+            $where .= " and DATE(tto.tto_owner_out_confirm_date) = '".$current_out."'";
+        }
         
-        $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain "
+      echo  $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain "
                 ." from apdm_pns_tto tto "
                 . $where;
         $db->setQuery($query);
