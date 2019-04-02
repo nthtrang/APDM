@@ -93,10 +93,7 @@ class pnsViewgetpnstoolbom extends JView
                         $arr_tool_id = array_unique($arr_tool_id);
                         $where[] = 'fk.location IN ('.implode(',', $arr_tool_id).')';
                     }
-                    else
-                    {
-                        $where[] = 'fk.location IN (0)';
-                    }
+
                     
                 break;
                 case '7': //Manufacture PN                         
@@ -182,7 +179,7 @@ class pnsViewgetpnstoolbom extends JView
 //                        ." group by fk.pns_id"
 //                        . $orderby ;
 
-        $query = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+       $query = "SELECT sto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
             . $filter
             . $where
             . $orderby ;

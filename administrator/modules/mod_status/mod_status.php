@@ -130,8 +130,8 @@ $search .=         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 $search .=         $type_filter;				
 $search .=         "&nbsp;&nbsp;<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
-$search .=         "&nbsp;&nbsp;<br>Scan Barcode <input type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
-$search .=         "</form></span>";
+$search .=         "&nbsp;&nbsp;<br></form>Scan Barcode <input autofocus type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
+$search .=         "</span>";
 
 $output[] = "";
 $gettask= JRequest::getVar('task');

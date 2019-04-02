@@ -123,7 +123,7 @@ class TToViewtto extends JView
             $where .= " and DATE(tto.tto_owner_out_confirm_date) = '".$current_out."'";
         }
         
-      echo  $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain "
+        $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain "
                 ." from apdm_pns_tto tto "
                 . $where;
         $db->setQuery($query);

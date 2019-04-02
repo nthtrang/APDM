@@ -228,6 +228,9 @@ function checkAllEtoPn(n, fldName )
 		document.adminForm.boxchecked.value = 0;
 	}
 }
+    function autoAddPartIto(pns,sto_id){
+        window.location = "index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
+    }
 </script>
 <!--<div class="submenu-box">
     <div class="t">
@@ -642,6 +645,9 @@ function checkAllEtoPn(n, fldName )
 if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
         ?>
+        <td class="button" id="toolbar-addpnsave">
+            Scan PN Barcode <input onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
+        </td>
         <td class="button" id="toolbar-save">
             <a href="#"
                onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save shipping part');}else{ hideMainMenu(); submitbutton('saveqtyStofk')}"
