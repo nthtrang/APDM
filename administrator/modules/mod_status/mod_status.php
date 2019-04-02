@@ -95,6 +95,12 @@ $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'typ
                 $searchStr = $type_filter =  "";  
         }
         $type_filter = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
+        
+        $_isscan = JRequest::getVar('scan');
+        if($_isscan){
+                $scanchecked = 'checked="checked"';
+                $onkeyUp = "onkeyup=\"autoSearchWoView(this.value)\" autofocus";
+        }
 ?>
 <script language="javascript">
 function submitbutton1(pressbutton) {
@@ -120,18 +126,29 @@ function autoSearchWoView(a){
         window.location = "index.php?option=com_apdmpns&task=getBarcodeScan&wo_code="+a+"&timem=<?php echo time();?>";
   //  }, 1);
 }
+function checkforscan(isitchecked)
+{
+        if (isitchecked == true){
+                document.getElementById("text_search").focus();
+                document.getElementById('text_search').setAttribute("onkeyup", "autoSearchWoView(this.value)");
+        }
+        else {
+                document.getElementById('text_search').setAttribute("onkeyup", "return false;");
+        }
+}
 </script>
 <?php
        
 
         
 $search = "<span class=\"search\"><form action=\"index.php?option=com_apdmpns&task=searchall\" method=\"post\" name=\"adminForm1\" onsubmit=\"submitbutton1('submit')\" >".
-$search .=         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search &nbsp;&nbsp;<input type='text' name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='20' />&nbsp;&nbsp;Filter &nbsp;&nbsp;";
+$search .=         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search &nbsp;&nbsp;<input type='text' $onkeyUp name='text_search' id='text_search' value='". $searchStr."' class='text_area'  size='20' />&nbsp;&nbsp;Filter &nbsp;&nbsp;";
 $search .=         $type_filter;				
 $search .=         "&nbsp;&nbsp;<input type='submit' name='btinsersave' value='Go' />";
 $search .=         "&nbsp;&nbsp;<a href='index.php?option=com_apdmpns&task=searchall&clean=all'><input type='button' value='Reset'></a>";
-$search .=         "&nbsp;&nbsp;<br></form>Scan Barcode <input autofocus type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
-$search .=         "</span>";
+//$search .=         "&nbsp;&nbsp;<br></form>Scan Barcode <input autofocus type=\"text\" size =\"20\" name='wo_code' value=\"\" onkeyup=\"autoSearchWoView(this.value)\"/><input type=\"hidden\" name=\"option\" value=\"com_apdmpns\"><input type=\"hidden\" name = \"task\" value = \"searchall\" >";
+$search .=         "<br></form><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scan Barcode&nbsp;&nbsp;<input $scanchecked type=\"checkbox\" name=\"check_scan_barcode\" value=\"1\" onclick=\"checkforscan(this.checked)\" />";
+$search .=         "</span></span>";
 
 $output[] = "";
 $gettask= JRequest::getVar('task');

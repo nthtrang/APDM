@@ -34,9 +34,26 @@ function UpdateECO(){
 	}
 	
 }
+function autoAddWoTto(wo_code)
+{
+        var url = 'index.php?option=com_apdmtto&task=ajax_scanwo_toitto&wo_code='+wo_code;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                        var eco_result = result;
+                        eco = eco_result.split('^');
+                        window.parent.document.getElementById('tto_wo_id').value = eco[4];
+                                window.parent.document.getElementById('wo_code').value = eco[5];
+                   document.getElementById('notice').innerHTML = "Have add WO "+ wo_code +" successfull.";	       
+                   document.getElementById('wo_code').value ="";                    
+                   document.getElementById('wo_code').focus();
+                }
+        }).request();        
+}
 </script>
 
 <form action="index.php?option=com_apdmtto&task=get_wo_ajax&tmpl=component" method="post" name="adminForm" id="adminFormEco">
+        
 	<table  width="100%">
 		<tr>
 			<td width="35%" >
@@ -45,12 +62,18 @@ function UpdateECO(){
 				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
 				
 			</td>
-			
-			
 		</tr>
 		<tr align="right">
 			<td align="right"><input type="button" name="btinsert" value="Insert" onclick="UpdateECO();" /> </td>	
 		</tr>
+                <tr>
+                         <td class="button" id="toolbar-addpnsave">
+                                
+            Scan PN Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="wo_code" id="wo_code" value="" >
+             <div name="notice" style="color:#D30000" id ="notice"></div>
+        </td>	
+                </tr>
+                        
 	</table>
 
 	<table class="adminlist" cellpadding="1">

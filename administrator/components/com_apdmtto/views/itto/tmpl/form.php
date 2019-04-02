@@ -83,6 +83,31 @@ function get_default_tto_prefix(){
         a.value = a.value.toUpperCase();
     }, 1);
 }
+function submitbutton(pressbutton) {
+        var form = document.adminForm;
+        if (pressbutton == 'cancel') {
+                submitform( pressbutton );
+                return;
+        }  
+        if (form.tto_due_date.value==0){
+                alert("Please select Due date");
+                form.tto_due_date.focus();
+                return false;
+        }  
+                
+        var date = new Date();
+        current_month = date.getMonth()+1;
+        var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+        var current_date = new Date(current_date);
+        var due_date = new Date(form.tto_due_date.value);
+        if (due_date < current_date ) 
+        {
+            alert("Invalid Date Range!\nDue Date cannot be before Today!")
+            return false;
+        }
+
+       submitform( pressbutton );
+}
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">

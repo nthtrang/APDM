@@ -1350,6 +1350,28 @@ class TToController extends JController
         }
         echo $result;      
         exit;
+    }    
+    function ajax_scanwo_toitto()
+    {
+        $db = & JFactory::getDBO();
+        $wo_code             = JRequest::getVar( 'wo_code' );        
+        if($wo_code)
+        {
+                $db->setQuery("SELECT so.pns_so_id,wo.pns_wo_id,wo.wo_code, so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code from apdm_pns_so so right join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where wo.wo_code=".$wo_code);
+                $row =  $db->loadObject();
+                $soNumber = $row->so_cuscode;
+                if($row->ccs_code)
+                {
+                    $soNumber = $row->ccs_code."-".$soNumber;
+                }
+                $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber.'^'.$row->pns_wo_id.'^'.$row->wo_code;
+                
+        }
+        else {
+               $result = '0^NA^0^NA^0^NA'; 
+        }
+        echo $result;      
+        exit;
     }
     function get_wo_ajax()
     {
