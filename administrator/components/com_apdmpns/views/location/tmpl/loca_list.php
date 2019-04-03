@@ -132,13 +132,13 @@ function checkAllLocationList(n, fldName )
                                                         <?php //echo $loc->location_status ? '<img src="images/tick.png" width="16" height="16" border="0" alt="" />': '<img src="images/disabled.png" width="16" height="16" border="0" alt="" />'; ?>    
                                                 </td>-->
                                                 <td align="center">
-                                                        <?php echo JHTML::_('date', $loc->location_created, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                                        <?php echo JHTML::_('date', $loc->location_created, JText::_('DATE_FORMAT_LC6')); ?>
                                                 </td>
                                                 <td align="center">
                                                         <?php echo GetValueUser($loc->location_created_by, "name"); ?>
                                                 </td>      
                                                 <td align="center">
-                                                        <?php echo JHTML::_('date', $loc->location_updated, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                                        <?php echo JHTML::_('date', $loc->location_updated, JText::_('DATE_FORMAT_LC6')); ?>
                                                 </td>
                                                 <td align="center">
                                                         <?php echo GetValueUser($loc->location_updated_by, "name"); ?>

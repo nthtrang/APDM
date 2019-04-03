@@ -161,7 +161,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo ($this->row->info_id) ? JHTML::_('date', $this->row->info_create, '%Y-%m-%d %H:%M:%S') :'New document';?>
+						<?php echo ($this->row->info_id) ? JHTML::_('date', $this->row->info_create, JText::_('DATE_FORMAT_LC6')) :'New document';?>
 					</td>
 				</tr>
 				<tr>
@@ -181,7 +181,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo ($this->row->info_modified_by) ? JHTML::_('date', $this->row->info_modified, '%Y-%m-%d %H:%M:%S') : 'None';?>
+						<?php echo ($this->row->info_modified_by) ? JHTML::_('date', $this->row->info_modified, JText::_('DATE_FORMAT_LC6')) : 'None';?>
 					</td>
 				</tr>
 				<tr>

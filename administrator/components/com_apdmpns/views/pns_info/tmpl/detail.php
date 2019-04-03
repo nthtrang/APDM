@@ -264,7 +264,7 @@
 						</label>
 					</td>
 					<td>						
-                                                <?php echo  JHTML::_('date', $this->row->pns_datein, '%m-%d-%Y'); ?>
+                                                <?php echo  JHTML::_('date', $this->row->pns_datein,JText::_('DATE_FORMAT_LC5')); ?>
 					</td>
 				</tr>	
 				<tr>

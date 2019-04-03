@@ -142,13 +142,13 @@
 					<?php echo $row->pns_type;?>
 				</td>
 				<td>
-					<?php echo  JHTML::_('date', $row->pns_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->pns_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->pns_create_by, 'username'); ?>
 				</td>
 				<td nowrap="nowrap">
-						<?php echo ($row->pns_modified !='0000-00-00 00:00:00') ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->pns_modified !='0000-00-00 00:00:00') ? JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->pns_modified_by, 'username'); ?>

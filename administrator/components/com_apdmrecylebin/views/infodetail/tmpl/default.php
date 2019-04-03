@@ -84,7 +84,7 @@
 				if ($row->lastvisitDate == "0000-00-00 00:00:00") {
 					$lvisit = JText::_( 'Never' );
 				} else {
-					$lvisit	= JHTML::_('date', $row->lastvisitDate, '%Y-%m-%d %H:%M:%S');
+					$lvisit	= JHTML::_('date', $row->lastvisitDate, JText::_('DATE_FORMAT_LC6'));
 				}
 			?>
 			<tr class="<?php echo "row$k"; ?>">

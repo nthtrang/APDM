@@ -169,7 +169,7 @@ th:first-child div{
                                                     <?php echo $sto->sto_state; ?>
                                                 </td>
                                                 <td align="center"  style="<?php //echo $style?>" >
-                                                        <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC6')); ?>
                                                 </td>
                                                 <td align="center"  style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>

@@ -29,7 +29,7 @@
 	if ($this->user[0]->lastvisitDate == "0000-00-00 00:00:00") {
 		$lvisit = JText::_( 'Never' );
 	} else {
-		$lvisit	= JHTML::_('date', $this->user[0]->lastvisitDate, '%Y-%m-%d %H:%M:%S');
+		$lvisit	= JHTML::_('date', $this->user[0]->lastvisitDate,JText::_('DATE_FORMAT_LC6'));
 	}
 ?>
 <script language="javascript" type="text/javascript">

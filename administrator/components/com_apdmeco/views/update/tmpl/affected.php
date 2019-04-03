@@ -121,7 +121,7 @@
                                                         <td><?php echo $aff->eco_technical;?></td>
 							<td><?php echo $aff->eco_estimated;?></td>
 							<td><?php echo $aff->eco_activate;?></td>
-                                                        <td><?php echo JHTML::_('date', $aff->eco_modified, '%Y-%m-%d %H:%M:%S');?></td>
+                                                        <td><?php echo JHTML::_('date', $aff->eco_modified, JText::_('DATE_FORMAT_LC6'));?></td>
                                                         <td><?php echo GetValueUser($aff->eco_modified_by, 'name');?></td>                                                     
 							</td>
 						</tr>

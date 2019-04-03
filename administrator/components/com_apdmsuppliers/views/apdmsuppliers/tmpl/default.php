@@ -146,7 +146,7 @@ function submitbutton(pressbutton) {
 				/*if ($row->lastvisitDate == "0000-00-00 00:00:00") {
 					$lvisit = JText::_( 'Never' );
 				} else {
-					$lvisit	= JHTML::_('date', $row->lastvisitDate, '%Y-%m-%d %H:%M:%S');
+					$lvisit	= JHTML::_('date', $row->lastvisitDate,JText::_('DATE_FORMAT_LC6'));
 				}*/
 			?>
 			<tr class="<?php echo "row$k"; ?>">
@@ -167,13 +167,13 @@ function submitbutton(pressbutton) {
 					<?php echo $row->info_description; ?>
 				</td>
 				<td align="center">
-					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->info_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
 				<td align="center" nowrap="nowrap">
-						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>

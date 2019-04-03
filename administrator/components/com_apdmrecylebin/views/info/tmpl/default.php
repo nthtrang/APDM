@@ -100,13 +100,13 @@
 				</td>
 				
 				<td>
-					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->info_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
 				<td nowrap="nowrap">
-						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>

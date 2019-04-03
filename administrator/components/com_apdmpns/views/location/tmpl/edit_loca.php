@@ -77,7 +77,7 @@ $role = JAdministrator::RoleOnComponent(7);
 						</label>
 					</td>
 					<td>
-                                                <?php echo JHTML::_('date', $this->location_row->location_created, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                                <?php echo JHTML::_('date', $this->location_row->location_created, JText::_('DATE_FORMAT_LC6')); ?>
 					</td>
 				</tr>   
                                 <tr>
@@ -97,7 +97,7 @@ $role = JAdministrator::RoleOnComponent(7);
 						</label>
 					</td>
 					<td>
-                                                <?php echo JHTML::_('date', $this->location_row->location_updated, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                                <?php echo JHTML::_('date', $this->location_row->location_updated, JText::_('DATE_FORMAT_LC6')); ?>
 					</td>
 				</tr>   
                                 <tr>

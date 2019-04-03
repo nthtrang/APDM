@@ -195,7 +195,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <td align="center"><?php echo PNsController::getWoStatus($row->pre_status); ?></td>
                 <td align="center"><?php echo PNsController::getWoStatus($row->cur_status); ?></td>
                 <td align="center"><?php echo GetValueUser($row->wo_log_created_by, "name"); ?></td>
-                <td align="center"><?php echo JHTML::_('date', $row->wo_log_created, '%m-%d-%Y %H:%M:%S %p'); ?></td>
+                <td align="center"><?php echo JHTML::_('date', $row->wo_log_created, JText::_('DATE_FORMAT_LC6')); ?></td>
                 <td align="center"><?php echo $row->wo_log_content;?></td>
                 
 	</tr>

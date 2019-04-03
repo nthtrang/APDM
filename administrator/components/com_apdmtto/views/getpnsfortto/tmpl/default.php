@@ -123,6 +123,8 @@ function UpdatePnsEco(){
 						
                                 $partStateArr   = array('OH-G','OH-D','IT-G','IT-D','OO','Prototype');  
                                 $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
+                               // $qtyRemain = CalculateToolRemainValue($row->pns_id,$row->location,$row->partstate);
+                                
                                 if($qtyRemain<=0)
                                         continue;
                                         

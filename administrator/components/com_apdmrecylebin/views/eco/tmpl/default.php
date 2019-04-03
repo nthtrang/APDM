@@ -97,13 +97,13 @@
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" />
 				</td>				
 				<td>
-					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->eco_create, JText::_('DATE_FORMAT_LC6')); ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->eco_create_by, 'username'); ?>
 				</td>
 				<td nowrap="nowrap">
-						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6')) : ''; ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->eco_modified_by, 'username'); ?>

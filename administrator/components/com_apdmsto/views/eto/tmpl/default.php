@@ -166,13 +166,13 @@ function submitbutton(pressbutton) {
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
 				<td>
-					<?php echo JHTML::_('date', $row->ccs_create, '%m/%d/%Y') ; ?>
+					<?php echo JHTML::_('date', $row->ccs_create, JText::_('DATE_FORMAT_LC6')) ; ?>
 				</td>
 				<td>					
 						<?php echo $row->username; ?>
 				</td>
 				<td nowrap="nowrap">
-					<?php echo ($row->ccs_modified_by) ? JHTML::_('date', $row->ccs_modified, '%m/%d/%Y') : '' ; ?>
+					<?php echo ($row->ccs_modified_by) ? JHTML::_('date', $row->ccs_modified, JText::_('DATE_FORMAT_LC6')) : '' ; ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->ccs_modified_by, 'username');?>

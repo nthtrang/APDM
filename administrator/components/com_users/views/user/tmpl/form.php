@@ -27,7 +27,7 @@
 	if ($this->user->get('lastvisitDate') == "0000-00-00 00:00:00") {
 		$lvisit = JText::_( 'Never' );
 	} else {
-		$lvisit	= JHTML::_('date', $this->user->get('lastvisitDate'), '%Y-%m-%d %H:%M:%S');
+		$lvisit	= JHTML::_('date', $this->user->get('lastvisitDate'),JText::_('DATE_FORMAT_LC6'));
 	}
 ?>
 <script language="javascript" type="text/javascript">
@@ -164,7 +164,7 @@
 						<?php echo JText::_( 'Register Date' ); ?>
 					</td>
 					<td>
-						<?php echo JHTML::_('date', $this->user->get('registerDate'), '%Y-%m-%d %H:%M:%S');?>
+						<?php echo JHTML::_('date', $this->user->get('registerDate'), JText::_('DATE_FORMAT_LC6'));?>
 					</td>
 				</tr>
 				<tr>

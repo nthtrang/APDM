@@ -317,7 +317,7 @@ function submitbutton(pressbutton) {
 					<?php echo  number_format((float)$row->pns_cost, 2, '.', '');?>
 				</td>   -->
 <!--                                <td align="center">
-					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+					<?php echo  JHTML::_('date', $row->pns_datein, JText::_('DATE_FORMAT_LC6')); ?>
 				</td>   -->
                                 <td align="center">
 					<?php //echo $row->pns_stock;?>

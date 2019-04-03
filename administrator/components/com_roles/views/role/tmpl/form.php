@@ -458,7 +458,7 @@ if(count($this->arrTTO) > 0){
 						?>
 					</td>
 					<td>
-						<?php echo ($this->row->role_create !='0000-00-00 00:00:00') ? JHTML::_('date', $this->row->role_create, '%Y-%m-%d %H:%M:%S') : 'New Role' ?>
+						<?php echo ($this->row->role_create !='0000-00-00 00:00:00') ? JHTML::_('date', $this->row->role_create, JText::_('DATE_FORMAT_LC6')) : 'New Role' ?>
 					</td>
 				</tr>
 				<tr>
@@ -479,7 +479,7 @@ if(count($this->arrTTO) > 0){
 						?>
 					</td>
 					<td>
-						<?php echo ($this->row->role !=0) ? JHTML::_('date', $this->row->role_modified, '%Y-%m-%d %H:%M:%S') : 'None' ?>
+						<?php echo ($this->row->role !=0) ? JHTML::_('date', $this->row->role_modified, JText::_('DATE_FORMAT_LC6')) : 'None' ?>
 					</td>
 				</tr>
 				<tr>

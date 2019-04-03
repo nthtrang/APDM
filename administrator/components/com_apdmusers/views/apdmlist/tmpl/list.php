@@ -91,7 +91,7 @@ function UpdateUser(){
 				if ($row->lastvisitDate == "0000-00-00 00:00:00") {
 					$lvisit = JText::_( 'Never' );
 				} else {
-					$lvisit	= JHTML::_('date', $row->lastvisitDate, '%m-%d-%Y %H:%M:%S');
+					$lvisit	= JHTML::_('date', $row->lastvisitDate, JText::_('DATE_FORMAT_LC5'));
 				}
 			?>
 			<tr class="<?php echo "row$k"; ?>">
