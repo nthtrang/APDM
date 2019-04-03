@@ -371,7 +371,7 @@
                                                 </label>
                                         </td>
                                         <td>
-                                                <?php echo JHTML::_('date', $this->row->pns_create, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                                <?php echo JHTML::_('date', $this->row->pns_create, JText::_('DATE_FORMAT_LC6')); ?>
                                                         
                                         </td>
                                 </tr>

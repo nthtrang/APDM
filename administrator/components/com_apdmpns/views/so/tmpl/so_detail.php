@@ -187,7 +187,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         </label>
                                     </td>
                                     <td>
-                                        <?php echo JHTML::_('date', $this->so_row->so_created, '%m-%d-%Y %H:%M:%S %p'); ?>
+                                        <?php echo JHTML::_('date', $this->so_row->so_created, JText::_('DATE_FORMAT_LC6')); ?>
 
                                     </td>
                                 </tr>
@@ -219,7 +219,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                             <?php echo JText::_( 'Modified Date' ); ?>
                                         </td>
                                         <td>
-                                            <?php echo  ($this->so_row->so_updated) ? JHTML::_('date', $this->so_row->so_updated, '%m-%d-%Y %H:%M:%S %p') : ''; ?>
+                                            <?php echo  ($this->so_row->so_updated) ? JHTML::_('date', $this->so_row->so_updated, JText::_('DATE_FORMAT_LC6')) : ''; ?>
                                         </td>
                                 </tr>  
                                 <tr>
