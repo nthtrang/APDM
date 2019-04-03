@@ -171,13 +171,13 @@ function submitbutton(pressbutton) {
 					<?php echo $row->eco_status ; ?>
 				</td>
 				<td align="center">
-					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->eco_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->eco_create_by, 'name'); ?>
 				</td>
 				<td align="center">
-						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->eco_modified_by, 'name'); ?>

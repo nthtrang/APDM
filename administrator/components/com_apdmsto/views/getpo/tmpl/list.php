@@ -116,7 +116,7 @@ function UpdateECO(){
                     <?php echo $row->po_description; ?>
                 </td>
                 <td align="center">
-                    <?php echo JHTML::_('date', $row->po_created, '%m-%d-%Y %H:%M:%S'); ?>
+                    <?php echo JHTML::_('date', $row->po_created, JText::_('DATE_FORMAT_LC5')); ?>
                 </td>
                 <td align="center">
                     <?php echo GetValueUser($row->po_create_by, "name"); ?>

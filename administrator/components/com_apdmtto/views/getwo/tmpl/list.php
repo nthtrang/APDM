@@ -23,16 +23,11 @@ function UpdateECO(){
                              //   window.parent.document.getElementById('customer_id').value = eco[0];
                                 window.parent.document.getElementById('tto_wo_id').value = eco[4];
                                 window.parent.document.getElementById('wo_code').value = eco[5];
-
-
-                window.parent.document.getElementById('sbox-window').close();
-				
-
+                                window.parent.document.getElementById('sbox-window').close();
 			}
 		}).request();
 
 	}
-	
 }
 function autoAddWoTto(wo_code)
 {
@@ -40,13 +35,13 @@ function autoAddWoTto(wo_code)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                        var eco_result = result;
-                        eco = eco_result.split('^');
-                        window.parent.document.getElementById('tto_wo_id').value = eco[4];
-                                window.parent.document.getElementById('wo_code').value = eco[5];
-                   document.getElementById('notice').innerHTML = "Have add WO "+ wo_code +" successfull.";	       
-                   document.getElementById('wo_code').value ="";                    
-                   document.getElementById('wo_code').focus();
+                    var eco_result = result;
+                    eco = eco_result.split('^');
+                    window.parent.document.getElementById('tto_wo_id').value = eco[4];
+                    window.parent.document.getElementById('wo_code').value = eco[5];
+                    window.document.getElementById('notice').innerHTML = "Have add WO "+ wo_code +" successfull.";
+                    window.document.getElementById('wo_code').value ="";
+                    window.document.getElementById('wo_code').focus();
                 }
         }).request();        
 }

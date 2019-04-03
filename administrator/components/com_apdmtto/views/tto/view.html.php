@@ -85,7 +85,7 @@ class TToViewtto extends JView
                  $val_date_out_to = $date_out_to->format('m/d/Y');
         }
         $current = new DateTime(); 
-        $current_out = $current->format('Y-m-d');          
+        $current_in = $current->format('Y-m-d');
         $filter_tto_created_by = JRequest::getVar( 'filter_tto_created_by');
         $filter_tto_owner_out_by = JRequest::getVar( 'filter_tto_owner_out_by');
 
@@ -120,7 +120,7 @@ class TToViewtto extends JView
         }
         if(!$tto_date_out_from && !$tto_date_out_to && !$filter_tto_created_by && !$filter_tto_owner_out_by)
         {
-            $where .= " and DATE(tto.tto_owner_out_confirm_date) = '".$current_out."'";
+            $where .= " and DATE(tto.tto_owner_in_confirm_date) = '".$current_in."'";
         }
         
         $query = "select  tto.*,DATEDIFF(tto.tto_due_date, CURDATE()) + 1 as tto_remain "

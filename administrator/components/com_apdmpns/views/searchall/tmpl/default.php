@@ -141,13 +141,13 @@ if(($this->type_filter==0 || $this->type_filter==1) && count( $this->rs_eco ))
 					<?php echo $row->eco_status ; ?>
 				</td>
 				<td align="center">
-					<?php echo  JHTML::_('date', $row->eco_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->eco_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->eco_create_by, 'name'); ?>
 				</td>
 				<td align="center">
-						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->eco_modified_by) ? JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->eco_modified_by, 'name'); ?>
@@ -369,7 +369,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php echo $row->pns_cost;?>
 				</td>   
 <!--                                <td align="center">
-					<?php echo  JHTML::_('date', $row->pns_datein, '%m-%d-%Y %H:%M:%S'); ?>
+					<?php echo  JHTML::_('date', $row->pns_datein, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>   -->
                                 <td align="center">
 					<?php //echo $row->pns_stock;?>
@@ -431,7 +431,7 @@ if(($this->type_filter==0 || $this->type_filter==7 ) && count($this->rs_po))
                                                         <?php } ?>
                                                 </td>                                                
                                                 <td align="center">
-                                                        <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $po->po_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center">
                                                         <?php echo GetValueUser($po->po_create_by, "name"); ?>
@@ -529,13 +529,13 @@ if(($this->type_filter==0 || $this->type_filter==3 || $this->type_filter==100 )&
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
 				<td align="center">
-					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->info_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
 				<td  align="center" nowrap="nowrap">
-						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>
@@ -629,13 +629,13 @@ if(($this->type_filter==0 || $this->type_filter==4 || $this->type_filter==88 )&&
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
 				<td>
-					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->info_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->info_created_by, 'username'); ?>
 				</td>
 				<td nowrap="nowrap">
-						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td>
 					<?php echo GetValueUser($row->info_modified_by, 'username'); ?>
@@ -729,13 +729,13 @@ if(($this->type_filter==0 || $this->type_filter==2 || $this->type_filter==99 )&&
 						<img src="images/<?php echo $img;?>" width="16" height="16" border="0" alt="<?php echo $alt; ?>" /></a>
 				</td>
 				<td align="center">
-					<?php echo  JHTML::_('date', $row->info_create, '%m-%d-%Y'); ?>
+					<?php echo  JHTML::_('date', $row->info_create, JText::_('DATE_FORMAT_LC5')); ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_created_by, 'name'); ?>
 				</td>
 				<td align="center" nowrap="nowrap">
-						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, '%m-%d-%Y') : ''; ?>
+						<?php echo ($row->info_modified_by) ? JHTML::_('date', $row->info_modified, JText::_('DATE_FORMAT_LC5')) : ''; ?>
 				</td>
 				<td align="center">
 					<?php echo GetValueUser($row->info_modified_by, 'name'); ?>
@@ -795,7 +795,7 @@ if(($this->type_filter==0 || $this->type_filter==11) && count($this->rs_sto))
                                                         <?php } ?>
                                                 </td>                                                -->
                                                 <td align="center" style="<?php //echo $style?>" >
-                                                        <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center" style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>
@@ -863,7 +863,7 @@ if(($this->type_filter==0 || $this->type_filter==14) && count($this->rs_tto))
                         <?php echo $tto->tto_state; ?>
                     </td>
                     <td align="center"  style="<?php echo $style?>" >
-                        <?php echo JHTML::_('date', $tto->tto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                        <?php echo JHTML::_('date', $tto->tto_created, JText::_('DATE_FORMAT_LC5')); ?>
                     </td>
                     <td align="center"  style="<?php echo $style?>" >
                         <?php echo GetValueUser($tto->tto_owner_out, "name"); ?>

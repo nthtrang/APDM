@@ -101,6 +101,16 @@ $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'typ
                 $scanchecked = 'checked="checked"';
                 $onkeyUp = "onkeyup=\"autoSearchWoView(this.value)\" autofocus";
         }
+        $session = JFactory::getSession();
+        if($session->get('is_scan')){
+            $scanchecked = 'checked="checked"';
+            $onkeyUp = "onkeyup=\"autoSearchWoView(this.value)\" autofocus";
+        }
+        else
+        {
+            $scanchecked = "";
+            $onkeyUp = "";
+        }
 ?>
 <script language="javascript">
 function submitbutton1(pressbutton) {
@@ -131,11 +141,26 @@ function checkforscan(isitchecked)
         if (isitchecked == true){
                 document.getElementById("text_search").focus();
                 document.getElementById('text_search').setAttribute("onkeyup", "autoSearchWoView(this.value)");
+            checkedforScan(1);
         }
         else {
                 document.getElementById('text_search').setAttribute("onkeyup", "return false;");
+            checkedforScan(0);
         }
 }
+
+function checkedforScan(ischecked)
+{
+    var url = 'index.php?option=com_apdmtto&task=ajax_markscan_checked&scan='+ischecked;
+    var MyAjax = new Ajax(url, {
+        method:'get',
+        onComplete:function(result){
+            var eco_result = result;
+
+        }
+    }).request();
+}
+
 </script>
 <?php
        

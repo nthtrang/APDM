@@ -165,7 +165,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <tr>
                                                 
                                                <td align="center">
-                                                        <?php echo JHTML::_('date', $tto->tto_owner_out_confirm_date, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $tto->tto_owner_out_confirm_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center"><?php echo $tto->qty; ?></td>
                                                 <td align="center"><?php echo $tto->tto_state; ?></td>
@@ -242,7 +242,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
                                                 <td align="center">
-                                                        <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center">
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>

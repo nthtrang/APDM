@@ -106,7 +106,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php } ?>
                                                 </td>                                                
                                                 <td align="center">
-                                                        <?php echo JHTML::_('date', $po->po_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $po->po_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center">
                                                         <?php echo GetValueUser($po->po_create_by, "name"); ?>

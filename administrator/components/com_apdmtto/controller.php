@@ -576,7 +576,7 @@ class TToController extends JController
                 $location = $row->location;
                 $partState = $row->partstate;
             }
-            $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
+            $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."','1')");
             $db->query();
         }
         return $msg = JText::_('Have add Tool successfull.');
@@ -598,7 +598,7 @@ class TToController extends JController
                                 $location = $obj->location;
                                 $partState = $obj->partstate;
                                 $pn_id =  $obj->pns_id;
-                                $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."')");
+                                $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."','1')");
                                 $db->query(); 
                         }
                  }
@@ -1407,4 +1407,12 @@ class TToController extends JController
             }
             return  $this->setRedirect('index.php?option=com_apdmtto');
     }
+    function ajax_markscan_checked()
+    {
+        global $is_scan;
+        $is_scan= JRequest::getVar('scan');
+        $session = JFactory::getSession();
+        $session->set('is_scan',$is_scan);
+    }
 }
+

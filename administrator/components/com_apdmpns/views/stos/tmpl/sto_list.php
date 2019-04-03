@@ -121,7 +121,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                         <?php } ?>
                                                 </td>                                                
                                                 <td style="<?php echo $style?>" >
-                                                        <?php echo JHTML::_('date', $sto->sto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>

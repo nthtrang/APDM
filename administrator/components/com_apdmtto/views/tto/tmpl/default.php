@@ -176,7 +176,7 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                                                     <?php echo $tto->tto_state; ?>
                                                 </td>
                                                 <td align="center"  style="<?php echo $style?>" >
-                                                        <?php echo JHTML::_('date', $tto->tto_created, '%m-%d-%Y %H:%M:%S'); ?>
+                                                        <?php echo JHTML::_('date', $tto->tto_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center"  style="<?php echo $style?>" >
                                                         <?php echo GetValueUser($tto->tto_owner_out, "name"); ?>
@@ -259,10 +259,10 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                                                 <td align="left"><?php echo $sto->tto_description; ?></td>
                                                 <td align="center"><?php echo $sto->tto_state; ?></td>                                                
                                                 <td align="center">
-                                                        <?php echo ($sto->tto_owner_out_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_out_confirm_date, '%m-%d-%Y %H:%M:%S'):""; ?>
+                                                        <?php echo ($sto->tto_owner_out_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_out_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?>
                                                 </td>
                                                 <td align="center">
-                                                        <?php echo ($sto->tto_owner_in_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_in_confirm_date, '%m-%d-%Y %H:%M:%S'):""; ?>
+                                                        <?php echo ($sto->tto_owner_in_confirm_date!="0000-00-00 00:00:00")?JHTML::_('date', $sto->tto_owner_in_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?>
                                                 </td>
                                                 
                                                 <td align="center">
