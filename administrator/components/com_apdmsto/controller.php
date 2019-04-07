@@ -300,7 +300,32 @@ class SToController extends JController
                         }
                 }
                 return $locationArr;
-        }		
+        }	
+        
+        function getLocationPartStatePnEto($partState,$pnsId)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+                        " from apdm_pns_sto_fk fk  ".
+                        " inner join apdm_pns_location loc on loc.pns_location_id=location ".
+                        " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' group by loc.location_code";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $locationArr=array();
+                        foreach ($result as $obj) {
+                                $qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
+                                if($qty_remain>0)
+                                {
+                                        //$array_partstate[$obj->partstate] = $obj->partstate;                                
+                                        $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
+                                }
+                        }
+                }
+                return $locationArr;
+        }        
         function ito_detail_support_doc()
         {
                 JRequest::setVar('layout', 'view_detail_doc');
@@ -1595,7 +1620,60 @@ class SToController extends JController
                 $partstate="";
                 $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
                 $sto_type = $db->loadResult();
-                $return = 'index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id;
+                $return = 'index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id;                
+                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
+                $db->query();
+                return $this->setRedirect($return);
+        }   
+        function ajax_addpn_eto()
+        {
+                $db = & JFactory::getDBO();
+                $sto_id = JRequest::getVar('sto_id');   
+                $pns_code = JRequest::getVar('pns_code');   
+                $arrPn = explode("-", $pns_code);
+        //A02-200263-0A
+                $ccs_code = $arrPn[0];
+                $pns_code = $arrPn[1];
+                $pns_revision = $arrPn[2];
+        //K01-0262499-000
+
+                if($arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2]."-".$arrPn[3];
+                    $pns_revision = $arrPn[4];
+                }
+                elseif($arrPn[3] &&!$arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2];
+                    $pns_revision = $arrPn[3];
+
+                }
+                if($arrPn[3] || $arrPn[4])
+                {
+                       // $pns_revision = $arrPn[3];
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+
+                }
+                else {
+                        if(preg_match("/^[0-9]+$/i", $arrPn[2]))
+                        {
+                            $pns_code = $arrPn[1]."-".$arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                        }
+                        else
+                        {
+                            $pns_code = $arrPn[1];
+                            $pns_revision = $arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                        }
+                }
+                $db->setQuery($query);
+                $pns_id = $db->loadResult();
+                //innsert to FK table
+                $location="";
+                $partstate="";                                           
+                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+                $sto_type = $db->loadResult();
                 if($sto_type==2)
                 {
                         $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$pns_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");
@@ -1607,7 +1685,11 @@ class SToController extends JController
                 $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
                 $db->query();
                 return $this->setRedirect($return);
-                //exit;
-               // return $msg = JText::_('Have add PN successfull.');
-        }             
+        }        
+        function get_list_pns_eto()
+        {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsforeto');
+                parent::display();
+        }
 }

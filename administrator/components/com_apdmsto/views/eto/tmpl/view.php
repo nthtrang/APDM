@@ -228,8 +228,8 @@ function checkAllEtoPn(n, fldName )
 		document.adminForm.boxchecked.value = 0;
 	}
 }
-    function autoAddPartIto(pns,sto_id){
-        window.location = "index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
+    function autoAddPartEto(pns,sto_id){
+        window.location = "index.php?option=com_apdmsto&task=ajax_addpn_eto&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
     }
 </script>
 <!--<div class="submenu-box">
@@ -646,7 +646,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
         ?>
         <td class="button" id="toolbar-addpnsave">
-            Scan PN Barcode <input onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
+            Scan PN Barcode <input onchange="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
         </td>
         <td class="button" id="toolbar-save">
             <a href="#"
@@ -659,7 +659,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
         </td>
         <td class="button" id="toolbar-popup-Popup">
             <a class="modal"
-               href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>"
+               href="index.php?option=com_apdmpns&amp;task=get_list_pns_eto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>"
                rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Part">
 </span>
@@ -772,14 +772,14 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?></span>
                                                        <?php 
-                                                        if($rw->sto_type==1)
+                                                        if($rw->sto_type==1)//ITO
                                                          {
                                                                 echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
                                                          }
-                                                         else{
+                                                         else{//ETO
 														 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
-                                                                 $locationArr = SToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
+                                                                 $locationArr = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id);
                                                                 echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
 																?>
 																</span> 

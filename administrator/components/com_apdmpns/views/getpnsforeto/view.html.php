@@ -11,9 +11,7 @@
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
 */
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
 
@@ -27,14 +25,14 @@ jimport( 'joomla.application.component.view');
  * @subpackage	Users
  * @since 1.0
  */
-class SToViewgetpnsforstos extends JView
+class pnsViewgetpnsforeto extends JView
 {
 	function display($tpl = null)
 	{
 	    global $mainframe, $option;
         
         $db                =& JFactory::getDBO();
-        $option             = 'com_apdmsto&task=get_list_child';
+        $option             = 'com_apdmpns&task=get_list_child';
         $id               = JRequest::getVar('id');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
@@ -205,42 +203,6 @@ class SToViewgetpnsforstos extends JView
                         $arr_eco_id[] = -1;
                     }
                 break;
-                case '2': //Vendor
-                    $arr_vendor_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_vendor = $db->loadObjectList();
-                    if (count($rs_vendor) > 0){
-                        foreach ($rs_vendor as $vendor){
-                            $arr_vendor_id[] = $vendor->info_id;
-                        }
-                    }else{
-                        $arr_vendor_id[] =-1;
-                    }
-                break;
-                 case '3': //Supplier
-                    $arr_supplier_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =3 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_supplier = $db->loadObjectList();
-                    if (count($rs_supplier) > 0){
-                        foreach ($rs_supplier as $supplier){
-                            $arr_supplier_id[] = $supplier->info_id;
-                        }
-                    }else{
-                        $arr_supplier_id[] = -1;
-                    }
-                break;
-                 case '4': //Manufacture
-                    $arr_mf_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_mf = $db->loadObjectList();
-                    if (count($rs_mf) > 0){
-                        foreach ($rs_mf as $mf){
-                            $arr_mf_id[] = $mf->info_id;
-                        }
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }
-                break;
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
@@ -295,55 +257,23 @@ class SToViewgetpnsforstos extends JView
 //                       }
 //                        
 //                   }else
+  
+                   
                     if($leght==10){
                          $arr_code = explode("-", trim($keyword));
                          $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
-                   }else{      
-                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
-                     
-                   }          
+                   }else{
+                               if($searchEscaped) {                                       
+                                   $arr_code = explode("-", trim($keyword));
+                                   $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%" or p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                               }
+                   }         
                 break;
             }
             
         }
-        
-        
-        if(count($arr_vendor_id) > 0){           
-            //get list pns have this vendor
-            $pns_id_vendor = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 2 AND supplier_id IN (".implode(",",$arr_vendor_id).") ");
-            $rs_ps_vd = $db->loadObjectList();
-            if(count($rs_ps_vd) > 0){
-                foreach ($rs_ps_vd as $obj){
-                    $pns_id_vendor[] = $obj->pns_id;        
-                }
-                $pns_id_vendor =array_unique($pns_id_vendor);     
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_vendor).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }              
-        }
-       if(count($arr_supplier_id) > 0){
-            //get list pns have this supplier
-            $pns_id_sp = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 3 AND supplier_id IN (".implode(",",$arr_supplier_id).")");
-            $rs_ps_sp = $db->loadObjectList();
-            if(count($rs_ps_sp) > 0){
-                foreach ($rs_ps_sp as $obj){
-                    $pns_id_sp[] = $obj->pns_id;        
-                }
-                $pns_id_sp = array_unique($pns_id_sp);
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_sp).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            } 
-            
-            
-            
-        }
+
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
             $pns_id_mf = array();
@@ -363,7 +293,7 @@ class SToViewgetpnsforstos extends JView
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
-        //check if exist in TTO with state USING will be exclude
+         //check if exist in TTO with state USING will be exclude
             $pns_id_tto = array();
             $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
             $rs_ps_tto = $db->loadObjectList();
@@ -372,31 +302,45 @@ class SToViewgetpnsforstos extends JView
                     $pns_id_tto[] = $obj->pns_id;        
                 }
                $pns_id_tto = array_unique($pns_id_tto);
-                $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+               $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
             }   
         
+        //check if exist in TTO with state USING will be exclude
+//            $pns_id_tto = array();
+//            $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
+//            $rs_ps_tto = $db->loadObjectList();
+//            if(count($rs_ps_tto) > 0){
+//                foreach ($rs_ps_tto as $obj){
+//                    $pns_id_tto[] = $obj->pns_id;        
+//                }
+//               $pns_id_tto = array_unique($pns_id_tto);
+//               $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+//            }   
+            
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+        $where[] = 'fk.location !="" and fk.partstate !=""';
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
         
-        $query = 'SELECT COUNT(p.pns_id)'
-        . ' FROM apdm_pns AS p'
-        . $filter
-        . $where
-        ;
-       //echo $query;
+        $query = "SELECT count(*) FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+                        . $filter
+                        . $where                                                                                          
+                        . " group by fk.location,fk.partstate "
+                        . $orderby;
+        
         $db->setQuery( $query );
         $total = $db->loadResult();
 
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
-        
-        $query = 'SELECT p.* '
-            . ' FROM apdm_pns AS p'
-            . $filter
-            . $where            
-            . $orderby
-        ;
+
+         $query = "SELECT sto.pns_sto_id,sto.sto_code,fk.id,fk.pns_id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_type,p.pns_life_cycle,p.pns_status,p.eco_id,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+                        . $filter
+                        . $where                                                                                          
+                        . " group by fk.location,fk.partstate "
+                        . $orderby;
+      
+      
         $lists['query'] = base64_encode($query);   
         $lists['total_record'] = $total; 
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );

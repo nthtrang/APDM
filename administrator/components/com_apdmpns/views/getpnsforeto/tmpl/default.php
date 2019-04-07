@@ -8,7 +8,7 @@
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
 	
-?>new
+?>
 <script language="javascript">
 function CheckForm() {
 
@@ -30,7 +30,7 @@ function UpdatePnsEco(){
 		return false;
 	}else{
 	
-		var url = 'index.php?option=com_apdmsto&task=ajax_add_pns_stos&sto_id='+sto_id;
+		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_eto&sto_id='+sto_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -46,7 +46,7 @@ function UpdatePnsEco(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmsto&task=get_list_pns_sto&tmpl=component&sto_id=<?php echo $sto_id?>" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_eto&tmpl=component&sto_id=<?php echo $sto_id?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -84,7 +84,7 @@ function UpdatePnsEco(){
 				</th>
 				
 				<th  class="title" width="10%">
-					<?php echo JText::_('ECO'); ?>
+					<?php echo JText::_('ECO Number'); ?>
 				</th>
 				
 <!--				<th width="5%" class="title" nowrap="nowrap">
@@ -99,7 +99,7 @@ function UpdatePnsEco(){
 				<th width="20%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
 				</th>
-                                <th width="5%" class="title"  >
+                                <th  width="5%" class="title"  >
 					<?php echo JText::_( 'MFG PN' ); ?>
 				</th>                                
 			</tr>
@@ -131,13 +131,18 @@ function UpdatePnsEco(){
 				//echo $pns_image;
 				$mf = PNsController::GetManufacture($row->pns_id);
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
+                                $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
+                               // $qtyRemain = CalculateToolRemainValue($row->pns_id,$row->location,$row->partstate);
+                                
+                                if($qtyRemain<=0)
+                                        continue;
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
 					<?php echo $i+1+$this->pagination->limitstart;?>
 				</td>
 				<td align="center">
-					<?php echo JHTML::_('grid.id', $i, $row->pns_id ); ?>
+					<?php echo JHTML::_('grid.id', $i, $row->id ); ?>                                         
 				</td>
 				<td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
 					<?php echo $pns_code;?>
@@ -177,7 +182,7 @@ function UpdatePnsEco(){
 	</table>
 
 	<div class="clr"></div>	
-	<input type="hidden" name="option" value="com_apdmsto" />
+	<input type="hidden" name="option" value="com_apdmpns" />
         <input type="hidden" name="sto_id" id="sto_id" value="<?php echo $sto_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />

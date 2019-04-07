@@ -4085,6 +4085,11 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'getpnsforstos');
                 parent::display();
         }
+        function get_list_pns_eto() {
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsforeto');
+                parent::display();
+        }                
         function get_list_pns_sto_movelocation() {
                 JRequest::setVar('layout', 'default');
                 JRequest::setVar('view', 'getpnsforstom');
@@ -4175,7 +4180,26 @@ class PNsController extends JController {
                         $db->query();                         
                 }                 
                 return $msg = JText::_('Have add pns successfull.');
-        }             
+        }               
+        function ajax_add_pns_eto() {
+                $db = & JFactory::getDBO();
+                $fk_ids = JRequest::getVar('cid', array(), '', 'array');
+                $sto_id = JRequest::getVar('sto_id');                  
+                //innsert to FK table        
+                $location ="";
+                $partState="";
+                foreach($fk_ids as $fk_id)
+                {
+                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.id= '".$fk_id."' and sto.sto_type = 1  order by stofk.id desc limit 1");
+                        $row = $db->loadObject();        
+                        $location = $row->location;
+                        $partState = $row->partstate; 
+                        $pns_id = $row->pns_id; 
+                        $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");
+                        $db->query();                         
+                }                 
+                return $msg = JText::_('Have add PN to ETO successfull.');
+        }               
         function ajax_add_pns_stos_movelocation() {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');

@@ -203,42 +203,6 @@ class pnsViewgetpnsforstos extends JView
                         $arr_eco_id[] = -1;
                     }
                 break;
-                case '2': //Vendor
-                    $arr_vendor_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_vendor = $db->loadObjectList();
-                    if (count($rs_vendor) > 0){
-                        foreach ($rs_vendor as $vendor){
-                            $arr_vendor_id[] = $vendor->info_id;
-                        }
-                    }else{
-                        $arr_vendor_id[] =-1;
-                    }
-                break;
-                 case '3': //Supplier
-                    $arr_supplier_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =3 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_supplier = $db->loadObjectList();
-                    if (count($rs_supplier) > 0){
-                        foreach ($rs_supplier as $supplier){
-                            $arr_supplier_id[] = $supplier->info_id;
-                        }
-                    }else{
-                        $arr_supplier_id[] = -1;
-                    }
-                break;
-                 case '4': //Manufacture
-                    $arr_mf_id = array();
-                    $db->setQuery('SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )');
-                    $rs_mf = $db->loadObjectList();
-                    if (count($rs_mf) > 0){
-                        foreach ($rs_mf as $mf){
-                            $arr_mf_id[] = $mf->info_id;
-                        }
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }
-                break;
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
@@ -309,41 +273,7 @@ class pnsViewgetpnsforstos extends JView
             }
             
         }
-        
-        
-        if(count($arr_vendor_id) > 0){           
-            //get list pns have this vendor
-            $pns_id_vendor = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 2 AND supplier_id IN (".implode(",",$arr_vendor_id).") ");
-            $rs_ps_vd = $db->loadObjectList();
-            if(count($rs_ps_vd) > 0){
-                foreach ($rs_ps_vd as $obj){
-                    $pns_id_vendor[] = $obj->pns_id;        
-                }
-                $pns_id_vendor =array_unique($pns_id_vendor);     
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_vendor).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }              
-        }
-       if(count($arr_supplier_id) > 0){
-            //get list pns have this supplier
-            $pns_id_sp = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 3 AND supplier_id IN (".implode(",",$arr_supplier_id).")");
-            $rs_ps_sp = $db->loadObjectList();
-            if(count($rs_ps_sp) > 0){
-                foreach ($rs_ps_sp as $obj){
-                    $pns_id_sp[] = $obj->pns_id;        
-                }
-                $pns_id_sp = array_unique($pns_id_sp);
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_sp).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            } 
-            
-            
-            
-        }
+
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
             $pns_id_mf = array();
@@ -363,8 +293,7 @@ class pnsViewgetpnsforstos extends JView
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
-        
-//check if exist in TTO with state USING will be exclude
+         //check if exist in TTO with state USING will be exclude
             $pns_id_tto = array();
             $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
             $rs_ps_tto = $db->loadObjectList();
@@ -373,7 +302,19 @@ class pnsViewgetpnsforstos extends JView
                     $pns_id_tto[] = $obj->pns_id;        
                 }
                $pns_id_tto = array_unique($pns_id_tto);
-                $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+               $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+            }   
+        
+        //check if exist in TTO with state USING will be exclude
+            $pns_id_tto = array();
+            $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
+            $rs_ps_tto = $db->loadObjectList();
+            if(count($rs_ps_tto) > 0){
+                foreach ($rs_ps_tto as $obj){
+                    $pns_id_tto[] = $obj->pns_id;        
+                }
+               $pns_id_tto = array_unique($pns_id_tto);
+               $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
             }   
             
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
@@ -392,7 +333,7 @@ class pnsViewgetpnsforstos extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
+      echo  $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            
