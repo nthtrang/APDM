@@ -87,6 +87,20 @@
             });
         });
     });
+    
+function autoAddPartTool(pns,parent_id)
+{
+        var url = 'index.php?option=com_apdmpns&task=ajax_scanadd_pnstool_bom&pns_id='+parent_id+'&pns_code='+pns;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                   document.getElementById('notice').innerHTML = "Have add PN Tool successfull.";	       
+                   document.getElementById('pns_code').value ="";
+                    window.document.getElementById('tool_pnlists').innerHTML =result;
+                   document.getElementById('pns_code').focus();
+                }
+        }).request();        
+}
 </script>
 <div class="submenu-box">
             <div class="t">
@@ -326,8 +340,8 @@
                                    
                                                         <tr>
                                                                 <th width="2%"  align="center" class="key"><?php echo JText::_( 'NUM' ); ?></th>
-                                                                <th  align="center" width="20%" class="key">Tool PN</th>                                                               
-                                                                <th align="center"  width="15%" class="key"></th>
+                                                                <th align="center" width="15%" class="key">Tool PN</th>                                                               
+                                                                <th align="center"  width="5%" class="key"></th>
                                                         </tr> 
                                                 <?php 
                                                         $i=0;
@@ -335,16 +349,21 @@
                                                         {
                                                                 $i++;
                                                                 ?>
-                                                        <tr><td><?php echo $i;?></td><td><?php 
-                                                         if($pn->pns_revision){
+                                                        <tr><td align="center"><?php echo $i;?></td><td align="left"><?php 
+                                                        if($pn->pns_cpn==1)
+                                                                $linktoolpns	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$pn->pns_id;	
+                                                        else
+                                                                $linktoolpns 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$pn->pns_id;	
+
+                                                        if($pn->pns_revision){
                                                                 $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code.'-'.$pn->pns_revision;
                                                          }
                                                         else{
                                                                 $toolpns_code = $pn->ccs_code.'-'.$pn->pns_code;
-                                                        }
-                                        
-                                                        echo $toolpns_code;
-                                                        ?></td><td><a href="index.php?option=com_apdmpns&task=removetoolbom&id=<?php echo $pn->id;?>&pns_id=<?php echo $this->row->pns_id;?>">Remove</a></td></tr>
+                                                        }                                                                                                                                      
+                                                        ?>
+                                                                <a href="<?php echo $linktoolpns;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $toolpns_code;?></a>
+                                                                </td><td align="center"><a href="index.php?option=com_apdmpns&task=removetoolbom&id=<?php echo $pn->id;?>&pns_id=<?php echo $this->row->pns_id;?>">Remove</a></td></tr>
                                                         <?php 
                                                         }
                                                 ?>
@@ -352,8 +371,9 @@
                                                 <?php }?></div>
                                                 
 					<a class="modal-button" rel="{handler: 'iframe', size: {x: 850, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
-                                                <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/>
-                                        
+                                                <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/></a>
+                                                Scan PN Barcode <input onchange="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')"  onkeyup="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+                                                <div name="notice" style="color:#D30000" id ="notice"></div>
                                         </td>
                                         
 				</tr>	

@@ -8962,23 +8962,27 @@ class PNsController extends JController {
                 $db->setQuery("select tool.id, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$parent_id);
                 $rows= $db->loadObjectList();     
                  $str = '<table class="adminlist" cellspacing="1" width="100%"><tr>'.
-                        '<td class="key">No.</td>'.
-                        '<td class="key">Tool PN</td>'.
-                        '<td class="key"></td>'.
+                        '<th width="2%" align="center" class="key">No.</th>'.
+                        '<th  align="center" width="15%" class="key">Tool PN</th>'.
+                        '<th align="center" width="5%" class="key"></th>'.
                         '</tr>';
                  $i=0;
                 foreach ($rows as $row) {
                         $i++;
+                        if($$pns_cpn==1)
+                                $link_pndetail 	= 'index.php?option=com_apdmpns&task=detailmpn&cid[0]='.$row->pns_id;
+                        else
+                                $link_pndetail 	= 'index.php?option=com_apdmpns&task=detail&cid[0]='.$row->pns_id;
                          if ($row->pns_revision) {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
                         } else {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code;
                         }           
-                      $link = "index.php?option=com_apdmpns&task=removetoolbom&id=".$row->id."&pns_id=". $parent_id;
+                      $link_remove = "index.php?option=com_apdmpns&task=removetoolbom&id=".$row->id."&pns_id=". $parent_id;
                         $str .= '<tr>'.
                                 ' <td width="2%"  align="center">'.$i.'</td>'.
-                                ' <td align="center" width="20%" class="title">'.$pnNumber.'</td>'.                                
-                                ' <td align="center"  width="15%" class="title"><a href="'.$link.'" />Remove</a></td></tr>';
+                                ' <td align="left"><a href="'.$link_pndetail.'" />'.$pnNumber.'</a></td>'.                                
+                                ' <td align="center"><a href="'.$link_remove.'" />Remove</a></td></tr>';
                 }
                 $str .='</table>';
                 echo $str;

@@ -108,6 +108,23 @@ function submitbutton(pressbutton) {
 
        submitform( pressbutton );
 }
+
+function autoAddWoTto(wo_code)
+{
+        var url = 'index.php?option=com_apdmtto&task=ajax_scanwo_toitto&wo_code='+wo_code;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                    var eco_result = result;
+                    eco = eco_result.split('^');
+                    window.document.getElementById('tto_wo_id').value = eco[4];
+                    window.document.getElementById('wo_code').value = eco[5];
+                    window.document.getElementById('notice').innerHTML = "Have add WO "+ wo_code +" successfull.";
+                    window.document.getElementById('scan_wo_code').value ="";
+                    window.document.getElementById('scan_wo_code').focus();
+                }
+        }).request();        
+}
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
@@ -138,6 +155,8 @@ function submitbutton(pressbutton) {
                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_wo_ajax&tmpl=component" title="Image">
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
                         </a>
+                        Scan Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="scan_wo_code" id="scan_wo_code" value="" >
+                         <div name="notice" style="color:#D30000" id ="notice"></div>
                     </td>
                 </tr>
                  <tr>

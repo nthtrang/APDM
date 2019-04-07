@@ -64,7 +64,7 @@ function autoAddWoTto(wo_code)
                 <tr>
                          <td class="button" id="toolbar-addpnsave">
                                 
-            Scan PN Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="wo_code" id="wo_code" value="" >
+            Scan Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="wo_code" id="wo_code" value="" >
              <div name="notice" style="color:#D30000" id ="notice"></div>
         </td>	
                 </tr>
