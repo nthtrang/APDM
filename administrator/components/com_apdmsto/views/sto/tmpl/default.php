@@ -123,7 +123,7 @@ th:first-child div{
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
  <fieldset class="adminform">
-		<legend><font style="size:14px"><?php echo JText::_( 'Delivery' ); ?> </font></legend>                          
+		<legend><font style="size:14px"><?php echo JText::_( 'Inventory Tracking' ); ?> </font></legend>
 <section class="">
 <div class="col width-100 scroll container">
 <?php if (count($this->stos_list) > 0) { ?>

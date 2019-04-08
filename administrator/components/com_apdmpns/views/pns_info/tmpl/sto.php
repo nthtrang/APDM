@@ -196,7 +196,21 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 </fieldset>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Transaction History' ); ?></legend>
-<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
+<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
+    <table width="80%" border="0">
+        <tr>
+            <td align="right">
+                Created From From&nbsp;&nbsp
+                <?php echo JHTML::_('calendar',$this->sto_created_from, 'sto_created_from', 'sto_created_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->sto_created_to, 'sto_created_to', 'sto_created_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <?php echo $this->lists['sto_create_by'];?>
+                <?php echo $this->lists['sto_owner_out'];?>
+                <input type="submit"  onclick="submitbutton('search_tool_out')"  name="search_tool_out" value="Go">
+                <a href="index.php?option=com_apdmtto&amp;task=tto&amp;clean=all"><input type="button" value="Reset"></a></td>
+        </tr>
+    </table>
 <?php if (count($this->stos) > 0) { ?>
          <div class="col width-100 scroll">
                 <table class="adminlist" cellspacing="1" width="400">

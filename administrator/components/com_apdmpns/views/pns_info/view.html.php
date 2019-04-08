@@ -252,13 +252,80 @@ class pnsViewpns_info extends JView
                 $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from,fk.tto_type_inout , p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_tto AS tto inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$row->pns_id." order by fk.pns_id desc");
                 $pns_list2 = $db->loadObjectList();                  
                 $this->assignRef('tto_pn_list2',        $pns_list2);                
-                
 
-                $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");         
-                $list_ccs = $db->loadObjectList();               
-                $this->assignRef('ccs_name',         $list_ccs[0]->ccs_name);
 
-                $this->assignRef('pns_uom', $row->pns_uom);             
-                parent::display($tpl);                
+                //for sto
+        $val_created_date_from ="";
+        $val_created_date_to="";
+        if(JRequest::getVar( 'sto_created_from')){
+            $date_created_from = new DateTime(JRequest::getVar( 'sto_created_from'));
+            $sto_created_date_from = $date_created_from->format('Y-m-d');
+            $val_created_date_from = $date_created_from->format('m/d/Y');
+        }
+        if(JRequest::getVar( 'sto_created_to')){
+            $date_created_to = new DateTime(JRequest::getVar( 'sto_created_to'));
+            $sto_created_date_to = $date_created_to->format('Y-m-d');
+            $val_created_date_to = $date_created_to->format('m/d/Y');
+        }
+        $current = new DateTime();
+        $current_in = $current->format('Y-m-d');
+        $filter_sto_created_by = JRequest::getVar( 'filter_sto_created_by');
+        $filter_sto_owner_by = JRequest::getVar( 'filter_sto_owner_by');
+
+        $clean = JRequest::getVar( 'clean');
+        if($clean=="all")
+        {
+            $sto_created_date_from = $sto_created_date_to=$filter_tto_created_by="";
+        }
+        $where = "where tto.tto_state = 'Done'";
+
+        if($sto_created_date_from && $sto_created_date_to)
+        {
+            $where .= " and DATE(tto.sto_created) >= '".$sto_created_date_from."'";
+            $where .= " and DATE(tto.sto_created) <= '".$sto_created_date_to."'";
+        }
+        elseif($sto_created_date_to)
+        {
+            $where .= " and DATE(tto.sto_created <= '".$sto_created_date_to."'";
+        }
+        elseif($sto_created_date_from)
+        {
+            $where .= " and DATE(tto.sto_created  >= '".$sto_created_date_from."'";
+        }
+
+        if($filter_sto_created_by)
+        {
+            $where .= " and tto.sto_create_by = '".$filter_sto_created_by."'";
+        }
+        if($filter_sto_owner_by)
+        {
+            $where .= " and tto.sto_owner = '".$filter_sto_owner_by."'";
+        }
+        if(!$sto_created_date_from && !$sto_created_date_to && !$filter_sto_created_by && !$filter_sto_owner_by)
+        {
+            $where .= " and DATE(tto.sto_created) = '".$current_in."'";
+        }
+
+        //Cerated by
+        $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p LEFT JOIN jos_users as u ON u.id=p.tto_create_by  GROUP BY p.tto_create_by ORDER BY text ");
+        $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
+        $create_bys = array_merge($create_by, $db->loadObjectList());
+        $lists['tto_create_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_sto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_sto_created_by );
+
+        //Owner by
+        $db->setQuery("SELECT  p.sto_owner as value, u.name as text FROM apdm_pns_sto as p LEFT JOIN jos_users as u ON u.id=p.tto_owner_out GROUP BY p.tto_owner_out ORDER BY text  ");
+        $modified[] = JHTML::_('select.option', 0, JText::_('Select Owner'), 'value', 'text');
+        $modifieds = array_merge($modified, $db->loadObjectList());
+        $lists['tto_owner_out'] = JHTML::_('select.genericlist', $modifieds, 'filter_sto_owner_by', 'class="inputbox" size="1"  ', 'value', 'text', $filter_sto_owner_by );
+
+        $this->assignRef('date_out_from',      $val_created_date_from );
+        $this->assignRef('date_out_to',        $val_created_date_to);
+
+        $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");
+        $list_ccs = $db->loadObjectList();
+        $this->assignRef('ccs_name',         $list_ccs[0]->ccs_name);
+
+        $this->assignRef('pns_uom', $row->pns_uom);
+        parent::display($tpl);
         }
 }
