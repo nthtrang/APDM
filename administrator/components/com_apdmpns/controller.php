@@ -8959,7 +8959,7 @@ class PNsController extends JController {
                 $db->query(); 
                  $msg = JText::_('Have add PN successfull.');                
                 $db = & JFactory::getDBO();
-                $db->setQuery("select tool.id, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$parent_id);
+                $db->setQuery("select tool.id,p.pns_cpn, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$parent_id);
                 $rows= $db->loadObjectList();     
                  $str = '<table class="adminlist" cellspacing="1" width="100%"><tr>'.
                         '<th width="2%" align="center" class="key">No.</th>'.
@@ -8969,7 +8969,7 @@ class PNsController extends JController {
                  $i=0;
                 foreach ($rows as $row) {
                         $i++;
-                        if($$pns_cpn==1)
+                        if($row->pns_cpn==1)
                                 $link_pndetail 	= 'index.php?option=com_apdmpns&task=detailmpn&cid[0]='.$row->pns_id;
                         else
                                 $link_pndetail 	= 'index.php?option=com_apdmpns&task=detail&cid[0]='.$row->pns_id;
