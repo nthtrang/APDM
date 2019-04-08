@@ -94,13 +94,27 @@ function autoAddPartTool(pns,parent_id)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                   document.getElementById('notice').innerHTML = "Have add PN Tool successfull.";	       
+                  var tooladd_result = result;
+                toolr = tooladd_result.split('^^^');
+                   document.getElementById('notice').innerHTML = toolr[1];
                    document.getElementById('pns_code').value ="";
-                    window.document.getElementById('tool_pnlists').innerHTML =result;
+                    window.document.getElementById('tool_pnlists').innerHTML =toolr[0];
                    document.getElementById('pns_code').focus();
                 }
         }).request();        
 }
+var input = document.getElementById("pns_code");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("pns_code").click();
+  }
+});
 </script>
 <div class="submenu-box">
             <div class="t">
@@ -442,7 +456,7 @@ function autoAddPartTool(pns,parent_id)
 	<input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id;?>" />
 	<input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id;?>" />	
 	<input type="hidden" name="option" value="com_apdmpns" />
-	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="task" value="<?php echo JRequest::getVar( 'task');?>" />
 	<input type="hidden" name="return" value="<?php echo $this->cd;?>"  />
 	<input type="hidden" name="boxchecked" value="1" />
 	<?php echo JHTML::_( 'form.token' ); ?>

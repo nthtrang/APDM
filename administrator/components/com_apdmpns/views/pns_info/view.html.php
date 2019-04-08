@@ -237,13 +237,7 @@ class pnsViewpns_info extends JView
                 $list_quos = $db->loadObjectList();         
                 $this->assignRef('quos',        $list_quos);
 
-                //for STO Tracking
-                $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id where fk.pns_id=".$row->pns_id;
-               //          ." union "
-                //         ."select 4 as sto_type, tto.pns_tto_id as pns_sto_id ,tto.tto_code as sto_code,tto.tto_description as sto_description ,tto.tto_state as sto_state,tto.tto_created as sto_created,tto.tto_create_by as sto_create_by ,tto.tto_owner_in as sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_tto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_tto tto on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id;
-                $db->setQuery($query);
-                $list_stos = $db->loadObjectList();         
-                $this->assignRef('stos',        $list_stos);
+               
                 
                 //for TTO
                 $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.tto_type_inout FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id." and fk.tto_type_inout = 2 and tto.tto_state != 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");                                
@@ -277,49 +271,60 @@ class pnsViewpns_info extends JView
         {
             $sto_created_date_from = $sto_created_date_to=$filter_tto_created_by="";
         }
-        $where = "where tto.tto_state = 'Done'";
+        $where = " where fk.pns_id=".$row->pns_id;
 
         if($sto_created_date_from && $sto_created_date_to)
         {
-            $where .= " and DATE(tto.sto_created) >= '".$sto_created_date_from."'";
-            $where .= " and DATE(tto.sto_created) <= '".$sto_created_date_to."'";
+            $where .= " and DATE(sto.sto_created) >= '".$sto_created_date_from."'";
+            $where .= " and DATE(sto.sto_created) <= '".$sto_created_date_to."'";
         }
         elseif($sto_created_date_to)
         {
-            $where .= " and DATE(tto.sto_created <= '".$sto_created_date_to."'";
+            $where .= " and DATE(sto.sto_created <= '".$sto_created_date_to."'";
         }
         elseif($sto_created_date_from)
         {
-            $where .= " and DATE(tto.sto_created  >= '".$sto_created_date_from."'";
+            $where .= " and DATE(sto.sto_created  >= '".$sto_created_date_from."'";
         }
 
         if($filter_sto_created_by)
         {
-            $where .= " and tto.sto_create_by = '".$filter_sto_created_by."'";
+            $where .= " and sto.sto_create_by = '".$filter_sto_created_by."'";
         }
         if($filter_sto_owner_by)
         {
-            $where .= " and tto.sto_owner = '".$filter_sto_owner_by."'";
+            $where .= " and sto.sto_owner = '".$filter_sto_owner_by."'";
         }
+        $limit = "";
         if(!$sto_created_date_from && !$sto_created_date_to && !$filter_sto_created_by && !$filter_sto_owner_by)
         {
-            $where .= " and DATE(tto.sto_created) = '".$current_in."'";
+            $where .= " and DATE(sto.sto_created) = '".$current_in."'";
+            $limit = " order by fk.id desc limit 5";
         }
-
+ //for STO Tracking
+        $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id ".
+                 $where
+                . $limit;
+       //          ." union "
+        //         ."select 4 as sto_type, tto.pns_tto_id as pns_sto_id ,tto.tto_code as sto_code,tto.tto_description as sto_description ,tto.tto_state as sto_state,tto.tto_created as sto_created,tto.tto_create_by as sto_create_by ,tto.tto_owner_in as sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_tto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_tto tto on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id;
+        $db->setQuery($query);
+        $list_stos = $db->loadObjectList();         
+        $this->assignRef('stos',        $list_stos);
+        
         //Cerated by
-        $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p LEFT JOIN jos_users as u ON u.id=p.tto_create_by  GROUP BY p.tto_create_by ORDER BY text ");
+        $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_create_by  GROUP BY p.sto_create_by ORDER BY text ");
         $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
         $create_bys = array_merge($create_by, $db->loadObjectList());
-        $lists['tto_create_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_sto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_sto_created_by );
+        $lists['sto_created_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_sto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_sto_created_by );
 
         //Owner by
-        $db->setQuery("SELECT  p.sto_owner as value, u.name as text FROM apdm_pns_sto as p LEFT JOIN jos_users as u ON u.id=p.tto_owner_out GROUP BY p.tto_owner_out ORDER BY text  ");
+        $db->setQuery("SELECT  p.sto_owner as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_owner GROUP BY p.sto_owner ORDER BY text  ");        
         $modified[] = JHTML::_('select.option', 0, JText::_('Select Owner'), 'value', 'text');
         $modifieds = array_merge($modified, $db->loadObjectList());
-        $lists['tto_owner_out'] = JHTML::_('select.genericlist', $modifieds, 'filter_sto_owner_by', 'class="inputbox" size="1"  ', 'value', 'text', $filter_sto_owner_by );
+        $lists['sto_owner'] = JHTML::_('select.genericlist', $modifieds, 'filter_sto_owner_by', 'class="inputbox" size="1"  ', 'value', 'text', $filter_sto_owner_by );
 
-        $this->assignRef('date_out_from',      $val_created_date_from );
-        $this->assignRef('date_out_to',        $val_created_date_to);
+        $this->assignRef('sto_created_from',      $val_created_date_from );
+        $this->assignRef('sto_created_to',        $val_created_date_to);
 
         $db->setQuery("SELECT ccs.ccs_name  FROM apdm_ccs AS ccs WHERE ccs.ccs_code ='".$row->ccs_code."'");
         $list_ccs = $db->loadObjectList();

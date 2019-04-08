@@ -90,13 +90,27 @@ function autoAddPartTool(pns,parent_id)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                   document.getElementById('notice').innerHTML = "Have add PN Tool successfull.";	       
+                  var tooladd_result = result;
+                toolr = tooladd_result.split('^^^');
+                   document.getElementById('notice').innerHTML = toolr[1];
                    document.getElementById('pns_code').value ="";
-                    window.document.getElementById('tool_pnlists').innerHTML =result;
+                    window.document.getElementById('tool_pnlists').innerHTML =toolr[0];
                    document.getElementById('pns_code').focus();
                 }
         }).request();        
 }
+var input = document.getElementById("pns_code");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("pns_code").click();
+  }
+});
 </script>
 <div class="submenu-box">
             <div class="t">

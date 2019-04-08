@@ -56,6 +56,7 @@ class PNsController extends JController {
                 $this->registerTask('locatecode', 'locatecode');
                 $this->registerTask('save_sales_order', 'save_sales_order');
                 $this->registerTask('searchadvance', 'searchadvance');
+                $this->registerTask('sto', 'sto');
                 
                 
                 
@@ -4430,7 +4431,6 @@ class PNsController extends JController {
         function sto() {
                 JRequest::setVar('layout', 'sto');
                 JRequest::setVar('view', 'pns_info');
-                JRequest::setVar('edit', true);
                 parent::display();
         }        
         /*
@@ -8955,9 +8955,16 @@ class PNsController extends JController {
                 }
                 $db->setQuery($query);
                 $pn_id = $db->loadResult();
-                $db->setQuery("INSERT INTO apdm_pns_tool_bom (pns_id,pns_tool_id) VALUES ( '" . $parent_id . "','" . $pn_id . "')");
-                $db->query(); 
-                 $msg = JText::_('Have add PN successfull.');                
+                $msg = JText::_('Have add PN successfull.');  
+                if(!$pn_id || $pn_id==$parent_id)
+                {
+                        $msg = JText::_('Can not add this PN.');  
+                }
+                else
+                {
+                        $db->setQuery("INSERT INTO apdm_pns_tool_bom (pns_id,pns_tool_id) VALUES ( '" . $parent_id . "','" . $pn_id . "')");
+                        $db->query(); 
+                }              
                 $db = & JFactory::getDBO();
                 $db->setQuery("select tool.id,p.pns_cpn, p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  from apdm_pns  p inner join apdm_pns_tool_bom tool on p.pns_id = tool.pns_tool_id where tool.pns_id = ".$parent_id);
                 $rows= $db->loadObjectList();     
@@ -8985,7 +8992,7 @@ class PNsController extends JController {
                                 ' <td align="center"><a href="'.$link_remove.'" />Remove</a></td></tr>';
                 }
                 $str .='</table>';
-                echo $str;
+                echo $str.'^^^'.$msg;
                 exit;
                 
                 

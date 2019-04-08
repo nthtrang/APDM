@@ -264,7 +264,7 @@ th:first-child div{
                     $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
                     $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
 
-                    $stock = SToController::CalculateInventoryValue($row->pns_id);
+                    $stock = CalculateInventoryValue($row->pns_id);
                 $background = "";
                 if ($stock <= 3) {
                     $background = "style='background-color:#f00;color:#fff'";

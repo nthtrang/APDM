@@ -22,8 +22,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
 <script language="javascript" type="text/javascript">
         function submitbutton(pressbutton) {
-                var form = document.adminForm;
+                var form = document.adminFormSto;
                 if (pressbutton == 'cancel') {
+                        submitform( pressbutton );
+                        return;
+                }
+                if (pressbutton == 'search_sto_history') {                         
                         submitform( pressbutton );
                         return;
                 }
@@ -36,6 +40,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 return;
                         }
                 }
+                
                 submitform( pressbutton );
         }
         function removeMf(id)
@@ -46,6 +51,60 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         }
 	
 </script>
+<style>
+section {
+  position: relative;
+  padding-top: 30px;
+      text-align: center;
+    background: #f0f0f0;
+    color: #666;
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #fff;
+}
+section.positioned {
+  position: absolute;
+  top:100px;
+  left:100px;
+  width:800px;
+  box-shadow: 0 0 15px #333;
+}
+.container {
+  overflow-y: auto;
+  height: 160px;
+}
+table {
+  border-spacing: 0;
+  width:100%;
+}
+td + td {
+  border-left:1px solid #eee;
+}
+td, th {
+  border-bottom:1px solid #eee;
+  padding: 10px 10px 7px 0px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  white-space: nowrap;
+}
+th div{
+  position: absolute;
+  background: transparent;
+     color: #666;
+  padding: 10px;
+  top: 0;
+  line-height: normal;
+    border-left: 1px solid #fff;
+}
+th:first-child div{
+  border: none;
+}
+</style>
 <div class="submenu-box">
         <div class="t">
                 <div class="t">
@@ -80,13 +139,15 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 		<legend><?php echo JText::_( 'Location and Quantity' ); ?></legend>
                 <?php              
                 $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
-                ?><div class="col width-100 scroll">
-                <table class="adminlist" cellspacing="1" width="400">
+                ?>
+                        <section class="">
+                <div class="col width-100 scroll container">
+                <table class="adminlist1" cellspacing="1" width="100%">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>                                               
-                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
-                                        <th width="100"><?php echo JText::_('Location'); ?></th>                                        
+                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Part State'); ?></div></th>                                               
+                                        <th width="100"><?php echo JText::_('Qty'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Qty'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Location'); ?></div></th>                                        
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -134,22 +195,23 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         
                 </table>
                 </div>
+                        </section>
 </fieldset>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Tool-Out' ); ?></legend>
-                <table class="adminlist" cellspacing="1" width="400">
+                <section class="">
+                <div class="col width-100 scroll container">
+                <table class="adminlist1" cellspacing="1" width="100%">
                 <?php if (count($this->tto_pn_list) > 0) { ?>                
                         <thead>
+                                
                                 <tr>
-                                        <th width="100" colspan="6"><?php echo JText::_('Tool Out'); ?></th>
-                                </tr>
-                                <tr>
-                                        <th width="100"><?php echo JText::_('Date Out'); ?></th>                                           
-                                        <th width="100"><?php echo JText::_('QTY Out'); ?></th>      
-                                        <th width="100"><?php echo JText::_('State'); ?></th>      
-                                        <th width="100"><?php echo JText::_('Tool ID'); ?></th>
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>                                                                                
-                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
+                                        <th width="100"><?php echo JText::_('Date Out'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Date Out'); ?></div></th>                                           
+                                        <th width="100"><?php echo JText::_('QTY Out'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('QTY Out'); ?></div></th>      
+                                        <th width="100"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('State'); ?></div></th>      
+                                        <th width="100"><?php echo JText::_('Tool ID'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Tool ID'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Part State'); ?></div></th>                                                                                
+                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Owner'); ?></div></th>
                                 </tr>
                         </thead>
                         <tbody>					
@@ -184,20 +246,29 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <tr>
                                         <td width="100" align="center" colspan="6">
                                         <?php 
-                                        echo JText::_('Tool Remain:'); 
-                                        echo CalculateToolRemainValue($this->row->pns_id);
-                                        ?></td>
+                                        echo JText::_('Quantity Available:'); 
+                                        $qtyAvai =  CalculateToolRemainValue($this->row->pns_id);
+                                        $style="color: #f00";
+                                        if($qtyAvai>0)
+                                        {
+                                                $style="color: #0B55C4";
+                                        }
+                                        echo "<span style='".$style."'>".$qtyAvai."</span>";
+                                        ?>
+                                                
+                                        </td>
                                 </tr>
                  <?php 
                  }
                  ?>
                  
                                    </table>
+                </div></section>
 </fieldset>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'Transaction History' ); ?></legend>
-<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >
-    <table width="80%" border="0">
+<form action="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id; ?>" method="post" name="adminFormSto" enctype="multipart/form-data" >
+    <table width="100%" border="0">
         <tr>
             <td align="right">
                 Created From From&nbsp;&nbsp
@@ -205,27 +276,29 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->sto_created_to, 'sto_created_to', 'sto_created_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                <?php echo $this->lists['sto_create_by'];?>
-                <?php echo $this->lists['sto_owner_out'];?>
-                <input type="submit"  onclick="submitbutton('search_tool_out')"  name="search_tool_out" value="Go">
-                <a href="index.php?option=com_apdmtto&amp;task=tto&amp;clean=all"><input type="button" value="Reset"></a></td>
+                <?php echo $this->lists['sto_created_by'];?>
+                <?php echo $this->lists['sto_owner'];?>
+                <input type="submit"  onclick="submitbutton('search_sto_history')"  name="search_tool_out" value="Go">
+                <a href="index.php?option=com_apdmpns&amp;task=sto&cid[]=<?php echo $this->row->pns_id; ?>&amp;clean=all"><input type="button" value="Reset"></a></td>
         </tr>
     </table>
 <?php if (count($this->stos) > 0) { ?>
-         <div class="col width-100 scroll">
-                <table class="adminlist" cellspacing="1" width="400">
+         <section class="">
+                <div class="col width-100 scroll container">
+                <table class="adminlist1" cellspacing="1" width="100%">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('Transaction Number'); ?></th>                                        
-                                        <th width="100"><?php echo JText::_('Description'); ?></th>                                                
-                                        <th width="100"><?php echo JText::_('QTY In/QTY Out'); ?></th>
+                                        <th width="20"><?php echo JText::_('NUM'); ?><div style="width:20px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Transaction Number'); ?><div style="width:50px;padding:10px 0px 0px 30px"><?php echo JText::_('Transaction Number'); ?></div></th>                                        
+                                        <th width="100"><?php echo JText::_('Description'); ?><div style="width:50px;padding:10px 0px 0px 50px"><?php echo JText::_('Description'); ?></div></th>    
+                                        <th width="50"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 20px"><?php echo JText::_('State'); ?></div></th>    
+                                        <th width="60"><?php echo JText::_('QTY In/QTY Out'); ?><div style="width:60px;padding:10px 0px 0px 25px"><?php echo JText::_('QTY In/QTY Out'); ?></div></th>
                                         <!--<th width="100"><?php /*echo JText::_('Attached'); */?></th>-->
-                                        <th width="100"><?php echo JText::_('Location'); ?></th>
-                                        <th width="100"><?php echo JText::_('Part State'); ?></th>
-                                        <th width="100"><?php echo JText::_('Created Date'); ?></th>
-                                        <th width="100"><?php echo JText::_('Owner'); ?></th>
-                                        <th width="100"><?php echo JText::_('Created By'); ?></th>
+                                        <th width="60"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('Location'); ?></div></th>
+                                        <th width="60"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 20px"><?php echo JText::_('Part State'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Created Date'); ?><div style="width:50px;padding:10px 0px 0px 30px"><?php echo JText::_('Created Date'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Created By'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('Created By'); ?></div></th>
 <!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
                                 </tr>
                         </thead>
@@ -247,6 +320,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td align="center"><?php echo $i; ?></td>
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
                                                 <td align="left"><?php echo $sto->sto_description; ?></td>
+                                                 <td align="center"><?php echo $sto->sto_state; ?></td>
                                                 <td align="center"><?php echo $sto->stock; ?></td>
                                                 <!--<td align="center">
                                                 <?php /*if ($sto->sto_file) { */?>
@@ -276,6 +350,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 </tbody>
         </table>
          </div>
+         </section>
                  <?php 
                  }
                  ?>
@@ -289,8 +364,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
         <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
         <input type="hidden" name="option" value="com_apdmpns" />
-        <input type="hidden" name="task" value="" />
-        <input type="hidden" name="redirect" value="mep" />
+        <input type="hidden" name="task" value="sto" />
+        <input type="hidden" name="redirect" value="sto" />
+        <input type="hidden" name="boxchecked" value="0" />
+        
         <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
 <?php echo JHTML::_('form.token'); ?>
 </form>

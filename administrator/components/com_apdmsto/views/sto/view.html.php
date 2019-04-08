@@ -120,7 +120,7 @@ class SToViewsto extends JView
         $warehouse = $db->loadObjectList();
 
 
-         $query = 'SELECT p.* '
+        $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . ' where p.pns_id in (select fk.pns_id from apdm_pns_sto_fk fk)'
         ;
