@@ -357,7 +357,7 @@ class APDMUsersController extends JController
 	}
 	function cancel_profile()
 	{
-			$this->setRedirect( 'index.php' );
+			$this->setRedirect( 'index.php?option=com_apdmeco&task=dashboard' );
 	}
 
 	/**

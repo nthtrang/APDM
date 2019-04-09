@@ -419,6 +419,7 @@ function checkAllToolPn(n, fldName )
                     $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;
                 else
                     $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;
+                $linkStoTab 	= 'index.php?option=com_apdmpns&task=sto&cid[]='.$row->pns_id;
                 $image = TToController::GetImagePreview($row->pns_id);
                 if ($image !=''){
                     $pns_image = "<img border=&quot;1&quot; src='".$path_image.$image."' name='imagelib' alt='".JText::_( 'No preview available' )."' width='100' height='100' />";
@@ -464,7 +465,7 @@ function checkAllToolPn(n, fldName )
                                             <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo ($rw->qty)?$rw->qty:1;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />
                                         </td>
                                         <td align="center" width="77px">
-                                            <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></span>
+                                            <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><a href="<?php echo $linkStoTab;?>"><?php echo $rw->location?TToController::GetCodeLocation($rw->location):"";?></a></span>
                                             <?php
                                          //   if($rw->tto_type_inout==1)
                                         //    {
