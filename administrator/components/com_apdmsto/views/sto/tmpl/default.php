@@ -5,6 +5,7 @@
 <?php
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
+$viewmore = JRequest::getVar('viewmore');
 
 JToolBarHelper::title("Inventory", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
@@ -247,7 +248,8 @@ th:first-child div{
 		<?php
 			$path_image = '../uploads/pns/images/';
 			$k = 0;
-                                                                                                   
+                              $total = 0;  
+                              $count =0; 
 			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++) {
                 $row =& $this->warehouse_list[$i];
                // if (($this->qty_from =="") && $row->inventory > 0) {
@@ -274,27 +276,39 @@ th:first-child div{
                 if($qty_from && $qty_to)
                 {
                     if($stock<$qty_from || $stock>$qty_to)
+                    {
+                        $count++;
                         continue;
+                    }
                 }
                 elseif($qty_to)
                 {
                     if($stock>$qty_to)
+                    {
                         continue;
+                    }
                 }
                 elseif($qty_from)
                 {
                     if($stock<$qty_from )
+                    {
+                        $count++;
                         continue;
+                    }
                 }
                 else{
                     if($stock<=0 || $stock>10)
+                    {
+                            $count++;
                         continue;
+                    }
                 }
+                
 
                     ?>
                     <tr class="<?php echo "row$k"; ?>">
                         <td align="center" width="50">
-                            <?php echo $i + 1 + $this->pagination->limitstart; ?>
+                            <?php echo $total+1; ?>
                         </td>
                         <td align="left" >
                             <a href="<?php echo $link; ?>"
@@ -372,9 +386,23 @@ th:first-child div{
                     </tr>
                     <?php
                     $k = 1 - $k;
+                    $total++;
+                       if($total==5 && !$viewmore)
+                        {
+                                break;
+                        }
+                       
+                
                 }
           //  }
 			?>
+                    <tr><td colspan="10"><?php 
+                    if($count+$total < count( $this->warehouse_list ))
+                    {
+                            echo "<a href = 'index.php?option=com_apdmsto&task=viewallsto&viewmore=1'>Click here to view more</a>";
+                    }
+                    ?></td></tr>
+                    
 		</tbody>
 	</table>
                         <?php 

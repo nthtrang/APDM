@@ -1692,4 +1692,10 @@ class SToController extends JController
                 JRequest::setVar('view', 'getpnsforeto');
                 parent::display();
         }
+        function viewallsto()
+        {
+                JRequest::setVar('layout', 'viewall');
+                JRequest::setVar('view', 'sto');
+                parent::display();
+        }
 }

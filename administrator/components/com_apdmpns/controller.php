@@ -8942,19 +8942,44 @@ class PNsController extends JController {
                 $parent_id = JRequest::getVar('pns_id');   
                 $pns_code = JRequest::getVar('pns_code');   
                 $arrPn = explode("-", $pns_code);
-               
+        //A02-200263-0A
                 $ccs_code = $arrPn[0];
-                $pns_code = $arrPn[1]."-".$arrPn[2];                
-                if($arrPn[3])
+                $pns_code = $arrPn[1];
+                $pns_revision = $arrPn[2];
+        //K01-0262499-000
+
+                if($arrPn[4])
                 {
-                        $pns_revision = $arrPn[3];
+                    $pns_code = $arrPn[1]."-".$arrPn[2]."-".$arrPn[3];
+                    $pns_revision = $arrPn[4];
+                }
+                elseif($arrPn[3] &&!$arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2];
+                    $pns_revision = $arrPn[3];
+
+                }
+                if($arrPn[3] || $arrPn[4])
+                {
+                       // $pns_revision = $arrPn[3];
                         $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+
                 }
                 else {
-                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                        if(preg_match("/^[0-9]+$/i", $arrPn[2]))
+                        {
+                            $pns_code = $arrPn[1]."-".$arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                        }
+                        else
+                        {
+                            $pns_code = $arrPn[1];
+                            $pns_revision = $arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                        }
                 }
                 $db->setQuery($query);
-                $pn_id = $db->loadResult();
+                $pns_id = $db->loadResult();                                           
                 $msg = JText::_('Have add PN successfull.');  
                 if(!$pn_id || $pn_id==$parent_id)
                 {
@@ -9069,4 +9094,129 @@ class PNsController extends JController {
                 }
             return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
         }
+        function getPnsIdfromPnCode($pn_code)
+        {            
+                $db =& JFactory::getDBO();
+                $arrPn = explode("-", $pn_code);
+        //A02-200263-0A
+                $ccs_code = $arrPn[0];
+                $pns_code = $arrPn[1];
+                $pns_revision = $arrPn[2];
+        //K01-0262499-000
+
+                if($arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2]."-".$arrPn[3];
+                    $pns_revision = $arrPn[4];
+                }
+                elseif($arrPn[3] &&!$arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2];
+                    $pns_revision = $arrPn[3];
+
+                }
+                if($arrPn[3] || $arrPn[4])
+                {
+                       // $pns_revision = $arrPn[3];
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+
+                }
+                else {
+                        if(preg_match("/^[0-9]+$/i", $arrPn[2]))
+                        {
+                            $pns_code = $arrPn[1]."-".$arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                        }
+                        else
+                        {
+                            $pns_code = $arrPn[1];
+                            $pns_revision = $arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                        }
+                }
+                $db->setQuery($query);
+               return $pns_id = $db->loadResult();    
+        }
+        function copy_filespec_pns()
+        {
+                global $dirarray, $conf, $dirsize;
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();                
+                $datenow = & JFactory::getDate();
+                
+                $src  = JPATH_SITE . DS . 'uploads' . DS . 'temp' . DS; 
+                $src_dest = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS. 'cads'. DS ;     
+                chdir($src); // in this way glob() can give us just the file names
+                //T04-123456789---sdfsdfsd (1).pdf
+               // foreach(glob('T04-123456789---*') as $name) {
+              //      rename($src.$name, $dest.$name);
+               // }
+              //  shell_exec("cp -r $src $dest");               
+                
+                $zdir[] = $src;
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        $zdir[] = $dirarray[$i];
+                        
+                }
+                
+                foreach($zdir as $file)   {   
+                        if (is_file($file)){
+                        $data = implode("",file($file));
+                         $file= substr(end(explode("\\", $file)),1);     
+                                  list($pns,$prefix_file) = explode("---", $file);
+  
+                                $pns_arr = explode("-", $pns);
+                                $dest = $src_dest . DS . $pns_arr[0]. DS . $pns;
+                                $arr_success = array();
+                                $arr_fail = array();
+                                 $file_name =  $pns.'---'.$prefix_file;
+                                if(rename($src.$file, $dest . DS.$file_name))
+                                {
+                                        $pns_id = PNsController::getPnsIdfromPnCode($pns);
+                                        if($pns_id){
+                                                $arr_succes[$file_name]=  $pns_id;                                         
+                                                $db->setQuery("INSERT INTO apdm_pn_cad (pns_id, cad_file, date_create, created_by) VALUES (" . $pns_id . ", '" . $file_name . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
+                                                $db->query();
+                                        }
+                                        
+                                }
+                                else
+                                {
+                                        $arr_fail[]=  $file;
+                                }
+                        }
+		}
+                echo "Import Specification Complete with result below";
+                echo "<br>";
+                echo "Sucesssfull:<br>";
+                foreach ($arr_succes as $file_name =>$pns_id)
+                {
+                        echo "<a href='index.php?option=com_apdmpns&task=specification&cid[]=".$pns_id."'>".$file_name."</a><br>";
+                }
+                echo "<br>Failed:";
+                foreach ($arr_fail as $val)
+                {
+                        echo $val."<br>";
+                }
+
+        }
 }
+
