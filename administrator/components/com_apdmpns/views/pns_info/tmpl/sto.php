@@ -145,9 +145,9 @@ th:first-child div{
                 <table class="adminlist1" cellspacing="1" width="100%">
                         <thead>
                                 <tr>
-                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Part State'); ?></div></th>                                               
-                                        <th width="100"><?php echo JText::_('Qty'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Qty'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 180px"><?php echo JText::_('Location'); ?></div></th>                                        
+                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('Part State'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?><div style="width:50px;padding:10px 0px 0px 2350px"><?php echo JText::_('Qty'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('Location'); ?></div></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -206,12 +206,12 @@ th:first-child div{
                         <thead>
                                 
                                 <tr>
-                                        <th width="100"><?php echo JText::_('Date Out'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Date Out'); ?></div></th>                                           
-                                        <th width="100"><?php echo JText::_('QTY Out'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('QTY Out'); ?></div></th>      
-                                        <th width="100"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('State'); ?></div></th>      
-                                        <th width="100"><?php echo JText::_('Tool ID'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Tool ID'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Part State'); ?></div></th>                                                                                
-                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 75px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Date Out'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Date Out'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('QTY Out'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('QTY Out'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('State'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Tool ID'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Tool ID'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Part State'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Owner'); ?></div></th>
                                 </tr>
                         </thead>
                         <tbody>					
@@ -288,17 +288,17 @@ th:first-child div{
                 <table class="adminlist1" cellspacing="1" width="100%">
                         <thead>
                                 <tr>
-                                        <th width="20"><?php echo JText::_('NUM'); ?><div style="width:20px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Transaction Number'); ?><div style="width:50px;padding:10px 0px 0px 30px"><?php echo JText::_('Transaction Number'); ?></div></th>                                        
-                                        <th width="100"><?php echo JText::_('Description'); ?><div style="width:50px;padding:10px 0px 0px 50px"><?php echo JText::_('Description'); ?></div></th>    
-                                        <th width="50"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 20px"><?php echo JText::_('State'); ?></div></th>    
-                                        <th width="60"><?php echo JText::_('QTY In/QTY Out'); ?><div style="width:60px;padding:10px 0px 0px 25px"><?php echo JText::_('QTY In/QTY Out'); ?></div></th>
+                                        <th width="20"><?php echo JText::_('NUM'); ?><div style="width:20px;padding:10px 0px 0px 15px"><?php echo JText::_('NUM'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Transaction Number'); ?><div style="width:50px;padding:10px 0px 0px 50px"><?php echo JText::_('Transaction Number'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Description'); ?><div style="width:50px;padding:10px 0px 0px 115px"><?php echo JText::_('Description'); ?></div></th>
+                                        <th width="50"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>
+                                        <th width="60"><?php echo JText::_('QTY In/QTY Out'); ?><div style="width:60px;padding:10px 0px 0px 40px"><?php echo JText::_('QTY In/QTY Out'); ?></div></th>
                                         <!--<th width="100"><?php /*echo JText::_('Attached'); */?></th>-->
-                                        <th width="60"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('Location'); ?></div></th>
-                                        <th width="60"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 20px"><?php echo JText::_('Part State'); ?></div></th>
-                                        <th width="80"><?php echo JText::_('Created Date'); ?><div style="width:50px;padding:10px 0px 0px 30px"><?php echo JText::_('Created Date'); ?></div></th>
-                                        <th width="80"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('Owner'); ?></div></th>
-                                        <th width="80"><?php echo JText::_('Created By'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('Created By'); ?></div></th>
+                                        <th width="60"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 3%"><?php echo JText::_('Location'); ?></div></th>
+                                        <th width="60"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('Part State'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Created Date'); ?><div style="width:50px;padding:10px 0px 0px 40px"><?php echo JText::_('Created Date'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 50px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="80"><?php echo JText::_('Created By'); ?><div style="width:50px;padding:10px 0px 0px 45px"><?php echo JText::_('Created By'); ?></div></th>
 <!--                                        <th width="100"><?php echo JText::_('Action'); ?></th>-->
                                 </tr>
                         </thead>

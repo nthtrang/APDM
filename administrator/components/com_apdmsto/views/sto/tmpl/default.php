@@ -6,7 +6,7 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 
-//JToolBarHelper::title("STOCK Management", 'cpanel.png');
+JToolBarHelper::title("Inventory", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
@@ -123,7 +123,7 @@ th:first-child div{
         <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
  <fieldset class="adminform">
-		<legend><font style="size:14px"><?php echo JText::_( 'Inventory Tracking' ); ?> </font></legend>
+		<legend><font style="size:14px"><?php echo JText::_( 'Inventory Transaction' ); ?> </font></legend>
 <section class="">
 <div class="col width-100 scroll container">
 <?php if (count($this->stos_list) > 0) { ?>
@@ -131,7 +131,7 @@ th:first-child div{
                          <thead>
                                <tr class="header">
                                         <th  class="title" width="50"><?php echo JText::_('NUM'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('No.'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('ITO/ETO'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('ITO/ETO'); ?></div></th>
+                                        <th  class="title" width="100"><?php echo JText::_('Transaction Number'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('ITO/ETO'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('State'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>
                                         <th  class="title" width="100"><?php echo JText::_('Created Date'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Created Date'); ?></div></th>
@@ -169,7 +169,7 @@ th:first-child div{
                                                     <?php echo $sto->sto_state; ?>
                                                 </td>
                                                 <td align="center"  style="<?php //echo $style?>" >
-                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC6')); ?>
+                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                 <td align="center"  style="<?php //echo $style?>" >
                                                         <?php echo GetValueUser($sto->sto_owner, "name"); ?>

@@ -6,7 +6,7 @@
 $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
-//JToolBarHelper::title("SO Management", 'cpanel.png');
+JToolBarHelper::title("Sale Order", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);      
 if (in_array("W", $role)) {
         //JToolBarHelper::addNew("add_so","New SO");
