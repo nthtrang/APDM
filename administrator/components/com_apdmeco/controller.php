@@ -1050,9 +1050,14 @@ class ECOController extends JController
                 $db->setQuery("INSERT INTO apdm_eco_routes (eco_id,name,description,status,due_date,created,owner) VALUES ('" . $eco_id . "', '" . $name . "', '" . $description . "', '" . $status . "', '" . $due_date . "', '" . $created . "', '" . $owner . "')");
                 $db->query();
                 $msg = "Successfully Saved Route";
-               return $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&time='.time().'&cid[]='.$eco_id, $msg );
+               return $this->setRedirect( 'index.php?option=com_apdmeco&task=routestmp&time='.time().'&cid[]='.$eco_id, $msg );
                 
-        }  
+        }
+        function routestmp()
+        {
+            $eco_id = JRequest::getVar('eco_id');
+            return $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&time='.time().'&cid[]='.$eco_id, $msg );
+        }
   function update_routes() {
            
           

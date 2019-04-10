@@ -45,7 +45,8 @@ class RolesViewRole extends JView
         $arrTTO		= array();
         $arrLOC		= array();
 		$arrPns 	= array();
-                $arrSwo 	= array();
+		$arrSwo 	= array();
+        $arrWo 	    = array();
 		if (count ($row_values) > 0){
 			foreach ($row_values as $obj){
 				if ($obj->component_id ==1){
@@ -78,12 +79,17 @@ class RolesViewRole extends JView
 				if ($obj->component_id==9){
 					$arrLOC[] = $obj->role_value;
 				}
+				//FOR SO
 				if ($obj->component_id==10){
 					$arrSwo[] = $obj->role_value;
 				}
 				//FOR TOOL
                 if ($obj->component_id==11){
                     $arrTTO[] = $obj->role_value;
+                }
+                //FOR WO
+                if ($obj->component_id==12){
+                    $arrWo[] = $obj->role_value;
                 }
 			}
 		}
@@ -97,10 +103,11 @@ class RolesViewRole extends JView
 		$this->assignRef('arrVendor',	$arrVendor);		
 		$this->assignRef('arrSupplier',	$arrSupplier);		
 		$this->assignRef('arrECO',	$arrECO);	
-                $this->assignRef('arrPO',	$arrPO);	
-                $this->assignRef('arrSTO',	$arrSTO);
-                $this->assignRef('arrLOC',	$arrLOC);
-                $this->assignRef('arrSWO',	$arrSwo);
+        $this->assignRef('arrPO',	$arrPO);
+        $this->assignRef('arrSTO',	$arrSTO);
+        $this->assignRef('arrLOC',	$arrLOC);
+        $this->assignRef('arrSWO',	$arrSwo);
+        $this->assignRef('arrWO',	$arrWo);
         $this->assignRef('arrTTO',	$arrTTO);
 		$this->assignRef('arrManufacture',	$arrManufacture);		
 		$this->assignRef('arrPns',	$arrPns);		

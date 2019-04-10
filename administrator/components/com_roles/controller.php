@@ -112,8 +112,8 @@ class RolesController extends JController
 		//for value of component
 		$c		= JRequest::getVar( 'cc', array(0), '', 'array' );
 		$v		= JRequest::getVar( 'v', array(0), '', 'array' );
-		$s		= JRequest::getVar( 'v', array(0), '', 'array' );
-		$m		= JRequest::getVar( 'v', array(0), '', 'array' );
+		$s		= JRequest::getVar( 's', array(0), '', 'array' );
+		$m		= JRequest::getVar( 'm', array(0), '', 'array' );
 		$eco	= JRequest::getVar( 'eco', array(0), '', 'array' );
         $po	= JRequest::getVar( 'po', array(0), '', 'array' );
         $sto	= JRequest::getVar( 'sto', array(0), '', 'array' );
@@ -121,6 +121,7 @@ class RolesController extends JController
         $loc	= JRequest::getVar( 'loc', array(0), '', 'array' );
 		$p	= JRequest::getVar( 'p', array(0), '', 'array' );
         $swo	= JRequest::getVar( 'swo', array(0), '', 'array' );
+        $wo	= JRequest::getVar( 'wo', array(0), '', 'array' );
 		if (count($c) > 0){
 			//update for vendor
 			foreach ($c as $commodity){
@@ -195,7 +196,7 @@ class RolesController extends JController
 			}
 		}
 		if (count($swo) > 0){
-			//update for STO
+			//update for SO
 			foreach ($swo as $swoobject){
 				$query = "INSERT INTO apdm_role_component (role_id, component_id, role_value) VALUES({$role_id}, 10, '{$swoobject}')";
 				$db->setQuery($query);
@@ -206,6 +207,14 @@ class RolesController extends JController
             //update for TTO
             foreach ($tto as $ttoobject){
                 $query = "INSERT INTO apdm_role_component (role_id, component_id, role_value) VALUES({$role_id}, 11, '{$ttoobject}')";
+                $db->setQuery($query);
+                $db->query();
+            }
+        }
+        if (count($wo) > 0){
+            //update for WO
+            foreach ($wo as $woobject){
+                $query = "INSERT INTO apdm_role_component (role_id, component_id, role_value) VALUES({$role_id}, 12, '{$woobject}')";
                 $db->setQuery($query);
                 $db->query();
             }

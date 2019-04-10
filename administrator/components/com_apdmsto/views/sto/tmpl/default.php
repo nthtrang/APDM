@@ -397,10 +397,14 @@ th:first-child div{
           //  }
 			?>
                     <tr><td colspan="10"><?php 
-                    if($count+$total < count( $this->warehouse_list ))
+                    if($count+$total < count( $this->warehouse_list))
                     {
-                            echo "<a href = 'index.php?option=com_apdmsto&task=viewallsto&viewmore=1'>Click here to view more</a>";
+                            echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=1'>Click here to view more</a>";
                     }
+                    else{
+                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=0'>Click here to  collapse</a>";
+                    }
+
                     ?></td></tr>
                     
 		</tbody>

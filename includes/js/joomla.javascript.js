@@ -498,6 +498,24 @@ function checkAllSwo( n, fldName ) {
 		document.adminForm.boxcheckedswo.value = 0;
 	}
 }
+//for WO
+function checkAllWo( n, fldName ) {
+    var f = document.adminForm;
+    var c = f.toggle12.checked;
+    var n2 = 0;
+    for (i=0; i < n; i++) {
+        cb = eval( 'f.' + fldName + '' + i );
+        if (cb) {
+            cb.checked = c;
+            n2++;
+        }
+    }
+    if (c) {
+        document.adminForm.boxcheckedwo.value = n2;
+    } else {
+        document.adminForm.boxcheckedwo.value = 0;
+    }
+}
 function listItemTask( id, task ) {
     var f = document.adminForm;
     cb = eval( 'f.' + id );

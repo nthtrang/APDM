@@ -15,11 +15,44 @@ $me = & JFactory::getUser();
 	//ToolBarHelper::apply('apply', 'Save');  
 ?>
 <script language="javascript" type="text/javascript">
-function UpdateRoutesWindow(){   
-        window.parent.document.getElementById('sbox-window').close();	
+function UpdateRoutesWindow(){
+    if (document.adminFormSaveRoutes.name.value==""){
+        alert("Please input name");
+        return false;
+    }
+    if (document.adminFormSaveRoutes.due_date.value=="0000-00-00 00:00:00" || document.adminFormSaveRoutes.due_date.value==""){
+        alert("Please select Due date");
+        return false;
+    }
+
+    var date = new Date();
+    current_month = date.getMonth()+1;
+    var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());
+    var current_date = new Date(current_date);
+    var due_date = new Date(document.adminFormSaveRoutes.due_date.value);
+    if (due_date < current_date )
+    {
+        alert("Invalid Date Range!\nDue Date cannot be before Today!")
+        return false;
+    }
+    //submitform();
+    /*var url = 'index.php?option=com_apdmeco&task=save_routes&eco[]=php //echo $cid[0]?>;
+    var MyAjax = new Ajax(url, {
+        method:'post',
+        data:  $('adminFormSaveRoutes').toQueryString(),
+        onComplete:function(result){
+            //	window.parent.document.getElementById('pns_child').innerHTML = result;
+            window.parent.document.getElementById('sbox-window').close();
+            window.parent.location.reload();
+
+
+        }
+    }).request();*/
+
+        window.parent.document.getElementById('sbox-window').close();
         //window.top.location.
         //window.parent.location.reload(1);
-        window.parent.location.href = "index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $cid[0]?>&time=<?php echo time();?>";
+        window.parent.location.href = "index.php?option=com_apdmeco&task=routestmp&eco_id=<?php echo $cid[0]?>&time=<?php echo time();?>";
 }
 
 </script>
@@ -30,7 +63,7 @@ function UpdateRoutesWindow(){
 			<td></td>
 			<tr align="right">
 			<td align="right">
-                                <input type="submit" name="btinsersave" value="Save Route"  onclick="UpdateRoutesWindow();"/>
+                                <input type="submit" name="btinsersave" value="Save Route"  onclick="return UpdateRoutesWindow();"/>
                         </td>	
 		</tr>
 		</tr>			

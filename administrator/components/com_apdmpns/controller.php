@@ -274,7 +274,7 @@ class PNsController extends JController {
                 $query = "UPDATE apdm_pns SET pns_revision='" . $rev . "' WHERE pns_id=" . $pns_id;
                 $db->setQuery($query);
                 $db->query();
-                $msg = JText::_('Successfully Saved Rev Roll') . $text_mess;
+                $msg = JText::_('Successfully Saved Rev Roll');
                 $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $pns_id, $msg);
         }
 
@@ -9041,7 +9041,7 @@ class PNsController extends JController {
                 $query = "select pns_cpn from apdm_pns where pns_id = ".$parent_id;
                 $db->setQuery($query);
                 $pns_cpn = $db->loadResult();
-                if($$pns_cpn==1)
+                if($pns_cpn==1)
                         $link 	= 'index.php?option=com_apdmpns&task=detailmpn&cid[0]='.$parent_id;	
                 else
                         $link 	= 'index.php?option=com_apdmpns&task=detail&cid[0]='.$parent_id;	
@@ -9090,6 +9090,22 @@ class PNsController extends JController {
                                 $db->setQuery($query);
                                 $tto_id = $db->loadResult();
                                 return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&scan=1&id=' . $tto_id);                                
+                        }
+                        else{//for PN
+                            $pns_id = PNsController::getPnsIdfromPnCode($bar_code);
+                            if($pns_id) {
+                                $query = "select pns_cpn from apdm_pns where pns_id = " . $pns_id;
+                                $db->setQuery($query);
+                                $pns_cpn = $db->loadResult();
+                                $link = 'index.php?option=com_apdmpns&task=detail&cid[0]=' . $pns_id;
+                                if ($pns_cpn == 1)
+                                    $link = 'index.php?option=com_apdmpns&task=detailmpn&cid[0]=' . $pns_id;
+                                return $this->setRedirect($link);
+                            }
+                            else
+                            {
+                                return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard','Not found any PN');
+                            }
                         }
                 }
             return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
