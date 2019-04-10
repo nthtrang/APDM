@@ -447,7 +447,7 @@ if(count($this->arrTTO) > 0){
                 <tr>
 					<td valign="top" class="key">
 						<label for="gid">
-							<?php echo JText::_( 'STO' ); ?>
+							<?php echo JText::_( 'Inventory' ); ?>
 						</label>
 					</td>
 					<td><input type="checkbox" name="sto[]" value="H" <?php echo ($sto0) ? 'checked="checked"' : ''?> onclick="isChecked(this.checked);" id="sto6" />
@@ -470,7 +470,7 @@ if(count($this->arrTTO) > 0){
                 <tr>
                     <td valign="top" class="key">
                         <label for="gid">
-                            <?php echo JText::_( 'Special Tool' ); ?>
+                            <?php echo JText::_( 'Tool Management' ); ?>
 
                         </label>
                     </td>

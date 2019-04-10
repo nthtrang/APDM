@@ -163,6 +163,7 @@ class modMenuHelper
 		/*
 		 * Components SubMenu
 		 */
+
 		if ($editAllComponents)
 		{
 			$menu->addChild(new JMenuNode(JText::_('Components')), true);
@@ -172,13 +173,13 @@ class modMenuHelper
 				' WHERE '.$db->NameQuote( 'option' ).' <> "com_frontpage"' .
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
-				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57) '.
+				' AND id NOT IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57,58,59) '.
 				' ORDER BY ordering, name';
 		}else{ 
 			if ($usertype=='Administrator' && $user_apdm==0){
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57)'.
+				' WHERE id IN (34, 37, 40, 41, 42, 43, 44, 45, 46, 47, 48,50,52,53,54,55,56,57,58,59)'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
 				' ORDER BY ordering, name';
@@ -187,11 +188,61 @@ class modMenuHelper
 				if(in_array("R", $arr_role)){
 					$list_recyle_bin = ', 43, 44, 45, 46, 47';
 				}
+                                $not_in = array();
+                                 //Vendor
+                                $role2 = JAdministrator::RoleOnComponent(2);  
+                                if(in_array("H", $role2)){
+					$not_in[] = 41;
+				}
+                                if (!in_array("W", $role2)) {
+                                        $not_in[] = 55;
+                                       
+                                }
+                                //PN
+                                $role6 = JAdministrator::RoleOnComponent(6);  
+                                if(in_array("H", $role6)){
+					$not_in[] = 48;
+				}
+                                if (!in_array("W", $role6)) {
+                                        $not_in[] = 52;
+                                        $not_in[] = 53;
+                                }
+                                //Commodity Code
+                                $role1 = JAdministrator::RoleOnComponent(1);  
+                                if(in_array("H", $role1)){
+					$not_in[] = 40;
+				}
+                                if (!in_array("W", $role1)) {
+                                        $not_in[] = 58;
+                                        $not_in[] = 59;
+                                }
+                                //eco
+                                $role5 = JAdministrator::RoleOnComponent(5);  
+                                if(in_array("H", $role5)){
+					$not_in[] = 42;
+				}
+                                if (!in_array("W", $role5)) {
+                                        $not_in[] = 54;
+                                }
+                                //location
+                                $role9 = JAdministrator::RoleOnComponent(9);  
+                                if(in_array("H", $role9)){
+					$not_in[] = 56;
+				}
+                                if (!in_array("W", $role9)) {
+                                        $not_in[] = 57;
+                                }
+                                $and_where ="";
+                                if(isset($not_in)&&  sizeof($not_in)>0)
+                                {
+                                        $and_where  = " AND id not in (".implode(",", $not_in).")";
+                                }
 				$query = 'SELECT *' .
 				' FROM #__components' .
-				' WHERE id IN (57,56,55,53,54,52,40, 41, 42, 48,50 '.$list_recyle_bin.' )'.
+				' WHERE id IN (57,56,55,53,54,52,40, 41, 42, 48,50,58 '.$list_recyle_bin.' )'.
 				' AND '.$db->NameQuote( 'option' ).' <> "com_media"' .
 				' AND enabled = 1' .
+                                 $and_where. 
 				' ORDER BY ordering, name';
 			}
 
@@ -282,7 +333,8 @@ class modMenuHelper
 			 }
                          	$menu->addSeparator();		 
                         //PO
-			if($user_apdm==0 &&  (in_array(7, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                               
+                        $role7 = JAdministrator::RoleOnComponent(7);  
+			if(($user_apdm==0 &&  (in_array(7, $arr_component) && !in_array("H", $role7) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                               
 				$menu->addChild(new JMenuNode(JText::_('Internal PO'), 'index.php?option=com_apdmpns&task=pomanagement', 'class:dashboard'));                               
 			}                        
 			//STO
@@ -290,15 +342,18 @@ class modMenuHelper
 				$menu->addChild(new JMenuNode(JText::_('STO'), 'index.php?option=com_apdmpns&task=stomanagement', 'class:dashboard'));                        
 			} */
                         //SO
-			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
+                        $role10 = JAdministrator::RoleOnComponent(10);     
+			if(($user_apdm==0 &&  (in_array(8, $arr_component) && !in_array("H", $role10) )|| $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
 				$menu->addChild(new JMenuNode(JText::_('SO'), 'index.php?option=com_apdmpns&task=somanagement', 'class:dashboard'));                        
 			}     
                         //NEW STO
-			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
+                        $role8 = JAdministrator::RoleOnComponent(8);     
+			if(($user_apdm==0 &&  (in_array(8, $arr_component) && !in_array("H", $role8) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
 				$menu->addChild(new JMenuNode(JText::_('Inventory'), 'index.php?option=com_apdmsto', 'class:dashboard'));
 			}  
-                        //NEW STO
-			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
+                        //NEW TTO
+                        $role11 = JAdministrator::RoleOnComponent(11);                             
+			if(($user_apdm==0 &&  (in_array(11, $arr_component) && !in_array("H", $role11) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
 				$menu->addChild(new JMenuNode(JText::_('Tool Tracker'), 'index.php?option=com_apdmtto', 'class:dashboard'));
 			} 
 		}

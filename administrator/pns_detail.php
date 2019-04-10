@@ -197,7 +197,7 @@ $list_cads = $db->loadObjectList();
 						</label>
 					</td>
 					<td width="70%">
- 						<font color="#666666"><?php echo  JHTML::_('date', $row->pns_create, '%m-%d-%Y %H:%M:%S'); ?></font>
+ 						<font color="#666666"><?php echo  JHTML::_('date', $row->pns_create, JText::_('DATE_FORMAT_LC6')); ?></font>
 
 					</td>
 				</tr>
@@ -220,7 +220,7 @@ $list_cads = $db->loadObjectList();
 						</label>
 					</td>
 					<td width="70%">
- 						<font color="#666666"><?php echo  ($row->pns_modified_by) ? JHTML::_('date', $row->pns_modified, '%m-%d-%Y %H:%M:%S') : ''; ?></font>
+ 						<font color="#666666"><?php echo  ($row->pns_modified_by) ? JHTML::_('date', $row->pns_modified, JText::_('DATE_FORMAT_LC6')) : ''; ?></font>
 
 					</td>
 				</tr>
