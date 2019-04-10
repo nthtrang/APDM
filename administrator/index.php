@@ -11,13 +11,15 @@
 * See COPYRIGHT.php for copyright notices and details.
 */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 // Set flag that this is a parent file
 define( '_JEXEC', 1 );
 
+error_reporting( E_ERROR | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING );
 define('JPATH_BASE', dirname(__FILE__) );
+
 
 define('DS', DIRECTORY_SEPARATOR);
 ini_set('display_errors', 0);

@@ -50,10 +50,13 @@ class modMenuHelper
 				$role2 = JAdministrator::RoleOnComponent(2); //SP. VD, MF
 				$role5 = JAdministrator::RoleOnComponent(5); // ECO
 				$role6 = JAdministrator::RoleOnComponent(6); //PNs
-                                $role7 = JAdministrator::RoleOnComponent(7); //PO
-                                $role8 = JAdministrator::RoleOnComponent(8); //STO
-                                $role9 = JAdministrator::RoleOnComponent(9); //Location
-				$arr_role = array_merge($role1, $role2, $role5, $role6, $role7, $role8, $role9);
+				$role7 = JAdministrator::RoleOnComponent(7); //PO
+				$role8 = JAdministrator::RoleOnComponent(8); //STO
+				$role9 = JAdministrator::RoleOnComponent(9); //Location
+            	$role10 = JAdministrator::RoleOnComponent(10); //SO
+            	$role11 = JAdministrator::RoleOnComponent(11); //TTO
+            	$role12 = JAdministrator::RoleOnComponent(12); //WO
+				$arr_role = array_merge($role1, $role2, $role5, $role6, $role7, $role8, $role9,$role10,$role11,$role12);
 		}
 	
 
