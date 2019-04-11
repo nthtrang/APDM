@@ -8893,7 +8893,7 @@ class PNsController extends JController {
         function GetEtoPns($pns_id)
         {
                 $db =& JFactory::getDBO();	
-                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state != 'Create'";
+                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state = 'InTransit'";
                 $db->setQuery($query);
                 return $db->loadObjectList();
 

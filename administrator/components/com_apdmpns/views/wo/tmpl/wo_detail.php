@@ -10,7 +10,7 @@ $id = JRequest::getVar('id');
 $edit = JRequest::getVar('edit', true);
 
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(10);
+$role = JAdministrator::RoleOnComponent(12);
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
     JToolBarHelper::editListX("editwo","Edit WO");
 }

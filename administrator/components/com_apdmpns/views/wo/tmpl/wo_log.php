@@ -10,7 +10,7 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 JToolBarHelper::title("WO: " . $this->wo_row->wo_code, 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(10);
+$role = JAdministrator::RoleOnComponent(12);
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
         JToolBarHelper::apply('save_log_wo', 'Save');
 }

@@ -275,9 +275,9 @@ th:first-child div{
                 <?php echo JHTML::_('calendar',$this->sto_created_from, 'sto_created_from', 'sto_created_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->sto_created_to, 'sto_created_to', 'sto_created_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                <?php echo $this->lists['sto_created_by'];?>
                 <?php echo $this->lists['sto_owner'];?>
+                <?php echo $this->lists['sto_created_by'];?>
+
                 <input type="submit"  onclick="submitbutton('search_sto_history')"  name="search_tool_out" value="Go">
                 <a href="index.php?option=com_apdmpns&amp;task=sto&cid[]=<?php echo $this->row->pns_id; ?>&amp;clean=all"><input type="button" value="Reset"></a></td>
         </tr>

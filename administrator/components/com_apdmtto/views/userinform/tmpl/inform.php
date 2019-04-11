@@ -4,13 +4,14 @@
 
 <?php
 $me = & JFactory::getUser();
-$me->get('username');
+$user_id = $me->get('id');
 $tto_id		= JRequest::getVar( 'tto_id');
 $tto_type_inout		= JRequest::getVar( 'tto_type_inout');
 	// clean item data
 JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 $checkFullFill =  $this->checkFullFill;
 $isOutConfirm =  $this->isOutConfirm;
+$UserOutConfirm =  $this->userOutConfirm;
 	
 ?>
 <script language="javascript">
@@ -82,6 +83,13 @@ function UpdateOwnerSto(sto_id){
         <?php
         }
         else{
+        if($UserOutConfirm !=0 && $UserOutConfirm!=$user_id){
+            ?>
+            <tr>
+                <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('You are must owner confirm out ')?></strong></td>
+            </tr>
+            <?php
+        }else {
         ?>
         <tr>
                 <td colspan="2"><strong><?php echo JText::_('Please confirm your Username / password')?></strong></td>
@@ -112,7 +120,7 @@ function UpdateOwnerSto(sto_id){
                         
                         </td>	
 		</tr>	      
-		<?php		}?>
+		<?php		}}?>
 	</table>
 
 	<div class="clr"></div>	

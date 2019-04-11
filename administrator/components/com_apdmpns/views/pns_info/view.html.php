@@ -312,13 +312,13 @@ class pnsViewpns_info extends JView
         $this->assignRef('stos',        $list_stos);
         
         //Cerated by
-        $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_create_by  GROUP BY p.sto_create_by ORDER BY text ");
+        $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_create_by  inner join apdm_pns_sto_fk fk on p.pns_sto_id = fk.sto_id where fk.pns_id = ".$row->pns_id." GROUP BY p.sto_create_by ORDER BY text ");
         $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
         $create_bys = array_merge($create_by, $db->loadObjectList());
         $lists['sto_created_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_sto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_sto_created_by );
 
         //Owner by
-        $db->setQuery("SELECT  p.sto_owner as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_owner GROUP BY p.sto_owner ORDER BY text  ");        
+        $db->setQuery("SELECT  p.sto_owner as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_owner  inner join apdm_pns_sto_fk fk on p.pns_sto_id = fk.sto_id where fk.pns_id = ".$row->pns_id."  GROUP BY p.sto_owner ORDER BY text  ");
         $modified[] = JHTML::_('select.option', 0, JText::_('Select Owner'), 'value', 'text');
         $modifieds = array_merge($modified, $db->loadObjectList());
         $lists['sto_owner'] = JHTML::_('select.genericlist', $modifieds, 'filter_sto_owner_by', 'class="inputbox" size="1"  ', 'value', 'text', $filter_sto_owner_by );

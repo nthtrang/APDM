@@ -27,7 +27,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
     @page
     {
         size: auto;   /* auto is the current printer page size */
-        margin: 0mm;  /* this affects the margin in the printer settings */
+        margin: 4mm;  /* this affects the margin in the printer settings */
     }
 
 

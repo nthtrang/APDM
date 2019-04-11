@@ -7,12 +7,13 @@ $cid = JRequest::getVar('cid', array(0));
 $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 JToolBarHelper::title("Sale Order", 'cpanel.png');
-$role = JAdministrator::RoleOnComponent(10);      
+$role = JAdministrator::RoleOnComponent(10);
+$rolewo = JAdministrator::RoleOnComponent(12);
 if (in_array("W", $role)) {
-        //JToolBarHelper::addNew("add_so","New SO");
         JToolBarHelper::customX('add_so', 'new', '', 'New SO', false);
-        JToolBarHelper::addNew("add_wo","New WO");
-        
+}
+if (in_array("W", $rolewo)) {
+    JToolBarHelper::addNew("add_wo","New WO");
 }
 $cparams = JComponentHelper::getParams('com_media');
 $editor = &JFactory::getEditor();

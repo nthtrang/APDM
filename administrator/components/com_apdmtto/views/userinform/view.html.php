@@ -19,11 +19,14 @@ class TToViewuserinform extends JView {
                 $tto_type_inout		=  JRequest::getVar( 'tto_type_inout');
                 //check if click = 2
                 $isOutConfirm = 1;
-                if($tto_type_inout==1)
+                $tto_owner_out = 0;
+                if($tto_type_inout==1)//confirm in
                 {
-                        $query = 'select tto_owner_out_confirm FROM apdm_pns_tto where pns_tto_id  = '.$tto_id;
+                        $query = 'select *  FROM apdm_pns_tto where pns_tto_id  = '.$tto_id;
                         $db->setQuery( $query );
-                        $isOutConfirm = $db->loadResult();
+                        $tto_row =  $db->loadObject();
+                        $isOutConfirm = $tto_row->tto_owner_out_confirm;
+                        $tto_owner_out = $tto_row->tto_owner_out;
                 }                
                 $me = JFactory::getUser();
                 JArrayHelper::toInteger($cid, array(0));
@@ -40,7 +43,8 @@ class TToViewuserinform extends JView {
                       $checkFullFill=0;  
                 }
                 $this->assignRef('checkFullFill',        $checkFullFill);   
-                $this->assignRef('isOutConfirm',        $isOutConfirm);   
+                $this->assignRef('isOutConfirm',        $isOutConfirm);
+                $this->assignRef('userOutConfirm',        $tto_owner_out);
                 
                 parent::display($tpl);
         }

@@ -207,10 +207,10 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                                         Date Out From&nbsp;&nbsp
                                         <?php echo JHTML::_('calendar',$this->date_out_from, 'tto_owner_out_confirm_date_from', 'tto_owner_out_confirm_date_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->date_out_to, 'tto_owner_out_confirm_date_to', 'tto_owner_out_confirm_date_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                        
-                           
+                                        To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->date_out_to, 'tto_owner_out_confirm_date_to', 'tto_owner_out_confirm_date_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <?php echo $this->lists['tto_owner_out'];?>
                                         <?php echo $this->lists['tto_create_by'];?>
-			<?php echo $this->lists['tto_owner_out'];?>
                              <input type="submit"  onclick="submitbutton('search_tool_out')"  name="search_tool_out" value="Go">
                                         <a href="index.php?option=com_apdmtto&amp;task=tto&amp;clean=all"><input type="button" value="Reset"></a></td>
                         </tr>

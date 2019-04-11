@@ -29,8 +29,9 @@ class  SToViewgetso extends JView
         $where[] = 'so.so_state not in ("onhold","cancel")';
 		if (isset( $search ) && $search!= '')
 		{
-			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );
-			$where[] = 'so.so_cuscode LIKE '.$searchEscaped;
+            $arr_code = explode("-", trim($search));
+            $searchEscaped = $db->Quote( '%'.$db->getEscaped( $arr_code[1], true ).'%', false );
+			$where[] = 'so.so_cuscode LIKE '.$searchEscaped.' and so.customer_id = "'.$arr_code[0].'"';
 		}	    
 		
 

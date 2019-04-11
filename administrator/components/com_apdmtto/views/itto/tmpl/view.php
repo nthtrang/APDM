@@ -246,7 +246,7 @@ function checkAllToolPn(n, fldName )
                                         <td  class="title"><?php echo JHTML::_('date', $this->tto_row->tto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
 					<td  class="key"><?php echo JText::_('Owner'); ?></td>
                                         <td class="title"><?php echo GetValueUser($this->tto_row->tto_owner_out, "name"); ?></td>                                       
-                                        <td class="key"><?php echo JText::_('Confirm'); ?></td>
+                                        <td class="key"><?php echo JText::_('Confirm-Out'); ?></td>
                                         <td class="title"> 
 										 <?php                                                                                  
                                                              if($this->tto_row->tto_owner_out_confirm==0 && $this->tto_row->tto_state=="Create"){
@@ -276,9 +276,9 @@ function checkAllToolPn(n, fldName )
                                 <tr>
                                         <td class="key"><?php echo JText::_('Due Date'); ?></td>                                               
                                         <td class="title">  <?php echo ($this->tto_row->tto_due_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_due_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
-                                        <td  class="key" ><?php echo JText::_('Owner'); ?></td>
+                                        <td  class="key" ><?php echo JText::_(''); ?></td>
                                         <td class="title"><?php echo GetValueUser($this->tto_row->tto_owner_in, "name"); ?></td>                                       
-                                        <td  class="key"><?php echo JText::_('Confirm'); ?></td>
+                                        <td  class="key"><?php echo JText::_('Confirm-In'); ?></td>
                                         <td  class="title"> 
 										 <?php                                                                                  
                                                              if($this->tto_row->tto_owner_in_confirm==0 && $this->tto_row->tto_state=="Using"){
