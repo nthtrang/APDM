@@ -295,10 +295,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-c3ow" rowspan="5">Production</td>
             <td class="tg-0pky">CONT#</td>
             <td class="tg-0pky">Wire size#</td>
-            <td class="tg-0pky">TOOL ID#</td>
+            <td class="tg-0pky" width="120px">TOOL ID# <?php echo $listTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+//            if($listTool){
+//            foreach($listTool as $rowsto)
+//            {
+//                    echo "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$rowsto->pns_tto_id."'>".$rowsto->tto_code."</a><br>";
+//            }
+//            }
+            ?></td>
             <td class="tg-0pky">Height</td>
             <td class="tg-0pky">Pull Force</td>
-            <td class="tg-0pky"></td>
+            <td class="tg-0pky">sss</td>
             <td class="tg-0pky"></td>
             <td class="tg-0pky"></td>
             <td class="tg-0pky"></td>

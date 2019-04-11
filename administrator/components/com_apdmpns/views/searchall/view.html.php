@@ -285,7 +285,7 @@ else
                 case '9': //Vendor PN
                     $pns_id_mf = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');
                     $rs_supplier = $db->loadObjectList();                    
                     if (count($rs_supplier) > 0){
                         foreach ($rs_supplier as $mf){
@@ -298,7 +298,7 @@ else
                  
                  case '10': //Supplier PN
                     $pns_id_mf = array();
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');
                     $rs_supplier = $db->loadObjectList();
                     
 
@@ -315,7 +315,7 @@ else
                 case '8': //Manufacture PN                         
                     $pns_id_mf = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');                    
                     $rs_mf = $db->loadObjectList();
                     
                     if (count($rs_mf) > 0){
@@ -332,7 +332,7 @@ else
                 case '0':   
                         $arr_vendor_id = array();
                     //echo 'SELECT * FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =2 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.' )';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');                    
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =2 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');                    
                     $rs_vendor = $db->loadObjectList();
                     if (count($rs_vendor) > 0){
                         foreach ($rs_vendor as $vendor){
@@ -341,7 +341,7 @@ else
                     }
                     
                     $arr_supplier_id = array();
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =3 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');
                     $rs_supplier = $db->loadObjectList();
                     
                     if (count($rs_supplier) > 0){
@@ -351,7 +351,7 @@ else
                     }    
                     $arr_mf_id = array();
                       //   echo 'SELECT info_id FROM apdm_supplier_info WHERE info_deleted=0 AND info_type =4 AND ( info_name LIKE '.$searchEscaped.' OR info_address LIKE '.$searchEscaped.' OR info_telfax LIKE '.$searchEscaped.' OR info_website LIKE '.$searchEscaped.' OR info_contactperson LIKE '.$searchEscaped.' OR info_email LIKE '.$searchEscaped.' OR info_description LIKE '.$searchEscaped.')';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.' OR ASI.info_name LIKE '.$searchEscaped.' OR ASI.info_address LIKE '.$searchEscaped.' OR ASI.info_telfax LIKE '.$searchEscaped.' OR ASI.info_website LIKE '.$searchEscaped.' OR ASI.info_contactperson LIKE '.$searchEscaped.' OR ASI.info_email LIKE '.$searchEscaped.' OR ASI.info_description LIKE '.$searchEscaped.' ) group by APS.pns_id');
                     $rs_mf = $db->loadObjectList();
                     
                     if (count($rs_mf) > 0){

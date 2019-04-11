@@ -1698,4 +1698,18 @@ class SToController extends JController
                 JRequest::setVar('view', 'sto');
                 parent::display();
         }
+        function ajax_markscan_checked()
+        {
+                global $is_etoscan;
+                $is_etoscan= JRequest::getVar('etoscan');
+                $session = JFactory::getSession();
+                $session->set('is_scaneto',$is_etoscan);
+        }
+        function ajax_markscan_itochecked()
+        {
+                global $is_itoscan;
+                $is_itoscan= JRequest::getVar('itoscan');
+                $session = JFactory::getSession();
+                $session->set('is_scanito',$is_itoscan);
+    }
 }

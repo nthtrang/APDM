@@ -101,7 +101,10 @@ function UpdatePnsEco(){
 				</th>
                                 <th  width="5%" class="title"  >
 					<?php echo JText::_( 'MFG PN' ); ?>
-				</th>                                
+				</th>    
+                                <th width="5%" class="title"  >
+					<?php echo JText::_( 'QTY' ); ?>
+				</th> 
 			</tr>
 		</thead>
 		<tfoot>
@@ -133,6 +136,8 @@ function UpdatePnsEco(){
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
                               //  $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
                               $qtyRemain = CalculateToolRemainValue($row->pns_id);
+                              
+                              //$qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
                                 
                                 if($qtyRemain<=0)
                                         continue;
@@ -173,6 +178,10 @@ function UpdatePnsEco(){
                                                 }					
 					} ?>
 				</td>	                                
+                                <td>
+                                        <?php echo $qtyRemain;?>
+                                        
+                                </td>
 			</tr>
 			<?php
 				$k = 1 - $k;

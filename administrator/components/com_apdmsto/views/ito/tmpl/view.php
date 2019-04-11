@@ -217,6 +217,30 @@ function autoAddPartItobk(pns,sto_id)
 function autoAddPartIto(pns,sto_id){
         window.location = "index.php?option=com_apdmsto&task=ajax_addpn_ito&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
 }
+function checkforscanito(isitchecked)
+{
+        if (isitchecked == true){
+                document.getElementById("pns_code").focus();
+                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')");
+            checkedforMarkScan(1);
+        }
+        else {
+                document.getElementById('pns_code').setAttribute("onkeyup", "return false;");
+            checkedforMarkScan(0);
+        }
+}
+
+function checkedforMarkScan(ischecked)
+{
+    var url = 'index.php?option=com_apdmsto&task=ajax_markscan_itochecked&itoscan='+ischecked;
+    var MyAjax = new Ajax(url, {
+        method:'get',
+        onComplete:function(result){
+            var eco_result = result;
+
+        }
+    }).request();
+}    
 </script>
 <!--<div class="submenu-box">
             <div class="t">
@@ -474,9 +498,20 @@ function autoAddPartIto(pns,sto_id){
 <?php
 if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
+            $session = JFactory::getSession();
+        if($session->get('is_scanito')){
+            $itoscanchecked = 'checked="checked"';
+            $itoonkeyUp = "onkeyup=\"autoAddPartIto(this.value,'".$this->sto_row->pns_sto_id."')\" autofocus";
+        }
+        else
+        {
+            $itoscanchecked = "";
+            $itoonkeyUp = "";
+        }
         ?>
                                     <td class="button" id="toolbar-addpnsave">           
-                Scan PN Barcode <input onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
+                Scan PN Barcode <input <?php echo $itoonkeyUp?> onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+                 <input <?php echo $itoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscanito(this.checked)" />
         </td>
         <td class="button" id="toolbar-save">
             <a href="#"

@@ -231,6 +231,30 @@ function checkAllEtoPn(n, fldName )
     function autoAddPartEto(pns,sto_id){
         window.location = "index.php?option=com_apdmsto&task=ajax_addpn_eto&sto_id="+sto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
     }
+function checkforscaneto(isitchecked)
+{
+        if (isitchecked == true){
+                document.getElementById("pns_code").focus();
+                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')");
+            checkedforMarkScan(1);
+        }
+        else {
+                document.getElementById('pns_code').setAttribute("onkeyup", "return false;");
+            checkedforMarkScan(0);
+        }
+}
+
+function checkedforMarkScan(ischecked)
+{
+    var url = 'index.php?option=com_apdmsto&task=ajax_markscan_checked&etoscan='+ischecked;
+    var MyAjax = new Ajax(url, {
+        method:'get',
+        onComplete:function(result){
+            var eco_result = result;
+
+        }
+    }).request();
+}    
 </script>
 <!--<div class="submenu-box">
     <div class="t">
@@ -644,9 +668,20 @@ function checkAllEtoPn(n, fldName )
 <?php
 if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
     if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
+       $session = JFactory::getSession();
+        if($session->get('is_scaneto')){
+            $etoscanchecked = 'checked="checked"';
+            $etoonkeyUp = "onkeyup=\"autoAddPartEto(this.value,'".$this->sto_row->pns_sto_id."')\" autofocus";
+        }
+        else
+        {
+            $etoscanchecked = "";
+            $etoonkeyUp = "";
+        }
         ?>
         <td class="button" id="toolbar-addpnsave">
-            Scan PN Barcode <input onchange="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" value="" >
+            Scan PN Barcode <input <?php echo $etoonkeyUp?> onchange="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartEto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+            <input <?php echo $etoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscaneto(this.checked)" />
         </td>
         <td class="button" id="toolbar-save">
             <a href="#"

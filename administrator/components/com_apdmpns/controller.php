@@ -9058,14 +9058,28 @@ class PNsController extends JController {
                         $query = "SELECT eco_id FROM apdm_eco where eco_name  = ' ".trim($bar_code)."'";
                         $db->setQuery($query);
                         $eco_id = $db->loadResult();
-                        return $this->setRedirect('index.php?option=com_apdmeco&task=detail&scan=1&cid[]=' . $eco_id);
+                        if($eco_id){
+                                return $this->setRedirect('index.php?option=com_apdmeco&task=detail&scan=1&cid[]=' . $eco_id);
+                        }
+                        else
+                        {
+                                $msg = 'Not found any ECO';
+                               // return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
+                         }
                 }
                 elseif($leght==8)
                 {
                         $query = "SELECT pns_wo_id FROM apdm_pns_wo where wo_code =  '".trim($bar_code)."'";
                         $db->setQuery($query);
                         $wo_id = $db->loadResult();
-                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&scan=1&id=' . $wo_id);                        
+                        if($wo_id){
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&scan=1&id=' . $wo_id);                        
+                        }
+                         else
+                        {
+                                $msg = 'Not found any WO';
+                                //return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
+                         }
                 }
                 else
                 {                        
@@ -9074,14 +9088,29 @@ class PNsController extends JController {
                                 $query = "SELECT pns_sto_id FROM apdm_pns_sto where sto_code  = '".trim($bar_code)."'";
                                 $db->setQuery($query);
                                 $ito_id = $db->loadResult();
-                                return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&scan=1&id=' . $ito_id);                                
+                                if($ito_id)
+                                {
+                                        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&scan=1&id=' . $ito_id);                                
+                                }
+                                else
+                                {
+                                        $msg = 'Not found any ITO';
+                                       // return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
+                                 }
                         }
                         elseif(preg_match("/E/i",$bar_code))
                         {
                                 $query = "SELECT pns_sto_id FROM apdm_pns_sto where sto_code  = '".trim($bar_code)."'";
                                 $db->setQuery($query);
                                 $eto_id = $db->loadResult();
-                                return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&scan=1&id=' . $eto_id);                                                                
+                                if($eto_id){
+                                        return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&scan=1&id=' . $eto_id);                                                                
+                                }
+                                else
+                                {
+                                        $msg = 'Not found any ETO';
+                                      //  return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
+                                 }
                         }
                          elseif(preg_match("/T/i",$bar_code))
                          {
@@ -9089,7 +9118,16 @@ class PNsController extends JController {
                                 $query = "SELECT pns_tto_id FROM apdm_pns_tto where tto_code = '".trim($bar_code)."'";
                                 $db->setQuery($query);
                                 $tto_id = $db->loadResult();
-                                return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&scan=1&id=' . $tto_id);                                
+                                if($tto_id)
+                                {
+                                        return $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&scan=1&id=' . $tto_id);                                
+                                }
+                                else
+                                {
+                                        $msg = 'Not found any Tool';
+                                       // return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard&i='.time(),$msg);
+                                      
+                                 }
                         }
                         else{//for PN
                             $pns_id = PNsController::getPnsIdfromPnCode($bar_code);
@@ -9104,11 +9142,12 @@ class PNsController extends JController {
                             }
                             else
                             {
-                                return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard','Not found any PN');
+                                    $msg = 'Not found any PN';
+                                //return $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
                             }
                         }
                 }
-            return  $this->setRedirect('index.php?option=com_apdmpns&task=somanagement');
+            return  $this->setRedirect('index.php?option=com_apdmeco&task=dashboard',$msg);
         }
         function getPnsIdfromPnCode($pn_code)
         {            
@@ -9233,6 +9272,21 @@ class PNsController extends JController {
                         echo $val."<br>";
                 }
 
+        }
+        function getTtofromWo($wo_id)        
+        {
+                  $db = & JFactory::getDBO();            
+                  $db->setQuery("select tto.pns_tto_id,tto.tto_code from apdm_pns_tto tto where tto.tto_wo_id = '".$wo_id."'");
+                  $rows = $db->loadObjectList();
+                $str = '';
+                foreach ($rows as $row) {
+                         $str .= "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$row->pns_tto_id."'>".$row->tto_code."</a><br>";
+                }
+                echo $str;
+                
+//                  if ($rows) {
+//                          echo "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$rows->pns_tto_id."'>".$rows->tto_code."</a><br>";
+//                  }                                                                        
         }
 }
 
