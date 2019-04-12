@@ -1365,7 +1365,12 @@ class TToController extends JController
                 {
                     $soNumber = $row->ccs_code."-".$soNumber;
                 }
-                $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber.'^'.$row->pns_wo_id.'^'.$row->wo_code;
+                if($row->wo_code) {
+                    $result = $row->ccs_so_code . '^' . $row->ccs_name . '^' . $row->pns_so_id . '^' . $soNumber . '^' . $row->pns_wo_id . '^' . $row->wo_code;
+                }
+                else{
+                    $result = '0^NA^0^NA^0^NA';
+                }
                 
         }
         else {

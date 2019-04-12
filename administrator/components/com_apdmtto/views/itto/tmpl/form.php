@@ -119,7 +119,15 @@ function autoAddWoTto(wo_code)
                     eco = eco_result.split('^');
                     window.document.getElementById('tto_wo_id').value = eco[4];
                     window.document.getElementById('wo_code').value = eco[5];
-                    window.document.getElementById('notice').innerHTML = "Have add WO "+ wo_code +" successfull.";
+                    if(eco[5]!= "NA") {
+                        window.document.getElementById('notice').innerHTML = "Have add WO " + wo_code + " successfull.";
+                        window.document.getElementById('notice_fail').innerHTML = "";
+                    }
+                    else
+                    {
+                        window.document.getElementById('notice').innerHTML = "";
+                        window.document.getElementById('notice_fail').innerHTML = "Not found WO " + wo_code ;
+                    }
                     window.document.getElementById('scan_wo_code').value ="";
                     window.document.getElementById('scan_wo_code').focus();
                 }
@@ -156,7 +164,8 @@ function autoAddWoTto(wo_code)
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
                         </a>
                         Scan Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="scan_wo_code" id="scan_wo_code" value="" >
-                         <div name="notice" style="color:#D30000" id ="notice"></div>
+                         <div name="notice_fail" style="color:#D30000" id ="notice_fail"></div>
+                        <div name="notice" style="color:#0B55C4" id ="notice"></div>
                     </td>
                 </tr>
                  <tr>
