@@ -14,7 +14,7 @@ require_once('includes/class.upload.php');
 require_once('includes/download.class.php');
 require_once('includes/zip.class.php');
 require_once('includes/system_defines.php');
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
 class PNsController extends JController {
 
@@ -9287,6 +9287,122 @@ class PNsController extends JController {
 //                  if ($rows) {
 //                          echo "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$rows->pns_tto_id."'>".$rows->tto_code."</a><br>";
 //                  }                                                                        
+        }
+        function checkPnExist($customer_code,$customer_pn,$rev)
+        {
+                $db = & JFactory::getDBO(); 
+                $db->setQuery('select pns_id from apdm_pns where ccs_code = "' . $customer_code .'" AND pns_code = "'.$customer_pn.'" and pns_revision = "'.$rev.'"');
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                        return $pns_id;
+                }
+                return 0;
+        }
+        function importBom()
+        {
+                include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
+                require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
+                require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
+                require_once('includes/download.class.php');
+                ini_set("memory_limit", "512M");
+                @set_time_limit(1000000);
+               $objPHPExcel = new PHPExcel();
+              //  $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
+               // $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xlsx');
+
+                global $mainframe;
+                $me = & JFactory::getUser();
+                $pns_id = JRequest::getVar('pns_id');
+                $username = $me->get('username');
+                $db = & JFactory::getDBO();
+
+                  //Use whatever path to an Excel file you need.
+                  $inputFileName = JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xls';
+
+                  try {                    
+                    $objReader = PHPExcel_IOFactory::createReader('Excel5');
+                    $objPHPExcel = $objReader->load($inputFileName);
+                  } catch (Exception $e) {
+                    die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . 
+                        $e->getMessage());
+                  }
+
+                  $sheet = $objPHPExcel->getSheet(0);
+                   $highestRow = $sheet->getHighestRow();
+                   $highestColumn = $sheet->getHighestColumn();
+//var_dump($objPHPExcel->getActiveSheet()->toArray(null,true,true,true));
+                    for ($row = 1; $row <= 1; $row++) { 
+                            $rowData = $sheet->toArray('A1:' . $highestColumn . '1',  null, true, false);
+                    }
+                    $header = $rowData[1];
+                    if($rowData[1][0]!="Level")
+                    {
+                            $mess =  "Wrong format at A1. Must be 'Level'";
+                    }                   
+                    if($rowData[1][1]!="Customer Code")
+                    {
+                            $mess =  "Wrong format at B1. Must be 'Customer Code'";
+                    }
+                    if($rowData[1][2]!="Customer PN")
+                    {
+                            $mess =  "Wrong format at C1. Must be 'Customer PN'";
+                    }
+                    if($rowData[1][3]!="Rev.")
+                    {
+                            $mess =  "Wrong format at D1. Must be 'Rev.'";
+                    }
+                    if($rowData[1][4]!="Description")
+                    {
+                            $mess =  "Wrong format at E1. Must be 'Description'";
+                    }
+                    if($rowData[1][5]!="ECO number")
+                    {
+                            $mess =  "Wrong format at F1. Must be 'ECO number";
+                    }
+                    if($rowData[1][6]!="Find number")
+                    {
+                            $mess =  "Wrong format at G1. Must be 'Find number'";
+                    }
+                    if($rowData[1][7]!="Ref Des")
+                    {
+                            $mess =  "Wrong format at H1. Must be 'Ref Des'";
+                    }
+                    if($rowData[1][8]!="Qty.")
+                    {
+                            $mess =  "Wrong format at I1. Must be 'Qty.'";
+                    }
+                    if($rowData[1][9]!="UOM")
+                    {
+                            $mess =  "Wrong format at J1. Must be 'UOM'";
+                    }
+                    if($rowData[1][10]!="MFR name")
+                    {
+                            $mess =  "Wrong format at K1. Must be 'MFR name'";
+                    }
+                    if($rowData[1][11]!="MFG PN")
+                    {
+                            $mess =  "Wrong format at L1. Must be 'MFG PN'";
+                    }
+    
+                
+                for ($row = 1; $row <= $highestRow; $row++) { 
+                $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);    
+                }
+                  // print_r($rowData);   
+                for($k=2;$k<=$highestRow;$k++)
+                {
+                        if($rowData[$k][0]==0)
+                        {
+                                echo $pns_id = PNsController::checkPnExist($rowData[$k][1],$rowData[$k][2],$rowData[$k][3]);
+                                if($pns_id)
+                                {
+                                        //pass and continuew update
+                                }
+                                echo "parent";
+                        }
+
+                }
+       
         }
 }
 
