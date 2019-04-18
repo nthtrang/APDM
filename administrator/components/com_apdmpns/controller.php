@@ -14,7 +14,7 @@ require_once('includes/class.upload.php');
 require_once('includes/download.class.php');
 require_once('includes/zip.class.php');
 require_once('includes/system_defines.php');
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 class PNsController extends JController {
 
@@ -9280,11 +9280,11 @@ class PNsController extends JController {
         function getTtofromWo($wo_id)        
         {
                   $db = & JFactory::getDBO();            
-                  $db->setQuery("select tto.pns_tto_id,tto.tto_code from apdm_pns_tto tto where tto.tto_wo_id = '".$wo_id."'");
+                  $db->setQuery("select tto.pns_tto_id,tto.tto_code,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on loc.pns_location_id=fk.location where tto.tto_wo_id = '".$wo_id."' group by loc.location_code");
                   $rows = $db->loadObjectList();
                 $str = '';
                 foreach ($rows as $row) {
-                         $str .= "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$row->pns_tto_id."'>".$row->tto_code."</a><br>";
+                         $str .= "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$row->pns_tto_id."'>".$row->location_code."</a><br>";
                 }
                 echo $str;
                 
