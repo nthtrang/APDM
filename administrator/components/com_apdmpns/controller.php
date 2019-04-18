@@ -2362,7 +2362,11 @@ class PNsController extends JController {
                 $db->setQuery("SELECT eco_name FROM apdm_eco WHERE eco_id=" . $eco_id);
                 return $db->loadResult();
         }
-
+        function GetECOId($eco_name) {
+                $db = & JFactory::getDBO();
+                $db->setQuery("SELECT eco_id FROM apdm_eco WHERE eco_name=' " . $eco_name."'");
+                return $db->loadResult();
+        }
         /**
          * @desc Display list child pns 
          */
@@ -9291,13 +9295,46 @@ class PNsController extends JController {
         function checkPnExist($customer_code,$customer_pn,$rev)
         {
                 $db = & JFactory::getDBO(); 
-                $db->setQuery('select pns_id from apdm_pns where ccs_code = "' . $customer_code .'" AND pns_code = "'.$customer_pn.'" and pns_revision = "'.$rev.'"');
+                $db->setQuery('select pns_id from apdm_pns where ccs_code = "' . $customer_code .'" AND pns_code = "'.$customer_pn.'" and pns_revision = "'.$rev.'"');                
                 $pns_id = $db->loadResult();
                 if ($pns_id) {
                         return $pns_id;
                 }
                 return 0;
         }
+        function autoInsertPn($ccs_code,$pns_code,$pns_revision,$pns_description,$eco_name,$pns_find_number,$pns_ref_des,$pns_uom,$mfr_name,$mfg_pn)
+        {
+                $db = & JFactory::getDBO(); 
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();                
+                $pns_created = $datenow->toMySQL();
+                $pns_created_by = $me->get('id');
+                $eco_id = PNsController::GetECOId($eco_name);
+                
+                $ccs_id = PNsController::checkCcsId($ccs_code);
+                if(!$ccs_id)
+                {
+                        $db->setQuery("INSERT INTO apdm_ccs (ccs_code,ccs_description,ccs_activate,ccs_create,ccs_create_by) ".
+                                "  VALUES ('" . $ccs_code . "','" . $ccs_code . "','1','".$pns_created."','".$pns_created_by."')");                               
+                        $db->query();                            
+                }
+                $db->setQuery("INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_description,eco_id,pns_find_number,pns_ref_des,pns_uom,pns_create,pns_create_by) ".
+                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision . "','" . $pns_description . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");                               
+                $db->query();                     
+                //getLast PN ID
+               return $pns_id = $db->insertid();
+                
+                
+        }
+        function checkCcsId($ccs_code)
+	{
+		$db =& JFactory::getDBO();               
+                $ccs_description = "";
+                $query = " SELECT ccs_id FROM apdm_ccs WHERE ccs_code='".$ccs_code."'";
+		$db->setQuery($query);
+		return $db->loadResult();
+                
+	} 
         function importBom()
         {
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
@@ -9389,20 +9426,111 @@ class PNsController extends JController {
                 $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);    
                 }
                   // print_r($rowData);   
-                for($k=2;$k<=$highestRow;$k++)
+                //for level 0
+                $parent0 = 0;
+                $parent1 = 0;
+                $parent2 = 0;
+                $parent3 = 0;
+                $parent4 = 0;
+                $parent5 = 0;
+                for($line=2;$line<=$highestRow;$line++)
                 {
-                        if($rowData[$k][0]==0)
+                        
+                        if($rowData[$line][0]==0)
                         {
-                                echo $pns_id = PNsController::checkPnExist($rowData[$k][1],$rowData[$k][2],$rowData[$k][3]);
-                                if($pns_id)
-                                {
-                                        //pass and continuew update
+                               echo $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                               
+                                if(!$pns_id){                                
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }
-                                echo "parent";
+                                $parent0 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                              // echo "<br> parent is BOM ".$pns_id;                       
                         }
-
-                }
-       
+                        
+                        if($rowData[$line][0]==1)
+                        {    
+                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                if(!$pns_id){
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                }
+                               
+                                $parent1 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
+                                $db->query();
+                               // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0;                                     
+                        }
+                      
+                        if($rowData[$line][0]==2)
+                        {
+                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                if(!$pns_id){
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                }                               
+                                $parent2 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
+                                $db->query();
+                                echo "<br> ".$rowData[$line][1]." level 2 parent is".$parent1;                               
+                                
+                        }
+                       
+                        if($rowData[$line][0]==3)
+                        {
+                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                if(!$pns_id){
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                }                               
+                                $parent3 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
+                                $db->query();
+                                echo "<br> ".$rowData[$line][1]." level 3 parent is".$parent2;                               
+                        }
+                        if($rowData[$line][0]==4)
+                        {
+                               $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                if(!$pns_id){
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                }                               
+                                $parent4 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
+                                $db->query();
+                                echo "<br> ".$rowData[$line][1]." level 4 parent is".$parent3;                               
+                        }
+                        if($rowData[$line][0]==5)
+                        {
+                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                if(!$pns_id){
+                                        $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                }                               
+                                $parent5 = $pns_id;
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $db->setQuery($query);
+                                $db->query();
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
+                                $db->query();
+                                echo "<br> ".$rowData[$line][1]." level 5 parent is".$parent4;                               
+                        }
+                }                         
         }
 }
 
