@@ -305,7 +305,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             ?></td>
             <td class="tg-0pky">Height</td>
             <td class="tg-0pky">Pull Force</td>
-            <td class="tg-0pky">sss</td>
+            <td class="tg-0pky"></td>
             <td class="tg-0pky"></td>
             <td class="tg-0pky"></td>
             <td class="tg-0pky"></td>
