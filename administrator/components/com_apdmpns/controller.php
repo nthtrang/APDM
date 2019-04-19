@@ -9353,16 +9353,55 @@ class PNsController extends JController {
                 $username = $me->get('username');
                 $db = & JFactory::getDBO();
 
-                  //Use whatever path to an Excel file you need.
-                  $inputFileName = JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xls';
+                
+                //process upload file
+                $path_bom_file = JPATH_SITE . DS . 'uploads'  . DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_bom_file, 0777);                
+                $bom_upload = "";
+                         if ($_FILES['bom_file']['size'] > 0) {                                
+                            if($_FILES['bom_file']['size']<20000000)
+                            {                                                                 
+                                $ext = pathinfo($_FILES['bom_file']['name'], PATHINFO_EXTENSION);
+                                if($ext=="xls"){
+                                        if (file_exists($path_bom_file . $_FILES['bom_file']['name'])) {
 
-                  try {                    
-                    $objReader = PHPExcel_IOFactory::createReader('Excel5');
-                    $objPHPExcel = $objReader->load($inputFileName);
-                  } catch (Exception $e) {
-                    die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . 
-                        $e->getMessage());
-                  }
+                                                @unlink($path_bom_file .  $_FILES['bom_file']['name']);
+                                        }
+                                        if (!move_uploaded_file($_FILES['bom_file']['tmp_name'], $path_bom_file . $_FILES['bom_file']['name'])) {
+                                                $msg = JText::_('Upload fail, please try again');
+                                                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);
+                                        } else {
+                                            $bom_upload = $_FILES['bom_file']['name'];
+                                        }
+                                }
+                                else
+                                {
+                                        $msg = JText::_('Please upload file type is xls.');
+                                        return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);                                        
+                                }
+                            }
+                            else
+                            {
+                                $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);
+                            }
+                        }
+                        else{
+                                $msg = JText::_('Please select an excel file first.');
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);
+                        }
+                                              
+                  //Use whatever path to an Excel file you need.
+                  //$inputFileName = JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xls';
+                        $inputFileName =  $path_bom_file.$bom_upload;
+                        try {                    
+                                $objReader = PHPExcel_IOFactory::createReader('Excel5');
+                                $objPHPExcel = $objReader->load($inputFileName);
+                        } catch (Exception $e) {
+                                $msg = 'Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage();
+                                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);
+                        }
 
                   $sheet = $objPHPExcel->getSheet(0);
                    $highestRow = $sheet->getHighestRow();
@@ -9372,53 +9411,54 @@ class PNsController extends JController {
                             $rowData = $sheet->toArray('A1:' . $highestColumn . '1',  null, true, false);
                     }
                     $header = $rowData[1];
+                    $mess=array();
                     if($rowData[1][0]!="Level")
                     {
-                            $mess =  "Wrong format at A1. Must be 'Level'";
+                            $mess[] =  "Wrong format at A1. Must be 'Level'";
                     }                   
                     if($rowData[1][1]!="Customer Code")
                     {
-                            $mess =  "Wrong format at B1. Must be 'Customer Code'";
+                            $mess[] =  "Wrong format at B1. Must be 'Customer Code'";
                     }
                     if($rowData[1][2]!="Customer PN")
                     {
-                            $mess =  "Wrong format at C1. Must be 'Customer PN'";
+                            $mess[] =  "Wrong format at C1. Must be 'Customer PN'";
                     }
                     if($rowData[1][3]!="Rev.")
                     {
-                            $mess =  "Wrong format at D1. Must be 'Rev.'";
+                            $mess[] =  "Wrong format at D1. Must be 'Rev.'";
                     }
                     if($rowData[1][4]!="Description")
                     {
-                            $mess =  "Wrong format at E1. Must be 'Description'";
+                            $mess[] =  "Wrong format at E1. Must be 'Description'";
                     }
                     if($rowData[1][5]!="ECO number")
                     {
-                            $mess =  "Wrong format at F1. Must be 'ECO number";
+                            $mess[] =  "Wrong format at F1. Must be 'ECO number";
                     }
                     if($rowData[1][6]!="Find number")
                     {
-                            $mess =  "Wrong format at G1. Must be 'Find number'";
+                            $mess[] =  "Wrong format at G1. Must be 'Find number'";
                     }
                     if($rowData[1][7]!="Ref Des")
                     {
-                            $mess =  "Wrong format at H1. Must be 'Ref Des'";
+                            $mess[] =  "Wrong format at H1. Must be 'Ref Des'";
                     }
                     if($rowData[1][8]!="Qty.")
                     {
-                            $mess =  "Wrong format at I1. Must be 'Qty.'";
+                            $mess[] =  "Wrong format at I1. Must be 'Qty.'";
                     }
                     if($rowData[1][9]!="UOM")
                     {
-                            $mess =  "Wrong format at J1. Must be 'UOM'";
+                            $mess[] =  "Wrong format at J1. Must be 'UOM'";
                     }
                     if($rowData[1][10]!="MFR name")
                     {
-                            $mess =  "Wrong format at K1. Must be 'MFR name'";
+                            $mess[] =  "Wrong format at K1. Must be 'MFR name'";
                     }
                     if($rowData[1][11]!="MFG PN")
                     {
-                            $mess =  "Wrong format at L1. Must be 'MFG PN'";
+                            $mess[] =  "Wrong format at L1. Must be 'MFG PN'";
                     }
     
                 
@@ -9438,7 +9478,7 @@ class PNsController extends JController {
                         
                         if($rowData[$line][0]==0)
                         {
-                               echo $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                
                                 if(!$pns_id){                                
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
@@ -9448,7 +9488,7 @@ class PNsController extends JController {
                                 $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
-                              // echo "<br> parent is BOM ".$pns_id;                       
+                                $mess[] = "Import sucessfull BOM <a href='index.php?option=com_apdmpns&task=bom&id='".$pns_id."''>". $pns_id."</a></br>";
                         }
                         
                         if($rowData[$line][0]==1)
@@ -9465,7 +9505,8 @@ class PNsController extends JController {
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                               // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0;                                     
+                               // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0; 
+                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
                       
                         if($rowData[$line][0]==2)
@@ -9481,7 +9522,7 @@ class PNsController extends JController {
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                echo "<br> ".$rowData[$line][1]." level 2 parent is".$parent1;                               
+                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                                 
                         }
                        
@@ -9498,7 +9539,7 @@ class PNsController extends JController {
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                echo "<br> ".$rowData[$line][1]." level 3 parent is".$parent2;                               
+                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
                         if($rowData[$line][0]==4)
                         {
@@ -9513,7 +9554,7 @@ class PNsController extends JController {
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                echo "<br> ".$rowData[$line][1]." level 4 parent is".$parent3;                               
+                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
                         if($rowData[$line][0]==5)
                         {
@@ -9528,9 +9569,23 @@ class PNsController extends JController {
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                echo "<br> ".$rowData[$line][1]." level 5 parent is".$parent4;                               
+                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
-                }                         
+                }  
+                
+                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', implode("<br>", $mess));
+        }
+        function import_bom_pns()
+        {
+                JRequest::setVar('layout', 'importbom');
+                JRequest::setVar('view', 'listpns');
+                parent::display();     
+        }
+        function downloadBomTemplate() {
+                //$path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'pdf' . DS;
+                $path_pns = JPATH_COMPONENT . DS ;
+                $dFile = new DownloadFile($path_pns, 'IMPORT_BOM_TEMPALTE.xls');
+                exit;
         }
 }
 

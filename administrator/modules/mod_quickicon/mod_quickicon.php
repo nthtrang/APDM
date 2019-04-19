@@ -112,38 +112,45 @@ if (!defined( '_JOS_QUICKICON_MODULE' ))
 
 		} //end 
 			///Commodity code
-			if($user_apdm==0 && (in_array(1, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )) {
+                        $role1 = JAdministrator::RoleOnComponent(1); 
+			if(($user_apdm==0 && (in_array(1, $arr_component) && !in_array("H", $role1) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )) {
 				$link = 'index.php?option=com_apdmccs';
 				quickiconButton( $link, 'icon-48-category.png', JText::_( 'CC MANAGER' ) );
 			}
 			//LOCATION CODE
-			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                        $role9 = JAdministrator::RoleOnComponent(9); 
+			if(($user_apdm==0 &&  (in_array(8, $arr_component) && !in_array("H", $role9) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
                                 $link = 'index.php?option=com_apdmpns&task=locatecode';
 				quickiconButton( $link, 'icon-48-component.png', JText::_( 'Location Code Management' ) );                                
 			}     
 			//PNs
-			if($user_apdm==0 &&  (in_array(6, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                        $role6 = JAdministrator::RoleOnComponent(6);  
+			if(($user_apdm==0 &&  (in_array(6, $arr_component)&& !in_array("H", $role6) )  || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmpns';
 				quickiconButton( $link, 'icon-48-cpanel.png', JText::_( 'PN MANAGER' ) );                             
 			}
 			//PO
-			if($user_apdm==0 &&  (in_array(7, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                        $role7 = JAdministrator::RoleOnComponent(7);  
+			if(($user_apdm==0 &&  (in_array(7, $arr_component)  && !in_array("H", $role7) ) ||  $usertype =='Administrator' || $usertype=="Super Administrator" )){
                                 $link = 'index.php?option=com_apdmpns&task=pomanagement';
 				quickiconButton( $link, 'icon-48-component.png', JText::_( 'PO' ) );                                
 			}                        
 			//STO
-			if($user_apdm==0 &&  (in_array(8, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                        $role8 = JAdministrator::RoleOnComponent(8);   
+			if(($user_apdm==0 &&  (in_array(8, $arr_component)  && !in_array("H", $role8) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
                                 $link = 'index.php?option=com_apdmpns&task=stomanagement';
 				quickiconButton( $link, 'icon-48-component.png', JText::_( 'STO' ) );                                
 			}                        
                         //suplier
-			if($user_apdm==0 &&  (in_array(2, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator")){
+                        $role2 = JAdministrator::RoleOnComponent(2);  
+			if(($user_apdm==0 &&  (in_array(2, $arr_component)  && !in_array("H", $role2) )  || $usertype =='Administrator' || $usertype=="Super Administrator")){
 				$link = 'index.php?option=com_apdmsuppliers';
 				quickiconButton( $link, 'icon-48-category.png', JText::_( 'ORGANIZATION MANAGER' ) );
 			}
 			
 			//ECO
-			if($user_apdm==0 &&  (in_array(5, $arr_component) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
+                        $role5 = JAdministrator::RoleOnComponent(5);  
+			if(($user_apdm==0 &&  (in_array(5, $arr_component) && !in_array("H", $role5) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){
 				$link = 'index.php?option=com_apdmeco';
 				quickiconButton( $link, 'icon-48-category.png', JText::_( 'ECO MANAGER' ) );                                
 			}
