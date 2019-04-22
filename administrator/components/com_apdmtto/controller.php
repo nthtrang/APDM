@@ -307,6 +307,9 @@ class TToController extends JController
                 $userId = $db->loadResult();
                 $db->setQuery("SELECT * from apdm_pns_tto where pns_tto_id=".$tto_id);
                 $sto_row =  $db->loadObject();    
+
+                        $isOutConfirm = $sto_row->tto_owner_out_confirm;
+                        $UserOutConfirm = $sto_row->tto_owner_out;
                 
                 if($userId)
                 {   
@@ -314,13 +317,20 @@ class TToController extends JController
                         {
                                 $db->setQuery("update apdm_pns_tto set tto_owner_out = '".$userId."',tto_state = 'Using',tto_owner_out_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_out_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                                                        
                                 $db->query();     
+                                 echo 1;
                         }
                         if($sto_row->tto_state=="Using" && $tto_type_inout = 1)
                         {
-                                $db->setQuery("update apdm_pns_tto set tto_owner_in = '".$userId."',tto_state = 'Done',tto_completed_date='" . $datenow->toMySQL() . "' ,tto_owner_in_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_in_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                        
-                                $db->query();  
+                                 if($UserOutConfirm !=0 && $UserOutConfirm!=$userId){
+                                         echo 2;
+                                 }
+                                 else{
+                                        $db->setQuery("update apdm_pns_tto set tto_owner_in = '".$userId."',tto_state = 'Done',tto_completed_date='" . $datenow->toMySQL() . "' ,tto_owner_in_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_in_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                        
+                                        $db->query();  
+                                         echo 1;
+                                 }
                         }                        
-                        echo 1;
+                       
                 }
                 else
                 {
@@ -1420,5 +1430,47 @@ class TToController extends JController
         $session = JFactory::getSession();
         $session->set('is_scan',$is_scan);
     }
+     function ajax_addscanpn_tto()
+        {
+                $db = & JFactory::getDBO();
+                $tto_id = JRequest::getVar('tto_id');   
+                $pns_code = JRequest::getVar('pns_code');   
+                $pns_id = getPnsIdfromPnCode($pns_code);
+                //innsert to FK table
+                if($pns_id){
+                        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id where p.pns_id =  ".$pns_id." group by fk.location,fk.partstate ";
+                        $db->setQuery($query);
+                        $rowfs = $db->loadObjectList();
+                        if (count($rowfs) > 0) {          
+                                
+                                foreach($rowfs as $rw)
+                                {
+                                        $location="";
+                                        $partstate="";
+                                        $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.id= '".$rw->id."' and sto.sto_type = 1   order by stofk.id desc");                                        
+                                        $rows = $db->loadObjectList();
+                                         if (count($rows) > 0) {                        
+                                                foreach ($rows as $obj) {
+                                                        $location = $obj->location;
+                                                        $partState = $obj->partstate;
+                                                        $pn_id =  $obj->pns_id;
+                                                        $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','2','1')");
+                                                        $db->query(); 
+                                                }
+                                         }
+                                }
+                        }
+                        return $msg = JText::_('Have add Tool successfull.');
+                }
+                return $msg = JText::_('Not found PN.');
+                
+        }    
+        function ajax_markscan_checkedtto()
+        {
+                global $is_etoscan;
+                $is_etoscan= JRequest::getVar('ttoscan');
+                $session = JFactory::getSession();
+                $session->set('is_scantto',$is_etoscan);
+        }
 }
 

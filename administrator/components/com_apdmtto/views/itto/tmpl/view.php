@@ -9,6 +9,16 @@ $role   = JAdministrator::RoleOnComponent(11);
 JToolBarHelper::title($this->tto_row->tto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
 if (in_array("E", $role)&& ($this->tto_row->tto_state  == "Create")) {
+        $session = JFactory::getSession();
+        if($session->get('is_scantto')){
+            $ttoscanchecked = 'checked="checked"';
+            $ttoonkeyUp = "onkeyup=\"autoAddPartTto(this.value,'".$this->tto_row->pns_tto_id."')\" autofocus";
+        }
+        else
+        {
+            $ttoscanchecked = "";
+            $ttoonkeyUp = "";
+        }
             JToolBarHelper::customX("edittto",'edit',"Edit","Edit",false);
 }
     JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -224,6 +234,33 @@ function checkAllToolPn(n, fldName )
 		document.adminForm.boxchecked.value = 0;
 	}
 }
+    function autoAddPartTto(pns,tto_id){
+        window.location = "index.php?option=com_apdmtto&task=ajax_addscanpn_tto&tto_id="+tto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
+    }
+function checkforscantto(isitchecked)
+{
+        if (isitchecked == true){
+                document.getElementById("pns_code").focus();
+                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartTto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')");
+            checkedforMarkScanTto(1);
+        }
+        else {
+                document.getElementById('pns_code').setAttribute("onkeyup", "return false;");
+            checkedforMarkScanTto(0);
+        }
+}
+
+function checkedforMarkScanTto(ischecked)
+{
+    var url = 'index.php?option=com_apdmtto&task=ajax_markscan_checkedtto&ttoscan='+ischecked;
+    var MyAjax = new Ajax(url, {
+        method:'get',
+        onComplete:function(result){
+            var eco_result = result;
+
+        }
+    }).request();
+}   
 </script>
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <fieldset>
@@ -325,6 +362,10 @@ function checkAllToolPn(n, fldName )
                   //  if($this->tto_row->tto_owner_confirm==0 && !$this->tto_row->tto_owner) {
                         if (in_array("E", $role) && ($this->tto_row->tto_state == "Create")) {
                             ?>
+                                     <td class="button" id="toolbar-addpnsave">
+            Scan PN Barcode <input <?php echo $ttoonkeyUp?> onchange="autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')" onkeyup="autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+            <input <?php echo $ttoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscantto(this.checked)" />
+        </td>
                             <td class="button" id="toolbar-save">
                                 <a href="#"
                                    onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyTtofk')}"

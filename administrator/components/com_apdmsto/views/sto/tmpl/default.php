@@ -199,6 +199,7 @@ th:first-child div{
                 <table width="100%" border="0">
                         <tr>
                                 <td align="right">
+                                        PN <input type="text" maxlength="20" name="pn_code_wr" id="pn_code_wr" class="inputbox" size="30" value="<?php echo $this->pn_code_wr;?>"/> 
                                         QTY From&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_from"  onKeyPress="return numbersOnly(this, event);" id="qty_from" class="inputbox" size="30" value="<?php echo $this->qty_from?>"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         To&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_to"  onKeyPress="return numbersOnly(this, event);" id="qty_to" class="inputbox" size="30" value="<?php echo $this->qty_to?>"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="submit"  onclick="submitbutton('search_qty')"  name="search_qty" value="Go">
@@ -273,6 +274,7 @@ th:first-child div{
                 }
                 $qty_from =  $this->qty_from;
                 $qty_to =  $this->qty_to;
+                $pn_code_wr =  $this->pn_code_wr;
                 if($qty_from && $qty_to)
                 {
                     if($stock<$qty_from || $stock>$qty_to)
@@ -297,7 +299,7 @@ th:first-child div{
                     }
                 }
                 else{
-                    if($stock<=0 || $stock>10)
+                    if($pn_code_wr == "" && ($stock<=0 || $stock>10))
                     {
                             $count++;
                         continue;

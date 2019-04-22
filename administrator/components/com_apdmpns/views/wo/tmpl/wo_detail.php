@@ -295,7 +295,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-c3ow" rowspan="5">Production</td>
             <td class="tg-0pky">CONT#</td>
             <td class="tg-0pky">Wire size#</td>
-            <td class="tg-0pky" width="120px">TOOL ID# <?php echo $listTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+            <td class="tg-0pky" width="120px">TOOL ID# <?php
 //            if($listTool){
 //            foreach($listTool as $rowsto)
 //            {
@@ -311,13 +311,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
         </tr>
         <?php
+        $iassem=1;
         foreach ($this->wo_assem_rows as $a_row)
         {
             ?>
             <tr>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value1; ?></td>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value3; ?></td>
+                <td class="tg-0pky">
+                <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+                echo $arrTool[$iassem];
+               // echo $a_row->op_assembly_value3; ?></td>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
                 <td class="tg-0pky"></td>
@@ -326,6 +330,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <td class="tg-0pky"></td>
             </tr>
             <?php
+            $iassem++;
         }
         ?>
 

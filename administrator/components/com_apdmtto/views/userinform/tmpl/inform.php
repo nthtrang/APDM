@@ -48,24 +48,23 @@ function UpdateOwnerSto(sto_id){
                                 if(result==0)
                                 {
                                         document.getElementById('notice').innerHTML = "Incorrect Password";				                
+                                }else if(result==2)//
+                                {
+                                        document.getElementById('notice').innerHTML = "You are must owner confirm out";				                
                                 }
 				else
                                 {                                    
                                         window.parent.document.getElementById('sbox-window').close();	
                                         window.parent.location.reload();
                                 }
-				
-				
-
 			}
 		}).request();
-	}
-	
+	}	
 }
 </script>
 <form action="index.php?option=com_apdmtto&task=checkownertto&tmpl=component&id=<?php echo $tto_id?>" method="post" name="adminForm" id="adminForm"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
-<div name="notice" style="color:#D30000" id ="notice"></div>
+<div name="notice" style="color:#D30000;font-size: 14px" id ="notice"></div>
 <table class="adminlist" cellpadding="1">
         <?php 
         
@@ -83,13 +82,7 @@ function UpdateOwnerSto(sto_id){
         <?php
         }
         else{
-        if($UserOutConfirm !=0 && $UserOutConfirm!=$user_id){
-            ?>
-            <tr>
-                <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('You are must owner confirm out ')?></strong></td>
-            </tr>
-            <?php
-        }else {
+       
         ?>
         <tr>
                 <td colspan="2"><strong><?php echo JText::_('Please confirm your Username / password')?></strong></td>
@@ -120,7 +113,7 @@ function UpdateOwnerSto(sto_id){
                         
                         </td>	
 		</tr>	      
-		<?php		}}?>
+		<?php		}?>
 	</table>
 
 	<div class="clr"></div>	

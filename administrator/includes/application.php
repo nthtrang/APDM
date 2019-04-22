@@ -507,7 +507,50 @@ function GetNameCCs($ccs_id){
                 if($inventory<0)
                      $inventory = 0;
                 return $inventory;          
-        }        
+        }   
+        function getPnsIdfromPnCode($pn_code)
+        {            
+                $db =& JFactory::getDBO();
+                $arrPn = explode("-", $pn_code);
+        //A02-200263-0A
+                $ccs_code = $arrPn[0];
+                $pns_code = $arrPn[1];
+                $pns_revision = $arrPn[2];
+        //K01-0262499-000
+
+                if($arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2]."-".$arrPn[3];
+                    $pns_revision = $arrPn[4];
+                }
+                elseif($arrPn[3] &&!$arrPn[4])
+                {
+                    $pns_code = $arrPn[1]."-".$arrPn[2];
+                    $pns_revision = $arrPn[3];
+
+                }
+                if($arrPn[3] || $arrPn[4])
+                {
+                       // $pns_revision = $arrPn[3];
+                        $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+
+                }
+                else {
+                        if(preg_match("/^[0-9]+$/i", $arrPn[2]))
+                        {
+                            $pns_code = $arrPn[1]."-".$arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."'";
+                        }
+                        else
+                        {
+                            $pns_code = $arrPn[1];
+                            $pns_revision = $arrPn[2];
+                            $query = "select pns_id from apdm_pns where ccs_code = '".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+                        }
+                }
+                $db->setQuery($query);
+               return $pns_id = $db->loadResult();    
+        }
 function getdir($path=".") {
   
 global $dirarray,$conf,$dirsize;    

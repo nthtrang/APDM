@@ -9282,11 +9282,13 @@ class PNsController extends JController {
                   $db = & JFactory::getDBO();            
                   $db->setQuery("select tto.pns_tto_id,tto.tto_code,fk.location,loc.location_code from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id inner join apdm_pns_location loc on loc.pns_location_id=fk.location where tto.tto_wo_id = '".$wo_id."' group by loc.location_code");
                   $rows = $db->loadObjectList();
-                $str = '';
+                $str = array();
+                $i=1;
                 foreach ($rows as $row) {
-                         $str .= "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$row->pns_tto_id."'>".$row->location_code."</a><br>";
+                         $str[$i]= "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$row->pns_tto_id."'>".$row->location_code."</a><br>";
+                         $i++;
                 }
-                echo $str;
+                return $str;
                 
 //                  if ($rows) {
 //                          echo "<a href='index.php?option=com_apdmtto&task=tto_detail&id=".$rows->pns_tto_id."'>".$rows->tto_code."</a><br>";
@@ -9334,7 +9336,16 @@ class PNsController extends JController {
 		$db->setQuery($query);
 		return $db->loadResult();
                 
-	} 
+	}
+    function checkMfrId($mfr_name)
+    {
+        $db =& JFactory::getDBO();
+        $query = " SELECT info_id FROM apdm_supplier_info WHERE info_name='".$mfr_name."'";
+        $db->setQuery($query);
+        return $db->loadResult();
+
+    }
+
         function importBom()
         {
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
@@ -9473,8 +9484,21 @@ class PNsController extends JController {
                 $parent3 = 0;
                 $parent4 = 0;
                 $parent5 = 0;
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $_created = $datenow->toMySQL();
+                $_created_by = $me->get('id');
                 for($line=2;$line<=$highestRow;$line++)
                 {
+                        //check MFR
+                        $mfr_id = PNsController::checkMfrId($rowData[$line][10]);
+                        if(!$mfr_id)
+                        {
+                            $query = 'INSERT INTO apdm_pns_supplier (info_type, info_name, info_description, info_activate,info_create,info_created_by) VALUES(4,"'.$rowData[$line][10].'","'.$rowData[$line][10].'",1,"'.$_created.'","'.$_created_by.'")';
+                            $db->setQuery($query);
+                            $db->query();
+                            $mfr_id = $db->insertid();
+                        }
                         
                         if($rowData[$line][0]==0)
                         {
@@ -9485,7 +9509,7 @@ class PNsController extends JController {
                                 }
                                 $parent0 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $mess[] = "Import sucessfull BOM <a href='index.php?option=com_apdmpns&task=bom&id='".$pns_id."''>". $pns_id."</a></br>";
@@ -9500,7 +9524,7 @@ class PNsController extends JController {
                                
                                 $parent1 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
@@ -9517,7 +9541,7 @@ class PNsController extends JController {
                                 }                               
                                 $parent2 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
@@ -9534,7 +9558,7 @@ class PNsController extends JController {
                                 }                               
                                 $parent3 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
@@ -9549,7 +9573,7 @@ class PNsController extends JController {
                                 }                               
                                 $parent4 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
@@ -9564,7 +9588,7 @@ class PNsController extends JController {
                                 }                               
                                 $parent5 = $pns_id;
                                 //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$rowData[$line][10] . ', "' . $rowData[$line][11] . '", 3)';
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
