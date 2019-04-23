@@ -320,61 +320,64 @@ th:first-child div{
                                     <?php echo $row->pns_description; ?>
                                 </td>
                                 <td align="left">
+                                        <table>
+                                    <?php
+                                    if (count($mf) > 0) {
+                                        foreach ($mf as $m) {                                                
+                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
+                                        }
+                                    }
+                                    ?>
+                                                </table>
+                                </td>
+                                <td align="left">
+                                         <table>
                                     <?php
                                     if (count($mf) > 0) {
                                         foreach ($mf as $m) {
-                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
-                                        }
-                                    }
-                                    ?>
-                                </td>
-                                <td align="left">
-                                    <?php
-                                    if (count($mf) > 0) {
-                                        foreach ($mf as $m) {
-                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
                                         }
 
                                     }
-                                    ?>
+                                    ?> </table>
                                 </td>
-                                <td align="left">
+                                <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
                                         foreach ($ms as $m) {
-                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
+                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
                                         }
                                     }
-                                    ?>
+                                    ?> </table>
                                 </td>
-                                <td align="left">
+                                <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
                                         foreach ($ms as $m) {
-                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
                                         }
 
                                     }
-                                    ?>
+                                    ?> </table>
                                 </td>
-                                <td align="left">
+                                <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
                                         foreach ($mv as $m) {
-                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
+                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
                                         }
                                     }
-                                    ?>
+                                    ?> </table>
                                 </td>
-                                <td align="left">
+                                <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
                                         foreach ($mv as $m) {
-                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
                                         }
 
                                     }
-                                    ?>
+                                    ?> </table>
                                 </td>
                                 <td align="center" <?php echo $background; ?>>
                                     <?php

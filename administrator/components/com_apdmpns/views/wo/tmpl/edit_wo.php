@@ -340,6 +340,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 	 <div class="col width-100">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Edit WO' ); ?></legend>
+                <?php if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){  ?>
         <table class="tg" cellspacing="1" width="100%">                               
                                  <tr>
 					<td class="tg-0pky">
@@ -573,6 +574,224 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                   </td>
                                  </tr>                                                                                                                      		
 			</table>
+                <?php 
+                }else{
+                        //not allow edit
+                        ?>
+                <table class="tg" cellspacing="1" width="100%">                               
+                                 <tr>
+					<td class="tg-0pky">
+						<label for="name">
+							<?php echo JText::_( 'WO NUMBER' ); ?>
+						</label>
+					</td>
+					<td>                                                 
+                                                <input readonly type="text" maxlength="20" name="wo_code"  id="wo_code" class="inputbox" size="30" value="<?php echo $this->wo_row->wo_code;?>" readonly="readonly"/>
+					</td>
+				</tr>     
+                                <tr>
+					<td class="tg-0pky" valign="top">
+						<?php echo JText::_( 'PART NUMBER' ); ?>
+					</td>
+					<td valign="top">						
+                                                <?php 
+                                                $readonly = $style = "";
+                                                if($this->wo_row->allow_edit_qty > 0 )
+                                                {
+                                                        $readonly = 'readonly="readonly"';
+                                                        $style= 'style="display:none"';
+                                                }
+                                                ?>
+							<a  <?php echo $style ?> class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id=<?php echo $this->wo_row->so_id;?>" title="<?php echo JText::_('click here to add more PN')?>"><?php //echo JText::_('Select Part Number')?></a>
+						
+					</td>
+				</tr>  
+                                  <tr>
+					<td class="tg-0pky" colspan="2" id='pns_child_so' >
+                                                <table class="admintable" cellspacing="1" width="60%">
+                                                <tr>
+                                                         <td class="key">#</td>
+                                                        <td class="key">PART NUMBER</td>
+                                                         <td class="key">Description</td>                                                         
+                                                           <td class="key">UOM</td>                                                          
+                                                </tr>
+                                                <?php 
+                                                         if ($row->pns_revision) {
+                                                                $pnNumber = $this->row_part->ccs_code . '-' . $this->row_part->pns_code . '-' . $this->row_part->pns_revision;
+                                                        } else {
+                                                                $pnNumber = $this->row_part->ccs_code . '-' . $this->row_part->pns_code;
+                                                        }                        
+                                                        $str = '<tr>'.
+                                                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $this->row_part->pns_id . '" /> </td>'.
+                                                                ' <td class="key">'.$pnNumber.'</td>'.
+                                                                ' <td class="key">'.$this->row_part->pns_description.'</td>'.                               
+                                                                ' <td class="key">'.$this->row_part->pns_uom.'</td>';
+                                                        echo $str;
+                                                ?>
+                                               
+                                                </table>                                                                                                                                               
+					</td>
+					
+				</tr>   
+                                <tr>
+					<td class="tg-0pky" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'QTY' ); ?>
+						</label>
+					</td>
+					<td>
+                                                
+                                                <input readonly type="text" <?php echo $readonly;?>  onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="wo_qty" id="wo_qty" <?php echo $classDisabled;?> />
+					</td>
+				</tr>   
+                                <tr>
+					<td class="tg-0pky" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'SO NUMBER' ); ?>
+						</label>
+					</td>
+					<td>
+					<input readonly type="text" value="<?php echo $this->wo_row->so_cuscode;?>" name="so_code" id="so_code" readonly="readonly" />
+					<input type="hidden" name="so_id" id="so_id" value="<?php echo $this->wo_row->so_id;?>" />
+						<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_so_ajax&tmpl=component" title="Image">
+<!--                                        <input type="button" name="addSO" value="<?php echo JText::_('Select SO')?>"/>-->
+                                        </a>
+										
+					</td>
+				</tr>                                
+                                        <tr>
+					<td class="tg-0pky" valign="top">
+						<?php echo JText::_( 'TOP LEVEL ASSY P/N:' ); ?>
+                                                <?php 
+                                                 if ($this->row_top_assy->pns_revision) {
+                                                        $pnNumber = $this->row_top_assy->ccs_code . '-' . $this->row_top_assy->pns_code . '-' . $this->row_top_assy->pns_revision;
+                                                } else {
+                                                        $pnNumber = $this->row_top_assy->ccs_code . '-' . $this->row_top_assy->pns_code;
+                                                } 
+                                                ?>
+					</td>
+                                        <td valign="top"><input type="text" value="<?php echo $pnNumber;?>" name="top_pns_code" id="top_pns_code" readonly="readonly" />
+                                                <input type="text" value="<?php echo $this->row_top_assy->pns_id;?>" name="top_pns_id" id="top_pns_id" readonly="readonly" />
+                                                <?php    
+                                               if(strtotime(date("Y-m-d")) >= strtotime($this->wo_row->wo_start_date))
+                                               {
+                                                ?>
+                                                <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&so_id=<?php echo $this->wo_row->so_id;?>&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>"></a>
+                                                <?php 
+                                               }
+                                               else
+                                               {
+                                                       ?>
+                                                <a class="modal-button" id="get_assy_pn" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmpns&task=get_list_assy_wo&so_id=<?php echo $this->wo_row->so_id;?>&tmpl=component" title="<?php echo JText::_('click here to add more PN')?>">Select Top ASSY P/N</a>
+                                                <?php                                                
+                                               }                                                                                              
+                                               ?>
+                                                
+						
+					</td>
+                                        </tr>  
+                                        <tr>
+                                                <td class="tg-0pky" colspan="2" id='pns_assy_so' >
+                                                <?php 
+                                                $str = '<table class="admintable" cellspacing="1" width="60%">';                                                  
+                                                
+                                                                   
+                                                        $fachecked="";
+                                                        if($this->row_top_assy->fa_required)
+                                                                $fachecked = 'checked="checked"';
+                                                        $esdchecked="";
+                                                        if($this->row_top_assy->esd_required)
+                                                                $esdchecked = 'checked="checked"';
+                                                        $cocchecked="";
+                                                        if($this->row_top_assy->coc_required)
+                                                                $cocchecked = 'checked="checked"';
+                                                        $str .=  '<tr> <td class="key">FA<input '.$fachecked.' type="checkbox" onclick="return false;" onkeydown="return false;"  name="fa_required['.$row->pns_id.']" value="1" /> </td>'.
+                                                                ' <td class="key">ESD<input '.$esdchecked.'  type="checkbox" onclick="return false;" onkeydown="return false;"  name="esd_required['.$row->pns_id.']" value="1" /> </td>'.
+                                                                ' <td class="key">COC<input '.$cocchecked.'  type="checkbox" onclick="return false;" onkeydown="return false;"  name="coc_required['.$row->pns_id.']" value="1" /> </td></tr>';
+                                               
+                                                $str .='</table>';
+                                                echo $str;
+                                               // $result = $row->pns_id.'^'.$row->customer_code.'^'.$pnNumber.'^'.$str;                
+                                                ?>
+                                                </td>
+
+                                        </tr>    
+                                <tr>
+					<td class="tg-0pky" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'RMA' ); ?>
+						</label>
+					</td>
+					<td>                                                
+                                                  <?php 
+                                                     if($this->wo_row->wo_rma_active)
+                                                        $wo_rma_active = 'checked="checked"';
+                                                    ?>
+                                                   <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="1" /> RMA</td>
+					</td>
+				</tr>                                              
+                                       <tr>
+					<td class="tg-0pky" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'CUSTOMER' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input readonly type="text" value="<?php echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?>" name="wo_customer_name" id="wo_customer_name" />
+                                                <input type="hidden" value="<?php echo $this->wo_row->wo_customer_id;?>" name="wo_customer_id" id="wo_customer_id" />
+					</td>
+				</tr>                                                                                 
+                                       <tr>
+					<td class="tg-0pky" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'REQUEST DATE' ); ?>
+						</label>
+					</td>
+					<td>
+                                                <input readonly type="text" value="<?php echo $this->wo_row->so_shipping_date?>" name="so_request_date" id="so_request_date" readonly="readonly" />
+                                                <input type="hidden" value="<?php echo $this->wo_row->so_start_date?>" name="so_start_date" id="so_start_date" readonly="readonly" />
+					</td>
+				</tr>
+                                 <tr>
+					<td class="tg-0pky">
+						<label for="name">
+							<?php echo JText::_( 'WO Start Date' ); ?>
+						</label>
+					</td>
+					<td>         
+                                                <input type="hidden" value="<?php echo $this->wo_row->allow_edit_qty?>" name="is_edit_finish_date" id="is_edit_finish_date" readonly="readonly" />
+                                              
+                                                <input readonly type="text" value="<?php echo $this->wo_row->wo_start_date?>" name="wo_start_date" id="wo_start_date" readonly="readonly" />
+                                               
+					</td>
+				</tr>      
+                                 <tr>
+					<td class="tg-0pky">
+						<label for="name">
+							<?php echo JText::_( 'WO Finished Date' ); ?>
+						</label>
+					</td>
+					<td>  
+                                                 <input type="hidden" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date_old" id="wo_completed_date_old" readonly="readonly" />
+                                                  <input readonly type="text" value="<?php echo $this->wo_row->wo_completed_date?>" name="wo_completed_date" id="wo_completed_date" readonly="readonly" />                                                                                                                                             
+					</td>
+				</tr>    
+                                
+                                 <tr>
+					<td class="tg-0pky">
+						<label for="name">
+							<?php echo JText::_( 'ASSIGNER' ); ?>
+						</label>
+					</td>
+                                 <td>
+                                                                <?php echo $this->lists['assigners'];?> 
+                                  </td>
+                                 </tr>                                                                                                                      		
+			</table>
+                
+                <?php
+                }
+                ?>
                 </fieldset>
          </div>
                 <div class="col width-100">

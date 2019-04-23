@@ -9488,6 +9488,7 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();
                 $_created = $datenow->toMySQL();
                 $_created_by = $me->get('id');
+                $arr_err=array();
                 for($line=2;$line<=$highestRow;$line++)
                 {
                         //check MFR
@@ -9499,30 +9500,72 @@ class PNsController extends JController {
                             $db->query();
                             $mfr_id = $db->insertid();
                         }
-                        
-                        if($rowData[$line][0]==0)
+                        $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
+                        if($rowData[$line][1]=="")//
                         {
+                            $arr_err[$line]    = "Customer Code at column B".$line ." is not null";
+                        }
+                        if($rowData[$line][2]=="")
+                        {
+                            $arr_err[$line]    = "Customer PN at column C".$line ." is not null";
+                        }                        
+                        if($rowData[$line][4]=="")
+                        {
+                            $arr_err[$line]    = $pn_code. " have Description at column E".$line ." is not null";
+                        }
+                        if($rowData[$line][5]!="")//eco
+                        {
+                            $eco_id = PNsController::GetECOId($eco_name);
+                            if(!$eco_id){
+                                    $arr_err[$line]    = $pn_code. " have ECO number at column F".$line ." is not found";
+                            }
+
+                        }
+                        if($rowData[$line][9]=="")//uom
+                        {
+                            $arr_err[$line]    = $pn_code. " have UOM at column J".$line ." is not null";
+                        }
+                        if($rowData[$line][0]!=0){//if != level 0 not check MFR
+                                if($rowData[$line][8]=="")//qty
+                                {
+                                    $arr_err[$line]    = $pn_code. " have QTY at column I".$line ." is not null";
+                                }
+                                if($rowData[$line][10]=="")
+                                {
+                                    $arr_err[$line]    = $pn_code. " have MFR name at column K".$line ." is not null";
+                                }  
+                                if($rowData[$line][11]=="")
+                                {
+                                    $arr_err[$line]    = $pn_code. " have MFG PN at column L".$line ." is not null";
+                                }  
+                        }
+                        
+                        
+                        //start import with level 0
+                        if($rowData[$line][0]==0)
+                        {                                                                
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
-                               
                                 if(!$pns_id){                                
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }
-                                $parent0 = $pns_id;
+                                
+                                $parent0 = $pns_id;                                                                                                                              
                                 //insert MFG 
                                 $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
                                 $db->query();
                                 $mess[] = "Import sucessfull BOM <a href='index.php?option=com_apdmpns&task=bom&id='".$pns_id."''>". $pns_id."</a></br>";
                         }
-                        
+                        //start import with level 1
                         if($rowData[$line][0]==1)
                         {    
+                                
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
-                                }
-                               
+                                }                               
                                 $parent1 = $pns_id;
+                                
                                 //insert MFG 
                                 $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
                                 $db->setQuery($query);
@@ -9596,8 +9639,14 @@ class PNsController extends JController {
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
                 }  
+                $inputFileName =  $path_bom_file.
+                $file = fopen($path_bom_file.$bom_upload."_result.txt","w");
+                //echo fwrite($file,  implode("\n", $arr_err));
+                $file_name = $bom_upload.time()."_result.txt";
+                file_put_contents($path_bom_file.$file_name, implode("\n", $arr_err) . "\n", FILE_APPEND);
+                fclose($file);
                 
-                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', implode("<br>", $mess));
+                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns&importresult='.$file_name,"Import Done" );
         }
         function import_bom_pns()
         {
@@ -9609,6 +9658,13 @@ class PNsController extends JController {
                 //$path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'pdf' . DS;
                 $path_pns = JPATH_COMPONENT . DS ;
                 $dFile = new DownloadFile($path_pns, 'IMPORT_BOM_TEMPALTE.xls');
+                exit;
+        }
+        function downloadBomImportResult()
+        {
+                $importresult = JRequest::getVar('importresult'); 
+                $path_pns = JPATH_SITE . DS . 'uploads'. DS;
+                $dFile = new DownloadFile($path_pns, $importresult);
                 exit;
         }
 }

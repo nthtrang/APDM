@@ -33,8 +33,19 @@ function submitbutton(pressbutton) {
 
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
+        <?php 
+         $importresult = JRequest::getVar('importresult'); 
+         if($importresult)
+         {
+                 $path_pns = JPATH_SITE . DS . 'uploads'. DS;
+                $dFile = new DownloadFile($path_pns, $importresult);
+                 ?>
+<!--                  <a href="index.php?option=com_apdmpns&task=downloadBomImportResult&importresult=<?php echo $importresult?>">Click here to download</a> file import result.-->
+                 <?php 
+         }
+        ?>
 <fieldset class="adminform">
-            <legend><?php echo JText::_( 'Import BOM(.xls)' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
+            <legend><?php echo JText::_( 'Import BOM(.xls)' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>            
             <table class="adminlist">
                 <tr>
                     <td>
