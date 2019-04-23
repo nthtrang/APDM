@@ -195,7 +195,7 @@ th:first-child div{
 
 
 <fieldset class="adminform">
-		<legend><font style="size:14px"><?php echo JText::_( 'Warehouse Status' ); ?> </font></legend>                          
+		<legend><font style="size:14px"><?php echo JText::_( 'Warehouse Tracking' ); ?> </font></legend>
                 <table width="100%" border="0">
                         <tr>
                                 <td align="right">
@@ -210,203 +210,202 @@ th:first-child div{
                 <section class="">
                 <div class="col width-100 scroll container">
                         <?php if (count($this->warehouse_list) > 0) { ?>
-                        <table class="adminlist1" cellspacing="1" width="400">
-		<thead>
-			<tr>
-				<th  width="50" align="center" class="title">
-					<?php echo JText::_( 'No.' ); ?><div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_( 'NUM' ); ?></div>
-				</th>
-				<th class="title"  width="100">
-					<?php  JText::_('PART_NUMBER_CODE'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'PART_NUMBER_CODE' ); ?></div>
-				</th>          
-				<th class="title"  width="100" >
-					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'PNS_DESCRIPTION' ); ?></div>
-				</th>
-                                <th  width="100"class="title" >
-					<?php echo JText::_( 'MFR Name' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFR Name' ); ?></div>
-				</th>
-                                <th width="100" class="title" >
-					<?php echo JText::_( 'MFR PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'MFG PN' ); ?></div>
-				</th>
-                                <th  width="100" class="title" >
-					<?php echo JText::_( 'Supplier' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Supplier' ); ?></div>
-				</th>	
-                                 <th  width="100" class="title" >
-					<?php echo JText::_( 'Supplier PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Supplier PN' ); ?></div>
-				</th>
-                                <th  width="100" class="title" >
-					<?php echo JText::_( 'Vendor' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Vendor' ); ?></div>
-				</th>	
-                                 <th  width="100" class="title" >
-					<?php echo JText::_( 'Vendor PN' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Vendor PN' ); ?></div>
-				</th>
-                                 <th width="100" class="title" >
-					<?php echo JText::_( 'Inventory' ); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_( 'Inventory' ); ?></div>
-				</th>
-			</tr>
-		</thead>		
-		<tbody>
-		<?php
-			$path_image = '../uploads/pns/images/';
-			$k = 0;
-                              $total = 0;  
-                              $count =0; 
-			for ($i=0, $n=count( $this->warehouse_list ); $i < $n; $i++) {
-                $row =& $this->warehouse_list[$i];
-               // if (($this->qty_from =="") && $row->inventory > 0) {
-                    if ($row->pns_cpn == 1)
-                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
-                    else
-                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $row->pns_id;
-                    if ($row->pns_revision)
-                        $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
-                    else
-                        $pns_code = $row->ccs_code . '-' . $row->pns_code;
+                    <table class="adminlist1" cellspacing="1" width="400">
+                        <thead>
+                        <tr>
+                            <th width="50" align="center" class="title">
+                                <?php echo JText::_('No.'); ?>
+                                <div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div>
+                            </th>
+                            <th class="title" width="100">
+                                <?php JText::_('PART_NUMBER_CODE'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('PART_NUMBER_CODE'); ?></div>
+                            </th>
+                            <th class="title" width="100">
+                                <?php echo JText::_('PNS_DESCRIPTION'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('PNS_DESCRIPTION'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('MFR Name'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('MFR Name'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('MFR PN'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('MFG PN'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('Supplier'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Supplier'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('Supplier PN'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Supplier PN'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('Vendor'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Vendor'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('Vendor PN'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Vendor PN'); ?></div>
+                            </th>
+                            <th width="100" class="title">
+                                <?php echo JText::_('Inventory'); ?>
+                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Inventory'); ?></div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $path_image = '../uploads/pns/images/';
+                        $k = 0;
+                        $total = 0;
+                        $count = 0;
+                        for ($i = 0, $n = count($this->warehouse_list); $i < $n; $i++) {
+                            $row =& $this->warehouse_list[$i];
+                            // if (($this->qty_from =="") && $row->inventory > 0) {
+                            if ($row->pns_cpn == 1)
+                                $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
+                            else
+                                $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $row->pns_id;
+                            if ($row->pns_revision)
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
+                            else
+                                $pns_code = $row->ccs_code . '-' . $row->pns_code;
 
-                    $mf = SToController::GetManufacture($row->pns_id, 4);//manufacture
-                    $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
-                    $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
+                            $mf = SToController::GetManufacture($row->pns_id, 4);//manufacture
+                            $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
+                            $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
 
-                    $stock = CalculateInventoryValue($row->pns_id);
-                $background = "";
-                if ($stock <= 3) {
-                    $background = "style='background-color:#f00;color:#fff'";
-                }
-                $qty_from =  $this->qty_from;
-                $qty_to =  $this->qty_to;
-                $pn_code_wr =  $this->pn_code_wr;
-                if($qty_from && $qty_to)
-                {
-                    if($stock<$qty_from || $stock>$qty_to)
-                    {
-                        $count++;
-                        continue;
-                    }
-                }
-                elseif($qty_to)
-                {
-                    if($stock>$qty_to)
-                    {
-                        continue;
-                    }
-                }
-                elseif($qty_from)
-                {
-                    if($stock<$qty_from )
-                    {
-                        $count++;
-                        continue;
-                    }
-                }
-                else{
-                    if($pn_code_wr == "" && ($stock<=0 || $stock>10))
-                    {
-                            $count++;
-                        continue;
-                    }
-                }
-                
-
-                    ?>
-                    <tr class="<?php echo "row$k"; ?>">
-                        <td align="center" width="50">
-                            <?php echo $total+1; ?>
-                        </td>
-                        <td align="left" >
-                            <a href="<?php echo $link; ?>"
-                               title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pns_code; ?></a>
-                        </td>
-                        <td align="left" >
-                            <?php echo $row->pns_description; ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($mf) > 0) {
-                                foreach ($mf as $m) {
-                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
+                            $stock = CalculateInventoryValue($row->pns_id);
+                            $background = "";
+                            if ($stock <= 3) {
+                                $background = "style='background-color:#f00;color:#fff'";
+                            }
+                            $qty_from = $this->qty_from;
+                            $qty_to = $this->qty_to;
+                            $pn_code_wr = $this->pn_code_wr;
+                            if ($qty_from && $qty_to) {
+                                if ($stock < $qty_from || $stock > $qty_to) {
+                                    $count++;
+                                    continue;
+                                }
+                            } elseif ($qty_to) {
+                                if ($stock > $qty_to) {
+                                    continue;
+                                }
+                            } elseif ($qty_from) {
+                                if ($stock < $qty_from) {
+                                    $count++;
+                                    continue;
+                                }
+                            } else {
+                                if ($pn_code_wr == "" && ($stock <= 0 || $stock > 10)) {
+                                    $count++;
+                                    continue;
                                 }
                             }
-                            ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($mf) > 0) {
-                                foreach ($mf as $m) {
-                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
-                                }
 
-                            }
-                            ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($ms) > 0) {
-                                foreach ($ms as $m) {
-                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
-                                }
-                            }
-                            ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($ms) > 0) {
-                                foreach ($ms as $m) {
-                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
-                                }
 
-                            }
                             ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($mv) > 0) {
-                                foreach ($mv as $m) {
-                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
-                                }
-                            }
-                            ?>
-                        </td>
-                        <td align="left" >
-                            <?php
-                            if (count($mv) > 0) {
-                                foreach ($mv as $m) {
-                                    echo $m['v_mf'].' &nbsp;&nbsp;<br />';
-                                }
+                            <tr class="<?php echo "row$k"; ?>">
+                                <td align="center" width="50">
+                                    <?php echo $total + 1; ?>
+                                </td>
+                                <td align="left">
+                                    <a href="<?php echo $link; ?>"
+                                       title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pns_code; ?></a>
+                                </td>
+                                <td align="left">
+                                    <?php echo $row->pns_description; ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($mf) > 0) {
+                                        foreach ($mf as $m) {
+                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
+                                    }
+                                    ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($mf) > 0) {
+                                        foreach ($mf as $m) {
+                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
 
-                            }
-                            ?>
-                        </td>
-                        <td align="center" <?php echo $background; ?>>
+                                    }
+                                    ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($ms) > 0) {
+                                        foreach ($ms as $m) {
+                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
+                                    }
+                                    ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($ms) > 0) {
+                                        foreach ($ms as $m) {
+                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
+
+                                    }
+                                    ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($mv) > 0) {
+                                        foreach ($mv as $m) {
+                                            echo $m['mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
+                                    }
+                                    ?>
+                                </td>
+                                <td align="left">
+                                    <?php
+                                    if (count($mv) > 0) {
+                                        foreach ($mv as $m) {
+                                            echo $m['v_mf'] . ' &nbsp;&nbsp;<br />';
+                                        }
+
+                                    }
+                                    ?>
+                                </td>
+                                <td align="center" <?php echo $background; ?>>
+                                    <?php
+                                    echo $stock;
+                                    $inventory = round($row->inventory, 2);
+                                    if ($inventory <= 0)
+                                        $inventory = 0;
+                                    //echo $inventory;
+                                    ?>
+                                </td>
+                            </tr>
                             <?php
-                            echo $stock;
-                            $inventory = round($row->inventory, 2);
-                            if ($inventory <= 0)
-                                $inventory = 0;
-                            //echo $inventory;
-                            ?>
-                        </td>
-                    </tr>
-                    <?php
-                    $k = 1 - $k;
-                    $total++;
-                       if($total==5 && !$viewmore)
-                        {
+                            $k = 1 - $k;
+                            $total++;
+                            if (($qty_from == "" && $qty_to == "" && $pn_code_wr == "") && $total == 5 && !$viewmore) {
                                 break;
-                        }
-                       
-                
-                }
-          //  }
-			?>
-                    <tr><td colspan="10"><?php 
-                    if($count+$total < count( $this->warehouse_list))
-                    {
-                            echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=1'>Click here to view more</a>";
-                    }
-                    else{
-                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=0'>Click here to  collapse</a>";
-                    }
+                            }
 
+
+                        }
+                        //  }
+                        ?>
+                        <tr>
+                            <td colspan="10"><?php
+                                if ($qty_from == "" && $qty_to == "" && $pn_code_wr == "") {
+                                    if ($count + $total < count($this->warehouse_list)) {
+                                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=1'>Click here to view more</a>";
+                                    } else {
+                                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=0'>Click here to  collapse</a>";
+                                    }
+                                }
                     ?></td></tr>
                     
 		</tbody>

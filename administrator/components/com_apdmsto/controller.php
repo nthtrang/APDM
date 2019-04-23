@@ -107,11 +107,12 @@ class SToController extends JController
                 $db = & JFactory::getDBO();
                 $sto_type = JRequest::getVar('sto_type');
 
-                $query = "SELECT count(*)  FROM apdm_pns_sto  WHERE sto_type = '" . $sto_type . "' and date(sto_created) = CURDATE()";
+                $query = "SELECT sto_code  FROM apdm_pns_sto  WHERE sto_type = '" . $sto_type . "' and date(sto_created) = CURDATE() order by pns_sto_id desc limit 1";
                 $db->setQuery($query);
                $pns_latest = $db->loadResult();
+                $arr = explode("-",$pns_latest);
                
-                $next_pns_code = (int) $pns_latest;
+                $next_pns_code = (int) $arr[1];
                 $next_pns_code++;
                 $number = strlen($next_pns_code);
                 switch ($number) {

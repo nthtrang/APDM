@@ -280,14 +280,18 @@ window.print();
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
   </tr>
-  <?php 
+  <?php
+  $iassem=1;
   foreach ($this->wo_assem_rows as $a_row)
   {
   ?>
   <tr>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value1; ?></td>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?></td>
-    <td class="tg-0pky"><?php echo $a_row->op_assembly_value3; ?></td>
+      <td class="tg-0pky">
+          <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+          echo $arrTool[$iassem];
+          // echo $a_row->op_assembly_value3; ?></td>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
     <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
     <td class="tg-0pky">&nbsp;</td>
@@ -295,7 +299,8 @@ window.print();
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
   </tr>
-  <?php 
+  <?php
+      $iassem++;
   }
   ?>
    
