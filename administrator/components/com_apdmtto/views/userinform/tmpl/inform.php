@@ -12,6 +12,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 $checkFullFill =  $this->checkFullFill;
 $isOutConfirm =  $this->isOutConfirm;
 $UserOutConfirm =  $this->userOutConfirm;
+$ttoCodeOutBefore =  $this->ttoCodeOutBefore;
 	
 ?>
 <script language="javascript">
@@ -66,8 +67,7 @@ function UpdateOwnerSto(sto_id){
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <div name="notice" style="color:#D30000;font-size: 14px" id ="notice"></div>
 <table class="adminlist" cellpadding="1">
-        <?php 
-        
+        <?php
         if(!$isOutConfirm){
              ?>
         <tr>
@@ -80,8 +80,13 @@ function UpdateOwnerSto(sto_id){
                 <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('Please input all PN QTY before confirm done')?></strong></td>
         </tr>
         <?php
-        }
-        else{
+        }elseif($ttoCodeOutBefore){
+        ?>
+         <tr>
+                <td colspan="2"><strong style="color:#D30000" ><?php echo 'You are using for "'.$ttoCodeOutBefore.'" before.';?></strong></td>
+        </tr>
+        <?php 
+        }else{
        
         ?>
         <tr>

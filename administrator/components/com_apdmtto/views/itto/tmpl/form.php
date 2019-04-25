@@ -119,20 +119,45 @@ function autoAddWoTto(wo_code)
                     eco = eco_result.split('^');
                     window.document.getElementById('tto_wo_id').value = eco[4];
                     window.document.getElementById('wo_code').value = eco[5];
-                    if(eco[5]!= "NA") {
+                    if(eco[5]!= "NA" && eco[5] != "EXIT") {
                         window.document.getElementById('notice').innerHTML = "Have add WO " + wo_code + " successfull.";
                         window.document.getElementById('notice_fail').innerHTML = "";
+                        window.document.getElementById('wo_code').value =eco[5];
                     }
                     else
                     {
-                        window.document.getElementById('notice').innerHTML = "";
-                        window.document.getElementById('notice_fail').innerHTML = "Not found WO " + wo_code ;
+                            if(eco[5]== "EXIT"){
+                                window.document.getElementById('notice').innerHTML = "";
+                                window.document.getElementById('notice_fail').innerHTML = "WO " + wo_code+" exist in another TTO" ;
+                                window.document.getElementById('wo_code').value = "";
+                            }
+                            else
+                            {
+                                window.document.getElementById('notice').innerHTML = "";
+                                window.document.getElementById('notice_fail').innerHTML = "Not found WO " + wo_code ;
+                            }
+                        
                     }
                     window.document.getElementById('scan_wo_code').value ="";
                     window.document.getElementById('scan_wo_code').focus();
                 }
         }).request();        
 }
+
+function checkforscanwotto(isitchecked)
+{
+        if (isitchecked == true){
+                document.getElementById("wo_code").focus();
+                document.getElementById('wo_code').setAttribute("onkeyup", "autoAddWoTto(this.value)");
+          
+        }
+        else {
+                document.getElementById('wo_code').setAttribute("onkeyup", "return false;");
+            
+        }
+}
+
+
 </script>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
 	<div class="col width-60">
@@ -158,12 +183,12 @@ function autoAddWoTto(wo_code)
                     </td>
                     <td>
                         <?php //echo $this->lists['wolist'];?>
-                        <input type="text" value="" name="wo_code" id="wo_code" readonly="readonly" />
-                        <input type="hidden" name="tto_wo_id" id="tto_wo_id" value="" />
+                        <input type="text" value="" name="wo_code" id="wo_code" />
+                        <input type="hidden" name="tto_wo_id" id="tto_wo_id" value="" />                        
                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_wo_ajax&tmpl=component" title="Image">
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
-                        </a>
-                        Scan Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="scan_wo_code" id="scan_wo_code" value="" >
+                        </a><br>Scan Barcode <input type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscanwotto(this.checked)" />
+<!--                        Scan Barcode <input onchange="autoAddWoTto(this.value)" onkeyup="autoAddWoTto(this.value)" type="text"  name="scan_wo_code" id="scan_wo_code" value="" >-->
                          <div name="notice_fail" style="color:#D30000" id ="notice_fail"></div>
                         <div name="notice" style="color:#0B55C4" id ="notice"></div>
                     </td>

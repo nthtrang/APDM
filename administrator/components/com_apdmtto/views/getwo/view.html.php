@@ -26,7 +26,7 @@ class  TToViewgetwo extends JView
 		$limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
 		$where = array();
-        $where[] = 'wo.wo_state not in ("onhold","cancel")';
+        $where[] = 'wo.wo_state not in ("onhold","cancel") and wo.pns_wo_id not in (select tto_wo_id from apdm_pns_tto where  tto_state != "Done")';
 		if (isset( $search ) && $search!= '')
 		{
 			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );
