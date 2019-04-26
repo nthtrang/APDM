@@ -236,9 +236,9 @@ function checkAllToolPn(n, fldName )
 }
     function autoAddPartTto(pns,tto_id){
 
-        setTimeout(function(){
+   //     setTimeout(function(){
         window.location = "index.php?option=com_apdmtto&task=ajax_addscanpn_tto&tto_id="+tto_id+"&pns_code="+pns+"&time=<?php echo time();?>";
-    }, 1000);
+   // }, 1000);
     }
 function checkforscantto(isitchecked)
 {
@@ -366,7 +366,7 @@ function checkedforMarkScanTto(ischecked)
                         if (in_array("E", $role) && ($this->tto_row->tto_state == "Create")) {
                             ?>
                                      <td class="button" id="toolbar-addpnsave">
-            Scan PN Barcode <input <?php echo $ttoonkeyUp?>  onkeyup="autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+            Scan PN Barcode <input <?php echo $ttoonkeyUp?>  onchange="autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')" onkeyup="autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
             <input <?php echo $ttoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscantto(this.checked)" />
         </td>
                             <td class="button" id="toolbar-save">

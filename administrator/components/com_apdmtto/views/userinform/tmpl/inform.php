@@ -50,7 +50,7 @@ function UpdateOwnerSto(sto_id){
                                         document.getElementById('notice').innerHTML = "Incorrect Password";				                
                                 }else if(result==2)//
                                 {
-                                        document.getElementById('notice').innerHTML = "You are must owner confirm out";				                
+                                        document.getElementById('notice').innerHTML = "You don't must owner";
                                 }
 				else
                                 {                                    
