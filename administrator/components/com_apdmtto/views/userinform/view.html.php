@@ -42,9 +42,13 @@ class TToViewuserinform extends JView {
                 {
                       $checkFullFill=0;  
                 }
+                 $query = 'select tto_code from apdm_pns_tto  where pns_tto_id != '.$tto_id.' and tto_state ="Using" and date(tto_created)="'.date('Y-m-d').'" and tto_owner_out = "'.$me->get('id').'"';
+                $db->setQuery( $query );
+                $ttoCodeOutBefore = $db->loadResult();
                 $this->assignRef('checkFullFill',        $checkFullFill);   
                 $this->assignRef('isOutConfirm',        $isOutConfirm);
                 $this->assignRef('userOutConfirm',        $tto_owner_out);
+                $this->assignRef('ttoCodeOutBefore',        $ttoCodeOutBefore);
                 
                 parent::display($tpl);
         }

@@ -247,12 +247,17 @@ th:first-child div{
                         <td align="left" >
                             <?php echo $row->pns_description; ?>
                         </td>
-                       <td align="left">
+                        <td align="left">
                                         <table>
                                     <?php
                                     if (count($mf) > 0) {
+                                        $i=1;
                                         foreach ($mf as $m) {                                                
-                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($mf))
+                                                        $style ="style='border-bottom:none'";                                                        
+                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                            $i++;
                                         }
                                     }
                                     ?>
@@ -262,8 +267,13 @@ th:first-child div{
                                          <table>
                                     <?php
                                     if (count($mf) > 0) {
+                                         $i=1;
                                         foreach ($mf as $m) {
-                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($mf))
+                                                        $style ="style='border-bottom:none'";      
+                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                             $i++;
                                         }
 
                                     }
@@ -272,8 +282,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
+                                            $i=1;
                                         foreach ($ms as $m) {
-                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($ms))
+                                                        $style ="style='border-bottom:none'";      
+                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                            $i++;
                                         }
                                     }
                                     ?> </table>
@@ -281,8 +296,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
+                                            $i=1;
                                         foreach ($ms as $m) {
-                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($ms))
+                                                        $style ="style='border-bottom:none'";      
+                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                            $i++;
                                         }
 
                                     }
@@ -291,8 +311,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
+                                            $i=1;
                                         foreach ($mv as $m) {
-                                            echo "<tr><td>".$m['mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($mv))
+                                                        $style ="style='border-bottom:none'";      
+                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                            $i++;
                                         }
                                     }
                                     ?> </table>
@@ -300,8 +325,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
+                                            $i=1;
                                         foreach ($mv as $m) {
-                                            echo "<tr><td>".$m['v_mf'] . '</tr></td>';
+                                                $style="";
+                                                if($i==count($mv))
+                                                        $style ="style='border-bottom:none'";      
+                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                            $i++;
                                         }
 
                                     }

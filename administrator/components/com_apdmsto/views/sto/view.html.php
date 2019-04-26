@@ -154,7 +154,7 @@ class SToViewsto extends JView
 
 
 
-        $query = 'SELECT p.* '
+     echo   $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . ' where p.pns_id in (select fk.pns_id from apdm_pns_sto_fk fk) '.$wherePN 
         ;

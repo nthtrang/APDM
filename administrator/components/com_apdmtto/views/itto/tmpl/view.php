@@ -346,7 +346,12 @@ function checkedforMarkScanTto(ischecked)
                                 </tr>                                
                                 <tr>
                                         <td class="key"><?php echo JText::_('WO'); ?></td>
-                                        <td  class="title"><?php echo ($this->tto_row->wo_code)?$this->tto_row->wo_code:"NA";?></td>
+                                        <td  class="title"><?php if($this->tto_row->wo_code){?>
+                                                                        <a href="index.php?option=com_apdmpns&task=wo_detail&id=<?php echo $this->tto_row->pns_wo_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $this->tto_row->wo_code; ?></a>                                                                         
+                                                                        <?php }else {
+                                                                                echo "NA";
+                                                                                }
+                                                ?></td>
                                         <td class="key"><?php echo JText::_('State'); ?></td>
                                         <td  class="title"><?php echo ($this->tto_row->tto_state)?$this->tto_row->tto_state:"NA";?></td>
                                 </tr> 

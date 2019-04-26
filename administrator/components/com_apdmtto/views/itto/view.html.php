@@ -76,7 +76,7 @@ class TToViewitto extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
         
-        $db->setQuery("select tto.*,wo.wo_code from apdm_pns_tto tto left join apdm_pns_wo wo on tto.tto_wo_id = wo.pns_wo_id  where tto.pns_tto_id =".$tto_id);
+        $db->setQuery("select tto.*,wo.wo_code,wo.pns_wo_id from apdm_pns_tto tto left join apdm_pns_wo wo on tto.tto_wo_id = wo.pns_wo_id  where tto.pns_tto_id =".$tto_id);
 
         $tto_row =  $db->loadObject();
 
