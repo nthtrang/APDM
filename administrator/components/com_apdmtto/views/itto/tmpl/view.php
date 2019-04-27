@@ -244,7 +244,7 @@ function checkforscantto(isitchecked)
 {
         if (isitchecked == true){
                 document.getElementById("pns_code").focus();
-                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartTto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')");
+                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartTto(this.value,'<?php echo $this->tto_row->pns_tto_id; ?>')");
             checkedforMarkScanTto(1);
         }
         else {

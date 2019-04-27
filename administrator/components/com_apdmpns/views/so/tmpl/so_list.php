@@ -9,7 +9,7 @@ $me = & JFactory::getUser();
 JToolBarHelper::title("Sale Order", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(10);
 $rolewo = JAdministrator::RoleOnComponent(12);
-if (in_array("W", $role)) {
+if (in_array("W", $role)) {     
         JToolBarHelper::customX('add_so', 'new', '', 'New SO', false);
 }
 if (in_array("W", $rolewo)) {

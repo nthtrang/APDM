@@ -12,7 +12,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 $checkFullFill =  $this->checkFullFill;
 $isOutConfirm =  $this->isOutConfirm;
 $UserOutConfirm =  $this->userOutConfirm;
-$ttoCodeOutBefore =  $this->ttoCodeOutBefore;
+//$ttoCodeOutBefore =  $this->ttoCodeOutBefore;
 	
 ?>
 <script language="javascript">
@@ -45,15 +45,20 @@ function UpdateOwnerSto(sto_id){
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminForm').toQueryString(),
-			onComplete:function(result){                                
-                                if(result==0)
+			onComplete:function(result){
+                var eco_result = result;
+                rs = eco_result.split('^');
+                                if(rs[0]==0)
                                 {
                                         document.getElementById('notice').innerHTML = "Incorrect Password";				                
-                                }else if(result==2)//
+                                }else if(rs[0]==2)//
                                 {
                                         document.getElementById('notice').innerHTML = "You don't must owner";
+                                }else if(rs[0]==3)//
+                                {
+                                    document.getElementById('notice').innerHTML = "You are using for "+rs[1]+" before.";
                                 }
-				else
+				                else
                                 {                                    
                                         window.parent.document.getElementById('sbox-window').close();	
                                         window.parent.location.reload();
@@ -80,12 +85,6 @@ function UpdateOwnerSto(sto_id){
                 <td colspan="2"><strong style="color:#D30000" ><?php echo JText::_('Please input all PN QTY before confirm done')?></strong></td>
         </tr>
         <?php
-        }elseif($ttoCodeOutBefore){
-        ?>
-         <tr>
-                <td colspan="2"><strong style="color:#D30000" ><?php echo 'You are using for "'.$ttoCodeOutBefore.'" before.';?></strong></td>
-        </tr>
-        <?php 
         }else{
        
         ?>

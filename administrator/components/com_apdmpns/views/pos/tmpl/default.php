@@ -46,7 +46,7 @@ function UpdatePnsRevWindow(){
                                 <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'QTY' ); ?>
+							<?php echo JText::_( 'Qty' ); ?>
 						</label>
 					</td>
 					<td>

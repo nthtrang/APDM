@@ -77,7 +77,7 @@ function autoAddPartTool(pns,parent_id)
                         <td>
                                 Scan PN Barcode <input onchange="autoAddPartTool(this.value,'<?php echo $pns_id; ?>')"  onkeyup="autoAddPartTool(this.value,'<?php echo $pns_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
                         </td>
-		</tr>
+		</tr>			
 </table>
     <table class="adminlist" cellpadding="1">
         <thead>

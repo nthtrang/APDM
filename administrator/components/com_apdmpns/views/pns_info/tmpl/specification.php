@@ -526,7 +526,6 @@
     <td colspan="2">
     <?php 
 	 $video = $partnumber.".mp4";
-    $videomov = $partnumber.".mov";
 	 JPATH_SITE.'/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/' . $video;
 		if (file_exists(JPATH_SITE.'/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/' . $video)) {
 	?>
@@ -539,15 +538,6 @@
 </video>
 		<?php 
 		}
-		elseif(file_exists(JPATH_SITE.'/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/' . $videomov))
-        {
-		    ?>
-        <video width="400" controls="">
-            <source src="http://apdm2.ascenx.vn/AsxDP/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/<?php echo $videomov?>" type="video/mp4">
-            <source src="http://apdm2.ascenx.vn/AsxDP/uploads/eco/VIDEO_TRAININ_GPS_G5_XSERVE/<?php echo $videomov?>" type="video/ogg">
-            Your browser does not support HTML5 video.
-        </video>
-        }
 	?>
     </td>
 </tr>

@@ -248,95 +248,95 @@ th:first-child div{
                             <?php echo $row->pns_description; ?>
                         </td>
                         <td align="left">
-                                        <table>
-                                    <?php
-                                    if (count($mf) > 0) {
-                                        $i=1;
-                                        foreach ($mf as $m) {                                                
-                                                $style="";
-                                                if($i==count($mf))
-                                                        $style ="style='border-bottom:none'";                                                        
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
-                                        }
+                            <table>
+                                <?php
+                                if (count($mf) > 0) {
+                                    $imf=1;
+                                    foreach ($mf as $m) {
+                                        $style="";
+                                        if($imf==count($mf))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                        $imf++;
                                     }
-                                    ?>
-                                                </table>
-                                </td>
-                                <td align="left">
-                                         <table>
-                                    <?php
-                                    if (count($mf) > 0) {
-                                         $i=1;
-                                        foreach ($mf as $m) {
-                                                $style="";
-                                                if($i==count($mf))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                             $i++;
-                                        }
+                                }
+                                ?>
+                            </table>
+                        </td>
+                        <td align="left">
+                            <table>
+                                <?php
+                                if (count($mf) > 0) {
+                                    $imf1=1;
+                                    foreach ($mf as $m) {
+                                        $style="";
+                                        if($imf1==count($mf))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                        $imf1++;
+                                    }
 
+                                }
+                                ?> </table>
+                        </td>
+                        <td align="left"> <table>
+                                <?php
+                                if (count($ms) > 0) {
+                                    $ims1=1;
+                                    foreach ($ms as $m) {
+                                        $style="";
+                                        if($ims1==count($ms))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                        $ims1++;
                                     }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($ms) > 0) {
-                                            $i=1;
-                                        foreach ($ms as $m) {
-                                                $style="";
-                                                if($i==count($ms))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
-                                        }
+                                }
+                                ?> </table>
+                        </td>
+                        <td align="left"> <table>
+                                <?php
+                                if (count($ms) > 0) {
+                                    $ims2=1;
+                                    foreach ($ms as $m) {
+                                        $style="";
+                                        if($ims2==count($ms))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                        $ims2++;
                                     }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($ms) > 0) {
-                                            $i=1;
-                                        foreach ($ms as $m) {
-                                                $style="";
-                                                if($i==count($ms))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $i++;
-                                        }
 
+                                }
+                                ?> </table>
+                        </td>
+                        <td align="left"> <table>
+                                <?php
+                                if (count($mv) > 0) {
+                                    $imv=1;
+                                    foreach ($mv as $m) {
+                                        $style="";
+                                        if($imv==count($mv))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                        $imv++;
                                     }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($mv) > 0) {
-                                            $i=1;
-                                        foreach ($mv as $m) {
-                                                $style="";
-                                                if($i==count($mv))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
-                                        }
+                                }
+                                ?> </table>
+                        </td>
+                        <td align="left"> <table>
+                                <?php
+                                if (count($mv) > 0) {
+                                    $imv1=1;
+                                    foreach ($mv as $m) {
+                                        $style="";
+                                        if($imv1==count($mv))
+                                            $style ="style='border-bottom:none'";
+                                        echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                        $imv1++;
                                     }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($mv) > 0) {
-                                            $i=1;
-                                        foreach ($mv as $m) {
-                                                $style="";
-                                                if($i==count($mv))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $i++;
-                                        }
 
-                                    }
-                                    ?> </table>
-                                </td>
+                                }
+                                ?> </table>
+                        </td>
                         <td align="center" <?php echo $background; ?>>
                             <?php
                             echo $stock;

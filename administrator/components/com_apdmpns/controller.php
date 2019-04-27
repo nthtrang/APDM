@@ -5620,7 +5620,7 @@ class PNsController extends JController {
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        "where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (1,2)";
+                        "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (1,2)";
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
@@ -5638,7 +5638,7 @@ class PNsController extends JController {
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location_from=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        "where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+                        "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
@@ -5653,7 +5653,7 @@ class PNsController extends JController {
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        "where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+                        "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {

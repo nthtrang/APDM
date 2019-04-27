@@ -323,13 +323,13 @@ th:first-child div{
                                         <table>
                                     <?php
                                     if (count($mf) > 0) {
-                                        $i=1;
+                                        $imf=1;
                                         foreach ($mf as $m) {                                                
                                                 $style="";
-                                                if($i==count($mf))
+                                                if($imf==count($mf))
                                                         $style ="style='border-bottom:none'";                                                        
                                             echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
+                                            $imf++;
                                         }
                                     }
                                     ?>
@@ -339,13 +339,13 @@ th:first-child div{
                                          <table>
                                     <?php
                                     if (count($mf) > 0) {
-                                         $i=1;
+                                         $imf1=1;
                                         foreach ($mf as $m) {
                                                 $style="";
-                                                if($i==count($mf))
+                                                if($imf1==count($mf))
                                                         $style ="style='border-bottom:none'";      
                                             echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                             $i++;
+                                            $imf1++;
                                         }
 
                                     }
@@ -354,13 +354,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
-                                            $i=1;
+                                            $ims1=1;
                                         foreach ($ms as $m) {
                                                 $style="";
-                                                if($i==count($ms))
+                                                if($ims1==count($ms))
                                                         $style ="style='border-bottom:none'";      
                                             echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
+                                            $ims1++;
                                         }
                                     }
                                     ?> </table>
@@ -368,13 +368,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($ms) > 0) {
-                                            $i=1;
+                                            $ims2=1;
                                         foreach ($ms as $m) {
                                                 $style="";
-                                                if($i==count($ms))
+                                                if($ims2==count($ms))
                                                         $style ="style='border-bottom:none'";      
                                             echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $i++;
+                                            $ims2++;
                                         }
 
                                     }
@@ -383,13 +383,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
-                                            $i=1;
+                                            $imv=1;
                                         foreach ($mv as $m) {
                                                 $style="";
-                                                if($i==count($mv))
+                                                if($imv==count($mv))
                                                         $style ="style='border-bottom:none'";      
                                             echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $i++;
+                                            $imv++;
                                         }
                                     }
                                     ?> </table>
@@ -397,13 +397,13 @@ th:first-child div{
                                 <td align="left"> <table>
                                     <?php
                                     if (count($mv) > 0) {
-                                            $i=1;
+                                            $imv1=1;
                                         foreach ($mv as $m) {
                                                 $style="";
-                                                if($i==count($mv))
+                                                if($imv1==count($mv))
                                                         $style ="style='border-bottom:none'";      
                                             echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $i++;
+                                            $imv1++;
                                         }
 
                                     }

@@ -167,6 +167,7 @@
                     <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Part Number'); ?></th>
                     <th width="100" align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Description'); ?></th>
                     <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('UOM'); ?></th>
+                    <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Location'); ?></th>
                     <th width="100"  align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid" class="tg-0pky-pr tg-0pky-border"><?php echo JText::_('Qty'); ?></th>
                 </tr>
                 </thead>
@@ -187,25 +188,26 @@
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $pns_code;?></td>
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
-                        <td  class="tg-0pky-pr tg-0pky-border" colspan="2" style="text-align:center;">
-                            <!--<table class="adminlist" style="color:#000" cellspacing="0" width="200">-->
+                        <td class="tg-0pky-pr tg-0pky-border" align="center" colspan="2">
+                            <table class="adminlist" cellspacing="0" width="200">
                                 <?php
-                                $totalQty = 0;
                                 foreach ($this->sto_pn_list2 as $rw) {
                                     if($rw->pns_id==$row->pns_id)
                                     {
-                                        $totalQty += $rw->qty;
                                         ?>
-                                       <!-- <tr><td align="center" width="74px">
-                                                <?php /*echo $rw->qty;*/?>
+                                        <tr><td align="center" width="77px">
+                                                <?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?>
                                             </td>
-                                        </tr>-->
+                                            <td align="center" width="74px">
+                                                <?php echo $rw->qty;?>
+                                            </td>
+
+                                        </tr>
                                         <?php
                                     }
                                 }
-                                echo $totalQty;
                                 ?>
-                            <!--</table>-->
+                            </table>
                         </td>
                     </tr>
                 <?php }

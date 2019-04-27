@@ -308,33 +308,42 @@ class TToController extends JController
                 $db->setQuery("SELECT * from apdm_pns_tto where pns_tto_id=".$tto_id);
                 $sto_row =  $db->loadObject();    
 
-                        $isOutConfirm = $sto_row->tto_owner_out_confirm;
-                        $UserOutConfirm = $sto_row->tto_owner_out;
-                
+                $isOutConfirm = $sto_row->tto_owner_out_confirm;
+                $UserOutConfirm = $sto_row->tto_owner_out;
+
+                $query = 'select tto_code from apdm_pns_tto  where pns_tto_id != '.$tto_id.' and tto_state ="Using" and date(tto_created)="'.date('Y-m-d').'" and tto_owner_out = "'.$userId.'"';
+                $db->setQuery($query);
+                $ttoCodeOutBefore = $db->loadResult();
                 if($userId)
                 {   
-                        if($sto_row->tto_state=="Create" && $tto_type_inout = 2)
+                        if($sto_row->tto_state=="Create" && $tto_type_inout = 2)//out
                         {
-                                $db->setQuery("update apdm_pns_tto set tto_owner_out = '".$userId."',tto_state = 'Using',tto_owner_out_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_out_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                                                        
-                                $db->query();     
-                                 echo 1;
+                                if($ttoCodeOutBefore!="")
+                                {
+                                     echo "3^".$ttoCodeOutBefore;
+                                }
+                                else {
+                                    $db->setQuery("update apdm_pns_tto set tto_owner_out = '" . $userId . "',tto_state = 'Using',tto_owner_out_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_out_confirm ='1' WHERE  pns_tto_id = " . $tto_id);
+                                    $db->query();
+                                    echo "1^1";
+                                }
                         }
                         if($sto_row->tto_state=="Using" && $tto_type_inout = 1)
                         {
                                  if($UserOutConfirm !=0 && $UserOutConfirm!=$userId){
-                                         echo 2;
+                                         echo "2^1";
                                  }
                                  else{
                                         $db->setQuery("update apdm_pns_tto set tto_owner_in = '".$userId."',tto_state = 'Done',tto_completed_date='" . $datenow->toMySQL() . "' ,tto_owner_in_confirm_date='" . $datenow->toMySQL() . "' , tto_owner_in_confirm ='1' WHERE  pns_tto_id = ".$tto_id);                        
                                         $db->query();  
-                                         echo 1;
+                                         echo "1^1";
                                  }
                         }                        
                        
                 }
                 else
                 {
-                        echo 0;
+                        echo "0^1";
                 }
                 exit;
         }
