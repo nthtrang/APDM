@@ -192,65 +192,102 @@ function submitbutton(pressbutton) {
 					<?php echo $row->pns_type;?>
 				</td>
 				<td align="left">
-					<?php 
-					if (count($mv) > 0){
-                                                foreach ($mv as $m){
-                                                        echo $m['vendor_name'];
-                                                }
-					}
-					 ?>
+                    <table>
+                        <?php
+                        if (count($mv) > 0) {
+                            $imv=1;
+                            foreach ($mv as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($imv==count($mv))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['vendor_name'] . '</tr></td>';
+                                $imv++;
+                            }
+                        }
+                        ?>
+                    </table>
 				</td>
 				<td align="left">
-					<?php 
-					if (count($mv) > 0){
-                                                foreach ($mv as $m){
-                                                        echo $m['vendor_info'];
-                                                }
-					}
-					 ?>
+                    <table>
+                        <?php
+                        if (count($mv) > 0) {
+                            $imv1=1;
+                            foreach ($mv as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($imv1==count($mv))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['vendor_info'] . '</tr></td>';
+                                $imv1++;
+                            }
+                        }
+                        ?>
+                    </table>
 				</td>   
 				<td align="left">
-					<?php 
-					if (count($ms) > 0){
-                                                foreach ($ms as $m){
-                                                        echo $m['supplier_name'];
-                                                }
-					}
-					 ?>
+                    <table>
+                        <?php
+                        if (count($ms) > 0) {
+                            $ims=1;
+                            foreach ($ms as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($ims==count($ms))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['supplier_name'] . '</tr></td>';
+                                $ims++;
+                            }
+                        }
+                        ?>
+                    </table>
+
 				</td>
 				<td align="left">
-					<?php 
-					if (count($ms) > 0){
-                                                foreach ($ms as $m){
-                                                        echo $m['supplier_info'];
-                                                }
-					}
-					 ?>
-				</td>                                
-				<td align="left">
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo $m['mf'];
-					}
-						
-					}else{
-						
-					}
-					 ?>
+                    <table>
+                        <?php
+                        if (count($ms) > 0) {
+                            $ims1=1;
+                            foreach ($ms as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($ims1==count($ms))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['supplier_info'] . '</tr></td>';
+                                $ims1++;
+                            }
+                        }
+                        ?>
+                    </table>
 				</td>
-                                <td align="left">
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-						echo $m['v_mf'];
-					}
-						
-					}else{
-						
-					}
-					 ?>
-				</td>                                
+                <td align="left">
+                    <table>
+                        <?php
+                        if (count($mf) > 0) {
+                            $imf=1;
+                            foreach ($mf as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($imf==count($mf))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                $imf++;
+                            }
+                        }
+                        ?>
+                    </table>
+                </td>
+                <td align="left">
+                    <table>
+                        <?php
+                        if (count($mf) > 0) {
+                            $imf1=1;
+                            foreach ($mf as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($imf1==count($mf))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                $imf1++;
+                            }
+
+                        }
+                        ?> </table>
+                </td>
 				<td align="center">
 					<?php 
      

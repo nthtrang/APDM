@@ -170,13 +170,21 @@ function UpdatePnsEco(){
 					<?php echo  $row->pns_description; ?>
 				</td>		
                                 <td align="center">
-					<?php
+                                    <table>
+                                        <?php
                                         $mf = PNsController::GetManufacture($row->pns_id,4);
-                                        if (count($mf) > 0){
-                                                foreach ($mf as $m){
-                                                        echo $m['v_mf'];
-                                                }					
-					} ?>
+                                        if (count($mf) > 0) {
+                                            $imf1=1;
+                                            foreach ($mf as $m) {
+                                                $style="style='border-bottom:1px solid #eee;'";
+                                                if($imf1==count($mf))
+                                                    $style ="style='border-bottom:none'";
+                                                echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                                $imf1++;
+                                            }
+
+                                        }
+                                        ?> </table>
 				</td>	                                
                                 <td>
                                         <?php echo $qtyRemain;?>

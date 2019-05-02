@@ -785,13 +785,21 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 <td align="left"><?php echo $row->pns_description; ?></td>
                                                 <td align="center"><?php echo $row->pns_uom; ?></td>
                                                 <td align="center">
-                                                <?php
-                                                 $mf = SToController::GetManufacture($row->pns_id,4);
-                                                if (count($mf) > 0){
-                                                        foreach ($mf as $m){
-                                                                echo $m['v_mf'];
-                                                        }					
-                                                } ?>
+                                                    <table>
+                                                        <?php
+                                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                                        if (count($mf) > 0) {
+                                                            $imf1=1;
+                                                            foreach ($mf as $m) {
+                                                                $style="style='border-bottom:1px solid #eee;'";
+                                                                if($imf1==count($mf))
+                                                                    $style ="style='border-bottom:none'";
+                                                                echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                                                $imf1++;
+                                                            }
+
+                                                        }
+                                                        ?> </table>
                                                 </td> 
                                                 <td align="center" colspan="4">
                                                         

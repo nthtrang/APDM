@@ -345,25 +345,36 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php echo  $row->pns_description; ?>
 				</td>
 				<td align="left">
-					<?php 
-					if (count($mf) > 0){
-                                                foreach ($mf as $m){
-                                                    echo $m['mf'].' &nbsp;&nbsp;<br />';
-                                                }					
-					}
-					 ?>
+                    <table>
+                        <?php
+                        if (count($mf) > 0) {
+                            $imf=1;
+                            foreach ($mf as $m) {
+                                $style="style='border-bottom:1px solid #eee;'";
+                                if($imf==count($mf))
+                                    $style ="style='border-bottom:none'";
+                                echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
+                                $imf++;
+                            }
+                        }
+                        ?>
+                    </table>
 				</td>	
                                 <td align="left">
-					<?php 
-					if (count($mf) > 0){
-					foreach ($mf as $m){
-                        echo $m['v_mf'].' &nbsp;&nbsp;<br />';
-					}
-						
-					}else{
-						
-					}
-					 ?>
+                                    <table>
+                                        <?php
+                                        if (count($mf) > 0) {
+                                            $imf1=1;
+                                            foreach ($mf as $m) {
+                                                $style="style='border-bottom:1px solid #eee;'";
+                                                if($imf1==count($mf))
+                                                    $style ="style='border-bottom:none'";
+                                                echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
+                                                $imf1++;
+                                            }
+
+                                        }
+                                        ?> </table>
 				</td>	                                
                                 <td align="center">
 					<?php echo $row->pns_cost;?>
