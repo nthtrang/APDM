@@ -52,7 +52,7 @@ class SToViewsto extends JView
         }
         else
         {
-                $where[] = 'p.sto_type = 2 and p.sto_state != "Done"';
+                $where[] = ' p.sto_type in (1,2) and  p.sto_state != "Done"';//
         }
         
       

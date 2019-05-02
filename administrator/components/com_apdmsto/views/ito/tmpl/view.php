@@ -49,6 +49,29 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                     return;
                 }
                 if (pressbutton == 'saveqtyStofk') {
+                         if (document.adminForm.boxchecked.value==0){
+                                alert("Please make a selection from the list to save receiving part");			
+                                return false;
+                        }
+                        else
+                        {
+                                var cpn = document.getElementsByName('cid[]');
+                                var len = cpn.length;                              
+                                for (var i=0; i<len; i++) {
+                                        if(cpn[i].checked)
+                                        {                                        
+                                               // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
+                                                var qty_value = document.getElementById('qty_' +cpn[i].value).value;                                        
+                                                if(qty_value==0)
+                                                {
+                                                        alert("Please input QTY for PN selected");    
+                                                        document.getElementById('qty_' +cpn[i].value).focus();
+                                                        return false;
+                                                }                                       
+                                        }
+                                }
+                               // submitform( pressbutton );
+                        }                
                         submitform( pressbutton );
                         return;
                 }                      

@@ -9266,15 +9266,25 @@ class PNsController extends JController {
                 echo "Import Specification Complete with result below";
                 echo "<br>";
                 echo "Sucesssfull:<br>";
+                $arr =array();
                 foreach ($arr_succes as $file_name =>$pns_id)
                 {
-                        echo "<a href='index.php?option=com_apdmpns&task=specification&cid[]=".$pns_id."'>".$file_name."</a><br>";
+                        $arr[]= "<a href='index.php?option=com_apdmpns&task=specification&cid[]=".$pns_id."'>".$file_name."</a><br>";
                 }
                 echo "<br>Failed:";
                 foreach ($arr_fail as $val)
                 {
-                        echo $val."<br>";
+                        $arr[] = $val."<br>";
                 }
+                
+                 $file = fopen($src."import_spec_result.txt","w");                 
+                 fwrite($file,  implode("\n", $arr));
+                $file_name = "import_spec_result.txt";
+                file_put_contents($src.$file_name, implode("\n", $arr) . "\n", FILE_APPEND);
+                fclose($file);
+                // $path_pns = JPATH_COMPONENT . DS ;
+                $dFile = new DownloadFile($src, $file_name);
+                return $this->setRedirect('index.php?option=com_apdmpns',"Import Done" );
 
         }
         function getTtofromWo($wo_id)        
@@ -9358,6 +9368,8 @@ class PNsController extends JController {
               //  $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
                // $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xlsx');
 
+                
+                
                 global $mainframe;
                 $me = & JFactory::getUser();
                 $pns_id = JRequest::getVar('pns_id');
@@ -9414,6 +9426,7 @@ class PNsController extends JController {
                                 return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns', $msg);
                         }
 
+                
                   $sheet = $objPHPExcel->getSheet(0);
                    $highestRow = $sheet->getHighestRow();
                    $highestColumn = $sheet->getHighestColumn();
@@ -9639,12 +9652,61 @@ class PNsController extends JController {
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
                         }
                 }  
-                $inputFileName =  $path_bom_file.
-                $file = fopen($path_bom_file.$bom_upload."_result.txt","w");
+                //$inputFileName =  $path_bom_file.
+               // $file = fopen($path_bom_file.$bom_upload."_result.txt","w");
                 //echo fwrite($file,  implode("\n", $arr_err));
-                $file_name = $bom_upload.time()."_result.txt";
-                file_put_contents($path_bom_file.$file_name, implode("\n", $arr_err) . "\n", FILE_APPEND);
-                fclose($file);
+              //  $file_name = $bom_upload.time()."_result.txt";
+             //   file_put_contents($path_bom_file.$file_name, implode("\n", $arr_err) . "\n", FILE_APPEND);
+               // fclose($file);
+                
+                //write_ log
+                $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
+                $objPHPExcel = $objReader->load($path_bom_file .'IMPORT_BOM_TEMPALTE_REPORT.xls');
+                $nRecord = count($arr_err);
+                //$objPHPExcel->getSheet(0);
+                $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
+                if ($nRecord > 0) {
+                        $jj = 0;
+                        $ii = 1;
+                        $number = 1;
+                        foreach ($arr_err as $ms) {
+                                $a = 'A' . $ii;
+                                $b = 'B' . $ii;
+                                //$c = 'C' . $ii;
+                               
+                                //set heigh or row                                 
+                                $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
+                                $objPHPExcel->getActiveSheet()->setCellValue($a, $number );
+                                $objPHPExcel->getActiveSheet()->setCellValue($b, $ms);                             
+
+                                //set format
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                              
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                          
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                               
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                
+                                if ($jj == $nRecord - 1) {
+                                        $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                                                       }
+                                $ii++;
+                                $jj++;
+                                $number++;
+                        }
+                }
+                $path_export = JPATH_SITE . DS . 'uploads'  . DS;
+                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                $objWriter->save($path_export . "Report_".$bom_upload);
+                $dFile = new DownloadFile($path_export, "Report_".$bom_upload);
                 
                 return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns&importresult='.$file_name,"Import Done" );
         }

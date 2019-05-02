@@ -13,8 +13,10 @@ if (!intval($edit)) {
         JToolBarHelper::save('save', 'Save & Add new');
 }
 $role = JAdministrator::RoleOnComponent(6);
+$allow_remove = 0;
 if (in_array("E", $role) && $this->row->pns_life_cycle == 'Create') {
         JToolBarHelper::apply('edit_pns', 'Save');
+        $allow_remove = 1;
 }
 if ($edit) {
         // for existing items the button is renamed `close`
@@ -122,10 +124,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <?php echo $v['v_name'] ?> 
                                                                 </td>
                                                                 <td>
-                                                                        <input size="40" type="text" value="<?php echo $v['v_value']; ?>" name="v_exist_value[]" />
+                                                                        <?php echo $v['v_value']; ?><input size="40" type="hidden" value="<?php echo $v['v_value']; ?>" name="v_exist_value[]" />
                                                                 </td>
                                                                 <td align="center">
+                                                                        <?php if($allow_remove){?>
                                                                         <a href="index.php?option=com_apdmpns&task=remove_info&id=<?php echo $v['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
+                                                                        <?php }?>
                                                                 </td>
                                                         </tr>
                                         <?php } ?>	
@@ -147,9 +151,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </tbody>
                         </table>
                         <p>	
+                                <?php if($allow_remove){?>
                                 <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=2&pns_id=<?php echo $this->row->pns_id ?>" title="Image">
                                         <input type="button" name="addVendor" value="<?php echo JText::_('Select Vendor') ?>"/>
                                 </a>
+                                <?php }?>
                         </p>
                 </fieldset>
         </div>
@@ -176,10 +182,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                         <?php echo $s['s_name'] ?> 
                                                                 </td>
                                                                 <td>
-                                                                        <input type="text" size="40" value="<?php echo $s['s_value']; ?>" name="s_exist_value[]" />
+                                                                        <?php echo $s['s_value']; ?><input type="hidden" size="40" value="<?php echo $s['s_value']; ?>" name="s_exist_value[]" />
                                                                 </td>
                                                                 <td align="center">
+                                                                        <?php if($allow_remove){?>
                                                                         <a href="index.php?option=com_apdmpns&task=remove_info&id=<?php echo $s['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove"><?php echo JText::_('Remove') ?></a>
+                                                                        <?php }?>
                                                                 </td>
                                                         </tr>
                                         <?php } ?>				
@@ -200,9 +208,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </tbody>
                         </table>
                         <p>	
+                                <?php if($allow_remove){?>
                                 <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=3&pns_id=<?php echo $this->row->pns_id ?>" title="Image">
                                         <input type="button" name="addSupplier" value="<?php echo JText::_('Select Supplier') ?>"/>
                                 </a>
+                                <?php }?>
                         </p>
                 </fieldset>
         </div>
@@ -228,12 +238,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                         <?php echo $m['m_name'] ?> 
                                                                 </td>
                                                                 <td>
-                                                                        <input type="text" size="40" value="<?php echo $m['m_value']; ?>" name="m_exist_value[]" /> 
+                                                                        <?php echo $m['m_value']; ?><input type="hidden" size="40" value="<?php echo $m['m_value']; ?>" name="m_exist_value[]" /> 
                                                                 </td>
                                                                 <td align="center">
+                                                                        <?php if($allow_remove){?>
                                                                         <a href="index.php?option=com_apdmpns&task=remove_infomf&id=<?php echo $m['id'] ?>&pns_id=<?php echo $this->row->pns_id ?>" title="Click to remove">
                                                                                 <?php echo JText::_('Remove') ?>
                                                                         </a>
+                                                                        <?php }?>
                                                                 </td>
                                                         </tr>
                                                 <?php }
@@ -252,10 +264,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                 <td colspan="2"><?php echo JText::_('Please select Manufacturer to add more information.') ?></td>
                                         </tr>
                                 </tbody>
-                        </table
-                        <p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=4&pns_id=<?php echo $this->row->pns_id ?>" title="Manufacturer">
+                        </table>
+                        <p>	
+                                <?php if($allow_remove){?>
+                                <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=4&pns_id=<?php echo $this->row->pns_id ?>" title="Manufacturer">
                                         <input type="button" name="addManufacture" value="<?php echo JText::_('Select Manufacturing') ?>"/>
-                                </a></p>
+                                </a>
+                                <?php }?>
+                        </p>
                 </fieldset>
         </div>
         <div style="display:none"><?php
