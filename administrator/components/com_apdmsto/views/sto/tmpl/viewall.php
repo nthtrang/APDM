@@ -192,9 +192,9 @@ th:first-child div{
                     else
                         $pns_code = $row->ccs_code . '-' . $row->pns_code;
 
-                    $mf = SToController::GetManufacture($row->pns_id, 4);//manufacture
-                    $ms = SToController::GetManufacture($row->pns_id, 3);//Supplier
-                    $mv = SToController::GetManufacture($row->pns_id, 2);//vendor
+                    $mf = GetManufacture($row->pns_id, 4);//manufacture
+                    $ms = GetManufacture($row->pns_id, 3);//Supplier
+                    $mv = GetManufacture($row->pns_id, 2);//vendor
 
                     $stock = CalculateInventoryValue($row->pns_id);
                 $background = "";

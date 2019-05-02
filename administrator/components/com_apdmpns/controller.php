@@ -4578,7 +4578,7 @@ class PNsController extends JController {
                 //upload attached POs
                 if ($_FILES['po_file']['size'] > 0) {
                         $attached = new upload($_FILES['po_file']);
-                        $attached->file_new_name_body = $pns_id . "_" . str_replace("-", "_", $po_code);
+                        $attached->file_new_name_body =   str_replace("-", "_", $po_code);
                         if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
 
                                 @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
@@ -4779,7 +4779,7 @@ class PNsController extends JController {
                 //upload attached POs
                 if ($_FILES['sto_file']['size'] > 0) {
                         $attached = new upload($_FILES['sto_file']);
-                        $attached->file_new_name_body = $pns_id . "_" . str_replace("-", "_", $sto_code);
+                        $attached->file_new_name_body =  "_" . str_replace("-", "_", $sto_code);
                         if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
 
                                 @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
@@ -4826,7 +4826,7 @@ class PNsController extends JController {
                 //upload attached POs
                 if ($_FILES['sto_file']['size'] > 0) {
                         $attached = new upload($_FILES['sto_file']);
-                        $attached->file_new_name_body = $pns_id . "_" . str_replace("-", "_", $sto_code);
+                        $attached->file_new_name_body =  "_" . str_replace("-", "_", $sto_code);
                         if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
 
                                 @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
@@ -4870,7 +4870,7 @@ class PNsController extends JController {
                 //upload attached POs
                 if ($_FILES['sto_file']['size'] > 0) {
                         $attached = new upload($_FILES['sto_file']);
-                        $attached->file_new_name_body = $pns_id . "_" . str_replace("-", "_", $sto_code);
+                        $attached->file_new_name_body =  "_" . str_replace("-", "_", $sto_code);
                         if (file_exists($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext)) {
 
                                 @unlink($path_pns . 'images' . DS . $attached->file_new_name_body . "." . $attached->file_src_name_ext);
@@ -6055,7 +6055,7 @@ class PNsController extends JController {
                 } else
                         @chmod($conf['dir'], 0777);
 
-                $zipname = 'zipfile_' . $pns_code;
+                $zipname = 'zipfile_' . $folder;
                 $zipname = str_replace("/", "", $zipname);
                 //if (empty($zipname)) $zipname="NDKzip";
                 $zipname.=".zip";
@@ -6372,7 +6372,7 @@ class PNsController extends JController {
                      
                 }//for save database of pns 
                
-                $msg = JText::_('Successfully Saved So') . $text_mess;
+                $msg = JText::_('Successfully Saved So');
                 return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail&id=' . $so_id, $msg);
                                
         }

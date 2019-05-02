@@ -172,7 +172,7 @@ function UpdatePnsEco(){
                                 <td align="center">
                                     <table>
                                         <?php
-                                        $mf = PNsController::GetManufacture($row->pns_id,4);
+                                        $mf = GetManufacture($row->pns_id,4);
                                         if (count($mf) > 0) {
                                             $imf1=1;
                                             foreach ($mf as $m) {
