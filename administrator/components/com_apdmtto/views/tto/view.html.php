@@ -110,9 +110,9 @@ class TToViewtto extends JView
                 $where .= " and DATE(tto.tto_owner_out_confirm_date  >= '".$tto_date_out_from."'";
         }
 
-        if($filter_tto_created_by)
-        {
-                $where .= " and tto.tto_create_by = '".$filter_tto_created_by."'";
+        if($filter_tto_created_by && $filter_tto_created_by!=-1)
+        {                
+                        $where .= " and tto.tto_create_by = '".$filter_tto_created_by."'";               
         }
         if($filter_tto_owner_out_by)
         {
@@ -130,9 +130,10 @@ class TToViewtto extends JView
         $list_tools_done = $db->loadObjectList();         
         $this->assignRef('tools', $list_tools_done);
         
-        //Cerated by
+        //Crerated by
         $db->setQuery("SELECT p.tto_create_by as value, u.name as text FROM apdm_pns_tto as p LEFT JOIN jos_users as u ON u.id=p.tto_create_by  GROUP BY p.tto_create_by ORDER BY text "); 
         $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
+        $create_by[] = JHTML::_('select.option', -1, JText::_('View All'), 'value', 'text');
         $create_bys = array_merge($create_by, $db->loadObjectList());
         $lists['tto_create_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_tto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_tto_created_by );
         

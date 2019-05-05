@@ -37,11 +37,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			form.pns_revision.focus();
 			return false;
 		}		
-		if (form.eco_id.value==0){
-			alert("Please select ECO");
-			form.eco.focus();
-			return false;
-		}
+//		if (form.eco_id.value==0){
+//			alert("Please select ECO");
+//			form.eco.focus();
+//			return false;
+//		}
 //		if (form.pns_stock.value < form.pns_qty_used.value){
 //			alert("Please input Stock greater than Qty Used	");
 //			form.pns_stock.focus();

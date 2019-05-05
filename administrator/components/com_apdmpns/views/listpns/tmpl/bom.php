@@ -24,17 +24,13 @@ $pns_code_full = $row->pns_code_full;
         if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
                 JToolBarHelper::customX('download', 'download', '', 'Download', false);	
+                JToolBarHelper::customX('downloadall', 'download', '', 'Download All', false);	
 	}
 	if (in_array("V", $role)) {
 		JToolBarHelper::customX('export_bom_xls', 'excel', '', 'Export', false);
 
 	}
-        JToolBarHelper::customX("printbom","print",'',"Print",false);
-	
-
-	
-        
-	     
+        JToolBarHelper::customX("printbom","print",'',"Print",false); 
 
 	$cparams = JComponentHelper::getParams ('com_media');
 ?>
@@ -74,6 +70,14 @@ function submitbutton(pressbutton) {
 			}                              
 			if (pressbutton == 'download') {
                                  window.location.assign("index.php?option=com_apdmpns&task=download_cad_all_pns&pns_id=<?php echo $this->lists['pns_id']?>")
+                                 //window.location.assign("../uploads/pns/cads/<?php echo $row->ccs_code?>/<?php echo $row->pns_code_full?>/zip.php?step=2")
+				//submitform( pressbutton );
+				//form.task.value = '';
+				return;
+			}
+                        
+                        if (pressbutton == 'downloadall') {
+                                 window.location.assign("index.php?option=com_apdmpns&task=download_all_bompns&pns_id=<?php echo $this->lists['pns_id']?>")
                                  //window.location.assign("../uploads/pns/cads/<?php echo $row->ccs_code?>/<?php echo $row->pns_code_full?>/zip.php?step=2")
 				//submitform( pressbutton );
 				//form.task.value = '';
@@ -195,30 +199,33 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
             <th width="4%">
                 <?php echo JText::_('Level')?>
 			</th>                        
-			<th width="20%" >
+			<th width="16%" >
 					<?php echo JText::_('Part Number')?>
 			</th>
 			<th width="20%">
 				<?php echo JText::_('Description')?>				
 			</th>
-			<th width="8%">
+			<th width="5%">
 				<?php echo JText::_('Find Number')?>
 			</th>
 			<th width="5%">
 				<?php echo JText::_('Ref des')?>
 			</th>
-			<th width="5%">
+			<th width="3%">
 				<?php echo JText::_('Qty')?>
 			</th>                     
-			<th width="5%">
+			<th width="4%">
 				<?php echo JText::_('UOM')?>
 			</th>
-			<th width="10%">
+			<th width="8%">
 				<?php echo JText::_('MFR Name')?>
 			</th>
-            <th width="15%">
+                        <th width="13%">
 				<?php echo JText::_('MFG PN')?>
-			</th>                        
+			</th>     
+                         <th width="15%">
+				<?php echo JText::_('Download')?>
+			</th>   
 			<th width="6%">
 				<?php echo JText::_('State')?>
 			</th>
@@ -256,6 +263,29 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
                 <td align="center"><?php echo $row->pns_uom;?></td>
                 <td align="center"><?php echo $manufacture[0]['mf'];?></td>
                 <td align="center"><?php echo $manufacture[0]['v_mf'];?></td>
+                <td>
+                <?php                 
+				$folder_pns = $row->text;          
+                                $image_files = PNsController::getImagefiles($row->pns_id);
+				foreach ($image_files as $image) {					
+                                        ?>
+                                        <a href="index.php?option=com_apdmpns&task=download_imgs&pid=<?php echo $row->pns_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><?php echo $image['image_file'];?></a>
+                                        <?php 
+                                }
+                                $pdf_files = PNsController::getPdffiles($row->pns_id);
+				foreach ($pdf_files as $pdf) {					
+                                        ?>
+                                        <a href="index.php?option=com_apdmpns&task=download_pdfs&pid=<?php echo $row->pns_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><?php echo $pdf['pdf_file'];?></a>&nbsp;&nbsp;
+                                        <?php 
+                                }
+                                $cad_files = PNsController::getCadfiles($row->pns_id);
+				foreach ($cad_files as $cad) {					
+                                        ?>
+                                        <a href="index.php?option=com_apdmpns&task=download_cad&id=<?php echo $cad['id']?>" title="Click here to download file"><?php echo $cad['cad_file'];?></a>
+                                        <?php 
+                                }
+                ?>
+                </td>		
 		<td><?php echo $row->pns_life_cycle;?></td>		
 	</tr>
         <?php

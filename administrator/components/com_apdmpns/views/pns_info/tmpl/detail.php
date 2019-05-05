@@ -386,8 +386,8 @@ input.addEventListener("keyup", function(event) {
                                                 
 					<a class="modal-button" rel="{handler: 'iframe', size: {x: 850, y: 400}}" href="index.php?option=com_apdmpns&task=get_pntoolboom&tmpl=component&cid[0]=<?php echo $this->row->pns_id;?>" title="Image">
                                                 <input type="button" name="addECO" value="<?php echo JText::_('Select Tools')?>"/></a>
-                                                Scan PN Barcode <input onchange="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')"  onkeyup="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
-                                                <div name="notice" style="color:#D30000" id ="notice"></div>
+<!--                                                Scan PN Barcode <input onchange="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')"  onkeyup="autoAddPartTool(this.value,'<?php echo $this->row->pns_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+                                                <div name="notice" style="color:#D30000" id ="notice"></div>-->
                                         </td>
                                         
 				</tr>	

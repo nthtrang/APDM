@@ -2275,6 +2275,7 @@ class PNsController extends JController {
                 $dirsize = 0;
                 $zdirsize = 0;
                 $zdir[] = $path_pns;
+                
 
                 $dirarray = array();
                 $dirsize = 0;
@@ -2350,7 +2351,139 @@ class PNsController extends JController {
                 $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $pns_id);
                 exit;
         }
+function download_all_bompns() {
+                global $dirarray, $conf, $dirsize;
 
+                //$conf['dir'] = "zipfiles";
+                $conf['dir'] = "../uploads/pns/cads/PNsZip";
+                $db = & JFactory::getDBO();
+                $pns_id = JRequest::getVar('pns_id');
+                $querypn = "SELECT p.ccs_code,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS pns_code,p.pns_id FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+                $pns_code = $pns->pns_code;
+                if (substr($pns_code, -1) == "-") {
+                        $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
+                }
+
+                $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $pns_code . DS;
+                 
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                $zdir[] = $path_pns;
+                $list_pns2 = PNsController::DisplayPnsAllChildId($pns->pns_id);
+                foreach ($list_pns2 as $row2){                       
+                        $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row2->ccs_code . DS . $row2->text . DS;       
+                        $list_pns3 = PNsController::DisplayPnsAllChildId($row2->pns_id);
+                        foreach ($list_pns3 as $row3){                       
+                                $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row3->ccs_code . DS . $row3->text . DS;       
+                                 $list_pns4 = PNsController::DisplayPnsAllChildId($row3->pns_id);
+                                foreach ($list_pns4 as $row4){                       
+                                        $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row4->ccs_code . DS . $row4->text . DS;       
+                                         $list_pns5 = PNsController::DisplayPnsAllChildId($row4->pns_id);
+                                        foreach ($list_pns5 as $row5){                       
+                                                $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row5->ccs_code . DS . $row5->text . DS;       
+                                                 $list_pns6 = PNsController::DisplayPnsAllChildId($row5->pns_id);
+                                                foreach ($list_pns6 as $row6){                       
+                                                        $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row6->ccs_code . DS . $row6->text . DS;       
+                                                         $list_pns7 = PNsController::DisplayPnsAllChildId($row6->pns_id);
+                                                        foreach ($list_pns7 as $row7){                       
+                                                                $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row7->ccs_code . DS . $row7->text . DS;       
+                                                                 $list_pns8 = PNsController::DisplayPnsAllChildId($row7->pns_id);
+                                                                foreach ($list_pns8 as $row8){                       
+                                                                        $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row8->ccs_code . DS . $row8->text . DS;       
+                                                                         $list_pns9 = PNsController::DisplayPnsAllChildId($row8->pns_id);
+                                                                        foreach ($list_pns9 as $row9){                       
+                                                                                $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row9->ccs_code . DS . $row9->text . DS;       
+                                                                                 $list_pns10 = PNsController::DisplayPnsAllChildId($row9->pns_id);
+                                                                                foreach ($list_pns10 as $row10){                       
+                                                                                        $zdir[] = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row10->ccs_code . DS . $row10->text . DS;       
+
+                                                                                }
+                                                                        }
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
+
+                $dirarray = array();
+                $dirsize = 0;
+                $zdirsize = 0;
+                for ($i = 0; $i < count($zdir); $i++) {
+                     
+                        $ffile = $zdir[$i];
+                        if (is_dir($ffile)) {
+                                getdir($ffile);
+                        } else {
+
+                                if ($fsize = @filesize($ffile))
+                                        $zdirsize+=$fsize;
+                        }
+                }
+
+                $zdirsize+=$dirsize;
+
+                for ($i = 0; $i < count($dirarray); $i++) {
+                        $zdir[] = $dirarray[$i];
+                }
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+
+
+//
+//                $zdirsize+=$dirsize;
+//                for ($i = 0; $i < count($dirarray); $i++) {
+//                        $zdir[] = $dirarray[$i];
+//                }
+
+                //bom
+
+                PNsController::export_bom();
+
+                if (!@is_dir($conf['dir'])) {
+                        $res = @mkdir($conf['dir'], 0777);
+                        if (!$res)
+                                $txtout = "Cannot create dir !<br>";
+                } else
+                        @chmod($conf['dir'], 0777);
+
+                $zipname = 'zipfile_' . $pns_code;
+                $zipname = str_replace("/", "", $zipname);
+                //if (empty($zipname)) $zipname="NDKzip";
+                $zipname.=".zip";
+
+                $ziper = new zipfile();
+                $ziper->addFiles($zdir);
+                $ziper->output("{$conf['dir']}/{$zipname}");
+
+                if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))
+                        $zipsize = $fsize;
+                else
+                        $zipsize = 0;
+
+
+                $zdirsize = PNsController::size_format($zdirsize);
+                $zipsize = PNsController::size_format($zipsize);
+                $archive_file_name = $conf['dir'] . '/' . $zipname;
+
+                header("Content-type: application/zip");
+                header("Content-Disposition: attachment; filename=$archive_file_name");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                readfile("$archive_file_name");
+                $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $pns_id);
+                exit;
+        }
         function GetNameCCs($ccs_id) {
                 $db = & JFactory::getDBO();
                 $db->setQuery("SELECT ccs_code FROM apdm_ccs WHERE ccs_id=" . $ccs_id);
@@ -2528,7 +2661,7 @@ class PNsController extends JController {
         function DisplayPnsAllChildId($pns_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
-                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
                 return $result = $db->loadObjectList();
         }
 
@@ -9728,6 +9861,48 @@ class PNsController extends JController {
                 $path_pns = JPATH_SITE . DS . 'uploads'. DS;
                 $dFile = new DownloadFile($path_pns, $importresult);
                 exit;
+        }
+        function getCadfiles($pns_id)        
+        {
+                 $db =& JFactory::getDBO();
+                ///get list cad files
+                        $db->setQuery("SELECT * FROM apdm_pn_cad WHERE pns_id=".$pns_id);
+                        $res = $db->loadObjectList();
+                        $cads_files = array();
+                        if (count($res)>0){
+                                foreach ($res as $r){
+                                    $cads_files[] = array('id'=>$r->pns_cad_id, 'cad_file'=>$r->cad_file);
+                                }
+                        }
+                        return $cads_files;                        
+        }
+        function getImagefiles($pns_id)        
+        {
+                $db =& JFactory::getDBO();
+                        ///get list image files
+                        $db->setQuery("SELECT * FROM apdm_pns_image WHERE pns_id=".$pns_id);
+                        $res = $db->loadObjectList();
+                        $images_files = array();
+                        if (count($res)>0){
+                                foreach ($res as $r){
+                                        $images_files[] = array('id'=>$r->pns_image_id, 'image_file'=>$r->image_file);
+                                }
+                        }     
+                        return $images_files;
+        }
+         function getPdffiles($pns_id)        
+        {
+                 $db =& JFactory::getDBO();
+                        ///get list pdf files
+                        $db->setQuery("SELECT * FROM apdm_pns_pdf WHERE pns_id=".$pns_id);
+                        $res = $db->loadObjectList();
+                        $pdf_files = array();
+                        if (count($res)>0){
+                                foreach ($res as $r){
+                                        $pdf_files[] = array('id'=>$r->pns_pdf_id, 'pdf_file'=>$r->pdf_file);
+                                }
+                        }            
+                        return $pdf_files;
         }
 }
 

@@ -288,9 +288,16 @@ class pnsViewpns_info extends JView
         }
 
         if($filter_sto_created_by)
-        {
-            $where .= " and sto.sto_create_by = '".$filter_sto_created_by."'";
+        {                
+                if($filter_sto_created_by!=-1){
+                        $where .= " and sto.sto_create_by = '".$filter_sto_created_by."'";
+                }
+                else
+                {
+                        
+                }
         }
+        
         if($filter_sto_owner_by)
         {
             $where .= " and sto.sto_owner = '".$filter_sto_owner_by."'";
@@ -314,6 +321,7 @@ class pnsViewpns_info extends JView
         //Cerated by
         $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_create_by  inner join apdm_pns_sto_fk fk on p.pns_sto_id = fk.sto_id where fk.pns_id = ".$row->pns_id." GROUP BY p.sto_create_by ORDER BY text ");
         $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
+        $create_by[] = JHTML::_('select.option',-1, JText::_('View All'), 'value', 'text');
         $create_bys = array_merge($create_by, $db->loadObjectList());
         $lists['sto_created_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_sto_created_by', 'class="inputbox" size="1" ', 'value', 'text', $filter_sto_created_by );
 

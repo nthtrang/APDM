@@ -186,7 +186,7 @@
 				<tr>
                                         <td colspan="2" >
 					<table width="100%"  class="adminlist" cellpadding="1">
-						<hr />
+						<hr/>
 						<thead>
 							<th colspan="4"><?php echo JText::_('Images List')?></th>
 						</thead>

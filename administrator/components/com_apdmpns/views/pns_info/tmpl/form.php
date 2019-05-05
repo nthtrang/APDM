@@ -80,11 +80,11 @@
 			return false;
 		}
 		
-		if (form.eco_id.value==0){
-			alert("Please select ECO");
-			form.eco.focus();
-			return false;
-		}
+//		if (form.eco_id.value==0){
+//			alert("Please select ECO");
+//			form.eco.focus();
+//			return false;
+//		}
 		
 //		if (form.pns_status.value==""){
 //			alert("Please select Part Number Status");
