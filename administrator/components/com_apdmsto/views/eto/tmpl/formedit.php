@@ -132,6 +132,10 @@ window.addEvent('domready', function(){
                         <input type="text" readonly="readonly" name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code?>"/>
                     </td>
                 </tr>
+                <?php // echo $this->lists['stoDeliveryGood'];
+                if($this->sto_row->sto_isdelivery_good)
+                  ?>
+
                 <tr>
                     <td class="key">
                         <label for="name">

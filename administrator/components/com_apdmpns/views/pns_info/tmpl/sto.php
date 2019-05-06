@@ -271,7 +271,7 @@ th:first-child div{
     <table width="100%" border="0">
         <tr>
             <td align="right">
-                Created From From&nbsp;&nbsp
+                Created From nbsp;&nbsp
                 <?php echo JHTML::_('calendar',$this->sto_created_from, 'sto_created_from', 'sto_created_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->sto_created_to, 'sto_created_to', 'sto_created_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

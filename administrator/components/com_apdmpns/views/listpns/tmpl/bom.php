@@ -23,7 +23,7 @@ $pns_code_full = $row->pns_code_full;
 	}
         if (in_array("V", $role)) { 	
                 // JToolBarHelper::customX("affected", 'affected', '', 'Affected Parts', false);
-                JToolBarHelper::customX('download', 'download', '', 'Download', false);	
+                //JToolBarHelper::customX('download', 'download', '', 'Download', false);
                 JToolBarHelper::customX('downloadall', 'download', '', 'Download All', false);	
 	}
 	if (in_array("V", $role)) {

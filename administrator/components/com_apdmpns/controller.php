@@ -5638,6 +5638,29 @@ function download_all_bompns() {
                 return $inventory;                                
                 exit;                
         }
+    function CalculateInventoryValueforView($pns_id)
+    {
+        $db = & JFactory::getDBO();
+        $db->setQuery("select pns_stock from apdm_pns where pns_id='".$pns_id."'");
+        $db->query();
+        $rows = $db->loadObjectList();
+        $CurrentStock = $rows[0]->pns_stock;
+        //get Stock IN
+        $db->setQuery("select  sum(qty) from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 1 and sto.sto_owner_confirm = 1 where fk.pns_id='".$pns_id."'");
+        $db->query();
+        $StockIn = $db->loadResult();
+        //$StockIn = $rows->qty_in;
+        //get Stock OUT
+        $db->setQuery("select  sum(qty)  from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id and sto_type = 2 and sto.sto_owner_confirm = 1 where fk.pns_id='".$pns_id."'");
+        $db->query();
+        $StockOut = $db->loadResult();
+        //$StockOut = $rows->qty_out;
+        $inventory =  round($CurrentStock + ($StockIn-$StockOut),2);
+        if($inventory<0)
+            $inventory = 0;
+        return $inventory;
+        exit;
+    }
         function CalculateQtyUsedValue($pns_id)
         {
                 $db = & JFactory::getDBO();
@@ -9498,15 +9521,16 @@ function download_all_bompns() {
                 $eco_id = PNsController::GetECOId($eco_name);
                 
                 $ccs_id = PNsController::checkCcsId($ccs_code);
-                if(!$ccs_id)
+               /* if(!$ccs_id)
                 {
                         $db->setQuery("INSERT INTO apdm_ccs (ccs_code,ccs_description,ccs_activate,ccs_create,ccs_create_by) ".
                                 "  VALUES ('" . $ccs_code . "','" . $ccs_code . "','1','".$pns_created."','".$pns_created_by."')");                               
                         $db->query();                            
                 }
+               */
                 $db->setQuery("INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_description,eco_id,pns_find_number,pns_ref_des,pns_uom,pns_create,pns_create_by) ".
-                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision . "','" . $pns_description . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");                               
-                $db->query();                     
+                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision . "','" . substr($pns_description,0,40) . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");
+                $db->query();
                 //getLast PN ID
                return $pns_id = $db->insertid();
                 
@@ -9682,10 +9706,11 @@ function download_all_bompns() {
                         $mfr_id = PNsController::checkMfrId($rowData[$line][10]);
                         if(!$mfr_id)
                         {
-                            $query = 'INSERT INTO apdm_pns_supplier (info_type, info_name, info_description, info_activate,info_create,info_created_by) VALUES(4,"'.$rowData[$line][10].'","'.$rowData[$line][10].'",1,"'.$_created.'","'.$_created_by.'")';
+                            $arr_err[$line]    = "MFR name at column K".$line ." is not found";
+                           /* $query = 'INSERT INTO apdm_supplier_info (info_type, info_name, info_description, info_activate,info_create,info_created_by) VALUES(4,"'.$rowData[$line][10].'","'.$rowData[$line][10].'",1,"'.$_created.'","'.$_created_by.'")';
                             $db->setQuery($query);
                             $db->query();
-                            $mfr_id = $db->insertid();
+                            $mfr_id = $db->insertid();*/
                         }
                         $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
                         if($rowData[$line][1]=="")//
@@ -9702,7 +9727,7 @@ function download_all_bompns() {
                         }
                         if($rowData[$line][5]!="")//eco
                         {
-                            $eco_id = PNsController::GetECOId($eco_name);
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
                             if(!$eco_id){
                                     $arr_err[$line]    = $pn_code. " have ECO number at column F".$line ." is not found";
                             }
@@ -9730,17 +9755,36 @@ function download_all_bompns() {
                         
                         //start import with level 0
                         if($rowData[$line][0]==0)
-                        {                                                                
+                        {
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
-                                if(!$pns_id){                                
+                                if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }
-                                
+
+                                    $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                                    $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');                             
+                                    $status = $db->loadResult();
+                                    if($status == "Create" && $eco_id)
+                                    {
+                                        $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
+                                        $db->setQuery($query);
+                                        $db->query();
+                                    }
+                                    else{
+                                        $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                    }
+
                                 $parent0 = $pns_id;                                                                                                                              
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
-                                $db->setQuery($query);
-                                $db->query();
+                                //insert MFG
+                                if($mfr_id) {
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
                                 $mess[] = "Import sucessfull BOM <a href='index.php?option=com_apdmpns&task=bom&id='".$pns_id."''>". $pns_id."</a></br>";
                         }
                         //start import with level 1
@@ -9749,14 +9793,32 @@ function download_all_bompns() {
                                 
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }                               
                                 $parent1 = $pns_id;
-                                
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                            $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');
+                            $status = $db->loadResult();
+                            if($status == "Create" && $eco_id)
+                            {
+                                $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
                                 $db->setQuery($query);
                                 $db->query();
+                            }
+                            else{
+                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                            }
+
+                            if($mfr_id) {
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0; 
@@ -9767,13 +9829,31 @@ function download_all_bompns() {
                         {
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }                               
                                 $parent2 = $pns_id;
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                            $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');
+                            $status = $db->loadResult();
+                            if($status == "Create" && $eco_id)
+                            {
+                                $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
                                 $db->setQuery($query);
                                 $db->query();
+                            }
+                            else{
+                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                            }
+                            if($mfr_id) {
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '",4)';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
@@ -9784,13 +9864,31 @@ function download_all_bompns() {
                         {
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }                               
                                 $parent3 = $pns_id;
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                            $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');
+                            $status = $db->loadResult();
+                            if($status == "Create" && $eco_id)
+                            {
+                                $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
                                 $db->setQuery($query);
                                 $db->query();
+                            }
+                            else{
+                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                            }
+                            if($mfr_id) {
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
@@ -9799,13 +9897,31 @@ function download_all_bompns() {
                         {
                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }                               
                                 $parent4 = $pns_id;
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                            $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');
+                            $status = $db->loadResult();
+                            if($status == "Create" && $eco_id)
+                            {
+                                $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
                                 $db->setQuery($query);
                                 $db->query();
+                            }
+                            else{
+                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                            }
+                            if($mfr_id) {
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
@@ -9814,13 +9930,31 @@ function download_all_bompns() {
                         {
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
+                                        if(strlen($rowData[$line][4])>40)
+                                        {
+                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                 }                               
                                 $parent5 = $pns_id;
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' .$mfr_id . ', "' . $rowData[$line][11] . '", 3)';
+                            $eco_id = PNsController::GetECOId($rowData[$line][5]);
+                            $db->setQuery('select pns_life_cycle from apdm_pns where pns_id  = "'.$pns_id.'"');
+                            $status = $db->loadResult();
+                            if($status == "Create" && $eco_id)
+                            {
+                                $query = 'update apdm_pns set eco_id = "'.$eco_id.'" where  pns_id  = "'.$pns_id.'"';
                                 $db->setQuery($query);
                                 $db->query();
+                            }
+                            else{
+                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                            }
+                            if($mfr_id) {
+                                //insert MFG 
+                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
