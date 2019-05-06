@@ -867,10 +867,12 @@ class SToController extends JController
                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
+                $mfgPnId = JRequest::getVar('mfg_pn_' . $pns .'_' . $id);
+                
                 //get sto_type
                 $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
                 $stoChecker= $db->loadObject();
-                if($stoChecker->sto_type==2)//if is out stock
+                if($stoChecker->sto_type==2)//if is out(ship) stock
                 {
                     $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
                     $qtyInCheck = round($db->loadResult(),2);
@@ -888,7 +890,7 @@ class SToController extends JController
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
-                $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "' WHERE  id = " . $id);
+                $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "',pns_mfg_pn_id = '".$mfgPnId."' WHERE  id = " . $id);
                 $db->query();
             }
         }
@@ -1713,4 +1715,26 @@ class SToController extends JController
                 $session = JFactory::getSession();
                 $session->set('is_scanito',$is_itoscan);
     }
+ 
+    function GetMfgPnCode($mfgId) {
+                $db = & JFactory::getDBO();                
+                $db->setQuery("SELECT p.supplier_info FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id left join apdm_pns_sto_fk fk on fk.pns_mfg_pn_id = p.id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.id =" . $mfgId);                
+                return $db->loadResult();
+    }
+     function getMfgPnListFromPn($pnsId)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.pns_id =" . $pnsId;
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $locationArr=array();
+                        foreach ($result as $obj) {                                  
+                                    $locationArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');                                
+                        }
+                }                       
+                return $locationArr;
+        }	
+    
 }

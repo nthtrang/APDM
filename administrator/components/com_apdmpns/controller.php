@@ -2268,6 +2268,10 @@ class PNsController extends JController {
                 if (substr($pns_code, -1) == "-") {
                         $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
                 }
+                //bom
+
+                PNsController::export_bom();
+
 
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $pns_code . DS;
                  
@@ -2313,10 +2317,7 @@ class PNsController extends JController {
 //                        $zdir[] = $dirarray[$i];
 //                }
 
-                //bom
-
-                PNsController::export_bom();
-
+                
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
                         if (!$res)
@@ -2351,7 +2352,7 @@ class PNsController extends JController {
                 $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $pns_id);
                 exit;
         }
-function download_all_bompns() {
+        function download_all_bompns() {
 
                 global $dirarray, $conf, $dirsize;
 
@@ -2366,7 +2367,8 @@ function download_all_bompns() {
                 if (substr($pns_code, -1) == "-") {
                         $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
                 }
-
+                //bom
+                PNsController::export_bom();
                 $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $pns->ccs_code . DS . $pns_code . DS;
                  
                 $dirarray = array();
@@ -2478,9 +2480,7 @@ function download_all_bompns() {
 //                        $zdir[] = $dirarray[$i];
 //                }
 
-                //bom
-
-                PNsController::export_bom();
+                
 
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
@@ -3247,7 +3247,10 @@ function download_all_bompns() {
                         @chmod($path_export, 0777);
                 }                
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                $objWriter->save($path_export . $name .'-'.time(). '_APDM_BOM_REPORT.xls');
+                if (file_exists($path_export . $name .'_APDM_BOM_REPORT.xls')) {
+                        @unlink($path_export . $name .'_APDM_BOM_REPORT.xls');
+                }
+                $objWriter->save($path_export . $name .'_APDM_BOM_REPORT.xls');
                 //  $dFile = new DownloadFile($path_export, $name.'_APDM_BOM_REPORT.xls');                
                 //     exit;
         }
@@ -9636,51 +9639,51 @@ function download_all_bompns() {
                     $mess=array();
                     if($rowData[1][0]!="Level")
                     {
-                            $mess[] =  "Wrong format at A1. Must be 'Level'";
+                            $mess[] =  "Err:Wrong format at A1. Must be 'Level'";
                     }                   
                     if($rowData[1][1]!="Customer Code")
                     {
-                            $mess[] =  "Wrong format at B1. Must be 'Customer Code'";
+                            $mess[] =  "Err:Wrong format at B1. Must be 'Customer Code'";
                     }
                     if($rowData[1][2]!="Customer PN")
                     {
-                            $mess[] =  "Wrong format at C1. Must be 'Customer PN'";
+                            $mess[] =  "Err:Wrong format at C1. Must be 'Customer PN'";
                     }
                     if($rowData[1][3]!="Rev.")
                     {
-                            $mess[] =  "Wrong format at D1. Must be 'Rev.'";
+                            $mess[] =  "Err:Wrong format at D1. Must be 'Rev.'";
                     }
                     if($rowData[1][4]!="Description")
                     {
-                            $mess[] =  "Wrong format at E1. Must be 'Description'";
+                            $mess[] =  "Err:Wrong format at E1. Must be 'Description'";
                     }
                     if($rowData[1][5]!="ECO number")
                     {
-                            $mess[] =  "Wrong format at F1. Must be 'ECO number";
+                            $mess[] =  "Err:Wrong format at F1. Must be 'ECO number";
                     }
                     if($rowData[1][6]!="Find number")
                     {
-                            $mess[] =  "Wrong format at G1. Must be 'Find number'";
+                            $mess[] =  "Err:Wrong format at G1. Must be 'Find number'";
                     }
                     if($rowData[1][7]!="Ref Des")
                     {
-                            $mess[] =  "Wrong format at H1. Must be 'Ref Des'";
+                            $mess[] =  "Err:Wrong format at H1. Must be 'Ref Des'";
                     }
                     if($rowData[1][8]!="Qty.")
                     {
-                            $mess[] =  "Wrong format at I1. Must be 'Qty.'";
+                            $mess[] =  "Err:Wrong format at I1. Must be 'Qty.'";
                     }
                     if($rowData[1][9]!="UOM")
                     {
-                            $mess[] =  "Wrong format at J1. Must be 'UOM'";
+                            $mess[] =  "Err:Wrong format at J1. Must be 'UOM'";
                     }
                     if($rowData[1][10]!="MFR name")
                     {
-                            $mess[] =  "Wrong format at K1. Must be 'MFR name'";
+                            $mess[] =  "Err:Wrong format at K1. Must be 'MFR name'";
                     }
                     if($rowData[1][11]!="MFG PN")
                     {
-                            $mess[] =  "Wrong format at L1. Must be 'MFG PN'";
+                            $mess[] =  "Err:Wrong format at L1. Must be 'MFG PN'";
                     }
     
                 
@@ -9706,7 +9709,7 @@ function download_all_bompns() {
                         $mfr_id = PNsController::checkMfrId($rowData[$line][10]);
                         if(!$mfr_id)
                         {
-                            $arr_err[$line]    = "MFR name at column K".$line ." is not found";
+                            $arr_err[$line]    = "Err:"."MFR name at column K".$line ." is not found";
                            /* $query = 'INSERT INTO apdm_supplier_info (info_type, info_name, info_description, info_activate,info_create,info_created_by) VALUES(4,"'.$rowData[$line][10].'","'.$rowData[$line][10].'",1,"'.$_created.'","'.$_created_by.'")';
                             $db->setQuery($query);
                             $db->query();
@@ -9715,40 +9718,40 @@ function download_all_bompns() {
                         $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
                         if($rowData[$line][1]=="")//
                         {
-                            $arr_err[$line]    = "Customer Code at column B".$line ." is not null";
+                            $arr_err[$line]    = "Err:Customer Code at column B".$line ." is not null";
                         }
                         if($rowData[$line][2]=="")
                         {
-                            $arr_err[$line]    = "Customer PN at column C".$line ." is not null";
+                            $arr_err[$line]    = "Err:Customer PN at column C".$line ." is not null";
                         }                        
                         if($rowData[$line][4]=="")
                         {
-                            $arr_err[$line]    = $pn_code. " have Description at column E".$line ." is not null";
+                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column E".$line ." is not null";
                         }
                         if($rowData[$line][5]!="")//eco
                         {
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
                             if(!$eco_id){
-                                    $arr_err[$line]    = $pn_code. " have ECO number at column F".$line ." is not found";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
 
                         }
                         if($rowData[$line][9]=="")//uom
                         {
-                            $arr_err[$line]    = $pn_code. " have UOM at column J".$line ." is not null";
+                            $arr_err[$line]    = "Err:".$pn_code. " have UOM at column J".$line ." is not null";
                         }
                         if($rowData[$line][0]!=0){//if != level 0 not check MFR
                                 if($rowData[$line][8]=="")//qty
                                 {
-                                    $arr_err[$line]    = $pn_code. " have QTY at column I".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have QTY at column I".$line ." is not null";
                                 }
                                 if($rowData[$line][10]=="")
                                 {
-                                    $arr_err[$line]    = $pn_code. " have MFR name at column K".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have MFR name at column K".$line ." is not null";
                                 }  
                                 if($rowData[$line][11]=="")
                                 {
-                                    $arr_err[$line]    = $pn_code. " have MFG PN at column L".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have MFG PN at column L".$line ." is not null";
                                 }  
                         }
                         
@@ -9760,9 +9763,10 @@ function download_all_bompns() {
                                 if(!$pns_id){
                                         if(strlen($rowData[$line][4])>40)
                                         {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }
 
                                     $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9775,7 +9779,7 @@ function download_all_bompns() {
                                         $db->query();
                                     }
                                     else{
-                                        $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                        $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                                     }
 
                                 $parent0 = $pns_id;                                                                                                                              
@@ -9785,7 +9789,7 @@ function download_all_bompns() {
                                     $db->setQuery($query);
                                     $db->query();
                                 }
-                                $mess[] = "Import sucessfull BOM <a href='index.php?option=com_apdmpns&task=bom&id='".$pns_id."''>". $pns_id."</a></br>";
+                                
                         }
                         //start import with level 1
                         if($rowData[$line][0]==1)
@@ -9795,9 +9799,10 @@ function download_all_bompns() {
                                 if(!$pns_id){
                                         if(strlen($rowData[$line][4])>40)
                                         {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
                                 $parent1 = $pns_id;
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9810,7 +9815,7 @@ function download_all_bompns() {
                                 $db->query();
                             }
                             else{
-                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
 
                             if($mfr_id) {
@@ -9822,7 +9827,7 @@ function download_all_bompns() {
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0; 
-                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
+                                $mess[$line] = "Import sucessfull BOM ". $pn_code;
                         }
                       
                         if($rowData[$line][0]==2)
@@ -9831,9 +9836,10 @@ function download_all_bompns() {
                                 if(!$pns_id){
                                         if(strlen($rowData[$line][4])>40)
                                         {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
                                 $parent2 = $pns_id;
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9846,7 +9852,7 @@ function download_all_bompns() {
                                 $db->query();
                             }
                             else{
-                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
                             if($mfr_id) {
                                 //insert MFG 
@@ -9856,7 +9862,7 @@ function download_all_bompns() {
                             }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
+                                $mess[$line] = "Import sucessfull BOM ". $pns_code;
                                 
                         }
                        
@@ -9866,9 +9872,10 @@ function download_all_bompns() {
                                 if(!$pns_id){
                                         if(strlen($rowData[$line][4])>40)
                                         {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
                                 $parent3 = $pns_id;
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9881,7 +9888,7 @@ function download_all_bompns() {
                                 $db->query();
                             }
                             else{
-                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
                             if($mfr_id) {
                                 //insert MFG 
@@ -9891,7 +9898,7 @@ function download_all_bompns() {
                             }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
+                                $mess[$line] = "Import sucessfull BOM ". $pns_code;
                         }
                         if($rowData[$line][0]==4)
                         {
@@ -9899,9 +9906,10 @@ function download_all_bompns() {
                                 if(!$pns_id){
                                         if(strlen($rowData[$line][4])>40)
                                         {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                            $arr_err[$line]    = "Err:Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
                                 $parent4 = $pns_id;
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9914,7 +9922,7 @@ function download_all_bompns() {
                                 $db->query();
                             }
                             else{
-                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
                             if($mfr_id) {
                                 //insert MFG 
@@ -9924,7 +9932,7 @@ function download_all_bompns() {
                             }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
+                                $mess[$line] = "Import sucessfull PN ". $pns_code;
                         }
                         if($rowData[$line][0]==5)
                         {
@@ -9935,6 +9943,7 @@ function download_all_bompns() {
                                             $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
                                         }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
+                                        $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
                                 $parent5 = $pns_id;
                             $eco_id = PNsController::GetECOId($rowData[$line][5]);
@@ -9947,7 +9956,7 @@ function download_all_bompns() {
                                 $db->query();
                             }
                             else{
-                                $arr_err[$line]    = $pns_id. " have ECO number at column F".$line ." is not found";
+                                $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
                             if($mfr_id) {
                                 //insert MFG 
@@ -9957,7 +9966,7 @@ function download_all_bompns() {
                             }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[] = "Import sucessfull PN <a href='index.php?option=com_apdmpns&task=detail&cid[0]='".$pns_id."''>". $pns_id."</a></br>";
+                                $mess[$line] = "Import sucessfull BOM". $pns_code;
                         }
                 }  
                 //$inputFileName =  $path_bom_file.
@@ -9968,16 +9977,17 @@ function download_all_bompns() {
                // fclose($file);
                 
                 //write_ log
+                $result = array_merge($arr_err, $mess);
                 $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
                 $objPHPExcel = $objReader->load($path_bom_file .'IMPORT_BOM_TEMPALTE_REPORT.xls');
-                $nRecord = count($arr_err);
+                $nRecord = count($result);
                 //$objPHPExcel->getSheet(0);
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
                 if ($nRecord > 0) {
                         $jj = 0;
                         $ii = 1;
                         $number = 1;
-                        foreach ($arr_err as $ms) {
+                        foreach ($result as $ms) {
                                 $a = 'A' . $ii;
                                 $b = 'B' . $ii;
                                 //$c = 'C' . $ii;
