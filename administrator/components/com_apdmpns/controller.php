@@ -2391,7 +2391,14 @@ class PNsController extends JController {
                 $list_files = array();
                 if(is_dir($path_pns))
                 {
-                    $list_files[] = PNsController::getAllfilesPn($pns->pns_id);
+                        //$list_files[] = PNsController::getAllfilesPn($pns->pns_id);
+                        $db->setQuery("SELECT pdf_file as file_name FROM apdm_pns_pdf WHERE pns_id=".$pns->pns_id ." union SELECT image_file as file_name FROM apdm_pns_image WHERE pns_id=".$pns->pns_id ."  union SELECT cad_file  as file_name FROM apdm_pn_cad WHERE pns_id=".$pns->pns_id);
+                        $res = $db->loadObjectList();
+                        if (count($res)>0){
+                            foreach ($res as $r){
+                                $list_files[] = $r->file_name;
+                            }
+                        }
                         $zdir[] = $path_pns;
                 }
                 $list_pns2 = PNsController::DisplayPnsAllChildId($pns->pns_id);
@@ -2399,13 +2406,28 @@ class PNsController extends JController {
                         
                         $path_pns2 = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row2->ccs_code . DS . $row2->text . DS;       
                         if(is_dir($path_pns2)){
+                            //    $list_files[]  = PNsController::getAllfilesPn($row2->pns_id);
+                            $db->setQuery("SELECT pdf_file as file_name FROM apdm_pns_pdf WHERE pns_id=".$row2->pns_id ." union SELECT image_file as file_name FROM apdm_pns_image WHERE pns_id=".$row2->pns_id ."  union SELECT cad_file  as file_name FROM apdm_pn_cad WHERE pns_id=".$row2->pns_id);
+                            $res = $db->loadObjectList();
+                            if (count($res)>0){
+                                foreach ($res as $r){
+                                    $list_files[] = $r->file_name;
+                                }
+                            }
                                $zdir[] =  $path_pns2;
                         }
                         $list_pns3 = PNsController::DisplayPnsAllChildId($row2->pns_id);
                         foreach ($list_pns3 as $row3){                       
                                 $path_pns3 = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row3->ccs_code . DS . $row3->text . DS;       
                                 if(is_dir($path_pns3)){
-                                    $list_files = PNsController::getAllfilesPn($row3->pns_id);
+                                       // $list_files[]  = PNsController::getAllfilesPn($row3->pns_id);
+                                    $db->setQuery("SELECT pdf_file as file_name FROM apdm_pns_pdf WHERE pns_id=".$row3->pns_id ." union SELECT image_file as file_name FROM apdm_pns_image WHERE pns_id=".$row3->pns_id ."  union SELECT cad_file  as file_name FROM apdm_pn_cad WHERE pns_id=".$row3->pns_id);
+                                    $res = $db->loadObjectList();
+                                    if (count($res)>0){
+                                        foreach ($res as $r){
+                                            $list_files[] = $r->file_name;
+                                        }
+                                    }
                                         $zdir[] =  $path_pns3;
                                  }
                                  $list_pns4 = PNsController::DisplayPnsAllChildId($row3->pns_id);
@@ -2481,16 +2503,19 @@ class PNsController extends JController {
                 for ($i = 0; $i < count($dirarray); $i++) {
                         $zdir[] = $dirarray[$i];
                 }
-                //chua xong
-            /*for ($i = 0; $i < count($dirarray); $i++) {
-                echo  $dirarray[$i];
-                $fName= substr(end(explode("\\", $dirarray[$i])),1);
-                if(in_array($fName, $arrPdfs))
-                {
-                    $zdir[] = $dirarray[$i];
-                }
-            }*/
 
+                //chua xongv
+
+
+            for ($i = 0; $i < count($dirarray); $i++) {
+                 $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                if(in_array($fName, $list_files))
+                {
+                    $zdir1[] = $dirarray[$i];
+                }
+            }
+            //get Bom
+            $zdir1[] = $path_pns . $pns_code.'_APDM_BOM_REPORT.xls';
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
                         if (!$res)
@@ -2521,7 +2546,7 @@ class PNsController extends JController {
                 $zipname.=".zip";
 
                 $ziper = new zipfile();
-                $ziper->addFiles($zdir);
+                $ziper->addFiles($zdir1);
                 $ziper->output("{$conf['dir']}/{$zipname}");
 
                 if ($fsize = @filesize("{$conf['dir']}/{$zipname}"))

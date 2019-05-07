@@ -69,7 +69,7 @@ class pnsViewsearchsowo extends JView
         {        
             $wherewop[] = 'wop.op_code = "'.$search_step.'"';
         }
-        if ($search_type == "searchstep" && isset( $search_emp ) && $search_emp!= '')
+        if ($search_type == "searchstep" && isset( $search_emp ) && $search_emp!= 0)
         {                            
             $wherewop[] = 'wop.op_assigner = '.$search_emp;               
         }
@@ -179,6 +179,7 @@ class pnsViewsearchsowo extends JView
         {       if($wo_step_status=="done")
                 {
                         $wherewop[] ="wop.op_status = 'done'";
+                    $wherewop[] = "wop.op_assigner !=0";
                 }
                 elseif($wo_step_status=="inprogress")
                 {
@@ -205,7 +206,7 @@ class pnsViewsearchsowo extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
        
-       $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
+        $query = 'SELECT so.*,ccs.ccs_coordinator,ccs.ccs_code as ccs_so_code,fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision '.
                ' ,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date'.
              ' from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code'.
              ' left join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id'.
@@ -234,7 +235,7 @@ class pnsViewsearchsowo extends JView
         }
         
         if(count( $wherewop )>0){
-              $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
+           echo   $sql = "select wo.wo_code,wo.wo_state,wop.*,DATEDIFF(wop.op_target_date, CURDATE()) as wop_remain_date " .
                         " from apdm_pns_wo_op wop inner join apdm_pns_wo wo on wop.wo_id = wo.pns_wo_id " .                        
                         $wherewop1;
                 $db->setQuery($sql);                   

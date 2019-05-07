@@ -392,10 +392,10 @@ if (count($this->rs_step) > 0) { ?>
         $i = 0;
         foreach ($this->rs_step as $wop) {
                 $i++;
-                 $remain_day = $wop->wop_remain_date+1;     
+                 $remain_day = $wop->wop_remain_date+1;
                  $background = "";
                         if($remain_day<=0)
-                        {       
+                        {
                                 $remain_day = 0;
                                 if($wop->op_status != 'done')
                                 {
@@ -403,7 +403,7 @@ if (count($this->rs_step) > 0) { ?>
                                 }
                         }
                         elseif($remain_day<=3)
-                        {        
+                        {
                                 if($wo->wo_state != 'done' && $wo->wo_state != 'cancel')
                                 {
                                         $background= "style='background-color:#ff0;color:#000'";
@@ -421,10 +421,19 @@ if (count($this->rs_step) > 0) { ?>
                                                  <?php echo JHTML::_('date', $wop->op_start_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                 </td>
                                                  <td align="center">
-                                                <?php echo JHTML::_('date', $wop->op_target_date, JText::_('DATE_FORMAT_LC5')); ?>
-                                                </td> 
+                                                <?php
+                                                if($wop->op_target_date!="0000-00-00 00:00:00"){
+                                                    echo JHTML::_('date', $wop->op_target_date, JText::_('DATE_FORMAT_LC5'));
+                                                }
+                                                else
+                                                {
+                                                    echo "NA";
+                                                }
+
+                                                ?>
+                                                </td>
                                                 <td align="center" <?php echo $background?>><?php echo $remain_day;?></td>
-                                                  <td><?php 
+                                                  <td><?php
                                                   if($wop->op_status=="done")
                                                           echo "Done";
                                                   elseif($wop->op_status!="done")
