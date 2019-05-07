@@ -130,47 +130,69 @@ window.addEvent('domready', function(){
                     </td>
                     <td>
                         <input type="text" readonly="readonly" name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code?>"/>
+                        <input type="hidden" readonly="readonly" name="sto_so_id" id="sto_so_id"  size="10" value=""/>
+                        <span id="po_customer" style="display:none"></span>
                     </td>
                 </tr>
                 <?php // echo $this->lists['stoDeliveryGood'];
-                if($this->sto_row->sto_isdelivery_good)
-                  ?>
+                if($this->sto_row->sto_isdelivery_good) {
+                    ?>
+                    <tr>
+                <td class="key">
+                    <label for="name">
+                        <?php echo JText::_( 'SO' ); ?>
+                    </label>
+                </td>
+                <td>
 
-                <tr>
-                    <td class="key">
-                        <label for="name">
-                            <?php echo JText::_( 'WO' ); ?>
-                        </label>
-                    </td>
-                    <td>
-                        <?php //echo $this->lists['wolist'];?>
-                        <input type="text" value="<?php echo $this->sto_row->wo_code?>" name="wo_code" id="wo_code" readonly="readonly" />
-                        <input type="hidden" name="sto_wo_id" id="sto_wo_id" value="<?php echo $this->sto_row->sto_wo_id?>" />
-                        <?php if($allow_edit){?>
-                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" title="Image">
-                            <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
-                        </a>
-                        <?php }?>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key">
-                        <label for="name">
-                            <?php echo JText::_( 'PO#' ); ?>
-                        </label>
-                    </td>
-                    <td>
-                        <input type="hidden" readonly="readonly" name="so_cuscode" id="so_cuscode"  size="10" value=""/>
-                        <span id="po_customer"><?php
-                            $soNumber = $this->sto_row->so_cuscode;
-                            if($this->sto_row->ccs_code)
-                            {
-                                $soNumber = $this->sto_row->ccs_code."-".$soNumber;
-                            }
-                            echo $soNumber;
-                            ?></span>
-                    </td>
-                </tr>
+                    <?php
+                    $so_code =  SToController::getSoCodeFromId($this->sto_row->sto_so_id);
+                    //echo $this->lists['wolist'];?>
+                    <input type="text" value="<?php echo $so_code?>" name="so_code" id="so_code" readonly="readonly" />
+                    <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_so_ajax&tmpl=component" title="Image">
+                        <input type="button" name="addSO" value="<?php echo JText::_('Select SO')?>"/>
+                    </a>
+                </td>
+                    </tr>
+                    <?php
+                }else{
+                    ?>
+                    <tr>
+                        <td class="key">
+                            <label for="name">
+                                <?php echo JText::_( 'WO' ); ?>
+                            </label>
+                        </td>
+                        <td>
+                            <?php //echo $this->lists['wolist'];?>
+                            <input type="text" value="<?php echo $this->sto_row->wo_code?>" name="wo_code" id="wo_code" readonly="readonly" />
+                            <input type="hidden" name="sto_wo_id" id="sto_wo_id" value="<?php echo $this->sto_row->sto_wo_id?>" />
+                            <?php if($allow_edit){?>
+                                <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_wo_ajax&tmpl=component" title="Image">
+                                    <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>
+                                </a>
+                            <?php }?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="key">
+                            <label for="name">
+                                <?php echo JText::_( 'PO#' ); ?>
+                            </label>
+                        </td>
+                        <td>
+                            <input type="hidden" readonly="readonly" name="so_cuscode" id="so_cuscode"  size="10" value=""/>
+                            <span id="po_customer"><?php
+                                $soNumber = $this->sto_row->so_cuscode;
+                                if($this->sto_row->ccs_code)
+                                {
+                                    $soNumber = $this->sto_row->ccs_code."-".$soNumber;
+                                }
+                                echo $soNumber;
+                                ?></span>
+                        </td>
+                    </tr>
+                <?php }?>
                 <tr>
                     <td class="key">
                         <label for="name">
@@ -179,7 +201,16 @@ window.addEvent('domready', function(){
                     </td>
                     <td>
                         <input type="hidden" readonly="readonly" name="customer_id" id="customer_id"  size="10" value=""/>
-                        <span id="ccs_name"><?php  echo $this->sto_row->ccs_name; ?></span>
+                        <span id="ccs_name">
+                        <?php
+                        if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                            echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
+                        }
+                        else
+                        {
+                            echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";
+                        }
+                        ?></span>
                     </td>
                 </tr>
                 <tr>

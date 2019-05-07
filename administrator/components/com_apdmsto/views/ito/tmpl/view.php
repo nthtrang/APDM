@@ -52,27 +52,34 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                          if (document.adminForm.boxchecked.value==0){
                                 alert("Please make a selection from the list to save receiving part");			
                                 return false;
-                        }
-                        else
-                        {
+                         }
+                         else
+                             {
                                 var cpn = document.getElementsByName('cid[]');
                                 var len = cpn.length;                              
-                                for (var i=0; i<len; i++) {
+                                for (var i=0; i<len; i++)
+                                {
                                         if(cpn[i].checked)
-                                        {                                        
-                                               // alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
-                                                var qty_value = document.getElementById('qty_' +cpn[i].value).value;                                        
-                                                if(qty_value==0)
+                                        {
+                                            var arr_sto = cpn[i].value.split("_");
+                                            var arr_qfk = arr_sto[1].split(",");
+                                            arr_qfk.forEach(function(sti)
+                                            {
+
+                                                var qty_value = document.getElementById('qty_' + arr_sto[0]+'_'+sti).value;
+
+                                                if (qty_value == 0)
                                                 {
-                                                        alert("Please input QTY for PN selected");    
-                                                        document.getElementById('qty_' +cpn[i].value).focus();
-                                                        return false;
-                                                }                                       
+                                                //    alert("Please input QTY for PN selected");
+                                                    document.getElementById('qty_' + arr_sto[0]+'_'+ sti).focus();
+                                                    return false;
+                                                }
+                                            });
                                         }
                                 }
-                               // submitform( pressbutton );
-                        }                
-                        submitform( pressbutton );
+                                 submitform( pressbutton );
+                             }
+
                         return;
                 }                      
                 if(pressbutton == 'removeAllpnsstos')

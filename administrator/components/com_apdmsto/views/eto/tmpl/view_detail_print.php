@@ -24,9 +24,12 @@
 
 </style>
 <style type="text/css">
-    .tgi  {border-collapse:collapse;border-spacing:0;align-content: center;width:100%}
+    .tgi  {border-collapse:collapse;border-spacing:0;align-content: center}
     .tgi td{font-family:Arial, Helvetica, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
     .tgi th{font-family:Arial, Helvetica, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
+    .tgi-pn  {border-collapse:collapse;border-spacing:0;align-content: center}
+    .tgi-pn td{font-family:Arial, Helvetica, sans-serif;font-size:14px;padding:0px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
+    .tgi-pn th{font-family:Arial, Helvetica, sans-serif;font-size:14px;font-weight:normal;padding:0px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;}
     .tgi .tg-88nc{font-weight:bold;border-color:inherit;text-align:center;font-size: 20px;color: #0B55C4}
     .tgi .tg-kiyi{font-weight:bold;font-size: 11px;border-color:inherit;text-align:left}
     .tgi .tg-c3ow{text-align:center;vertical-align:top}
@@ -34,10 +37,9 @@
     .tgi .tg-xldj-pr{text-align:right}
     .tgi .tg-0pky-pr{text-align:left;vertical-align:top}
     .tgi .tg-0pky-border{border-width:1px;border-style:solid}
+    .tgi .tg-0pky-border-r{border-right:1px;border-bottom:1px;border-style:solid}
     .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 18px;color: #0B55C4}
     .tgi .tg-0pky-ito-title{border-color:inherit;text-align:center;vertical-align:top;font-size: 16px;color: #0B55C4}
-    .adminlist1 th{border-width:1px;border-style:solid}
-    .adminlist1 td{border-width:1px;border-style:solid}
 </style>
 <table class="tgi" width="100%">
     <tr>
@@ -188,17 +190,17 @@
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $pns_code;?></td>
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border" align="center" colspan="2">
-                            <table class="adminlist" cellspacing="0" width="200">
+                        <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;padding:0px" align="center" colspan="2">
+                            <table class="tgi" width="100%">
                                 <?php
                                 foreach ($this->sto_pn_list2 as $rw) {
                                     if($rw->pns_id==$row->pns_id)
                                     {
                                         ?>
-                                        <tr><td align="center" width="77px">
+                                        <tr><td  class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;" align="center" width="75px">
                                                 <?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?>
                                             </td>
-                                            <td align="center" width="74px">
+                                            <td  class="tg-0pky-pr tg-0pky-border-r"  style="text-align:center;" align="center" width="74px">
                                                 <?php echo $rw->qty;?>
                                             </td>
 

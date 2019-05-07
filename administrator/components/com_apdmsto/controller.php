@@ -455,8 +455,8 @@ class SToController extends JController
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');   
                 $sto_code = $post['sto_code'];
-                $ito_id = $post['pns_sto_id'];                
-                                            
+                $ito_id = $post['pns_sto_id'];
+
                 $return = JRequest::getVar('return');
                 //get so info
                 $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$post['pns_sto_id']);
@@ -468,7 +468,7 @@ class SToController extends JController
                     $db->setQuery("update apdm_pns_sto_delivery set delivery_method='".$post['sto_delivery_method']."',delivery_shipping_name ='".$post['sto_delivery_shipping_name']."', delivery_shipping_company = '".$post['sto_delivery_shipping_company']."',delivery_shipping_street='" . $post['sto_delivery_shipping_street'] . "' ,delivery_shipping_zipcode='" . $post['sto_delivery_shipping_zipcode'] . "',delivery_shipping_phone='".$post['sto_delivery_shipping_phone']."',delivery_billing_name='".$post['sto_delivery_billing_name']."',delivery_billing_company='".$post['sto_delivery_billing_company']."',delivery_billing_street='".$post['sto_delivery_billing_street']."',delivery_billing_zipcode='".$post['sto_delivery_billing_zipcode']."',delivery_billing_phone='".$post['sto_delivery_billing_phone']."'  WHERE  sto_id = '".$post['pns_sto_id']."'");                    
                     $db->query();
                 }        
-                $db->setQuery("update apdm_pns_sto set sto_wo_id ='".$post['sto_wo_id']."', sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
+                $db->setQuery("update apdm_pns_sto set sto_so_id = '".$post['sto_so_id']."', sto_wo_id ='".$post['sto_wo_id']."', sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
                 $db->query();
                 //upload file
                             

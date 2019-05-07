@@ -2352,6 +2352,20 @@ class PNsController extends JController {
                 $this->setRedirect('index.php?option=com_apdmpns&task=bom&id=' . $pns_id);
                 exit;
         }
+        function getAllfilesPn($pns_id)
+        {
+            $db =& JFactory::getDBO();
+            ///get list cad files
+            $db->setQuery("SELECT pdf_file as file_name FROM apdm_pns_pdf WHERE pns_id=".$pns_id ." union SELECT image_file as file_name FROM apdm_pns_image WHERE pns_id=".$pns_id ."  union SELECT cad_file  as file_name FROM apdm_pn_cad WHERE pns_id=".$pns_id);
+            $res = $db->loadObjectList();
+            $cads_files = array();
+            if (count($res)>0){
+                foreach ($res as $r){
+                    $cads_files[] = $r->file_name;
+                }
+            }
+            return $cads_files;
+        }
         function download_all_bompns() {
 
                 global $dirarray, $conf, $dirsize;
@@ -2374,8 +2388,10 @@ class PNsController extends JController {
                 $dirarray = array();
                 $dirsize = 0;
                 $zdirsize = 0;
+                $list_files = array();
                 if(is_dir($path_pns))
                 {
+                    $list_files[] = PNsController::getAllfilesPn($pns->pns_id);
                         $zdir[] = $path_pns;
                 }
                 $list_pns2 = PNsController::DisplayPnsAllChildId($pns->pns_id);
@@ -2389,6 +2405,7 @@ class PNsController extends JController {
                         foreach ($list_pns3 as $row3){                       
                                 $path_pns3 = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'cads' . DS . $row3->ccs_code . DS . $row3->text . DS;       
                                 if(is_dir($path_pns3)){
+                                    $list_files = PNsController::getAllfilesPn($row3->pns_id);
                                         $zdir[] =  $path_pns3;
                                  }
                                  $list_pns4 = PNsController::DisplayPnsAllChildId($row3->pns_id);
@@ -2464,6 +2481,15 @@ class PNsController extends JController {
                 for ($i = 0; $i < count($dirarray); $i++) {
                         $zdir[] = $dirarray[$i];
                 }
+                //chua xong
+            /*for ($i = 0; $i < count($dirarray); $i++) {
+                echo  $dirarray[$i];
+                $fName= substr(end(explode("\\", $dirarray[$i])),1);
+                if(in_array($fName, $arrPdfs))
+                {
+                    $zdir[] = $dirarray[$i];
+                }
+            }*/
 
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
