@@ -2516,7 +2516,8 @@ class PNsController extends JController {
                 }
             }
             //get Bom
-            $zdir1[] = $path_pns . $pns_code.'_APDM_BOM_REPORT.xls';
+
+            $zdir1[] = $path_pns . "/".$pns_code.'_APDM_BOM_REPORT.xls';
                 if (!@is_dir($conf['dir'])) {
                         $res = @mkdir($conf['dir'], 0777);
                         if (!$res)
@@ -9562,7 +9563,7 @@ class PNsController extends JController {
         function checkPnExist($customer_code,$customer_pn,$rev)
         {
                 $db = & JFactory::getDBO(); 
-                $db->setQuery('select pns_id from apdm_pns where ccs_code = "' . $customer_code .'" AND pns_code = "'.$customer_pn.'" and pns_revision = "'.$rev.'"');                
+                $db->setQuery('select pns_id from apdm_pns where ccs_code = "' . $customer_code .'" AND pns_code = "'.$customer_pn.'" and pns_revision = "'.$rev.'"');
                 $pns_id = $db->loadResult();
                 if ($pns_id) {
                         return $pns_id;
@@ -9612,8 +9613,13 @@ class PNsController extends JController {
 
     }
 
+<<<<<<< HEAD
         function importBom()
         {                
+=======
+        function importBom($pns_code)
+        {
+>>>>>>> e427e56fa7fe2c51cab90242110b68ed0d323b77
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
@@ -9632,7 +9638,7 @@ class PNsController extends JController {
                 $username = $me->get('username');
                 $db = & JFactory::getDBO();
 
-                
+
                 //process upload file
                 $path_bom_file = JPATH_SITE . DS . 'uploads'  . DS;
                 $upload = new upload($_FILES['']);
@@ -9740,11 +9746,12 @@ class PNsController extends JController {
                     {
                             $mess[] =  "Err:Wrong format at L1. Must be 'MFG PN'";
                     }
-    
+
                 
                 for ($row = 1; $row <= $highestRow; $row++) { 
-                $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);    
+                $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
                 }
+
                   // print_r($rowData);   
                 //for level 0
                 $parent0 = 0;
@@ -9760,6 +9767,12 @@ class PNsController extends JController {
                 $arr_err=array();
                 for($line=2;$line<=$highestRow;$line++)
                 {
+                        $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
+                        //start import with level 0
+                        if($rowData[$line][0]==""){
+                            $arr_err[$line]    = "Err:".$pn_code. " have Level at column A".$line ." is null";
+                            continue;
+                        }
                         //check MFR
                         $mfr_id = PNsController::checkMfrId($rowData[$line][10]);
                         if(!$mfr_id)
@@ -9770,7 +9783,7 @@ class PNsController extends JController {
                             $db->query();
                             $mfr_id = $db->insertid();*/
                         }
-                        $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
+
                         if($rowData[$line][1]=="")//
                         {
                             $arr_err[$line]    = "Err:Customer Code at column B".$line ." is not null";
@@ -9793,26 +9806,24 @@ class PNsController extends JController {
                         }
                         if($rowData[$line][9]=="")//uom
                         {
-                            $arr_err[$line]    = "Err:".$pn_code. " have UOM at column J".$line ." is not null";
+                            $arr_err[$line]    = "Err:".$pn_code. " have UOM at column J".$line ." is null";
                         }
                         if($rowData[$line][0]!=0){//if != level 0 not check MFR
                                 if($rowData[$line][8]=="")//qty
                                 {
-                                    $arr_err[$line]    = "Err:".$pn_code. " have QTY at column I".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have QTY at column I".$line ." is null";
                                 }
                                 if($rowData[$line][10]=="")
                                 {
-                                    $arr_err[$line]    = "Err:".$pn_code. " have MFR name at column K".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have MFR name at column K".$line ." is null";
                                 }  
                                 if($rowData[$line][11]=="")
                                 {
-                                    $arr_err[$line]    = "Err:".$pn_code. " have MFG PN at column L".$line ." is not null";
+                                    $arr_err[$line]    = "Err:".$pn_code. " have MFG PN at column L".$line ." is null";
                                 }  
                         }
-                        
-                        
-                        //start import with level 0
-                        if($rowData[$line][0]==0)
+
+                        if($rowData[$line][0]=='0')
                         {
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
@@ -9873,16 +9884,23 @@ class PNsController extends JController {
                                 $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
 
-                            if($mfr_id) {
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
-                                $db->setQuery($query);
+
+                            if($pns_id!=$parent0) {
+                                if($mfr_id) {
+                                    //insert MFG
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
                                 $db->query();
+                                // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0;
+                                $mess[$line] = "Import sucessfull BOM " . $pn_code;
                             }
-                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
-                                $db->query();
-                               // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0; 
-                                $mess[$line] = "Import sucessfull BOM ". $pn_code;
+                            else
+                            {
+                                $arr_err[$line]    = "Err:".$pn_code. " Can not add same PN with parent for BOM";
+                            }
                         }
                       
                         if($rowData[$line][0]==2)
@@ -9909,15 +9927,22 @@ class PNsController extends JController {
                             else{
                                 $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
-                            if($mfr_id) {
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '",4)';
-                                $db->setQuery($query);
+
+                            if($pns_id!=$parent1) {
+                                if($mfr_id) {
+                                    //insert MFG
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '",4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
+                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
                                 $db->query();
+                                $mess[$line] = "Import sucessfull BOM " . $pns_code;
                             }
-                                $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
-                                $db->query();
-                                $mess[$line] = "Import sucessfull BOM ". $pns_code;
+                            else
+                            {
+                                $arr_err[$line]    = "Err:".$pn_code. " Can not add same PN with parent for BOM";
+                            }
                                 
                         }
                        
@@ -9945,15 +9970,22 @@ class PNsController extends JController {
                             else{
                                 $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
-                            if($mfr_id) {
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
-                                $db->setQuery($query);
-                                $db->query();
-                            }
+
+                            if($pns_id!=$parent2) {
+                                if($mfr_id) {
+                                    //insert MFG
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[$line] = "Import sucessfull BOM ". $pns_code;
+                            }
+                            else
+                            {
+                                $arr_err[$line]    = "Err:".$pn_code. " Can not add same PN with parent for BOM";
+                            }
                         }
                         if($rowData[$line][0]==4)
                         {
@@ -9979,15 +10011,22 @@ class PNsController extends JController {
                             else{
                                 $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
-                            if($mfr_id) {
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
-                                $db->setQuery($query);
-                                $db->query();
-                            }
+
+                            if($pns_id!=$parent3) {
+                                if($mfr_id) {
+                                    //insert MFG
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[$line] = "Import sucessfull PN ". $pns_code;
+                            }
+                            else
+                            {
+                                $arr_err[$line]    = "Err:".$pn_code. " Can not add same PN with parent for BOM";
+                            }
                         }
                         if($rowData[$line][0]==5)
                         {
@@ -10013,15 +10052,22 @@ class PNsController extends JController {
                             else{
                                 $arr_err[$line]    = "Err:".$pn_code. " have ECO number at column F".$line ." is not found";
                             }
-                            if($mfr_id) {
-                                //insert MFG 
-                                $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
-                                $db->setQuery($query);
-                                $db->query();
-                            }
+
+                            if($pns_id!=$parent4) {
+                                if($mfr_id) {
+                                    //insert MFG
+                                    $query = 'INSERT INTO apdm_pns_supplier (pns_id, supplier_id, supplier_info, type_id) VALUES (' . $pns_id . ', ' . $mfr_id . ', "' . $rowData[$line][11] . '", 4)';
+                                    $db->setQuery($query);
+                                    $db->query();
+                                }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
                                 $mess[$line] = "Import sucessfull BOM". $pns_code;
+                            }
+                            else
+                            {
+                                $arr_err[$line]    = "Err:".$pn_code. " Can not add same PN with parent for BOM";
+                            }
                         }
                 }  
                 //$inputFileName =  $path_bom_file.

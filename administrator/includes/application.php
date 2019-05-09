@@ -492,8 +492,8 @@ function GetNameCCs($ccs_id){
                 if($inventory<0)
                      $inventory = 0;
                 //get Tool out
-                $db->setQuery("SELECT sum(fk.qty) FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$pns_id." and fk.tto_type_inout = 2 and tto.tto_state = 'Using' and tto.tto_owner_out_confirm != 0 and fk.location='".$location."' and fk.partstate ='".$partState."' order by fk.pns_id desc");                
-                $ToolOut = $db->loadResult();    
+                $db->setQuery("SELECT sum(fk.qty) FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$pns_id." and fk.tto_type_inout = 2 and tto.tto_state = 'Using' and tto.tto_owner_out_confirm != 0 and fk.location='".$location."' and fk.partstate ='".$partState."' order by fk.pns_id desc");
+                $ToolOut = $db->loadResult();
                 if($ToolOut)
                 {
                      $inventory   = $inventory - $ToolOut;

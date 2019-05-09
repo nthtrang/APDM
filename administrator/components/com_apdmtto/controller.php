@@ -617,8 +617,11 @@ class TToController extends JController
                                 $location = $obj->location;
                                 $partState = $obj->partstate;
                                 $pn_id =  $obj->pns_id;
-                                $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','".$tto_type_inout."','1')");
-                                $db->query(); 
+                                $qtyRemain = CalculateInventoryLocationPartValueForTool($pn_id, $location, $partState);
+                                if ($qtyRemain > 0) {
+                                    $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','" . $tto_type_inout . "','1')");
+                                    $db->query();
+                                }
                         }
                  }
         }
@@ -1454,21 +1457,21 @@ class TToController extends JController
                 $pns_id = getPnsIdfromPnCode($pns_code);
                 //innsert to FK table
                 if($pns_id){
-                        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id where p.ccs_code = '206' and p.pns_id =  ".$pns_id." and fk.location !='' and  fk.location not in (select location from apdm_pns_tto_fk ttfk where ttfk.pns_id = ".$pns_id."  and ttfk.tto_id = ".$tto_id.") group by fk.location,fk.partstate";
+                        $query = "SELECT fk.id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id where p.ccs_code = '206' and p.pns_id =  ".$pns_id." and fk.location !='' and  fk.location not in (select location from apdm_pns_tto_fk ttfk where ttfk.pns_id = ".$pns_id."  and ttfk.tto_id = ".$tto_id.") group by fk.location,fk.partstate limit 1";
                         $db->setQuery($query);
                         $rowfs = $db->loadObjectList();
                         if (count($rowfs) > 0) {
                             foreach ($rowfs as $rw) {
                                 $location = "";
                                 $partstate = "";
-                                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.id= '" . $rw->id . "' and sto.sto_type = 1 and  stofk.location not in (select location from apdm_pns_tto_fk ttfk where ttfk.pns_id = " . $pns_id . "  and ttfk.tto_id = " . $tto_id . ")  order by stofk.id desc");
+                                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk  inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.id= '" . $rw->id . "' and sto.sto_type = 1 and  stofk.location not in (select location from apdm_pns_tto_fk ttfk where ttfk.pns_id = " . $pns_id . "  and ttfk.tto_id = " . $tto_id . ")  order by stofk.id desc limit 1");
                                 $rows = $db->loadObjectList();
                                 if (count($rows) > 0) {
                                     foreach ($rows as $obj) {
                                         $location = $obj->location;
-                                        $partState = $obj->partstate;
-                                        $pn_id = $obj->pns_id;
-                                        $qtyRemain = CalculateInventoryLocationPartValueForTool($pn_id, $location, $partState);
+                                         $partState = $obj->partstate;
+                                         $pn_id = $obj->pns_id;
+                                         $qtyRemain = CalculateInventoryLocationPartValueForTool($pn_id, $location, $partState);
                                         if ($qtyRemain > 0) {
                                             $db->setQuery("INSERT INTO apdm_pns_tto_fk (pns_id,tto_id,location,partstate,tto_type_inout,qty) VALUES ( '" . $pn_id . "','" . $tto_id . "','" . $location . "','" . $partState . "','2','1')");
                                             $db->query();
@@ -1482,7 +1485,7 @@ class TToController extends JController
              //    $msg = JText::_('Not found PN.');
 
               return  $this->setRedirect('index.php?option=com_apdmtto&task=tto_detail&id='.$tto_id);
-        }    
+        }
         function ajax_markscan_checkedtto()
         {
                 global $is_etoscan;
