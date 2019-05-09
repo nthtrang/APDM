@@ -41,7 +41,7 @@ class pnsViewrevroll extends JView
         $list_revision = $db->loadObjectList();              
         if(count($list_revision)==0)
         {
-               $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $cid[0] . "'");
+               $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,parent_id) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,pns_id from apdm_pns where pns_id = '" . $cid[0] . "'");
                $db->query();
                $db->setQuery("SELECT prev.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id=".$cid[0]." order by prev.pns_rev_id desc limit 1");
                $list_revision = $db->loadObjectList();                     

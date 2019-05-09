@@ -16,7 +16,7 @@
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){        				
         window.parent.document.getElementById('sbox-window').close();	
-        window.parent.location.reload();
+       // window.parent.location.reload();
 }
 
 </script>
@@ -64,7 +64,7 @@ function UpdatePnsRevWindow(){
 				</tr>
 				
 				
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'PNS_ECO' ); ?>
@@ -74,7 +74,7 @@ function UpdatePnsRevWindow(){
 					<?php echo PNsController::GetECO($rev[0]->eco_id); ?>
 					<input type="hidden" name="eco_id" id="eco_id" value="<?php echo $rev[0]->eco_id;?>" />
 					</td>
-				</tr>
+				</tr>-->
 				
 				<tr>
 					<td class="key" valign="top">

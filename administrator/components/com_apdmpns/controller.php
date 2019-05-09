@@ -660,18 +660,19 @@ class PNsController extends JController {
                 $pns_modified_by = $me->get('id');
                 $pns_life_cycle = JRequest::getVar('pns_life_cycle');
                 $return = JRequest::getVar('return');                
-                $db->setQuery("INSERT INTO apdm_pns_rev (pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_modified,pns_modified_by,pns_life_cycle) VALUES (" . $pns_id . ", '" . $ccs_code . "', '" . $pns_code . "', '" . $pns_revision . "', '" . $eco_id . "', '" . $pns_modified . "', '" . $pns_modified_by . "', '" . $pns_life_cycle . "')");
-                $db->query();
+                $db->setQuery("INSERT INTO apdm_pns_rev (pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_modified,pns_modified_by,pns_life_cycle,parent_id) VALUES (" . $pns_id . ", '" . $ccs_code . "', '" . $pns_code . "', '" . $pns_revision . "', '" . $eco_id . "', '" . $pns_modified . "', '" . $pns_modified_by . "', '" . $pns_life_cycle . "','".$pns_id."')");                  
+                // $db->query();
                 //Insett into PN
-                $query = "INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,eco_id,pns_type,pns_status,pns_pdf,pns_image,pns_description,pns_create,pns_create_by,pns_modified,pns_modified_by,pns_deleted,pns_life_cycle,pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn)";
-                $query .= "SELECT '".$ccs_code."','".$pns_code."','".$pns_revision."',".$eco_id.",pns_type,pns_status,pns_pdf,pns_image,pns_description,'".$pns_modified."','".$pns_modified_by."','".$pns_modified."','".$pns_modified_by."',0,'".$pns_life_cycle."',pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn FROM apdm_pns WHERE pns_id = $pns_id";
+                $query = "INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_type,pns_status,pns_pdf,pns_image,pns_description,pns_create,pns_create_by,pns_modified,pns_modified_by,pns_deleted,pns_life_cycle,pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn)";
+                $query .= "SELECT '".$ccs_code."','".$pns_code."','".$pns_revision."',pns_type,pns_status,pns_pdf,pns_image,pns_description,'".$pns_modified."','".$pns_modified_by."','".$pns_modified."','".$pns_modified_by."',0,'".$pns_life_cycle."',pns_uom,pns_cost,pns_stock,pns_datein,pns_qty_used,pns_ref_des,pns_find_number,pns_cpn FROM apdm_pns WHERE pns_id = $pns_id";
                 $db->setQuery($query);
                 $db->query();
+                $last_id = $db->insertid();
                 
-                $getlast_id = "select pns_id from apdm_pns where ccs_code ='".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
-                $db->setQuery($getlast_id);
-                $last_id = $db->loadResult();
-                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $last_id . "'");
+                //$getlast_id = "select pns_id from apdm_pns where ccs_code ='".$ccs_code."' and pns_code = '".$pns_code."' and pns_revision = '".$pns_revision."'";
+               // $db->setQuery($getlast_id);
+                //$last_id = $db->loadResult();
+                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,pns_life_cycle,parent_id) select ".$last_id.",ccs_code,pns_code,pns_revision,pns_life_cycle,".$pns_id." from apdm_pns where pns_id = '" . $last_id . "'");
                 $db->query();
                //Make folder for download
                 $folder = $ccs_code . '-' . $pns_code . '-' . $pns_revision;
@@ -1041,7 +1042,7 @@ class PNsController extends JController {
                                 }
 
                                 //insert  rev history
-                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $row->pns_id . "'");
+                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,parent_id) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,".$rows->pns_id." from apdm_pns where pns_id = '" . $row->pns_id . "'");
                                 $db->query();
                                 $msg = JText::_('Successfully Saved Part Number') . $text_mess;
                                 $return = JRequest::getVar('return');
@@ -1078,7 +1079,7 @@ class PNsController extends JController {
                                         } 
                                 }                                                                   
                                 //insert  rev history
-                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $row->pns_id . "'");
+                                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,parent_id) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,".$rows->pns_id." from apdm_pns where pns_id = '" . $row->pns_id . "'");
                                 $db->query();                                
                                 $msg = JText::_('Successfully Saved Part Number') . ': ' . $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision . ' ' . $text_mess;
                                 $return = JRequest::getVar('return');
@@ -1140,7 +1141,7 @@ class PNsController extends JController {
                 $db->setQuery($query);
                 $rows = $db->loadObject();
                 //insert  rev history
-                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle from apdm_pns where pns_id = '" . $rows->pns_id . "'");
+                $db->setQuery("insert into apdm_pns_rev(pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,parent_id) select pns_id,ccs_code,pns_code,pns_revision,eco_id,pns_life_cycle,".$rows->pns_id." from apdm_pns where pns_id = '" . $rows->pns_id . "'");
                 $db->query();
                 $msg = JText::_('Successfully Saved Dash Roll');
 
@@ -4332,9 +4333,12 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();
                 $pns = JRequest::getVar('cid', array(), '', 'array');
                 $cid = JRequest::getVar('eco', array(), '', 'array');
-                $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");
-            
+                $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");            
                 $db->query();
+                //dd eco into REV
+                $db->setQuery("update apdm_pns_rev set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");            
+                $db->query();
+                
                 //add to inital
                 foreach($pns as $pn_id)
                 {
@@ -9609,7 +9613,7 @@ class PNsController extends JController {
     }
 
         function importBom()
-        {
+        {                
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
