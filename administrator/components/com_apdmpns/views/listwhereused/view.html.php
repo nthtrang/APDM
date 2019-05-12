@@ -191,7 +191,19 @@ class pnsViewlistwhereused extends JView
         //get parent
         $row = & JTable::getInstance('apdmpns');
         $row->load($id);   
-        $this->assignRef('row',        $row);     
+        $this->assignRef('row',        $row); 
+        //get REV history
+         $query = "SELECT parent_id FROM apdm_pns_rev WHERE pns_id='".$id."'";
+         $db->setQuery( $query);
+        $parent_id = $db->loadResult();   
+        
+        $query = "SELECT * FROM apdm_pns_rev WHERE parent_id='".$parent_id."' and pns_id <".$id;    
+       			
+       $db->setQuery($query);
+       $rowsHistory = $db->loadObjectList();
+       $this->assignRef('rows_history',        $rowsHistory);     
+      
+        
         // table ordering
         $lists['order_Dir']    = $filter_order_Dir;
         $lists['order']        = $filter_order;

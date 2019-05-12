@@ -457,6 +457,386 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </div>
+                                <?php 
+                                
+                                if($this->rows_history &&  $title->pns_life_cycle =="Released"){
+                                foreach ($this->rows_history as $rw_his)
+                                {
+                                       $rows_revhis =  PNsController::getPnsRevHistory($rw_his->pns_id);
+                                         $pns_code_full =  PNsController::getPnsCodefromId($rw_his->pns_id);  
+                                         if($rows_revhis)  
+                                         {
+                                ?>
+        <fieldset class="adminform">
+		<legend><?php echo JText::_( 'Where Used History' ); ?></legend>                        
+<div> <input type="checkbox" onclick="isChecked(this.checked);" value="<?php echo $this->id;?>" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->id?>&cd=<?php echo $this->id?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level 0</a>
+<table class="adminlist" cellpadding="1">
+		<thead>
+			<tr>
+                                <th width="4%">				
+                                        <input type="checkbox" name="CheckAll" value="0" onClick="checkboxBom(document.adminForm.cwhereused)"/>
+                                </th>                                
+                                <th width="5%">
+                                        <?php echo JText::_('Level')?>
+                                </th>					
+				<th class="title" width="10%">
+					<?php echo  JText::_('Part Number'); ?>
+				</th>			
+				<th width="15%" class="title"  >
+					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>
+				</th>                                                                
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('ECO Number'); ?>
+				</th>                                
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('State'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('REV'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Current REV'); ?>
+				</th>                            
+<!--				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Current DASH'); ?>
+				</th>    -->
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Make/Buy'); ?>
+				</th>                                    
+
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="9">
+					<?php // echo $this->pagination->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
+		<tbody id="list_pns_child" >
+		<?php
+			$path_image = '../uploads/pns/images/';
+			$k = 0;
+			for ($i=0, $n=count( $rows_revhis ); $i < $n; $i++)
+			{
+				$row 	=& $rows_revhis[$i];								
+                                if($row->pns_revision)
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
+                                else
+                                        $pns_code = $row->ccs_code.'-'.$row->pns_code;
+                                
+				if ($row->pns_image !=''){
+					$pns_image = $path_image.$row->pns_image;
+				}else{
+					$pns_image = JText::_('NONE_IMAGE_PNS');
+				}
+				
+				
+				
+			?>
+			<tr class="<?php echo "row$k"; ?>">
+                                <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row->pns_id;?>);" value="<?php echo $row->pns_id;?>" name="cid[]"  /></td>				
+                                <td align="center">-1</td>
+				<td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                <?php    echo '<p style="margin-left:0px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $pns_code.'</a></p> '; ?>                                                
+				</span>				
+				<td align="left" width="20%">
+					<?php echo  $row->pns_description; ?>
+				</td>		                                        
+				<td align="center">
+					<?php echo PNsController::GetEcoValue($row->eco_id);?>
+				</td>                                
+				<td align="center">
+					<?php echo $row->pns_life_cycle;?>
+				</td>
+				<td align="center">
+					<?php 
+                                        $list_rev = PNsController::DisplayAllRevValue($row->pns_id); 
+                                        foreach($list_rev as $rev)
+                                        {
+                                                echo $rev->pns_revision."</br>";
+                                        }
+                                        ?>
+				</td>
+                                <td align="center">
+					<?php echo $row->pns_revision;?>
+				</td>	
+<!--                                <td align="center">
+					<?php echo $row->pns_type;?>
+				</td>	-->
+                                <td align="center">
+					<?php echo $row->pns_type;?>
+				</td>	                                
+			</tr>
+                        	<?php		
+                                //level2      
+                               $list_pns_c2 = PNsController::DisplayPnsAllParentId($row->pns_id); 
+                               if(isset($list_pns_c2)&& sizeof($list_pns_c2)>0)
+                               {
+                                        foreach ($list_pns_c2 as $row2){
+                                                if ($row2->pns_image !=''){
+                                                        $pns_image1 = $path_image.$row2->pns_image;
+                                                }else{
+                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                }                                                
+                                       ?>
+                                                <tr>
+                                                        <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row2->pns_id;?>);" value="<?php echo $row2->pns_id;?>" name="cid[]"  /></td>
+                                                        <td align="center">-2</td>
+                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                               <?php    echo '<p style="margin-left:40px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row2->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row2->text.'</a></p> '; ?>
+                                                        </span>
+                                                        </td>
+                                                        <td align="left">
+                                                                <?php echo  $row2->pns_description; ?>
+                                                        </td>	                
+                                                        <td align="center">
+                                                                <?php echo PNsController::GetEcoValue($row2->eco_id);?>
+                                                        </td>                                                          
+                                                        <td align="center">
+                                                                <?php echo $row2->pns_life_cycle;?>
+                                                        </td>
+                                                        <td align="center">
+                                                                <?php 
+                                                                $list_rev = PNsController::DisplayAllRevValue($row2->pns_id); 
+                                                                foreach($list_rev as $rev)
+                                                                {
+                                                                        echo $rev->pns_revision."</br>";
+                                                                }
+                                                                ?>
+                                                        </td>
+                                                        <td align="center">
+                                                                <?php echo $row2->pns_revision;?>
+                                                        </td>	
+<!--                                                        <td align="center">
+                                                                <?php echo $row2->pns_type;?>
+                                                        </td>	-->
+                                                        <td align="center">
+                                                                <?php echo $row2->pns_type;?>
+                                                        </td>	                                                        
+                                                        						
+                                                </tr>
+                                               <?php		
+                                                //level3      
+                                               $list_pns_c3 = PNsController::DisplayPnsAllParentId($row2->pns_id); 
+                                               if(isset($list_pns_c3)&& sizeof($list_pns_c3)>0)
+                                               {
+                                                        foreach ($list_pns_c3 as $row3){
+                                                                if ($row3->pns_image !=''){
+                                                                        $pns_image1 = $path_image.$row3->pns_image;
+                                                                }else{
+                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                }                                                
+                                                       ?>
+                                                                <tr>
+                                                                        <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row3->pns_id;?>);" value="<?php echo $row3->pns_id;?>" name="cid[]"  /></td>
+                                                                        <td align="center">-3</td>
+                                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                               <?php    echo '<p style="margin-left:80px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row3->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row3->text.'</a></p> '; ?>
+                                                                        </span>
+                                                                        </td>	
+                                                                        <td align="left">
+                                                                                <?php echo  $row3->pns_description; ?>
+                                                                        </td>	  
+                                                                        <td align="center">
+                                                                                <?php echo PNsController::GetEcoValue($row3->eco_id);?>
+                                                                        </td>                                                                          
+                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_life_cycle;?>
+                                                                        </td>
+                                                                        <td align="center">
+                                                                                <?php 
+                                                                        $list_rev = PNsController::DisplayAllRevValue($row3->pns_id); 
+                                                                        foreach($list_rev as $rev)
+                                                                        {
+                                                                                echo $rev->pns_revision."</br>";
+                                                                        }
+                                                                        ?>
+                                                                        </td>
+                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_revision;?>
+                                                                        </td>	
+<!--                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_type;?>
+                                                                        </td>	   -->
+                                                                        <td align="center">
+                                                                                <?php echo $row3->pns_type;?>
+                                                                        </td>	                                                                           
+						
+                                                                </tr>
+                                                               <?php		
+                                                                //level4     
+                                                               $list_pns_c4 = PNsController::DisplayPnsAllParentId($row3->pns_id); 
+                                                               if(isset($list_pns_c4)&& sizeof($list_pns_c4)>0)
+                                                               {
+                                                                        foreach ($list_pns_c4 as $row4){
+                                                                                if ($row4->pns_image !=''){
+                                                                                        $pns_image1 = $path_image.$row4->pns_image;
+                                                                                }else{
+                                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                }                                                
+                                                                       ?>
+                                                                                <tr>
+                                                                                        <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row4->pns_id;?>);" value="<?php echo $row4->pns_id;?>" name="cid[]"  /></td>
+                                                                                        <td align="center">-4</td>
+                                                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                               <?php    echo '<p style="margin-left:120px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row4->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row4->text.'</a></p> '; ?>
+                                                                                        </span>
+                                                                                        </td>	
+                                                                                        <td align="left">
+                                                                                                <?php echo  $row4->pns_description; ?>
+                                                                                        </td>	                  
+                                                                                        <td align="center">
+                                                                                                <?php echo PNsController::GetEcoValue($row4->eco_id);?>
+                                                                                        </td>                                                                                          
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_life_cycle;?>
+                                                                                        </td>
+                                                                                        <td align="center">
+                                                                                                <?php 
+                                                                                                $list_rev = PNsController::DisplayAllRevValue($row4->pns_id); 
+                                                                                                foreach($list_rev as $rev)
+                                                                                                {
+                                                                                                        echo $rev->pns_revision."</br>";
+                                                                                                }
+                                                                                                ?>
+                                                                                        </td>
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_revision;?>
+                                                                                        </td>	
+<!--                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_type;?>
+                                                                                        </td>	-->
+                                                                                        <td align="center">
+                                                                                                <?php echo $row4->pns_type;?>
+                                                                                        </td>	
+                                                                                        
+                                                                                </tr>
+                                                                                       <?php		
+                                                                                        //level5     
+                                                                                       $list_pns_c5 = PNsController::DisplayPnsAllParentId($row4->pns_id); 
+                                                                                       if(isset($list_pns_c5)&& sizeof($list_pns_c5)>0)
+                                                                                       {
+                                                                                                foreach ($list_pns_c5 as $row5){
+                                                                                                        if ($row5->pns_image !=''){
+                                                                                                                $pns_image1 = $path_image.$row5->pns_image;
+                                                                                                        }else{
+                                                                                                                $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                                        }                                                
+                                                                                               ?>
+                                                                                                        <tr>
+                                                                                                                <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row5->pns_id;?>);" value="<?php echo $row5->pns_id;?>" name="cid[]"  /></td>
+                                                                                                               <td align="center">-5</td>
+                                                                                                                <td align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                       <?php    echo '<p style="margin-left:160px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row5->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row5->text.'</a></p> '; ?>
+                                                                                                                </span>
+                                                                                                                </td>	
+                                                                                                                <td align="left">
+                                                                                                                        <?php echo  $row5->pns_description; ?>
+                                                                                                                </td>		
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo PNsController::GetEcoValue($row5->eco_id);?>
+                                                                                                                </td>                                                                                                                  
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_life_cycle;?>
+                                                                                                                </td>
+                                                                                                                <td align="center">
+                                                                                                                        <?php 
+                                                                                                                        $list_rev = PNsController::DisplayAllRevValue($row5->pns_id); 
+                                                                                                                        foreach($list_rev as $rev)
+                                                                                                                        {
+                                                                                                                                echo $rev->pns_revision."</br>";
+                                                                                                                        }
+                                                                                                                        ?>
+                                                                                                                </td>					
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_revision;?>
+                                                                                                                </td>	
+<!--                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                </td>	 -->
+                                                                                                                <td align="center">
+                                                                                                                        <?php echo $row5->pns_type;?>
+                                                                                                                </td>	                                                                                                                 
+                                                                                                        </tr>
+                                                                                                               <?php		
+                                                                                                                //level6     
+                                                                                                               $list_pns_c6 = PNsController::DisplayPnsAllParentId($row5->pns_id); 
+                                                                                                               if(isset($list_pns_c6)&& sizeof($list_pns_c6)>0)
+                                                                                                               {
+                                                                                                                        foreach ($list_pns_c6 as $row6){
+                                                                                                                                if ($row6->pns_image !=''){
+                                                                                                                                        $pns_image1 = $path_image.$row6->pns_image;
+                                                                                                                                }else{
+                                                                                                                                        $pns_image1 = JText::_('NONE_IMAGE_PNS');
+                                                                                                                                }                                                
+                                                                                                                       ?>
+                                                                                                                                <tr>
+                                                                                                                                        <td align="center"><input  type="checkbox" id = "cwhereused" onclick="isChecked(this.checked,<?php echo $row6->pns_id;?>);" value="<?php echo $row6->pns_id;?>" name="cid[]"  /></td>
+                                                                                                                                        <td align="center">-6</td>
+                                                                                                                                        <td  align="left"><span class="editlinktip hasTip" title="<img border=&quot;1&quot; src=&quot;<?php echo $pns_image1; ?>&quot; name=&quot;imagelib&quot; alt=&quot;<?php echo JText::_( 'No preview available' ); ?>&quot; width=&quot;100&quot; height=&quot;100&quot; />" >
+                                                                                                                                               <?php    echo '<p style="margin-left:200px"><a href="index.php?option=com_apdmpns&task=detail&cid[]='.$row6->pns_id.'&cd='.$this->lists['pns_id'].'" title="'.JText::_('Click to see detail PNs').'">'. $row6->text.'</a></p> '; ?>
+                                                                                                                                        </span>
+                                                                                                                                        </td>
+                                                                                                                                        <td align="left">
+                                                                                                                                                <?php echo  $row6->pns_description; ?>
+                                                                                                                                        </td>	
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo PNsController::GetEcoValue($row6->eco_id);?>
+                                                                                                                                        </td>                                                                                                                                          
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_life_cycle;?>
+                                                                                                                                        </td>
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php 
+                                                                                                                                                $list_rev = PNsController::DisplayAllRevValue($row6->pns_id); 
+                                                                                                                                                foreach($list_rev as $rev)
+                                                                                                                                                {
+                                                                                                                                                        echo $rev->pns_revision."</br>";
+                                                                                                                                                }
+                                                                                                                                                ?>
+                                                                                                                                        </td>
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_revision;?>
+                                                                                                                                        </td>	
+<!--                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                        </td>	          -->
+                                                                                                                                        <td align="center">
+                                                                                                                                                <?php echo $row6->pns_type;?>
+                                                                                                                                        </td>	                                                                                                                                                  
+                                                                                                                                </tr>
+                                                                                                                                <?php
+                                                                                                                        }
+                                                                                                               }//end level6
+                                                                                                               ?>                                                                                                           
+                                                                                                        <?php
+                                                                                                }
+                                                                                       }//end level5
+                                                                                       ?>   
+                                                                                <?php
+                                                                        }
+                                                               }//end level4
+                                                               ?>                                                                
+                                                                <?php
+                                                        }
+                                               }//end level3
+                                               ?>
+                                                <?php
+                                        }
+                               }
+                               ?>
+
+			<?php
+				$k = 1 - $k;
+				}
+			?>
+		</tbody>
+	</table>
+</div>        </fieldset>   
+                                <?php 
+                                }}}
+                                ?>
 	<div class="clr"></div>		
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="option" value="com_apdmpns" />

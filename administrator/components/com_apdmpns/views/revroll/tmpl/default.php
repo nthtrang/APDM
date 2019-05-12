@@ -16,7 +16,8 @@
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){        				
         window.parent.document.getElementById('sbox-window').close();	
-       // window.parent.location.reload();
+        //window.parent.location.reload();
+        window.parent.document.location.href = "index.php?option=com_apdmpns&task=doneRedirectRevPn&pns_id=<?php echo $cid[0];?>";
 }
 
 </script>

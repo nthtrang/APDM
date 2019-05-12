@@ -587,7 +587,7 @@ class PNsController extends JController {
                 // $arrLast    = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'T', 'V', 'Y', 'Z');
                 $cid = JRequest::getVar('cid', array(0), '', 'array');
                 $ccs_code = JRequest::getVar('ccs_code');
-                $query = "SELECT pns_revision FROM apdm_pns_rev WHERE pns_id='" . $cid[0] . "' order by pns_revision DESC LIMIT 0, 1";
+                $query = "SELECT pns_revision FROM apdm_pns_rev WHERE parent_id='" . $cid[0] . "' order by pns_revision DESC LIMIT 0, 1";
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 $last_revision = trim($rows[0]->pns_revision);
@@ -684,7 +684,12 @@ class PNsController extends JController {
                 $file_zip = $path_pns . 'cads' . DS . 'zip.php';
                 copy($file_zip, $path_pns_cads . 'zip.php');                
                 $msg = "Successfully Saved Rev Roll";
-                $this->setRedirect('index.php?option=com_apdmpns&task=detail&cid[0]=' . $pns_id, $msg);
+                $this->setRedirect('index.php?option=com_apdmpns&task=doneRedirectRevPn&pns_id=' . $pns_id, $msg);
+        }
+        function doneRedirectRevPn() {
+                $pns_id = JRequest::getVar('pns_id');
+            // $msg = "Successfully Saved Rev Roll";
+           return $this->setRedirect('index.php?option=com_apdmpns&task=rev&cid[0]=' . $pns_id, $msg); 
         }
 
         function get_dash_up() {
@@ -4336,7 +4341,7 @@ class PNsController extends JController {
                 $cid = JRequest::getVar('eco', array(), '', 'array');
                 $db->setQuery("update apdm_pns set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");            
                 $db->query();
-                //dd eco into REV
+                //add eco into REV
                 $db->setQuery("update apdm_pns_rev set eco_id = " . $cid[0] . " WHERE  pns_id IN (" . implode(",", $pns) . ")");            
                 $db->query();
                 
@@ -9613,13 +9618,8 @@ class PNsController extends JController {
 
     }
 
-<<<<<<< HEAD
         function importBom()
         {                
-=======
-        function importBom($pns_code)
-        {
->>>>>>> e427e56fa7fe2c51cab90242110b68ed0d323b77
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
@@ -10189,6 +10189,44 @@ class PNsController extends JController {
                                 }
                         }            
                         return $pdf_files;
+        }
+        function getPnsRevHistory($pns_id)
+        {
+                $db =& JFactory::getDBO();
+                $query = "SELECT pns_parent from apdm_pns_rev_history where pns_reved=".$pns_id;           			
+               $db->setQuery($query);
+               $rows = $db->loadObjectList();
+               if (count($rows) > 0){
+                    foreach ($rows as $row){
+                        $arrPNsChild[] = $row->pns_parent;
+                    }
+               }
+               
+               $where = array();
+                if (count( $arrPNsChild ) > 0)   {
+                        $where[] = 'p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
+                         $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
+                $query = 'SELECT p.* '
+                    . ' FROM apdm_pns AS p'            
+                    . $where;     
+                $db->setQuery($query);
+              return $db->loadObjectList();
+                }
+             return "";  
+                
+             
+        }
+        function getPnsCodefromId($pns_id)
+        {
+                 $db =& JFactory::getDBO();
+                $querypn = "SELECT p.ccs_code, CONCAT(p.ccs_code,'-',p.pns_code,if(p.pns_revision = '','','-'),p.pns_revision) AS pns_code,p.pns_id FROM apdm_pns AS p  WHERE  p.pns_id =" . $pns_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+                $pns_code = $pns->pns_code;
+                if (substr($pns_code, -1) == "-") {
+                        $pns_code = substr($pns_code, 0, strlen($pns_code) - 1);
+                }
+                return $pns_code;
         }
 }
 

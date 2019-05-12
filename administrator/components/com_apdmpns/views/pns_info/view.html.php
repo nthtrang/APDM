@@ -225,7 +225,6 @@ class pnsViewpns_info extends JView
                 $lists['pns_qty_used'] = $row->pns_qty_used;
                 //For revision
                 $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = prev.eco_id WHERE p.pns_deleted =0 AND prev.parent_id=".$row->pns_id);
-                echo $db->getQuery();
                 $list_revision = $db->loadObjectList();
                 $this->assignRef('revision',        $list_revision);
 
