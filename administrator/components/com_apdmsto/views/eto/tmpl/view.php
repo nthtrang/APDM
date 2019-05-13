@@ -143,6 +143,11 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                 document.getElementById('partstate_'+id+'_'+sti).style.display= 'block';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'none';         
+                
+                document.getElementById('mfg_pn_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('mfg_pn_'+id+'_'+sti).style.display= 'block';
+                document.getElementById('text_mfg_pn_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('text_mfg_pn_'+id+'_'+sti).style.display= 'none';                
                 });
 	}
 	else {
@@ -156,6 +161,10 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
                 document.getElementById('text_partstate_'+id+'_'+sti).style.visibility= 'visible';
                 document.getElementById('text_partstate_'+id+'_'+sti).style.display= 'block';
+                
+                document.getElementById('text_mfg_pn_'+id+'_'+sti).style.visibility= 'visible';
+                document.getElementById('text_mfg_pn_'+id+'_'+sti).style.display= 'block';
+                
 
                 document.getElementById('qty_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('qty_'+id+'_'+sti).style.display= 'none';
@@ -164,6 +173,10 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                 document.getElementById('location_'+id+'_'+sti).style.display= 'none';
                 document.getElementById('partstate_'+id+'_'+sti).style.visibility= 'hidden';
                 document.getElementById('partstate_'+id+'_'+sti).style.display= 'none';                
+                
+                document.getElementById('mfg_pn_'+id+'_'+sti).style.visibility= 'hidden';
+                document.getElementById('mfg_pn_'+id+'_'+sti).style.display= 'none';      
+                
              });
                 
                 
@@ -206,6 +219,18 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         }).request();
         
 }
+function getMfgPnPartState(pnsId,fkId,currentMfgPn,partState)
+{	
+        var url = 'index.php?option=com_apdmsto&task=ajax_getmfgpn_partstate&partstate='+partState+'&pnsid='+pnsId+'&fkid='+fkId+'&currentmfgpn='+currentMfgPn;
+        var MyAjax = new Ajax(url, {
+                method:'get',
+                onComplete:function(result){
+                       document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
+                }
+        }).request();
+        
+}
+
 function checkAllEtoPn(n, fldName )
 {
   if (!fldName) {
@@ -784,10 +809,10 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
 				</span></td>
                                                 <td align="left"><?php echo $row->pns_description; ?></td>
                                                 <td align="center"><?php echo $row->pns_uom; ?></td>
-                                                <td align="center">
+<!--                                                <td align="center">
                                                     <table>
                                                         <?php
-                                                        $mf = GetManufacture($row->pns_id,4);
+                                                       /* $mf = GetManufacture($row->pns_id,4);
                                                         if (count($mf) > 0) {
                                                             $imf1=1;
                                                             foreach ($mf as $m) {
@@ -798,10 +823,10 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                                 $imf1++;
                                                             }
 
-                                                        }
+                                                        }*/
                                                         ?> </table>
-                                                </td> 
-                                                <td align="center" colspan="4">
+                                                </td> -->
+                                                <td align="center" colspan="5">
                                                         
                                                         <table class="adminlist" cellspacing="0" width="200">
                                                                 <?php 
@@ -809,41 +834,39 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                                         if($rw->pns_id==$row->pns_id)
                                                                         {                                                                                
                                                                 ?>
-                                                                <tr><td align="center" width="74px">
+                                                                <tr>
+                                                                         <td align="center" width="74px">					
+                                                    <span style="display:block" id="text_mfg_pn_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->pns_mfg_pn_id?SToController::GetMfgPnCode($rw->pns_mfg_pn_id):"";?></span>
+                                                        <span  id="ajax_mfgpn_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
+                                                                  <?php 
+                                                        
+                                                                 //pns_mfg_pn_id
+                                                                $mfgPnLists = SToController::getMfgPnListFromPnEto($row->pns_id);                                                                
+                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" ', 'value', 'text', $rw->pns_mfg_pn_id ); 
+                                                       
+                                                        ?></span> 
+                                                </td>	
+                                                                        <td align="center" width="74px">
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
                                                         <input style="display:none;width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $rw->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>" />                                                        
                                                 </td> 
                                                 <td align="center" width="77px">					
                                                     <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><a href="<?php echo $linkStoTab;?>"><?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?></a></span>
                                                        <?php 
-                                                        if($rw->sto_type==1)//ITO
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
-                                                         }
-                                                         else{//ETO
+                                                        
 														 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
                                                                  $locationArr = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id);
                                                                 echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
 																?>
-																</span> 
-																<?php 
-                                                         }
-                                                        ?>
+																</span> 																
                                                 </td>	
                                                 <td align="center" width="77px">					
                                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
                                                          <?php       
-                                                         if($rw->sto_type==1)
-                                                         {
-                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->partstate ); 
-                                                         }
-                                                         else{                                                                 
+                                                                                                                     
                                                                  $partStateArr = SToController::getPartStatePn($rw->partstate,$row->pns_id);
-                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
-                                                                 
-                                                         }
-                                                        
+                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value);getMfgPnPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->pns_mfg_pn_id.'\',this.value)"', 'value', 'text', $rw->partstate );
                                                         ?>
                                                 </td>
                                                 <td align="center" width="75px">	

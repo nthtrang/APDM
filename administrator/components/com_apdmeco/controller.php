@@ -1251,11 +1251,20 @@ class ECOController extends JController
                                 $rowPnReleased= $db->loadObjectList();
                                 foreach($rowPnReleased as $row1)
                                 {
-                                        $query = "INSERT INTO apdm_pns_parents (pns_id,pns_parent,ref_des,find_number,stock)";
-                                        $query .= " SELECT pns_id,'".$row1->pns_id."',ref_des,find_number,stock from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";
-                                       
+                                         //bk into BOM history first
+                                         $query = "INSERT INTO apdm_pns_bom_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
+                                        $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";                                     
                                         $db->setQuery($query);
-                                        $db->query();   
+                                        $db->query();  
+                                        
+                                      /*  $query = "INSERT INTO apdm_pns_parents (pns_id,pns_parent,ref_des,find_number,stock)";
+                                        $query .= " SELECT pns_id,'".$row1->pns_id."',ref_des,find_number,stock from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";                                       
+                                        $db->setQuery($query);
+                                        $db->query();   */
+                                        //update parent to new REV
+                                        $query = "update apdm_pns_parents set pns_parent = '".$row1->pns_id."', pns_reved = '".$row1->parent_id."' where pns_parent = '".$row1->parent_id."'";
+                                        $db->setQuery($query);
+                                        $db->query(); 
                                         
                                         //bk into history first
                                          $query = "INSERT INTO apdm_pns_rev_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
@@ -1271,7 +1280,7 @@ class ECOController extends JController
                                        
                                 }
                               
-                                
+                                die;
                         
 
                         //send email PRROMOTE RELEASED

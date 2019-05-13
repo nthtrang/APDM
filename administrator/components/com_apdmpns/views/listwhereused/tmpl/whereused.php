@@ -92,6 +92,8 @@ function submitbutton(pressbutton) {
 			
 		</tr>			
 </table>-->
+                                <fieldset class="adminform">
+		
                                 <div> <input type="checkbox" onclick="isChecked(this.checked);" value="<?php echo $this->id;?>" name="cid[]"  /> <a href="index.php?option=com_apdmpns&task=detail&cid[]=<?php echo $this->id?>&cd=<?php echo $this->id?>" title="<?php echo JText::_('Click to see detail PNs')?>"> <strong><?php echo $pns_code_full?> </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level 0</a>
 <table class="adminlist" cellpadding="1">
 		<thead>
@@ -457,9 +459,11 @@ function submitbutton(pressbutton) {
 		</tbody>
 	</table>
 </div>
+                                 </fieldset>   
                                 <?php 
                                 
-                                if($this->rows_history &&  $title->pns_life_cycle =="Released"){
+                                //if($this->rows_history &&  $title->pns_life_cycle =="Released"){
+                                         if($this->rows_history){
                                 foreach ($this->rows_history as $rw_his)
                                 {
                                        $rows_revhis =  PNsController::getPnsRevHistory($rw_his->pns_id);

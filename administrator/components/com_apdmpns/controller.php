@@ -10228,5 +10228,11 @@ class PNsController extends JController {
                 }
                 return $pns_code;
         }
+        function DisplayPnsAllBomChildHistory($pns_id) {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT(p.ccs_code,"-",p.pns_code,if(p.pns_revision = "","","-"),p.pns_revision)  AS text, e.eco_name, p.pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_bom_history as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                                
+                return $result = $db->loadObjectList();
+        }        
 }
 

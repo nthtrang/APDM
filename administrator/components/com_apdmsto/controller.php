@@ -1736,5 +1736,66 @@ class SToController extends JController
                 }                       
                 return $locationArr;
         }	
+        function getMfgPnListFromPnEto($pnsId,$partState)
+        {
+                $db = & JFactory::getDBO();
+                $rows = array();               
+                $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
+                                " FROM apdm_pns_supplier AS p ".
+                                " LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id ".
+                                " LEFT JOIN apdm_pns_sto_fk AS fk ON p.id = fk.pns_mfg_pn_id ".
+                                " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                                " WHERE s.info_deleted=0 AND s.info_activate=1 AND p.type_id = 4 ".
+                                " and fk.pns_id = '".$pnsId."' and sto.sto_type=1  ";
+                     if($partState)
+                     {
+                           $query .=   " and fk.partstate = '".$partState."' ";
+                     }
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        $mfgPnArr=array();
+                        foreach ($result as $obj) {                                  
+                                    $mfgPnArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');                                
+                        }
+                }                       
+                return $mfgPnArr;
+                
+                
+        }	
+ function ajax_getmfgpn_partstate($pnsId,$fkId,$currentLoc,$partState)
+    {
+        //&partstate='+partState+'&pnsid='+pnsId+'&fkid'+fkId+'&currentloc='+currentLoc;
+
+        $db = & JFactory::getDBO();
+        $rows = array();
+        $pnsId = JRequest::getVar('pnsid');
+        $fkId = JRequest::getVar('fkid');
+        $currentmfgpn = JRequest::getVar('currentmfgpn');
+        $partState = JRequest::getVar('partstate');
+                $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
+                                " FROM apdm_pns_supplier AS p ".
+                                " LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id ".
+                                " LEFT JOIN apdm_pns_sto_fk AS fk ON p.id = fk.pns_mfg_pn_id ".
+                                " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                                " WHERE s.info_deleted=0 AND s.info_activate=1 AND p.type_id = 4 ".
+                                " and fk.pns_id = '".$pnsId."' and sto.sto_type=1  ";
+                     if($partState)
+                     {
+                           $query .=   " and fk.partstate = '".$partState."' ";
+                     }
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            $mfgPnArr=array();
+            foreach ($result as $obj) {                                
+                    $mfgPnArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');            
+            }
+        }
+
+        echo JHTML::_('select.genericlist',   $mfgPnArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox" size="1" ', 'value', 'text', $currentmfgpn);
+        exit;
+        //return $locationArr;
+    }            
     
 }
