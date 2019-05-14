@@ -18,8 +18,11 @@
                 }
 
                 JToolBarHelper::apply('edit_pns', 'Save');
-                JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+
         }
+if (in_array("E", $role)&& $this->row->pns_life_cycle == 'Released' && !$this->revExist){
+    JToolBarHelper::addPnsRev("Rev Roll",$this->row->pns_id);
+}
 	if ( $edit ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -93,7 +96,7 @@
 <div class="clr"></div>
 <p>&nbsp;</p>
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >	
-		<?php if (count($this->revision) > 0) { ?>
+		<?php if (count($this->revision) > 0 && $this->revExist) { ?>
 		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
 					<tr>

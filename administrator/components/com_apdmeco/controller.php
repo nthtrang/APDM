@@ -1170,120 +1170,25 @@ class ECOController extends JController
                         $msg = JText::sprintf('Must choose at least 2 persons for Review', $cid[0]);                               
                         return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$route, $msg);
                 }
-                else{    
-                        
-                        $row =& JTable::getInstance('apdmeco');
-                        $row->load($cid[0]);  
-                        if($row->eco_status =='Create')
-                        {                                                        
-                                //promote up to inreview
-                                $query = 'update apdm_eco set eco_status= "Inreview" where eco_id = ' . $cid[0];
-                                $db->setQuery($query);
-                                $db->query();
-                                //set all pn 
-                                $query = 'update apdm_pns set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . '';
-                                $db->setQuery($query);
-                                $db->query();        
-                                //update status REV
-                                $query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
-                                $db->setQuery($query);
-                                $db->query();                                        
-                                //send email Inreview          
-                                $row =& JTable::getInstance('apdmeco');
-                                $row->load($cid[0]);
-                                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
-                                $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
-                                $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+                else {
 
-                                $message2 = "<br>+ ECO #: " . $row->eco_name .
-                                        "<br>+ Description: " . $row->eco_description .
-                                        "<br>+ Status: " . $row->eco_status .
-                                        "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
-                                        "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
-                                $message = $message1 . $message2;
-                                if (!$isNew) {
-                                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
-                                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
-                                }
-                                $message .= "<br>Please go to <a href='http://10.10.1.217/adp/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";
-                                $adminEmail = $me->get('email');
-                                $adminName = $me->get('name');
-                                if ($MailFrom != '' && $FromName != '') {
-                                        $adminName = $FromName;
-                                        $adminEmail = $MailFrom;
-                                }
-                                $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . '  and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid[0] . '")');
-                                $result = $db->loadObjectList();
-                                     if (count($result) > 0){
-                                         foreach ($result as $obj){
-                                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
-                                         }
-                                     }                        
-                }
-                elseif ($row->eco_status == 'Inreview') {
-                        $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');                
-                        $totalApprovers = $db->loadResult();
-                        //check all release
-                        $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');
-                        $totalReleased = $db->loadResult();
-                        if ($totalApprovers == $totalReleased) {
-                                //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');  
-                                //update route status Released
-                                $query = 'update apdm_eco_routes set status= "Finished" where eco_id = ' . $cid[0] .' and id ='.$route;
-                                $db->setQuery($query);
-                                $db->query();
-                                //update eco to Released
-                                $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
-                                $db->setQuery($query);
-                                $db->query();                                
-                                //set all pn 
-                                $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . '';
-                                $db->setQuery($query);
-                                $db->query();
-                                //update status REV
-                                $query = 'update apdm_pns_rev set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
-                                $db->setQuery($query);
-                                $db->query();           
-                                //move all BOM to new PN REV
-                                $query = "select pns_id,parent_id from apdm_pns_rev where eco_id = '". $cid[0] . "'";
-                              
-                                $db->setQuery($query);
-                                $rowPnReleased= $db->loadObjectList();
-                                foreach($rowPnReleased as $row1)
-                                {
-                                         //bk into BOM history first
-                                         $query = "INSERT INTO apdm_pns_bom_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
-                                        $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";                                     
-                                        $db->setQuery($query);
-                                        $db->query();  
-                                        
-                                      /*  $query = "INSERT INTO apdm_pns_parents (pns_id,pns_parent,ref_des,find_number,stock)";
-                                        $query .= " SELECT pns_id,'".$row1->pns_id."',ref_des,find_number,stock from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";                                       
-                                        $db->setQuery($query);
-                                        $db->query();   */
-                                        //update parent to new REV
-                                        $query = "update apdm_pns_parents set pns_parent = '".$row1->pns_id."', pns_reved = '".$row1->parent_id."' where pns_parent = '".$row1->parent_id."'";
-                                        $db->setQuery($query);
-                                        $db->query(); 
-                                        
-                                        //bk into history first
-                                         $query = "INSERT INTO apdm_pns_rev_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
-                                        $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_id = '".$row1->parent_id."'";
-                                       
-                                        $db->setQuery($query);
-                                        $db->query();   
-                                        //update parent to new REV
-                                        $query = "update apdm_pns_parents set pns_id = '".$row1->pns_id."', pns_reved = '".$row1->parent_id."' where pns_id = '".$row1->parent_id."'";
-                                        $db->setQuery($query);
-                                        $db->query(); 
-                                        
-                                       
-                                }
-                              
-                                die;
-                        
 
-                        //send email PRROMOTE RELEASED
+                    $row =& JTable::getInstance('apdmeco');
+                    $row->load($cid[0]);
+                    if ($row->eco_status == 'Create') {
+                        //promote up to inreview
+                        $query = 'update apdm_eco set eco_status= "Inreview" where eco_id = ' . $cid[0];
+                        $db->setQuery($query);
+                        $db->query();
+                        //set all pn
+                        $query = 'update apdm_pns set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . '';
+                        $db->setQuery($query);
+                        $db->query();
+                        //update status REV
+                        $query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                        $db->setQuery($query);
+                        $db->query();
+                        //send email Inreview
                         $row =& JTable::getInstance('apdmeco');
                         $row->load($cid[0]);
                         //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
@@ -1291,42 +1196,133 @@ class ECOController extends JController
                         $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
 
                         $message2 = "<br>+ ECO #: " . $row->eco_name .
+                            "<br>+ Description: " . $row->eco_description .
+                            "<br>+ Status: " . $row->eco_status .
+                            "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
+                            "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
+                        $message = $message1 . $message2;
+                        if (!$isNew) {
+                            $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
+                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
+                        }
+                        $message .= "<br>Please go to <a href='http://10.10.1.217/adp/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to " . $row->eco_status . " for this ECO";
+                        $adminEmail = $me->get('email');
+                        $adminName = $me->get('name');
+                        if ($MailFrom != '' && $FromName != '') {
+                            $adminName = $FromName;
+                            $adminEmail = $MailFrom;
+                        }
+                        $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . '  and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid[0] . '")');
+                        $result = $db->loadObjectList();
+                        if (count($result) > 0) {
+                            foreach ($result as $obj) {
+                                JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                            }
+                        }
+                        $msg = JText::sprintf('Successfully Promote', $cid[0]);
+                        return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
+                    } elseif ($row->eco_status == 'Inreview') {
+                        $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');
+                        $totalApprovers = $db->loadResult();
+                        //check all release
+                        $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');
+                        $totalReleased = $db->loadResult();
+                        if ($totalApprovers == $totalReleased) {
+                            //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');
+                            //update route status Released
+                            $query = 'update apdm_eco_routes set status= "Finished" where eco_id = ' . $cid[0] . ' and id =' . $route;
+                            $db->setQuery($query);
+                            $db->query();
+                            //update eco to Released
+                            $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
+                            $db->setQuery($query);
+                            $db->query();
+                            //set all pn
+                            $query = 'update apdm_pns set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . '';
+                            $db->setQuery($query);
+                            $db->query();
+                            //update status REV
+                            $query = 'update apdm_pns_rev set pns_life_cycle= "Released" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                            $db->setQuery($query);
+                            $db->query();
+                            //move all BOM to new PN REV
+                            $query = "select pns_id,parent_id from apdm_pns_rev where eco_id = '" . $cid[0] . "'";
+
+                            $db->setQuery($query);
+                            $rowPnReleased = $db->loadObjectList();
+                            foreach ($rowPnReleased as $row1) {
+                                //bk into BOM history first
+                                $query = "INSERT INTO apdm_pns_bom_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
+                                $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_parent = '" . $row1->parent_id . "'";
+                                $db->setQuery($query);
+                                $db->query();
+
+                                /*  $query = "INSERT INTO apdm_pns_parents (pns_id,pns_parent,ref_des,find_number,stock)";
+                                  $query .= " SELECT pns_id,'".$row1->pns_id."',ref_des,find_number,stock from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";
+                                  $db->setQuery($query);
+                                  $db->query();   */
+                                //update parent to new REV
+                                $query = "update apdm_pns_parents set pns_parent = '" . $row1->pns_id . "', pns_reved = '" . $row1->parent_id . "' where pns_parent = '" . $row1->parent_id . "'";
+                                $db->setQuery($query);
+                                $db->query();
+
+                                //bk into history first
+                                $query = "INSERT INTO apdm_pns_rev_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
+                                $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_id = '" . $row1->parent_id . "'";
+
+                                $db->setQuery($query);
+                                $db->query();
+                                //update parent to new REV
+                                $query = "update apdm_pns_parents set pns_id = '" . $row1->pns_id . "', pns_reved = '" . $row1->parent_id . "' where pns_id = '" . $row1->parent_id . "'";
+                                $db->setQuery($query);
+                                $db->query();
+
+
+                            }
+                            //send email PRROMOTE RELEASED
+                            $row =& JTable::getInstance('apdmeco');
+                            $row->load($cid[0]);
+                            //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                            $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
+                            $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+
+                            $message2 = "<br>+ ECO #: " . $row->eco_name .
                                 "<br>+ Description: " . $row->eco_description .
                                 "<br>+ Status: " . $row->eco_status .
                                 "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
                                 "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
 
-                        $message = $message1 . $message2;
-                        if (!$isNew) {
+                            $message = $message1 . $message2;
+                            if (!$isNew) {
                                 $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
-                                        "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
-                        }
-                        $message .= "<br>Please go to <a href='http://10.10.1.217/adp/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";
+                                    "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
+                            }
+                            $message .= "<br>Please go to <a href='http://10.10.1.217/adp/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to " . $row->eco_status . " for this ECO";
 
-                        $adminEmail = $me->get('email');
-                        $adminName = $me->get('name');
-                        if ($MailFrom != '' && $FromName != '') {
+                            $adminEmail = $me->get('email');
+                            $adminName = $me->get('name');
+                            if ($MailFrom != '' && $FromName != '') {
                                 $adminName = $FromName;
                                 $adminEmail = $MailFrom;
+                            }
+                            $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid[0] . '")');
+                            $result = $db->loadObjectList();
+                            if (count($result) > 0) {
+                                foreach ($result as $obj) {
+                                    JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                                }
+                            }
+                            $msg = JText::sprintf('Successfully Promote', $cid[0]);
+                            return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
+                        } else {
+                            $msg = JText::sprintf('All approvers must approve first', $cid[0]);
+                            return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0] . '&routes=' . $route, $msg);
                         }
-                        $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid[0] . '")');
-                        $result = $db->loadObjectList();
-                             if (count($result) > 0){
-                                 foreach ($result as $obj){
-                                   JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );                                                         
-                                 }
-                             }
-                        $msg = JText::sprintf('Successfully Promote', $cid[0]);
-                        $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
-                        }
-                        else{
-                              $msg = JText::sprintf('All approvers must approve first', $cid[0]);
-                              return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$route, $msg);  
-                        }
-                        
+
+                    }
                 }
-                }
-                
+                    $msg = JText::sprintf('Successfully Promote', $cid[0]);
+                    return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);                          
         }
 
         /*

@@ -224,7 +224,7 @@ class pnsViewpns_info extends JView
                 $lists['pns_stock'] = $row->pns_stock;
                 $lists['pns_qty_used'] = $row->pns_qty_used;
                 //For revision
-                $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = prev.eco_id WHERE p.pns_deleted =0 AND prev.parent_id=".$row->pns_id);
+                $db->setQuery("SELECT prev.*,eco.eco_name, CONCAT_WS( '-', prev.ccs_code, prev.pns_code, prev.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = prev.eco_id WHERE p.pns_deleted =0 AND prev.parent_id=".$row->pns_id." or  prev.pns_id = ".$row->pns_id);
                 $list_revision = $db->loadObjectList();
                 $this->assignRef('revision',        $list_revision);
 
@@ -236,8 +236,10 @@ class pnsViewpns_info extends JView
                 $db->setQuery("SELECT quo.*, CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns AS p LEFT JOIN apdm_pns_quo AS quo on p.pns_id = quo.pns_id WHERE p.pns_deleted =0 AND quo.pns_id=".$row->pns_id);
                 $list_quos = $db->loadObjectList();         
                 $this->assignRef('quos',        $list_quos);
-
-               
+                //check is reved or not
+                $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$row->pns_id."");
+                $revCheck = $db->loadResult();
+                $this->assignRef('revExist',        $revCheck);
                 
                 //for TTO
                 $db->setQuery("SELECT tto.*,fk.id,fk.qty,fk.location,fk.partstate,fk.tto_type_inout FROM apdm_pns_tto AS tto  inner JOIN apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where fk.pns_id=".$row->pns_id." and fk.tto_type_inout = 2 and tto.tto_state != 'Done' and tto.tto_owner_out_confirm != 0  order by fk.pns_id desc");                                

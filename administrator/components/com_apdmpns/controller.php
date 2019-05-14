@@ -587,7 +587,7 @@ class PNsController extends JController {
                 // $arrLast    = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'T', 'V', 'Y', 'Z');
                 $cid = JRequest::getVar('cid', array(0), '', 'array');
                 $ccs_code = JRequest::getVar('ccs_code');
-                $query = "SELECT pns_revision FROM apdm_pns_rev WHERE parent_id='" . $cid[0] . "' order by pns_revision DESC LIMIT 0, 1";
+                $query = "SELECT p.pns_revision FROM apdm_pns AS p LEFT JOIN apdm_pns_rev AS prev on p.pns_id = prev.pns_id left join apdm_eco eco on eco.eco_id = p.eco_id WHERE p.pns_deleted =0 AND prev.pns_id='".$cid[0]."' order by prev.pns_rev_id desc limit  0, 1";
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 $last_revision = trim($rows[0]->pns_revision);
