@@ -197,8 +197,9 @@ class pnsViewlistwhereused extends JView
          $db->setQuery( $query);
         $parent_id = $db->loadResult();   
         
-        $query = "SELECT * FROM apdm_pns_rev WHERE parent_id='".$parent_id."' and pns_id <=".$id;    
-       			
+       //echo $query = "SELECT * FROM apdm_pns_rev WHERE parent_id='".$parent_id."' or  pns_id = ".$row->pns_id;
+        $query = "SELECT * FROM apdm_pns_rev_history WHERE  pns_id = ".$row->pns_id;
+
        $db->setQuery($query);
        $rowsHistory = $db->loadObjectList();
        $this->assignRef('rows_history',        $rowsHistory);     

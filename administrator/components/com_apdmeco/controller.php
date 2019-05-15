@@ -963,11 +963,19 @@ class ECOController extends JController
                 if ($check_owner==0) {
                          $msg = JText::sprintf('You are not permission set routes', $cid[0]);
                          return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
-                }   
-                $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');                
+                }
+                $query = 'select count(*) from  apdm_pns where eco_id = ' . $cid[0] . '';
+                $db->setQuery($query);
+                $check_affectedPN = $db->loadResult();
+               if ($check_affectedPN==0) {
+                   $msg = JText::sprintf('Please add PN into Affected Parts before set Route', $cid[0]);
+                   return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
+               }
+
+           $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');
                 $check_approve = $db->loadResult();
                 if ($check_approve<=1) {
-                         $msg = JText::sprintf('Must choose at least 2 person to route before set', $cid[0]);
+                         $msg = JText::sprintf('Please add at least 2 persons into route before set', $cid[0]);
                          return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
                 }     
                 $row =& JTable::getInstance('apdmeco');
@@ -1256,6 +1264,11 @@ class ECOController extends JController
                                 $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_parent = '" . $row1->parent_id . "'";
                                 $db->setQuery($query);
                                 $db->query();
+                                //bk into history first
+                                $query = "INSERT INTO apdm_pns_rev_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
+                                $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_id = '" . $row1->parent_id . "'";
+                                $db->setQuery($query);
+                                $db->query();
 
                                 /*  $query = "INSERT INTO apdm_pns_parents (pns_id,pns_parent,ref_des,find_number,stock)";
                                   $query .= " SELECT pns_id,'".$row1->pns_id."',ref_des,find_number,stock from apdm_pns_parents where pns_parent = '".$row1->parent_id."'";
@@ -1266,12 +1279,8 @@ class ECOController extends JController
                                 $db->setQuery($query);
                                 $db->query();
 
-                                //bk into history first
-                                $query = "INSERT INTO apdm_pns_rev_history (pns_id,pns_parent,ref_des,find_number,stock,pns_reved)";
-                                $query .= " SELECT pns_id,pns_parent,ref_des,find_number,stock,pns_reved from apdm_pns_parents where pns_id = '" . $row1->parent_id . "'";
 
-                                $db->setQuery($query);
-                                $db->query();
+
                                 //update parent to new REV
                                 $query = "update apdm_pns_parents set pns_id = '" . $row1->pns_id . "', pns_reved = '" . $row1->parent_id . "' where pns_id = '" . $row1->parent_id . "'";
                                 $db->setQuery($query);
@@ -1322,7 +1331,7 @@ class ECOController extends JController
                     }
                 }
                     $msg = JText::sprintf('Successfully Promote', $cid[0]);
-                    return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);                          
+                    return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
         }
 
         /*

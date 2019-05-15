@@ -9592,8 +9592,16 @@ class PNsController extends JController {
                         $db->query();                            
                 }
                */
+               if($pns_revision=="")
+               {
+                   $pns_revision_val = "";
+               }
+               else
+               {
+                   $pns_revision_val = $pns_revision;
+               }
                 $db->setQuery("INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_description,eco_id,pns_find_number,pns_ref_des,pns_uom,pns_create,pns_create_by) ".
-                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision . "','" . substr($pns_description,0,40) . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");
+                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision_val . "','" . substr($pns_description,0,40) . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");
                 $db->query();
                 //getLast PN ID
                return $pns_id = $db->insertid();
@@ -9767,7 +9775,10 @@ class PNsController extends JController {
                 $arr_err=array();
                 for($line=2;$line<=$highestRow;$line++)
                 {
-                        $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
+                        if($rowData[$line][3]!="")
+                            $pn_code = $rowData[$line][1]."-".$rowData[$line][2]."-".$rowData[$line][3];
+                        else
+                            $pn_code = $rowData[$line][1]."-".$rowData[$line][2];
                         //start import with level 0
                         if($rowData[$line][0]==""){
                             $arr_err[$line]    = "Err:".$pn_code. " have Level at column A".$line ." is null";
@@ -9895,7 +9906,7 @@ class PNsController extends JController {
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent0 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
                                 $db->query();
                                 // echo "<br> ".$rowData[$line][1]." level 1 parent  ".$parent0;
-                                $mess[$line] = "Import sucessfull BOM " . $pn_code;
+                                $mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
                             }
                             else
                             {
@@ -9937,7 +9948,7 @@ class PNsController extends JController {
                                 }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
                                 $db->query();
-                                $mess[$line] = "Import sucessfull BOM " . $pns_code;
+                                $$mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
                             }
                             else
                             {
@@ -9980,7 +9991,7 @@ class PNsController extends JController {
                                 }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent2 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[$line] = "Import sucessfull BOM ". $pns_code;
+                                $mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
                             }
                             else
                             {
@@ -10021,7 +10032,7 @@ class PNsController extends JController {
                                 }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent3 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[$line] = "Import sucessfull PN ". $pns_code;
+                                $mess[$line] = "Import sucessfull PN ". $pn_code;
                             }
                             else
                             {
@@ -10062,7 +10073,7 @@ class PNsController extends JController {
                                 }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent4 . ",'".$rowData[$line][7]."','".$rowData[$line][6]."','".$rowData[$line][8]."')");                               
                                 $db->query();
-                                $mess[$line] = "Import sucessfull BOM". $pns_code;
+                                $mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
                             }
                             else
                             {
@@ -10193,7 +10204,7 @@ class PNsController extends JController {
         function getPnsRevHistory($pns_id)
         {
                 $db =& JFactory::getDBO();
-                $query = "SELECT pns_parent from apdm_pns_rev_history where pns_reved=".$pns_id;           			
+               $query = "SELECT pns_parent from apdm_pns_rev_history where pns_id=".$pns_id;
                $db->setQuery($query);
                $rows = $db->loadObjectList();
                if (count($rows) > 0){

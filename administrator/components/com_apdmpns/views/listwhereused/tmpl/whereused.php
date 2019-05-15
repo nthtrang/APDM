@@ -466,6 +466,7 @@ function submitbutton(pressbutton) {
                                          if($this->rows_history){
                                 foreach ($this->rows_history as $rw_his)
                                 {
+
                                        $rows_revhis =  PNsController::getPnsRevHistory($rw_his->pns_id);
                                          $pns_code_full =  PNsController::getPnsCodefromId($rw_his->pns_id);  
                                          if($rows_revhis)  

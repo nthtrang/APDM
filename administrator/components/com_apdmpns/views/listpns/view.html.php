@@ -39,8 +39,11 @@ class pnsViewlistpns extends JView
         $rows = $db->loadObjectList();              
         $lists['pns_id']        = $pns_id;    
         $this->assignRef('lists',        $lists);
-        $this->assignRef('rows',        $rows);          
-        
+        $this->assignRef('rows',        $rows);
+        //check is reved or not
+        $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$pns_id."");
+        $revCheck = $db->loadResult();
+        $this->assignRef('revExist',        $revCheck);
                 //get parent
         $row = & JTable::getInstance('apdmpns');
         $row->load($pns_id);   

@@ -27,7 +27,8 @@ class ecoViewgeteco extends JView
 
 		$where = array();
 		$where[] = 'e.eco_deleted = 0';
-        $where[] = 'e.eco_activate = 1'; 
+        $where[] = 'e.eco_activate = 1';
+        $where[] = 'e.eco_status = "Create"';
 		if (isset( $search ) && $search!= '')
 		{
 			$searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );

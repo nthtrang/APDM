@@ -178,8 +178,12 @@ function isCheckedBom(isitchecked,id){
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
+<?php
+if(!$this->revExist){
+    ?>
 <fieldset class="adminform">		
 <form action="index.php?option=com_apdmpns" method="post" name="adminForm">
+
 <?php 
 
 $list_pns_id = PNsController::DisplayPnsChildId($this->lists['pns_id'], $this->lists['pns_id']);
@@ -728,8 +732,13 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 <input type="hidden" name="pns_id" value="<?php echo $this->lists['pns_id'];?>"  />
 <input type="hidden" name="return" value="<?php echo $this->lists['pns_id'];?>"  />
 <input type="hidden" name="cd" value="<?php echo $this->lists['pns_id'];?>"  />
+
 </form>
 </fieldset>
+<?php }?>
+<?php
+if($this->revExist){
+?>
 <fieldset class="adminform">
 		<legend><?php echo JText::_( 'BOM History' ); ?></legend>                        
 <div>
@@ -1273,7 +1282,7 @@ if($list_pns){
 </div>
         <?php }?>
  </fieldset>
-
+<?php }?>
  
 
 
