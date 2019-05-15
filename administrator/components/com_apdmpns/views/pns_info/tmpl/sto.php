@@ -271,7 +271,7 @@ th:first-child div{
     <table width="100%" border="0">
         <tr>
             <td align="right">
-                Created From nbsp;&nbsp
+                Created From &nbsp;&nbsp
                 <?php echo JHTML::_('calendar',$this->sto_created_from, 'sto_created_from', 'sto_created_from', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 To&nbsp;&nbsp;<?php echo JHTML::_('calendar',$this->sto_created_to, 'sto_created_to', 'sto_created_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'10',  'maxlength'=>'10')); ?>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -294,6 +294,7 @@ th:first-child div{
                                         <th width="50"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 25px"><?php echo JText::_('State'); ?></div></th>
                                         <th width="60"><?php echo JText::_('QTY In/QTY Out'); ?><div style="width:60px;padding:10px 0px 0px 50px"><?php echo JText::_('QTY In/QTY Out'); ?></div></th>
                                         <!--<th width="100"><?php /*echo JText::_('Attached'); */?></th>-->
+                                        <th width="60"><?php echo JText::_('MFG PN'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('MFG PN'); ?></div></th>
                                         <th width="60"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('Location'); ?></div></th>
                                         <th width="60"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 35px"><?php echo JText::_('Part State'); ?></div></th>
                                         <th width="80"><?php echo JText::_('Created Date'); ?><div style="width:50px;padding:10px 0px 0px 45px"><?php echo JText::_('Created Date'); ?></div></th>
@@ -327,6 +328,7 @@ th:first-child div{
                                                                 <a href="index.php?option=com_apdmpns&task=download_sto&id=<?php /*echo $sto->pns_sto_id; */?>" title="<?php /*echo JText::_('Click here to download') */?>" ><?php /*echo JText::_('Download') */?></a>&nbsp;&nbsp;
                                                         <?php /*} */?>
                                                 </td>-->
+                                                <td align="center"><?php echo $sto->pns_mfg_pn_id?PNsController::GetMfgPnCode($sto->pns_mfg_pn_id):"";?></td>
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->location?PNsController::GetCodeLocation($sto->location):"";?></a></td>
                                                 <td align="center"><a href="<?php echo $link; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->partstate; ?></a></td>
                                                 <td align="center">

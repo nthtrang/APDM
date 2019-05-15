@@ -55,8 +55,7 @@ class pnsViewgetpnschild extends JView
         
         
         $where = array();  
-       // $where[] = 'p.pns_deleted = 0';
-        
+       // $where[] = 'p.pns_deleted = 0';        
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
         }
@@ -74,7 +73,18 @@ class pnsViewgetpnschild extends JView
         if ($id){ //get pns_child have exist
             $arrPNsChild  = array();
             $arrPNsChild[] = $id;
-			
+	//get list REV for exclude	
+            $query = "SELECT parent_id from apdm_pns_rev group by parent_id";            
+            $db->setQuery($query);
+            $row_pns_rev = $db->loadObjectList();            
+            if (count($row_pns_rev) > 0){
+                foreach ($row_pns_rev as $obj){
+                        if($obj->parent_id){
+                                $arrPNsChild[] = $obj->parent_id;
+                        }
+                }
+            }
+            
             $query = "SELECT pns_id from apdm_pns_parents where pns_parent=".$id;
             
             $db->setQuery($query);
@@ -376,7 +386,7 @@ class pnsViewgetpnschild extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
+       echo $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            

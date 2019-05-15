@@ -311,7 +311,7 @@ class pnsViewpns_info extends JView
             $limit = " order by fk.id desc limit 5";
         }
  //for STO Tracking
-         $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id ".
+         $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate,fk.pns_mfg_pn_id from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id ".
                  $where
                 . $limit;
        //          ." union "

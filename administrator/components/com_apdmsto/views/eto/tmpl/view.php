@@ -856,8 +856,8 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         
 														 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
-                                                                 $locationArr = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id);
-                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
+                                                                 $locationArr1 = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id);
+                                                                echo JHTML::_('select.genericlist',   $locationArr1, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
 																?>
 																</span> 																
                                                 </td>	

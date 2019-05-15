@@ -317,12 +317,12 @@ class SToController extends JController
                 if (count($result) > 0) {
                         $locationArr=array();
                         foreach ($result as $obj) {
-                                $qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
-                                if($qty_remain>0)
-                                {
+                                //$qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
+                                //if($qty_remain>0)
+                                //{
                                         //$array_partstate[$obj->partstate] = $obj->partstate;                                
                                         $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
-                                }
+                                //}
                         }
                 }
                 return $locationArr;
@@ -871,19 +871,24 @@ class SToController extends JController
                 
                 //get sto_type
                 $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
+               
                 $stoChecker= $db->loadObject();
                 if($stoChecker->sto_type==2)//if is out(ship) stock
                 {
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");                     
                     $qtyInCheck = round($db->loadResult(),2);
                         //get QTY from TTO
                         $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1");
                         $qtyTtoCheck = round($db->loadResult(),2);   
                         $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
                         
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);
-                    $qtyOutCheck = $db->loadResult();
-                     $currentOutStock = $stock+$qtyOutCheck;
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);                    
+                  $qtyOutCheck = $db->loadResult();
+                  if(!$qtyOutCheck)
+                  {
+                          $qtyOutCheck = 0;
+                  }
+                    $currentOutStock = $stock+$qtyOutCheck;
                     if($currentOutStock > $totalQtyCheck)
                     {
                         $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $totalQtyCheck";
