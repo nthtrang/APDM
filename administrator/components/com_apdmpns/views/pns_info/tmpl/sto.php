@@ -146,8 +146,10 @@ th:first-child div{
                         <thead>
                                 <tr>
                                         <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('Part State'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('MFG PN'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Qty'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('Qty'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Location'); ?><div style="width:50px;padding:10px 0px 0px 235px"><?php echo JText::_('Location'); ?></div></th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -155,12 +157,26 @@ th:first-child div{
                                 foreach($arrayPartState as $partState)
                                 {
                                         $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
-                                        
+var_dump($location);
                                         if(count($location)>0)
                                         {
                                ?>
                                         <tr rowspan="<?php echo count($location); ?>">
                                                                 <td  align="center"><?php echo $partState ?></td>
+                                                                <td align="center">
+                                                                    <table class="adminlist" cellspacing="1" width="400">
+                                                                        <?php
+                                                                        foreach ($location as $keyloc => $valoc) {
+                                                                            if ($valoc)
+                                                                            {
+                                                                                $arr = explode("_",$keyloc);
+                                                                                ?><tr><td align="center"><?php echo $arr[1]?PNsController::GetMfgPnCode($arr[1]):"";?></td></tr>
+                                                                                <?php
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </table>
+                                                                </td>
                                                                 <td align="center">
                                                                         <table class="adminlist" cellspacing="1" width="400">
                                                                                 <?php
@@ -180,7 +196,8 @@ th:first-child div{
                                                                                 foreach ($location as $keyloc => $valoc) {
                                                                                         if ($valoc) 
                                                                                         {
-                                                                                                ?><tr><td align="center"><?php echo $keyloc;?></td></tr>
+                                                                                            $arr = explode("_",$keyloc);
+                                                                                                ?><tr><td align="center"><?php echo $arr[0];?></td></tr>
                                                                                         <?php                                                                                                 
                                                                                         }
                                                                                 } ?>

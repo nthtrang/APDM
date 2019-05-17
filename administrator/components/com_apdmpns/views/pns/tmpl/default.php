@@ -344,7 +344,7 @@ function submitbutton(pressbutton) {
 				</td>   -->
                                 <td align="center">
 					<?php //echo $row->pns_stock;?>
-                                        <?php echo $stock = PNsController::CalculateInventoryValue($row->pns_id);?>
+                                        <?php echo $stock = CalculateInventoryValueforView($row->pns_id);?>
 				</td>   
 <!--                                <td align="center">
 					<?php //echo $row->pns_qty_used;?>

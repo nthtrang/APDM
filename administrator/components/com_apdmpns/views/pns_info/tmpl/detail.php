@@ -323,7 +323,7 @@ input.addEventListener("keyup", function(event) {
 						</label>
 					</td>
 					<td>
-						<?php echo PNsController::CalculateInventoryValueforView($this->row->pns_id);?>
+						<?php echo CalculateInventoryValueforView($this->row->pns_id);?>
 					</td>
 				</tr>	                                 
 				<tr>
