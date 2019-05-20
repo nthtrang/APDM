@@ -76,8 +76,56 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
         }
         
          if (pressbutton == 'saveqtyStofk') {
-                        submitform( pressbutton );
-                        return;
+                       // submitform( pressbutton );
+                       // return;
+                       
+                             
+                                var cpn = document.getElementsByName('cid[]');
+                                var len = cpn.length;                              
+                                for (var i=0; i<len; i++)
+                                {
+                                        if(cpn[i].checked)
+                                        {
+                                            var arr_sto = cpn[i].value.split("_");
+                                            var arr_qfk = arr_sto[1].split(",");
+                                            var check_pass = 1;
+                                            arr_qfk.forEach(function(sti)
+                                            {
+                                                var mfg_pn_value = document.getElementById('mfg_pn_' + arr_sto[0]+'_'+sti).value;
+                                                if (mfg_pn_value == 0)
+                                                {
+                                                    alert("Please choose MFG PN");
+                                                    check_pass = 0;
+                                                    document.getElementById('mfg_pn_' + arr_sto[0]+'_'+ sti).focus();
+                                                    return;
+                                                }
+                                                var location_value = document.getElementById('location_' + arr_sto[0]+'_'+sti).value;
+                                                if (location_value == 0)
+                                                {
+                                                    alert("Please choose Location");
+                                                    check_pass = 0;
+                                                    document.getElementById('location_' + arr_sto[0]+'_'+ sti).focus();
+                                                    return;
+                                                }                                                
+                                                var qty_value = document.getElementById('qty_' + arr_sto[0]+'_'+sti).value;
+                                                if (qty_value == 0)
+                                                {
+                                                    alert("Please input QTY for PN selected");
+                                                        check_pass = 0;
+                                                    document.getElementById('qty_' + arr_sto[0]+'_'+ sti).focus();
+                                                    return;
+                                                }
+                                            });
+                                        }
+                                }
+                                if(check_pass==1){
+                                        submitform( pressbutton );
+                                        return;         
+                                }
+                             
+
+                                      
+                        
                 }                      
                 if(pressbutton == 'removeAllpnsstos')
                 {
@@ -214,7 +262,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                       document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
+                     //  document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
                 }
         }).request();
         
@@ -236,7 +284,7 @@ function getLocationFromMfgPn(pnsId,fkId,currentLocation,MfgPn)
     var MyAjax = new Ajax(url, {
         method:'get',
         onComplete:function(result){
-            document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();
+            document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();
         }
     }).request();
 }
@@ -850,8 +898,8 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                                   <?php 
                                                         
                                                                  //pns_mfg_pn_id
-                                                                $mfgPnLists = SToController::getMfgPnListFromPnEto($row->pns_id);                                                                
-                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1 onchange="getLocationFromMfgPn(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value)"" ', 'value', 'text', $rw->pns_mfg_pn_id );
+                                                                $mfgPnLists = SToController::getMfgPnListFromPnEto($row->pns_id,$rw->partstate);                                                                
+                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" onchange="getLocationFromMfgPn(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value)"', 'value', 'text', $rw->pns_mfg_pn_id );
                                                        
                                                         ?></span> 
                                                 </td>	
@@ -865,7 +913,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         
 														 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
-                                                                 $locationArr1 = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id);
+                                                                 $locationArr1 = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id,$rw->pns_mfg_pn_id);
                                                                 echo JHTML::_('select.genericlist',   $locationArr1, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
 																?>
 																</span> 																

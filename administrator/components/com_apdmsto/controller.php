@@ -303,7 +303,7 @@ class SToController extends JController
                 return $locationArr;
         }	
         
-        function getLocationPartStatePnEto($partState,$pnsId)
+        function getLocationPartStatePnEto($partState,$pnsId,$pns_mfg_pn_id)
         {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -311,7 +311,7 @@ class SToController extends JController
                         " from apdm_pns_sto_fk fk  ".
                         " inner join apdm_pns_location loc on loc.pns_location_id=location ".
                         " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' group by loc.location_code";
+                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' and fk.pns_mfg_pn_id = '".$pns_mfg_pn_id."' group by loc.location_code";
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
@@ -974,7 +974,7 @@ class SToController extends JController
         exit;
         //return $locationArr;
     }
-    function getLocationFromMfgPn($pnsId,$fkId,$currentLoc,$MfgPn)
+    function ajax_getlocation_mfgpn($pnsId,$fkId,$currentLoc,$MfgPn)
     {
         //&partstate='+partState+'&pnsid='+pnsId+'&fkid'+fkId+'&currentloc='+currentLoc;
 
@@ -983,12 +983,12 @@ class SToController extends JController
         $pnsId = JRequest::getVar('pnsid');
         $fkId = JRequest::getVar('fkid');
         $currentLoc = JRequest::getVar('currentloc');
-        $partState = JRequest::getVar('partstate');
+        $MfgPn = JRequest::getVar('mfgpn');
         $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
             " from apdm_pns_sto_fk fk  ".
             " inner join apdm_pns_location loc on loc.pns_location_id=location ".
             " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."'";
+            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.pns_mfg_pn_id = '".$MfgPn."'";
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {
@@ -1160,7 +1160,7 @@ class SToController extends JController
                 if($obj->sto_type==1 )
                 {
                     //$array_partstate[$obj->partstate] = $obj->partstate;
-                    $partStateArr[] = JHTML::_('select.option', $obj->partstate, strtoupper($obj->partstate) , 'value', 'text');
+                    $partStateArr[] = JHTML::_('select.option', $obj->partstate, strtoupper($obj->partstate) , 'value', 'text');                    
                 }
             }
         }
@@ -1756,6 +1756,7 @@ class SToController extends JController
     function GetMfgPnCode($mfgId) {
                 $db = & JFactory::getDBO();                
                 $db->setQuery("SELECT p.supplier_info FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id left join apdm_pns_sto_fk fk on fk.pns_mfg_pn_id = p.id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.id =" . $mfgId);                
+               
                 return $db->loadResult();
     }
      function getMfgPnListFromPn($pnsId)
@@ -1767,6 +1768,7 @@ class SToController extends JController
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
                         $locationArr=array();
+                        $locationArr[] = JHTML::_('select.option', 0, "Select MFG PN" , 'value', 'text');
                         foreach ($result as $obj) {                                  
                                     $locationArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');                                
                         }
@@ -1792,6 +1794,7 @@ class SToController extends JController
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
                         $mfgPnArr=array();
+                        $mfgPnArr[] = JHTML::_('select.option', 0, "Select MFG PN" , 'value', 'text');
                         foreach ($result as $obj) {                                  
                                     $mfgPnArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');                                
                         }
@@ -1810,13 +1813,13 @@ class SToController extends JController
         $fkId = JRequest::getVar('fkid');
         $currentmfgpn = JRequest::getVar('currentmfgpn');
         $partState = JRequest::getVar('partstate');
-                $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
+        $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
                                 " FROM apdm_pns_supplier AS p ".
                                 " LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id ".
                                 " LEFT JOIN apdm_pns_sto_fk AS fk ON p.id = fk.pns_mfg_pn_id ".
                                 " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
                                 " WHERE s.info_deleted=0 AND s.info_activate=1 AND p.type_id = 4 ".
-                                " and fk.pns_id = '".$pnsId."' and sto.sto_type=1  ";
+                                " and fk.pns_id = '".$pnsId."'  and sto.sto_type=1  ";
                      if($partState)
                      {
                            $query .=   " and fk.partstate = '".$partState."' ";
@@ -1830,7 +1833,7 @@ class SToController extends JController
             }
         }
 
-        echo JHTML::_('select.genericlist',   $mfgPnArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox" size="1" ', 'value', 'text', $currentmfgpn);
+        echo JHTML::_('select.genericlist',   $mfgPnArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox"  size="1" onchange="getLocationFromMfgPn(\''.$pnsId.'\',\''.$fkId.'\',\''.$currentLoc.'\',this.value)"" ', 'value', 'text', $currentmfgpn);
         exit;
         //return $locationArr;
     }            
