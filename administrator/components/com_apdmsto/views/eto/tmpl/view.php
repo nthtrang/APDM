@@ -228,9 +228,18 @@ function getMfgPnPartState(pnsId,fkId,currentMfgPn,partState)
                        document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
                 }
         }).request();
-        
-}
 
+}
+function getLocationFromMfgPn(pnsId,fkId,currentLocation,MfgPn)
+{
+    var url = 'index.php?option=com_apdmsto&task=ajax_getlocation_mfgpn&mfgpn='+MfgPn+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLocation;
+    var MyAjax = new Ajax(url, {
+        method:'get',
+        onComplete:function(result){
+            document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();
+        }
+    }).request();
+}
 function checkAllEtoPn(n, fldName )
 {
   if (!fldName) {
@@ -842,7 +851,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         
                                                                  //pns_mfg_pn_id
                                                                 $mfgPnLists = SToController::getMfgPnListFromPnEto($row->pns_id);                                                                
-                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" ', 'value', 'text', $rw->pns_mfg_pn_id ); 
+                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1 onchange="getLocationFromMfgPn(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value)"" ', 'value', 'text', $rw->pns_mfg_pn_id );
                                                        
                                                         ?></span> 
                                                 </td>	

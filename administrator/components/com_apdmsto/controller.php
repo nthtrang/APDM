@@ -974,6 +974,38 @@ class SToController extends JController
         exit;
         //return $locationArr;
     }
+    function getLocationFromMfgPn($pnsId,$fkId,$currentLoc,$MfgPn)
+    {
+        //&partstate='+partState+'&pnsid='+pnsId+'&fkid'+fkId+'&currentloc='+currentLoc;
+
+        $db = & JFactory::getDBO();
+        $rows = array();
+        $pnsId = JRequest::getVar('pnsid');
+        $fkId = JRequest::getVar('fkid');
+        $currentLoc = JRequest::getVar('currentloc');
+        $partState = JRequest::getVar('partstate');
+        $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+            " from apdm_pns_sto_fk fk  ".
+            " inner join apdm_pns_location loc on loc.pns_location_id=location ".
+            " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."'";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            $locationArr=array();
+            foreach ($result as $obj) {
+                if($obj->sto_type==1 )
+                {
+                    //$array_partstate[$obj->partstate] = $obj->partstate;
+                    $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
+                }
+            }
+        }
+
+        echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox" size="1" ', 'value', 'text', $currentLoc);
+        exit;
+        //return $locationArr;
+    }
     function move_location()
     {
         JRequest::setVar('layout', 'add_stom');

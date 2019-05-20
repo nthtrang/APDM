@@ -386,7 +386,7 @@ class pnsViewgetpnschild extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-       echo $query = 'SELECT p.* '
+        $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            
