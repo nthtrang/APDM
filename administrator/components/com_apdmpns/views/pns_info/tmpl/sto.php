@@ -156,7 +156,7 @@ th:first-child div{
                                 <?php 
                                 foreach($arrayPartState as $partState)
                                 {
-                                        $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
+                                        $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);                                     
                                         $locationCode = PNsController::GetMfgPnFromPartStatePns($partState,$this->row->pns_id);
                                         if(count($location)>0)
                                         {
@@ -169,8 +169,8 @@ th:first-child div{
                                                                         foreach ($location as $keyloc => $valoc) {
                                                                             if ($valoc)
                                                                             {
-                                                                                
-                                                                                ?><tr><td align="center"><?php echo $keyloc?PNsController::GetMfgPnCode($keyloc):""?></td></tr>
+                                                                                $arr = explode("-",$keyloc);
+                                                                                ?><tr><td align="center"><?php echo $arr[1]?PNsController::GetMfgPnCode($arr[1]):""?></td></tr>
                                                                                 <?php
                                                                             }
                                                                         }
@@ -195,8 +195,9 @@ th:first-child div{
                                                                                 <?php
                                                                                 foreach ($location as $keyloc => $valoc) {
                                                                                         if ($valoc) 
-                                                                                        {                                                                                           
-                                                                                                ?><tr><td align="center"><?php echo $locationCode[$keyloc];?></td></tr>
+                                                                                        {
+                                                                                            $arr1 = explode("-",$keyloc);
+                                                                                                ?><tr><td align="center"><?php echo $arr1[0];//$locationCode[$keyloc];?></td></tr>
                                                                                         <?php                                                                                                 
                                                                                         }
                                                                                 } ?>

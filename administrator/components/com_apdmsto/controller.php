@@ -1767,8 +1767,7 @@ class SToController extends JController
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
-                        $locationArr=array();
-                        $locationArr[] = JHTML::_('select.option', 0, "Select MFG PN" , 'value', 'text');
+                        $locationArr=array();                        
                         foreach ($result as $obj) {                                  
                                     $locationArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');                                
                         }

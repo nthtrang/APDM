@@ -5878,7 +5878,7 @@ class PNsController extends JController {
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
                 //$query = "select loc.location_code,fk.qty,fk.sto_id from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
-               $query = "select loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+               $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
@@ -5889,14 +5889,13 @@ class PNsController extends JController {
                         $array_loacation=array();
                         foreach ($result as $obj) {
                                 if($obj->sto_type==1 )
-                                    $array_loacation[$obj->pns_mfg_pn_id] = $array_loacation[$obj->pns_mfg_pn_id] + $obj->qty;
+                                    $array_loacation[$obj->loc_mfg] = $array_loacation[$obj->loc_mfg] + $obj->qty;
                                 elseif($obj->sto_type==2)
-                                     $array_loacation[$obj->pns_mfg_pn_id] =$array_loacation[$obj->pns_mfg_pn_id] - $obj->qty;
-                                
+                                     $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] - $obj->qty;
                         }
                 }
                 //get calculate move location
-                $query = "select loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+                $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location_from=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
@@ -5906,12 +5905,12 @@ class PNsController extends JController {
                 if (count($result) > 0) {
                         //$array_loacation=array();
                         foreach ($result as $obj) {
-                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] - $obj->qty;
+                                     $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] - $obj->qty;
                         }
                 }
                 //get row fromlocation display newline
                 //get calculate move location
-                $query = "select loc.location_code,fk.qty,fk.sto_id,fk.pns_mfg_pn_id ,sto.sto_type ".
+                $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id,fk.pns_mfg_pn_id ,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
@@ -5921,10 +5920,9 @@ class PNsController extends JController {
                 if (count($result) > 0) {
                         //$array_loacation=array();
                         foreach ($result as $obj) {
-                                     $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] + $obj->qty;
+                                     $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] + $obj->qty;
                         }
                 }
-                
                 $arr_loc =array();
                 foreach($array_loacation as $key=>$val)
                 {
@@ -5936,8 +5934,73 @@ class PNsController extends JController {
                 }
                 
                 return $arr_loc;
-        }    
-        function GetMfgPnFromPartStatePns($partState,$pns_id)
+        }
+    function GetLocationFromPartStatePns_bk($partState,$pns_id)
+    {
+        $db = & JFactory::getDBO();
+        $rows = array();
+        //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
+        //$query = "select loc.location_code,fk.qty,fk.sto_id from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
+        $query = "select loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+            "from apdm_pns_sto_fk fk ".
+            "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
+            "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+            "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (1,2)";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            $array_loacation=array();
+            foreach ($result as $obj) {
+                if($obj->sto_type==1 )
+                    $array_loacation[$obj->pns_mfg_pn_id] = $array_loacation[$obj->pns_mfg_pn_id] + $obj->qty;
+                elseif($obj->sto_type==2)
+                    $array_loacation[$obj->pns_mfg_pn_id] =$array_loacation[$obj->pns_mfg_pn_id] - $obj->qty;
+
+            }
+        }
+        //get calculate move location
+        $query = "select loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+            "from apdm_pns_sto_fk fk ".
+            "inner join apdm_pns_location loc on fk.location_from=loc.pns_location_id ".
+            "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+            "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            //$array_loacation=array();
+            foreach ($result as $obj) {
+                $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] - $obj->qty;
+            }
+        }
+        //get row fromlocation display newline
+        //get calculate move location
+        $query = "select loc.location_code,fk.qty,fk.sto_id,fk.pns_mfg_pn_id ,sto.sto_type ".
+            "from apdm_pns_sto_fk fk ".
+            "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
+            "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+            "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (3)";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            //$array_loacation=array();
+            foreach ($result as $obj) {
+                $array_loacation[$obj->location_code] =$array_loacation[$obj->location_code] + $obj->qty;
+            }
+        }
+
+        $arr_loc =array();
+        foreach($array_loacation as $key=>$val)
+        {
+            if($val)
+            {
+                $arr_loc[$key]= $val;
+            }
+
+        }
+
+        return $arr_loc;
+    }
+    function GetMfgPnFromPartStatePns($partState,$pns_id)
         {
                 $db = & JFactory::getDBO();
                 $rows = array();

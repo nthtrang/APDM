@@ -217,32 +217,11 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
                 method:'get',
                 onComplete:function(result){
 //                       /alert(result.trim());
-                     //  document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();        
+                       document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();        
                         //$('#ajax_location_'+pnsId+'_'+fkId).value = result.trim();                                
                 }
         }).request();
         
-}
-function getMfgPnPartState(pnsId,fkId,currentMfgPn,partState)
-{	
-        var url = 'index.php?option=com_apdmsto&task=ajax_getmfgpn_partstate&partstate='+partState+'&pnsid='+pnsId+'&fkid='+fkId+'&currentmfgpn='+currentMfgPn;
-        var MyAjax = new Ajax(url, {
-                method:'get',
-                onComplete:function(result){
-                       document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
-                }
-        }).request();
-
-}
-function getLocationFromMfgPn(pnsId,fkId,currentLocation,MfgPn)
-{
-    var url = 'index.php?option=com_apdmsto&task=ajax_getlocation_mfgpn&mfgpn='+MfgPn+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLocation;
-    var MyAjax = new Ajax(url, {
-        method:'get',
-        onComplete:function(result){
-            document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();
-        }
-    }).request();
 }
 function checkAllItoPn(n, fldName )
 {
@@ -706,14 +685,13 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                                 <tr>
                                                                         <td align="center" width="74px">					
                                                     <span style="display:block" id="text_mfg_pn_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->pns_mfg_pn_id?SToController::GetMfgPnCode($rw->pns_mfg_pn_id):"";?></span>
-                                                    <span  id="ajax_mfgpn_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
                                                        <?php 
                                                         
                                                                  //pns_mfg_pn_id
                                                                 $mfgPnLists = SToController::getMfgPnListFromPn($row->pns_id);                                                                
-                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" onchange="getLocationFromMfgPn(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value)"', 'value', 'text', $rw->pns_mfg_pn_id ); 
+                                                                echo JHTML::_('select.genericlist',   $mfgPnLists, 'mfg_pn_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" ', 'value', 'text', $rw->pns_mfg_pn_id ); 
                                                        
-                                                        ?></span>
+                                                        ?>
                                                 </td>	
                                                                         <td align="center" width="74px">
                                                         <span style="display:block" id="text_qty_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->qty;?></span>
@@ -722,7 +700,11 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                 <td align="center" width="77px">					
                                                     <span style="display:block" id="text_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><a href="<?php echo $linkStoTab;?>"><?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?></a></span>
                                                        <?php 
-                                                        
+                                                        if($rw->sto_type==1)
+                                                         {
+                                                                echo JHTML::_('select.genericlist',   $locationArr, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox"  style="display:none; width: 81px;" size="1" ', 'value', 'text', $rw->location ); 
+                                                         }
+                                                         else{
 															 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
                                                                  $locationArr = SToController::getLocationPartStatePn($rw->partstate,$row->pns_id);
@@ -730,7 +712,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
 																?>
 																</span> 
 																<?php 
-                                                         
+                                                         }
                                                         ?>
                                                 </td>	
                                                 <td align="center" width="77px">					
@@ -738,11 +720,11 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                          <?php       
                                                          if($rw->sto_type==1)
                                                          {
-                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none;width: 81px;" size="1" onchange="getLocationPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value);getMfgPnPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->pns_mfg_pn_id.'\',this.value)""', 'value', 'text', $rw->partstate ); 
+                                                                echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none;width: 81px;" size="1" ', 'value', 'text', $rw->partstate ); 
                                                          }
                                                          else{                                                                 
                                                                  $partStateArr = SToController::getPartStatePn($rw->partstate,$row->pns_id);
-                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none;width: 81px;" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);getMfgPnPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->pns_mfg_pn_id.'\',this.value)""', 'value', 'text', $rw->partstate ); 
+                                                                 echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none;width: 81px;" size="1" onchange="getLocationPartState('.$row->pns_id.','.$rw->id.','.$rw->location.',this.value);"', 'value', 'text', $rw->partstate ); 
                                                                  
                                                          }
                                                         
