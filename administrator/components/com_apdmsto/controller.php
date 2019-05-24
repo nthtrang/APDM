@@ -105,10 +105,10 @@ class SToController extends JController
 	}
         function get_sto_code_default() {
                 $db = & JFactory::getDBO();
+            $datenow = & JFactory::getDate();
                 $sto_type = JRequest::getVar('sto_type');
-
-                $query = "SELECT sto_code  FROM apdm_pns_sto  WHERE sto_type = '" . $sto_type . "' and date(sto_created) = CURDATE() order by pns_sto_id desc limit 1";
-                $db->setQuery($query);
+            $query = "SELECT sto_code  FROM apdm_pns_sto  WHERE sto_type = '" . $sto_type . "' and date(sto_created) = '".$datenow->toFormat('%Y-%m-%d')."' order by pns_sto_id desc limit 1";
+            $db->setQuery($query);
                $pns_latest = $db->loadResult();
                 $arr = explode("-",$pns_latest);
                
@@ -133,7 +133,8 @@ class SToController extends JController
                         $pre = "E";
                 elseif($sto_type==3)
                         $pre = "M";
-                echo $pre.date('ymd').'-'.$new_pns_code;
+                echo $pre.$datenow->toFormat('%y%m%d').'-'.$new_pns_code;
+                 
                 exit;
         }
         /*
@@ -863,6 +864,7 @@ class SToController extends JController
             $obj = explode("_", $pnsid);
             $pns=$obj[0];
             $ids = explode(",",$obj[1]);
+            $msg = "";
             foreach ($ids as $id) {
                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
@@ -875,23 +877,24 @@ class SToController extends JController
                 $stoChecker= $db->loadObject();
                 if($stoChecker->sto_type==2)//if is out(ship) stock
                 {
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");                     
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 1 and sto.sto_owner_confirm = 1");
+
                     $qtyInCheck = round($db->loadResult(),2);
-                        //get QTY from TTO
-                        $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1");
-                        $qtyTtoCheck = round($db->loadResult(),2);   
-                        $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
-                        
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);                    
-                  $qtyOutCheck = $db->loadResult();
-                  if(!$qtyOutCheck)
-                  {
+                    //get QTY from TTO
+                    $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1 and sto.sto_owner_confirm = 1");
+                    $qtyTtoCheck = round($db->loadResult(),2);
+                    $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
+
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 2  and fk.id != ".$id);
+                    $qtyOutCheck = $db->loadResult();
+                    if(!$qtyOutCheck)
+                    {
                           $qtyOutCheck = 0;
-                  }
+                    }
                     $currentOutStock = $stock+$qtyOutCheck;
                     if($currentOutStock > $totalQtyCheck)
                     {
-                        $msg = "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code." must less than $totalQtyCheck";
+                        $msg .= "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." must less than $totalQtyCheck . $currentOutStock";
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
@@ -904,7 +907,7 @@ class SToController extends JController
         $return = "ito_detail";
         if($sto_type==2)
                 $return = "eto_detail";
-        $msg = "Successfully Saved Part Number";
+        $msg .= "Successfully Saved Part Number";
         $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $fkid, $msg);
     }
     /*
@@ -984,11 +987,11 @@ class SToController extends JController
         $fkId = JRequest::getVar('fkid');
         $currentLoc = JRequest::getVar('currentloc');
         $MfgPn = JRequest::getVar('mfgpn');
-        $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+         $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
             " from apdm_pns_sto_fk fk  ".
             " inner join apdm_pns_location loc on loc.pns_location_id=location ".
             " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.pns_mfg_pn_id = '".$MfgPn."'";
+            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.pns_mfg_pn_id = '".$MfgPn."' group by fk.location";
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {
@@ -1778,18 +1781,19 @@ class SToController extends JController
         {
                 $db = & JFactory::getDBO();
                 $rows = array();               
-                $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
+                 $query = "SELECT p.id,p.supplier_id, p.supplier_info, s.info_name ".
                                 " FROM apdm_pns_supplier AS p ".
                                 " LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id ".
                                 " LEFT JOIN apdm_pns_sto_fk AS fk ON p.id = fk.pns_mfg_pn_id ".
                                 " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
                                 " WHERE s.info_deleted=0 AND s.info_activate=1 AND p.type_id = 4 ".
-                                " and fk.pns_id = '".$pnsId."' and sto.sto_type=1  ";
+                                " and fk.pns_id = '".$pnsId."' and sto.sto_type=1 ";
                      if($partState)
                      {
                            $query .=   " and fk.partstate = '".$partState."' ";
                      }
-                $db->setQuery($query);
+            $query .=   " group by  p.id";
+            $db->setQuery($query);
                 $result = $db->loadObjectList();
                 if (count($result) > 0) {
                         $mfgPnArr=array();
@@ -1818,11 +1822,12 @@ class SToController extends JController
                                 " LEFT JOIN apdm_pns_sto_fk AS fk ON p.id = fk.pns_mfg_pn_id ".
                                 " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
                                 " WHERE s.info_deleted=0 AND s.info_activate=1 AND p.type_id = 4 ".
-                                " and fk.pns_id = '".$pnsId."'  and sto.sto_type=1  ";
+                                " and fk.pns_id = '".$pnsId."'  and sto.sto_type=1 ";
                      if($partState)
                      {
                            $query .=   " and fk.partstate = '".$partState."' ";
                      }
+        $query .=   " group by  p.id";
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {

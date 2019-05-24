@@ -36,7 +36,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 			alert("PNs Revision must 2 characters");
 			form.pns_revision.focus();
 			return false;
-		}		
+		}
 //		if (form.eco_id.value==0){
 //			alert("Please select ECO");
 //			form.eco.focus();

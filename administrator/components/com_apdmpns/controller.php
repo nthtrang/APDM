@@ -2189,7 +2189,7 @@ class PNsController extends JController {
                         }
                         $path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS;
                         $path_cads = $path_pns . 'cads' . DS . $row->ccs_code . DS . $folder . DS;                           
-                        $pns_id = $rowr->pns_id;
+                        $pns_id = $row->pns_id;
                         $file_name = $row->pdf_file;
                         //$path_pns = $path_cads;
                         $dFile = new DownloadFile($path_cads, $file_name);
@@ -2685,15 +2685,16 @@ class PNsController extends JController {
                         foreach ($ids as $id) {                                
                                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);      
                                 $location = JRequest::getVar('location_' . $pns .'_' . $id);         
-                                $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);   
+                                $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
+                                $mfgPn = JRequest::getVar('mfg_pn_' . $pns .'_' . $id);
                                 //get sto_type
-                                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);                               
+                                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,fk.pns_mfg_pn_id,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
                                 $stoChecker= $db->loadObject();                                
                                 if($stoChecker->sto_type==2)//if is out stock
                                 {                                       
-                                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 1");                                     
+                                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPn."'  and sto.sto_type = 1");
                                         $qtyInCheck = round($db->loadResult(),2);
-                                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and sto.sto_type = 2 and fk.id != ".$id);                                     
+                                        $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pnsid."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPn."'  and sto.sto_type = 2 and fk.id != ".$id);
                                         $qtyOutCheck = $db->loadResult();
                                         $currentOutStock = $stock+$qtyOutCheck;
                                         if($currentOutStock > $qtyInCheck)
@@ -5878,7 +5879,7 @@ class PNsController extends JController {
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
                 //$query = "select loc.location_code,fk.qty,fk.sto_id from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
-               $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+              $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
@@ -5894,7 +5895,7 @@ class PNsController extends JController {
                                      $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] - $obj->qty;
                         }
                 }
-                //get calculate move location
+                /*//get calculate move location
                 $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location_from=loc.pns_location_id ".
@@ -5922,7 +5923,7 @@ class PNsController extends JController {
                         foreach ($result as $obj) {
                                      $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] + $obj->qty;
                         }
-                }
+                }*/
                 $arr_loc =array();
                 foreach($array_loacation as $key=>$val)
                 {
@@ -9636,8 +9637,16 @@ class PNsController extends JController {
                                 $dest = $src_dest . DS . $pns_arr[0]. DS . $pns;
                                 $arr_success = array();
                                 $arr_fail = array();
-                                 $file_name =  $pns.'---'.$prefix_file;
-                                if(rename($src.$file, $dest . DS.$file_name))
+                                $file_name =  $pns.'---'.$prefix_file;
+                                if (!@is_dir($dest)) {
+                                    $res = @mkdir($dest, 0777);
+                                    if (!$res)
+                                        $txtout = "Cannot create dir !<br>";
+                                } else
+                                {
+                                    @chmod($dest, 0777);
+                                }
+                            if(rename($src.$file, $dest . DS.$file_name))
                                 {
                                         $pns_id = PNsController::getPnsIdfromPnCode($pns);
                                         if($pns_id){
@@ -9704,7 +9713,7 @@ class PNsController extends JController {
                 }
                 return 0;
         }
-        function autoInsertPn($ccs_code,$pns_code,$pns_revision,$pns_description,$eco_name,$pns_find_number,$pns_ref_des,$pns_uom,$mfr_name,$mfg_pn)
+        function autoInsertPn($ccs_code,$pns_code,$pns_revision,$pns_description,$eco_name,$pns_find_number,$pns_ref_des,$pns_uom,$mfr_name=0,$mfg_pn=0,$pns_cpn=1)
         {
                 $db = & JFactory::getDBO(); 
                 $me = & JFactory::getUser();
@@ -9729,8 +9738,8 @@ class PNsController extends JController {
                {
                    $pns_revision_val = $pns_revision;
                }
-                $db->setQuery("INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_description,eco_id,pns_find_number,pns_ref_des,pns_uom,pns_create,pns_create_by) ".
-                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision_val . "','" . substr($pns_description,0,40) . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."')");
+                $db->setQuery("INSERT INTO apdm_pns (ccs_code,pns_code,pns_revision,pns_description,eco_id,pns_find_number,pns_ref_des,pns_uom,pns_create,pns_create_by,pns_cpn) ".
+                      "  VALUES ('" . $ccs_code . "','" . $pns_code . "','" . $pns_revision_val . "','" . substr($pns_description,0,40) . "','" . $eco_id . "','" . $pns_find_number . "','" . $pns_ref_des . "','" . $pns_uom . "','".$pns_created."','".$pns_created_by."','".$pns_cpn."')");
                 $db->query();
                 //getLast PN ID
                return $pns_id = $db->insertid();
@@ -9913,6 +9922,12 @@ class PNsController extends JController {
                             $arr_err[$line]    = "Err:".$pn_code. " have Level at column A".$line ." is null";
                             continue;
                         }
+                        //check CCS_CODE
+                        $ccs_id = PNsController::checkCcsId($rowData[$line][1]);
+                        if(!$ccs_id)
+                        {
+                            $arr_err[$line]    = "Err:"."CCS_CODE at column B".$line ." is not found";
+                        }
                         //check MFR
                         $mfr_id = PNsController::checkMfrId($rowData[$line][10]);
                         if(!$mfr_id)
@@ -9948,6 +9963,15 @@ class PNsController extends JController {
                         {
                             $arr_err[$line]    = "Err:".$pn_code. " have UOM at column J".$line ." is null";
                         }
+                        else
+                        {
+                            //check UOM correct
+                            $arr_uom = array('Each','Undefined','Meter','Centimeter','Feet','Inch','Gram','Kilogram','Lbin');
+                            if(!in_array($rowData[$line][9],$arr_uom))
+                            {
+                                $arr_err[$line]    = "Err:"." UOM value at column J".$line ." is out range:'Each','Undefined','Meter','Centimeter','Feet','Inch','Gram','Kilogram','Lbin'";
+                            }
+                        }
                         if($rowData[$line][0]!=0){//if != level 0 not check MFR
                                 if($rowData[$line][8]=="")//qty
                                 {
@@ -9965,12 +9989,12 @@ class PNsController extends JController {
 
                         if($rowData[$line][0]=='0')
                         {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
+                                }
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }
@@ -9999,14 +10023,13 @@ class PNsController extends JController {
                         }
                         //start import with level 1
                         if($rowData[$line][0]==1)
-                        {    
-                                
+                        {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
+                                }
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
@@ -10045,12 +10068,12 @@ class PNsController extends JController {
                       
                         if($rowData[$line][0]==2)
                         {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
+                                }
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
@@ -10088,12 +10111,12 @@ class PNsController extends JController {
                        
                         if($rowData[$line][0]==3)
                         {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
+                                }
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = "Err:".$pn_code. " have Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
@@ -10129,12 +10152,12 @@ class PNsController extends JController {
                         }
                         if($rowData[$line][0]==4)
                         {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = "Err:Description at column L".$line ."  very long";
+                                }
                                $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = "Err:Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               
@@ -10170,12 +10193,12 @@ class PNsController extends JController {
                         }
                         if($rowData[$line][0]==5)
                         {
+                                if(strlen($rowData[$line][4])>40)
+                                {
+                                    $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
+                                }
                                 $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
                                 if(!$pns_id){
-                                        if(strlen($rowData[$line][4])>40)
-                                        {
-                                            $arr_err[$line]    = $pn_code. " have Description at column L".$line ."  very long";
-                                        }
                                         $pns_id = PNsController::autoInsertPn($rowData[$line][1],$rowData[$line][2],$rowData[$line][3],$rowData[$line][4],$rowData[$line][5],$rowData[$line][6],$rowData[$line][7],$rowData[$line][9]);
                                         $mess[$line] = "Import sucessfull PN ". $pn_code;
                                 }                               

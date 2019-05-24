@@ -38,7 +38,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 //		}		
 //                var pns_stock = Math.round(form.pns_stock.value);
 //                var pns_qty_used = Math.round(form.pns_qty_used.value);
-//		if ( pns_qty_used > pns_stock){                
+//		if ( pns_qty_used > pns_stock){
 //			alert("Please input Stock greater than Qty Used	");
 //			form.pns_stock.focus();
 //			return false;
@@ -260,7 +260,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 						</label>
 					</td>
 					<td>
-						<?php echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+						<?php //echo JHTML::_('calendar', $this->lists['pns_datein'], 'pns_datein', 'pns_datein', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>
 					</td>
 				</tr>
 				<tr>

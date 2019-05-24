@@ -156,8 +156,8 @@ th:first-child div{
                                 <?php 
                                 foreach($arrayPartState as $partState)
                                 {
-                                        $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);                                     
-                                        $locationCode = PNsController::GetMfgPnFromPartStatePns($partState,$this->row->pns_id);
+                                        $location = PNsController::GetLocationFromPartStatePns($partState,$this->row->pns_id);
+                                       // $locationCode = PNsController::GetMfgPnFromPartStatePns($partState,$this->row->pns_id);
                                         if(count($location)>0)
                                         {
                                ?>
