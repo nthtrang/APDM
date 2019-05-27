@@ -1832,12 +1832,13 @@ class SToController extends JController
         $result = $db->loadObjectList();
         if (count($result) > 0) {
             $mfgPnArr=array();
+            $mfgPnArr[] = JHTML::_('select.option', 0, "Select MFG PN" , 'value', 'text');
             foreach ($result as $obj) {                                
                     $mfgPnArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');            
             }
         }
 
-        echo JHTML::_('select.genericlist',   $mfgPnArr, 'location_'.$pnsId.'_'.$fkId, 'class="inputbox"  size="1" onchange="getLocationFromMfgPn(\''.$pnsId.'\',\''.$fkId.'\',\''.$currentLoc.'\',this.value)"" ', 'value', 'text', $currentmfgpn);
+        echo JHTML::_('select.genericlist',   $mfgPnArr, 'mfg_pn_'.$pnsId.'_'.$fkId, 'class="inputbox"  size="1" onchange="getLocationFromMfgPn(\''.$pnsId.'\',\''.$fkId.'\',\''.$currentLoc.'\',this.value)"" ', 'value', 'text', $currentmfgpn);
         exit;
         //return $locationArr;
     }            

@@ -11,9 +11,9 @@ JToolBarHelper::title( JText::_( 'PO' ) . ': <small><small>[ New ]</small></smal
 	
 ?>
 <script language="javascript" type="text/javascript">
-function UpdatePnsRevWindow(){        				
-        window.parent.document.getElementById('sbox-window').close();	            
-        window.parent.document.location.href = "index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>";
+function UpdatePnsRevWindow(){
+    //    window.parent.document.getElementById('sbox-window').close();
+      //  window.parent.document.location.href = "index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>";
 }
 function get_default_po_prefix(){		
 		var url = 'index.php?option=com_apdmpns&task=po_prefix_default';				
@@ -80,6 +80,7 @@ function get_default_po_prefix(){
 	<input type="hidden" name="pns_id" value="<?php echo  $cid[0];?>" />	
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="return" value="po"  />
+    <input type="hidden" name="task" value="save_po" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
 </fieldset>
