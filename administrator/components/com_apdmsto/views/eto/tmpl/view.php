@@ -278,9 +278,10 @@ function getMfgPnPartState(pnsId,fkId,currentMfgPn,partState)
         }).request();
 
 }
-function getLocationFromMfgPn(pnsId,fkId,currentLocation,MfgPn)
+function getLocationFromMfgPn(pnsId,fkId,currentLocation,MfgPn,partstate)
 {
-    var url = 'index.php?option=com_apdmsto&task=ajax_getlocation_mfgpn&mfgpn='+MfgPn+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLocation;
+    var partState = document.getElementById('partstate_' + pnsId+'_'+fkId).value;
+    var url = 'index.php?option=com_apdmsto&task=ajax_getlocation_mfgpn&mfgpn='+MfgPn+'&pnsid='+pnsId+'&fkid='+fkId+'&currentloc='+currentLocation+'&partstate='+partState;
     var MyAjax = new Ajax(url, {
         method:'get',
         onComplete:function(result){
@@ -913,7 +914,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         
 														 ?><span  id="ajax_location_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>">
 															 <?php 
-                                                                 $locationArr1 = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id,$rw->pns_mfg_pn_id);
+                                                                 $locationArr1 = SToController::getLocationPartStatePnEto($rw->partstate,$row->pns_id,$rw->pns_mfg_pn_id,$rw->id);
                                                                 echo JHTML::_('select.genericlist',   $locationArr1, 'location_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" ', 'value', 'text', $rw->location ); 
 																?>
 																</span> 																

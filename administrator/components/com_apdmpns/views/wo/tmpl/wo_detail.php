@@ -143,9 +143,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-7jts" colspan="10"><span style="font-weight:bold">JOB INFORMATION</span></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">WO NUMBER:</span></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">WO NUMBER</span></td>
             <td class="tg-c3ow" colspan="3"><?php echo $this->wo_row->wo_code;?></td>
-            <td class="tg-0pky"><span style="font-weight:bold">STATUS:</span></td>
+            <td class="tg-0pky"><span style="font-weight:bold">STATUS</span></td>
             <td class="tg-c3ow" colspan="3"><?php echo PNsController::getWoStatus($this->wo_row->wo_state); ?></td>
         </tr>
         <tr>
@@ -161,7 +161,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             </td>
             <td class="tg-0pky"><span style="font-weight:bold">QUANTITY</span></td>
             <td class="tg-0pky"><?php echo $this->wo_row->wo_qty;?></td>
-            <td class="tg-0pky"><span style="font-weight:bold">UOM</span>:</td>
+            <td class="tg-0pky"><span style="font-weight:bold">UOM</span></td>
             <td class="tg-0pky"><?php echo $this->row_part->pns_uom;?></td>
         </tr>
         <tr>
@@ -169,7 +169,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-c3ow" colspan="7"><?php echo $this->row_part->pns_description;?></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUIRED:</span>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUIRED</span>
                 <?php
                 $fachecked="";
                 if($this->row_top_assy->fa_required)
@@ -187,7 +187,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-dvpl" colspan="3"><span style="font-weight:bold"><input <?php echo $esdchecked?> type="checkbox" name="fa_required" value="1" onclick="return false;" onkeydown="return false;" />ESD</span></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">TOP LEVEL ASSY P/N:</span></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">TOP LEVEL ASSY PN</span></td>
             <td class="tg-c3ow" colspan="4">
                 <?php
                 if ($this->row_top_assy->pns_revision) {
@@ -205,13 +205,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="<?php echo $this->wo_row->wo_rma_active;?>" onclick="return false;" onkeydown="return false;" /> RMA</td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CUSTOMER:</span></td>
-            <td class="tg-0pky" colspan="3"><?php echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?></td>
-            <td class="tg-0pky"><span style="font-weight:bold">REQUEST DATE:</span></td>
-            <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUEST DATE</span></td>
+            <td class="tg-0pky" colspan="3"><?php echo JHTML::_('date', $this->wo_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?><?php //echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?></td>
+            <td class="tg-0pky"><span style="font-weight:bold"></span></td>
+            <td class="tg-dvpl" colspan="3"></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">SO NUMBER:</span></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">SO NUMBER</span></td>
             <td class="tg-0pky" colspan="3"><?php
                 $soNumber = $this->wo_row->so_cuscode;
                 if($this->wo_row->ccs_code)
@@ -219,17 +219,17 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                     $soNumber = $this->wo_row->ccs_code."-".$soNumber;
                 }
                 echo $soNumber;?></td>
-            <td class="tg-0pky"><span style="font-weight:bold">WO Started</span></td>
+            <td class="tg-0pky"><span style="font-weight:bold">WO STARTED</span></td>
             <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED BY:</span></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED BY</span></td>
             <td class="tg-0pky" colspan="3"><?php echo GetValueUser($this->wo_row->wo_created_by, "name"); ?></td>
-            <td class="tg-0pky"><span style="font-weight:bold">WO Finished</span></td>
+            <td class="tg-0pky"><span style="font-weight:bold">WO FINISHED</span></td>
             <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?></td>
         </tr>
         <tr>
-            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED DATE:</span></td>
+            <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED DATE</span></td>
             <td class="tg-0pky" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_created, JText::_('DATE_FORMAT_LC5')); ?></td>
             <td class="tg-0pky"><span style="font-weight:bold">ASSIGNER</span></td>
             <td class="tg-dvpl" colspan="3"><?php echo GetValueUser($this->wo_row->wo_assigner, "name"); ?></td>
@@ -242,11 +242,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             </td>
         </tr>
         <tr>
-            <td class="tg-w9sc">#</td>
-            <td class="tg-b2ze" colspan="5">Steps</td>
-            <td class="tg-v783">Comments</td>
-            <td class="tg-v783">DATE</td>
-            <td class="tg-v783">INITIAL/ID</td>
+            <td class="tg-w9sc">NO.</td>
+            <td class="tg-b2ze" colspan="5">STEP</td>
+            <td class="tg-v783">COMMENTS</td>
+            <td class="tg-v783">COMPLETED DATE</td>
+            <td class="tg-v783">ASSIGNEE</td>
             <td class="tg-v783">TARGET DATE</td>
         </tr>
         <tr>
@@ -339,7 +339,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-b2ze">1st Fail Qty</td>
             <td class="tg-b2ze">2nd Fail Qty</td>
             <td class="tg-b2ze">DATE</td>
-            <td class="tg-b2ze">INITIAL/ID</td>
+            <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>
         <tr>
@@ -361,7 +361,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"><?php echo $opvs_arr[1]['op_visual_value1']?></td>
             <td class="tg-0pky"><?php echo $opvs_arr[2]['op_visual_value1']?></td>
             <td class="tg-0pky"></td>
-            <td class="tg-c3ow" colspan="2"><span style="font-weight:bold">Comments</span></td>
+            <td class="tg-c3ow" colspan="2"><span style="font-weight:bold">COMMENTS</span></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -413,7 +413,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value1']?></td>
             <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>
             <td class="tg-0pky"></td>
-            <td class="tg-c3ow" colspan="2"><span style="font-weight:700">Comments</span></td>
+            <td class="tg-c3ow" colspan="2"><span style="font-weight:700">COMMENTS</span></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -468,7 +468,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="6"></td>
             <td class="tg-b2ze">COMMENTS</td>
             <td class="tg-b2ze">DATE</td>
-            <td class="tg-b2ze">INITIAL/ID</td>
+            <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>
         <tr>

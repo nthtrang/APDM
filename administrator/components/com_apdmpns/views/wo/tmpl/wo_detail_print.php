@@ -120,9 +120,9 @@ window.print();
     <td class="tg-7jts" colspan="10"><span style="font-weight:bold">JOB INFORMATION</span></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">WO NUMBER:</span></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">WO NUMBER</span></td>
     <td class="tg-c3ow" colspan="3"><?php echo $this->wo_row->wo_code;?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">STATUS:</span></td>
+    <td class="tg-0pky"><span style="font-weight:bold">STATUS</span></td>
     <td class="tg-c3ow" colspan="3"><?php echo PNsController::getWoStatus($this->wo_row->wo_state); ?></td>    
   </tr>
   <tr>
@@ -138,7 +138,7 @@ window.print();
     </td>
     <td class="tg-0pky"><span style="font-weight:bold">QUANTITY</span></td>
     <td class="tg-0pky"><?php echo $this->wo_row->wo_qty;?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">UOM</span>:</td>
+    <td class="tg-0pky"><span style="font-weight:bold">UOM</span></td>
     <td class="tg-0pky"><?php echo $this->row_part->pns_uom;?></td>
   </tr>
   <tr>
@@ -146,7 +146,7 @@ window.print();
     <td class="tg-c3ow" colspan="7"><?php echo $this->row_part->pns_description;?></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUIRED:</span>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUIRED</span>
         <?php
                         $fachecked="";
                         if($this->row_top_assy->fa_required)
@@ -164,7 +164,7 @@ window.print();
     <td class="tg-dvpl" colspan="3"><span style="font-weight:bold"><input <?php echo $esdchecked?> type="checkbox" name="fa_required" value="1" onclick="return false;" onkeydown="return false;" />ESD</span></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">TOP LEVEL ASSY P/N:</span></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">TOP LEVEL ASSY PN</span></td>
     <td class="tg-c3ow" colspan="4">
              <?php 
         if ($this->row_top_assy->pns_revision) {
@@ -182,13 +182,13 @@ window.print();
            <input <?php echo $wo_rma_active?> type="checkbox" name="wo_rma_active" value="<?php echo $this->wo_row->wo_rma_active;?>" onclick="return false;" onkeydown="return false;" /> RMA</td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CUSTOMER:</span></td>
-    <td class="tg-0pky" colspan="3"><?php echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">REQUEST DATE:</span></td>
-    <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->so_shipping_date, JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">REQUEST DATE</span></td>
+    <td class="tg-0pky" colspan="3"><?php echo JHTML::_('date', $this->wo_row->so_shipping_date, JText::_('DATE_FORMAT_LC5')); ?><?php //echo PNsController::getCcsName($this->wo_row->wo_customer_id); ?></td>
+    <td class="tg-0pky"><span style="font-weight:bold"></span></td>
+    <td class="tg-dvpl" colspan="3"></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">SO NUMBER:</span></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">SO NUMBER</span></td>
     <td class="tg-0pky" colspan="3"><?php 
      $soNumber = $this->wo_row->so_cuscode;
                                 if($this->wo_row->ccs_code)
@@ -196,18 +196,18 @@ window.print();
                                        $soNumber = $this->wo_row->ccs_code."-".$soNumber;
                                 }
     echo $soNumber;?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">WO Started</span></td>
-    <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_start_date, JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky"><span style="font-weight:bold">WO STARTED</span></td>
+    <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_start_date, JText::_('DATE_FORMAT_LC5')); ?></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED BY:</span></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED BY</span></td>
     <td class="tg-0pky" colspan="3"><?php echo GetValueUser($this->wo_row->wo_created_by, "name"); ?></td>
-    <td class="tg-0pky"><span style="font-weight:bold">WO Finished</span></td>
-    <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_completed_date, JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky"><span style="font-weight:bold">WO FINISHED</span></td>
+    <td class="tg-dvpl" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_completed_date, JText::_('DATE_FORMAT_LC5')); ?></td>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED DATE:</span></td>
-    <td class="tg-0pky" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_created, JText::_('DATE_FORMAT_LC3')); ?></td>
+    <td class="tg-0pky" colspan="3"><span style="font-weight:bold">CREATED DATE</span></td>
+    <td class="tg-0pky" colspan="3"><?php echo JHTML::_('date', $this->wo_row->wo_created, JText::_('DATE_FORMAT_LC5')); ?></td>
     <td class="tg-0pky"><span style="font-weight:bold">ASSIGNER</span></td>
     <td class="tg-dvpl" colspan="3"><?php echo GetValueUser($this->wo_row->wo_assigner, "name"); ?></td>
   </tr>
@@ -219,44 +219,44 @@ window.print();
     </td>
   </tr>
   <tr>
-    <td class="tg-w9sc">#</td>
+    <td class="tg-w9sc">NO.</td>
     <td class="tg-b2ze" colspan="5">Steps</td>
-    <td class="tg-v783">Comments</td>
-    <td class="tg-v783">DATE</td>
-    <td class="tg-v783">INITIAL/ID</td>
+    <td class="tg-v783">COMMENTS</td>
+    <td class="tg-v783">COMPLETED DATE</td>
+    <td class="tg-v783">ASSIGNEE</td>
     <td class="tg-v783">TARGET DATE</td>
   </tr>
   <tr>
     <td class="tg-uys7">1</td>
     <td class="tg-0pky" colspan="5">Label Print By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step1']['op_comment'];?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_assigner']!=0)?GetValueUser($op_arr['wo_step1']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-uys7">2</td>
     <td class="tg-0pky" colspan="5">Wire Cut By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step2']['op_comment'];?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_assigner']!=0)?GetValueUser($op_arr['wo_step2']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-uys7">3</td>
     <td class="tg-0pky" colspan="5">Kitted By:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step3']['op_comment'];?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_assigner']!=0)?GetValueUser($op_arr['wo_step3']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-c3ow">4</td>
     <td class="tg-0pky" colspan="5">Assembly performed by:</td>
     <td class="tg-xldj"><?php echo $op_arr['wo_step4']['op_comment'];?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_assigner']!=0)?GetValueUser($op_arr['wo_step4']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
   <tr>
     <td class="tg-c3ow">Process</td>
@@ -308,8 +308,8 @@ window.print();
     <td class="tg-0pky" colspan="5"></td>
     <td class="tg-b2ze">1st Fail Qty</td>
     <td class="tg-b2ze">2nd Fail Qty</td>
-    <td class="tg-b2ze">DATE</td>
-    <td class="tg-b2ze">INITIAL/ID</td>
+    <td class="tg-b2ze">COMPLETED DATE</td>
+    <td class="tg-b2ze">ASSIGNEE</td>
     <td class="tg-b2ze">TARGET DATE</td>
   </tr>
   <tr>
@@ -317,9 +317,9 @@ window.print();
     <td class="tg-0pky" colspan="4">Visual Inspection(QC) By:</td>
     <td class="tg-xldj"></td>
     <td class="tg-xldj"></td>    
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_assigner']!=0)?GetValueUser($op_arr['wo_step5']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
 <?php 
   $opvs_arr = $this->opvs_arr;
@@ -331,7 +331,7 @@ window.print();
     <td class="tg-0pky"><?php echo $opvs_arr[1]['op_visual_value1']?></td>
     <td class="tg-0pky"><?php echo $opvs_arr[2]['op_visual_value1']?></td>
     <td class="tg-0pky"></td>
-    <td class="tg-c3ow" colspan="2"><span style="font-weight:bold">Comments</span></td>
+    <td class="tg-c3ow" colspan="2"><span style="font-weight:bold">COMMENTS</span></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
@@ -371,9 +371,9 @@ window.print();
     <td class="tg-0pky" colspan="4">Final&nbsp;&nbsp;Inspection(QC) By:</td>
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
-    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_assigner']!=0)?GetValueUser($op_arr['wo_step6']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
   <?php $opfn_arr = $this->opfn_arr;?>
   <tr>
@@ -383,7 +383,7 @@ window.print();
     <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value1']?></td>
     <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>
     <td class="tg-0pky"></td>
-    <td class="tg-c3ow" colspan="2"><span style="font-weight:700">Comments</span></td>
+    <td class="tg-c3ow" colspan="2"><span style="font-weight:700">COMMENTS</span></td>
   </tr>
   <tr>
     <td class="tg-0pky"></td>
@@ -437,17 +437,17 @@ window.print();
   <tr>
     <td class="tg-0pky" colspan="6"></td>
     <td class="tg-b2ze">COMMENTS</td>
-    <td class="tg-b2ze">DATE</td>
-    <td class="tg-b2ze">INITIAL/ID</td>
+    <td class="tg-b2ze">COMPLETED DATE</td>
+    <td class="tg-b2ze">ASSIGNEE</td>
     <td class="tg-b2ze">TARGET DATE</td>
   </tr>
   <tr>
     <td class="tg-7btt">7</td>
     <td class="tg-0pky" colspan="5">Packaging by</td>
     <td class="tg-0pky"><?php echo $op_arr['wo_step7']['op_comment'];?></td>
-    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
     <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_assigner']!=0)?GetValueUser($op_arr['wo_step7']['op_assigner'], "name"):"N/A"; ?></td>
-    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC3')):""; ?></td>
+    <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
   </tr>
 </table>		       
         <input type="hidden" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />

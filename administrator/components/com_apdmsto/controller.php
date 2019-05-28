@@ -304,30 +304,7 @@ class SToController extends JController
                 return $locationArr;
         }	
         
-        function getLocationPartStatePnEto($partState,$pnsId,$pns_mfg_pn_id)
-        {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
-                        " from apdm_pns_sto_fk fk  ".
-                        " inner join apdm_pns_location loc on loc.pns_location_id=location ".
-                        " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' and fk.pns_mfg_pn_id = '".$pns_mfg_pn_id."' group by loc.location_code";
-                $db->setQuery($query);
-                $result = $db->loadObjectList();
-                if (count($result) > 0) {
-                        $locationArr=array();
-                        foreach ($result as $obj) {
-                                //$qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
-                                //if($qty_remain>0)
-                                //{
-                                        //$array_partstate[$obj->partstate] = $obj->partstate;                                
-                                        $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
-                                //}
-                        }
-                }
-                return $locationArr;
-        }        
+
         function ito_detail_support_doc()
         {
                 JRequest::setVar('layout', 'view_detail_doc');
@@ -977,7 +954,31 @@ class SToController extends JController
         exit;
         //return $locationArr;
     }
-    function ajax_getlocation_mfgpn($pnsId,$fkId,$currentLoc,$MfgPn)
+    function getLocationPartStatePnEto($partState,$pnsId,$pns_mfg_pn_id,$id=0)
+    {
+        $db = & JFactory::getDBO();
+        $rows = array();
+        $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+            " from apdm_pns_sto_fk fk  ".
+            " inner join apdm_pns_location loc on loc.pns_location_id=location ".
+            " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' and fk.pns_mfg_pn_id = '".$pns_mfg_pn_id."' or fk.id= '".$id."' group by loc.location_code";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0) {
+            $locationArr=array();
+            foreach ($result as $obj) {
+                //$qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
+                //if($qty_remain>0)
+                //{
+                //$array_partstate[$obj->partstate] = $obj->partstate;
+                $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
+                //}
+            }
+        }
+        return $locationArr;
+    }
+    function ajax_getlocation_mfgpn($pnsId,$fkId,$currentLoc,$MfgPn,$partstate="")
     {
         //&partstate='+partState+'&pnsid='+pnsId+'&fkid'+fkId+'&currentloc='+currentLoc;
 
@@ -987,11 +988,17 @@ class SToController extends JController
         $fkId = JRequest::getVar('fkid');
         $currentLoc = JRequest::getVar('currentloc');
         $MfgPn = JRequest::getVar('mfgpn');
-         $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
+        $partstate = JRequest::getVar('partstate');
+        $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
             " from apdm_pns_sto_fk fk  ".
             " inner join apdm_pns_location loc on loc.pns_location_id=location ".
             " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.pns_mfg_pn_id = '".$MfgPn."' group by fk.location";
+            " where fk.pns_id = ".$pnsId." and sto.sto_type=1 ";
+        if($MfgPn)
+        {
+            $query .= " and fk.pns_mfg_pn_id = '".$MfgPn."'";
+        }
+        $query .= " and fk.partstate = '".$partstate."' or fk.id= '".$fkId."' group by fk.location";
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {
