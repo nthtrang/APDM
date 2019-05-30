@@ -923,7 +923,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                                                         <span style="display:block" id="text_partstate_<?php echo $row->pns_id;?>_<?php echo $rw->id;?>"><?php echo $rw->partstate?strtoupper($rw->partstate):"";?></span>
                                                          <?php       
                                                                                                                      
-                                                                 $partStateArr = SToController::getPartStatePn($rw->partstate,$row->pns_id);
+                                                                 $partStateArr = SToController::getPartStatePnEto($rw->partstate,$row->pns_id);
                                                                  echo JHTML::_('select.genericlist',   $partStateArr, 'partstate_'.$row->pns_id.'_'.$rw->id, 'class="inputbox" style="display:none" size="1" onchange="getLocationPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->location.'\',this.value);getMfgPnPartState(\''.$row->pns_id.'\',\''.$rw->id.'\',\''.$rw->pns_mfg_pn_id.'\',this.value)"', 'value', 'text', $rw->partstate );
                                                         ?>
                                                 </td>

@@ -1177,6 +1177,42 @@ class SToController extends JController
 
         return $partStateArr;
     }
+    function getPartStatePnEto($partState,$pns_id)
+    {
+            $db = & JFactory::getDBO();
+            $rows = array();
+            $partStateArr=array();
+            $partStateArr[] = JHTML::_('select.option', '', strtoupper("Select Part State") , 'value', 'text');                        
+            $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
+            
+            foreach($arrayPartState as $partState)
+            {
+                    $array_loacation=array();
+                 $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+                        "from apdm_pns_sto_fk fk ".
+                        "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
+                        "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
+                        "where sto.sto_owner_confirm = 1  and  fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."' and sto.sto_type in (1,2)";
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        
+                        foreach ($result as $obj) {
+                                if($obj->sto_type==1 )
+                                    $array_loacation[$obj->loc_mfg] = $array_loacation[$obj->loc_mfg] + $obj->qty;
+                                elseif($obj->sto_type==2)
+                                     $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] - $obj->qty;
+                        }
+                }                  
+                if(count($array_loacation)>0)
+                {
+                    $partStateArr[] = JHTML::_('select.option', $partState, strtoupper($partState) , 'value', 'text');                        
+                }
+            }
+            return $partStateArr;
+        
+                //
+    }
     function printetopdf()
     {
         JRequest::setVar('layout', 'view_detail_print');
