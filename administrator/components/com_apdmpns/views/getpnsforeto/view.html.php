@@ -211,12 +211,10 @@ class pnsViewgetpnsforeto extends JView
                     $rs_mf = $db->loadObjectList();                   
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
-                           $arr_mf_id[] = $mf->info_id;
+                           $arr_mf_id[] = $mf->pns_id;
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }                     
+                    }
                     break;                
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
@@ -276,18 +274,7 @@ class pnsViewgetpnsforeto extends JView
 
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
-            $pns_id_mf = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 4 AND supplier_id IN (".implode(",",$arr_mf_id).")");
-            $rs_ps_mf = $db->loadObjectList();
-            if(count($rs_ps_mf) > 0){
-                foreach ($rs_ps_mf as $obj){
-                    $pns_id_mf[] = $obj->pns_id;        
-                }
-               $pns_id_mf = array_unique($pns_id_mf);
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }           
+             $where[] = 'p.pns_id IN ('.implode(',', $arr_mf_id).')';
             
         }
         if (count($arr_eco_id) > 0) {

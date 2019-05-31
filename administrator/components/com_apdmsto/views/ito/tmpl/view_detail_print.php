@@ -140,6 +140,7 @@
                     <th class="tg-0pky-pr tg-0pky-border" align="center" width="100" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('PN'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="150" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Description'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('UOM'); ?></th>
+                    <th  class="tg-0pky-pr tg-0pky-border" align="center" width="60" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Manufacture PN'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="60" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Qty'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Location'); ?></th>
                     <th  class="tg-0pky-pr tg-0pky-border" align="center" width="80" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo JText::_('Part State'); ?></th>
@@ -166,24 +167,34 @@
                         <td  class="tg-0pky-pr tg-0pky-border" align="center" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $pns_code;?></td>
                         <td class="tg-0pky-pr tg-0pky-border"  align="left" style="text-align:left;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_description; ?></td>
                         <td  class="tg-0pky-pr tg-0pky-border" align="center" style="text-align:center;border-left:1px;border-width:1px;border-style:solid"><?php echo $row->pns_uom; ?></td>
-                        <td class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;padding:0px" colspan="3">
+                        <td class="tg-0pky-pr tg-0pky-border"  align="center" style="text-align:center;padding:0px" colspan="4">
                             <table class="tgi" width="100%">
                                 <?php
                                 foreach ($this->sto_pn_list2 as $rw) {
+                                    $ipn2  =1;
+                                    $style = "";
                                     if($rw->pns_id==$row->pns_id)
                                     {
+                                        $stoList = SToController::GetStoFrommPns($rw->pns_id,$rw->pns_sto_id);
+                                        if($ipn2==count($stoList))
+                                            $style ="border-bottom:none";
                                         ?>
-                                        <tr><td width="60" class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;" align="center" width="77.5px">
+                                        <tr>
+                                            <td class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;<?php echo $style;?>" align="center" width="75.5px">
+                                                <?php echo $rw->pns_mfg_pn_id?SToController::GetMfgPnCode($rw->pns_mfg_pn_id):"";?>
+                                            </td>
+                                            <td  class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;<?php echo $style;?>" align="center" width="57.5px">
                                                <?php echo $rw->qty;?>                                                
                                             </td>
-                                             <td width="80" class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;" align="center" width="77px">
+                                             <td  class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;<?php echo $style;?>" align="center" width="77.5px">
                                                       <?php echo $rw->location?SToController::GetCodeLocation($rw->location):"";?>                                                     
                                                 </td>	
-                                                <td width="80" class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;"  align="center" width="77px">
+                                                <td  class="tg-0pky-pr tg-0pky-border-r" style="text-align:center;<?php echo $style;?>"  align="center" width="77px">
                                                        <?php echo $rw->partstate?strtoupper($rw->partstate):"";?>                                                         
                                                 </td>
                                         </tr>
                                         <?php
+                                        $ipn2++;
                                     }
                                 }
                                 ?>

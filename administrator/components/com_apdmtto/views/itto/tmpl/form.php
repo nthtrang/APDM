@@ -149,10 +149,13 @@ function checkforscanwotto(isitchecked)
         if (isitchecked == true){
                 document.getElementById("wo_code").focus();
                 document.getElementById('wo_code').setAttribute("onkeyup", "autoAddWoTto(this.value)");
+
+            document.getElementById('wo_code').removeAttribute("readonly");
           
         }
         else {
                 document.getElementById('wo_code').setAttribute("onkeyup", "return false;");
+            document.getElementById('wo_code').setAttribute("readonly", "readonly");
             
         }
 }
@@ -183,7 +186,7 @@ function checkforscanwotto(isitchecked)
                     </td>
                     <td>
                         <?php //echo $this->lists['wolist'];?>
-                        <input type="text" value="" name="wo_code" id="wo_code" />
+                        <input type="text" value="" name="wo_code" id="wo_code" readonly="readonly" />
                         <input type="hidden" name="tto_wo_id" id="tto_wo_id" value="" />                        
                         <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_wo_ajax&tmpl=component" title="Image">
                             <input type="button" name="addSO" value="<?php echo JText::_('Select WO')?>"/>

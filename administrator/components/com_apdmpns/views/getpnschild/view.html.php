@@ -259,9 +259,7 @@ class pnsViewgetpnschild extends JView
                            $arr_mf_id[] = $mf->info_id;
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }                     
+                    }
                     break;                
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
