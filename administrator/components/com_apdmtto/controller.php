@@ -310,6 +310,7 @@ class TToController extends JController
 
                 $isOutConfirm = $sto_row->tto_owner_out_confirm;
                 $UserOutConfirm = $sto_row->tto_owner_out;
+                $userToolManager = $sto_row->tto_create_by;
 
                 $query = 'select tto_code from apdm_pns_tto  where pns_tto_id != '.$tto_id.' and tto_state ="Using" and date(tto_created)="'.date('Y-m-d').'" and tto_owner_out = "'.$userId.'"';
                 $db->setQuery($query);
@@ -328,9 +329,10 @@ class TToController extends JController
                                     echo "1^1";
                                 }
                         }
-                        if($sto_row->tto_state=="Using" && $tto_type_inout = 1)
+                        if($sto_row->tto_state=="Using" && $tto_type_inout = 1)//in
                         {
-                                 if($UserOutConfirm !=0 && $UserOutConfirm!=$userId){
+                                 //if($UserOutConfirm !=0 && $UserOutConfirm!=$userId){
+                                if($UserOutConfirm !=0 && $userToolManager!=$userId){
                                          echo "2^1";
                                  }
                                  else{

@@ -272,7 +272,7 @@ function checkedforMarkScanTto(ischecked)
                               <tr>
                                         <td class="key" width="11%"><?php echo JText::_('TTO Number'); ?></td>                                               
                                         <td width="12%" class="title"><?php echo $this->tto_row->tto_code; ?></td>                                          
-                                        <td class="key" width="20%"><?php echo JText::_('Tool Assigner'); ?></td>                                               
+                                        <td class="key" width="20%"><?php echo JText::_('Tool Manager'); ?></td>                                               
                                         <td width="20%" class="title"><?php echo GetValueUser($this->tto_row->tto_create_by, "name");?></td>
                                        <td  class="key"><?php echo JText::_('Confirm'); ?></td>                                                                                       
                                          <td colspan="2"  class="title">
@@ -284,15 +284,16 @@ function checkedforMarkScanTto(ischecked)
                                 <tr>
                                         <td class="key" ><?php echo JText::_('Created Date'); ?></td>                                               
                                         <td  class="title"><?php echo JHTML::_('date', $this->tto_row->tto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-					<td  class="key"><?php echo JText::_('Owner'); ?></td>
+					<td  class="key"><?php echo JText::_('Tool Borrower'); ?></td>
                                         <td class="title"><?php echo GetValueUser($this->tto_row->tto_owner_out, "name"); ?></td>                                       
-                                        <td class="key"><?php echo JText::_('Confirm-Out'); ?></td>
-                                        <td class="title"> 
+                                        <td class="key">                                               
+                                                <?php echo JText::_('Confirm-Out'); ?></td>
+                                        <td class="title">
 										 <?php                                                                                  
                                                              if($this->tto_row->tto_owner_out_confirm==0 && $this->tto_row->tto_state=="Create"){
                                                     ?>                                                                                                     
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=2" title="Image">
-                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_out_confirm" value="1" /></a>
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=2" title="Tool Borrower will confirm in here">
+                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_out_confirm" value="1" title="Tool Borrower will confirm in here" /></a>
                                                         <?php }
                                                         else
                                                         {
@@ -323,7 +324,7 @@ function checkedforMarkScanTto(ischecked)
 										 <?php                                                                                  
                                                              if($this->tto_row->tto_owner_in_confirm==0 && $this->tto_row->tto_state=="Using"){
                                                     ?>                                                                                                     
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=1" title="Image">
+                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmtto&task=get_owner_confirm_tto&tto_id=<?php echo $this->tto_row->pns_tto_id?>&tmpl=component&tto_type_inout=1" title="Tool Manager will confirm in here">
                                                          <input onclick="return false;" onkeydown="return false;" type="checkbox" name="tto_owner_in_confirm" value="1" /></a>
                                                         <?php }
                                                         else

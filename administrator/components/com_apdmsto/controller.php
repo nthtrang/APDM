@@ -843,13 +843,13 @@ class SToController extends JController
             $ids = explode(",",$obj[1]);
             $msg = "";
             foreach ($ids as $id) {
-                $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
-                $location = JRequest::getVar('location_' . $pns .'_' . $id);
-                $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
+                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
+                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
+                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
                 $mfgPnId = JRequest::getVar('mfg_pn_' . $pns .'_' . $id);
                 
                 //get sto_type
-                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
+                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id left join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
                
                 $stoChecker= $db->loadObject();
                 if($stoChecker->sto_type==2)//if is out(ship) stock
@@ -860,9 +860,9 @@ class SToController extends JController
                     //get QTY from TTO
                     $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1 and sto.sto_owner_confirm = 1");
                     $qtyTtoCheck = round($db->loadResult(),2);
-                    $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
+                     $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
 
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 2  and fk.id != ".$id);
+                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 2  and fk.id != ".$id);                    
                     $qtyOutCheck = $db->loadResult();
                     if(!$qtyOutCheck)
                     {
