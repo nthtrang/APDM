@@ -91,14 +91,14 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                                             var check_pass = 1;
                                             arr_qfk.forEach(function(sti)
                                             {
-                                                var mfg_pn_value = document.getElementById('mfg_pn_' + arr_sto[0]+'_'+sti).value;
+                                                /*var mfg_pn_value = document.getElementById('mfg_pn_' + arr_sto[0]+'_'+sti).value;
                                                 if (mfg_pn_value == 0)
                                                 {
                                                     alert("Please choose MFG PN");
                                                     check_pass = 0;
                                                     document.getElementById('mfg_pn_' + arr_sto[0]+'_'+ sti).focus();
                                                     return;
-                                                }
+                                                }*/
                                                 var location_value = document.getElementById('location_' + arr_sto[0]+'_'+sti).value;
                                                 if (location_value == 0)
                                                 {
@@ -262,7 +262,7 @@ function getLocationPartState(pnsId,fkId,currentLoc,partState)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                     //  document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
+                     //  document.getElementById('ajax_location_'+pnsId+'_'+fkId).innerHTML = result.trim();
                 }
         }).request();
         
@@ -273,7 +273,8 @@ function getMfgPnPartState(pnsId,fkId,currentMfgPn,partState)
         var MyAjax = new Ajax(url, {
                 method:'get',
                 onComplete:function(result){
-                       document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();                                
+                       document.getElementById('ajax_mfgpn_'+pnsId+'_'+fkId).innerHTML = result.trim();
+                    document.getElementById('mfg_pn_'+pnsId+'_'+fkId).onchange();
                 }
         }).request();
 

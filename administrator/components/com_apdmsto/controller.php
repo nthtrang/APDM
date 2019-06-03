@@ -1882,12 +1882,15 @@ class SToController extends JController
         $query .=   " group by  p.id";
         $db->setQuery($query);
         $result = $db->loadObjectList();
+        $mfgPnArr=array();
+        $mfgPnArr[] = JHTML::_('select.option', -1, "Select MFG PN" , 'value', 'text');
         if (count($result) > 0) {
-            $mfgPnArr=array();
-            $mfgPnArr[] = JHTML::_('select.option', 0, "Select MFG PN" , 'value', 'text');
             foreach ($result as $obj) {                                
                     $mfgPnArr[] = JHTML::_('select.option', $obj->id, $obj->supplier_info , 'value', 'text');            
             }
+        }
+        else{
+            $mfgPnArr[] = JHTML::_('select.option', 0, "NA" , 'value', 'text');
         }
 
         echo JHTML::_('select.genericlist',   $mfgPnArr, 'mfg_pn_'.$pnsId.'_'.$fkId, 'class="inputbox"  size="1" onchange="getLocationFromMfgPn(\''.$pnsId.'\',\''.$fkId.'\',\''.$currentLoc.'\',this.value)"" ', 'value', 'text', $currentmfgpn);

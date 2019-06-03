@@ -264,7 +264,7 @@ th:first-child div{
                                         <td width="100" align="center" colspan="6">
                                         <?php 
                                         echo JText::_('Quantity Available:'); 
-                                        $qtyAvai =  CalculateToolRemainValue($this->row->pns_id);
+                                        $qtyAvai =  CalculateInventoryValueforView($this->row->pns_id);
                                         $style="color: #f00";
                                         if($qtyAvai>0)
                                         {

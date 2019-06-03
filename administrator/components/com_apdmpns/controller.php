@@ -4440,7 +4440,7 @@ class PNsController extends JController {
                         $partState = $row->partstate; 
                         $pns_id = $row->pns_id; 
                         $pns_mfg_pn_id = $row->pns_mfg_pn_id;
-                        $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,partstate,pns_mfg_pn_id) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $partState . "','0')");
+                        $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,partstate,pns_mfg_pn_id) VALUES ( '" . $pns_id . "','" . $sto_id . "','','0')");
                         $db->query();                         
                 }                 
                 return $msg = JText::_('Have add PN to ETO successfull.');

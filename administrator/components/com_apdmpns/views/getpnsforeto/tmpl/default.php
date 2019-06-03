@@ -135,7 +135,7 @@ function UpdatePnsEco(){
 				$mf = PNsController::GetManufacture($row->pns_id);
 				$bom = PNsController::GetChildParentNumber($row->pns_id);
                               //  $qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
-                              $qtyRemain = CalculateToolRemainValue($row->pns_id);
+                              $qtyRemain = CalculateInventoryValueforView($row->pns_id);
                               
                               //$qtyRemain = CalculateInventoryLocationPartValueForTool($row->pns_id,$row->location,$row->partstate);
                                 

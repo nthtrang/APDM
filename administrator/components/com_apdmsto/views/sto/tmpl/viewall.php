@@ -196,7 +196,7 @@ th:first-child div{
                     $ms = GetManufacture($row->pns_id, 3);//Supplier
                     $mv = GetManufacture($row->pns_id, 2);//vendor
 
-                    $stock = CalculateInventoryValue($row->pns_id);
+                    $stock = CalculateInventoryValueforView($row->pns_id);
                 $background = "";
                 if ($stock <= 3) {
                     $background = "style='background-color:#f00;color:#fff'";
