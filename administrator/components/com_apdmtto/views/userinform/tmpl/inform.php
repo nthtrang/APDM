@@ -53,7 +53,7 @@ function UpdateOwnerSto(sto_id){
                                         document.getElementById('notice').innerHTML = "Incorrect Password";				                
                                 }else if(rs[0]==2)//
                                 {
-                                        document.getElementById('notice').innerHTML = "You don't must owner";
+                                        document.getElementById('notice').innerHTML = "You don't must Tool Manager";
                                 }else if(rs[0]==3)//
                                 {
                                     document.getElementById('notice').innerHTML = "You are using for "+rs[1]+" before.";

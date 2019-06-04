@@ -999,6 +999,7 @@ class SToController extends JController
             $query .= " and fk.pns_mfg_pn_id = '".$MfgPn."'";
         }
         $query .= " and fk.partstate = '".$partstate."' or fk.id= '".$fkId."' group by fk.location";
+
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {
@@ -1006,8 +1007,12 @@ class SToController extends JController
             foreach ($result as $obj) {
                 if($obj->sto_type==1 )
                 {
-                    //$array_partstate[$obj->partstate] = $obj->partstate;
-                    $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
+                    $qty_remain = CalculateInventoryLocationPartValueForTool($obj->pns_id,$obj->location,$obj->partstate);
+                    if($qty_remain>0)
+                    {
+                        //$array_partstate[$obj->partstate] = $obj->partstate;
+                        $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');
+                    }
                 }
             }
         }
@@ -1182,7 +1187,7 @@ class SToController extends JController
             $db = & JFactory::getDBO();
             $rows = array();
             $partStateArr=array();
-            $partStateArr[] = JHTML::_('select.option', '', strtoupper("Select Part State") , 'value', 'text');                        
+            $partStateArr[] = JHTML::_('select.option', '', "Select Part State" , 'value', 'text');
             $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
         $array_loacation=array();
             foreach($arrayPartState as $partState)

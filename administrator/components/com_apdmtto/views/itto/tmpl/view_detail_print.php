@@ -93,7 +93,7 @@
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Status' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo $this->tto_row->tto_state;?></td>
-        <td class="tg-0pky-pr tg-0pky-border" width="250px"><?php echo JText::_( 'Tool Assigner' ); ?>: <?php echo ($this->tto_row->tto_create_by)?GetValueUser($this->tto_row->tto_create_by, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" width="250px"><?php echo JText::_( 'Tool Manager' ); ?>: <?php echo ($this->tto_row->tto_create_by)?GetValueUser($this->tto_row->tto_create_by, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border"><?php echo JText::_( 'Comfirm' ); ?>:<input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" /></td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Date Out' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo ($this->tto_row->tto_owner_out_confirm_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_owner_out_confirm_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>    
@@ -101,7 +101,7 @@
     <tr>
         <td class="tg-0pky-pr tg-0pky-border" style="border-right:0px"><?php echo JText::_( 'Description' ); ?>:</td>
         <td class="tg-0pky-pr tg-0pky-border" style="border-left:0px"><?php echo strtoupper($this->tto_row->tto_description)?></td>
-        <td class="tg-0pky-pr tg-0pky-border" width="150px"><?php echo JText::_( 'Owner' ); ?>: <?php echo ($this->tto_row->tto_owner_in)?GetValueUser($this->tto_row->tto_owner_in, "name"):""; ?></td>
+        <td class="tg-0pky-pr tg-0pky-border" width="150px"><?php echo JText::_( 'Tool Borrower' ); ?>: <?php echo ($this->tto_row->tto_owner_out)?GetValueUser($this->tto_row->tto_owner_out, "name"):""; ?></td>
         <td class="tg-0pky-pr tg-0pky-border"><?php echo JText::_( 'Comfirm' ); ?>:
                 <?php 
                 $style="";

@@ -318,7 +318,7 @@ function checkedforMarkScanTto(ischecked)
                                         <td class="key"><?php echo JText::_('Due Date'); ?></td>                                               
                                         <td class="title">  <?php echo ($this->tto_row->tto_due_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->tto_row->tto_due_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
                                         <td  class="key" ><?php echo JText::_(''); ?></td>
-                                        <td class="title"><?php echo GetValueUser($this->tto_row->tto_owner_in, "name"); ?></td>                                       
+                                        <td class="title"><?php //echo GetValueUser($this->tto_row->tto_owner_in, "name"); ?></td>
                                         <td  class="key"><?php echo JText::_('Confirm-In'); ?></td>
                                         <td  class="title"> 
 										 <?php                                                                                  

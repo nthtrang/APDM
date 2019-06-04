@@ -199,8 +199,6 @@ class pnsViewgetpnsforeto extends JView
                            $arr_eco_id[] = $eco->eco_id; 
                         }
                         
-                    }else{
-                        $arr_eco_id[] = -1;
                     }
                 break;
                 case '7': //Manufacture PN                         
@@ -217,7 +215,9 @@ class pnsViewgetpnsforeto extends JView
                     }
                     break;                
                 case '6': //for information of pns
-                    $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                    if (isset( $search ) && $search!= '') {
+                        $where[] = 'p.pns_description LIKE ' . $searchEscaped;
+                    }
                 break;
                 case '5': //for code
                     //  $where[] = 'p.pns_code_full LIKE '.$searchEscaped;
