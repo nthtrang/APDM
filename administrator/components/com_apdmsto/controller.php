@@ -858,7 +858,7 @@ class SToController extends JController
 
                     $qtyInCheck = round($db->loadResult(),2);
                     //get QTY from TTO
-                    $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1 and sto.sto_owner_confirm = 1");
+                    $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1  and tto.tto_state = 'Using' and tto.tto_owner_out_confirm=1");
                     $qtyTtoCheck = round($db->loadResult(),2);
                      $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
 
@@ -999,7 +999,7 @@ class SToController extends JController
             $query .= " and fk.pns_mfg_pn_id = '".$MfgPn."'";
         }
         $query .= " and fk.partstate = '".$partstate."' or fk.id= '".$fkId."' group by fk.location";
-
+        
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if (count($result) > 0) {

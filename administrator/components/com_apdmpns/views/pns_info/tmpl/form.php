@@ -285,7 +285,7 @@
 			</table>
 		</fieldset>
 	</div>
-	<div class="col width-40">
+	<div class="col width-40" style="display:none">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Image, Pdf, CAD files' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
 			<table class="admintable">
@@ -453,7 +453,7 @@
 		</fieldset>		
 	</div>
 	<div class="clr"></div>
-	<div class="col width-60">
+	<div class="col width-60" style="display: none">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Vendor' ); ?></legend>
 		<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=2&pns_id=0" title="Image">
@@ -475,7 +475,7 @@
 		</fieldset>
 	</div>
 	<div class="clr"></div>
-	<div class="col width-60">
+	<div class="col width-60" style="display: none">
 	<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Supplier' ); ?></legend>
 			<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=3&pns_id=0" title="Image">
@@ -495,7 +495,7 @@
 		</fieldset>
 	</div>
 	<div class="clr"></div>
-	<div class="col width-60">
+	<div class="col width-60" style="display: none">
 	<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Manufacture' ); ?></legend>
 			<p>	<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsuppliers&task=get_supplier&tmpl=component&type=4&pns_id=0" title="Image">
@@ -526,6 +526,6 @@
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="" />
          <input type="hidden" name="mpn" value="0" />
-        <input type="text" name="return" value="<?php echo $eco_name?>"  />
+        <input type="hidden" name="return" value="<?php echo $eco_name?>"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

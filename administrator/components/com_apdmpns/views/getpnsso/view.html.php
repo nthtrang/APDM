@@ -78,119 +78,20 @@ class pnsViewgetpnsso extends JView
 //            $inner =  ' inner join apdm_pns_so_fk AS fk on p.pns_id = fk.pns_id ';
 //        }	
         if ($so_id){ //get pns_child have exist
-           
-// function DisplayPnsAllChildId($pns_id) {
-//                $db = & JFactory::getDBO();
-//                $rows = array();
-//                $db->setQuery('SELECT pr.pns_id as pns_bom_id,pr.*,CONCAT_WS( "-", p.ccs_code, p.pns_code, p.pns_revision ) AS text, e.eco_name, p.    pns_description, p.pns_type, p.pns_status,p.* FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');                
-//                return $result = $db->loadObjectList();
-//        }
-            $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id;
+           // $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id;
             if($pns_id)
             {
                 $query = "SELECT pns_id from apdm_pns_so_fk where so_id =". $so_id ." and pns_id = ".$pns_id;
-            }
-
-            $db->setQuery($query);
-            $row_pns = $db->loadObjectList();
-            $arrPNsChild  = array(0);
-            foreach($row_pns as $rw)
-            {
+                $db->setQuery($query);
+                $row_pns = $db->loadObjectList();
+                $arrPNsChild  = array(0);
+                foreach($row_pns as $rw)
+                {
                     $arrPNsChild[] = $rw->pns_id;
-            }
-           			
-            //get list pns_parent of this pns
-            $query = "SELECT pns_id from apdm_pns_parents where pns_parent IN (".implode(',', $arrPNsChild).")";
-            $db->setQuery($query);
-            $row_pns_ = $db->loadObjectList();
-            if ( count ($row_pns_) > 0 ){
-                foreach ($row_pns_ as $obj_){
-                    $arrPNsChild[] = $obj_->pns_id;
-                    //check for parent of parent wtih level 1
-                    $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj_->pns_id);                    
-                    $rows1 = $db->loadObjectList();
-                    if (count($rows1) > 0){
-                            foreach ($rows1 as $obj1){
-                                $arrPNsChild[] = $obj1->pns_id;
-                                ///check for parent level 2
-                                $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj1->pns_id);                    
-                                $rows2 = $db->loadObjectList();
-                                if ( count ($rows2 ) > 0){
-                                    foreach ($rows2 as $obj2){
-                                        $arrPNsChild[] = $obj2->pns_id;
-                                        //check for levle 3
-                                        $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj2->pns_id);                    
-                                        $rows3 = $db->loadObjectList();
-                                        if ( count ($rows3) > 0 ){
-                                            foreach ($rows3 as $obj3){
-                                                $arrPNsChild[] = $obj3->pns_id;
-                                                //check for level 4
-                                                $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj3->pns_id);                    
-                                                $rows4 = $db->loadObjectList();
-                                                if (count($rows4) > 0){
-                                                    foreach($rows4 as $obj4){
-                                                        $arrPNsChild[] = $obj4->pns_id;
-                                                        //check for levle 5
-                                                        $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj4->pns_id);                    
-                                                        $rows5 = $db->loadObjectList();
-                                                        if  ( count ($rows5) > 0 ){
-                                                            foreach ($rows5 as $obj5 ){
-                                                                $arrPNsChild[] = $obj5->pns_id;
-                                                                //check for level 6
-                                                                $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj5->pns_id);                    
-                                                                $rows6 = $db->loadObjectList();
-                                                                if ( count ($rows6) > 0 ){
-                                                                    foreach ($rows6 as $obj6){
-                                                                        $arrPNsChild[] = $obj6->pns_id;
-                                                                        //check for level 7
-                                                                        $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj6->pns_id);                    
-                                                                        $rows7 = $db->loadObjectList();
-                                                                        if ( count ($rows7) > 0 ){
-                                                                            foreach ($rows7 as $obj7){
-                                                                                $arrPNsChild[] = $obj7->pns_id;
-                                                                                //check for level 8
-                                                                                $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj7->pns_id);                    
-                                                                                $rows8 = $db->loadObjectList();
-                                                                                if ( count( $rows8) > 0){
-                                                                                    foreach ($rows8 as $obj8){
-                                                                                        $arrPNsChild[] = $obj8->pns_id;
-                                                                                        //check for level 9
-                                                                                        $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj8->pns_id);                    
-                                                                                        $rows9 = $db->loadObjectList();
-                                                                                        if ( count ($rows9) > 0){
-                                                                                            foreach ($rows9 as $obj9){
-                                                                                                $arrPNsChild[] = $obj9->pns_id;
-                                                                                                //check forlevel 10;
-                                                                                                 $db->setQuery("SELECT pns_id FROM apdm_pns_parents WHERE pns_parent=".$obj9->pns_id);                    
-                                                                                                 $rows10 = $db->loadObjectList();
-                                                                                                 if (count($rows10) > 0){
-                                                                                                     foreach ($rows10 as $obj10){
-                                                                                                         $arrPNsChild[] = $obj10->pns_id;
-                                                                                                     }
-                                                                                                 }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                    }
-                    
                 }
             }
-            
+
+
 			
 //            if (count( $arrPNsChild ) > 0)   {
 //            	$where[] = 'p.pns_id NOT IN ('.implode(",", $arrPNsChild ).') ';
@@ -254,71 +155,35 @@ class pnsViewgetpnsso extends JView
                         $arr_mf_id[] = -1;
                     }
                 break;
-                case '7': //Manufacture PN                         
+                case '7': //Manufacture PN
                     $arr_mf_id = array();
-                         //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id');
-                    $rs_mf = $db->loadObjectList();                   
+                    //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.' group by ASI.info_id');
+                    // echo $db->getQuery();
+                    $rs_mf = $db->loadObjectList();
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
-                           $arr_mf_id[] = $mf->info_id;
+                            $arr_mf_id[] = $mf->pns_id;
                         }
-                        $arr_mf_id = array_unique($arr_mf_id);                       
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }                     
-                    break;                
+                        $arr_mf_id = array_unique($arr_mf_id);
+                    }
+                    break;
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
                 break;
                 case '5': //for code
-                    //  $where[] = 'p.pns_code_full LIKE '.$searchEscaped;
-                  //  echo $search; exit;
-                $leght = strlen (trim($keyword));                    
-//                 if ($leght==16){                                                                        
-//                       $arr_code = explode("-", trim($keyword));                                                         
-//                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."' AND pns_revision='".$arr_code[3]."'");
-//                       $rs_pns = $db->loadObjectList();
-//                       $array_pns_id_find = array();
-//                       if (count($rs_pns) > 0){
-//                           foreach ($rs_pns as $pn){
-//                               $array_pns_id_find[] = $pn->pns_id;
-//                           }
-//                         
-//                       }else{
-//                           $array_pns_id_find[] =0;
-//                       }
-//                       $where[] = 'p.pns_id IN ('.implode(",", $array_pns_id_find).') ';
-//                   }elseif ($leght==13){                       
-//                       $arr_code = explode("-", trim($keyword));                         
-//                       $db->setQuery("SELECT pns_id FROM apdm_pns WHERE  ccs_code=".$arr_code[0]." AND pns_code='".$arr_code[1].'-'.$arr_code[2]."'");
-//                       $rs_pns = $db->loadObjectList();                       
-//                       if (count($rs_pns) > 1){
-//                           foreach ($rs_pns as $obj) {
-//                                $arr_pns_id[] =  $obj->pns_id;
-//                           }            
-//                           $where[] = 'p.pns_id IN ('.implode(',', $arr_pns_id).')'; 
-//                       }else{
-//                            if(strlen($arr_code[0])==6){
-//                                 $where[] = 'p.pns_code='.$arr_code[0].'-'.$arr_code[1].' AND p.pns_revision='.$arr_code[2];
-//                            }else{
-//                                 $where[] = 'p.pns_id IN (0)';
-//                            }
-//                       }
-//                        
-//                   }else
+                    $leght = strlen (trim($keyword));
                     if($leght==10){
-                         $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code ='.$arr_code[0].' AND p.pns_code='.$arr_code[1];
-                         
-                   }else{      
-                           if($searchEscaped){
-                                $arr_code = explode("-", trim($keyword));
-                                $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
-                                $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
-                           }
-                   }             
-                break;
+                        $arr_code = explode("-", trim($keyword));
+                        $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
+
+                    }else{
+                        if($searchEscaped) {
+                            $arr_code = explode("-", trim($keyword));
+                            $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%" or p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                        }
+                    }
+                    break;
             }
             
         }
@@ -356,33 +221,27 @@ class pnsViewgetpnsso extends JView
             
             
         }
-         if(count($arr_mf_id) > 0){
+        if(count($arr_mf_id) > 0){
             //get list pns have this supplier
-            $pns_id_mf = array();
-            $db->setQuery("SELECT pns_id FROM apdm_pns_supplier WHERE type_id = 4 AND supplier_id IN (".implode(",",$arr_mf_id).")");
-            $rs_ps_mf = $db->loadObjectList();
-            if(count($rs_ps_mf) > 0){
-                foreach ($rs_ps_mf as $obj){
-                    $pns_id_mf[] = $obj->pns_id;        
-                }
-               $pns_id_mf = array_unique($pns_id_mf);
-                $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }           
-            
+            $where[] = 'p.pns_id IN ('.implode(',', $arr_mf_id).')';
+
         }
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
+        $where1 = array();
         if (count( $arrPNsChild ) > 0)   {
-                $where[] = 'p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
+                $where1[] = 'p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
         }
         
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-         $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
-        
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
+        //$where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
+        if(isset($arrPNsChild))
+        {
+            $where .= ' and p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
+        }
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
         . $inner
