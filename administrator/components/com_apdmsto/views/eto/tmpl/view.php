@@ -395,6 +395,18 @@ function checkedforMarkScan(ischecked)
                 <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
             </tr>
             <tr>
+                <td  class="key" width="28%"><?php echo JText::_('External PO'); ?></td>
+                <td width="30%" class="title"><?php
+                    if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                        echo SToController::getPoExCodeFromId($this->sto_row->sto_so_id);
+
+                    }
+                    ?></td>
+                <td  class="key" width="28%"></td>
+                <td width="30%" class="title">
+                   </td>
+            </tr>
+            <tr>
                 <td  class="key" width="28%"><?php echo JText::_('Customer'); ?></td>
                 <td width="30%" class="title"><?php 
                 if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){

@@ -14,13 +14,14 @@ function UpdateECO(){
 		var MyAjax = new Ajax(url, { 
 			method:'post',
 			data:  $('adminFormEco').toQueryString(),
-			onComplete:function(result){	
+			onComplete:function(result){
 				var eco_result = result;
 				eco = eco_result.split('^');
                 window.parent.document.getElementById('customer_id').value = eco[0];
                 window.parent.document.getElementById('ccs_name').innerHTML = eco[1];
                 window.parent.document.getElementById('sto_so_id').value =  eco[2];
                 window.parent.document.getElementById('so_code').value = eco[3];
+                window.parent.document.getElementById('so_cuscode').innerHTML = eco[4];
                 window.parent.document.getElementById('sbox-window').close();
 				
 

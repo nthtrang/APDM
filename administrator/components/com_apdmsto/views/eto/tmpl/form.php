@@ -198,11 +198,22 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                             <input type="button" name="addSO" value="<?php echo JText::_('Select SO')?>"/>
                         </a>
                     </td>
-                </tr>     </table>       
+                </tr>
+                                            <tr>
+                                                <td class="key">
+                                                    <label for="name">
+                                                        <?php echo JText::_('External PO'); ?>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <span id="so_cuscode"></span>
+                                                </td>
+                                            </tr>
+                                        </table>
                 </div>
                         </td>
                 </tr>
-                
+
                 <tr>
                     <td class="key">
                         <label for="name">

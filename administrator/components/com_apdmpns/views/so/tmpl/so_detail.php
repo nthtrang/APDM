@@ -196,10 +196,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                         <td width="30%" class="title">
                                         <?php 
                                          $soNumber = $this->so_row->so_cuscode;
-                                        if($this->so_row->ccs_code)
+                                       /* if($this->so_row->ccs_code)
                                         {
                                                $soNumber = $this->so_row->ccs_code."-".$soNumber;
-                                        }
+                                        }*/
                                         echo $soNumber; ?></td>
                                     <td class="key" valign="top">
                                         <label for="username">
@@ -339,9 +339,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                 <th class="title">State</th>
                                                 </tr>        </thead>
                                                         
-                                                                 <?php 
+                                                                 <?php
                                                                  foreach ($this->so_pn_list as $row) {                                                                         
-                                                                 $rowEto = PNsController::GetEtoPns($row->pns_id);
+                                                                 $rowEto = PNsController::GetEtoPns($row->pns_id,$this->so_row->pns_so_id);
                                                                  
                                                                  $totalEto= count($rowEto);
                                                                  if($totalEto){

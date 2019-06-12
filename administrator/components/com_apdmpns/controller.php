@@ -5879,7 +5879,7 @@ class PNsController extends JController {
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
                 //$query = "select loc.location_code,fk.qty,fk.sto_id from apdm_pns_sto_fk fk inner join apdm_pns_location loc on fk.location=loc.pns_location_id where fk.pns_id = ".$pns_id." and fk.partstate = '".$partState."'";
-              $query = "select concat(loc.location_code,'-',fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
+              $query = "select CONCAT_WS('-',loc.location_code,fk.pns_mfg_pn_id) as loc_mfg,loc.location_code,fk.qty,fk.sto_id ,fk.pns_mfg_pn_id,sto.sto_type ".
                         "from apdm_pns_sto_fk fk ".
                         "inner join apdm_pns_location loc on fk.location=loc.pns_location_id ".
                         "inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
@@ -9285,10 +9285,10 @@ class PNsController extends JController {
             JRequest::setVar('view', 'listpns');
             parent::display();
         }
-        function GetEtoPns($pns_id)
+        function GetEtoPns($pns_id,$so_id)
         {
                 $db =& JFactory::getDBO();	
-                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state = 'InTransit'";
+                $query = "SELECT p.pns_id,fk.qty,fk.sto_id,sto.sto_state  FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id left join apdm_pns_so so on sto.sto_so_id = so.pns_so_id  where  so.pns_so_id=  ".$so_id." and fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state = 'InTransit'";
                 $db->setQuery($query);
                 return $db->loadObjectList();
 

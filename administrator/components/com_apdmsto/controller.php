@@ -1574,11 +1574,11 @@ class SToController extends JController
                 {
                     $soNumber = $row->ccs_code."-".$soNumber;
                 }
-                $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber;
+                $result = $row->customer_id.'^'.$row->ccs_name.'^'.$row->pns_so_id.'^'.$soNumber.'^'.$row->so_cuscode;
                 
         }
         else {
-               $result = '0^NA^0^NA'; 
+               $result = '0^NA^0^NA^NA';
         }
         echo $result;      
         exit;
@@ -1655,7 +1655,20 @@ class SToController extends JController
         }
         $result = $soNumber;
         return  $result;      
-    } 
+    }
+    function getPoExCodeFromId($soId)
+    {
+        $db = & JFactory::getDBO();
+        $result  = "NA";
+        $query = 'SELECT  so.pns_so_id,so.so_cuscode,so.customer_id as ccs_so_code,ccs.ccs_coordinator,ccs.ccs_name,ccs.ccs_code '
+            . ' from apdm_pns_so so'
+            . ' left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id='.$soId;
+        $db->setQuery($query);
+        $row =  $db->loadObject();
+        $soNumber = $row->so_cuscode;
+        $result = $soNumber;
+        return  $result;
+    }
     function getCustomerCodeFromSoId($soId)
     {
         $db = & JFactory::getDBO();
