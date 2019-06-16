@@ -10100,7 +10100,7 @@ class PNsController extends JController {
                                 }
                                 $db->setQuery("INSERT INTO apdm_pns_parents (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
                                 $db->query();
-                                $$mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
+                                $mess[$line] = "Import sucessfull " . $pn_code ." into BOM";
                             }
                             else
                             {

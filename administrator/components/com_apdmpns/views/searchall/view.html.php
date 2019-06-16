@@ -362,7 +362,9 @@ else
                     break;
                 case '0':
                 case '6': //for information of pns
-                    $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                        if (isset( $search ) && $search!= '') {
+                                $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                        }
                 break;
                 case '0':
                 case '5': //for PNs code               

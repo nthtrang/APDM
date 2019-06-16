@@ -199,8 +199,6 @@ class pnsViewgetpnsforeco extends JView
                            $arr_eco_id[] = $eco->eco_id; 
                         }
                         
-                    }else{
-                        $arr_eco_id[] = -1;
                     }
                 break;
                 case '2': //Vendor
@@ -211,8 +209,6 @@ class pnsViewgetpnsforeco extends JView
                         foreach ($rs_vendor as $vendor){
                             $arr_vendor_id[] = $vendor->info_id;
                         }
-                    }else{
-                        $arr_vendor_id[] =-1;
                     }
                 break;
                  case '3': //Supplier
@@ -223,8 +219,6 @@ class pnsViewgetpnsforeco extends JView
                         foreach ($rs_supplier as $supplier){
                             $arr_supplier_id[] = $supplier->info_id;
                         }
-                    }else{
-                        $arr_supplier_id[] = -1;
                     }
                 break;
                  case '4': //Manufacture
@@ -250,7 +244,9 @@ class pnsViewgetpnsforeco extends JView
                     }
                     break;
                 case '6': //for information of pns
-                    $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                        if (isset( $search ) && $search!= '') {
+                                $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                        }
                 break;
                 case '5': //for code
                     //  $where[] = 'p.pns_code_full LIKE '.$searchEscaped;
