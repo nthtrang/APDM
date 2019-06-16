@@ -1915,5 +1915,213 @@ class SToController extends JController
         exit;
         //return $locationArr;
     }            
-    
+    function getStoCodefromId($sto_id)
+        {
+                $db =& JFactory::getDBO();
+                $querypn = "SELECT sto_code FROM apdm_pns_sto WHERE  pns_sto_id =" . $sto_id;
+                $db->setQuery($querypn);
+                $pns = $db->loadObject();
+                if($pns->sto_code)
+                {
+                        return $pns->sto_code;
+                }
+                return "";
+        }
+    function importpn()
+    {
+        JRequest::setVar('layout', 'importpart');
+        JRequest::setVar('view', 'getpnsforstos');
+        parent::display();   
+    }
+     function downloadImportPartTemplate() {
+                //$path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'pdf' . DS;
+                $path_pns = JPATH_COMPONENT . DS ;
+                $dFile = new DownloadFile($path_pns, 'IMPORT_PN_STO_TEMPALTE.xls');
+                exit;
+        }
+    function uploadimportPart()
+    {
+            $sto_id = JRequest::getVar('sto_id');
+            
+                include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
+                require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
+                require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
+                require_once('includes/download.class.php');
+                ini_set("memory_limit", "512M");
+                @set_time_limit(1000000);
+               $objPHPExcel = new PHPExcel();
+              //  $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
+               // $objPHPExcel = $objReader->load(JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xlsx');
+
+                
+                
+                global $mainframe;
+                $me = & JFactory::getUser();
+                $pns_id = JRequest::getVar('pns_id');
+                $username = $me->get('username');
+                $db = & JFactory::getDBO();
+
+                //process upload file
+                $path_bom_file = JPATH_SITE . DS . 'uploads'  . DS;
+                $upload = new upload($_FILES['']);
+                $upload->r_mkdir($path_bom_file, 0777);                
+                $bom_upload = "";
+                         if ($_FILES['bom_file']['size'] > 0) {                                
+                            if($_FILES['bom_file']['size']<20000000)
+                            {                                                                 
+                                $ext = pathinfo($_FILES['bom_file']['name'], PATHINFO_EXTENSION);
+                                if($ext=="xls"){
+                                        if (file_exists($path_bom_file . $_FILES['bom_file']['name'])) {
+
+                                                @unlink($path_bom_file .  $_FILES['bom_file']['name']);
+                                        }
+                                        if (!move_uploaded_file($_FILES['bom_file']['tmp_name'], $path_bom_file . $_FILES['bom_file']['name'])) {
+                                                $msg = JText::_('Upload fail, please try again');
+                                                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
+                                        } else {
+                                            $bom_upload = $_FILES['bom_file']['name'];
+                                        }
+                                }
+                                else
+                                {
+                                        $msg = JText::_('Please upload file type is xls.');
+                                        return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);                                        
+                                }
+                            }
+                            else
+                            {
+                                $msg = JText::_('Please upload file less than 20MB.');
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
+                            }
+                        }
+                        else{
+                                $msg = JText::_('Please select an excel file first.');
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
+                        }
+                                              
+                  //Use whatever path to an Excel file you need.
+                  //$inputFileName = JPATH_COMPONENT . DS . 'IMPORT_BOM_TEMPALTE.xls';
+                        $inputFileName =  $path_bom_file.$bom_upload;
+                        try {                    
+                                $objReader = PHPExcel_IOFactory::createReader('Excel5');
+                                $objPHPExcel = $objReader->load($inputFileName);
+                        } catch (Exception $e) {
+                                $msg = 'Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage();
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
+                        }
+
+                
+                  $sheet = $objPHPExcel->getSheet(0);
+                   $highestRow = $sheet->getHighestRow();
+                   $highestColumn = $sheet->getHighestColumn();
+//var_dump($objPHPExcel->getActiveSheet()->toArray(null,true,true,true));
+                    for ($row = 1; $row <= 1; $row++) { 
+                            $rowData = $sheet->toArray('A1:' . $highestColumn . '1',  null, true, false);
+                    }
+                    $header = $rowData[1];
+                    $messh=array();
+                      $mess=array();              
+                    if($rowData[1][1]!="Part Number")
+                    {
+                            $messh[] =  "Err:Wrong format at A1. Must be 'Part Number'";
+                    }
+                    if(sizeof($messh))
+                    {
+                                $msg = JText::_('Err:Wrong format at A1. Must be \'Part Number\'');
+                                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
+                    }
+                   
+                    
+                for ($row = 1; $row <= $highestRow; $row++) { 
+                        $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
+                }
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $_created = $datenow->toMySQL();
+                $_created_by = $me->get('id');
+                $arr_err=array();
+                for($line=2;$line<=$highestRow;$line++)
+                {
+                       
+                        if($rowData[$line][0]==""){
+                            $arr_err[$line]    = "Err:".$rowData[$line][0]. " at column A".$line ." is null";
+                            continue;
+                        }
+                        $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
+                        if($pns_id){                                
+                                 $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
+                                $db->query();                                
+                                $mess[$line] = "Import sucessfull PN ". $pn_code;
+                        }    
+                }  
+                //$inputFileName =  $path_bom_file.
+               // $file = fopen($path_bom_file.$bom_upload."_result.txt","w");
+                //echo fwrite($file,  implode("\n", $arr_err));
+              //  $file_name = $bom_upload.time()."_result.txt";
+             //   file_put_contents($path_bom_file.$file_name, implode("\n", $arr_err) . "\n", FILE_APPEND);
+               // fclose($file);
+                
+                //write_ log
+                $result = array_merge($arr_err, $mess);
+                $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
+                $objPHPExcel = $objReader->load($path_bom_file .'IMPORT_BOM_TEMPALTE_REPORT.xls');
+                $nRecord = count($result);
+                //$objPHPExcel->getSheet(0);
+                $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
+                if ($nRecord > 0) {
+                        $jj = 0;
+                        $ii = 1;
+                        $number = 1;
+                        foreach ($result as $ms) {
+                                $a = 'A' . $ii;
+                                $b = 'B' . $ii;
+                                //$c = 'C' . $ii;
+                               
+                                //set heigh or row                                 
+                                $objPHPExcel->getActiveSheet()->getRowDimension($ii)->setRowHeight(30);
+                                $objPHPExcel->getActiveSheet()->setCellValue($a, $number );
+                                $objPHPExcel->getActiveSheet()->setCellValue($b, $ms);                             
+
+                                //set format
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                              
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                          
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                               
+
+                                $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                
+                                if ($jj == $nRecord - 1) {
+                                        $objPHPExcel->getActiveSheet()->getStyle($a)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                        $objPHPExcel->getActiveSheet()->getStyle($b)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+                                                                       }
+                                $ii++;
+                                $jj++;
+                                $number++;
+                        }
+                }
+                $path_export = JPATH_SITE . DS . 'uploads'  . DS;
+                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                $objWriter->save($path_export . "Report_".$bom_upload);
+                $dFile = new DownloadFile($path_export, "Report_".$bom_upload);
+                
+                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns&importresult='.$file_name,"Import Done" );
+        
+    }
+     function checkPnExist($pns_code)
+        {
+                $db = & JFactory::getDBO(); 
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". $pns_code ."'");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                        return $pns_id;
+                }
+                return 0;
+        }
 }

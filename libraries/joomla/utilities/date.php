@@ -299,5 +299,12 @@ class JDate extends JObject
 			case 6: return $abbr ? JText::_('SAT') : JText::_('SATURDAY');
 		}
 	}
-
+        function toYmd($local = false)
+	{
+		$date   = ($local) ? $this->_date + $this->_offset : $this->_date;
+		$offset = $this->getOffset();
+        $offset = ($local && $this->_offset) ? sprintf("%+03d:%02d", $offset, abs(($offset-intval($offset))*60) ) : 'Z';
+        $date   = ($this->_date !== false) ? date('ymd', $date) : null;
+		return $date;
+	}
 }

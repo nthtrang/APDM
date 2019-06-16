@@ -83,7 +83,9 @@ class pnsViewlistchild extends JView
         if ($type_filter){           
             switch($type_filter){
                   case '6': //for information of pns
-                    $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                          if (isset( $search ) && $search!= '') {
+                                $where[] = 'p.pns_description LIKE '.$searchEscaped;
+                          }
                   break;
                     case '5': //for code
                     $leght = strlen (trim($keyword));                    

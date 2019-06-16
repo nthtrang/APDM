@@ -14,8 +14,8 @@ class JConfig {
 	var $gzip = '1';
 	var $error_reporting = '-1';
 	var $xmlrpc_server = '0';
-	var $log_path = 'D:\\WebApps\\ADP\\logs';
-	var $tmp_path = 'D:\\WebApps\\ADP\\tmp';
+	var $log_path = 'D:\\xampp\\htdocs\\APDM\\logs';
+	var $tmp_path = 'D:\\xampp\\htdocs\\APDM\\tmp';
 	var $live_site = '';
 	var $offset = '7';
 	var $caching = '0';
@@ -31,7 +31,7 @@ class JConfig {
 	var $dbtype = 'mysql';
 	var $host = 'localhost';
 	var $user = 'root';
-	var $db = 'apdm';
+	var $db = 'apdmnew';
 	var $dbprefix = 'jos_';
 	var $mailer = 'smtp';
 	var $mailfrom = 'trang.nguyen@ascenx.com';
@@ -41,7 +41,7 @@ class JConfig {
 	var $smtpsecure = 'ssl';
 	var $smtpport = '465';
 	var $smtpuser = 'trang.nguyen@ascenx.com';
-	var $smtppass = 'toosloan';
+	var $smtppass = '';
 	var $smtphost = 'smtp.gmail.com';
 	var $MetaAuthor = '1';
 	var $MetaTitle = '1';

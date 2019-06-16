@@ -1,5 +1,4 @@
 <?php
-
 $conf['dir'] = "../../PNsZip";
 if ((isset($_GET['step']))&&(!empty($_GET['step']))) $step=$_GET['step']; else $step=0;
 if ((isset($_GET['dirname']))&&(!empty($_GET['dirname']))) $dirname=$_GET['dirname']; else $dirname=".";

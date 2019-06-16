@@ -56,3 +56,4 @@ var JMenu = new Class({
 		}
 	}
 });
+

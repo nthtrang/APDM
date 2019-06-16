@@ -11,7 +11,9 @@
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
 */
-
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
 
@@ -25,14 +27,14 @@ jimport( 'joomla.application.component.view');
  * @subpackage	Users
  * @since 1.0
  */
-class pnsViewgetpnsforinit extends JView
+class SToViewgetpnsforstos extends JView
 {
 	function display($tpl = null)
 	{
 	    global $mainframe, $option;
         
         $db                =& JFactory::getDBO();
-        $option             = 'com_apdmpns&task=get_list_child';
+        $option             = 'com_apdmsto&task=get_list_child';
         $id               = JRequest::getVar('id');
         
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
@@ -55,7 +57,7 @@ class pnsViewgetpnsforinit extends JView
         
         
         $where = array();  
-        $where[] = 'p.pns_deleted = 0 and pns_life_cycle in ("Released") and eco_id > 0';
+      //  $where[] = 'p.pns_deleted = 0';//and po_id = 0
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
@@ -234,14 +236,15 @@ class pnsViewgetpnsforinit extends JView
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.'  group by ASI.info_id');
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.' group by ASI.info_id');
+                   // echo $db->getQuery();
                     $rs_mf = $db->loadObjectList();                   
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
                            $arr_mf_id[] = $mf->info_id;
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
-                    }
+                    }                    
                     break;                
                 case '6': //for information of pns
                         if (isset( $search ) && $search!= '') {
@@ -284,21 +287,21 @@ class pnsViewgetpnsforinit extends JView
 //                       }
 //                        
 //                   }else
-                   if($leght==10){
+                    if($leght==10){
                          $arr_code = explode("-", trim($keyword));
-                         $where[] = 'p.ccs_code ='.$arr_code[0].' AND p.pns_code='.$arr_code[1];
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
                          
                    }else{      
-                           if($searchEscaped){
-                         $arr_code = explode("-", trim($keyword));
-                         $where[] = '(p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%") or (p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped.')';
-                           }
-                         //$where[] = ';                               
-                   }             
+                          $arr_code = explode("-", trim($keyword));
+                         $where[] = 'p.ccs_code LIKE "%'.$arr_code[0].'%" AND p.pns_code like "%'.$arr_code[1].'%"';
+                         $where[] = 'p.pns_code LIKE '.$searchEscaped.' OR p.pns_revision LIKE '.$searchEscaped. ' OR p.ccs_code LIKE '.$searchEscaped;    
+                     
+                   }          
                 break;
             }
             
         }
+        
         
         if(count($arr_vendor_id) > 0){           
             //get list pns have this vendor
@@ -352,10 +355,21 @@ class pnsViewgetpnsforinit extends JView
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
         }
+        //check if exist in TTO with state USING will be exclude
+            $pns_id_tto = array();
+            $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
+            $rs_ps_tto = $db->loadObjectList();
+            if(count($rs_ps_tto) > 0){
+                foreach ($rs_ps_tto as $obj){
+                    $pns_id_tto[] = $obj->pns_id;        
+                }
+               $pns_id_tto = array_unique($pns_id_tto);
+                $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+            }   
         
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
-        $where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
-      
+        //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
         
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
@@ -369,7 +383,7 @@ class pnsViewgetpnsforinit extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-       $query = 'SELECT p.* '
+        $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $filter
             . $where            

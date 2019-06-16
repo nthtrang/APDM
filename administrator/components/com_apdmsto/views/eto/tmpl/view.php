@@ -13,6 +13,7 @@ JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small
 
 if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
     JToolBarHelper::customX("editeto",'edit',"Edit","Edit",false);
+    //JToolBarHelper::customX("importpn",'upload',"Import Part","Import Part",false);
 }
 
 JToolBarHelper::cancel( 'cancel', 'Close' );
@@ -62,10 +63,15 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             submitform( pressbutton );
             return;
         }
+        
         if (pressbutton == 'printetopdf') {
             //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
             var url = "index.php?option=com_apdmsto&task=printetopdf&id="+form.sto_id.value + "&tmpl=component";
             window.open(url, '_blank');
+            return;
+        }
+        if (pressbutton == 'importpn') {
+            window.location = "index.php?option=com_apdmsto&task=importpn&id="+form.sto_id.value;           
             return;
         }
          if (pressbutton == 'printetoDelivery') {
@@ -797,6 +803,13 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                 Add Part
             </a>
         </td>
+        <td class="button" id="toolbar-upload">
+<a href="#" onclick="javascript:hideMainMenu(); submitbutton('importpn')" class="toolbar">
+<span class="icon-32-upload" title="Import Part">
+</span>
+Import Part
+</a>
+</td>
         <?php
     }
     if (in_array("D", $role) && ($this->sto_row->sto_state != "Done")) {
