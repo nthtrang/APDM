@@ -106,9 +106,14 @@ if ($type_filter==0){
                              ' where so.so_cuscode LIKE '.$searchEscaped .' or so.customer_id LIKE '.$searchEscaped;
                              if($arr_code[0] && $arr_code[1])
                              {
-                                 $whereso =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  LIKE "%'.$arr_code[0] .'%")';
-                             }                         
-                    $query = $query. $whereso.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+                                 $whereso =  'OR  (so.so_cuscode LIKE "%'.$arr_code[1] .'%" or so.customer_id  = "'.$arr_code[0] .'")';
+                             }
+                             else
+                             {
+                                 $whereso =  'OR  (so.so_cuscode LIKE "%'.$keyword .'%" or so.customer_id  LIKE "%'.$keyword .'%")';
+                             }
+
+               echo   $query = $query. $whereso.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                     $db->setQuery($query);
                     $rs_so = $db->loadObjectList();
                     if (count($rs_so) >0){

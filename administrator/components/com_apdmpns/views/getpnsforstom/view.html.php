@@ -199,6 +199,8 @@ class pnsViewgetpnsforstom extends JView
                            $arr_eco_id[] = $eco->eco_id; 
                         }
                         
+                    }else{
+                        $arr_eco_id[] = -1;
                     }
                 break;
                 case '2': //Vendor
@@ -209,6 +211,8 @@ class pnsViewgetpnsforstom extends JView
                         foreach ($rs_vendor as $vendor){
                             $arr_vendor_id[] = $vendor->info_id;
                         }
+                    }else{
+                        $arr_vendor_id[] =-1;
                     }
                 break;
                  case '3': //Supplier
@@ -219,6 +223,8 @@ class pnsViewgetpnsforstom extends JView
                         foreach ($rs_supplier as $supplier){
                             $arr_supplier_id[] = $supplier->info_id;
                         }
+                    }else{
+                        $arr_supplier_id[] = -1;
                     }
                 break;
                  case '4': //Manufacture
@@ -229,6 +235,8 @@ class pnsViewgetpnsforstom extends JView
                         foreach ($rs_mf as $mf){
                             $arr_mf_id[] = $mf->info_id;
                         }
+                    }else{
+                        $arr_mf_id[] = -1;
                     }
                 break;
                 case '7': //Manufacture PN                         
@@ -242,12 +250,12 @@ class pnsViewgetpnsforstom extends JView
                            $arr_mf_id[] = $mf->info_id;
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
-                    }                    
+                    }else{
+                        $arr_mf_id[] = -1;
+                    }                     
                     break;                
                 case '6': //for information of pns
-                        if (isset( $search ) && $search!= '') {
-                                $where[] = 'p.pns_description LIKE '.$searchEscaped;
-                        }
+                    $where[] = 'p.pns_description LIKE '.$searchEscaped;
                 break;
                 case '5': //for code
                     //  $where[] = 'p.pns_code_full LIKE '.$searchEscaped;

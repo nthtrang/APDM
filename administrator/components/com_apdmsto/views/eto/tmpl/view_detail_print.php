@@ -194,6 +194,7 @@
                         <td class="tg-0pky-pr tg-0pky-border" style="text-align:center;padding:0px" align="center" colspan="3">
                             <table class="tgi" width="100%">
                                 <?php
+
                                 foreach ($this->sto_pn_list2 as $rw) {
                                     $ipn2  =1;
                                     $style = "";

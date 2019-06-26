@@ -40,7 +40,7 @@
                         return false;
                 }
                 if (form.so_cuscode.value==0){
-			alert("Please input PO# of Customer");
+			alert("Please input External PO");
 			form.so_cuscode.focus();
 			return false;
 		}  
@@ -187,7 +187,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                  <tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( 'PO# of Customer' ); ?>
+							<?php echo JText::_( 'External PO' ); ?>
 						</label>
 					</td>
 					<td>                                                 

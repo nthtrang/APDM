@@ -5,7 +5,6 @@
 <?php
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
 	
 ?>
 <script language="javascript">
@@ -31,7 +30,7 @@ function UpdatePnsChild(){
 		return false;
 	}else{
                 var so_id = $('so_id').value;
-		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_wo&so_id'+so_id;			
+		var url = 'index.php?option=com_apdmpns&task=ajax_list_pns_wo&so_id='+so_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -47,7 +46,7 @@ function UpdatePnsChild(){
 	
 }
 </script>
-<form action="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmpns&task=get_list_pns_wo&tmpl=component&so_id=<?php echo $this->so_id?>&pns_id=<?php echo $this->pns_id;?>" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?php echo $this->id?>" />
 <input type="hidden" name="so_id" id="so_id" value="<?php echo $this->so_id?>" />
 <table  width="100%">

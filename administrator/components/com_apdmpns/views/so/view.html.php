@@ -78,8 +78,8 @@ class pnsViewso extends JView {
                 $db->setQuery($query);
                 $report_list = $db->loadObjectList();
                 $usertype	= $me->get('usertype');
-                $role = JAdministrator::RoleOnComponent(10);                   
-                if (in_array("D", $role) ||  $usertype =='Administrator' || $usertype=="Super Administrator" ) {
+                $role = JAdministrator::RoleOnComponent(12);                   
+                if (in_array("V", $role) ||  $usertype =='Administrator' || $usertype=="Super Administrator" ) {
                         $this->assignRef('report_list', $report_list);
                 }
                 

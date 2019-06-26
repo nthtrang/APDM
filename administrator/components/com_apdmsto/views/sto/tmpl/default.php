@@ -411,7 +411,7 @@ th:first-child div{
                                 </td>
                                 <td align="center" <?php echo $background; ?>>
                                     <?php
-                                    echo CalculateInventoryValueforView($row->pns_id);
+                                    echo $stock;
                                     $inventory = round($row->inventory, 2);
                                     if ($inventory <= 0)
                                         $inventory = 0;

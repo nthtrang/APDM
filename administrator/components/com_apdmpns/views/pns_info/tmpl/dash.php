@@ -36,12 +36,12 @@
 	function submitbutton(pressbutton) {
 		var form = document.adminForm;
 			
-		/*if (form.eco_id.value==0){
+		if (form.eco_id.value==0){
 			alert("Please select ECO");
 			form.eco.focus();
 			return false;
 		}
-		*/
+		
 		
 		submitform( pressbutton );
 	}

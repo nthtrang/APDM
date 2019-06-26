@@ -384,7 +384,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 				</td>   -->
                                 <td align="center">
 					<?php //echo $row->pns_stock;?>
-                                        <?php echo $stock = CalculateInventoryValueforView($row->pns_id);?>
+                                        <?php echo $stock = PNsController::CalculateInventoryValueforView($row->pns_id);?>
 				</td>   
 <!--                                <td align="center">
 					<?php //echo $row->pns_qty_used;?>

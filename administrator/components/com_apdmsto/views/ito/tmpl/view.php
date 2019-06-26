@@ -42,6 +42,10 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                         submitform( pressbutton );
                         return;
                 }
+                if (pressbutton == 'importpnito') {
+                    window.location = "index.php?option=com_apdmsto&task=importpnito&id="+form.sto_id.value;           
+                    return;
+                }
                 if (pressbutton == 'printitopdf') {
                     //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
                     var url = "index.php?option=com_apdmsto&task=printitopdf&id="+form.sto_id.value + "&tmpl=component";
@@ -573,6 +577,13 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
                 Add Part
             </a>
         </td>
+        <td class="button" id="toolbar-upload">
+<a href="#" onclick="javascript:hideMainMenu(); submitbutton('importpnito')" class="toolbar">
+<span class="icon-32-upload" title="Import Part">
+</span>
+Import Part
+</a>
+</td>
         <?php
     }
     if (in_array("D", $role) && ($this->sto_row->sto_state != "Done")) {

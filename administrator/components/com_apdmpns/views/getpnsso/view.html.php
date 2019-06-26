@@ -57,7 +57,7 @@ class pnsViewgetpnsso extends JView
         
         
         $where = array();  
-       // $where[] = 'p.pns_deleted = 0';
+      //  $where[] = 'p.pns_deleted = 0';
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';
@@ -88,6 +88,97 @@ class pnsViewgetpnsso extends JView
                 foreach($row_pns as $rw)
                 {
                     $arrPNsChild[] = $rw->pns_id;
+                }
+                //get list pns_parent of this pns
+                $query = " SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$pns_id;
+                $db->setQuery($query);
+                $row_pns_ = $db->loadObjectList();
+                if ( count ($row_pns_) > 0 ){
+                    foreach ($row_pns_ as $obj_){
+                        $arrPNsChild[] = $obj_->pns_parent;
+                        //check for parent of parent wtih level 1
+                        $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj_->pns_parent);
+                        $rows1 = $db->loadObjectList();
+                        if (count($rows1) > 0){
+                            foreach ($rows1 as $obj1){
+                                $arrPNsChild[] = $obj1->pns_parent;
+                                ///check for parent level 2
+                                $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj1->pns_parent);
+                                $rows2 = $db->loadObjectList();
+                                if ( count ($rows2 ) > 0){
+                                    foreach ($rows2 as $obj2){
+                                        $arrPNsChild[] = $obj2->pns_parent;
+                                        //check for levle 3
+                                        $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj2->pns_parent);
+                                        $rows3 = $db->loadObjectList();
+                                        if ( count ($rows3) > 0 ){
+                                            foreach ($rows3 as $obj3){
+                                                $arrPNsChild[] = $obj3->pns_parent;
+                                                //check for level 4
+                                                $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj3->pns_parent);
+                                                $rows4 = $db->loadObjectList();
+                                                if (count($rows4) > 0){
+                                                    foreach($rows4 as $obj4){
+                                                        $arrPNsChild[] = $obj4->pns_parent;
+                                                        //check for levle 5
+                                                        $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj4->pns_parent);
+                                                        $rows5 = $db->loadObjectList();
+                                                        if  ( count ($rows5) > 0 ){
+                                                            foreach ($rows5 as $obj5 ){
+                                                                $arrPNsChild[] = $obj5->pns_parent;
+                                                                //check for level 6
+                                                                $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj5->pns_parent);
+                                                                $rows6 = $db->loadObjectList();
+                                                                if ( count ($rows6) > 0 ){
+                                                                    foreach ($rows6 as $obj6){
+                                                                        $arrPNsChild[] = $obj6->pns_parent;
+                                                                        //check for level 7
+                                                                        $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj6->pns_parent);
+                                                                        $rows7 = $db->loadObjectList();
+                                                                        if ( count ($rows7) > 0 ){
+                                                                            foreach ($rows7 as $obj7){
+                                                                                $arrPNsChild[] = $obj7->pns_parent;
+                                                                                //check for level 8
+                                                                                $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj7->pns_parent);
+                                                                                $rows8 = $db->loadObjectList();
+                                                                                if ( count( $rows8) > 0){
+                                                                                    foreach ($rows8 as $obj8){
+                                                                                        $arrPNsChild[] = $obj8->pns_parent;
+                                                                                        //check for level 9
+                                                                                        $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj8->pns_parent);
+                                                                                        $rows9 = $db->loadObjectList();
+                                                                                        if ( count ($rows9) > 0){
+                                                                                            foreach ($rows9 as $obj9){
+                                                                                                $arrPNsChild[] = $obj9->pns_parent;
+                                                                                                //check forlevel 10;
+                                                                                                $db->setQuery("SELECT pns_parent FROM apdm_pns_parents WHERE pns_id=".$obj9->pns_parent);
+                                                                                                $rows10 = $db->loadObjectList();
+                                                                                                if (count($rows10) > 0){
+                                                                                                    foreach ($rows10 as $obj10){
+                                                                                                        $arrPNsChild[] = $obj10->pns_parent;
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -193,9 +284,7 @@ class pnsViewgetpnsso extends JView
                 }
                 $pns_id_vendor =array_unique($pns_id_vendor);     
                 $where[] = 'p.pns_id IN ('.implode(',', $pns_id_vendor).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }              
+            }
         }
        if(count($arr_supplier_id) > 0){
             //get list pns have this supplier
@@ -208,9 +297,7 @@ class pnsViewgetpnsso extends JView
                 }
                 $pns_id_sp = array_unique($pns_id_sp);
                 $where[] = 'p.pns_id IN ('.implode(',', $pns_id_sp).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            } 
+            }
             
             
             
@@ -227,14 +314,20 @@ class pnsViewgetpnsso extends JView
         if (count( $arrPNsChild ) > 0)   {
                 $where1[] = 'p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
         }
-        
+
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
         //$where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
         if(isset($arrPNsChild))
         {
-            $where .= ' and p.pns_id IN ('.implode(",", $arrPNsChild ).') ';
+            if($where) {
+                $where .= ' and p.pns_id IN (' . implode(",", $arrPNsChild) . ') ';
+            }
+            else
+            {
+                $where .= ' WHERE p.pns_deleted = 0 and p.pns_id IN (' . implode(",", $arrPNsChild) . ') ';
+            }
         }
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
@@ -249,7 +342,7 @@ class pnsViewgetpnsso extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
+         $query = 'SELECT p.* '
             . ' FROM apdm_pns AS p'
             . $inner
             . $filter
@@ -308,6 +401,7 @@ class pnsViewgetpnsso extends JView
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('so_id',        $so_id);
+        $this->assignRef('pns_id',        $pns_id);
         $this->assignRef('rows',        $rows);
         $this->assignRef('pagination',    $pagination);   
         $this->assignRef('id',    $id);       

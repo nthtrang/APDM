@@ -41,7 +41,7 @@ class pnsViewlistpns extends JView
         $this->assignRef('lists',        $lists);
         $this->assignRef('rows',        $rows);
         //check is reved or not
-        $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$pns_id."");
+        $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$pns_id."");         
         $revCheck = $db->loadResult();
         $this->assignRef('revExist',        $revCheck);
                 //get parent

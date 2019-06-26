@@ -130,7 +130,7 @@ window.addEvent('domready', function(){
                     </td>
                     <td>
                         <input type="text" readonly="readonly" name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code?>"/>
-                        <input type="hidden" readonly="readonly" name="sto_so_id" id="sto_so_id"  size="10" value=""/>
+                        <input type="hidden" readonly="readonly" name="sto_so_id" id="sto_so_id"  size="10" value="<?php echo $this->sto_row->sto_so_id?>"/>
                         <span id="po_customer" style="display:none"></span>
                     </td>
                 </tr>

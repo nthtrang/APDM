@@ -321,7 +321,7 @@ class pnsViewgetpnsforeto extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
 
-         $query = "SELECT sto.pns_sto_id,sto.sto_code,fk.id,fk.pns_id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_type,p.pns_life_cycle,p.pns_status,p.eco_id,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
+        $query = "SELECT sto.pns_sto_id,sto.sto_code,fk.id,fk.pns_id,fk.qty,fk.location,fk.partstate,fk.qty_from,fk.location_from ,p.pns_life_cycle, p.pns_description,p.pns_type,p.pns_life_cycle,p.pns_status,p.eco_id,p.pns_cpn,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id  and sto.sto_type =1  inner join apdm_pns AS p on p.pns_id = fk.pns_id "
                         . $filter
                         . $where                                                                                          
                         . " group by fk.pns_id "

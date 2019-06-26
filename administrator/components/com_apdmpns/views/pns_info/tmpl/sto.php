@@ -228,7 +228,7 @@ th:first-child div{
                                         <th width="100"><?php echo JText::_('State'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('State'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Tool ID'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Tool ID'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Part State'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Part State'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Owner'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Owner'); ?><div style="width:50px;padding:10px 0px 0px 100px"><?php echo JText::_('Borrower'); ?></div></th>
                                 </tr>
                         </thead>
                         <tbody>					

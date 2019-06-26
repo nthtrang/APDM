@@ -11,7 +11,8 @@
 	}  
 
 	//JToolBarHelper::cancel();
-        JToolBarHelper::cancel( 'cancel', 'Close' );
+        //JToolBarHelper::cancel( 'cancel', 'Close' );
+    JToolBarHelper::customX("eto_detail",'cancel',"Back","Back",false);
 	$cparams = JComponentHelper::getParams ('com_media');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
@@ -22,12 +23,17 @@ function submitbutton(pressbutton) {
         if (pressbutton == 'cancel') {
                window.location = "index.php?option=com_apdmsto&task=eto_detail&id="+form.sto_id.value;           
                 return;
-        }  
-        if (form.bom_file.value==0){
+        }
+    if (pressbutton == 'eto_detail') {
+        window.location = "index.php?option=com_apdmsto&task=eto_detail&id="+form.sto_id.value;
+        return;
+    }
+    if (form.bom_file.value==0){
                 alert("Please select an excel file first.");
                 return false;
-        }  
-                
+        }
+
+
      submitform( pressbutton );
 }
 

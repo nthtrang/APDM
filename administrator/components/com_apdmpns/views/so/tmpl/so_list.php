@@ -204,7 +204,7 @@ if (count($this->so_list) > 0) { ?>
 
       
 <?php 
-if (in_array("W", $role) && count($this->report_list) > 0) { ?>
+if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
 <fieldset class="adminform">
 		<legend><font style="size:14px"><?php echo JText::_( 'Issue Report' ); ?> </font></legend>                          
                 <section class="">

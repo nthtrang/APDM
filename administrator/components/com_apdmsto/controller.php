@@ -244,7 +244,12 @@ class SToController extends JController
                 $db = & JFactory::getDBO();                
                 $db->setQuery("SELECT location_code FROM apdm_pns_location WHERE pns_location_id=" . $pns_location_id);                
                 return $db->loadResult();
-        }		
+        }	
+        function GetIdLocation($pns_location_code) {
+                $db = & JFactory::getDBO();                
+                $db->setQuery("SELECT pns_location_id FROM apdm_pns_location WHERE location_code='" . $pns_location_code."'");                                
+                return $db->loadResult();
+        }	
 		 function GetStoFrommPns($pns_id,$sto_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -470,9 +475,9 @@ class SToController extends JController
                                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$ito_id, $msg);                                        
                                   }
                                 $file_name = explode(".", $_FILES['pns_image' . $i]['name']);                                    
-                                if($sto_row->sto_isdelivery_good==1 && $sto_row->sto_state=="InTransit" && $sto_row->sto_owner_confirm && $file_name[0]!= "DELIVERY NOTE")
+                                if($sto_row->sto_isdelivery_good==1 && $sto_row->sto_state=="InTransit" && $sto_row->sto_owner_confirm && $file_name[0]!= $sto_row->sto_code)
                                 {
-                                        $msg = JText::_('Please upload file name is: DELIVERY NOTE');
+                                        $msg = JText::_('Please upload file name is: '.$sto_row->sto_code);
                                         return $this->setRedirect('index.php?option=com_apdmsto&task=editeto&id='.$ito_id, $msg);                                        
                                 }
                                 if (file_exists($path_so_images . $_FILES['pns_image' . $i]['name'])) {
@@ -871,7 +876,7 @@ class SToController extends JController
                     $currentOutStock = $stock+$qtyOutCheck;
                     if($currentOutStock > $totalQtyCheck)
                     {
-                        $msg .= "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." must less than $totalQtyCheck . $currentOutStock";
+                        $msg .= "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." have QTY remain is:". $totalQtyCheck;
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }
@@ -1933,16 +1938,22 @@ class SToController extends JController
         JRequest::setVar('view', 'getpnsforstos');
         parent::display();   
     }
+    function importpnito()
+    {
+        JRequest::setVar('layout', 'importpart');
+        JRequest::setVar('view', 'getpnsforstos');
+        parent::display();   
+    }
      function downloadImportPartTemplate() {
                 //$path_pns = JPATH_SITE . DS . 'uploads' . DS . 'pns' . DS . 'pdf' . DS;
                 $path_pns = JPATH_COMPONENT . DS ;
-                $dFile = new DownloadFile($path_pns, 'IMPORT_PN_STO_TEMPALTE.xls');
+                $dFile = new DownloadFile($path_pns, 'IMPORT_PN_STO_TEMPLATE.xls');
                 exit;
         }
     function uploadimportPart()
     {
             $sto_id = JRequest::getVar('sto_id');
-            
+        ini_set('display_errors', 1);
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');
@@ -2020,14 +2031,26 @@ class SToController extends JController
                     }
                     $header = $rowData[1];
                     $messh=array();
-                      $mess=array();              
+                      $mess=array();
                     if($rowData[1][1]!="Part Number")
                     {
-                            $messh[] =  "Err:Wrong format at A1. Must be 'Part Number'";
+                            $messh[] =  "Err:Wrong format at B1. Must be 'Part Number'";
+                    }
+                    if($rowData[1][2]!="Qty In")
+                    {
+                            $messh[] =  "Err:Wrong format at C1. Must be 'Qty In'";
+                    }
+                    if($rowData[1][3]!="Location")
+                    {
+                            $messh[] =  "Err:Wrong format at D1. Must be 'Location'";
+                    }
+                    if($rowData[1][4]!="Part State")
+                    {
+                            $messh[] =  "Err:Wrong format at E1. Must be 'Part State'";
                     }
                     if(sizeof($messh))
                     {
-                                $msg = JText::_('Err:Wrong format at A1. Must be \'Part Number\'');
+                                $msg = JText::_('Err:Wrong format at B1. Must be \'Part Number\'');
                                 return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id, $msg);
                     }
                    
@@ -2043,28 +2066,50 @@ class SToController extends JController
                 for($line=2;$line<=$highestRow;$line++)
                 {
                        
-                        if($rowData[$line][0]==""){
-                            $arr_err[$line]    = "Err:".$rowData[$line][0]. " at column A".$line ." is null";
+                        if($rowData[$line][1]==""){
+                            $arr_err[$line]    = "Err:".$rowData[$line][1]. " at column B".$line ." is null";
                             continue;
                         }
-                        $pns_id = PNsController::checkPnExist($rowData[$line][1],$rowData[$line][2],$rowData[$line][3]);
-                        if($pns_id){                                
-                                 $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id, pns_parent,ref_des,find_number,stock) VALUES (" . $pns_id . ", " . $parent1 . ",'" . $rowData[$line][7] . "','" . $rowData[$line][6] . "','" . $rowData[$line][8] . "')");
-                                $db->query();                                
-                                $mess[$line] = "Import sucessfull PN ". $pn_code;
+                        $pns_id = SToController::checkPnExist($rowData[$line][1]);
+                        if($pns_id){         
+                                
+                                $location= 0;
+                                if($rowData[$line][3]!=""){
+                                        $location= SToController::getIdLocation($rowData[$line][3]);
+                                        if(!$location)
+                                        {
+                                                $arr_err[$line]    = "Err:".$rowData[$line][3]. " at column D".$line ." not exist";  
+                                        }
+                                }
+                                $partState= "";
+                                if($rowData[$line][4]!=""){
+                                         $arrayPartState =array("OH-G","OH-D","IT-G","IT-D","OO","PROTOTYPE");
+                                         if(!in_array($rowData[$line][4],$arrayPartState))
+                                         {
+                                               $arr_err[$line]    = "Err:".$rowData[$line][4]. " at column E".$line ." not exist";  
+                                         }
+                                         else
+                                         {
+                                                 $partState = $rowData[$line][4];
+                                         }
+                                        
+                                }          
+                                $rowFkExist = SToController::checkPnExisLocationPart($pns_id,$sto_id,$location,$partState);
+                                if($rowFkExist)
+                                {
+                                        $arr_err[$line]    = "Err:".$rowData[$line][1]. " at row ".$line ." already exist";
+                                        continue;
+                                }
+                                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,qty,location,partstate) VALUES ( '" . $pns_id . "','" . $sto_id . "','" . $rowData[$line][2] . "','" . $location . "','" . $partState . "')");
+                                $db->query();
+                                $mess[$line] = "Import sucessfull PN ". $rowData[$line][1];                            
                         }    
                 }  
-                //$inputFileName =  $path_bom_file.
-               // $file = fopen($path_bom_file.$bom_upload."_result.txt","w");
-                //echo fwrite($file,  implode("\n", $arr_err));
-              //  $file_name = $bom_upload.time()."_result.txt";
-             //   file_put_contents($path_bom_file.$file_name, implode("\n", $arr_err) . "\n", FILE_APPEND);
-               // fclose($file);
                 
                 //write_ log
                 $result = array_merge($arr_err, $mess);
                 $objReader = PHPExcel_IOFactory::createReader('Excel5'); //Excel5
-                $objPHPExcel = $objReader->load($path_bom_file .'IMPORT_BOM_TEMPALTE_REPORT.xls');
+                $objPHPExcel = $objReader->load($path_bom_file .'IMPORT_PART_STO_TEMPALTE_REPORT.xls');
                 $nRecord = count($result);
                 //$objPHPExcel->getSheet(0);
                 $objPHPExcel->getActiveSheet()->getStyle('A7:F' . $nRecord)->getAlignment()->setWrapText(true);
@@ -2111,13 +2156,23 @@ class SToController extends JController
                 $objWriter->save($path_export . "Report_".$bom_upload);
                 $dFile = new DownloadFile($path_export, "Report_".$bom_upload);
                 
-                return $this->setRedirect('index.php?option=com_apdmpns&task=import_bom_pns&importresult='.$file_name,"Import Done" );
+                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id.'&importresult=Report_'.$bom_upload,"Import Done" );
         
     }
      function checkPnExist($pns_code)
         {
                 $db = & JFactory::getDBO(); 
                 $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". $pns_code ."'");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                        return $pns_id;
+                }
+                return 0;
+        }
+             function checkPnExisLocationPart($pns_id,$sto_id,$location,$partstate)
+        {
+                $db = & JFactory::getDBO(); 
+                $db->setQuery("SELECT id FROM apdm_pns_sto_fk WHERE sto_id = '".$sto_id."' and pns_id='".$pns_id."' and location ='".$location."' and partstate ='".$partstate."'");
                 $pns_id = $db->loadResult();
                 if ($pns_id) {
                         return $pns_id;
