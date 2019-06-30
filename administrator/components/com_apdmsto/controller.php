@@ -1938,6 +1938,49 @@ class SToController extends JController
         JRequest::setVar('view', 'getpnsforstos');
         parent::display();   
     }
+    function importpneto()
+    {           
+            $db =& JFactory::getDBO();
+             $sto_id = JRequest::getVar('id');
+             $query = "SELECT sto_wo_id  FROM apdm_pns_sto  WHERE sto_type = '2' and pns_sto_id = '".$sto_id."' order by pns_sto_id desc limit 1";
+             $db->setQuery($query);
+             $sto_wo_id = $db->loadResult();
+             if(!$sto_wo_id)
+             {
+                  $msg = JText::_('Can not file PN without WO.');
+                  return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
+             }
+             //getPN 
+             $query = "SELECT pns_id  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$sto_wo_id."'";
+             $db->setQuery($query);
+             $pns_id = $db->loadResult();
+             if(!$pns_id)
+             {
+                  $msg = JText::_('Can not find PN.');
+                  return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
+             }
+             //getBOM
+             // check exist REV
+              $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$pns_id."");         
+              $revCheck = $db->loadResult();
+              if($revCheck){
+                      
+              }              
+              $db->setQuery('SELECT p.pns_id FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');              
+              $result = $db->loadObjectList();             
+              foreach($result as  $rw)
+              {
+                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$rw->pns_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");                
+                $row = $db->loadObject();
+                $location = $row->location;
+                $partState = $row->partstate;                
+                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");                
+                $db->query();
+              }
+              $msg = "Successfull add PN";
+              return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
+              
+    }
     function importpnito()
     {
         JRequest::setVar('layout', 'importpart');
@@ -1953,7 +1996,7 @@ class SToController extends JController
     function uploadimportPart()
     {
             $sto_id = JRequest::getVar('sto_id');
-        ini_set('display_errors', 1);
+        ini_set('display_errors', 0);
                 include_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel.php');
                 require_once (JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'RichText.php');
                 require_once(JPATH_BASE . DS . 'includes' . DS . 'PHPExcel' . DS . 'IOFactory.php');

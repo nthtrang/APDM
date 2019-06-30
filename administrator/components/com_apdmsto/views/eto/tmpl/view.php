@@ -71,7 +71,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             return;
         }
         if (pressbutton == 'importpn') {
-            window.location = "index.php?option=com_apdmsto&task=importpn&id="+form.sto_id.value;           
+            window.location = "index.php?option=com_apdmsto&task=importpneto&id="+form.sto_id.value;           
             return;
         }
          if (pressbutton == 'printetoDelivery') {
