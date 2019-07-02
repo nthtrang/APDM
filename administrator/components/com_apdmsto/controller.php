@@ -210,6 +210,14 @@ class SToController extends JController
          * Detail STO 
          */        
         function ito_detail() {
+/*                $db = & JFactory::getDBO();
+                $sto_id = JRequest::getVar('id');
+                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+                $sto_type = $db->loadResult();
+                if($sto_type==2)
+                {
+                    $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id);
+                }*/
                 JRequest::setVar('layout', 'view');
                 JRequest::setVar('view', 'ito');
                 parent::display();
@@ -811,8 +819,13 @@ class SToController extends JController
                 $db->query();
             }
         }
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+        $sto_type = $db->loadResult();
+        $return = "ito_detail";
+        if($sto_type==2)
+            $return = "eto_detail";
         $msg = JText::_('Have removed Part successfull.');
-        return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $sto_id, $msg);
+        return $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $sto_id, $msg);
     }
     /*
      * Remove PNS out of STO in STO management
@@ -1160,6 +1173,14 @@ class SToController extends JController
          * Detail ETO
          */
     function eto_detail() {
+/*        $db = & JFactory::getDBO();
+        $sto_id = JRequest::getVar('id');
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+        $sto_type = $db->loadResult();
+        if($sto_type==1)
+        {
+            $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$sto_id);
+        }*/
         JRequest::setVar('layout', 'view');
         JRequest::setVar('view', 'eto');
         parent::display();
@@ -1939,7 +1960,7 @@ class SToController extends JController
         parent::display();   
     }
     function importpneto()
-    {           
+    {
             $db =& JFactory::getDBO();
              $sto_id = JRequest::getVar('id');
              $query = "SELECT sto_wo_id  FROM apdm_pns_sto  WHERE sto_type = '2' and pns_sto_id = '".$sto_id."' order by pns_sto_id desc limit 1";
@@ -2108,14 +2129,13 @@ class SToController extends JController
                 $arr_err=array();
                 for($line=2;$line<=$highestRow;$line++)
                 {
-                       
-                        if($rowData[$line][1]==""){
+                        if(trim($rowData[$line][1])==""){
                             $arr_err[$line]    = "Err:".$rowData[$line][1]. " at column B".$line ." is null";
                             continue;
                         }
-                        $pns_id = SToController::checkPnExist($rowData[$line][1]);
+                        $pns_id =  getPnsIdfromPnCode(trim($rowData[$line][1]));
                         if($pns_id){         
-                                
+
                                 $location= 0;
                                 if($rowData[$line][3]!=""){
                                         $location= SToController::getIdLocation($rowData[$line][3]);
@@ -2199,16 +2219,22 @@ class SToController extends JController
                 $objWriter->save($path_export . "Report_".$bom_upload);
                 $dFile = new DownloadFile($path_export, "Report_".$bom_upload);
                 
-                return $this->setRedirect('index.php?option=com_apdmsto&task=importpn&id='.$sto_id.'&importresult=Report_'.$bom_upload,"Import Done" );
-        
+               return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$sto_id.'&importresult=Report_'.$bom_upload,"Import Done" );
+
     }
      function checkPnExist($pns_code)
         {
                 $db = & JFactory::getDBO(); 
-                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". $pns_code ."'");
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". trim($pns_code) ."' and pns_revision !='' ");
                 $pns_id = $db->loadResult();
                 if ($pns_id) {
                         return $pns_id;
+                }
+                //in case without revision
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code) = '". trim($pns_code) ."' and pns_revision = ''");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                    return $pns_id;
                 }
                 return 0;
         }

@@ -57,7 +57,7 @@ class TToViewgetpnsfortto extends JView
         
         
         $where = array();  
-        $where[] = 'p.ccs_code = "206" and sto.sto_type = 1 and fk.location != ""';//and po_id = 0
+        $where[] = ' sto.sto_type = 1 and fk.location != ""';//and po_id = 0 //p.ccs_code = "206"
         
         if ($filter_status !=''){
             $where[]='p.pns_status ="'.$filter_status.'"';

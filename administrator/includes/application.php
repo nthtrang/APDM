@@ -511,6 +511,18 @@ function GetNameCCs($ccs_id){
         function getPnsIdfromPnCode($pn_code)
         {            
                 $db =& JFactory::getDBO();
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". trim($pn_code) ."' and pns_revision !='' ");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                    return $pns_id;
+                }
+                //in case without revision
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code) = '". trim($pn_code) ."' and pns_revision = ''");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                    return $pns_id;
+                }
+                return 0;
                 $arrPn = explode("-", $pn_code);
         //A02-200263-0A
                 $ccs_code = $arrPn[0];

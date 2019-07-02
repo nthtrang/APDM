@@ -9525,7 +9525,7 @@ class PNsController extends JController {
                                  }
                         }
                         else{//for PN
-                            $pns_id = PNsController::getPnsIdfromPnCode($bar_code);
+                            $pns_id = getPnsIdfromPnCode($bar_code);
                             if($pns_id) {
                                 $query = "select pns_cpn from apdm_pns where pns_id = " . $pns_id;
                                 $db->setQuery($query);
@@ -9547,6 +9547,18 @@ class PNsController extends JController {
         function getPnsIdfromPnCode($pn_code)
         {            
                 $db =& JFactory::getDBO();
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code, pns_revision) = '". trim($pn_code) ."' and pns_revision !='' ");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                    return $pns_id;
+                }
+                //in case without revision
+                $db->setQuery("select pns_id FROM apdm_pns where  CONCAT_WS( '-', ccs_code, pns_code) = '". trim($pn_code) ."' and pns_revision = ''");
+                $pns_id = $db->loadResult();
+                if ($pns_id) {
+                    return $pns_id;
+                }
+                return 0;
                 $arrPn = explode("-", $pn_code);
         //A02-200263-0A
                 $ccs_code = $arrPn[0];
@@ -9648,7 +9660,7 @@ class PNsController extends JController {
                                 }
                             if(rename($src.$file, $dest . DS.$file_name))
                                 {
-                                        $pns_id = PNsController::getPnsIdfromPnCode($pns);
+                                        $pns_id = getPnsIdfromPnCode($pns);
                                         if($pns_id){
                                                 $arr_succes[$file_name]=  $pns_id;                                         
                                                 $db->setQuery("INSERT INTO apdm_pn_cad (pns_id, cad_file, date_create, created_by) VALUES (" . $pns_id . ", '" . $file_name . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");
