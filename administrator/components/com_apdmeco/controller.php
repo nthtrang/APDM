@@ -967,10 +967,10 @@ class ECOController extends JController
         $query = 'select count(*) from  apdm_pns where eco_id = ' . $cid[0] . '';
         $db->setQuery($query);
         $check_affectedPN = $db->loadResult();
-        if ($check_affectedPN==0) {
+/*        if ($check_affectedPN==0) {
             $msg = JText::sprintf('Please add PN into Affected Parts before set Route', $cid[0]);
             return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
-        }
+        }*/
 
         $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');
         $check_approve = $db->loadResult();

@@ -331,10 +331,10 @@ class APDMUsersController extends JController
 
 		foreach ($cid as $id)
 		{
-			$query = "UPDATE jos_users SET block=1 WHERE id=".$id;
+			$query = "UPDATE jos_users SET block=1,email= concat(email,'_deleted')  WHERE id=".$id;
 			$db->setQuery($query);
 			$db->query();
-			$query2 = "UPDATE apdm_users SET user_enable=1 WHERE user_id=".$id;
+			$query2 = "UPDATE apdm_users SET user_enable=1,username = concat(username,'_deleted') WHERE user_id=".$id;
 			$db->setQuery($query2);
 			$db->query();
 			// delete table apdm_role_user

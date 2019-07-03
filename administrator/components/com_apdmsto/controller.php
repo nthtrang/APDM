@@ -1994,8 +1994,9 @@ class SToController extends JController
                 $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$rw->pns_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");                
                 $row = $db->loadObject();
                 $location = $row->location;
-                $partState = $row->partstate;                
-                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "')");                
+                $partState = $row->partstate;
+                $pns_mfg_pn_id = $row->pns_mfg_pn_id;
+                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate,pns_mfg_pn_id) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "','".$pns_mfg_pn_id."')");
                 $db->query();
               }
               $msg = "Successfull add PN";
