@@ -799,7 +799,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
 		<legend><?php echo JText::_( 'OPERATIONS' ); ?> </legend>
                 <table class="adminlist">
                         
-<table class="tg">
+<table class="tg" cellspacing="1" width="100%">
   <tr>
     <th class="tg-0pky"></th>
     <th class="tg-0pky" colspan="5"><label for="name">Steps</label></th>
@@ -813,7 +813,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     $op_arr  = $this->op_arr;
     ?>
     <td class="tg-0pky"><label for="name">1</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Label Print By:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation By:</label></td>
     <td>
     <?php
     if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
@@ -904,7 +904,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">2</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Wire Cut By:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Label Print By:</label></td>
     <td>
     <?php
     if($op_arr['wo_step2']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
@@ -997,9 +997,11 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                 <?php } ?>
     </td>
   </tr>
+  
+  
   <tr>
     <td class="tg-0pky"><label for="name">3</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Kitted By:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Wire Cut By:</label></td>
     <td>            
     <?php
     if($op_arr['wo_step3']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
@@ -1089,11 +1091,14 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             <?php  ?>    
     </td>
   </tr>
+  
+  
+  
   <tr>
     <td class="tg-0pky"><label for="name">4</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Assembly performed by:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Kitted By:</label></td>
     <td>            
-     <?php
+    <?php
     if($op_arr['wo_step4']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
             <textarea maxlength='200' name="op_comment4" rows="3" cols="30"><?php echo $op_arr['wo_step4']['op_comment'];?></textarea>
@@ -1109,19 +1114,20 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td>
         <!-- for checking completed date changed-->
         <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4_old" id="op_completed_date4_old" />
-    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_status'];?>" name="op_status4_check" id="op_status4_check" />    
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_status'];?>" name="op_status4_check" id="op_status4_check" />
     <?php 
-    if(PNsController::checkStepBeforeDone('step4',$this->wo_row->pns_wo_id) && $op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id') && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
-        echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
-    }else
+	$checkStepbefore =  PNsController::checkStepBeforeDone('step4',$this->wo_row->pns_wo_id);
+     if($checkStepbefore == 1 && $op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id')  && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step4']['op_completed_date'], 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
+     }else
     {?>
             <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step4']['op_completed_date'];?>" name="op_completed_date4" id="op_completed_date4" />
     <?php }?></td>
-    <td>
+    <td>            
     <?php
-    if( $this->wo_row->wo_created_by == $me->get('id')|| $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
             ?>
-           <select  name="op_assigner4" id="op_assigner4" >
+            <select  name="op_assigner4" id="op_assigner4" >
                 <option value="">Select Assignee</option>
                  <?php 
                 $opNa= "";
@@ -1129,7 +1135,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                         $opNa= 'selected="selected"';
                 ?>
                 <option value="0"  <?php echo $opNa?>>N/A</option>
-                 <?php foreach ($this->list_user as $list) { 
+                <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step4']['op_assigner'])
                          {
@@ -1145,15 +1151,15 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
             
     ?>
           <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_assigner'];?>" name="op_assigner4" id="op_assigner4" />
-         <select  name="op_assigner4_dis" id="op_assigner4_dis"  disabled="disabled">
+          <select  name="op_assigner4_dis" id="op_assigner4_dis"  disabled="disabled">
                 <option value="">Select Assignee</option>
                  <?php 
                 $opNa= "";
                 if($op_arr['wo_step4']['op_assigner']==0)
                         $opNa= 'selected="selected"';
                 ?>
-                <option value="0"  <?php echo $opNa?>>N/A</option>
-                 <?php foreach ($this->list_user as $list) { 
+                <option value="0"  <?php echo $opNa;?>>N/A</option>
+                <?php foreach ($this->list_user as $list) { 
                          $selected = "";
                          if($list->id == $op_arr['wo_step4']['op_assigner'])
                          {
@@ -1169,13 +1175,108 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     </td>
     <td>
             <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step4']['op_target_date'];?>" name="op_target_date4_old" id="op_target_date4_old" />
-        <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
+    <?php 
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id') || $this->wo_row->allow_edit_qty > 0)
             {
-                     echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+                    echo JHTML::_('calendar',$op_arr['wo_step4']['op_target_date'], 'op_target_date4', 'op_target_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
             }else{
             ?>            
             <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step4']['op_target_date'];?>" name="op_target_date4" id="op_target_date4" />
+                <?php } ?>
+            <?php  ?>    
+    </td>
+  </tr>
+  
+  
+  
+  
+  <tr>
+    <td class="tg-0pky"><label for="name">5</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Assembly performed by:</label></td>
+    <td>            
+     <?php
+    if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+            <textarea maxlength='200' name="op_comment5" rows="3" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+            <?php
+    }else
+    {            
+    ?>
+        <textarea readonly="readonly" maxlength='200' name="op_comment5" rows="3" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
+    <?php 
+    }          
+    ?>
+    </td>
+    <td>
+        <!-- for checking completed date changed-->
+        <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5_old" id="op_completed_date5_old" />
+    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_status'];?>" name="op_status5_check" id="op_status5_check" />    
+    <?php 
+    if(PNsController::checkStepBeforeDone('step5',$this->wo_row->pns_wo_id) && $op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
+        echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+    }else
+    {?>
+            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
+    <?php }?></td>
+    <td>
+    <?php
+    if( $this->wo_row->wo_created_by == $me->get('id')|| $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
+            ?>
+           <select  name="op_assigner5" id="op_assigner5" >
+                <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step5']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step5']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+            <?php
+    }else
+    {
+            
+    ?>
+          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_assigner'];?>" name="op_assigner5" id="op_assigner5" />
+         <select  name="op_assigner5_dis" id="op_assigner5_dis"  disabled="disabled">
+                <option value="">Select Assignee</option>
+                 <?php 
+                $opNa= "";
+                if($op_arr['wo_step4']['op_assigner']==0)
+                        $opNa= 'selected="selected"';
+                ?>
+                <option value="0"  <?php echo $opNa?>>N/A</option>
+                 <?php foreach ($this->list_user as $list) { 
+                         $selected = "";
+                         if($list->id == $op_arr['wo_step5']['op_assigner'])
+                         {
+                                 $selected = 'selected="selected"';
+                         }
+                         ?>
+                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
+                <?php } ?>
+        </select>
+    <?php 
+    }          
+    ?>
+    </td>
+    <td>
+            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5_old" id="op_target_date5_old" />
+        <?php 
+            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
+            {
+                     echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
+            }else{
+            ?>            
+            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5" id="op_target_date5" />
                 <?php } ?>
             <?php  ?>            
     </td>
@@ -1205,7 +1306,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
   <?php 
   $allow_step_edit ='readonly="readonly"';
   //$allow_edit || for admin can edit
-  if($op_arr['wo_step4']['op_assigner'] == $me->get('id')){
+  if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){
            $allow_step_edit = '';
   }
   foreach ($this->wo_assem_rows as $a_row)
@@ -1235,151 +1336,10 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"><label for="name">INITIAL/ID</label></td>
     <td class="tg-0pky"><label for="name">TARGET DATE</label></td>
   </tr>
-  <tr>
-    <td class="tg-0pky"><label for="name">5</label></td>
-    <td class="tg-0pky" colspan="4"><label for="name">Visual Inspection(QC) By:</label></td>
-    <td></td>
-    <td></td>
-    <td>
-          <!-- for checking completed date changed-->
-          <input type="hidden"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5_old" id="op_completed_date5_old" />
-    <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_status'];?>" name="op_status5_check" id="op_status5_check" />    
-  <?php 
-    if(PNsController::checkStepBeforeDone('step5',$this->wo_row->pns_wo_id) && $op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step5']['op_assigner'] == $me->get('id')
-        echo JHTML::_('calendar',$op_arr['wo_step5']['op_completed_date'], 'op_completed_date5', 'op_completed_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
-    }else
-    {?>
-            <input type="text"  readonly="readonly"  value="<?php echo $op_arr['wo_step5']['op_completed_date'];?>" name="op_completed_date5" id="op_completed_date5" />
-    <?php }?></td>
-    <td>           
-           
-<?php
-    if($this->wo_row->wo_created_by == $me->get('id') || $this->wo_row->wo_assigner== $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
-            ?>
-           <select  name="op_assigner5" id="op_assigne5" >
-                <option value="">Select Assignee</option>
-                 <?php 
-                $opNa= "";
-                if($op_arr['wo_step5']['op_assigner']==0)
-                        $opNa= 'selected="selected"';
-                ?>
-                <option value="0"  <?php echo $opNa?>>N/A</option>
-                <?php foreach ($this->list_user as $list) { 
-                         $selected = "";
-                         if($list->id == $op_arr['wo_step5']['op_assigner'])
-                         {
-                                 $selected = 'selected="selected"';
-                         }
-                         ?>
-                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
-                <?php } ?>
-        </select>
-            <?php
-    }else
-    {
-            
-    ?>
-          <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_assigner'];?>" name="op_assigner5" id="op_assigner5" />
-          <select  name="op_assigner5_dis" id="op_assigner5_dis"  disabled="disabled">
-                <option value="">Select Assignee</option>
-                 <?php 
-                $opNa= "";
-                if($op_arr['wo_step5']['op_assigner']==0)
-                        $opNa= 'selected="selected"';
-                ?>
-                <option value="0"  <?php echo $opNa?>>N/A</option>
-                <?php foreach ($this->list_user as $list) { 
-                         $selected = "";
-                         if($list->id == $op_arr['wo_step5']['op_assigner'])
-                         {
-                                 $selected = 'selected="selected"';
-                         }
-                         ?>
-                        <option value="<?php echo $list->id; ?>" <?php echo $selected?>><?php echo $list->name; ?></option>
-                <?php } ?>
-        </select>
-    <?php 
-    }          
-    ?>            
-    </td>
-    <td>
-            <input readonly="readonly" type="hidden" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5_old" id="op_target_date5_old" />
-        <?php 
-            if($allow_edit || $this->wo_row->wo_assigner == $me->get('id')|| $this->wo_row->allow_edit_qty > 0)
-            {
-                    echo JHTML::_('calendar',$op_arr['wo_step5']['op_target_date'], 'op_target_date5', 'op_target_date5', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); 
-            }else{
-            ?>            
-            <input readonly="readonly" type="text" value="<?php echo $op_arr['wo_step5']['op_target_date'];?>" name="op_target_date5" id="op_target_date5" />
-                <?php } ?>
-            <?php  ?>    
-    </td>
-  </tr>
-  <?php $opvs_arr = $this->opvs_arr;
-   $allow_step5_edit ='readonly="readonly"';
-  //$allow_edit || for admin can edit
-  if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){
-           $allow_step5_edit = '';
-  }
-  ?>
-  <tr>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">&gt;</td>
-    <td class="tg-0pky"  colspan="3"><label for="name">Document not match</label></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value1']?>" name="op_visual_value1[1]" id="op_visual_value1" /></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value1']?>" name="op_visual_value1[2]" id="op_visual_value1" /></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky" colspan="2"><label for="name">Comment</label></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">&gt;</td>
-    <td class="tg-0pky" colspan="3"><label for="name">Traveler incomplete</label></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value2']?>" name="op_visual_value2[1]" id="op_visual_value2" /></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value2']?>" name="op_visual_value2[2]" id="op_visual_value2" /></td>
-   <td class="tg-0pky"></td>
-    <td colspan="2" rowspan="4">            
-     <?php
-    if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
-            ?>
-            <textarea maxlength='200' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
-            <?php
-    }else
-    {            
-    ?>
-        <textarea readonly="readonly" maxlength='200' name="op_comment5" rows="12" cols="30"><?php echo $op_arr['wo_step5']['op_comment'];?></textarea>
-    <?php 
-    }          
-    ?>    
-    </td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">&gt;</td>
-    <td class="tg-0pky" colspan="3"><label for="name">Wrong Dimension</label></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value3']?>" name="op_visual_value3[1]" id="op_visual_value3" /></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value3']?>" name="op_visual_value3[2]" id="op_visual_value3" /></td>
-    <td class="tg-0pky"></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">&gt;</td>
-    <td class="tg-0pky" colspan="3"><label for="name">Label print error</label></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value4']?>" name="op_visual_value4[1]" id="op_visual_value4" /></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value4']?>" name="op_visual_value4[2]" id="op_visual_value4" /></td>
-    <td class="tg-0pky"></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">&gt;</td>
-    <td class="tg-0pky" colspan="3"><label for="name">Missing Label / Wrong Location</label></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[1]['op_visual_value5']?>" name="op_visual_value5[1]" id="op_visual_value5" /></td>
-    <td><input type="text" size="6" <?php echo $allow_step5_edit;?> value="<?php echo $opvs_arr[2]['op_visual_value5']?>" name="op_visual_value5[2]" id="op_visual_value5" /></td>
-    <td class="tg-0pky"></td>
-  </tr>
+  
   <tr>
     <td class="tg-0pky"><label for="name">6</label></td>
-    <td class="tg-0pky" colspan="4"><label for="name">Final&nbsp;&nbsp;Inspection(QC) By:</label></td>
+    <td class="tg-0pky" colspan="4"><label for="name">Inspection(QC) By:</label></td>
     <td></td>
     <td></td>
     <td>

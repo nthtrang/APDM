@@ -7803,7 +7803,7 @@ class PNsController extends JController {
                                 " VALUES ('" . $wo_id . "','wo_step3','".$woStatus3."','".$WostatusTitle3."','".$post['op_comment3']."','".$post['op_completed_date3']."','".$post['op_assigner3']."','".$post['op_target_date3']."','" . $datenow->toMySQL() . "'," . $me->get('id') . ")";
                         $db->setQuery($sql);
                         $db->query();
-                        //Insert step4
+                        //Insert step4				
 						$woStatus4 = 'pending';
 						$woStatusTitle4 = 'Pending';
 						if($post['op_assigner4']==0)
@@ -7815,18 +7815,30 @@ class PNsController extends JController {
                                 " VALUES ('" . $wo_id . "','wo_step4','".$woStatus4."','".$WostatusTitle4."','".$post['op_comment4']."','".$post['op_completed_date4']."','".$post['op_assigner4']."','".$post['op_target_date4']."','" . $datenow->toMySQL() . "'," . $me->get('id') . ")";
                         $db->setQuery($sql);
                         $db->query();
-                        $wo_op_step4_id = $db->insertid();
-                        if($wo_op_step4_id)
+                        //Insert step5
+						$woStatus5 = 'pending';
+						$woStatusTitle5 = 'Pending';
+						if($post['op_assigner5']==0)
+						{
+							$woStatus5= 'done';	
+							$WostatusTitle5= 'Done';							
+						}
+                        $sql = "INSERT INTO apdm_pns_wo_op (wo_id,op_code,op_status,op_title,op_comment,op_completed_date,op_assigner,op_target_date,op_updated,op_updated_by)".
+                                " VALUES ('" . $wo_id . "','wo_step5','".$woStatus5."','".$WostatusTitle5."','".$post['op_comment5']."','".$post['op_completed_date5']."','".$post['op_assigner5']."','".$post['op_target_date5']."','" . $datenow->toMySQL() . "'," . $me->get('id') . ")";
+                        $db->setQuery($sql);
+                        $db->query();
+                        $wo_op_step5_id = $db->insertid();
+                        if($wo_op_step5_id)
                         {
                                 for($i=1;$i<=4;$i++)
                                 {                                                    
                                         $sql = "INSERT INTO apdm_pns_wo_op_assembly(pns_wo_id,pns_op_id,op_assembly_value1,op_assembly_value2,op_assembly_value3,op_assembly_value4,op_assembly_value5,op_assembly_updated,op_assembly_updated_by) ".
-                                           " VALUES ('" . $wo_id . "','" . $wo_op_step4_id . "','".$post['op_assembly_value1'][$i]."','".$post['op_assembly_value2'][$i]."','".$post['op_assembly_value3'][$i]."','".$post['op_assembly_value4'][$i]."','".$post['op_assembly_value5'][$i]."','" . $datenow->toMySQL() . "'," . $me->get('id') . ")"; 
+                                           " VALUES ('" . $wo_id . "','" . $wo_op_step5_id . "','".$post['op_assembly_value1'][$i]."','".$post['op_assembly_value2'][$i]."','".$post['op_assembly_value3'][$i]."','".$post['op_assembly_value4'][$i]."','".$post['op_assembly_value5'][$i]."','" . $datenow->toMySQL() . "'," . $me->get('id') . ")"; 
                                         $db->setQuery($sql);
                                         $db->query();
                                 }
                         }
-                        //Insert step5
+                        /*//Insert step5
 						$woStatus5 = 'pending';
 						$woStatusTitle5 = 'Pending';
 						if($post['op_assigner5']==0)
@@ -7848,7 +7860,7 @@ class PNsController extends JController {
                                         $db->setQuery($sql);
                                         $db->query();
                                 }
-                        }
+                        }*/
                         //Insert step6
 						$woStatus6 = 'pending';
 						$woStatusTitle6 = 'Pending';

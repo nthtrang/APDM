@@ -245,7 +245,7 @@ if($owner == $me->get('id'))
 						<?php echo $this->row->eco_estimated_cogs; ?>
 					</td>
 				</tr>
-	-->			
+				
 			
 				<tr>
 					<td class="key" valign="top">
@@ -256,7 +256,7 @@ if($owner == $me->get('id'))
 					<td>
 						<?php echo ($this->row->eco_activate) ? 'Activated' : 'Inactivated';  ?>
 					</td>
-				</tr>	
+				</tr>	-->
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
