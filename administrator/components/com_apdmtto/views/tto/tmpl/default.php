@@ -242,16 +242,17 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                 $i++;
             $link = "index.php?option=com_apdmtto&task=tto_detail&id=".$sto->pns_tto_id;
             $background="";
-                                                                $remain_day = $sto->tto_remain;
-                                                                if($remain_day<=0)
-                                                                {       
-                                                                        //$remain_day = 0;
-                                                                        $background= "style='background-color:#f00;color:#fff'";                                                                        
-                                                                }
-                                                                elseif($remain_day<=3)
-                                                                {
-                                                                        $background= "style='background-color:#ff0;color:#000'";   
-                                                                }     
+            $remain_day = 0;
+            if($row->tto_state != 'Done') {
+                $remain_day = $sto->tto_remain;
+                if ($remain_day <= 0) {
+                    //$remain_day = 0;
+                    $background = "style='background-color:#f00;color:#fff'";
+                } elseif ($remain_day <= 3) {
+                    $background = "style='background-color:#ff0;color:#000'";
+                }
+            }
+
                 ?>
                                         <tr>
                                                 <td align="center"><?php echo $i; ?></td>
@@ -271,7 +272,7 @@ Scan Tool ID Barcode <input onchange="autoLoadTool(this.value)"  onkeyup="autoLo
                                                 <td align="center">
                                                         <?php echo GetValueUser($sto->tto_create_by, "name"); ?>
                                                 </td>                                                                                                                                                      
-                                              <td align="center"  <?php echo $background;?>> <?php echo $sto->tto_remain; ?></td>
+                                              <td align="center"  <?php echo $background;?>> <?php echo $remain_day; ?></td>
                                         </tr>
                                                 <?php }
                                          ?>

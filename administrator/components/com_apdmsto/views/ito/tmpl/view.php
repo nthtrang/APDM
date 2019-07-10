@@ -309,7 +309,17 @@ function checkedforMarkScan(ischecked)
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>-->
-
+<?php
+$importresult = JRequest::getVar('importresult');
+if($importresult)
+{
+    $path_pns = JPATH_SITE . DS . 'uploads'. DS;
+    $dFile = new DownloadFile($path_pns, $importresult);
+    ?>
+    <!--                  <a href="index.php?option=com_apdmpns&task=downloadBomImportResult&importresult=<?php echo $importresult?>">Click here to download</a> file import result.-->
+    <?php
+}
+?>
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <fieldset>
 		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>        

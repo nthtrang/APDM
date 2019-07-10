@@ -70,9 +70,10 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
             window.open(url, '_blank');
             return;
         }
-        if (pressbutton == 'importpn') {
-            window.location = "index.php?option=com_apdmsto&task=importpneto&id="+form.sto_id.value;           
-            return;
+        if (pressbutton == 'importpneto') {
+            submitform( pressbutton );
+            return window.location = "index.php?option=com_apdmsto&task=importpneto&id="+form.sto_id.value;
+
         }
          if (pressbutton == 'printetoDelivery') {
             //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
@@ -804,10 +805,10 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
             </a>
         </td>
         <td class="button" id="toolbar-upload">
-<a href="#" onclick="javascript:hideMainMenu(); submitbutton('importpn')" class="toolbar">
-<span class="icon-32-upload" title="Import Part">
+<a href="#" onclick="javascript:hideMainMenu(); submitbutton('importpneto')" class="toolbar">
+<span class="icon-32-upload" title="Import PNs from WO">
 </span>
-Import Part
+Import PNs from WO
 </a>
 </td>
         <?php

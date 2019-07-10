@@ -25,7 +25,7 @@ function submitbutton(pressbutton) {
                 return;
         }
     if (pressbutton == 'eto_detail') {
-        window.location = "index.php?option=com_apdmsto&task=eto_detail&id="+form.sto_id.value;
+        window.location = "index.php?option=com_apdmsto&task=ito_detail&id="+form.sto_id.value;
         return;
     }
     if (form.bom_file.value==0){
@@ -46,6 +46,7 @@ function submitbutton(pressbutton) {
          {
                  $path_pns = JPATH_SITE . DS . 'uploads'. DS;
                 $dFile = new DownloadFile($path_pns, $importresult);
+             return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$sto_id.'&importresult='.$importresult,"Import Done" );
                  ?>
 <!--                  <a href="index.php?option=com_apdmpns&task=downloadBomImportResult&importresult=<?php echo $importresult?>">Click here to download</a> file import result.-->
                  <?php 

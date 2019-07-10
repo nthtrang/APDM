@@ -36,6 +36,13 @@ class SToVieweto extends JView
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );
         $sto_id		= JRequest::getVar( 'id');
         $me 		= JFactory::getUser();
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
+        $sto_type = $db->loadResult();
+        if($sto_type==1)
+        {
+            return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$sto_id);
+        }
+
         JArrayHelper::toInteger($cid, array(0));
         $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
         $keyword                = $search;

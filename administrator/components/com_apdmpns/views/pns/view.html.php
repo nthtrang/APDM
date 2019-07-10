@@ -16,10 +16,14 @@ class pnsViewpns extends JView
         
         $db                =& JFactory::getDBO();
         $option             = 'com_apdmpns';
-       
+
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
-        
+        if(!$filter_order)
+        {
+            $filter_order = 'p.pns_id';
+            $filter_order_Dir = "desc";
+        }
         $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
         $filter_state    = $mainframe->getUserStateFromRequest( "$option.filter_state",    'filter_state',     '',    'string' );
         $filter_type      = $mainframe->getUserStateFromRequest( "$option.filter_type",    'filter_type',     '',    'string' );
@@ -30,7 +34,7 @@ class pnsViewpns extends JView
         $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
         $keyword                = $search;
         $search                = JString::strtolower( $search );
-        
+
         $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'type_filter', 0, 'int');
         
         $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
