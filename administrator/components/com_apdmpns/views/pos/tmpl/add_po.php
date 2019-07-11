@@ -12,8 +12,8 @@ JToolBarHelper::title( JText::_( 'PO' ) . ': <small><small>[ New ]</small></smal
 ?>
 <script language="javascript" type="text/javascript">
 function UpdatePnsRevWindow(){
-    //    window.parent.document.getElementById('sbox-window').close();
-      //  window.parent.document.location.href = "index.php?option=com_apdmpns&task=pomanagement&time=<?php echo time();?>";
+        window.parent.document.getElementById('sbox-window').close();
+        window.parent.document.location.href = "index.php?option=com_apdmpns&task=addposuccess&time=<?php echo time();?>";
 }
 function get_default_po_prefix(){		
 		var url = 'index.php?option=com_apdmpns&task=po_prefix_default';				

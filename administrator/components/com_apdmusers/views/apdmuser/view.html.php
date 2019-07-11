@@ -48,9 +48,9 @@ class apdmusersViewapdmuser extends JView
      	
 		 $gid_new[] = JHTML::_('select.option', '', JText::_('Select Group'), 'id', 'value');
          $gid_new[] = JHTML::_('select.option', '23', JText::_('User'), 'id', 'value');
-		 if ($user[0]->gid != 23) {
+		 //if ($user[0]->gid != 23) {
          	$gid_new[] = JHTML::_('select.option', '24', JText::_('Administrator'), 'id', 'value');              
-		 }
+		// }
          $lists['gid'] = JHTML::_('select.genericlist',  $gid_new, 'gid', 'class="inputbox" size="4" onChange="DisplayGroupRole(\'role_user\', this)" ', 'id', 'value', $user[0]->gid);  
 		// build the html select list
 		$lists['block'] 	= JHTML::_('select.booleanlist',  'block', 'class="inputbox" size="1"', $user[0]->user_enable );

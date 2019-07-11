@@ -4835,10 +4835,13 @@ class PNsController extends JController {
                 $return = JRequest::getVar('return');
                 $db->setQuery("INSERT INTO apdm_pns_po (po_code,qty,po_description,po_file,po_state,po_created,po_create_by) VALUES ('" . $po_code . "','" . $qty . "', '" . $po_description . "', '" . $po_file . "', '" . $po_state . "', '" . $pns_created . "', '" . $pns_created_by . "')");
                 $db->query();
-                $msg = "Successfully Saved Pos";
-                return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
-                exit;
-        }        
+        }
+        function addposuccess()
+        {
+            $msg = "Successfully Saved Pos";
+            return $this->setRedirect('index.php?option=com_apdmpns&task=pomanagement', $msg);
+
+        }
         
         function save_editpo() {
                 $db = & JFactory::getDBO();
@@ -9917,10 +9920,19 @@ class PNsController extends JController {
                             $mess[] =  "Err:Wrong format at L1. Must be 'MFG PN'";
                     }
 
-                
-                for ($row = 1; $row <= $highestRow; $row++) { 
-                $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
-                }
+                    for ($row = 1; $row <= $highestRow; $row++) {
+                        $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
+                    }
+                    $needle = 'A' . $highestRow . ':' . $highestColumn . $highestRow;
+                    $replacement = "";
+                    for($i=0;$i<count($rowData);$i++) {
+                        for($j=0;$j<=11;$j++) {
+                            if ($rowData[$i][$j] == $needle) {
+                                $rowData[$i][$j] = $replacement;
+                            }
+                        }
+
+                    }
 
                   // print_r($rowData);   
                 //for level 0
