@@ -46,7 +46,7 @@ class ecoViewlistpns extends JView
         $rowint = $db->loadObjectList();     
         $this->assignRef('rowint',	$rowint);
         
-        $db->setQuery("SELECT p.* FROM apdm_supplier_info as p WHERE p.info_type=4 ");
+        $db->setQuery("SELECT p.* FROM apdm_supplier_info as p WHERE p.info_type in (3,4) ");//supplier and manufacture
         $list_manufacture = $db->loadObjectList();
         $this->assignRef('manufacture',	$list_manufacture);
         

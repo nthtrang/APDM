@@ -158,6 +158,7 @@ function isCheckedBom(isitchecked,id){
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom"  class="active"><?php echo JText::_( 'BOM' ); ?></a></li>
+                        <li><a id="ecohistory" href="index.php?option=com_apdmpns&task=eco_history&cid[0]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'ECO History' ); ?></a></li>
 			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->lists['pns_id']?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->lists['pns_id'];?>"><?php echo JText::_( 'MEP' ); ?></a></li>

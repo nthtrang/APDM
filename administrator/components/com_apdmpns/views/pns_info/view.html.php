@@ -310,7 +310,7 @@ class pnsViewpns_info extends JView
             $where .= " and DATE(sto.sto_created) = '".$current_in."'";
             $limit = " order by fk.id desc limit 5";
         }
- //for STO Tracking
+        //for STO Tracking
          $query = "select sto.sto_type,sto.pns_sto_id,sto.sto_code,sto.sto_description,sto.sto_state,sto.sto_created,sto.sto_create_by,sto.sto_owner,fk.qty as stock,fk.qty,fk.location,fk.partstate,fk.pns_mfg_pn_id from apdm_pns_sto_fk fk inner join apdm_pns pn on fk.pns_id = pn.pns_id  inner join apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id ".
                  $where
                 . $limit;
@@ -319,6 +319,13 @@ class pnsViewpns_info extends JView
         $db->setQuery($query);
         $list_stos = $db->loadObjectList();         
         $this->assignRef('stos',        $list_stos);
+        
+        //for ECO HISTORY
+        $query = "SELECT e.eco_id,e.eco_name,e.eco_description,e.eco_status FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE  p.pns_deleted =0 AND init.pns_id=".$row->pns_id."  and e.eco_status = 'Released' order by eco_name desc";
+        $db->setQuery( $query);
+        $rowecohistory = $db->loadObjectList();     
+        $this->assignRef('rowecohistory',	$rowecohistory);
+
         
         //Cerated by
         $db->setQuery("SELECT p.sto_create_by as value, u.name as text FROM apdm_pns_sto as p inner JOIN jos_users as u ON u.id=p.sto_create_by  inner join apdm_pns_sto_fk fk on p.pns_sto_id = fk.sto_id where fk.pns_id = ".$row->pns_id." GROUP BY p.sto_create_by ORDER BY text ");

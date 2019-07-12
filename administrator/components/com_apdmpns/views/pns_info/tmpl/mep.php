@@ -80,6 +80,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <ul id="submenu" class="configuration">
                         <li><a id="detail"  href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->row->pns_id ?>"><?php echo JText::_('Detail'); ?></a></li>
                         <li><a id="bom" href="index.php?option=com_apdmpns&task=bom&id=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('BOM'); ?></a></li>
+                        <li><a id="ecohistory" href="index.php?option=com_apdmpns&task=eco_history&cid[0]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'ECO History' ); ?></a></li>
                         <li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('Where Used'); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('Specification'); ?></a></li>
                         <li><a id="mep" class="active"><?php echo JText::_('MEP'); ?></a></li>
@@ -87,7 +88,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <?php if ($this->row->pns_cpn != 1) { ?>
                                 <li><a id="dash" href="index.php?option=com_apdmpns&task=dash&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('DASH ROLL'); ?></a></li>                        
                         <?php } ?>
-                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('PO'); ?></a></li>                                                
+                        <li><a id="pos" href="index.php?option=com_apdmpns&task=po&cid[]=<?php echo $this->row->pns_id; ?>"><?php echo JText::_('PO'); ?></a></li>
                         <li><a id="stos" href="index.php?option=com_apdmpns&task=sto&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'STO' ); ?></a></li>
                 </ul>
                 <div class="clr"></div>

@@ -222,7 +222,12 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'listwhereused');
                 parent::display();
         }
-
+        function eco_history() {
+                JRequest::setVar('layout', 'eco_history');
+                JRequest::setVar('view', 'pns_info');
+                parent::display();
+        }
+        
         /*
          * Asign template for displat list child of Pns
          */
@@ -4368,16 +4373,22 @@ class PNsController extends JController {
                 //$db->query();
                 foreach($pns as $id)
                 {
-                        //check status PNS first
-                        $get_status = "select pns_life_cycle from apdm_pns where pns_id = '".$id."'";
+                        //check status PNS first                        
+                        $get_status = "select pns_life_cycle,pns_type from apdm_pns where pns_id = '".$id."'";
                         $db->setQuery($get_status);
-                        $status = $db->loadResult();                
+                        $row = $db->loadObject();     
+                        $status = $row->pns_life_cycle;
+                        $makeOrBuy = "Unassign";
+                        if($row->pns_type)
+                        {
+                                $makeOrBuy = $row->pns_type;
+                        }                        
                         if($status=="Released")
                         {
                                 $db->setQuery('select count(*) from apdm_pns_initial where pns_id = ' . $id.' AND eco_id = '.$cid[0].'');
                                 $check_exist = $db->loadResult();
                                 if ($check_exist==0) {
-                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$id.',"Unreleased","Unassign","3","'.$cid[0].'")';
+                                        $query = 'insert into apdm_pns_initial (pns_id,init_plant_status,init_make_buy,init_leadtime,eco_id) values ('.$id.',"Unreleased","'.$makeOrBuy.'","3","'.$cid[0].'")';
                                         $db->setQuery($query);
                                         $db->query();
                                 }      

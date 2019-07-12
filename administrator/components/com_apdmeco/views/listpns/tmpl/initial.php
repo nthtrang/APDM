@@ -168,21 +168,27 @@ function isCheckedInitial(isitchecked,id,state){
                                 document.adminForm.boxchecked.value++;
                                 document.getElementById('init_plant_status_'+id).style.visibility= 'visible';
                                 document.getElementById('init_plant_status_'+id).style.display= 'block';
-                                        
+                                document.getElementById('init_make_buy_'+id).style.visibility= 'visible';
+                                document.getElementById('init_make_buy_'+id).style.display= 'block';                                          
 
 
                                 document.getElementById('text_init_plant_status_'+id).style.visibility= 'hidden';
                                 document.getElementById('text_init_plant_status_'+id).style.display= 'none';
+                                document.getElementById('text_init_make_buy_'+id).style.visibility= 'hidden';
+                                document.getElementById('text_init_make_buy_'+id).style.display= 'none'; 
                                                
                         }
                         else {
                                 document.adminForm.boxchecked.value--;
                                 document.getElementById('text_init_plant_status_'+id).style.visibility= 'visible';
                                 document.getElementById('text_init_plant_status_'+id).style.display= 'block';
-                               
+                                document.getElementById('text_init_make_buy_'+id).style.visibility= 'visible';
+                                document.getElementById('text_init_make_buy_'+id).style.display= 'block'; 
 
                                 document.getElementById('init_plant_status_'+id).style.visibility= 'hidden';
                                 document.getElementById('init_plant_status_'+id).style.display= 'none';
+                                document.getElementById('init_make_buy_'+id).style.visibility= 'hidden';
+                                document.getElementById('init_make_buy_'+id).style.display= 'none';         
                                
                         }        
                 }
@@ -262,7 +268,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 				</th>				
 
 				<th width="8%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Type'); ?>
+					<?php echo JText::_('Make/Buy'); ?>
 				</th>
                                 <th  width="8%" class="title"  >
 					<?php echo JText::_( 'Lead Time(Days)' ); ?>

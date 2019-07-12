@@ -57,6 +57,7 @@ function submitbutton(pressbutton) {
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->id?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom" href="index.php?option=com_apdmpns&task=bom&id=<?php echo $this->id;?>"><?php echo JText::_( 'BOM' ); ?></a></li>
+                        <li><a id="ecohistory" href="index.php?option=com_apdmpns&task=eco_history&cid[0]=<?php echo $this->id;?>"><?php echo JText::_( 'ECO History' ); ?></a></li>
 			<li><a id="whereused" class="active"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
