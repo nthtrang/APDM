@@ -1309,13 +1309,17 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
   if($op_arr['wo_step5']['op_assigner'] == $me->get('id')){
            $allow_step_edit = '';
   }
+  $iassem=1;
   foreach ($this->wo_assem_rows as $a_row)
   {
   ?>
   <tr>
     <td><input type="text" size="6"  <?php echo $allow_step_edit;?> value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" /></td>
     <td><input type="text" size="6" <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" /></td>
-    <td><input type="text" size="6"  <?php echo $allow_step_edit;?> value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" /></td>
+    <td><input type="hidden" size="6"  <?php echo $allow_step_edit;?> value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" />
+        <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+        echo $arrTool[$iassem];?>
+    </td>
     <td><input type="text" size="6"  <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" /></td>
     <td><input type="text" size="6"  <?php echo $allow_step_edit;?> onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
     <td class="tg-0pky">
@@ -1325,7 +1329,8 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
   </tr>
-  <?php 
+  <?php
+      $iassem++;
   }
   ?>    
   <tr>

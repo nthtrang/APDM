@@ -24,6 +24,16 @@
 				<textarea class="text_area" cols="60" rows="2" style="width:400px; height:40px" name="offline_message"><?php echo $row->offline_message; ?></textarea>
 			</td>
 		</tr>
+        <tr>
+            <td class="key">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'Site URL' ); ?>::<?php echo JText::_( 'TIPSITENAME' ); ?>">
+				<?php echo JText::_( 'Site URL' ); ?>
+				</span>
+            </td>
+            <td>
+                <input class="text_area" type="text" name="siteurl" size="50" value="<?php echo $row->siteurl; ?>" />
+            </td>
+        </tr>
 		<tr>
 			<td class="key">
 				<span class="editlinktip hasTip" title="<?php echo JText::_( 'Site Name' ); ?>::<?php echo JText::_( 'TIPSITENAME' ); ?>">

@@ -969,10 +969,18 @@ class ECOController extends JController
         $query = 'select count(*) from  apdm_pns where eco_id = ' . $cid[0] . '';
         $db->setQuery($query);
         $check_affectedPN = $db->loadResult();
-/*        if ($check_affectedPN==0) {
-            $msg = JText::sprintf('Please add PN into Affected Parts before set Route', $cid[0]);
+//        if ($check_affectedPN==0) {
+//            $msg = JText::sprintf('Please add PN into Affected Parts before set Route', $cid[0]);
+//            return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
+//        }
+        //check initital
+        $query = "SELECT count(*)  FROM apdm_pns AS p  inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE   p.pns_deleted =0 AND init.eco_id='". $cid[0] ."'  group by p.pns_id";
+        $db->setQuery( $query);
+        $check_initialPN = $db->loadResult();
+        if ($check_affectedPN==0 && $check_initialPN==0) {
+            $msg = JText::sprintf('Please add PN into Affected Parts and Initial Data before set Route', $cid[0]);
             return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
-        }*/
+        }
 
         $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');
         $check_approve = $db->loadResult();
@@ -1580,6 +1588,7 @@ class ECOController extends JController
         $MailFrom = $mainframe->getCfg('mailfrom');
         $FromName = $mainframe->getCfg('fromname');
         $SiteName = $mainframe->getCfg('sitename');
+        $SiteUrl = $mainframe->getCfg('siteurl');
         $cid = JRequest::getVar('cid');
         $routes = JRequest::getVar('routes');
         $query = "SELECT st.*,rt.status as route_status,rt.owner,rt.name as route_name,rt.due_date FROM apdm_eco_status st  inner join apdm_eco_routes rt on st.routes_id = rt.id WHERE rt.id = " . $routes;

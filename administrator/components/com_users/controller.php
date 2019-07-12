@@ -517,6 +517,7 @@ class UsersController extends JController
 			$MailFrom	= $mainframe->getCfg('mailfrom');
 			$FromName	= $mainframe->getCfg('fromname');
 			$SiteName	= $mainframe->getCfg('sitename');
+            $SiteUrl	= $mainframe->getCfg('siteurl');
 			$adminEmail = $me->get('email');
 			$adminName	= $me->get('name');
 
@@ -565,7 +566,7 @@ class UsersController extends JController
 
 			$subject = JText::_('SUBJECT_EMAIL_INFROM_USER_DONT_HAVE_PERMISSION_LOGIN_ADMINISTRATOR'); 
 			$message = 'Hi, <br/>';
-			$message .= '<p>Your accout do not have permission to login system <a href="'.URL_SITE.'"> APDM </a>:</p>';
+			$message .= '<p>Your accout do not have permission to login system <a href="'.$SiteUrl.'"> APDM </a>:</p>';
 			$message .='<p>Please contact with Admin if you have any question.</p>';
 			$message .= '<p>Regards</p>';
 			$db->setQuery('SELECT email FROM jos_users WHERE id='.$cid[0]);

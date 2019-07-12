@@ -274,7 +274,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 					<?php echo JText::_( 'Cost' ); ?>
 				</th>
 				<th  width="10%" class="title"  >
-					<?php echo JText::_( 'Supplier' ); ?>
+					<?php echo JText::_( 'Supplier/Manufacture' ); ?>
 				</th>				
 				<th class="title">
 					&nbsp;
@@ -365,7 +365,7 @@ function numbersOnlyEspecial111(myfield, e, dec){
 <!--                                         <input style="display:none" type="text" value="<?php echo $row->init_buyer;?>" id="init_buyer_<?php echo $row->pns_id;?>"  name="init_buyer_<?php echo $row->pns_id;?>" />-->
                                        <span style="display:none" id="init_buyer_<?php echo $row->pns_id;?>">
                                          <select  name="init_buyer_<?php echo $row->pns_id;?>" >
-                                                                        <option value="">Select Approver</option>
+                                                                        <option value="">Select Buyer</option>
                                                                         <?php foreach ($this->list_user as $list) { ?>
                                                                                 <option value="<?php echo $list->name; ?>" <?php echo ($list->name==$row->init_buyer)?'selected="selected"':"";?>><?php echo $list->name; ?></option>
                                                                         <?php } ?>
@@ -384,10 +384,10 @@ function numbersOnlyEspecial111(myfield, e, dec){
                                         ?>
                                         <span style="display:block" id="text_init_supplier_<?php echo $row->pns_id;?>"><?php echo $name_mf;?></span>                                        
                                         <select style="display:none"  name="init_supplier_<?php echo $row->pns_id;?>"  id="init_supplier_<?php echo $row->pns_id;?>" >
-                                                <option value="">Select Supplier</option>
+                                                <option value="">Select Supplier/Manufacture</option>
                                                 <?php 
                                                 
-                                                echo $row->init_supplier;
+                                               // echo $row->init_supplier;
                                                 foreach ($this->manufacture as $mf) { 
                                                         $selected = "";
                                                         if($mf->info_id===$row->init_supplier)

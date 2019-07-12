@@ -114,6 +114,7 @@ class APDMUsersController extends JController
 		$MailFrom	= $mainframe->getCfg('mailfrom');
 		$FromName	= $mainframe->getCfg('fromname');
 		$SiteName	= $mainframe->getCfg('sitename');
+        $SiteUrl	= $mainframe->getCfg('siteurl');
 		$first_name = JRequest::getVar('first_name');
 		$user_title = JRequest::getVar('user_title');
 		$last_name  = JRequest::getVar('last_name');
@@ -215,7 +216,7 @@ class APDMUsersController extends JController
 
 			$subject = 'Welcome to APDM'; //JText::_('NEW_USER_MESSAGE_SUBJECT');
 			$message = 'Hi, <br/>';
-			$message .= '<p>This your accout to login system <a href="'.URL_SITE.'"> APDM </a>:</p>';
+			$message .= '<p>This your accout to login system <a href="'.$SiteUrl.'"> APDM </a>:</p>';
 			$message .='<p>Username: '.$user->get('username').'</p>';
 			$message .='<p>Password: '.$user->password_clear.'</p>';
 			$message .= '<p>Regards</p>';

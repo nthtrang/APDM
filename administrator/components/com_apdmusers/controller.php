@@ -100,6 +100,7 @@ class APDMUsersController extends JController
 		$MailFrom	= $mainframe->getCfg('mailfrom');
 		$FromName	= $mainframe->getCfg('fromname');
 		$SiteName	= $mainframe->getCfg('sitename');
+        $SiteUrl 	= $mainframe->getCfg('siteurl');
 		$adminEmail = $me->get('email');
 		$adminName	= $me->get('name');
 		$first_name = JRequest::getVar('first_name');
@@ -190,7 +191,7 @@ class APDMUsersController extends JController
 					$subject = JText::_('UPDATE_USER_MESSAGE_SUBJECT');
 				}
 				$message = 'Hi, <br/>';
-				$message .= '<p>Your profile have changed. Please check at : <a href="'.URL_SITE.'"> APDM </a></p>';
+				$message .= '<p>Your profile have changed. Please check at : <a href="'.$SiteUrl.'"> APDM </a></p>';
 				
 				if ($user->password_clear !='') {
 					$message .='<p>Your Password now: '.$user->password_clear.'</p>';
@@ -226,7 +227,7 @@ class APDMUsersController extends JController
 			
 			$subject = JText::_('NEW_USER_MESSAGE_SUBJECT'); 
 			$message = 'Hi, <br/>';
-			$message .= '<p>This your accout to login system <a href="'.URL_SITE.'"> APDM </a>:</p>';
+			$message .= '<p>This your accout to login system <a href="'.$SiteUrl.'"> APDM </a>:</p>';
 			$message .='<p>Username: '.$user->get('username').'</p>';
 			$message .='<p>Password: '.$user->password_clear.'</p>';
 			$message .= '<p>Regards</p>';

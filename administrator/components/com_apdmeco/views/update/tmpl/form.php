@@ -13,7 +13,7 @@ if (intval($edit) && $this->row->eco_create_by == $me->get('id')) {
         $demote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'demote\')" class="buttonfiles" style="vertical-align:middle"><span>Demote </span></button>';
         $promote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="buttonaffected" style="vertical-align:middle"><span>Promote</span></button>';
 }
-JToolBarHelper::title(JText::_('ECO_MANAGEMET') . ': <small><small>[ ' . $text . ' ]</small></small>' , 'generic.png');
+JToolBarHelper::title(JText::_('ECO ') . ': <small><small>[ ' . $text . ' ]</small></small>' , 'generic.png');
 if (!intval($edit)) {
         JToolBarHelper::save('save', 'Save & Add new');
 }
