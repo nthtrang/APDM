@@ -71,7 +71,7 @@
 					<?php echo JHTML::_('grid.sort',   JText::_('Status'), 'p.pns_status', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>-->
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   JText::_('Make/Buy'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th w class="title" >
 					<?php echo JHTML::_('grid.sort',   JText::_('Date Create'), 'p.pns_create', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>

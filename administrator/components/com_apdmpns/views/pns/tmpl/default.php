@@ -177,7 +177,7 @@ function submitbutton(pressbutton) {
 					<?php echo JHTML::_('grid.sort',   JText::_('State'), 'p.pns_life_cycle', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>                                
 				<th  align="center" width="5%" class="title" nowrap="nowrap">
-					<?php echo JHTML::_('grid.sort',   JText::_('Type'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
+					<?php echo JHTML::_('grid.sort',   JText::_('Make/Buy'), 'p.pns_type', @$this->lists['order_Dir'], @$this->lists['order'] ); ?>
 				</th>
 				<th align="center" width="25%" class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>

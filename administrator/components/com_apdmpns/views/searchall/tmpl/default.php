@@ -193,7 +193,7 @@ if(($this->type_filter==0 || $this->type_filter==5  || $this->type_filter==6 || 
 					<?php echo JText::_('State'); ?>
 				</th>
 				<th width="5%" class="title" nowrap="nowrap">
-					<?php echo JText::_('Type'); ?>
+					<?php echo JText::_('Make/Buy'); ?>
 				</th>
 				<th class="title"  >
 					<?php echo JText::_( 'PNS_DESCRIPTION' ); ?>

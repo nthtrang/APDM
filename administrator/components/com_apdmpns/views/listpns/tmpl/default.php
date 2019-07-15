@@ -66,7 +66,7 @@ $list_pns = PNsController::DisplayPnsAllChildId($this->lists['pns_id']);
 				<?php echo JText::_('ECO Number')?>
 			</th>
 			<th width="6%">
-				<?php echo JText::_('Type')?>
+				<?php echo JText::_('Make/Buy')?>
 			</th>
 			<th width="6%">
 				<?php echo JText::_('Status')?>

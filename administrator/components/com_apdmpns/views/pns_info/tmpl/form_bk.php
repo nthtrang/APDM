@@ -270,7 +270,7 @@
 				<tr>
 					<td class="key" valign="top">
 						<label for="username">
-							<?php echo JText::_( 'PNS_TYPE' ); ?>
+							<?php echo JText::_( 'Make/Buy' ); ?>
 						</label>
 					</td>
 					<td>
