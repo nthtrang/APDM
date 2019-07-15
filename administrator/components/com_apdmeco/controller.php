@@ -881,21 +881,27 @@ class ECOController extends JController
         $routes = JRequest::getVar('route');
         $approve_status = JRequest::getVar('approve_status',array());
         $approve_note = JRequest::getVar('approve_note',array());
-        $title = JRequest::getVar('title',array());
+        $title = JRequest::getVar('title',array());         
         $mail_user = JRequest::getVar('mail_user',array());
         //$approve_status[$key]
-
         foreach($mail_user as $key => $user)
         {
             if($user)
             {
                 //check email exist
-                $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = '.$user);
-                $check_exist = $db->loadResult();
-                if ($check_exist==0) {
+                $db->setQuery('select id from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = "'.$user.'"');                
+                $id_exist = $db->loadResult();
+                if ($id_exist==0) {
                     $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'") on duplicate key update user_id=user_id';
                     $db->setQuery($query);
                     $db->query();
+                }
+                else
+                {
+                        $approve_sequence = JRequest::getVar('sequence'.$id_exist);
+                        $query = 'update apdm_eco_status set sequence = "'.$approve_sequence.'" where id = ' . $id_exist . ' and email= "' . $user . '" and routes_id = "'.$routes.'"';
+                        $db->setQuery($query);
+                        $db->query();
                 }
 
 
@@ -921,6 +927,7 @@ class ECOController extends JController
         $routes = JRequest::getVar('route');
         $approve_status = JRequest::getVar('approve_status',array());
         $approve_note = JRequest::getVar('approve_note',array());
+        $approve_sequence = JRequest::getVar('sequence',array());
         $title = JRequest::getVar('title',array());
         $mail_user = JRequest::getVar('mail_user',array());
 
@@ -939,7 +946,7 @@ class ECOController extends JController
                     $msg = JText::sprintf('Please input comment before save', $cid[0]);
                     return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$routes, $msg);
                 }
-                $query = 'update apdm_eco_status set eco_status= "' . $approve_status[0] . '", note = "'.$approve_note[0].'" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
+                $query = 'update apdm_eco_status set sequence = "'.$approve_sequence.'",eco_status= "' . $approve_status[0] . '", note = "'.$approve_note[0].'" where eco_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
                 $db->setQuery($query);
                 $db->query();
             }

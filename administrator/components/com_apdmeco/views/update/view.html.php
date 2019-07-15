@@ -53,7 +53,7 @@ class ecoViewupdate extends JView
             //viet status	
             
             $routes		= JRequest::getVar('routes');
-            $db->setQuery("SELECT rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.due_date as route_due_date FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes." group by email");
+            $db->setQuery("SELECT DATEDIFF(rt.due_date, CURDATE()) as route_remain_date,rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.due_date as route_due_date,st.approved_at,rt.status FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes." group by email");
             $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase
@@ -98,8 +98,7 @@ class ecoViewupdate extends JView
         $type[] =    JHTML::_('select.option', JText::_('TYPE_SC_TO_BETA_ORDER'), JText::_('TYPE_SC_TO_BETA_ORDER') , 'value', 'text');  
         $type[] =    JHTML::_('select.option', JText::_('TYPE_SC_TO_PRERELEASE'), JText::_('TYPE_SC_TO_PRERELEASE') , 'value', 'text');     
         $type[] =    JHTML::_('select.option', JText::_('TYPE_VARIANT_CONFIGUARATION'), JText::_('TYPE_VARIANT_CONFIGUARATION') , 'value', 'text');     
-*/		
-		
+*/		                
 		for ($i=1; $i<=JText::_('ECO_TYPE_NUM'); $i++)
 			{
 				$type[] =    JHTML::_('select.option', JText::_('ECO_TYPE_'.$i), JText::_('ECO_TYPE_'. $i) , 'value', 'text'); 
