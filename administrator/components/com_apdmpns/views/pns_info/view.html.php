@@ -321,7 +321,7 @@ class pnsViewpns_info extends JView
         $this->assignRef('stos',        $list_stos);
         
         //for ECO HISTORY
-        $query = "SELECT e.eco_id,e.eco_name,e.eco_description,e.eco_status FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE  p.pns_deleted =0 AND init.pns_id=".$row->pns_id."  and e.eco_status = 'Released' order by eco_name desc";
+        $query = "SELECT e.eco_id,e.eco_name,e.eco_description,e.eco_status,init.init_plant_status,init.init_make_buy FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE  p.pns_deleted =0 AND init.pns_id=".$row->pns_id."  and e.eco_status = 'Released' order by eco_name desc";
         $db->setQuery( $query);
         $rowecohistory = $db->loadObjectList();     
         $this->assignRef('rowecohistory',	$rowecohistory);

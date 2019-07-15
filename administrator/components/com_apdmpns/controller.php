@@ -10448,6 +10448,13 @@ class PNsController extends JController {
                 $db = & JFactory::getDBO();                
                 $db->setQuery("SELECT p.supplier_info FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id left join apdm_pns_sto_fk fk on fk.pns_mfg_pn_id = p.id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = 4 AND  p.id =" . $mfgId);                                
                 return $db->loadResult();
-    }
+        }
+        function getLastEcoInitialReleased($pns_id)
+        {
+            $db = & JFactory::getDBO();
+            //for ECO HISTORY
+            $db->setQuery("SELECT e.eco_name FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE  p.pns_deleted =0 AND init.pns_id=".$pns_id."  and e.eco_status = 'Released' order by e.eco_id desc limit 1");
+            return $db->loadResult();
+        }
 }
 

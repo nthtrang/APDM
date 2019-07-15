@@ -66,7 +66,7 @@
 		<ul id="submenu" class="configuration">
 			<li><a id="detail"  href="index.php?option=com_apdmpns&task=detail&cid[0]=<?php echo $this->row->pns_id?>"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom" href="index.php?option=com_apdmpns&task=bom&id=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'BOM' ); ?></a></li>
-                        <li><a id="ecohistory" class="active"><?php echo JText::_( 'ECO History' ); ?></a></li>
+                        <li><a id="ecohistory" class="active"><?php echo JText::_( 'ECO Released History' ); ?></a></li>
 			<li><a id="whereused" href="index.php?option=com_apdmpns&task=whereused&id=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Where Used' ); ?></a></li>
                         <li><a id="specification" href="index.php?option=com_apdmpns&task=specification&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'Specification' ); ?></a></li>
                         <li><a id="mep" href="index.php?option=com_apdmpns&task=mep&cid[]=<?php echo $this->row->pns_id;?>"><?php echo JText::_( 'MEP' ); ?></a></li>
@@ -91,12 +91,17 @@
 		<?php if (count($this->rowecohistory) > 0) { ?>
 		<table class="adminlist" cellspacing="1" width="400">
 				<thead>
-					<tr>
-                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
-                                        <th width="100"><?php echo JText::_('ECO Number'); ?></th>                                        
-                                        <th width="200"><?php echo JText::_('Description'); ?></th>
-                                        <th width="100"><?php echo JText::_('State'); ?></th>   
-					</tr>
+                <tr>
+                    <th rowspan="2"><?php echo JText::_('NUM'); ?></th>
+                    <th rowspan="2"><?php echo JText::_('ECO Number'); ?></th>
+                    <th rowspan="2"><?php echo JText::_('Description'); ?></th>
+                    <th rowspan="2"><?php echo JText::_('State'); ?></th>
+                    <th colspan="2"><?php echo JText::_('Initital Data'); ?></th>
+                </tr>
+                <tr>
+                    <th><?php echo JText::_('Plant Status'); ?></th>
+                    <th><?php echo JText::_('Make/Buy'); ?></th>
+                </tr>
 				</thead>
 				<tbody>					
 					<?php 
@@ -113,7 +118,9 @@
 						<?php echo $row->eco_name; ?></a>
                                                 </td>
                                                 <td align="center"><?php echo $row->eco_description;?></td>
-                                                <td align="center"><?php echo $row->eco_status;?> </td>
+                                                <td align="center"><?php echo $row->eco_status;?></td>
+                                                <td align="center"><?php echo $row->init_plant_status?$row->init_plant_status:"Unreleased";?></td>
+                                                <td align="center"><?php echo $row->init_make_buy?$row->init_make_buy:"Unassign";?></td>
                                         </tr>
 		<?php }
 		 } ?>
