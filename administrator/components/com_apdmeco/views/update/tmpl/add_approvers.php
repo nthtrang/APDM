@@ -11,6 +11,7 @@ $role = JAdministrator::RoleOnComponent(5);
 $demote = $promote = "";
 $me = & JFactory::getUser();
 $add_routes = "";
+
 if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Released") {
 
         $add_routes = '<a href="javascript:;"id="lnkfichier" title="Add more approvers " >' . JText::_('Click here to add more approvers') . '</a>';
@@ -22,7 +23,11 @@ if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Re
 
 JToolBarHelper::title(JText::_($this->row->eco_name) . $demote . $promote, 'generic.png');
 //JToolBarHelper::title( JText::_($this->rowrowEco->eco_name));        
-JToolBarHelper::customX("approvers", 'apply', '', 'Save', true);
+$arrayNotAllow = array("Closed","Finished");
+if(!in_array($this->arr_route[0]->status,$arrayNotAllow))
+{
+        JToolBarHelper::customX("approvers", 'apply', '', 'Save', true);
+}
 JToolBarHelper::cancel('cancel', 'Back');
 $cparams = JComponentHelper::getParams('com_media');
 ?>
@@ -280,7 +285,7 @@ if (count($this->arr_status) > 0) {
                                                                         }
                                                                                 ?>
                                                                         <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                                <td  align="center" <?php echo $background?>>
+                                                                <td width="20%" align="center" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td>   
                                                                 <td align="center">
@@ -322,7 +327,7 @@ if (count($this->arr_status) > 0) {
                                                                         }
                                                                         ?>
                                                             <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                            <td align="center" width="20%">
+                                                            <td align="center" width="20%" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td> 
                                                                 <td align="center" width="25%">
@@ -391,7 +396,7 @@ if (count($this->arr_status) > 0) {
                                                                 }
                                                                 ?>
                                                                 <td align="center" width="19%"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                                <td width="15%">
+                                                                <td width="20%" <?php echo $background?>>
                                                                     <?php echo JHTML::_('date', $this->arr_route[0]->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td>
                                                         <td width="20%">          

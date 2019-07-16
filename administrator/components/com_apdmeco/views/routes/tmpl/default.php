@@ -3,6 +3,7 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
+
 	$role = JAdministrator::RoleOnComponent(5);
         $cid = JRequest::getVar( 'cid', array(0) );
 	//$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
@@ -28,6 +29,7 @@
 //	}
 	
 	$cparams = JComponentHelper::getParams ('com_media');
+
 ?>
 
 <?php
