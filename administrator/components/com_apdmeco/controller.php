@@ -881,32 +881,48 @@ class ECOController extends JController
         $routes = JRequest::getVar('route');
         $approve_status = JRequest::getVar('approve_status',array());
         $approve_note = JRequest::getVar('approve_note',array());
-        $title = JRequest::getVar('title',array());         
+        $title = JRequest::getVar('title',array());
+        $sequence = JRequest::getVar('sequence',array());
         $mail_user = JRequest::getVar('mail_user',array());
         //$approve_status[$key]
-        foreach($mail_user as $key => $user)
+        for($i=1;$i<=20;$i++)
+        {
+            $title = JRequest::getVar('title'.$i);
+            $sequence = JRequest::getVar('sequence'.$i);
+            $mail_user = JRequest::getVar('mail_user'.$i);
+            if($mail_user!="") {
+                //check email exist
+                $db->setQuery('select id from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = ' . $routes . ' and email = "' . $mail_user . '"');
+                $id_exist = $db->loadResult();
+                if (!$id_exist) {
+                    echo $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title,sequence) values (' . $cid[0] . ',"' . $mail_user . '","Inreview",' . $routes . ',"' . $title . '","' . $sequence . '") on duplicate key update user_id=user_id';
+                    $db->setQuery($query);
+                    $db->query();
+                }
+            }
+
+        }
+       /* foreach($mail_user as $key => $user)
         {
             if($user)
             {
                 //check email exist
-                $db->setQuery('select id from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = "'.$user.'"');                
+                $db->setQuery('select id from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = "'.$user.'"');
                 $id_exist = $db->loadResult();
-                if ($id_exist==0) {
-                    $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'") on duplicate key update user_id=user_id';
+                if (!$id_exist) {
+                   echo $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title,sequence) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'","'.$sequence[$key].'") on duplicate key update user_id=user_id';
                     $db->setQuery($query);
                     $db->query();
                 }
-                else
+               /* else
                 {
-                        $approve_sequence = JRequest::getVar('sequence'.$id_exist);
+                         $approve_sequence = JRequest::getVar('sequence'.$id_exist);
                         $query = 'update apdm_eco_status set sequence = "'.$approve_sequence.'" where id = ' . $id_exist . ' and email= "' . $user . '" and routes_id = "'.$routes.'"';
                         $db->setQuery($query);
                         $db->query();
                 }
-
-
             }
-        }
+        }*/
         $msg = JText::sprintf('Successfully Add Approve', $cid[0]);
         $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&time='.time().'&cid[]=' . $cid[0].'&routes='.$routes, $msg);
 
@@ -1141,9 +1157,17 @@ class ECOController extends JController
             $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (". $id.")");
             $db->query();
         }
-        $msgf = JText::sprintf('You are not permission delete routes '.  implode(",", $id_f));
-        $msg = JText::sprintf(' Have deleted successfull routes '.implode(",", $id_o));
-        $msg = JText::_($msgf.'<>'.$msg);
+        if(isset($id_f) && sizeof($id_f)>0)
+        {
+            $msg = JText::sprintf('You are not permission delete routes: '.  implode(",", $id_f));
+            $msg .= "<>";
+        }
+        if(isset($id_o) && sizeof($id_o)>0)
+        {
+            $msg .= JText::sprintf(' Have deleted successfull routes: '.implode(",", $id_o));
+        }
+
+        //$msg = JText::_($msgf.'<>'.$msg);
         $this->setRedirect( 'index.php?option=com_apdmeco&task=routes&cid[]='.$cid, $msg);
         //  apdm_eco_routes
     }

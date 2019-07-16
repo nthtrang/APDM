@@ -23,6 +23,7 @@ if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Re
 JToolBarHelper::title(JText::_($this->row->eco_name) . $demote . $promote, 'generic.png');
 //JToolBarHelper::title( JText::_($this->rowrowEco->eco_name));        
 JToolBarHelper::customX("approvers", 'apply', '', 'Save', true);
+JToolBarHelper::cancel('cancel', 'Back');
 $cparams = JComponentHelper::getParams('com_media');
 ?>
 
@@ -52,8 +53,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 if (pressbutton == 'affected') {
                         window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id ?>");
                         return;
-                }       
-                if (pressbutton == 'approvers') {
+                }
+                if (pressbutton == 'cancel') {
+                    window.location.assign("index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id ?>");
+                    return;
+                }
+            if (pressbutton == 'approvers') {
                         document.adminForm.submit();
                         //submitform( pressbutton );
                         //return;
@@ -204,40 +209,40 @@ if ($owner == $me->get('id')) {
                                 </tr>
 </thead>
 <?php
+$sequence = array();
+//$sequence[] =    JHTML::_('select.option', 0, JText::_('Please Select') , 'value', 'text');
+for($s=1;$s<=20;$s++)
+{
+    $sequence[] =    JHTML::_('select.option', JText::_('sequence'.$s), JText::_('Sequence '. $s) , 'value', 'text');
+}
 $i = 1;
 if (count($this->arr_status) > 0) {
         ?>
                                         <?php
-                                        $sequence = array();
-                                        $sequence[] =    JHTML::_('select.option', 0, JText::_('Please Select') , 'value', 'text'); 
-                                        for($s=1;$s<=10;$s++)
-                                        {
-                                                $sequence[] =    JHTML::_('select.option', JText::_('sequence'.$s), JText::_('Sequence '. $s) , 'value', 'text'); 
-                                        }
-                                                
                                         foreach ($this->arr_status as $status) {
+                                            $background="";
+                                            $remain_day = $status->route_remain_date;
+                                            if($status->route_status == 'Create'){
+                                                if($remain_day<=0)
+                                                {
+                                                    $background= "style='background-color:#f00;color:#fff'";
+
+                                                }
+                                                elseif($remain_day<=3)
+                                                {
+
+                                                    $background= "style='background-color:#ff0;color:#000'";
+
+                                                }
+                                            }
                                                 if ($me->get('email') == $status->email || $owner == $me->get('id')) {                                                                                                                                                                       
-                                                         $background="";
-                                                        $remain_day = $status->route_remain_date;
-                                                        if($status->route_status == 'Create'){
-                                                                if($remain_day<=0)
-                                                                {                                                                             
-                                                                                $background= "style='background-color:#f00;color:#fff'";
-                                                                        
-                                                                }
-                                                                elseif($remain_day<=3)
-                                                                {               
 
-                                                                                $background= "style='background-color:#ff0;color:#000'";
-
-                                                                }
-                                                        }
                                                        ?>
                                                         <tr>
                                                                 <td align="center"><?php echo $i ?></td>
                                                                  <td align="center" width="5%">
                                                                           <?php                                         
-                                                                         echo JHTML::_('select.genericlist',   $sequence, 'sequence'.$status->id, 'class="inputbox" size="1" ', 'value', 'text', $status->sequence ); 
+                                                                         echo  $status->sequence;//JHTML::_('select.genericlist',   $sequence, 'sequence'.$status->id, 'class="inputbox" size="1" ', 'value', 'text', $status->sequence );
                                                                         ?>
                                                                  </td>
                                                                 <td align="center" width="15%">
@@ -275,11 +280,8 @@ if (count($this->arr_status) > 0) {
                                                                         }
                                                                                 ?>
                                                                         <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                                        
-                                                                  
                                                                 <td  align="center" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
-                                                               
                                                                 </td>   
                                                                 <td align="center">
                                                                         <?php if ($status->route_status == "Create" && $owner == $me->get('id') && $status->eco_status=="Inreview") { ?>
@@ -289,10 +291,11 @@ if (count($this->arr_status) > 0) {
                                                         </tr>
                                                                 <?php
                                                                 $i++;
-                                                        } else {
+                                                        } else {//for member
                                                                 ?>
                                                         <tr>
                                                                 <td align="center"><?php echo $i ?></td>
+                                                                <td align="center"><?php echo $status->sequence;?></td>
                                                                 <td align="center"><?php echo $status->title ?></td>
                                                                 <td align="center"><?php echo EcoController::GetNameApprover($status->email); ?>
                                                                         <input type="hidden" name="mail_user[]" id="title" value="<?php echo $status->email; ?>" />
@@ -301,6 +304,7 @@ if (count($this->arr_status) > 0) {
                                                         if ($status->eco_status == 'Inreview') {
                                                                 ?>
                                                                         <td align="center" width="20%"><?php echo $status->eco_status; ?></td>
+                                                                        <td align="center"><?php echo $status->status; ?></td>
                                                                         <td  align="center" width="25%">
                                                                                 <textarea disabled="disabled" cols="25" rows="6" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>
                                                                         </td>
@@ -309,14 +313,16 @@ if (count($this->arr_status) > 0) {
                                                                                 ?>
                                                                         <td align="center" width="20%">
                                                                                 <?php echo ($status->eco_status=="Released")?"Approve":$status->eco_status; ?>                                                         
-                                                                        </td>                                                        
+                                                                        </td>
+                                                                        <td align="center"><?php echo $status->status; ?></td>
                                                                         <td align="center" width="25%">
                                                                                 <?php echo $status->note; ?>                                                  
                                                                         </td>       
                                                                                 <?php
                                                                         }
-                                                                        ?>  
-                                                                <td align="center" width="20%">
+                                                                        ?>
+                                                            <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                            <td align="center" width="20%">
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td> 
                                                                 <td align="center" width="25%">
@@ -332,7 +338,7 @@ if (count($this->arr_status) > 0) {
                                                         ?>
                                                         <?php } ?>
                         </table>
-                                                <?php if ($owner == $me->get('id')) { ?>
+                                                <?php if ($owner == $me->get('id')) { //for save approvers?>
                                 <table  class="adminlist iptfichier" width="100%"  >
                                                         <?php
                                                         $status_arr = array();
@@ -343,54 +349,60 @@ if (count($this->arr_status) > 0) {
                                                                 ?>
 
                                                 <tr id="<?php echo $j; ?>" style="display:block">
-                                                        <td  align="center"width="5%"><?php echo $j; ?></td>
-                                                        <td align="center" width="15%"><input type="text" name="title[]" id="title" value="" /></td>
-                                                        <td  align="center" width="16%">
-                                                                <select name="mail_user[]" >
+                                                        <td  align="center"width="2%"><?php echo $j; ?></td>
+                                                    <td align="center" width="13%">
+                                                        <?php
+                                                        echo JHTML::_('select.genericlist',   $sequence, 'sequence'.$j, 'class="inputbox" size="1" ', 'value', 'text', $status->sequence );
+                                                        ?>
+                                                    </td>
+                                                        <td align="center" width="10%"><input type="text" name="title<?php echo $j; ?>" id="title" value="" /></td>
+                                                        <td  align="center" width="10%">
+                                                                <select name="mail_user<?php echo $j; ?>" >
                                                                         <option value="">Select Approver</option>
-                                        <?php foreach ($this->list_user as $list) { ?>
+                                                                            <?php foreach ($this->list_user as $list) { ?>
                                                                                 <option value="<?php echo $list->email; ?>"><?php echo $list->name; ?></option>
-                                                <?php } ?>
+                                                                             <?php } ?>
                                                                 </select>
                                                         </td>
                                                 <?php
                                                 if ($status->eco_status == 'Inreview') {
                                                         ?>
-                                                                <td  align="center" width="20%">
-                                                        <?php
-                                                        echo JHTML::_('select.genericlist', $status_arr, 'approve_status[]', 'class="inputbox" size="1" ', 'value', 'text', "Inreview");
-                                                        ?>
-
+                                                                <td  align="center" width="7%">
+                                                                <?php
+                                                                echo JHTML::_('select.genericlist', $status_arr, 'approve_status[]', 'class="inputbox" size="1" ', 'value', 'text', "Inreview");
+                                                                ?>
                                                                         <a href='index.php?option=com_apdmeco&task=approve&cid[]=<?php echo $this->row->eco_id; ?>&time=<?php echo time(); ?>'></a>                                                                
-                                                                </td>                                                        
-                                                                <td align="center" width="25%">
-                                                                        <textarea cols="25" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>                                                       
+                                                                </td>
+                                                                <td align="center" width="5%"><?php echo $this->arr_route[0]->status; ?></td>
+                                                                <td align="center" width="19%">
+                                                                        <textarea cols="15" rows="4" id ="approve_note" name ='approve_note[]'><?php echo $status->note; ?></textarea>
                                                                 </td>
                                                                                 <?php
                                                                         } else {
                                                                                 ?>
-                                                                <td align="center" width="20%">
-                                                                         <?php echo ($status->eco_status=="Released")?"Approve":$status->eco_status; ?>                                                           
-                                                                </td>                                                        
-                                                                <td align="center" width="25%">
-                                                                <?php echo $status->note; ?>                                                  
+                                                                <td align="center" width="7%">
+                                                                         <?php echo ($status->eco_status=="Released")?"Approve":$status->eco_status; ?>
+                                                                </td>
+                                                                <td align="center" width="5%"><?php echo $this->arr_route[0]->status; ?></td>
+                                                                <td align="center" width="19%">
+                                                                <?php echo $status->note; ?>
                                                                 </td>                                                                
                                                                         <?php
                                                                 }
-                                                                ?>      
-                                                        <td width="20%">                                                                
-                <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC2')); ?>
-                                                        </td>   
+                                                                ?>
+                                                                <td align="center" width="19%"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                                <td width="15%">
+                                                                    <?php echo JHTML::_('date', $this->arr_route[0]->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
+                                                                </td>
                                                         <td width="20%">          
-                <?php if ($status->route_status == "Create" && $status->eco_status=="Inreview") { ?>
+                                                            <?php if ($status->route_status == "Create" && $status->eco_status=="Inreview") { ?>
                                                                         <a  style="cursor:pointer" onclick="removeApprove(<?php echo $j; ?>)">Remove</a>
                                                         <?php } ?>
                                                         </td>   
                                                 </tr>
                                                 <?php } ?>
-
-                                </table>     
-<?php } ?>
+                                                    </table>
+                                                <?php } ?>
                 
                                                 <?php
                                                 
