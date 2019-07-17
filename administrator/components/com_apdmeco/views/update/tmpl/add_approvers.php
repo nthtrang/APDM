@@ -56,11 +56,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         return;
                 }   
                 if (pressbutton == 'affected') {
-                        window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id ?>");
+                        window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id ?>&time=<?php echo time(); ?>");
                         return;
                 }
                 if (pressbutton == 'cancel') {
-                    window.location.assign("index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id ?>");
+                    window.location.assign("index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id ?>&time=<?php echo time(); ?>");
                     return;
                 }
             if (pressbutton == 'approvers') {

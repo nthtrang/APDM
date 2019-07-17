@@ -233,11 +233,11 @@ class ECOController extends JController
             $tzoffset = $config->getValue('config.offset');
             $date = & JFactory::getDate($row->eco_create, $tzoffset);
             $row->eco_create = $date->toMySQL();
-            $row->eco_description = strtoupper(JRequest::getVar('eco_description'));
-            $row->eco_reason = strtoupper(JRequest::getVar( 'eco_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));//JRequest::getVar('eco_reason');
-            $row->eco_what = strtoupper(JRequest::getVar( 'eco_what', '', 'post', 'string', JREQUEST_ALLOWHTML ));//JRequest::getVar('eco_what');
-            $row->eco_special =strtoupper(JRequest::getVar( 'eco_special', '', 'post', 'string', JREQUEST_ALLOWHTML ));//JRequest::getVar('eco_special');
-            $row->eco_record_number = strtoupper(JRequest::getVar( 'eco_record_number', '', 'post', 'string', JREQUEST_ALLOWHTML ));//
+            $row->eco_description = JRequest::getVar('eco_description');
+            $row->eco_reason = JRequest::getVar( 'eco_reason', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+            $row->eco_what = JRequest::getVar( 'eco_what', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_what');
+            $row->eco_special =JRequest::getVar( 'eco_special', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_special');
+            $row->eco_record_number = JRequest::getVar( 'eco_record_number', '', 'post', 'string', JREQUEST_ALLOWHTML );//
             $row->eco_benefit = JRequest::getVar('eco_benefit');
             $row->eco_technical =JRequest::getVar('eco_technical');
 
@@ -847,13 +847,13 @@ class ECOController extends JController
         $db = & JFactory::getDBO();
         $me = & JFactory::getUser();
         $cid = JRequest::getVar('cid', array(0));
-        $query = "SELECT eco_create_by,eco_routes_id FROM apdm_eco WHERE  eco_id=".$cid[0]." ORDER BY eco_id desc";                
+        $query = "SELECT eco_create_by,eco_routes_id FROM apdm_eco WHERE  eco_id=".$cid[0]." ORDER BY eco_id desc";
         $db->setQuery( $query);
-        $row = $db->loadObject();                        
-        
-        if($row->eco_create_by != $me->get('id'))
+        $row = $db->loadObject();
+
+        if($row->eco_create_by !== $me->get('id'))
         {                        
-                $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&time='.time().'&cid[]=' . $cid[0].'&routes='.$row->eco_routes_id, $msg);
+                return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&time='.time().'&cid[]=' . $cid[0].'&routes='.$row->eco_routes_id, $msg);
         }
         JRequest::setVar( 'layout', 'default'  );
         JRequest::setVar( 'view', 'routes' );
@@ -1022,7 +1022,7 @@ ini_set('display_errors', 0);
                         $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $row->eco_id . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
                         $totalSequenceApprovers = $db->loadResult();
                         //check all release
-                        $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $route . '" and sequence = "'.$rwapprove->sequence.'"');
+                        $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
                         $totalSequenceReleased = $db->loadResult();
                         if ($totalSequenceApprovers == $totalSequenceReleased) {
                                 //send email Inreview for next SEQUENCE                                                               
@@ -1034,7 +1034,7 @@ ini_set('display_errors', 0);
                                 "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6')).
                                 "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
                                 "<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
-                                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for this ECO";
+                                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=dashboard'>APDM</a> to access Approved/Rejected for this ECO";
                                     $adminEmail = $me->get('email');
                                     $adminName = $me->get('name');
                                     if ($MailFrom != '' && $FromName != '') {
@@ -1277,7 +1277,7 @@ ini_set('display_errors', 0);
         $me			= & JFactory::getUser();
         $route = JRequest::getVar('routes');
         //update route status Inreview
-        $query = 'update apdm_eco_routes set status= "Create" where eco_id = ' . $cid[0] .' and id ='.$route;
+        $query = 'update apdm_eco_routes set status= "Closed" where eco_id = ' . $cid[0] .' and id ='.$route;
         $db->setQuery($query);
         $db->query();
         $query = 'update apdm_eco_status set eco_status= "Inreview" where eco_id = '.$cid[0].' and routes_id ='.$route;
@@ -1351,7 +1351,7 @@ ini_set('display_errors', 0);
                                 "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
                                 "<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
 
-                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for this ECO";
+                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=dashboard'>APDM</a> to access Approved/Rejected for this ECO";
                 $adminEmail = $me->get('email');
                 $adminName = $me->get('name');
                 if ($MailFrom != '' && $FromName != '') {
@@ -1748,7 +1748,7 @@ ini_set('display_errors', 0);
                 "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6')).
                 "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
                 "<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
-                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for this ECO";
+                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=dashboard'>APDM</a> to access Approved/Rejected for this ECO";
             $adminEmail = $me->get('email');
             $adminName = $me->get('name');
             if ($MailFrom != '' && $FromName != '') {

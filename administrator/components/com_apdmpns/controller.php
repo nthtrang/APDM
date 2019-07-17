@@ -9934,11 +9934,12 @@ class PNsController extends JController {
                     for ($row = 1; $row <= $highestRow; $row++) {
                         $rowData = $sheet->toArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
                     }
+
                     $needle = 'A' . $highestRow . ':' . $highestColumn . $highestRow;
                     $replacement = "";
                     for($i=0;$i<count($rowData);$i++) {
                         for($j=0;$j<=11;$j++) {
-                            if ($rowData[$i][$j] == $needle) {
+                            if ($rowData[$i][$j] === $needle) {
                                 $rowData[$i][$j] = $replacement;
                             }
                         }
@@ -9965,8 +9966,8 @@ class PNsController extends JController {
                         else
                             $pn_code = $rowData[$line][1]."-".$rowData[$line][2];
                         //start import with level 0
-                        if($rowData[$line][0]==""){
-                            $arr_err[$line]    = "Err:".$pn_code. " have Level at column A".$line ." is null";
+                        if(!$rowData[$line][0]){
+                            $arr_err[$line]    = "Err:".$pn_code. " have Level at columnsss A".$line ." is null";
                             continue;
                         }
                         //check CCS_CODE
@@ -10019,7 +10020,7 @@ class PNsController extends JController {
                                 $arr_err[$line]    = "Err:"." UOM value at column J".$line ." is out range:'Each','Undefined','Meter','Centimeter','Feet','Inch','Gram','Kilogram','Lbin'";
                             }
                         }
-                        if($rowData[$line][0]!=0){//if != level 0 not check MFR
+                        if($rowData[$line][0]!='00'){//if != level 0 not check MFR
                                 if($rowData[$line][8]=="")//qty
                                 {
                                     $arr_err[$line]    = "Err:".$pn_code. " have QTY at column I".$line ." is null";
@@ -10034,7 +10035,7 @@ class PNsController extends JController {
                                 }  
                         }
 
-                        if($rowData[$line][0]=='0')
+                        if($rowData[$line][0]=='00')
                         {
                                 if(strlen($rowData[$line][4])>40)
                                 {

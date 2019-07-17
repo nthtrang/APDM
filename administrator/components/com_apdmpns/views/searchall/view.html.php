@@ -113,7 +113,7 @@ if ($type_filter==0){
                                  $whereso =  'OR  (so.so_cuscode LIKE "%'.$keyword .'%" or so.customer_id  LIKE "%'.$keyword .'%")';
                              }
 
-               echo   $query = $query. $whereso.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+                  $query = $query. $whereso.   ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                     $db->setQuery($query);
                     $rs_so = $db->loadObjectList();
                     if (count($rs_so) >0){
