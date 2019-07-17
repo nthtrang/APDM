@@ -50,7 +50,7 @@ class ecoViewdashboard extends JView
                // jimport('joomla.html.pagination');
                 
                 $arr_inreview =array();
-                $query= "SELECT rt.due_date as route_due_date,rt.id as route_id,rt.status as route_status,st.*,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,eco.eco_description,eco.eco_status FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id inner join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE st.email = '".$user_login."' and st.eco_status = 'Inreview' and rt.status='Started'";
+                $query= "SELECT DATEDIFF(rt.due_date, CURDATE()) as route_remain_date,rt.due_date as route_due_date,rt.id as route_id,rt.status as route_status,st.*,eco.eco_id as ecoid,eco.eco_create_by,rt.owner,rt.name as route_name,eco.eco_name,eco.eco_description,eco.eco_status FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id inner join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE st.email = '".$user_login."' and st.eco_status = 'Inreview' and rt.status in ('Started','Create') and sent_email = 1";
                 $db->setQuery($query);
                 
                 $arr_inreview= $db->loadObjectList();

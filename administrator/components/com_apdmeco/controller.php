@@ -1675,7 +1675,7 @@ ini_set('display_errors', 0);
         $db = & JFactory::getDBO();
         $me = & JFactory::getUser();
         $cid = JRequest::getVar('cid');
-
+        $datenow    =& JFactory::getDate();
         $routes = JRequest::getVar('routes_id');
         $approve_status = JRequest::getVar('approve_status');
         $approve_note = JRequest::getVar('approve_note');
@@ -1693,9 +1693,92 @@ ini_set('display_errors', 0);
             $msg = JText::sprintf('Please input comment before save', $cid);
             return false;
         }
-        $query = 'update apdm_eco_status set eco_status= "' . $approve_status . '", note = "'.$approve_note.'" where eco_id = ' . $cid . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
-        $db->setQuery($query);
-        $db->query();
+        //TEST
+        $approved_at = $datenow->toMySQL();
+                $query = 'update apdm_eco_status set approved_at = "'.$approved_at.'", eco_status= "' . $approve_status. '", note = "'.$approve_note.'" where eco_id = ' . $cid . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
+                $db->setQuery($query);
+                $db->query();
+                              
+                $db->setQuery('select * from apdm_eco_status where eco_id = ' . $cid. ' and user_id= "' . $me->get('id') . '" and routes_id = "' . $routes . '"');
+                $rwapprove = $db->loadObject();                                
+                //IF REJECT will CLOSE 
+                if($approve_status=="Reject"){
+                    $query = 'update apdm_eco_routes set status= "Closed" where eco_id = ' . $cid . ' and id =' . $routes;
+                    $db->setQuery($query);
+                    $db->query();
+                    //send email to OWNER notice CLOSED route                   
+                        
+                        //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                        $subject = "[ADP] ECO " . $row->eco_status . " Result - " . $row->eco_name;
+
+                        $message = "<br>+ ECO #: " . $row->eco_name .
+                                "<br>+ Description: " . $row->eco_description .
+                                "<br>+ Sequence: " . $rwapprove->sequence .
+                                "<br>+ Approver: " . GetValueUser($rwapprove->user_id, 'name') .
+                                "<br>+ Approved/Rejected: Reject" .
+                                "<br>+ Comment: " . $rwapprove->note .
+                                "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, '%Y-%m-%d %H:%M:%S') .                                        
+                        $message .= "<br>Please click on <a href='".$SiteUrl."index.php?option=com_apdmeco&task=dashboard'>APDM</a> to access Approved/Rejected for this ECO";
+
+                        $adminEmail = $me->get('email');
+                        $adminName = $me->get('name');
+                        if ($MailFrom != '' && $FromName != '') {
+                                $adminName = $FromName;
+                                $adminEmail = $MailFrom;
+                        }                
+                        $owner_email = GetValueUser($row->eco_create_by, 'email');
+                        JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $message, 1 );
+                    //end SENTEMAIL
+                }
+                //for CASE APPROVED
+                if ($approve_status == "Released") {
+                        $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $row->eco_id . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                        $totalSequenceApprovers = $db->loadResult();
+                        //check all release
+                        $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                        $totalSequenceReleased = $db->loadResult();
+                        if ($totalSequenceApprovers == $totalSequenceReleased) {
+                                //send email Inreview for next SEQUENCE                                                               
+                                $subject = "[APDM] ECO Approval Request - " . $row->eco_name;
+                                $message = "<br>+ ECO : " . $row->eco_name .
+                                "<br>+ Description: " . $row->eco_description .
+                                "<br>+ State: " . $row->eco_status .
+                                "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'name') .
+                                "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6')).
+                                "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
+                                "<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
+                                $message .= "<br>Please click on <a href='".$SiteUrl."index.php?option=com_apdmeco&task=dashboard'>APDM</a> to access Approved/Rejected for this ECO";
+                                    $adminEmail = $me->get('email');
+                                    $adminName = $me->get('name');
+                                    if ($MailFrom != '' && $FromName != '') {
+                                        $adminName = $FromName;
+                                        $adminEmail = $MailFrom;
+                                    }          
+                                    
+                                //get first sequence 
+                                $db->setQuery('select sequence from apdm_eco_status where sequence != "'.$rwapprove->sequence.'" and eco_id = ' . $cid . '  and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid. '") order by sequence asc limit 1');
+                                $hightSequence = $db->loadResult();
+                                //GET EMAIL LIST BELONG  $hightSequence      
+                                $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid . '  and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid . '") and sequence = "'.$hightSequence.'"');                                
+                                $result = $db->loadObjectList();
+                                if (count($result) > 0) {
+                                    foreach ($result as $obj) {
+                                      //  JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                                        //update status EMAIL SENT
+                                        $query = 'update apdm_eco_status set sent_email= "1" where eco_id = ' . $cid . ' and  sequence = "'.$hightSequence.'" and email ="'.$obj->email.'" ';
+                                        $db->setQuery($query);
+                                        $db->query();
+                                    }
+                                }
+                                
+                        }
+                }
+        ///END TEST
+        
+        
+        
+        
+        
 
         $msg = JText::sprintf('Successfully Approve/Reject', $cid);
         return true;

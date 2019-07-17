@@ -109,9 +109,27 @@ function saveApproveTask(id){
 			$i = 0;
 			foreach ($this->arr_inreview as $row)
 			{
+                                
                                 $i++;
 				$linkEco 	= 'index.php?option=com_apdmeco&task=detail&cid[]='.$row->eco_id;	
                                 $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&cid[]='.$row->eco_id.'&routes='.$row->routes_id;				
+                                
+                                $background="";
+                            $remain_day = $row->route_remain_date;                            
+                            $arr = array('Started','Create');
+                            if(in_array($row->route_status,$arr)){
+                                if($remain_day<=0)
+                                {
+                                    $background= "style='background-color:#f00;color:#fff'";
+
+                                }
+                                elseif($remain_day<=3)
+                                {
+
+                                    $background= "style='background-color:#ff0;color:#000'";
+
+                                }
+                            }
 			?>
 			<tr class="">
 				<td align="center" width="3%" >
@@ -152,12 +170,12 @@ function saveApproveTask(id){
 					<?php } ?>
 				</td>		
 					                                
-				<td   width="8%" align="center">
+				<td   width="8%" align="center" <?php echo $background?>>
 					<?php echo JHTML::_('date', $row->route_due_date, JText::_('DATE_FORMAT_LC5')) ;?>
 				</td>
 				
 				<td  width="5%" align="center">
-                                       <a id ="save_approve_task" name ="save_approve_task" href="javascript:void(0);" onclick="saveApproveTask(<?php echo $i?>);">Done</a>
+                                       <a id ="save_approve_task" name ="save_approve_task" href="javascript:void(0);" onclick="saveApproveTask(<?php echo $i?>);">Submit</a>
                                        
 				</td>                                
 				                            
