@@ -181,7 +181,7 @@ if ($owner == $me->get('id')) {
                         <li><a id="affected" href="index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $this->row->eco_id; ?>"><?php echo JText::_('Affected Parts'); ?></a></li>
                         <li><a id="initial" href="index.php?option=com_apdmeco&task=initial&cid[]=<?php echo $this->row->eco_id; ?>"><?php echo JText::_('Initial Data'); ?></a></li>
                         <li><a id="supporting" href="index.php?option=com_apdmeco&task=files&cid[]=<?php echo $this->row->eco_id; ?>"><?php echo JText::_('Supporting Document'); ?></a></li>
-                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id; ?>" class="active"><?php echo JText::_('Routes'); ?></a></li>                     
+                        <li><a id="routes" href="index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id; ?>&time=<?php echo time();?>" class="active"><?php echo JText::_('Routes'); ?></a></li>
                 </ul>
                 <div class="clr"></div>
         </div>
@@ -284,14 +284,37 @@ if (count($this->arr_status) > 0) {
                                                                         <?php
                                                                         }
                                                                                 ?>
-                                                                        <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                                        <td align="center"> <?php
+                                                                            if($status->approved_at) {
+                                                                                echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5'));
+                                                                            }
+
+                                                                            ?></td>
                                                                 <td width="20%" align="center" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td>   
-                                                                <td align="center">
+                                                                <td align="center">ffff
                                                                         <?php if ($status->route_status == "Create" && $owner == $me->get('id') && $status->eco_status=="Inreview") { ?>
                                                                                 <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id; ?>&id=<?php echo $status->id; ?>&time=<?php echo time(); ?>&routes=<?php echo JRequest::getVar('routes') ?>'>Remove</a>                                             
                                                                 <?php } ?>
+                                                                    <?php
+                                                                    if($this->row->eco_routes_id == $this->rowEco->eco_routes_id)
+                                                                        echo '<strong>Current Route</strong>';
+                                                                    else{
+                                                                        if($row->status=="Create"){
+                                                                            ?>
+                                                                            <a href="<?php echo $set_route;?>">Set Route</a>&nbsp;| &nbsp;
+                                                                            <a href="<?php echo $edit_link;?>">Edit</a>
+                                                                            <?php
+                                                                        }
+                                                                        else{
+                                                                            ?>
+                                                                            Can not do this action
+                                                                            <a href="<?php //echo $edit_link;?>"></a>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                    ?>
                                                                 </td>   
                                                         </tr>
                                                                 <?php
@@ -326,7 +349,11 @@ if (count($this->arr_status) > 0) {
                                                                                 <?php
                                                                         }
                                                                         ?>
-                                                            <td align="center"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                            <td align="center"> <?php
+                                                                if($status->approved_at) {
+                                                                    echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5'));
+                                                                }
+                                                                ?></td>
                                                             <td align="center" width="20%" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td> 
@@ -395,7 +422,11 @@ if (count($this->arr_status) > 0) {
                                                                         <?php
                                                                 }
                                                                 ?>
-                                                                <td align="center" width="19%"> <?php echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5')); ?></td>
+                                                                <td align="center" width="19%"> <?php
+                                                                    if($status->approved_at) {
+                                                                        echo JHTML::_('date', $status->approved_at, JText::_('DATE_FORMAT_LC5'));
+                                                                    }
+                                                                    ?></td>
                                                                 <td width="20%" <?php echo $background?>>
                                                                     <?php echo JHTML::_('date', $this->arr_route[0]->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td>

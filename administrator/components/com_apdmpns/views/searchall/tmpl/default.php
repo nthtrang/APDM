@@ -1032,25 +1032,29 @@ if (count($this->rs_wo) > 0) { ?>
         $i = 0;
         foreach ($this->rs_wo as $wo) {
                 $i++;
-                if ($so->pns_cpn == 1)
+                if ($wo->pns_cpn == 1)
                         $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $wo->pns_id;
                 else
                         $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $wo->pns_id;
-                if ($so->pns_revision) {
+                if ($wo->pns_revision) {
                         $pnNumber = $wo->ccs_code . '-' . $wo->pns_code . '-' . $wo->pns_revision;
                 } else {
                         $pnNumber = $wo->ccs_code . '-' . $wo->pns_code;
                 }
-               
-                $background="";
+
+            $background="";
                 $remain_day = $wo->wo_remain_date+1;
                 
                         if($remain_day<=0)
                         {       
-                                $remain_day = 0;
+                               // $remain_day = 0;
                                 if($wo->wo_state != 'done' && $wo->wo_state != 'cancel')
                                 {
                                         $background= "style='background-color:#f00;color:#fff'";
+                                }
+                                else
+                                {
+                                    $remain_day = 0;
                                 }
                         }
                         elseif($remain_day<=3)

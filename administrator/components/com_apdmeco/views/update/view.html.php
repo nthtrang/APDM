@@ -53,7 +53,7 @@ class ecoViewupdate extends JView
             //viet status	
             
             $routes		= JRequest::getVar('routes');
-            $db->setQuery("SELECT DATEDIFF(rt.due_date, CURDATE()) as route_remain_date,rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.due_date as route_due_date,st.approved_at,rt.status FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes." group by email");
+            $db->setQuery("SELECT DATEDIFF(rt.due_date, CURDATE()) as route_remain_date,rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.due_date as route_due_date,st.approved_at,rt.status FROM apdm_eco_status st inner join apdm_eco_routes rt on st.routes_id = rt.id left join apdm_eco eco on eco.eco_routes_id = rt.id  WHERE rt.id = ".$routes." group by email order by sequence asc");
             $arr_status = $db->loadObjectList();
 		}
 		//get list user have exist on datbase
@@ -123,6 +123,9 @@ class ecoViewupdate extends JView
             $arr_route= $db->loadObjectList();
             $this->assignRef('arr_route',    $arr_route);
         $this->assignRef('arr_status',    $arr_status);
+        $rowEco = & JTable::getInstance('apdmeco');
+        $rowEco->load($cid[0]);
+        $this->assignRef('rowEco',	$rowEco);
 		parent::display($tpl);
 	}
 }

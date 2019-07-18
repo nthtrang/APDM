@@ -233,8 +233,14 @@ function saveApproveTask(id){
 				</th>                             
 				<th width="7%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Approver'); ?>
-				</th>        				              
-                                <th  width="7%" class="title"  >
+				</th>
+                <th width="5%" class="title" nowrap="nowrap">
+                    <?php echo JText::_('Approve/Reject'); ?>
+                </th>
+                <th width="5%" class="title" nowrap="nowrap">
+                    <?php echo JText::_('Approve/Reject Date'); ?>
+                </th>
+                <th  width="7%" class="title"  >
 					<?php echo JText::_( 'Due Date' ); ?>
 				</th>
 				<th  width="10%" class="title">
@@ -292,6 +298,41 @@ function saveApproveTask(id){
                                               <?php }?>
                                                 </table>
                                 </td>
+                <td align="center">
+                    <table class="adminlist" cellpadding="0">
+                        <?php
+                        foreach($arrAppver as $rs)
+                        {
+                            ?>
+                            <tr>
+
+                                <td align="center">
+                                    <?php echo ($rs['approver_status']=="Released")?"Approve":$rs['approver_status']; ?>
+                                </td>
+
+                            </tr>
+                        <?php }?>
+                    </table>
+                </td>
+                <td align="center">
+                    <table class="adminlist" cellpadding="0">
+                        <?php
+                        foreach($arrAppver as $rs)
+                        {
+                            ?>
+                            <tr>
+
+                                <td align="center">
+                                    <?php
+                                    if($rs['approver_date']) {
+                                        echo JHTML::_('date', $rs['approver_date'], JText::_('DATE_FORMAT_LC5'));
+                                    }
+                                     ?></td>
+
+                            </tr>
+                        <?php }?>
+                    </table>
+                </td>
                                 <td align="center">
                                 <table class="adminlist" cellpadding="0">
                                               <?php 
