@@ -11,28 +11,35 @@ $role = JAdministrator::RoleOnComponent(5);
 $demote = $promote = "";
 $me = & JFactory::getUser();
 $add_routes = "";
-
+$arrayNotAllow = array("Closed","Finished");
 if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Released") {
 
         $add_routes = '<a href="javascript:;"id="lnkfichier" title="Add more approvers " >' . JText::_('Click here to add more approvers') . '</a>';
         if ($route == $this->row->eco_routes_id) {
+                if(!in_array($this->arr_route[0]->status,$arrayNotAllow)){
+                        $promote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="button_promote" style="vertical-align:middle"><span>Promote</span></button>';                        
+                }
                 $demote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'demote\')" class="button_demote" style="vertical-align:middle"><span>Demote </span></button>';
-                $promote = '<button onclick="javascript:hideMainMenu(); submitbutton(\'promote\')" class="button_promote" style="vertical-align:middle"><span>Promote</span></button>';
+                
         }
 }
 
 JToolBarHelper::title(JText::_($this->row->eco_name) . $demote . $promote, 'generic.png');
 //JToolBarHelper::title( JText::_($this->rowrowEco->eco_name));        
-$arrayNotAllow = array("Closed","Finished");
+$arrayAllowSetRoute = array("Create","Started");                                        
+if(in_array($this->arr_route[0]->status,$arrayAllowSetRoute))
+{
+        JToolBarHelper::customX("set_route_eco", 'apply', '', 'Set Route', true);
+}
+
 if(!in_array($this->arr_route[0]->status,$arrayNotAllow))
 {
-        JToolBarHelper::customX("approvers", 'apply', '', 'Save', true);
+        JToolBarHelper::customX("approvers", 'save', '', 'Save', true);
 }
+
 JToolBarHelper::cancel('cancel', 'Back');
 $cparams = JComponentHelper::getParams('com_media');
-?>
 
-<?php
 // clean itemrow-> data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
@@ -61,6 +68,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 }
                 if (pressbutton == 'cancel') {
                     window.location.assign("index.php?option=com_apdmeco&task=routes&cid[]=<?php echo $this->row->eco_id ?>&time=<?php echo time(); ?>");
+                    return;
+                }
+                 if (pressbutton == 'set_route_eco') {
+                    window.location.assign("index.php?option=com_apdmeco&task=set_route_eco&cid[]=<?php echo $this->row->eco_id ?>&time=<?php echo time(); ?>&id=<?php echo $cid = JRequest::getVar('routes'); ?>");
                     return;
                 }
             if (pressbutton == 'approvers') {
@@ -293,28 +304,10 @@ if (count($this->arr_status) > 0) {
                                                                 <td width="20%" align="center" <?php echo $background?>>
                                                                 <?php echo JHTML::_('date', $status->route_due_date, JText::_('DATE_FORMAT_LC5')); ?>
                                                                 </td>   
-                                                                <td align="center">ffff
+                                                                <td align="center">
                                                                         <?php if ($status->route_status == "Create" && $owner == $me->get('id') && $status->eco_status=="Inreview") { ?>
                                                                                 <a href='index.php?option=com_apdmeco&task=removeapprove&cid[]=<?php echo $this->row->eco_id; ?>&id=<?php echo $status->id; ?>&time=<?php echo time(); ?>&routes=<?php echo JRequest::getVar('routes') ?>'>Remove</a>                                             
-                                                                <?php } ?>
-                                                                    <?php
-                                                                    if($this->row->eco_routes_id == $this->rowEco->eco_routes_id)
-                                                                        echo '<strong>Current Route</strong>';
-                                                                    else{
-                                                                        if($row->status=="Create"){
-                                                                            ?>
-                                                                            <a href="<?php echo $set_route;?>">Set Route</a>&nbsp;| &nbsp;
-                                                                            <a href="<?php echo $edit_link;?>">Edit</a>
-                                                                            <?php
-                                                                        }
-                                                                        else{
-                                                                            ?>
-                                                                            Can not do this action
-                                                                            <a href="<?php //echo $edit_link;?>"></a>
-                                                                            <?php
-                                                                        }
-                                                                    }
-                                                                    ?>
+                                                                <?php } ?>                                                                    
                                                                 </td>   
                                                         </tr>
                                                                 <?php
