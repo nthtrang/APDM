@@ -70,7 +70,7 @@
 					<td class="key">
 						<label for="name">
                                          
-                                                        <?php echo JText::_( "Customer's PN" ); ?>
+                                                        <?php echo JText::_( "Customer Code" ); ?>
                                              
 						</label>
 					</td>
@@ -88,7 +88,7 @@
                                                <?php echo $this->row->ccs_name;?>					
 					</td>
 				</tr>                                      
-				<tr>
+<!--				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'COMMODITY_CODE_DESCRIPTION' ); ?>
@@ -96,6 +96,16 @@
 					</td>
 					<td>
 						<?php echo $this->row->ccs_description?>
+					</td>
+				</tr>-->
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Address' ); ?>
+						</label>
+					</td>
+					<td>
+						<?php echo $this->row->ccs_address?>
 					</td>
 				</tr>
 				<tr>
@@ -108,6 +118,36 @@
 						<?php echo ($this->row->ccs_activate)? JText::_('Yes') : JText::_('No');?>
 					</td>
 				</tr>
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( "Attention" ); ?>
+						</label>
+					</td>
+					<td>
+                                               <?php echo $this->row->ccs_attention;?>					
+					</td>
+				</tr>      
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( "Email" ); ?>
+						</label>
+					</td>
+					<td>
+                                               <?php echo $this->row->ccs_email;?>					
+					</td>
+				</tr>      
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( "Mobile" ); ?>
+						</label>
+					</td>
+					<td>
+                                               <?php echo $this->row->ccs_mobile;?>					
+					</td>
+				</tr>      
 			</table>
 		</fieldset>
 	</div>

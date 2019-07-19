@@ -1181,7 +1181,13 @@ class ECOController extends JController
 //                     }  
         //end sent email
         $msg = JText::sprintf('Successfully set route', $cid[0]);
-        $this->setRedirect('index.php?option=com_apdmeco&task=routes&cid[]=' . $cid[0], $msg);
+        $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$id, $msg);
+    }
+    function canSetRoute($eco_id,$route_id)
+    {
+            $db = & JFactory::getDBO();
+            $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $eco_id . ' and routes_id = "' . $route_id . '"');
+            return $check_approve = $db->loadResult();
     }
     function edit_routes() {
         JRequest::setVar('layout', 'form');
@@ -1443,15 +1449,10 @@ class ECOController extends JController
                         $query = "update apdm_pns_parents set pns_parent = '" . $row1->pns_id . "', pns_reved = '" . $row1->parent_id . "' where pns_parent = '" . $row1->parent_id . "'";
                         $db->setQuery($query);
                         $db->query();
-
-
-
                         //update parent to new REV
                         $query = "update apdm_pns_parents set pns_id = '" . $row1->pns_id . "', pns_reved = '" . $row1->parent_id . "' where pns_id = '" . $row1->parent_id . "'";
                         $db->setQuery($query);
                         $db->query();
-
-
                     }
                     //send email PRROMOTE RELEASED
                     $row =& JTable::getInstance('apdmeco');
@@ -1468,8 +1469,7 @@ class ECOController extends JController
                         "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
                         "<br>+ Modified Date: " . $row->eco_modified?JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6')):"";
 
-                    $message = $message1 . $message2;
-                  
+                    $message = $message1 . $message2;                  
                     $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access and see more detail for ECO " . $row->eco_name;
 
                     $adminEmail = $me->get('email');
@@ -1486,7 +1486,6 @@ class ECOController extends JController
                         }
                     }
                     //send email to OWNER notice RELEASED ECO
-
                     //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
                     $subject = "[APDM] ECO " . $row->eco_status . " - " . $row->eco_name;
                     $messageowner1 = "Please be noticed that this ECO has been " . $row->eco_status;

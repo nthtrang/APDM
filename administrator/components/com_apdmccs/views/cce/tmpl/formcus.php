@@ -78,7 +78,7 @@
 				<tr>
 					<td class="key">
 						<label for="name">
-							<?php echo JText::_( "Customer's PN" ); ?>
+							<?php echo JText::_( "Customer Code" ); ?>
 						</label>
 					</td>
 					<td>
@@ -109,7 +109,7 @@
 					</td>
 				</tr>                                  
                                 
-				<tr>
+				<!--<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'COMMODITY_CODE_DESCRIPTION' ); ?>
@@ -117,6 +117,16 @@
 					</td>
 					<td>
 						<textarea name="ccs_description" rows="10" cols="60"><?php echo $this->row->ccs_description?></textarea>
+					</td>
+				</tr>-->
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Address' ); ?>
+						</label>
+					</td>
+					<td>
+						<textarea name="ccs_address" rows="10" cols="60"><?php echo $this->row->ccs_address?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -127,6 +137,36 @@
 					</td>
 					<td>
 						<?php echo $this->lists['activate']?>
+					</td>
+				</tr>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Attention' ); ?>
+						</label>
+					</td>
+					<td>
+						 <input type="text"  name="ccs_attention" id="ccs_attention" class="inputbox" size="50" value="<?php echo $this->row->ccs_attention;?>"/>						
+					</td>
+				</tr>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Email' ); ?>
+						</label>
+					</td>
+					<td>
+						 <input type="text"  name="ccs_email" id="ccs_email" class="inputbox" size="50" value="<?php echo $this->row->ccs_email;?>"/>						
+					</td>
+				</tr>
+                                <tr>
+					<td class="key" valign="top">
+						<label for="username">
+							<?php echo JText::_( 'Mobile' ); ?>
+						</label>
+					</td>
+					<td>
+						 <input type="text"  name="ccs_mobile" id="ccs_mobile" class="inputbox" size="50" value="<?php echo $this->row->ccs_mobile;?>"/>						
 					</td>
 				</tr>
 			</table>
@@ -186,7 +226,7 @@
 	<input type="hidden" name="cid[]" value="<?php echo $this->row->ccs_id?>" />
 	<input type="hidden" name="option" value="com_apdmccs" />
 	<input type="hidden" name="task" value="savecus" />
-        <input type="text" name="back" value="<?php echo  JRequest::getVar( 'back');?>" />
+        <input type="hidden" name="back" value="<?php echo  JRequest::getVar( 'back');?>" />
         
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

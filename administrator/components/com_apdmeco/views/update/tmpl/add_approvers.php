@@ -12,6 +12,7 @@ $demote = $promote = "";
 $me = & JFactory::getUser();
 $add_routes = "";
 $arrayNotAllow = array("Closed","Finished");
+
 if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Released") {
 
         $add_routes = '<a href="javascript:;"id="lnkfichier" title="Add more approvers " >' . JText::_('Click here to add more approvers') . '</a>';
@@ -24,10 +25,12 @@ if ($this->row->eco_create_by == $me->get('id') && $this->row->eco_status != "Re
         }
 }
 
+$canApprove = EcoController::canSetRoute($this->row->eco_id,$this->arr_route[0]->id);
+
 JToolBarHelper::title(JText::_($this->row->eco_name) . $demote . $promote, 'generic.png');
 //JToolBarHelper::title( JText::_($this->rowrowEco->eco_name));        
 $arrayAllowSetRoute = array("Create","Started");                                        
-if(in_array($this->arr_route[0]->status,$arrayAllowSetRoute))
+if(in_array($this->arr_route[0]->status,$arrayAllowSetRoute) && $this->arr_route[0]->id != $this->rowEco->eco_routes_id && $canApprove>=2)
 {
         JToolBarHelper::customX("set_route_eco", 'apply', '', 'Set Route', true);
 }
@@ -435,8 +438,8 @@ if (count($this->arr_status) > 0) {
                 
                                                 <?php
                                                 
-                                                if ($owner == $me->get('id')) {                                                        
-                                                        if ($this->arr_route[0]->status == "Create") {
+                                                if ($owner == $me->get('id')) {                                                             
+                                                        if ($this->arr_route[0]->status == "Create" || $this->arr_route[0]->status =="Started") {
                                                                 echo $add_routes;
                                                         }
                                                         $link = "index.php?option=com_apdmeco&amp;task=addapprove&amp;cid[]=" . $this->row->eco_id . "&amp;time=" . time();
