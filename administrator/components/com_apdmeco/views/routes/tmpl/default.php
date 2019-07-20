@@ -14,9 +14,9 @@
 	
         JToolBarHelper::title( JText::_($this->rowEco->eco_name));
 
-	if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
+	//if (in_array("E", $role) && $this->rowEco->eco_status !="Released" && $this->rowEco->eco_status !="Inreview") {
 		JToolBarHelper::addEcoRoutes("New",$cid[0]);
-	} 
+//	} 
 
 	if (in_array("D", $role)) {           
 		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it(s)?','remove_routes');

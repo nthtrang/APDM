@@ -32,7 +32,7 @@ JToolBarHelper::title(JText::_($this->row->eco_name) . $demote . $promote, 'gene
 $arrayAllowSetRoute = array("Create","Started");                                        
 if(in_array($this->arr_route[0]->status,$arrayAllowSetRoute) && $this->arr_route[0]->id != $this->rowEco->eco_routes_id && $canApprove>=2)
 {
-        JToolBarHelper::customX("set_route_eco", 'apply', '', 'Set Route', true);
+        JToolBarHelper::customX("set_route_eco", 'unarchive', '', 'Set Route', true);
 }
 
 if(!in_array($this->arr_route[0]->status,$arrayNotAllow))

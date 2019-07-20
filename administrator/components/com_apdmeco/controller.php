@@ -1084,7 +1084,7 @@ class ECOController extends JController
         $msg = JText::sprintf('Successfully Approve/Reject', $cid[0]);
         $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0].'&routes='.$routes, $msg);
     }
-    function add_routes() {
+    function add_routes() {       
         JRequest::setVar('layout', 'addroutes');
         JRequest::setVar('view', 'routes');
         parent::display();
@@ -1907,4 +1907,25 @@ class ECOController extends JController
             $this->setRedirect( 'index.php?option=com_apdmeco&task=dashboard&time='.time(), $msg);
         }
     }
+    function get_routename_default()
+    {
+                $db = & JFactory::getDBO();
+                $eco_id = JRequest::getVar('eco_id');
+                $query = "SELECT count(*)  FROM apdm_eco_routes  WHERE  eco_id = '".$eco_id."'";
+                $db->setQuery($query);
+                $pns_latest = $db->loadResult();
+               
+                $next_poprf_code = (int) $pns_latest;
+                $next_poprf_code++;
+                echo "Route ".$next_poprf_code;
+                exit;
+        }       
+        function check_route_promote($eco_id)
+        {
+                 $db = & JFactory::getDBO();         
+                //$eco_id = JRequest::getVar( 'cid', array(0) );
+                $db->setQuery("select rt.id,rt.eco_id from apdm_eco_routes rt inner join apdm_eco eco on rt.eco_id =  eco.eco_id and rt.status not in ('Create','Closed') and eco.eco_id = '".$eco_id[0]."'");                 
+                return $db->loadResult();                
+                
+        }
 }

@@ -15,6 +15,16 @@ $me = & JFactory::getUser();
 	//ToolBarHelper::apply('apply', 'Save');  
 ?>
 <script language="javascript" type="text/javascript">
+function get_default_route_name(){		
+		var url = 'index.php?option=com_apdmeco&task=get_routename_default&eco_id=<?php echo $cid[0];?>';				
+		var MyAjax = new Ajax(url, {
+			method:'get',
+			onComplete:function(result){				
+				$('name').value = result.trim();
+			}
+		}).request();
+	}
+        get_default_route_name();        
 function UpdateRoutesWindow(){
     if (document.adminFormSaveRoutes.name.value==""){
         alert("Please input name");
@@ -56,7 +66,15 @@ function UpdateRoutesWindow(){
 }
 
 </script>
-
+<?php 
+$exist_route_promoted = EcoController::check_route_promote($cid[0]);
+if($exist_route_promoted)
+{
+?>
+<div name="notice" style="color:#D30000" id ="notice"><strong>Please demote route before create new route</strong></div>
+<?php 
+}else{
+?>
 <form action="index.php?option=com_apdmeco&task=save_routes&cid[]=<?php echo $cid[0]?>" method="post" name="adminFormSaveRoutes" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>
@@ -112,3 +130,4 @@ function UpdateRoutesWindow(){
 	<input type="hidden" name="return" value="routes"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
+<?php }?>
