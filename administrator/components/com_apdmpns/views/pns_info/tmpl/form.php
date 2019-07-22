@@ -21,11 +21,11 @@
 		JToolBarHelper::save('save', 'Save & Add new');
 	}
 	JToolBarHelper::apply('apply', 'Save');
-	if ( $edit ) {
+	if ( !$eco_id ) {
 		// for existing items the button is renamed `close`
 		JToolBarHelper::cancel( 'cancel', 'Close' );
 	} else {
-		JToolBarHelper::cancel();
+		JToolBarHelper::customX("cancel1", 'cancel', '', 'Close', false);                
 	}
 	
 	$cparams = JComponentHelper::getParams ('com_media');
@@ -41,9 +41,13 @@
 <script language="javascript" type="text/javascript">
 	function submitbutton(pressbutton) {
 		var form = document.adminForm;
-		if (pressbutton == 'cancel') {
+		if (pressbutton == 'cancel') {                         
 			submitform( pressbutton );
 			return;
+		}
+                if (pressbutton == 'cancel1') {                        
+			window.location.assign("index.php?option=com_apdmeco&task=affected&cid[]=<?php echo $eco_id?>&time=<?php echo time(); ?>");
+                        return;
 		}
 		var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
 		if (form.ccs_code.value==0){

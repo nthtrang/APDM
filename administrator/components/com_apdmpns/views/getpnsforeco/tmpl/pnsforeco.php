@@ -140,7 +140,7 @@ function UpdatePnsEco(){
 				</td>	
 				
 				<td align="center">
-					<?php echo PNsController::GetECO($row->eco_id); ?>
+					<?php echo PNsController::GetECO($row->eco_released_id); ?>
 				</td>				
 				<td align="center">
 					<?php echo $row->pns_status;?>

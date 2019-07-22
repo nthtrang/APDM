@@ -301,8 +301,18 @@ function saveApproveTask(id){
                 <td align="center">
                     <table class="adminlist" cellpadding="0">
                         <?php
+                        $all_approved = 0;
+                        $have_reject = 0;
                         foreach($arrAppver as $rs)
                         {
+                                if($rs['approver_status']=="Released")
+                                {                                       
+                                      $all_approved = $all_approved + 1; 
+                                }
+                                if($rs['approver_status'] =="Reject" )
+                                {
+                                      $have_reject = 1;
+                                }
                             ?>
                             <tr>
 
@@ -347,7 +357,18 @@ function saveApproveTask(id){
                                                 </table>	
 				</td>
 				<td align="center">
-                                       <a id ="save_approve_task" name ="save_approve_task" href="index.php?option=com_apdmeco&amp;task=sendRemindApprove&cid=<?php echo $row->ecoid;?>&routes=<?php echo $row->id;?>&time=<?php echo time();?>">Remind</a>
+                                       
+                                       
+                                        <?php if($all_approved != count($arrAppver) &&  !$have_reject){?>
+                                        <a id ="save_approve_task" name ="save_approve_task" href="index.php?option=com_apdmeco&amp;task=sendRemindApprove&cid=<?php echo $row->ecoid;?>&routes=<?php echo $row->id;?>&time=<?php echo time();?>">
+                                               Remind
+                                               </a>
+                                               <?php }
+                                                 else {
+                                                      echo "Remind";
+                                                }?>
+                                       
+                                       
                                        
 				</td>                                
 				                            

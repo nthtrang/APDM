@@ -1363,6 +1363,8 @@ class ECOController extends JController
         $db = & JFactory::getDBO();
         $cid = JRequest::getVar('cid', array(0));
         $me = & JFactory::getUser();
+        $datenow = & JFactory::getDate();
+        $eco_modified = $datenow->toMySQL();
         $route = JRequest::getVar('routes');
         $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id in (select eco_routes_id from apdm_eco where eco_id= "' . $cid[0] . '")');
         $trow = $db->loadResult();
@@ -1377,7 +1379,7 @@ class ECOController extends JController
             $row->load($cid[0]);
             if ($row->eco_status == 'Create') {
                 //promote up to inreview
-                $query = 'update apdm_eco set eco_status= "Inreview" where eco_id = ' . $cid[0];
+                $query = 'update apdm_eco set eco_status= "Inreview",eco_promote_date = "'.$eco_modified.'",eco_modified = "'.$eco_modified.'",eco_modified_by = "'.$me->get('id').'" where eco_id = ' . $cid[0];
                 $db->setQuery($query);
                 $db->query();
                 //set all pn
@@ -1398,7 +1400,8 @@ class ECOController extends JController
                                 "<br>+ Description: " . $row->eco_description .
                                 "<br>+ State: " . $row->eco_status .
                                 "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'name') .
-                                "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6'));
+                                "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6')).
+                                "<br>+ Promoted Dated:" . JHTML::_('date',$row->eco_promote_date, JText::_('DATE_FORMAT_LC6'));
                                 //"<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
                                 //"<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
 
@@ -1439,7 +1442,7 @@ class ECOController extends JController
                     $db->setQuery($query);
                     $db->query();
                     //update eco to Released
-                    $query = 'update apdm_eco set eco_status= "Released" where eco_id = ' . $cid[0];
+                    $query = 'update apdm_eco set eco_status= "Released",eco_promote_date = "'.$eco_modified.'",eco_modified = "'.$eco_modified.'",eco_modified_by = "'.$me->get('id').'"  where eco_id = ' . $cid[0];
                     $db->setQuery($query);
                     $db->query();
                     //set all pn
@@ -1486,14 +1489,18 @@ class ECOController extends JController
                     //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
                     $subject = "[APDM] ECO " . $row->eco_status . " - " . $row->eco_name;
                     $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
-
+                    $date_updated = "";
+                    if($row->eco_modified)
+                    {
+                            $date_updated = JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
+                    }
                     $message2 = "<br>+ ECO : " . $row->eco_name .
                         "<br>+ Description: " . $row->eco_description .
                         "<br>+ State: " . $row->eco_status .
                         "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'name') .
                         "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6')).
                         "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
-                        "<br>+ Modified Date: " . $row->eco_modified?JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6')):"";
+                        "<br>+ Modified Date: " . $date_updated;
 
                     $message = $message1 . $message2;                  
                     $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access and see more detail for ECO " . $row->eco_name;
@@ -1521,7 +1528,7 @@ class ECOController extends JController
                             "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'name') .
                             "<br>+ Created Date: " . JHTML::_('date',$row->eco_create, JText::_('DATE_FORMAT_LC6'));
                              "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
-                             "<br>+ Modified Date: " . $row->eco_modified?JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6')):"";
+                             "<br>+ Modified Date: " . $date_updated;
                     $messageowner1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for ECO " . $row->eco_name;
 
                     $adminEmail = $me->get('email');
@@ -1900,14 +1907,23 @@ class ECOController extends JController
         $SiteUrl = $mainframe->getCfg('siteurl');
         $cid = JRequest::getVar('cid');
         $routes = JRequest::getVar('routes');
-        $query = "SELECT st.*,rt.status as route_status,rt.owner,rt.name as route_name,rt.due_date FROM apdm_eco_status st  inner join apdm_eco_routes rt on st.routes_id = rt.id WHERE rt.id = " . $routes ." and st.eco_status = 'Inreview'";
+        
+         //get first sequence 
+                $db->setQuery('select sequence from apdm_eco_status where eco_status  = "Inreview" and eco_id = ' . $cid . '  and routes_id = "' . $routes . '" order by sequence asc limit 1');
+                $hightSequence = $db->loadResult();
+                //GET EMAIL LIST BELONG  $hightSequence  
+                if($hightSequence){
+                        $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid . '  and routes_id = "' . $routes . '" and sequence = "'.$hightSequence.'" and eco_status = "Inreview"');                
+                        $result = $db->loadObjectList();
+                }
+       /* $query = "SELECT st.*,rt.status as route_status,rt.owner,rt.name as route_name,rt.due_date FROM apdm_eco_status st  inner join apdm_eco_routes rt on st.routes_id = rt.id WHERE rt.id = " . $routes ." and st.eco_status = 'Inreview'";
         $db->setQuery($query);
-        $result = $db->loadObjectList();
+        $result = $db->loadObjectList();*/
         $arr_user = array();
         if (count($result) > 0) {
             foreach ($result as $obj) {
                 $arr_user[] = $obj->email;
-            }
+            }           
             $row = & JTable::getInstance('apdmeco');
             $row->load($cid);                       
                 $subject = "[APDM] ECO Approval Request - " . $row->eco_name;

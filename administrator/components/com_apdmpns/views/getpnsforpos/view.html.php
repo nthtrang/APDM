@@ -199,8 +199,6 @@ class pnsViewgetpnsforpos extends JView
                            $arr_eco_id[] = $eco->eco_id; 
                         }
                         
-                    }else{
-                        $arr_eco_id[] = -1;
                     }
                 break;
                 case '2': //Vendor
@@ -211,8 +209,6 @@ class pnsViewgetpnsforpos extends JView
                         foreach ($rs_vendor as $vendor){
                             $arr_vendor_id[] = $vendor->info_id;
                         }
-                    }else{
-                        $arr_vendor_id[] =-1;
                     }
                 break;
                  case '3': //Supplier
@@ -223,8 +219,6 @@ class pnsViewgetpnsforpos extends JView
                         foreach ($rs_supplier as $supplier){
                             $arr_supplier_id[] = $supplier->info_id;
                         }
-                    }else{
-                        $arr_supplier_id[] = -1;
                     }
                 break;
                  case '4': //Manufacture
@@ -235,8 +229,6 @@ class pnsViewgetpnsforpos extends JView
                         foreach ($rs_mf as $mf){
                             $arr_mf_id[] = $mf->info_id;
                         }
-                    }else{
-                        $arr_mf_id[] = -1;
                     }
                 break;
                 case '7': //Manufacture PN                         
@@ -249,9 +241,7 @@ class pnsViewgetpnsforpos extends JView
                            $arr_mf_id[] = $mf->info_id;
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
-                    }else{
-                        $arr_mf_id[] = -1;
-                    }                     
+                    }                  
                     break;                
                 case '6': //for information of pns
                     $where[] = 'p.pns_description LIKE '.$searchEscaped;
@@ -319,9 +309,7 @@ class pnsViewgetpnsforpos extends JView
                 }
                 $pns_id_vendor =array_unique($pns_id_vendor);     
                 $where[] = 'p.pns_id IN ('.implode(',', $pns_id_vendor).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }              
+            }            
         }
        if(count($arr_supplier_id) > 0){
             //get list pns have this supplier
@@ -334,12 +322,7 @@ class pnsViewgetpnsforpos extends JView
                 }
                 $pns_id_sp = array_unique($pns_id_sp);
                 $where[] = 'p.pns_id IN ('.implode(',', $pns_id_sp).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            } 
-            
-            
-            
+            }
         }
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
@@ -352,23 +335,23 @@ class pnsViewgetpnsforpos extends JView
                 }
                $pns_id_mf = array_unique($pns_id_mf);
                 $where[] = 'p.pns_id IN ('.implode(',', $pns_id_mf).')';
-            }else{
-                $where[] = 'p.pns_id IN (0)';
-            }           
+            }       
             
         }
         if (count($arr_eco_id) > 0) {
-            $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
+            $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).') or e.eco_id IN ('.implode(',', $arr_eco_id).') ';
         }
         
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
         $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
-        
+         $group_by = ' group by p.pns_id ';
+         
         $query = 'SELECT COUNT(p.pns_id)'
-        . ' FROM apdm_pns AS p'
-        . $filter
+        . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '
+        . $filter        
         . $where
+        . $group_by
         ;
        //echo $query;
         $db->setQuery( $query );
@@ -377,10 +360,11 @@ class pnsViewgetpnsforpos extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
-            . ' FROM apdm_pns AS p'
+        $query = 'SELECT if(e.eco_id,e.eco_id,p.eco_id) as eco_released_id, p.* '
+            . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '
             . $filter
-            . $where            
+            . $where                
+            . $group_by
             . $orderby
         ;
         $lists['query'] = base64_encode($query);   

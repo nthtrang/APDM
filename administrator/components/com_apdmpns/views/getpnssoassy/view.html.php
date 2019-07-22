@@ -360,19 +360,21 @@ class pnsViewgetpnssoassy extends JView
             
         }
         if (count($arr_eco_id) > 0) {
-            $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
+            $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).') or e.eco_id IN ('.implode(',', $arr_eco_id).') ';
         }
         if ($so_id) {
             $where[] = 'fk.so_id IN ('. $so_id.')';
         }
         $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
         $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') or (', $where ) . ')' : '' );
+        $group_by = ' group by p.pns_id ';
         
         $query = 'SELECT COUNT(p.pns_id)'
         . ' FROM apdm_pns AS p'
         . ' inner join apdm_pns_so_fk AS fk on p.pns_id = fk.pns_id '
         . $filter
         . $where
+        . $group_by
         ;
        //echo $query;
         $db->setQuery( $query );
@@ -381,11 +383,12 @@ class pnsViewgetpnssoassy extends JView
         jimport('joomla.html.pagination');
         $pagination = new JPagination( $total, $limitstart, $limit );
         
-        $query = 'SELECT p.* '
-            . ' FROM apdm_pns AS p'
+        $query = 'SELECT if(e.eco_id,e.eco_id,p.eco_id) as eco_released_id, p.* '
+            . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '            
             . ' inner join apdm_pns_so_fk AS fk on p.pns_id = fk.pns_id '
             . $filter
-            . $where            
+            . $where         
+            . $group_by
             . $orderby
         ;
         $lists['query'] = base64_encode($query);   
