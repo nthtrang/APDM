@@ -97,7 +97,7 @@ function submitbutton(pressbutton) {
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
     <td><input type="radio" name="so_status" id="so_status1" value="done" <?php echo ($this->so_status=='done')?"checked='checked'":"";?>>Done</td>
-    <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="doc_reparation" <?php echo ($this->wo_op_status=='doc_reparation')?"checked='checked'":"";?>>Doc. Preparation By</td>
   </tr>
   <tr>
     <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO:</td>
@@ -109,7 +109,7 @@ function submitbutton(pressbutton) {
       <?php echo JHTML::_('calendar',$this->time_to, 'time_to', 'time_to', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	     
   </td>
      <td><input type="radio" name="so_status" id="so_status2" value="onhold"  <?php echo ($this->so_status=='onhold')?"checked='checked'":"";?>>On Hold</td>
-     <td><input type="radio" name="wo_op_status"  id="wo_op_status2" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status2" value="label_printed" <?php echo ($this->wo_op_status=='label_printed')?"checked='checked'":"";?>>Label Printed</td>
   </tr>
   <tr>
     <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchstep" <?php echo ($this->search_swo_type=='searchstep')?"checked='checked'":"";?>>Step:</td>
@@ -119,7 +119,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td><input type="radio" name="so_status" id="so_status3" value="inprogress" <?php echo ($this->so_status=='inprogress')?"checked='checked'":"";?> >In Progress</td>
-    <td><input type="radio" name="wo_op_status"  id="wo_op_status3" value="kitted" <?php echo ($this->wo_op_status=='kitted')?"checked='checked'":"";?>>Kitted</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status3" value="wire_cut" <?php echo ($this->wo_op_status=='wire_cut')?"checked='checked'":"";?>>Wire Cut</td>
   </tr>
   <tr>
           <td>Employee:</td>
@@ -128,7 +128,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>
     <td><input type="radio" name="so_status" id="so_status4" value="cancel" <?php echo ($this->so_status=='cancel')?"checked='checked'":"";?>>Cancel</td>
-    <td><input type="radio" name="wo_op_status"  id="wo_op_status4" value="production" <?php echo ($this->wo_op_status=='production')?"checked='checked'":"";?>>Production</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status4" value="kitted" <?php echo ($this->wo_op_status=='kitted')?"checked='checked'":"";?>>Kitted</td>
   </tr>
   <tr>
     <td></td>
@@ -136,7 +136,7 @@ function submitbutton(pressbutton) {
     <td></td>
     <td></td>    
     <td><input type="radio" name="so_status" id="so_status5" value="rma" <?php echo ($this->so_status=='rma')?"checked='checked'":"";?>>RMA</td>
-    <td><input type="radio" name="wo_op_status"  id="wo_op_status5" value="visual_inspection" <?php echo ($this->wo_op_status=='visual_inspection')?"checked='checked'":"";?>>Visual Inspection</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status5" value="production" <?php echo ($this->wo_op_status=='production')?"checked='checked'":"";?>>Production</td>
   </tr>
   <tr>
     <td></td>

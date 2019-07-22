@@ -7772,7 +7772,7 @@ class PNsController extends JController {
                // var_dump($post);die;               
                 $soNumber = $post['so_cuscode'];
                 $partNumber = $post['pns_child'];
-                $woStatus= "label_printed";//Label Printed
+                $woStatus= "doc_reparation";//Label Printed
                 $sql = "INSERT INTO apdm_pns_wo (so_id,wo_code,wo_qty,pns_id,top_pns_id,wo_customer_id,wo_state,wo_start_date,wo_completed_date,wo_created,wo_created_by,wo_assigner,wo_updated,wo_updated_by,wo_rma_active) ".
                        " VALUES ('" . $post['so_id'] . "', '" . $post['wo_code'] . "', '" . $post['wo_qty'] . "', '" . $partNumber[0] . "', '" . $post['top_pns_id'] . "', '" . $post['wo_customer_id'] . "', '" . $woStatus . "', '" .  $post['wo_start_date']. "', '" .  $post['wo_completed_date']. "','" . $datenow->toMySQL() . "', '" . $me->get('id') . "','".$post['wo_assigner']."','" . $datenow->toMySQL() . "', '" . $me->get('id') . "','".$post['wo_rma_active']."')";
                 $db->setQuery($sql);
@@ -7984,22 +7984,22 @@ class PNsController extends JController {
                                      switch($row->op_code)
                                                 {
                                                         case 'wo_step1':
-                                                                $status ="label_printed";
+                                                                $status ="'doc_reparation";
                                                                 break;
                                                         case 'wo_step2':
-                                                                $status ="wire_cut";                                                                
+                                                                $status ="label_printed";
                                                                 break;    
                                                         case 'wo_step3':
-                                                                $status ="kitted";
+                                                                $status ="wire_cut";
                                                                 break;
                                                         case 'wo_step4':
-                                                                $status ="production";
+                                                                $status ="kitted";
                                                                 break;    
                                                         case 'wo_step5':
-                                                                $status ="visual_inspection";
+                                                                $status ="production";
                                                                 break;
                                                         case 'wo_step6':
-                                                                $status ="final_inspection";                                                                
+                                                                $status ="final_inspection";
                                                                 break;   
                                                         case 'wo_step7':
                                                                 $status ="packaging";
@@ -8583,19 +8583,19 @@ class PNsController extends JController {
                                      switch($row->op_code)
                                                 {
                                                         case 'wo_step1':
-                                                                $status ="label_printed";
+                                                                $status ="doc_reparation";
                                                                 break;
                                                         case 'wo_step2':
-                                                                $status ="wire_cut";                                                                
+                                                                $status ="label_printed";
                                                                 break;    
                                                         case 'wo_step3':
-                                                                $status ="kitted";
+                                                                $status ="wire_cut";
                                                                 break;
                                                         case 'wo_step4':
-                                                                $status ="production";
+                                                                $status ="kitted";
                                                                 break;    
                                                         case 'wo_step5':
-                                                                $status ="visual_inspection";
+                                                                $status ="production";
                                                                 break;
                                                         case 'wo_step6':
                                                                 $status ="final_inspection";                                                                
@@ -8665,6 +8665,7 @@ class PNsController extends JController {
                 $statusValue['done'] = JText::_('Done');
                 $statusValue['onhold'] = JText::_('On hold');
                 $statusValue['cancel'] =  JText::_('Cancel');
+                $statusValue['doc_reparation'] = JText::_('Doc. Preparation By');
                 $statusValue['label_printed'] = JText::_('Label Printed');
                 $statusValue['wire_cut'] = JText::_('Wire Cut');
                 $statusValue['kitted'] = JText::_('Kitted');
@@ -8677,11 +8678,11 @@ class PNsController extends JController {
         function getWoStep($stepCode)
         {
                 $stepValue = array();                
-                $stepValue['wo_step1'] = JText::_('Label Printed');
-                $stepValue['wo_step2'] = JText::_('Wire Cut');
-                $stepValue['wo_step3'] = JText::_('Kitted');
-                $stepValue['wo_step4'] = JText::_('Production');
-                $stepValue['wo_step5'] =  JText::_('Visual Inspection');
+                $stepValue['wo_step1'] = JText::_('Doc. Preparation By');
+                $stepValue['wo_step2'] = JText::_('Label Printed');
+                $stepValue['wo_step3'] = JText::_('Wire Cut');
+                $stepValue['wo_step4'] = JText::_('Kitted');
+                $stepValue['wo_step5'] =  JText::_('Production');
                 $stepValue['wo_step6'] =  JText::_('Final Inspection');
                 $stepValue['wo_step7'] = JText::_('Packaging');
                 echo $stepValue[$stepCode];

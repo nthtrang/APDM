@@ -100,7 +100,7 @@ class ECOController extends JController
         $db->setQuery("DELETE FROM apdm_eco_files WHERE id=".$id);
         $db->query();
         $msg = JText::_( 'Successfully Deleted file' );
-        $this->setRedirect( 'index.php?option=com_apdmeco&task=edit&cid[]='.$eco_id, $msg );
+        $this->setRedirect( 'index.php?option=com_apdmeco&task=files&cid[]='.$eco_id, $msg );
 
     }
     /**
@@ -137,7 +137,7 @@ class ECOController extends JController
             return false;
         }
         $arr_file = array();
-        for ($i = 1; $i <= 10; $i++) {
+      /*  for ($i = 1; $i <= 10; $i++) {
             $file_name = 'file' . $i;
             if ($_FILES[$file_name]['size'] > 0) {
                 $handle = new Upload($_FILES[$file_name]);
@@ -149,8 +149,34 @@ class ECOController extends JController
                         $arr_file[] = $handle->file_dst_name;
                     }
                 }
+            }*/
+            //test
+            $path_eco = JPATH_SITE . DS . 'uploads' . DS . 'eco' . DS;
+            $upload = new upload($_FILES['']);
+            $upload->r_mkdir($path_eco, 0777);
+            $bom_upload = "";
+            for ($i = 1; $i <= 10; $i++) {
+                $file_name = 'file' . $i;
+                if ($_FILES[$file_name]['size'] > 0) {
+                    if ($_FILES[$file_name]['size'] < 20000000) {
+                        $ext = pathinfo($_FILES[$file_name]['name'], PATHINFO_EXTENSION);
+                            if (file_exists($path_eco . $_FILES[$file_name]['name'])) {
+
+                                @unlink($path_eco . $_FILES[$file_name]['name']);
+                            }
+                            if (!move_uploaded_file($_FILES[$file_name]['tmp_name'], $path_eco . $_FILES[$file_name]['name'])) {
+                                $msg = JText::_('Upload fail, please try again');
+                                return $this->setRedirect('index.php?option=com_apdmeco&task=files&cid[]=' . $row->eco_id, $msg);
+                            } else {
+                                $arr_file[]= $_FILES[$file_name]['name'];
+                            }
+                    } else {
+                        $msg = JText::_('Please upload file less than 20MB.');
+                        return $this->setRedirect('index.php?option=com_apdmeco&task=files&cid[]=' . $row->eco_id, $msg);
+                    }
+                }
             }
-        }
+            //test
         if (count($arr_file) > 0) {
             foreach ($arr_file as $file) {
                 $query = "INSERT INTO apdm_eco_files (eco_id, file_name) VALUES (" . $row->eco_id . ", '" . $file . "') ";
@@ -1115,7 +1141,7 @@ class ECOController extends JController
         $db->setQuery( $query);
         $check_initialPN = $db->loadResult();
         if ($check_affectedPN==0 && $check_initialPN==0) {
-            $msg = JText::sprintf('Please add PN into Affected Parts and Initial Data before set Route', $cid[0]);
+            $msg = JText::sprintf('Please add PN into Affected Parts or Initial Data before set Route', $cid[0]);
             return $this->setRedirect('index.php?option=com_apdmeco&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
         }
 
