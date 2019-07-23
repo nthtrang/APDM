@@ -10458,5 +10458,11 @@ class PNsController extends JController {
             $db->setQuery("SELECT e.eco_name FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id inner JOIN apdm_eco AS e ON e.eco_id=init.eco_id WHERE  p.pns_deleted =0 AND init.pns_id=".$pns_id."  and e.eco_status = 'Released' order by e.eco_id desc limit 1");
             return $db->loadResult();
         }
+        function shopfloor()
+        {
+                JRequest::setVar('layout', 'list');
+                JRequest::setVar('view', 'shopfloor');
+                parent::display();
+        }
 }
 

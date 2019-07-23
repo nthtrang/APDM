@@ -108,6 +108,13 @@ class JAdminCSSMenu extends JTree
 		/*
 		 * Recurse through children if they exist
 		 */
+                if($this->_current->title=="SO")
+                {
+                 echo '<ul id="menu-production" class="menu-so">';   
+                echo  '<li style="width: 199px;"><a href="index.php?option=com_apdmccs">Production</a></li>'.
+                 ' <li style="width: 120px;"><a href="index.php?option=com_apdmpns&amp;task=shopfloor">Shop floor</a></li>';
+                 echo "</ul>\n";
+                }
 		while ($this->_current->hasChildren())
 		{
 			if ($this->_current->class) {
