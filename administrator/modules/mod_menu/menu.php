@@ -111,7 +111,7 @@ class JAdminCSSMenu extends JTree
                 if($this->_current->title=="SO")
                 {
                  echo '<ul id="menu-production" class="menu-so">';   
-                echo  '<li style="width: 199px;"><a href="index.php?option=com_apdmccs">Production</a></li>'.
+                    echo  '<li style="width: 199px;"><a href="index.php?option=com_apdmpns&task=somanagement">Production</a></li>'.
                  ' <li style="width: 120px;"><a href="index.php?option=com_apdmpns&amp;task=shopfloor">Shop floor</a></li>';
                  echo "</ul>\n";
                 }

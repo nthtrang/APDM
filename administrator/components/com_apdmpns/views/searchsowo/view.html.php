@@ -269,11 +269,11 @@ class pnsViewsearchsowo extends JView
         $this->assignRef('list_assigners',       $list_user);
 
         $wostep[] = JHTML::_('select.option',  '',  JText::_( 'Select Step' ), 'value', 'text'); 
-        $wostep[] = JHTML::_('select.option',  'wo_step1', JText::_( 'Label Printed' ), 'value', 'text'); 
-        $wostep[] = JHTML::_('select.option',  'wo_step2', JText::_( 'Wire Cut' ), 'value', 'text'); 
-        $wostep[] = JHTML::_('select.option',  'wo_step3', JText::_( 'Kitted' ) , 'value', 'text'); 
-        $wostep[] = JHTML::_('select.option',  'wo_step4', JText::_( 'Production' ), 'value', 'text'); 
-        $wostep[] = JHTML::_('select.option',  'wo_step5',  JText::_( 'Visual Inspection' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step1', JText::_( 'Doc. Preparation By' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step2', JText::_( 'Label Printed' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step3', JText::_( 'Wire Cut' ) , 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step4', JText::_( 'Kitted' ), 'value', 'text'); 
+        $wostep[] = JHTML::_('select.option',  'wo_step5',  JText::_( 'Production' ), 'value', 'text'); 
         $wostep[] = JHTML::_('select.option',  'wo_step6',  JText::_( 'Final Inspection' ), 'value', 'text'); 
         $wostep[] = JHTML::_('select.option',  'wo_step7', JText::_( 'Packaging' ), 'value', 'text');  
         $list_step =  JHTML::_('select.genericlist', $wostep, 'step', 'class="inputbox" size="1"', 'value', 'text', $search_step);

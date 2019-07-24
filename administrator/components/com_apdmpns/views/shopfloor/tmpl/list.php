@@ -21,7 +21,33 @@ function submitbutton(pressbutton) {
 <form action="index.php?option=com_apdmpns" method="post" name="adminForm" onsubmit="submitbutton('')" >
 <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
 <input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
-
+<table  width="50%">
+		<tr>
+			<td>
+				<?php echo JText::_( 'Search' ); ?>:
+				<input type="text" name="text_search" id="text_search" value="<?php echo $this->lists['search'];?>" class="text_area"  size="40" />&nbsp;&nbsp;<?php echo JText::_('Filter')?> 
+				<?php echo $this->lists['type_filter'];?>
+				&nbsp;&nbsp;
+                                 <?php echo $this->list_step;?>  
+			<button onclick="javascript: return submitbutton('submit')"><?php echo JText::_( 'Go' ); ?></button>
+			<button onclick="document.adminForm.text_search.value='';document.adminForm.type_filter.value=0;document.adminForm.filter_status.value='';document.adminForm.filter_type.value='';document.adminForm.filter_created_by.value=0;document.adminForm.filter_modified_by.value=0;document.adminForm.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+			
+   
+    </td>
+                        </td>
+			
+		</tr>
+		<tr>
+			
+			<td align="right">
+			<?php echo $this->lists['state'];?>
+			
+			<?php echo $this->lists['pns_type'];?>
+			<?php echo $this->lists['pns_create_by'];?>
+<!--			<?php echo $this->lists['pns_modified_by'];?></td>-->
+		</tr>
+			
+</table>
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -139,10 +165,16 @@ function submitbutton(pressbutton) {
 			for ($i=0, $n=count( $this->rows ); $i < $n; $i++)
 			{
 				$row 	=& $this->rows[$i];
-//                                if($row->pns_cpn==1)
-//                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
-//                                else
-//                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;	
+                                $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;
+                                if($row->pn_cpn==1)
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;
+
+                                $linktopsys 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->top_pns_id;
+                                if($row->pn_top_cpn==1)
+                                    $linktopsys 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->top_pns_id;
+
+
+
 //                                if($row->pns_revision)
 //                                        $pns_code = $row->ccs_code.'-'.$row->pns_code.'-'.$row->pns_revision;
 //                                else
@@ -152,17 +184,17 @@ function submitbutton(pressbutton) {
 			?>
 			<tr class="<?php echo "row$k"; ?>">				
 				
-				<td align="left">					
-                                        <?php echo $row->wo_code;?>			
-				</td>	                              
+				<td align="left">
+                                        <?php echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$row->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">'.$row->wo_code.'</a> '; ?>
+				</td>
 				<td align="left">					                                        
                                         <?php echo PNsController::getWoStatus($row->wo_state); ?>
-				</td>	
-                                <td align="left">					
-                                        <?php echo $row->part_number;?>			
+				</td>
+                <td align="left">
+                    <a href="<?php echo $link;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->part_number;?></a>
 				</td>	
 				<td align="center">
-					<?php echo $row->top_pn;?>
+                    <a href="<?php echo $linktopsys;?>" title="<?php echo JText::_('Click to see detail PNs');?>"><?php echo $row->top_pn;?></a>
 				</td>
 				<td align="center">
 					<?php echo $row->pns_revision;?>
@@ -171,8 +203,8 @@ function submitbutton(pressbutton) {
 					<?php echo $row->so_cuscode;?>
 				</td>
 				<td align="left">
-					<?php echo  $row->so_number; ?>
-				</td>
+                    <a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $row->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $row->so_number; ?></a>
+                </td>
 				<td align="left">
 					<?php echo  $row->ccs_name; ?>
 				</td>
@@ -248,7 +280,7 @@ function submitbutton(pressbutton) {
 	<input type="hidden" name="option" value="com_apdmpns" />
 	<input type="hidden" name="task" value="shopfloor" />
 	<input type="hidden" name="boxchecked" value="0" />
-	<input type="text" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
-	<input type="text" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
+	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
+	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

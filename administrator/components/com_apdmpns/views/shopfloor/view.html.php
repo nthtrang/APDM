@@ -14,7 +14,7 @@ class pnsViewshopfloor extends JView {
 
                 // global $mainframe, $option;
                 global $mainframe, $option;
-                $option = 'com_apdmpns_so';
+                $option = 'com_apdmpns_floor';
                 $db = & JFactory::getDBO();
                 $me = JFactory::getUser();
                 JArrayHelper::toInteger($cid, array(0));
@@ -26,39 +26,43 @@ class pnsViewshopfloor extends JView {
             $filter_order = 'wo.wo_state';
             $filter_order_Dir = "desc";
         }
+                $search_step                = $mainframe->getUserStateFromRequest( "$option.step", 'step', '','string' );
                 $search = $mainframe->getUserStateFromRequest("$option.text_search", 'text_search', '', 'string');
                 $keyword = $search;
                 $search = JString::strtolower($search);
                 $limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
                 $limitstart = $mainframe->getUserStateFromRequest($option . '.limitstart', 'limitstart', 0, 'int');
-                $where = array();
+                $where1 = array();
                 if (isset($search) && $search != '') {
                         $searchEscaped = $db->Quote('%' . $db->getEscaped($search, false) . '%', false);
-                        $where[] = 'p.po_code LIKE ' . $searchEscaped . ' or p.po_description LIKE ' . $searchEscaped . '';
+                        $where1[] = 'wo.wo_code LIKE ' . $searchEscaped . ' or CONCAT_WS( "-",so.customer_id, so.so_cuscode) LIKE ' . $searchEscaped . ' or ccs.ccs_name  LIKE ' . $searchEscaped . ' or CONCAT_WS("-",p2.ccs_code, p2.pns_code, p2.pns_revision)  LIKE ' . $searchEscaped . '  or CONCAT_WS( "-",p.ccs_code, p.pns_code, p.pns_revision) like ' . $searchEscaped . '' ;
+                }
+                if (isset( $search_step ) && $search_step!= '')
+                {        
+                    $where1[] = 'wo.wo_state = "'.$search_step.'"';
                 }
 
-                $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
+                $where = ( count($where1) ? ' WHERE (' . implode(') AND (', $where1) . ')' : '' );
                 
-                $query = 'SELECT COUNT(p.pns_po_id)'
-                        . ' FROM apdm_pns_po AS p'
-                        . $where
-                ;
+                $group_by = "group by wo.pns_wo_id";
                 $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                  $query = "
                         select  COUNT(wo.pns_wo_id)
                         from apdm_pns_wo wo
-                        ";
+                        ". $where
+                         .$group_by;
                         
 
                 $db->setQuery($query);
-                echo $total = $db->loadResult();
+                 $total = $db->loadResult();
 
                 jimport('joomla.html.pagination');
                 $pagination = new JPagination($total, $limitstart, $limit);
 
                
                 $query = "
-                        select wo.wo_code,wo.wo_state,CONCAT_WS( '-',p.ccs_code, p.pns_code, p.pns_revision) as part_number,
+                        select wo.pns_wo_id,so.pns_so_id,p.pns_cpn as pn_cpn,p2.pns_cpn as pn_top_cpn,
+                        wo.pns_id,wo.top_pns_id,wo.wo_code,wo.wo_state,CONCAT_WS( '-',p.ccs_code, p.pns_code, p.pns_revision) as part_number,
                         CONCAT_WS( '-',p2.ccs_code, p2.pns_code, p2.pns_revision) as top_pn,so.so_cuscode, 
                         CONCAT_WS( '-',so.customer_id, so.so_cuscode) as so_number,ccs.ccs_name, wo.wo_qty
                         ,p.pns_revision,so.so_shipping_date,wo.wo_completed_date
@@ -80,17 +84,31 @@ class pnsViewshopfloor extends JView {
                         left join apdm_pns_wo_op st4 on st4.wo_id =wo.pns_wo_id and st4.op_code = 'wo_step4'
                         left join apdm_pns_wo_op st5 on st5.wo_id =wo.pns_wo_id and st5.op_code = 'wo_step5'
                         left join apdm_pns_wo_op st6 on st6.wo_id =wo.pns_wo_id and st6.op_code = 'wo_step6'
-                        left join apdm_pns_wo_op st7 on st7.wo_id =wo.pns_wo_id and st7.op_code = 'wo_step7'
-                        group by wo.pns_wo_id " .
+                        left join apdm_pns_wo_op st7 on st7.wo_id =wo.pns_wo_id and st7.op_code = 'wo_step7' ".
+                        $where .                        
+                        $group_by .                        
                         $orderby;
                 $lists['query'] = base64_encode($query);
                 $lists['total_record'] = $total;
                 $db->setQuery($query, $pagination->limitstart, $pagination->limit);
                 //echo $db->getQuery();
-                $rows = $db->loadObjectList();         
+                $rows = $db->loadObjectList();  
                 
+                 $wostep[] = JHTML::_('select.option',  '',  JText::_( 'Select Step' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'doc_reparation', JText::_( 'Doc. Preparation By' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'label_printed', JText::_( 'Label Printed' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'wire_cut', JText::_( 'Wire Cut' ) , 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'kitted', JText::_( 'Kitted' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'production',  JText::_( 'Production' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'final_inspection',  JText::_( 'Final Inspection' ), 'value', 'text'); 
+                $wostep[] = JHTML::_('select.option',  'packaging', JText::_( 'Packaging' ), 'value', 'text');  
+                $wostep[] = JHTML::_('select.option',  'done', JText::_( 'Done' ), 'value', 'text');  
+                $wostep[] = JHTML::_('select.option',  'onhold', JText::_( 'On hold' ), 'value', 'text');  
+                $wostep[] = JHTML::_('select.option',  'cancel', JText::_( 'Cancel' ), 'value', 'text');                  
+                $list_step =  JHTML::_('select.genericlist', $wostep, 'step', 'class="inputbox" size="1"', 'value', 'text', $search_step);
+                $this->assignRef('list_step',       $list_step);
                 $lists['order_Dir']    = $filter_order_Dir;
-        $lists['order']        = $filter_order;
+                $lists['order']        = $filter_order;
                 $lists['search'] = $search;
                 $this->assignRef('lists',        $lists);
                 $this->assignRef('rows', $rows);
