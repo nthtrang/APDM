@@ -113,10 +113,10 @@ function submitbutton(pressbutton) {
 				</th>				
 <!--				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Status'); ?>
-				</th>-->
+				</th>
 				<th width="5%" class="title" nowrap="nowrap">
 					<?php echo JText::_('Make/Buy'); ?>
-				</th>
+				</th>-->
                                 <th width="8%" class="title"  >
 					<?php echo JText::_( 'Vendor' ); ?>
 				</th>
@@ -187,10 +187,10 @@ function submitbutton(pressbutton) {
 				</td>		
 <!--				<td align="center">
 					<?php echo $row->pns_status; ?>
-				</td>		                                -->
+				</td>
 				<td align="center">
 					<?php echo $row->pns_type;?>
-				</td>
+				</td>-->
 				<td align="left">
                     <table>
                         <?php

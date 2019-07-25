@@ -1966,7 +1966,7 @@ class ECOController extends JController
         {
                  $db = & JFactory::getDBO();         
                 //$eco_id = JRequest::getVar( 'cid', array(0) );
-                $db->setQuery("select rt.id,rt.eco_id from apdm_eco_routes rt inner join apdm_eco eco on rt.eco_id =  eco.eco_id and rt.status not in ('Create','Closed') and eco.eco_id = '".$eco_id[0]."'");                 
+                $db->setQuery("select rt.id,rt.eco_id from apdm_eco_routes rt inner join apdm_eco eco on rt.eco_id =  eco.eco_id and rt.status not in ('Create','Closed') and eco.eco_id = '".$eco_id."'");             
                 return $db->loadResult();                
                 
         }
