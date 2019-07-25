@@ -45,7 +45,7 @@ JPluginHelper::importPlugin('system');
 // trigger the onAfterInitialise events
 JDEBUG ? $_PROFILER->mark('afterInitialise') : null;
 $mainframe->triggerEvent('onAfterInitialise');
-
+$mainframe->redirect( 'administrator/index.php' );
 /**
  * ROUTE THE APPLICATION
  *

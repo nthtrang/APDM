@@ -46,11 +46,21 @@ class pnsViewshopfloor extends JView {
                 
                 $group_by = "group by wo.pns_wo_id";
                 $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
-                 $query = "
-                        select  COUNT(wo.pns_wo_id)
-                        from apdm_pns_wo wo
-                        ". $where
-                         .$group_by;
+                echo  $query = " select  COUNT(wo.pns_wo_id)
+                         from apdm_pns_wo wo
+                        left join apdm_pns p on wo.pns_id = p.pns_id
+                        left join apdm_pns p2 on p2.pns_id = wo.top_pns_id
+                        left join apdm_pns_so so on so.pns_so_id = wo.so_id
+                        left join apdm_ccs ccs on ccs.ccs_code = so.customer_id
+                        left join apdm_pns_wo_op st1 on st1.wo_id =wo.pns_wo_id and st1.op_code = 'wo_step1'
+                        left join apdm_pns_wo_op st2 on st2.wo_id =wo.pns_wo_id and st2.op_code = 'wo_step2'
+                        left join apdm_pns_wo_op st3 on st3.wo_id =wo.pns_wo_id and st3.op_code = 'wo_step3'
+                        left join apdm_pns_wo_op st4 on st4.wo_id =wo.pns_wo_id and st4.op_code = 'wo_step4'
+                        left join apdm_pns_wo_op st5 on st5.wo_id =wo.pns_wo_id and st5.op_code = 'wo_step5'
+                        left join apdm_pns_wo_op st6 on st6.wo_id =wo.pns_wo_id and st6.op_code = 'wo_step6'
+                        left join apdm_pns_wo_op st7 on st7.wo_id =wo.pns_wo_id and st7.op_code = 'wo_step7' " .
+                        $where;
+
                         
 
                 $db->setQuery($query);
@@ -91,7 +101,7 @@ class pnsViewshopfloor extends JView {
                 $lists['query'] = base64_encode($query);
                 $lists['total_record'] = $total;
                 $db->setQuery($query, $pagination->limitstart, $pagination->limit);
-                //echo $db->getQuery();
+                echo $db->getQuery();
                 $rows = $db->loadObjectList();  
                 
                  $wostep[] = JHTML::_('select.option',  '',  JText::_( 'Select Step' ), 'value', 'text'); 
