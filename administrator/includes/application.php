@@ -577,6 +577,14 @@ function GetNameCCs($ccs_id){
             }
             return $rows;
         }
+        function GetChildParentNumber($pns_id) {
+                $db = & JFactory::getDBO();
+                $result = 0;
+                $query = " SELECT COUNT(pr.id) FROM apdm_pns_parents AS pr LEFT JOIN apdm_pns AS p ON p.pns_id= pr.pns_id INNER JOIN apdm_ccs as c ON c.ccs_code = p.ccs_code WHERE p.pns_deleted = 0 AND c.ccs_deleted = 0 AND c.ccs_activate =1 AND pns_parent=" . $pns_id;
+                $db->setQuery($query);
+                $result = $db->loadResult();
+                return $result;
+        }
 function CalculateInventoryValueforView($pns_id)
 {
     $db = & JFactory::getDBO();

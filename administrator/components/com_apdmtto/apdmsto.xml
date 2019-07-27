@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+	<name>apdmsto</name>	
+	<creationDate>January 2009</creationDate>
+	<author>Phuc Le</author>
+	<authorEmail>lediemphuc@gmail.com</authorEmail>
+	<authorUrl>http://www.lediemphuc.com</authorUrl>
+	<copyright>(C) 2009 All rights reserved.</copyright>
+	<license>GNU/GPL</license>
+	<version>1.5.0</version>
+	  <description>
+	  This component to management APDM STO
+   </description> 
+	<files>
+		<filename>index.html</filename>		
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.com_apdmsto.ini</language>
+	</languages>	
+	<administration>		
+		<menu img="generic.png">APDM STO  Management</menu>				
+		<files folder="admin">
+		 <filename>index.html</filename>
+		 <filename>apdmsto.php</filename>	
+		<filename>controller.php</filename>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">en-GB.com_apdmsto.ini</language>			
+		</languages>		
+		
+	</administration>
+</install>
