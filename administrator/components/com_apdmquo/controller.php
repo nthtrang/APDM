@@ -124,7 +124,7 @@ class QUOController extends JController
                
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
-                $str = '<table class="admintable" cellspacing="1" width="60%"><tr>'.
+                $str = JHTML::_('behavior.calendar').'<table class="admintable" cellspacing="1" width="60%"><tr>'.
                         '<td class="key">No.</td>'.
                         '<td class="key">Part Number</td>'.
                         '<td class="key">Rev</td>'.
@@ -134,6 +134,41 @@ class QUOController extends JController
                         '<td class="key">Unit Price</td>'.
                         '<td class="key">Extended</td>'.
                         '<td class="key">Due Date</td><input type="hidden" name="boxcheckedpn" value="'.count($rows).'" /></tr>';
+                
+                $str .= 
+                $str .= '
+<script>
+window.addEvent("domready", function(){ var JTooltips = new Tips($$(".hasTip"), { maxTitleChars: 50, fixed: false}); });
+		window.addEvent("domready", function() {
+
+			SqueezeBox.initialize({});
+
+			$$("a.modal").each(function(el) {
+				el.addEvent("click", function(e) {
+					new Event(e).stop();
+					SqueezeBox.fromElement(el);
+				});
+			});
+		});
+Calendar._DN = new Array ("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");Calendar._SDN = new Array ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"); Calendar._FD = 0;	Calendar._MN = new Array ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");	Calendar._SMN = new Array ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");Calendar._TT = {};Calendar._TT["INFO"] = "About the Calendar";
+ 		Calendar._TT["ABOUT"] =
+ "DHTML Date/Time Selector\n" +
+ "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
+"For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
+"Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
+"\n\n" +
+"Date selection:\n" +
+"- Use the \xab, \xbb buttons to select year\n" +
+"- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
+"- Hold mouse button on any of the above buttons for faster selection.";
+Calendar._TT["ABOUT_TIME"] = "\n\n" +
+"Time selection:\n" +
+"- Click on any of the time parts to increase it\n" +
+"- or Shift-click to decrease it\n" +
+"- or click and drag for faster selection.";
+Calendar._TT["PREV_YEAR"] = "Click to move to the previous year. Click and hold for a list of years.";Calendar._TT["PREV_MONTH"] = "Click to move to the previous month. Click and hold for a list of the months.";	Calendar._TT["GO_TODAY"] = "Go to today";Calendar._TT["NEXT_MONTH"] = "Click to move to the next month. Click and hold for a list of the months.";Calendar._TT["NEXT_YEAR"] = "Click to move to the next year. Click and hold for a list of years.";Calendar._TT["SEL_DATE"] = "Select a date.";Calendar._TT["DRAG_TO_MOVE"] = "Drag to move";Calendar._TT["PART_TODAY"] = " (Today)";Calendar._TT["DAY_FIRST"] = "Display11 %s first";Calendar._TT["WEEKEND"] = "0,6";Calendar._TT["CLOSE"] = "Close";Calendar._TT["TODAY"] = "Today";Calendar._TT["TIME_PART"] = "(Shift-)Click or Drag to change the value.";Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%M-%D"; Calendar._TT["TT_DATE_FORMAT"] = "%A, %B %e";Calendar._TT["WK"] = "wk";Calendar._TT["TIME"] = "Time:";
+</script>';
+                
                 $i=0;
                 foreach ($rows as $row) {
                 $i++;        
@@ -141,7 +176,16 @@ class QUOController extends JController
                                 $pnNumber =  '-' . $row->pns_code . '-' . $row->pns_revision;
                         } else {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code;
-                        }                        
+                        }     
+                        $str  .='
+	<script>	
+jQuery(document).ready(function(jQuery) {Calendar.setup({
+        inputField     :    "due_date['.$row->pns_id.']",     // id of the input field
+        ifFormat       :    "%m/%d/%Y",      // format of the input field
+        button         :    "due_date['.$row->pns_id.']_img",  // trigger for the calendar (button ID)
+        align          :    "Tl",           // alignment (defaults to "Bl")
+        singleClick    :    true
+    });});</script>';
                         $str .= '<tr>'.
                                 ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /></td>'.
                                 ' <td class="key">'.$row->pns_code.'</td>'.
@@ -151,7 +195,8 @@ class QUOController extends JController
                                 ' <td class="key">'.$row->pns_uom.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="extended['.$row->pns_id.']"  name="extended['.$row->pns_id.']" /></td>'.
-                                ' <td class="key"></td>'.
+                                ' <td class="key"><input style="width: 70px" onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
+                                //' <td class="key">'.JHTML::_('calendar',"", 'due_date['.$row->pns_id.']', 'due_date['.$row->pns_id.']', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')).'</td>'.
                                 ' <td class="key"></td>';
                 }
                 $str .='</table>';
@@ -204,20 +249,40 @@ class QUOController extends JController
                 $msg = JText::_('Successfully Saved Quotation');
                 return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);                               
         }
+         function save_quo_template()
+        {
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');                        
+                
+                
+                $ascenx_info = JRequest::getVar( 'ascenx_info', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+                $content = JRequest::getVar( 'content', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+                $term_conditions = JRequest::getVar( 'term_conditions', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+                $question = JRequest::getVar( 'question', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+               
+               
+                $db->setQuery("update apdm_quotation_template set ascenx_info = '".$ascenx_info."',content='".$content."',term_conditions='".$term_conditions."',question='".$question."',updated_at='" . $datenow->toMySQL() . "' , updated_by ='".$me->get('id')."' WHERE id = 1");
+                $db->query();  
+                         
+                $msg = JText::_('Successfully Saved Quotation Template');
+                return $this->setRedirect('index.php?option=com_apdmquo&task=addform&id=1', $msg);                               
+        }
+        function addform()
+        {
+                 JRequest::setVar('layout', 'formtemplate');
+                JRequest::setVar('view', 'quo_info');
+                parent::display();
+        }
 		/*
          * Detail STO 
          */        
-        function ito_detail() {
-/*                $db = & JFactory::getDBO();
-                $sto_id = JRequest::getVar('id');
-                $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
-                $sto_type = $db->loadResult();
-                if($sto_type==2)
-                {
-                    $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id);
-                }*/
-                JRequest::setVar('layout', 'view');
-                JRequest::setVar('view', 'ito');
+        function quo_detail() {
+                JRequest::setVar('layout', 'formtemplate');
+                JRequest::setVar('view', 'quo_info');
                 parent::display();
         }  
         function GetSupplierName($supplier_id) {

@@ -7,15 +7,15 @@ $cid = JRequest::getVar( 'cid', array(0) );
 $edit		= JRequest::getVar('edit',true);	
 $sto_id = JRequest::getVar('id');
 $role = JAdministrator::RoleOnComponent(8);	
-JToolBarHelper::title($this->sto_row->sto_code .': <small><small>[ view ]</small></small>' , 'generic.png' );
-$folder_sto = $this->sto_row->sto_code;
-if (in_array("E", $role)&& ($this->sto_row->sto_state  != "Done")) {
+JToolBarHelper::title($this->quo_row->quo_code .' '. $this->quo_row->quo_revision .': <small><small>[ view ]</small></small>' , 'generic.png' );
+
+if (in_array("E", $role)&& ($this->quo_row->sto_state  != "Done")) {
         JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
 }
 JToolBarHelper::cancel( 'cancel', 'Close' );
 JToolBarHelper::customX("printitopdf","print",'',"Print",false);
 
-if (in_array("D", $role) && $this->sto_row->sto_state !="Done") {
+if (in_array("D", $role) && $this->quo_row->sto_state !="Done") {
     JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
 }
 $cparams = JComponentHelper::getParams ('com_media');
@@ -266,7 +266,7 @@ function checkforscanito(isitchecked)
 {
         if (isitchecked == true){
                 document.getElementById("pns_code").focus();
-                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')");
+                document.getElementById('pns_code').setAttribute("onkeyup", "autoAddPartIto(this.value,'<?php echo $this->quo_row->pns_sto_id; ?>')");
             checkedforMarkScan(1);
         }
         else {
@@ -287,7 +287,7 @@ function checkedforMarkScan(ischecked)
     }).request();
 }    
 </script>
-<!--<div class="submenu-box">
+<div class="submenu-box">
             <div class="t">
                 <div class="t">
                         <div class="t"></div>
@@ -296,8 +296,8 @@ function checkedforMarkScan(ischecked)
         <div class="m">
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_pns&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'AFFECTED PARTS' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_support_doc&id=<?php echo $this->sto_row->pns_sto_id;?>"><?php echo JText::_( 'SUPPORTING DOC' ); ?></a></li>                      
+			<li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_pns&id=<?php echo $this->quo_row->pns_sto_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
+                        
                 </ul>
 		<div class="clr"></div>
         </div>
@@ -308,255 +308,57 @@ function checkedforMarkScan(ischecked)
         </div>
 </div>
 <div class="clr"></div>
-<p>&nbsp;</p>-->
-<?php
-$importresult = JRequest::getVar('importresult');
-if($importresult)
-{
-    $path_pns = JPATH_SITE . DS . 'uploads'. DS;
-    $dFile = new DownloadFile($path_pns, $importresult);
-    ?>
-    <!--                  <a href="index.php?option=com_apdmpns&task=downloadBomImportResult&importresult=<?php echo $importresult?>">Click here to download</a> file import result.-->
-    <?php
-}
-?>
+<p>&nbsp;</p>
+
 <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >	
         <fieldset>
-		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>        
+		<legend><?php echo JText::_( 'Quotation Detail' ); ?></legend>        
         <table class="admintable" cellspacing="1"  width="70%">
                               <tr>
-                                        <td class="key" width="28%"><?php echo JText::_('ITO'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo $this->sto_row->sto_code; ?></td>                                          
-                                        <td class="key" width="18%"><?php echo JText::_('Supplier'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo SToController::GetSupplierName($this->sto_row->sto_supplier_id);?></td>
+                                        <td class="key" width="28%"><?php echo JText::_('Created Date'); ?></td>                                               
+                                        <td width="30%" class="title"><?php echo JHTML::_('date', $this->quo_row->quo_created, JText::_('DATE_FORMAT_LC5')); ?></td>                                        
+                                        <td class="key" width="18%"><?php echo JText::_('Quotation State'); ?></td>                                               
+                                        <td width="30%" class="title"><?php echo $this->quo_row->quo_state;?></td>
 				                                                                              
                                 </tr>
                                 <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('Internal PO'); ?></td>
-                                        <td width="30%" class="title"><?php echo $this->sto_row->sto_po_internal;?></td>                                        
-									   <td  class="key" width="28%"><?php echo JText::_('State'); ?></td>
-									   <td width="30%" class="title"><?php echo $this->sto_row->sto_state;?></td>
+                                        <td  class="key" width="28%"><?php echo JText::_('Created By'); ?></td>
+                                        <td width="30%" class="title">  <?php echo ($this->quo_row->quo_created_by)?GetValueUser($this->quo_row->quo_created_by, "name"):""; ?></td>                             
+									   <td  class="key" width="28%"><?php echo JText::_('Released Date'); ?></td>
+									   <td width="30%" class="title"><?php echo $this->quo_row->quo_expire_date?JHTML::_('date', $this->quo_row->quo_expire_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>
                                 </tr>  
+                               
                                 <tr>
-                                        <td class="key"  width="28%"><?php echo JText::_('Created Date'); ?></td>                                               
-                                        <td width="30%" class="title"><?php echo JHTML::_('date', $this->sto_row->sto_created, JText::_('DATE_FORMAT_LC5')); ?></td>
-										<td  class="key" width="28%"><?php echo JText::_('Stocker'); ?></td>
-									   <td width="30%" class="title"><?php echo GetValueUser($this->sto_row->sto_stocker, "name"); ?></td>                                       
-				                                                                              
-                                </tr>
-                                <tr>
-                                        <td class="key"  width="28%"><?php echo JText::_('Completed Date'); ?></td>                                               
-                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_completed_date!='0000-00-00 00:00:00')?JHTML::_('date', $this->sto_row->sto_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
-										<td  class="key" width="28%"><?php echo JText::_('Stocker Confirm'); ?></td>
-									   <td width="30%" class="title">
-                                                   <input checked="checked" type="checkbox" name="sto_stocker_confirm" value="1" onclick="return false;" onkeydown="return false;" />
+                                        <td class="key"  width="28%"><?php echo JText::_('Modified Date'); ?></td>                                               
+                                        <td width="30%" class="title">  <?php echo ($this->quo_row->quo_updated)?JHTML::_('date', $this->quo_row->quo_updated, JText::_('DATE_FORMAT_LC5')):""; ?></td>  
+										<td  class="key" width="28%"><?php echo JText::_('SO Linked'); ?></td>
+									   <td width="30%" class="title">                                                   
                                                                            </td>
 				                                                                              
                                 </tr>                                
                                 <tr>
-                                        <td  class="key" width="28%"><?php echo JText::_('Owner'); ?></td>                                               
-                                        <td width="30%" class="title">  <?php echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; ?></td>
-					<td  class="key" width="28%"><?php echo JText::_('Confirm'); ?></td>                                               
-                                        
+                                        <td  class="key" width="28%"><?php echo JText::_('Modified By'); ?></td>                                               
+                                        <td width="30%" class="title">  <?php echo ($this->quo_row->quo_updated_by)?GetValueUser($this->quo_row->quo_updated_by, "name"):""; ?></td>
+					<td  class="key" width="28%"></td>                                                                                       
                                          <td width="30%" class="title"> 
-										 <?php                                                                                  
-                                                             if($this->sto_row->sto_owner_confirm==0){
-                                                    ?>                                                                                                     
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php echo $this->sto_row->pns_sto_id?>&tmpl=component" title="Image">
-                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
-                                                        <?php }
-                                                        else
-                                                        {
-                                                                       ?>
-                                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
-                                                                       <?php
-                                                        }
-                                                        ?>
                                         </td>  
 				                                                                              
                                 </tr> 
-                                <tr>
-                                        <td class="key"  width="28%"><?php echo JText::_('Description'); ?></td>                                               
-                                             <td colspan="3"><?php echo strtoupper($this->sto_row->sto_description); ?></td>
-				                                                                              
-                                </tr>  
+                             
         </table>                
         </fieldset>
-<fieldset>		 
-		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php //echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
-                <table class="adminlist">                        
-              <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
-				<tr>
-                                        <td colspan="2" >
-					<table width="100%"  class="adminlist" cellpadding="1">
-						
-						<thead>
-							<th colspan="4"><?php echo JText::_('List Documents')?></th>
-						</thead>
-						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
-						</tr>
-				<?php
-				
-				$i = 1;
-				foreach ($this->lists['image_files'] as $image) {
-					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
-				?>
-				<tr>
-					<td><?php echo $i?></td>
-					<td><?php echo  $image['image_file']?></td>
-					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-                                                <?php
-                                               if ($this->sto_row->sto_state  != "Done") {                       
-                                                ?>
-					<a href="index.php?option=com_apdmsto&task=remove_doc_sto&back=ito_detail&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
-                                         <?php
-                                               }
-                                                ?>
-                                        </td>
-				</tr>
-				<?php $i++; } ?>
-				
-				<tr>
-					
-					<td colspan="4" align="center">
-					<a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=images&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                        <!--<input type="button" name="addVendor" value="<?php /*echo JText::_('Download All Files')*/?>"/>-->
-                                        </a>&nbsp;&nbsp;
 
-<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
-				</tr>
-								
-					</table>
-					</td>                                        
-                                        
-				</tr>
-				<?php } ?>
-                                
-                                                    
-                                <?php if (isset($this->lists['pdf_files'])&& count($this->lists['pdf_files'])>0) {?>
-				<tr>
-                                        <td colspan="2" >
-					<table width="100%"  class="adminlist" cellpadding="1">
-						<hr/>
-						<thead>
-							<th colspan="4"><?php echo JText::_('List PDF')?></th>
-						</thead>
-						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
-						</tr>
-				<?php
-				
-				$i = 1;				                   
-				foreach ($this->lists['pdf_files'] as $pdf) {
-					$filesize = SToController::readfilesizeSto($folder_sto, $pdf['pdf_file'],'pdfs');
-				?>
-				<tr>
-					<td><?php echo $i?></td>
-					<td><?php echo $pdf['pdf_file']?></td>
-					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=pdfs&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $pdf['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-                                                 <?php
-                                               if ($this->sto_row->sto_state  != "Done") {                       
-                                                ?>
-					<a href="index.php?option=com_apdmsto&task=remove_doc_sto&back=ito_detail&type=pdfs&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $pdf['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
-                                         <?php
-                                              }
-                                                ?>
-                                        </td>
-				</tr>
-				<?php $i++; } ?>
-				
-				<tr>
-					
-					<td colspan="4" align="center">
-				<a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=pdfs&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                        <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-                                        </a>&nbsp;&nbsp;
-
-<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_pdfs&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
-				</tr>
-								
-					</table>
-					</td>                                        
-                                        
-				</tr>
-				<?php } ?>  
-                                       
-                        <?php if (count($this->lists['zips_files']) > 0) {
-				?>				
-				<tr>
-					<td colspan="2" >
-					<table width="100%"  class="adminlist" cellpadding="1">
-						<hr />
-						<thead>
-							<th colspan="4"><?php echo JText::_('List ZIP')?></th>
-						</thead>
-						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
-						</tr>
-				<?php
-				
-				$i = 1;
-				                        
-				foreach ($this->lists['zips_files'] as $cad) {
-					$filesize = SToController::readfilesizeSto($folder_sto, $cad['zip_file'],'zips');                                        				
-				?>
-				<tr>
-					<td><?php echo $i?></td>
-					<td><?php echo $cad['zip_file']?></td>
-					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmsto&task=download_zip_sto&type=zips&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $cad['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-                                                 <?php
-                                             if ($this->sto_row->sto_state  != "Done") {                  
-                                                ?>
-					<a href="index.php?option=com_apdmsto&task=remove_doc_sto&back=ito_detail&type=zips&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $cad['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
-                                         <?php
-                                               }
-                                                ?>
-                                        </td>
-				</tr>
-				<?php $i++; } ?>
-				
-				<tr>
-					
-					<td colspan="4" align="center">
-                                                <a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=zips&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                                <input type="button" name="addVendor" value="<?php echo JText::_('Download All Files')?>"/>
-                                                </a>&nbsp;&nbsp;
-				
-<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_cad&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
-				</tr>
-				
-					</table>
-					</td>
-				</tr>
-				<?php } ?>                                        
-				</tr>		
-          
-                                          </table>
-                </fieldset>   
         <fieldset>
                 <legend>Receiving Part</legend>
             <div class="toolbar">
             <table class="toolbar"><tbody><tr>
 <?php
-if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
-    if (in_array("W", $role) && ($this->sto_row->sto_state != "Done")) {
+if($this->quo_row->sto_owner_confirm==0 && !$this->quo_row->sto_owner) {
+    if (in_array("W", $role) && ($this->quo_row->sto_state != "Done")) {
             $session = JFactory::getSession();
         if($session->get('is_scanito')){
             $itoscanchecked = 'checked="checked"';
-            $itoonkeyUp = "onkeyup=\"autoAddPartIto(this.value,'".$this->sto_row->pns_sto_id."')\" autofocus";
+            $itoonkeyUp = "onkeyup=\"autoAddPartIto(this.value,'".$this->quo_row->pns_sto_id."')\" autofocus";
         }
         else
         {
@@ -565,7 +367,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
         }
         ?>
                                     <td class="button" id="toolbar-addpnsave">           
-                Scan PN Barcode <input <?php echo $itoonkeyUp?> onchange="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->sto_row->pns_sto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
+                Scan PN Barcode <input <?php echo $itoonkeyUp?> onchange="autoAddPartIto(this.value,'<?php echo $this->quo_row->pns_sto_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->quo_row->pns_sto_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
                  <input <?php echo $itoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscanito(this.checked)" />
         </td>
         <td class="button" id="toolbar-save">
@@ -580,7 +382,7 @@ if($this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
 
         <td class="button" id="toolbar-popup-Popup">
             <a class="modal"
-               href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->sto_row->pns_sto_id; ?>"
+               href="index.php?option=com_apdmpns&amp;task=get_list_pns_sto&amp;tmpl=component&amp;sto_id=<?php echo $this->quo_row->pns_sto_id; ?>"
                rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Part">
 </span>
@@ -596,7 +398,7 @@ Import Part
 </td>
         <?php
     }
-    if (in_array("D", $role) && ($this->sto_row->sto_state != "Done")) {
+    if (in_array("D", $role) && ($this->quo_row->sto_state != "Done")) {
         ?>
         <td class="button" id="toolbar-Are you sure to delete it?">
             <a href="#"
@@ -622,7 +424,7 @@ Import Part
                                         <th width="300"><?php echo JText::_('Description'); ?></th>
                                         <th width="100"><?php echo JText::_('UOM'); ?></th>  
                                         <th width="100"><?php echo JText::_('Manufacture PN'); ?></th>  
-                                        <th width="100"><?php echo ($this->sto_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
+                                        <th width="100"><?php echo ($this->quo_row->sto_type==1)?JText::_('Qty In'):JText::_('Qty Out'); ?></th>
                                         <th width="100"><?php echo JText::_('Location'); ?></th>                                                
                                         <th width="100"><?php echo JText::_('Part State'); ?></th>  
                                         <th width="100"><?php //echo JText::_('Action'); ?></th>  
@@ -753,7 +555,7 @@ Import Part
                                                 </td>
                                                 <td align="center" width="75px">	
                                                           <?php
-                                                 if (in_array("D", $role) && $this->sto_row->sto_owner_confirm==0 && !$this->sto_row->sto_owner) {
+                                                 if (in_array("D", $role) && $this->quo_row->sto_owner_confirm==0 && !$this->quo_row->sto_owner) {
                                                 ?>
                                                         <a href="index.php?option=com_apdmsto&task=removepnsstos&cid[]=<?php echo $rw->id;?>&sto_id=<?php echo $sto_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
                                                         <?php }?>
@@ -780,7 +582,7 @@ Import Part
         </table>		
 
         </fieldset>
-        <input type="hidden" name="sto_id" value="<?php echo $this->sto_row->pns_sto_id; ?>" />
+        <input type="hidden" name="sto_id" value="<?php echo $this->quo_row->pns_sto_id; ?>" />
         <input type="hidden" name="option" value="com_apdmsto" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     
 	<input type="hidden" name="task" value="" />	

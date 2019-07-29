@@ -76,8 +76,8 @@ class QUOViewquo_info extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
         
-        $db->setQuery("SELECT pns_sto_id,sto_code,sto_po_internal,sto_description,sto_state,sto_created,sto_create_by,sto_completed_date,sto_type,sto_owner,sto_stocker,sto_supplier_id,sto_owner_confirm  from apdm_pns_sto where pns_sto_id=".$quo_id);         
-         $sto_row =  $db->loadObject();
+        $db->setQuery("SELECT * from apdm_quotation  where quotation_id=".$quo_id);         
+         $quo_row =  $db->loadObject();
 
         
          
@@ -90,14 +90,18 @@ class QUOViewquo_info extends JView
                 $so_row = $db->loadObject();
                 $this->assignRef('so_row', $so_row);
    
- 
+ //get formtemplate
+                $db->setQuery("SELECT * from apdm_quotation_template where id = 1");
+                $template_row = $db->loadObject();
+                $this->assignRef('template_row', $template_row);
+   
          //Customer
                 $cccpn[0] = JHTML::_('select.option', 0, '- ' . JText::_('SELECT_CCS') . ' -', 'value', 'text');
                 $db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
                 $ccscpn = array_merge($cccpn, $db->loadObjectList());
                 $lists['ccscpn'] = JHTML::_('select.genericlist', $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id);
 
-        $this->assignRef('sto_row',        $sto_row);
+        $this->assignRef('quo_row',        $quo_row);
         $lists['zips_files'] = $zips_files;
         $lists['image_files'] = $images_files;
         $lists['pdf_files'] = $pdf_files;		

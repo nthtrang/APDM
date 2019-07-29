@@ -12,7 +12,7 @@ $role = JAdministrator::RoleOnComponent(8);
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
         JToolBarHelper::customX('addquo', 'new', '', 'New Quotation', false);        
-       // JToolBarHelper::customX('addeto', 'new', '', 'New ETO', false);
+        JToolBarHelper::customX('addform', 'new', '', 'Form Template', false);
         //JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
         
 }
@@ -48,7 +48,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         submitform( pressbutton );
                         return;
                 }
-                if (pressbutton == 'addeto') {
+                if (pressbutton == 'addform') {
                         submitform( pressbutton );
                         return;
                 }
