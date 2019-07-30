@@ -926,7 +926,7 @@ class SToController extends JController
                       $currentOutStock = $stock+$qtyOutCheck;
                     if($currentOutStock > $totalQtyCheck)
                     {
-                        $msg .= "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." have QTY remain is:". $qtyRemain[$loc_mfg];
+                        $msg .= "Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." have QTY remain is:". $qtyRemain[$loc_mfg];
                         return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
                     }
                 }

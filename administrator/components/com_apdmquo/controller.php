@@ -112,6 +112,12 @@ class QUOController extends JController
                 JRequest::setVar('view', 'getpnsquo');
                 parent::display();
         }
+        function get_list_pns_quo_detail() {
+            JRequest::setVar('layout', 'add_fromdetail');
+            JRequest::setVar('view', 'getpnsquo');
+            parent::display();
+        }
+
          /**
          *
           funcntion get list PNs child for ajax request
@@ -135,39 +141,7 @@ class QUOController extends JController
                         '<td class="key">Extended</td>'.
                         '<td class="key">Due Date</td><input type="hidden" name="boxcheckedpn" value="'.count($rows).'" /></tr>';
                 
-                $str .= 
-                $str .= '
-<script>
-window.addEvent("domready", function(){ var JTooltips = new Tips($$(".hasTip"), { maxTitleChars: 50, fixed: false}); });
-		window.addEvent("domready", function() {
 
-			SqueezeBox.initialize({});
-
-			$$("a.modal").each(function(el) {
-				el.addEvent("click", function(e) {
-					new Event(e).stop();
-					SqueezeBox.fromElement(el);
-				});
-			});
-		});
-Calendar._DN = new Array ("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");Calendar._SDN = new Array ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"); Calendar._FD = 0;	Calendar._MN = new Array ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");	Calendar._SMN = new Array ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");Calendar._TT = {};Calendar._TT["INFO"] = "About the Calendar";
- 		Calendar._TT["ABOUT"] =
- "DHTML Date/Time Selector\n" +
- "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
-"For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
-"Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
-"\n\n" +
-"Date selection:\n" +
-"- Use the \xab, \xbb buttons to select year\n" +
-"- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
-"- Hold mouse button on any of the above buttons for faster selection.";
-Calendar._TT["ABOUT_TIME"] = "\n\n" +
-"Time selection:\n" +
-"- Click on any of the time parts to increase it\n" +
-"- or Shift-click to decrease it\n" +
-"- or click and drag for faster selection.";
-Calendar._TT["PREV_YEAR"] = "Click to move to the previous year. Click and hold for a list of years.";Calendar._TT["PREV_MONTH"] = "Click to move to the previous month. Click and hold for a list of the months.";	Calendar._TT["GO_TODAY"] = "Go to today";Calendar._TT["NEXT_MONTH"] = "Click to move to the next month. Click and hold for a list of the months.";Calendar._TT["NEXT_YEAR"] = "Click to move to the next year. Click and hold for a list of years.";Calendar._TT["SEL_DATE"] = "Select a date.";Calendar._TT["DRAG_TO_MOVE"] = "Drag to move";Calendar._TT["PART_TODAY"] = " (Today)";Calendar._TT["DAY_FIRST"] = "Display11 %s first";Calendar._TT["WEEKEND"] = "0,6";Calendar._TT["CLOSE"] = "Close";Calendar._TT["TODAY"] = "Today";Calendar._TT["TIME_PART"] = "(Shift-)Click or Drag to change the value.";Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%M-%D"; Calendar._TT["TT_DATE_FORMAT"] = "%A, %B %e";Calendar._TT["WK"] = "wk";Calendar._TT["TIME"] = "Time:";
-</script>';
                 
                 $i=0;
                 foreach ($rows as $row) {
@@ -176,16 +150,11 @@ Calendar._TT["PREV_YEAR"] = "Click to move to the previous year. Click and hold 
                                 $pnNumber =  '-' . $row->pns_code . '-' . $row->pns_revision;
                         } else {
                                 $pnNumber = $row->ccs_code . '-' . $row->pns_code;
-                        }     
-                        $str  .='
-	<script>	
-jQuery(document).ready(function(jQuery) {Calendar.setup({
-        inputField     :    "due_date['.$row->pns_id.']",     // id of the input field
-        ifFormat       :    "%m/%d/%Y",      // format of the input field
-        button         :    "due_date['.$row->pns_id.']_img",  // trigger for the calendar (button ID)
-        align          :    "Tl",           // alignment (defaults to "Bl")
-        singleClick    :    true
-    });});</script>';
+                        }
+                    $attribs='readonly="readonly" onclick="Calendar.setup({inputField: \'due_date['.$row->pns_id .']\',ifFormat: \'%Y-%m-%d\','.
+								'button: \'cal\','.
+								'align: \'Tl\','.
+								'singleClick: true});"';
                         $str .= '<tr>'.
                                 ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /></td>'.
                                 ' <td class="key">'.$row->pns_code.'</td>'.
@@ -195,8 +164,8 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
                                 ' <td class="key">'.$row->pns_uom.'</td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="extended['.$row->pns_id.']"  name="extended['.$row->pns_id.']" /></td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
-                                //' <td class="key">'.JHTML::_('calendar',"", 'due_date['.$row->pns_id.']', 'due_date['.$row->pns_id.']', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')).'</td>'.
+                                //' <td class="key"><input style="width: 70px" onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
+                                ' <td class="key"><input style="width: 70px" '.$attribs.' onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
                                 ' <td class="key"></td>';
                 }
                 $str .='</table>';
@@ -241,8 +210,10 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
                         {
                                 foreach($listPns as $pnId)
                                 {
-                                      $db->setQuery("INSERT INTO apdm_quotation_pn_fk (pns_id,quotation_id,qty,unit_price,extend_price,quo_pn_created,quo_pn_created_by) VALUES ('" . $pnId . "', '" . $quo_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $post['extended'][$pnId]  . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . ")");                                      
-                                      $db->query();                                   
+                                    $due_date = new DateTime($post['due_date'][$pnId] );
+                                    $quo_due_date = $due_date->format('Y-m-d');
+                                    $db->setQuery("INSERT INTO apdm_quotation_pn_fk (pns_id,quotation_id,qty,unit_price,extend_price,quo_pn_created,quo_pn_created_by,quo_pn_due_date) VALUES ('" . $pnId . "', '" . $quo_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $post['extended'][$pnId]  . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $quo_due_date . "')");
+                                    $db->query();
                                 }                                
                         }                     
                 }//for save database of pns                
@@ -284,8 +255,129 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
                 JRequest::setVar('layout', 'formtemplate');
                 JRequest::setVar('view', 'quo_info');
                 parent::display();
-        }  
-        function GetSupplierName($supplier_id) {
+        }
+        function GetQuoFrommPns($pns_id,$quo_id) {
+            $db = & JFactory::getDBO();
+            $rows = array();
+            $query = "SELECT pns_id,id FROM apdm_quotation_pn_fk WHERE pns_id = ".$pns_id ." and quotation_id = ".$quo_id;
+            $db->setQuery($query);
+            $result = $db->loadObjectList();
+            if (count($result) > 0) {
+                foreach ($result as $obj) {
+                    $rows[] = $obj->id;
+                }
+            }
+            return $rows;
+        }
+        function ajax_add_pns_quo_detail() {
+            $db = & JFactory::getDBO();
+            $me = & JFactory::getUser();
+            //$row = & JTable::getInstance('apdmpnso');
+            $datenow = & JFactory::getDate();
+            $pns = JRequest::getVar('cid', array(), '', 'array');
+            $quo_id = JRequest::getVar('quo_id');
+            //innsert to FK table
+            foreach($pns as $pn_id)
+            {
+                $db->setQuery("INSERT INTO apdm_quotation_pn_fk (pns_id,quotation_id,quo_pn_created,quo_pn_created_by) VALUES ('" . $pn_id . "', '" . $quo_id . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . ")");
+                $db->query();
+            }
+            return $msg = JText::_('Have add pns successfull.');
+        }
+
+    /*
+       * save stock for STO/PN
+       */
+    function saveqtyQuofk() {
+        $db = & JFactory::getDBO();
+        $cid = JRequest::getVar('cid', array(), '', 'array');
+        $me = & JFactory::getUser();
+        //$row = & JTable::getInstance('apdmpnso');
+        $datenow = & JFactory::getDate();
+        $fkid = JRequest::getVar('id');
+        foreach ($cid as $pnsid) {
+            $obj = explode("_", $pnsid);
+            $pns=$obj[0];
+            $ids = explode(",",$obj[1]);
+            $msg = "";
+            foreach ($ids as $id) {
+                $qty = JRequest::getVar('qty_'. $pns .'_' . $id);
+                $price = JRequest::getVar('price_' . $pns .'_' . $id);
+                $extend = JRequest::getVar('extend_' . $pns .'_' . $id);
+
+                $due_date = new DateTime(JRequest::getVar('duedate_' . $pns .'_' . $id));
+                $quo_due_date = $due_date->format('Y-m-d');
+                $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
+                $db->query();
+            }
+        }
+        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$fkid."'");
+        $sto_type = $db->loadResult();
+        $freturn = JRequest::getVar('return');
+        $quo_id = JRequest::getVar('quo_id');
+        $return = "quo_detail";
+        if($freturn)
+            $return = $freturn;
+        $msg .= "Successfully Saved Part Number";
+        $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
+    }
+
+    /*
+           * Remove PNS out of STO in STO management
+           */
+    function removeAllpnsquos() {
+        $db = & JFactory::getDBO();
+        $pnsfk = JRequest::getVar('cid', array(), '', 'array');
+        $quo_id = JRequest::getVar('quo_id');
+        foreach($pnsfk as $fk_ids){
+            $obj = explode("_", $fk_ids);
+            $pns=$obj[0];
+            $ids = explode(",",$obj[1]);
+            foreach ($ids as $fk_id)
+            {
+                $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE id = '" . $fk_id . "' AND quotation_id = " . $quo_id . "");
+                $db->query();
+            }
+        }
+        $freturn = JRequest::getVar('return');
+        $quo_id = JRequest::getVar('quo_id');
+        $return = "quo_detail";
+        if($freturn)
+            $return = $freturn;
+        $msg = JText::_('Have removed Part successfull.');
+        $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
+
+    }
+
+    /*
+               * Remove PNS out of STO in STO management
+               */
+    function removepnsquos() {
+        $db = & JFactory::getDBO();
+        $pnsfk = JRequest::getVar('cid', array(), '', 'array');
+         $quo_id = JRequest::getVar('quo_id');
+        foreach($pnsfk as $fk_id)
+        {
+            $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE id = '" . $fk_id . "' AND quotation_id = " . $quo_id . "");
+            $db->query();
+        }
+        $freturn = JRequest::getVar('return');
+        $return = "quo_detail";
+        if($freturn)
+            $return = $freturn;
+        $msg = JText::_('Have removed Part successfull.');
+        $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
+    }
+
+
+
+
+
+
+
+
+
+    function GetSupplierName($supplier_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
                 $query = "SELECT s.info_name FROM  apdm_supplier_info AS s WHERE  s.info_deleted=0 AND  s.info_activate=1  AND  s.info_id =" . $supplier_id;
@@ -298,12 +390,7 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
                 JRequest::setVar('view', 'ito');
                 parent::display();
         }  
-		 //for sto
-        function get_list_pns_sto() {
-                JRequest::setVar('layout', 'default');
-                JRequest::setVar('view', 'getpnsforstos');
-                parent::display();
-        }
+
 		 function GetLocationCodeList() {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -865,31 +952,7 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
         $msg = "Successfully Saved Part Number";
         $this->setRedirect('index.php?option=com_apdmsto&task=sto_detail_movelocation&id=' . $fkid, $msg);
     }
-    /*
-        * Remove PNS out of STO in STO management
-        */
-    function removeAllpnsstos() {
-        $db = & JFactory::getDBO();
-        $pnsfk = JRequest::getVar('cid', array(), '', 'array');
-        $sto_id = JRequest::getVar('sto_id');
-        foreach($pnsfk as $fk_ids){
-            $obj = explode("_", $fk_ids);
-            $pns=$obj[0];
-            $ids = explode(",",$obj[1]);
-            foreach ($ids as $fk_id)
-            {
-                $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE id = '" . $fk_id . "' AND sto_id = " . $sto_id . "");
-                $db->query();
-            }
-        }
-        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$sto_id."'");
-        $sto_type = $db->loadResult();
-        $return = "ito_detail";
-        if($sto_type==2)
-            $return = "eto_detail";
-        $msg = JText::_('Have removed Part successfull.');
-        return $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $sto_id, $msg);
-    }
+
     /*
      * Remove PNS out of STO in STO management
      */
@@ -910,64 +973,7 @@ jQuery(document).ready(function(jQuery) {Calendar.setup({
         $msg = JText::_('Have removed Part successfull.');
         return $this->setRedirect('index.php?option=com_apdmsto&task=sto_detail_movelocation&id=' . $sto_id, $msg);
     }
-    /*
-           * save stock for STO/PN
-           */
-    function saveqtyStofk() {
-        $db = & JFactory::getDBO();
-        $cid = JRequest::getVar('cid', array(), '', 'array');
 
-        $fkid = JRequest::getVar('id');
-        foreach ($cid as $pnsid) {
-            $obj = explode("_", $pnsid);
-            $pns=$obj[0];
-            $ids = explode(",",$obj[1]);
-            $msg = "";
-            foreach ($ids as $id) {
-                 $stock = JRequest::getVar('qty_'. $pns .'_' . $id);
-                 $location = JRequest::getVar('location_' . $pns .'_' . $id);
-                 $partState = JRequest::getVar('partstate_' . $pns .'_' . $id);
-                $mfgPnId = JRequest::getVar('mfg_pn_' . $pns .'_' . $id);
-                
-                //get sto_type
-                $db->setQuery("select fk.qty,sto.sto_type,fk.pns_id,fk.sto_id,fk.partstate,fk.location,loc.location_code from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id left join apdm_pns_location loc on fk.location = loc.pns_location_id where fk.id =  ".$id);
-               
-                $stoChecker= $db->loadObject();
-                if($stoChecker->sto_type==2)//if is out(ship) stock
-                {
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 1 and sto.sto_owner_confirm = 1");
-
-                    $qtyInCheck = round($db->loadResult(),2);
-                    //get QTY from TTO
-                    $db->setQuery("select sum(fk.qty) as total_qty_tool from apdm_pns_tto tto inner join apdm_pns_tto_fk fk on tto.pns_tto_id = fk.tto_id where  tto.tto_state != 'Done' and  fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."'  and tto.tto_type = 1  and tto.tto_state = 'Using' and tto.tto_owner_out_confirm=1");
-                    $qtyTtoCheck = round($db->loadResult(),2);
-                     $totalQtyCheck = $qtyInCheck - $qtyTtoCheck;
-
-                    $db->setQuery("select sum(fk.qty) as total_qty from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id where fk.pns_id = '".$pns."' and fk.partstate = '".$partState."' and fk.location = '".$location."' and fk.pns_mfg_pn_id = '".$mfgPnId."'  and sto.sto_type = 2  and fk.id != ".$id);                    
-                    $qtyOutCheck = $db->loadResult();
-                    if(!$qtyOutCheck)
-                    {
-                          $qtyOutCheck = 0;
-                    }
-                    $currentOutStock = $stock+$qtyOutCheck;
-                    if($currentOutStock > $totalQtyCheck)
-                    {
-                        $msg .= "Qty just input at row have Part State:".$stoChecker->partstate.",Location:".$stoChecker->location_code.",MFG PN:".SToController::GetMfgPnCode($mfgPnId)." have QTY remain is:". $totalQtyCheck;
-                        return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id=' . $fkid, $msg);
-                    }
-                }
-                $db->setQuery("update apdm_pns_sto_fk set qty=" . $stock . ", location='" . $location . "', partstate='" . $partState . "',pns_mfg_pn_id = '".$mfgPnId."' WHERE  id = " . $id);
-                $db->query();
-            }
-        }
-        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$fkid."'");       
-        $sto_type = $db->loadResult();
-        $return = "ito_detail";
-        if($sto_type==2)
-                $return = "eto_detail";
-        $msg .= "Successfully Saved Part Number";
-        $this->setRedirect('index.php?option=com_apdmsto&task='.$return.'&id=' . $fkid, $msg);
-    }
     /*
            * Remove PNS out of STO in STO management
            */

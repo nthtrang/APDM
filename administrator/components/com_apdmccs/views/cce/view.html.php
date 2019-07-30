@@ -40,7 +40,7 @@ class CCsViewcce extends JView
 			$row->load($cid[0]);
 		}
 		//get list acivation
-        $activate = ($row->ccs_activate) ?  $row->ccs_activate : 1;
+        $activate = ($row->ccs_activate) ?  $row->ccs_activate : 0;
 		$lists['activate'] 	= JHTML::_('select.booleanlist',  'ccs_activate', 'class="inputbox" size="1"', $activate );
 		$this->assignRef('lists',	$lists);
 		$this->assignRef('row',	$row);

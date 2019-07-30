@@ -108,16 +108,7 @@
 						<?php echo $this->row->ccs_address?>
 					</td>
 				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php echo ($this->row->ccs_activate)? JText::_('Yes') : JText::_('No');?>
-					</td>
-				</tr>
+
                                  <tr>
 					<td class="key">
 						<label for="name">
@@ -147,7 +138,17 @@
 					<td>
                                                <?php echo $this->row->ccs_mobile;?>					
 					</td>
-				</tr>      
+				</tr>
+                <tr>
+                    <td class="key" valign="top">
+                        <label for="username">
+                            <?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php echo ($this->row->ccs_activate)? JText::_('Yes') : JText::_('No');?>
+                    </td>
+                </tr>
 			</table>
 		</fieldset>
 	</div>

@@ -1,8 +1,9 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-ssss
+
 <?php
+echo $quo_id		= JRequest::getVar( 'quo_id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -22,29 +23,31 @@ function CheckForm() {
 		
 	
 }
+
 function UpdatePnsChild(){
-	if ($('boxchecked').value==0){
-		alert('Please select PNs.');
-		return false;
-	}else{
-	
-		var url = 'index.php?option=com_apdmquo&task=ajax_list_pns_quo';			
-		var MyAjax = new Ajax(url, {
-			method:'post',
-			data:  $('adminFormPns').toQueryString(),
-			onComplete:function(result){				
-				window.parent.document.getElementById('pns_child_quo').innerHTML = result;                                
-				window.parent.document.getElementById('sbox-window').close();	
-				
+    var quo_id = $('quo_id').value;
+    if ($('boxchecked').value==0){
+        alert('Please select PNs.');
+        return false;
+    }else{
 
-			}
-		}).request();
+        var url = 'index.php?option=com_apdmquo&task=ajax_add_pns_quo_detail&quo_id='+quo_id;
+        var MyAjax = new Ajax(url, {
+            method:'post',
+            data:  $('adminFormPns').toQueryString(),
+            onComplete:function(result){
+                //	window.parent.document.getElementById('pns_child').innerHTML = result;
+               window.parent.document.getElementById('sbox-window').close();
+                window.parent.location.reload();
 
-	}
-	
+
+            }
+        }).request();
+    }
+
 }
 </script>
-<form action="index.php?option=com_apdmquo&task=get_list_pns_quo&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+<form action="index.php?option=com_apdmquo&task=get_list_pns_quo_detail&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
 <input type="hidden" name="id" value="<?=$this->id?>" />
 <table  width="100%">
 		<tr>
@@ -159,6 +162,7 @@ function UpdatePnsChild(){
 	<div class="clr"></div>	
 	<input type="hidden" name="option" value="com_apdmquo" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
+    <input type="text" name="quo_id" id="quo_id" value="<?php echo $quo_id; ?>" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 	<?php echo JHTML::_( 'form.token' ); ?>

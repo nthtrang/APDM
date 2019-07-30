@@ -81,10 +81,10 @@ class QUOViewquo_info extends JView
 
         
          
-        //for PO detailid
-                $db->setQuery("SELECT fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_pns_so AS so inner JOIN apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where so.pns_so_id=" . $quo_id);
+        //for PN list
+                $db->setQuery("SELECT fk.*,p.pns_uom,p.pns_cpn, p.pns_description,p.pns_cpn,p.pns_id,p.pns_stock,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code,p.ccs_code, p.pns_code, p.pns_revision  FROM apdm_quotation AS quo inner JOIN apdm_quotation_pn_fk fk on quo.quotation_id = fk.quotation_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where quo.quotation_id=" . $quo_id);
                 $pns_list = $db->loadObjectList();
-                $this->assignRef('so_pn_list', $pns_list);
+                $this->assignRef('quo_pn_list', $pns_list);
 
                 $db->setQuery("SELECT so.*,so.customer_id as ccs_so_code,max(date(wo.wo_completed_date)) as max_wo_completed,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $quo_id);
                 $so_row = $db->loadObject();
@@ -102,9 +102,7 @@ class QUOViewquo_info extends JView
                 $lists['ccscpn'] = JHTML::_('select.genericlist', $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id);
 
         $this->assignRef('quo_row',        $quo_row);
-        $lists['zips_files'] = $zips_files;
-        $lists['image_files'] = $images_files;
-        $lists['pdf_files'] = $pdf_files;		
+
         $lists['search']= $search;    
         $this->assignRef('lists',        $lists);
         $this->assignRef('stos_list',        $rows);

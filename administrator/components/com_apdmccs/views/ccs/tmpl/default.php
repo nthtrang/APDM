@@ -159,7 +159,14 @@ function submitbutton(pressbutton) {
 						<?php echo $row->ccs_code; ?></a>
 				</td>
 				<td align="left">
-					<?php echo $row->ccs_description; //echo ($npns) ? '<a href="'.$link_pns.'">'.$npns.'</a>' : 0; ?>
+					<?php
+                    if($row->ccs_cpn){
+					    echo $row->ccs_name;
+                    }
+                    else{
+                       echo $row->ccs_description; //echo ($npns) ? '<a href="'.$link_pns.'">'.$npns.'</a>' : 0;
+                    }
+                     ?>
 				</td>				
 <!--				<td align="center">
 					<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task;?>')">

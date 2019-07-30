@@ -97,8 +97,8 @@
 					<td>
                                                 <input type="text"  name="ccs_name" id="ccs_name" class="inputbox" size="50" value="<?php echo $this->row->ccs_name;?>"/>						
 					</td>
-				</tr>  
-                                <tr>
+				</tr>
+                <!--             <tr>
 					<td class="key">
 						<label for="name">
 							<?php echo JText::_( "Coordinator" ); ?>
@@ -109,7 +109,7 @@
 					</td>
 				</tr>                                  
                                 
-				<!--<tr>
+				<tr>
 					<td class="key" valign="top">
 						<label for="username">
 							<?php echo JText::_( 'COMMODITY_CODE_DESCRIPTION' ); ?>
@@ -127,16 +127,6 @@
 					</td>
 					<td>
 						<textarea name="ccs_address" rows="10" cols="60"><?php echo $this->row->ccs_address?></textarea>
-					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
-						<label for="username">
-							<?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
-						</label>
-					</td>
-					<td>
-						<?php echo $this->lists['activate']?>
 					</td>
 				</tr>
                                 <tr>
@@ -169,6 +159,16 @@
 						 <input type="text"  name="ccs_mobile" id="ccs_mobile" class="inputbox" size="50" value="<?php echo $this->row->ccs_mobile;?>"/>						
 					</td>
 				</tr>
+                <tr>
+                    <td class="key" valign="top">
+                        <label for="username">
+                            <?php echo JText::_( 'COMMODITY_CODE_ACTIVATE' ); ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php echo $this->lists['activate']?>
+                    </td>
+                </tr>
 			</table>
 		</fieldset>
 	</div>

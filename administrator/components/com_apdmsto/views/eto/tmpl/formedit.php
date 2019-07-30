@@ -177,18 +177,20 @@ window.addEvent('domready', function(){
                     <tr>
                         <td class="key">
                             <label for="name">
-                                <?php echo JText::_( 'PO#' ); ?>
+                                <?php echo JText::_( 'External PO' ); ?>
                             </label>
                         </td>
                         <td>
                             <input type="hidden" readonly="readonly" name="so_cuscode" id="so_cuscode"  size="10" value=""/>
                             <span id="po_customer"><?php
-                                $soNumber = $this->sto_row->so_cuscode;
-                                if($this->sto_row->ccs_code)
-                                {
-                                    $soNumber = $this->sto_row->ccs_code."-".$soNumber;
-                                }
-                                echo $soNumber;
+                               // if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id) {
+                                    echo $soNumber = $this->sto_row->so_cuscode;
+                                    /*  if($this->sto_row->ccs_code)
+                                      {
+                                          $soNumber = $this->sto_row->ccs_code."-".$soNumber;
+                                      }
+                                      echo $soNumber;*/
+                                //}
                                 ?></span>
                         </td>
                     </tr>

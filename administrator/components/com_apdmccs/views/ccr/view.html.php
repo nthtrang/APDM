@@ -80,7 +80,6 @@ class CCsViewccr extends JView
 
 		$db->setQuery( $query, $pagination->limitstart, $pagination->limit );
 		$rows = $db->loadObjectList();
-
 		// get list of Status for dropdown filter
 		$active[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select Status' ) .' -');
 		$active[] = JHTML::_('select.option',  0, JText::_( 'ACTIVE' ) );
