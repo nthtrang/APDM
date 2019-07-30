@@ -560,7 +560,13 @@ class JToolBarHelper
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmeco&task=add_routes&tmpl=component&cid[]=$id", 750,400 );
-	}            
+	}  
+        function addQuoRoutes($alt = 'New',$id=0)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+		// Add an upload button
+		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmquo&task=add_routesquo&tmpl=component&cid[]=$id", 750,400 );
+	} 
 	function deleteEcoRoutes($msg = '', $task = 'remove_routes', $alt = 'Delete')
 	{
 		$bar = & JToolBar::getInstance('toolbar');

@@ -38,7 +38,16 @@ class QUOViewquo_info extends JView
         $db                =& JFactory::getDBO();
         $cid		= JRequest::getVar( 'cid', array(0), '', 'array' );       
         $quo_id		= JRequest::getVar( 'id');       
-        $me 		= JFactory::getUser();
+        $task		= JRequest::getVar( 'quo_detail');       
+        $me 		= JFactory::getUser();                        
+        $db->setQuery('select quotation_id from apdm_quotation where  quotation_id = "'.$quo_id.'"');                
+        $result = $db->loadResult();
+        if(!$result && $task =="quo_detail")
+        {
+                $msg .= "Quotation does not exist!";                
+                $app =& JFactory::getApplication();
+                $app->redirect('index.php?option=com_apdmquo',$msg);
+        }
         JArrayHelper::toInteger($cid, array(0));	       
          $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
         $keyword                = $search;
@@ -76,7 +85,7 @@ class QUOViewquo_info extends JView
         $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
         $rows = $db->loadObjectList(); 
         
-        $db->setQuery("SELECT * from apdm_quotation  where quotation_id=".$quo_id);         
+        $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$quo_id);         
          $quo_row =  $db->loadObject();
 
         
@@ -86,10 +95,6 @@ class QUOViewquo_info extends JView
                 $pns_list = $db->loadObjectList();
                 $this->assignRef('quo_pn_list', $pns_list);
 
-                $db->setQuery("SELECT so.*,so.customer_id as ccs_so_code,max(date(wo.wo_completed_date)) as max_wo_completed,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so inner join apdm_pns_wo wo on so.pns_so_id=wo.so_id left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.pns_so_id=" . $quo_id);
-                $so_row = $db->loadObject();
-                $this->assignRef('so_row', $so_row);
-   
  //get formtemplate
                 $db->setQuery("SELECT * from apdm_quotation_template where id = 1");
                 $template_row = $db->loadObject();
@@ -99,7 +104,7 @@ class QUOViewquo_info extends JView
                 $cccpn[0] = JHTML::_('select.option', 0, '- ' . JText::_('SELECT_CCS') . ' -', 'value', 'text');
                 $db->setQuery("SELECT  ccs_code  as value, CONCAT_WS(' :: ', ccs_code, ccs_name) as text FROM apdm_ccs WHERE ccs_deleted=0 AND ccs_activate= 1 and ccs_cpn = 1 ORDER BY ccs_code ");
                 $ccscpn = array_merge($cccpn, $db->loadObjectList());
-                $lists['ccscpn'] = JHTML::_('select.genericlist', $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $so_row->customer_id);
+                $lists['ccscpn'] = JHTML::_('select.genericlist', $ccscpn, 'customer_id', 'class="inputbox" size="1" onchange="getccsCoordinator(this.value)"', 'value', 'text', $quo_row->customer_id);
 
         $this->assignRef('quo_row',        $quo_row);
 

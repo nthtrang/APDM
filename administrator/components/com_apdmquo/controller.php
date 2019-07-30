@@ -71,7 +71,7 @@ class QUOController extends JController
 				JRequest::setVar( 'layout', 'view'  );
 				JRequest::setVar( 'view', 'quo_info' );				
 			}break;			
-			case 'editito'    :
+			case 'editquo'    :
 			{				
 				JRequest::setVar( 'layout', 'formedit'  );
 				JRequest::setVar( 'view', 'quo_info' );
@@ -251,7 +251,7 @@ class QUOController extends JController
 		/*
          * Detail STO 
          */        
-        function quo_detail() {
+        function quo_detail() {                
                 JRequest::setVar('layout', 'formtemplate');
                 JRequest::setVar('view', 'quo_info');
                 parent::display();
@@ -310,9 +310,7 @@ class QUOController extends JController
                 $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
                 $db->query();
             }
-        }
-        $db->setQuery("select sto_type from apdm_pns_sto where pns_sto_id ='".$fkid."'");
-        $sto_type = $db->loadResult();
+        }      
         $freturn = JRequest::getVar('return');
         $quo_id = JRequest::getVar('quo_id');
         $return = "quo_detail";
@@ -369,14 +367,121 @@ class QUOController extends JController
         $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
     }
 
+        function save_edit_quo()
+        {
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');                        
+                
+                
+                $startdate = new DateTime($post['quo_start_date']);
+                $expire_date = new DateTime($post['quo_expire_date']);
+                $quo_start_date = $startdate->format('Y-m-d'); 
+                $quo_expire_date = $expire_date->format('Y-m-d');              
+                $quo_id = $post['quo_id'];
+                $db->setQuery("update apdm_quotation set quo_start_date = '".$quo_start_date."',quo_expire_date='".$quo_expire_date."',quo_updated= '" . $datenow->toMySQL() . "',quo_updated_by ='" . $me->get('id') . "' where quotation_id ='".$quo_id."'");
+                $db->query();                   
+                if($quo_id)
+                {
+                        $cid = JRequest::getVar('cid', array(), '', 'array');
+                        foreach ($cid as $pnsid) {
+                            $obj = explode("_", $pnsid);
+                            $pns=$obj[0];
+                            $ids = explode(",",$obj[1]);
+                            $msg = "";
+                            foreach ($ids as $id) {
+                                $qty = JRequest::getVar('qty_'. $pns .'_' . $id);
+                                $price = JRequest::getVar('price_' . $pns .'_' . $id);
+                                $extend = JRequest::getVar('extend_' . $pns .'_' . $id);
+                                $due_date = new DateTime(JRequest::getVar('duedate_' . $pns .'_' . $id));
+                                $quo_due_date = $due_date->format('Y-m-d');
+                                $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
+                                $db->query();
+                            }
+                        }                    
+                }//for save database of pns                
+                $msg = JText::_('Successfully Saved Quotation');
+                return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);                               
 
+        }
 
+/*
+         * Remove QUO
+         */
+        function deletequo() {
+                $db = & JFactory::getDBO();                
+                $quo_id = JRequest::getVar('quo_id');
+                $db->setQuery("DELETE FROM apdm_quotation WHERE quotation_id = '" . $quo_id . "'");
+                $db->query();                    
+                $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE quotation_id = '" . $quo_id . "'");
+                $db->query(); 
+                $msg = JText::_('Have removed successfull.');
+                return $this->setRedirect('index.php?option=com_apdmquo&task=quo', $msg);
+        }   
 
+ /**
+     * Display all files eco
+     */
+    function quo_routes(){      
+        JRequest::setVar( 'layout', 'default'  );
+        JRequest::setVar( 'view', 'routes' );
+        parent::display();
+    }
 
+ function check_routequo_promote($quo_id)
+        {
+                 $db = & JFactory::getDBO();         
+                //$eco_id = JRequest::getVar( 'cid', array(0) );
+                $db->setQuery("select rt.id,rt.quotation_id from apdm_eco_routes rt inner join apdm_quotation quo on rt.quotation_id =  quo.quotation_id and rt.status not in ('Create','Closed') and quo.quotation_id = '".$quo_id."'");             
+                return $db->loadResult();                
+                
+        }
+ function add_routesquo() {       
+        JRequest::setVar('layout', 'addroutes');
+        JRequest::setVar('view', 'routes');
+        parent::display();
+    }
+    
+     function get_routename_quo_default()
+    {
+                $db = & JFactory::getDBO();
+                $quo_id = JRequest::getVar('quo_id');
+                $query = "SELECT count(*)  FROM apdm_eco_routes  WHERE  quotation_id = '".$quo_id."'";
+                $db->setQuery($query);
+                $pns_latest = $db->loadResult();
+               
+                $next_poprf_code = (int) $pns_latest;
+                $next_poprf_code++;
+                echo "Route ".$next_poprf_code;
+                exit;
+        }       
+        function save_routes_quo() {
 
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $datenow    =& JFactory::getDate();
+        $name = JRequest::getVar('name');
+        $description = JRequest::getVar('description');
+        $status = 'Create';
+        $due_date = JRequest::getVar('due_date');
+        $quo_id = JRequest::getVar('quo_id');
+        $created = $datenow->toMySQL();
+        $owner = $me->get('id');
+        $return = JRequest::getVar('return');
+        $db->setQuery("INSERT INTO apdm_eco_routes (eco_id,quotation_id,name,description,status,due_date,created,owner) VALUES (0,'" . $quo_id . "', '" . $name . "', '" . $description . "', '" . $status . "', '" . $due_date . "', '" . $created . "', '" . $owner . "')");
+        $db->query();
+        $msg = "Successfully Saved Route Quotation";
+        return $this->setRedirect( 'index.php?option=com_apdmquo&task=routestmp&time='.time().'&cid[]='.$quo_id, $msg );
 
-
-
+    }
+    function routestmp()
+    {
+        $quo_id = JRequest::getVar('quo_id');
+        return $this->setRedirect( 'index.php?option=com_apdmquo&task=quo_routes&time='.time().'&cid[]='.$quo_id, $msg );
+    }
     function GetSupplierName($supplier_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -528,66 +633,7 @@ class QUOController extends JController
                 exit;
         }
         
-        function save_editito() {
-                global $mainframe;
-                // Initialize some variables                                  
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');   
-                $sto_code = $post['sto_code'];
-                $ito_id = $post['pns_sto_id'];
-                                            
-                $return = JRequest::getVar('return');
-                $db->setQuery("update apdm_pns_sto set sto_po_internal = '".$post['po_inter_code']."',sto_supplier_id = '".$post['sto_supplier_id']."',sto_description='" . strtoupper($post['sto_description']) . "'  WHERE  pns_sto_id = '".$post['pns_sto_id']."'");
-                $db->query();
-                //upload file
-                //get so info
-                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$post['pns_sto_id']);
-                $sto_row =  $db->loadObject();                
-                //Save upload new                
-                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
-                $stoNumber = $folder = $sto_row->sto_code;                 
-                
-               //upload new images
-                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
-                $upload = new upload($_FILES['']);
-                $upload->r_mkdir($path_so_images, 0777);
-                $arr_error_upload_image = array();
-                $arr_image_upload = array();
-                
-                for ($i = 1; $i <= 20; $i++) {                        
-                        if ($_FILES['pns_image' . $i]['size'] > 0) {
-                            if($_FILES['pns_image' . $i]['size']<20000000)
-                            {                              
-                                if (file_exists($path_so_images . $_FILES['pns_image' . $i]['name'])) {
-
-                                        @unlink($path_so_images .  $_FILES['pns_image' . $i]['name']);
-                                }
-                                if (!move_uploaded_file($_FILES['pns_image' . $i]['tmp_name'], $path_so_images . $_FILES['pns_image' . $i]['name'])) {
-                                    $arr_error_upload_image[] = $_FILES['pns_image' . $i]['name'];
-                                } else {
-                                    $arr_image_upload[] = $_FILES['pns_image' . $i]['name'];
-                                }
-                            }
-                            else
-                            {
-                                $msg = JText::_('Please upload file less than 20MB.');
-                                return $this->setRedirect('index.php?option=com_apdmsto&task=editito&id='.$ito_id, $msg);
-                            }
-                        }
-                }                                
-                if (count($arr_image_upload) > 0) {
-                        foreach ($arr_image_upload as $file) {
-                                $db->setQuery("DELETE FROM apdm_pns_sto_files where sto_id = " . $ito_id);
-                                $db->query();
-                                $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',2, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                                                         
-                                $db->query();                                 
-                        }
-                }                        
-                $msg = "Successfully Saved Update ITO";
-                return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id='.$post['pns_sto_id'], $msg);                
-        }
+    
         function save_editeto() {
                 global $mainframe;
                 // Initialize some variables                                  
@@ -672,135 +718,7 @@ class QUOController extends JController
                 $msg = "Successfully Saved Update ETO";
                 return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$post['pns_sto_id'], $msg);                
         }        
-        function save_doc_sto()
-        {
-                global $mainframe;
-                // Initialize some variables
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();                
-                $datenow = & JFactory::getDate();        
-                $post = JRequest::get('post');   
-                $sto_code = $post['sto_code'];
-                $ito_id = $post['sto_id'];      
-                 
-                //get so info
-                $db->setQuery("SELECT * from apdm_pns_sto where pns_sto_id=".$ito_id);
-                $sto_row =  $db->loadObject();                
-                //Save upload new                
-                $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'sto' ;
-                $stoNumber = $folder = $sto_row->sto_code;
-                  
-
-                $path_so_zips = $path_upload  .DS. $folder . DS .'zips'. DS;
-                $upload = new upload($_FILES['']);
-                $upload->r_mkdir($path_so_zips, 0777);                        
-                $arr_file_upload = array();
-                $arr_error_upload_zips = array();
-                for ($i = 1; $i <= 20; $i++) {					
-                        if ($_FILES['pns_zip' . $i]['size'] > 0) {
-								if($_FILES['pns_zip' . $i]['size']<20000000)
-								{
-									if (!move_uploaded_file($_FILES['pns_zip' . $i]['tmp_name'], $path_so_zips . $_FILES['pns_zip' . $i]['name'])) {
-											$arr_error_upload_zips[] = $_FILES['pns_zip' . $i]['name'];
-									} else {
-											$arr_file_upload[] = $_FILES['pns_zip' . $i]['name'];
-									}
-								}
-								else
-								{        
-									$msg = JText::_('Please upload file ZIP less than 20MB.');
-								        return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$ito_id, $msg);    
-								}
-                        }
-                        
-                }
-                if (count($arr_file_upload) > 0) {                        
-                        foreach ($arr_file_upload as $file) {
-                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
-                                 $db->query();
-                        }
-                }
-               //upload new images
-                $path_so_images = $path_upload  .DS. $folder . DS .'images'. DS;
-                $upload = new upload($_FILES['']);
-                $upload->r_mkdir($path_so_images, 0777);
-                $arr_error_upload_image = array();
-                $arr_image_upload = array();
-                for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_image' . $i]['size'] > 0) {
-                                $imge = new upload($_FILES['pns_image' . $i]);
-                                $imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;    
-                                if (file_exists($path_so_images . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
-
-                                        @unlink($path_so_images .  $imge->file_new_name_body . "." . $imge->file_src_name_ext);
-                                }
-                                if ($imge->uploaded) {
-                                        $imge->Process($path_so_images);
-                                        if ($imge->processed) {
-                                                $arr_image_upload[] = $imge->file_dst_name;
-                                        } else {
-                                                $arr_error_upload_image[] = $_FILES['pns_imge' . $i]['name'];
-                                        }
-                                }
-                        }
-                }
-                if (count($arr_image_upload) > 0) {
-                        foreach ($arr_image_upload as $file) {
-                                 $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',2, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
-                                 $db->query();
-                        }
-                }        
-
-                //upload new pdf
-                $path_so_pdfs = $path_upload  .DS. $folder . DS .'pdfs'. DS;
-                $upload = new upload($_FILES['']);
-                $upload->r_mkdir($path_so_pdfs, 0777);
-                $arr_error_upload_pdf = array();
-                $arr_pdf_upload = array();
-                for ($i = 1; $i <= 20; $i++) {
-                        if ($_FILES['pns_pdf' . $i]['size'] > 0) {
-								if($_FILES['pns_pdf' . $i]['size']<20000000)
-								{
-									$imge = new upload($_FILES['pns_pdf' . $i]);
-									$imge->file_new_name_body = $stoNumber . "_" . time()."_".$i;
-
-									if (file_exists($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext)) {
-
-											@unlink($path_so_pdfs . $imge->file_new_name_body . "." . $imge->file_src_name_ext);
-									}
-									if ($imge->uploaded) {
-											$imge->Process($path_so_pdfs);
-											if ($imge->processed) {
-													$arr_pdf_upload[] = $imge->file_dst_name;
-											} else {
-													$arr_error_upload_pdf[] = $_FILES['pns_pdf' . $i]['name'];
-											}
-									}
-								}
-								else
-								{
-										$msg = JText::_('Please upload file PDF less than 20MB.');
-										return $this->setRedirect('index.php?option=com_apdmpns&task=so_detail_support_doc&id='.$ito_id, $msg);
-								}
-                        }
-                        
-                }
-                if (count($arr_pdf_upload) > 0) {
-                        foreach ($arr_pdf_upload as $file) {
-                                $db->setQuery("INSERT INTO apdm_pns_sto_files (sto_id, file_name,file_type, sto_file_created, sto_file_created_by) VALUES (" . $ito_id . ", '" . $file . "',1, '" . $datenow->toMySQL() . "', " . $me->get('id') . " ) ");                                        
-                                $db->query();
-                        }
-                }     
-                $msg = JText::_('Successfully Saved ITO Supporting Doc');
-                $return = JRequest::getVar('return');
-               
-                if ($return) {
-                       return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail_support_doc&id='.$ito_id, $msg);
-                } else {
-                       return $this->setRedirect('index.php?option=com_apdmsto&task=ito_detail&id=' . $ito_id, $msg);
-                }                
-                                        
-        }
+      
     function ajax_add_pns_stos() {
         $db = & JFactory::getDBO();
         $pns = JRequest::getVar('cid', array(), '', 'array');
@@ -1335,23 +1253,7 @@ class QUOController extends JController
         JRequest::setVar('view', 'eto');
         parent::display();
     }
-    /*
-         * Remove STO
-         */
-        function deletesto() {
-                $db = & JFactory::getDBO();                
-                $sto_id = JRequest::getVar('sto_id');
-                $db->setQuery("DELETE FROM apdm_pns_sto WHERE pns_sto_id = '" . $sto_id . "'");
-                $db->query();                    
-                $db->setQuery("DELETE FROM apdm_pns_sto_files WHERE sto_id = '" . $sto_id . "'");
-                $db->query();     
-                $db->setQuery("DELETE FROM apdm_pns_sto_fk WHERE sto_id = '" . $sto_id . "'");
-                $db->query();
-                $db->setQuery("DELETE FROM apdm_pns_sto_delivery WHERE sto_id = '" . $sto_id . "'");
-                $db->query();
-                $msg = JText::_('Have removed successfull.');
-                return $this->setRedirect('index.php?option=com_apdmsto&task=sto', $msg);
-        }   
+    
         
 /**
          * @desc  Remove file cads

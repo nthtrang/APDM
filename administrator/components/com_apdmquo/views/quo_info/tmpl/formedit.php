@@ -1,51 +1,134 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php JHTML::_('behavior.modal'); ?>
-<?php
-	$cid = JRequest::getVar( 'cid', array(0) );
-	$edit		= JRequest::getVar('edit',true);
-	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-    $folder_sto = $this->sto_row->sto_code;
-	JToolBarHelper::title( $this->sto_row->sto_code. ': <small><small>[ '. $text .' ]</small></small>' , 'generic.png' );
-	if (!intval($edit)) {
-	//	JToolBarHelper::save('save', 'Save & Add new');
-	}	
-	JToolBarHelper::apply('save_editito', 'Save');
-	
-	if ( $edit ) {
-		// for existing items the button is renamed `close`
-		JToolBarHelper::cancel( 'cancel', 'Close' );
-	} else {
-		JToolBarHelper::cancel();
-	}
-	
-	$cparams = JComponentHelper::getParams ('com_media');
-?>
-<?php	
-//poup add rev roll
-	$edit		= JRequest::getVar('edit',true);
-	$text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
-	// clean item data
-	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
+<?php	  
+        $edit = JRequest::getVar('edit',true);
+        $text = intval($edit) ? JText::_( 'Edit' ) : JText::_( 'New' );
+        JToolBarHelper::title("Edit Quotation: ".$this->quo_row->quo_code .' '. $this->quo_row->quo_revision, 'cpanel.png');
+        JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
-	
+        $role = JAdministrator::RoleOnComponent(10);     
+        JToolBarHelper::apply('save_edit_quo', 'Save');     
+        if ( $edit ) {
+        // for existing items the button is renamed `close`
+                JToolBarHelper::cancel( 'quo_detail', 'Close' );
+        } else {
+                JToolBarHelper::cancel();
+        }      
 ?>
 <script language="javascript" type="text/javascript">
- window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
-		window.addEvent('domready', function() {
-
-			SqueezeBox.initialize({});
-
-			$$('a.modal-button').each(function(el) {
-				el.addEvent('click', function(e) {
-					new Event(e).stop();
-					SqueezeBox.fromElement(el);
-				});
-			});
-		});
+      
+        function submitbutton(pressbutton) {
+                var form = document.adminForm;
+                if (pressbutton == 'quo_detail') {
+                        window.location = "index.php?option=com_apdmquo&task=quo_detail&id="+form.quo_id.value;
+                        return;
+                }           
+		if (pressbutton == 'cancel') {
+			submitform( pressbutton );
+			return false;
+		}
+               
+	//	var r = new RegExp("[\<|\>|\"|\'|\%|\;|\(|\)|\&]", "i");
+		if (form.customer_id.value==0){
+			alert("Please select Commodity Code");
+			form.customer_id.focus();
+			return false;
+		}                
                 
-                 window.addEvent('domready', function() {
+              
+                
+              
+                
+                        var cpn = document.getElementsByName('cid[]');
+                        var len = cpn.length;
+                        for (var i=0; i<len; i++) {
+                                alert('qty_' +cpn[i].value);
+                                //alert(i + (cpn[i].checked?' checked ':' unchecked ') + cpn[i].value);
+                                var qty_value = document.getElementById('qty_' +cpn[i].value).value;
+                                var price_value = document.getElementById('price_' +cpn[i].value).value;
+                                var price_extended = document.getElementById('extend_' +cpn[i].value).value;
+                                var duedate = document.getElementById('duedate_' +cpn[i].value).value;
+                                if(qty_value==0)
+                                {
+                                        alert("Please input QTY for PN");    
+                                        document.getElementById('qty_' +cpn[i].value).focus();
+                                        return false;
+                                }
+                                if(price_value==0)
+                                {
+                                        alert("Please input Price for PN");      
+                                        document.getElementById('price_' +cpn[i].value).focus();
+                                        return false;
+                                }
+                                if(price_extended==0)
+                                {
+                                        alert("Please input Extened Price for PN");      
+                                        document.getElementById('extend_' +cpn[i].value).focus();
+                                        return false;
+                                }
+                                if(duedate==0)
+                                {
+                                        alert("Please input Due Date for PN");      
+                                        document.getElementById('duedate_' +cpn[i].value).focus();
+                                        return false;
+                                }
+                                 var date = new Date();
+                current_month = date.getMonth()+1;
+                var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+                var current_date = new Date(current_date);
+                
+                                var quo_duedate = new Date(duedate);
+                                if (current_date > quo_duedate ) 
+                                {
+                                    alert("Invalid Date Range!\nDue Date cannot be before Today!")
+                                    return false;
+                                }
+                        }
+                        submitform( pressbutton );
+                
+                
+                 var date = new Date();
+                current_month = date.getMonth()+1;
+                var current_date = date.getFullYear()+"-"+current_month+"-"+ (date.getDate() < 10 ? "0"+date.getDate() : date.getDate());                
+                var current_date = new Date(current_date);
+                
+              
+                var quo_expire_date = new Date(form.quo_expire_date.value);
+                var quo_start_date = new Date(form.quo_start_date.value);  
+                if (form.quo_expire_date.value==0){
+			alert("Please input Expire Date");
+			form.quo_expire_date.focus();
+			return false;
+		}  
+                if (current_date > quo_expire_date ) 
+                {
+                    alert("Invalid Date Range!\nExpire Date cannot be before Today!")
+                    return false;
+                }
+                if (quo_expire_date < quo_start_date ) 
+                {
+                    alert("Invalid Date Range!\nExpire Date cannot be before StartDate!")
+                    return false;
+                }
+               // submitform( pressbutton );     
+        }                
+        window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
+                window.addEvent('domready', function() {
+
+                        SqueezeBox.initialize({});
+
+                        $$('a.modal-button').each(function(el) {
+                                el.addEvent('click', function(e) {
+                                        new Event(e).stop();
+                                        SqueezeBox.fromElement(el);
+                                });
+                        });
+                });
+        function jInsertEditorText( text, editor ) {
+                tinyMCE.execInstanceCommand(editor, 'mceInsertContent',false,text);
+        }
+        window.addEvent('domready', function() {
 
                 SqueezeBox.initialize({});
 
@@ -56,240 +139,179 @@
                         });
                 });
         });
-        
-///for add more file
-	window.addEvent('domready', function(){
-                        //for image
-                        //File Input Generate
-			var mid=0;			
-			var mclick=1;
-			$$(".iptfichier_image span").each(function(itext,id) {
-				if (mid!=0)
-					itext.style.display = "none";
-					mid++;
-			});
-			$('lnkfichier_image').addEvents ({				
-				'click':function(){	
-					if (mclick<mid) {
-						$$(".iptfichier_image span")[mclick].style.display="block";
-					//	alert($$(".iptfichier input")[mclick].style.display);
-						mclick++;
-					}
-				}
-			});	
-                                         
-		});
- window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), { maxTitleChars: 50, fixed: false}); });
- window.addEvent('domready', function() {
+function numbersOnlyEspecialFloat(myfield, e, dec){
+       
+	 var key;
+	 var keychar;
+	 if (window.event)
+		key = window.event.keyCode;
+	 else if (e)
+		key = e.which;
+	 else
+		return true;
+	 keychar = String.fromCharCode(key);
+	 // control keys
 
-     SqueezeBox.initialize({});
-
-     $$('a.modal-button').each(function(el) {
-         el.addEvent('click', function(e) {
-             new Event(e).stop();
-             SqueezeBox.fromElement(el);
-         });
-     });
- });
+	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+	 // numbers
+	 else if ((("0123456789$").indexOf(keychar) > -1))
+		return true;
+	 // decimal point jump
+	 else if (dec && (keychar == "."))
+		{
+		myfield.form.elements[dec].focus();
+		return false;
+		}
+	 else
+		return false;
+}			
 </script>
-<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data">
-	<div class="col width-40">
+<form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >      
+	 <div class="col width-100">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'ITO Detail' ); ?></legend>
-			<table class="admintable" cellspacing="1">
-                                <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'ITO Number' ); ?>
-						</label>
-					</td>
-					<td>
-						<input type="text" readonly="readonly" name="sto_code" id="sto_code"  size="10" value="<?php echo $this->sto_row->sto_code?>"/>                                               
-					</td>
-				</tr>
-                                <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Internal PO' ); ?>
-						</label>
-					</td>
-                    <td>
-                        <?php //echo $this->lists['wolist'];?>
-                        <input type="hidden" value="" name="po_id" id="po_id" readonly="readonly" />
-                        <input type="text" name="po_inter_code" id="po_inter_code"  size="10" value="<?php echo $this->sto_row->sto_po_internal?>"/>
-                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_po_ajax&tmpl=component" title="Image">
-                            <input type="button" name="addPO" value="<?php echo JText::_('Select Internal PO')?>"/>
-                        </a>
-                    </td>
-				</tr>
-                                <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Supplier' ); ?>
-						</label>                                                
-					</td>
-					<td>												 
-                                                <?php echo $this->lists['ccsupplier'];?>                                                                                                 
-					</td>
-				</tr>	
-				<tr>
-					<td class="key" valign="top">
-						<label for="stocker">
-							<?php echo JText::_( 'Stoker confirm' ); ?>
-						</label>
-					</td>
-					<td>
-                            <input type="checkbox" id ="stocker_confirm" name="stocker_confirm" checked="checked" value="1" /> 
-					</td>
-				</tr>              				
-                                <tr>
-					<td class="key">
-						<label for="name">
-							<?php echo JText::_( 'Description' ); ?>
-						</label>
-					</td>
-					<td>						
-						<textarea name="sto_description" rows="10" cols="60"><?php echo $this->sto_row->sto_description?></textarea>
-					</td>
-				</tr>  
-<!--                                <tr>
-                                        <td  class="key" width="28%"><?php /*echo JText::_('Confirm'); */?></td>
-                                        <td width="30%" class="title"> 
-										 <?php /*
-                                                     if(!$this->sto_row->sto_owner_confirm){
-
-                                                    */?>
-                                                  
-                                                   
-                                                   <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmsto&task=get_owner_confirm_sto&sto_id=<?php /*echo $this->sto_row->pns_sto_id*/?>&tmpl=component" title="Image">
-                                                         <input onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" /></a>
-                                                        <?php /*}
-                                                        else
-                                                        {
-                                                                       */?>
-                                                <input checked="checked" onclick="return false;" onkeydown="return false;" type="checkbox" name="sto_owner_confirm" value="1" />
-                                                                       <?php
-/*                                                        }
-                                                        */?>
-                                        </td>  
-                                </tr>
-                                
+		<legend><?php echo JText::_( 'Edit Quotation' ); ?></legend>
+        <table class="admintable" cellspacing="1" width="100%">
                                  <tr>
 					<td class="key">
 						<label for="name">
-							<?php /*echo JText::_( 'Owner' ); */?>
+							<?php echo JText::_( 'Customer' ); ?>
 						</label>
 					</td>
-                                 <td  width="16%">
-                                      <?php /*echo ($this->sto_row->sto_owner)?GetValueUser($this->sto_row->sto_owner, "name"):""; */?>
-                                                        </td>
-                                 </tr>   -->
-			</table>                	
-        </fieldset>
-        </div>
-                <div class="col width-60">
-                <fieldset class="adminform">
-		<legend><?php echo JText::_( 'Documents' ); ?> <font color="#FF0000"><em><?php echo JText::_('(Please upload file less than 20Mb)')?></em></font></legend>
-                <table class="adminlist">                        
-              <?php if (isset($this->lists['image_files'])&& count($this->lists['image_files'])>0) {?>
-				<tr>
-                                        <td colspan="2" >
-					<table width="100%"  class="adminlist" cellpadding="1">
-						
-						<thead>
-							<th colspan="4"><?php echo JText::_('List Documents')?></th>
-						</thead>
-						<tr>
-							<td width="5%"><strong><?php echo JText::_('No.')?></strong></td>
-							<td width="45%"><strong><?php echo JText::_('Name')?> </strong></td>
-							<td width="30%"><strong><?php echo JText::_('Size (KB)')?> </strong></td>
-							<td width="20%"><strong><?php echo JText::_('Download')?>  <?php echo JText::_('Remove')?></strong></td>
-						</tr>
-				<?php
-				
-				$i = 1;
-				foreach ($this->lists['image_files'] as $image) {
-					$filesize = SToController::readfilesizeSto($folder_sto, $image['image_file'],'images');
-				?>
-				<tr>
-					<td><?php echo $i?></td>
-					<td><?php echo $image['image_file']?></td>
-					<td><?php echo number_format($filesize, 0, '.', ' '); ?></td>
-					<td><a href="index.php?option=com_apdmsto&task=download_doc_sto&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
-                                                <?php
-                                               if ($this->sto_row->sto_state  != "Done") {                       
-                                                ?>
-					<a href="index.php?option=com_apdmsto&task=remove_doc_sto&back=ito_detail&type=images&sto_id=<?php echo $this->sto_row->pns_sto_id?>&id=<?php echo $image['id']?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
-                                         <?php
-                                               }
-                                                ?>
-                                        </td>
-				</tr>
-				<?php $i++; } ?>
-				
-				<tr>
-					
-					<td colspan="4" align="center">
-					<a href="index.php?option=com_apdmsto&task=download_all_doc_sto&type=images&tmpl=component&sto_id=<?php echo $this->sto_row->pns_sto_id;?>" title="Download All Files">
-                                        <input type="button" name="addVendor" value="<?php //echo JText::_('Download All Files')?>"/>
-                                        </a>&nbsp;&nbsp;
-
-<!--					<input type="button" value="<?php echo JText::_('Remove All Files')?>" onclick="if ( confirm ('Are you sure to delete it ?')) { window.location.href='index.php?option=com_apdmpns&task=remove_all_images&pns_id=<?php echo $this->row->pns_id?>' }else{ return false;}" /></td>					-->
-				</tr>
-								
-					</table>
-					</td>                                        
-                                        
-				</tr>
-				<?php } ?>
-                <tr>
-					
 					<td>
-
-						<input type="hidden" name="old_pns_image" value="<?php echo $this->row->pns_image;?>" />
-                                                <div class="iptfichier_image">
-                                                 <span id="1">
-							<input type="file" name="pns_image1" /> 
-						</span>
-						<span id="2">
-							<input type="file" name="pns_image2" /> 
-						</span>
-						<span id="3">
-							<input type="file" name="pns_image3" /> 
-						</span>
-						<span id="4">
-							<input type="file" name="pns_image4" /> 
-						</span>
-						<span id="5">
-							<input type="file" name="pns_image5" /> 
-						</span>
-						<span id="6">
-							<input type="file" name="pns_image6" /> 
-						</span>
-						<span id="7">
-							<input type="file" name="pns_image7" /> 
-						</span>
-						<span id="8">
-							<input type="file" name="pns_image8" /> 
-						</span>
-						<span id="9">
-							<input type="file" name="pns_image9" /> 
-						</span>   
-						<span id="10">
-							<input type="file" name="pns_image10" /> 
-						</span>                                                           
-                                                </div>
-                                                <br />
-                                                <a href="javascript:;"id="lnkfichier_image" title="<?php echo JText::_('Click here to add more files');?>" ><?php /*echo JText::_('Click here to add more files');*/?></a>
+                                                   <?php echo $this->lists['ccscpn'];?>       
+                                                <a href="index.php?option=com_apdmccs&task=addcustomer&back=quo"><?php //echo JText::_('Generate Customer')?></a>                                                
 					</td>
-                                        </tr> 
-                                          </table>
+				</tr>
+                                <tr>
+					
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Quotation Number' ); ?>
+						</label>
+					</td>
+					<td>                                                 
+                                                <input type="text"  readonly="readonly" maxlength="20" name="quo_code"  id="quo_code" class="inputbox" size="30" value="<?php echo $this->quo_row->quo_code .' '. $this->quo_row->quo_revision?>"/>
+					</td>
+				</tr>                                
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Request Date' ); ?>
+						</label>
+					</td>
+					<td>                                                 
+                                               <?php echo JHTML::_('calendar',$this->quo_row->quo_start_date, 'quo_start_date', 'quo_start_date', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+					</td>
+				</tr>      
+                                 <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'Expire Date' ); ?>
+						</label>
+					</td>
+					<td>                                                 
+                                               <?php echo JHTML::_('calendar',$this->quo_row->quo_expire_date, 'quo_expire_date', 'quo_expire_date', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>	
+					</td>
+				</tr>    
+                                <tr>
+					<td class="key">
+						<label for="name">
+							<?php echo JText::_( 'State' ); ?>
+						</label>                                                
+					</td>
+					<td>												 
+                                                <?php echo $this->quo_row->quo_state;?>  
+                                                <input type="hidden" maxlength="20" name="quo_state"  id="quo_state" class="inputbox" size="30" value="<?php echo $this->quo_row->quo_state;?>"/>
+                                                
+					</td>
+				</tr>	    
+                                <tr>
+					<td class="key" colspan="2" id='pns_child_so' >
+                                                <?php if (count($this->quo_pn_list) > 0) { ?>
+                <table class="adminlist" cellspacing="1" width="400">
+                        <thead>
+                                <tr>
+                                        <th width="2%"><?php echo JText::_('NUM'); ?></th>
+                                        <th width="3%" class="title"></th>
+                                        <th width="100"><?php echo JText::_('Part Number'); ?></th>
+                                        <th width="100"><?php echo JText::_('Rev'); ?></th>
+                                        <th width="300"><?php echo JText::_('Description'); ?></th>
+                                        <th width="100"><?php echo JText::_('Qty'); ?></th>
+                                        <th width="100"><?php echo JText::_('UOM'); ?></th>  
+                                        <th width="100"><?php echo JText::_('Unit Price'); ?></th>
+                                        <th width="100"><?php echo JText::_('Extended'); ?></th>
+                                        <th width="100"><?php echo JText::_('Due Date'); ?></th>
+                                        <th width="100"><?php //echo JText::_('Action'); ?></th>  
+                                </tr>
+                        </thead>
+                        <tbody>					
+        <?php
+
+
+        $i = 0;
+        foreach ($this->quo_pn_list as $row) {
+                                if($row->pns_cpn==1) {
+                                    $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
+                                }else{
+                                        $link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->pns_id;
+                                }
+                                $quoList = QUOController::GetQuoFrommPns($row->pns_id,$this->quo_row->quotation_id);
+                                ?>
+                                        <tr>
+                                                <td align="center"><?php echo $i+1; ?></td>
+                                                <td align="center">
+                                                <input checked="checked" type="checkbox" type="checkbox" id = "quopn<?php echo $i?>"  value="<?php echo $row->pns_id;?>_<?php echo $row->id;?>" name="cid[]"  />
+                                                </td>                                                
+                                                <td align="left"><?php echo $row->pns_code;?></td>
+                                                <td align="left"><?php echo $row->pns_revision;?></td>
+                                                <td align="left"><?php echo $row->pns_description; ?></td>
+                                                <td align="center" width="74px">                                                    
+                                                    <input onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $row->qty;?>" id="qty_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"  name="qty_<?php echo $row->pns_id;?>_<?php echo $row->id;?>" />
+                                                </td>
+                                            <td align="center"><?php echo $row->pns_uom; ?></td>
+                                            <td align="center" width="74px">                                                
+                                                <input onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $row->qty;?>" id="price_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"  name="price_<?php echo $row->pns_id;?>_<?php echo $row->id;?>" />
+                                            </td>
+                                            <td align="center" width="74px">                                                
+                                                <input onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="<?php echo $row->qty;?>" id="extend_<?php echo $row->pns_id;?>_<?php echo $row->id;?>"  name="extend_<?php echo $row->pns_id;?>_<?php echo $row->id;?>" />
+                                            </td>
+                                            <td align="center" width="74px">                                                                                                
+                                                <?php echo JHTML::_('calendar',$row->quo_pn_due_date, 'duedate_'.$row->pns_id.'_'. $row->id, 'duedate_'.$row->pns_id.'_'. $row->id, '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?>                                                    
+                                            </td>
+                                                <td align="center" width="75px">
+                                                        <a href="index.php?option=com_apdmquo&task=removepnsquos&return=editquo&cid[]=<?php echo $row->id;?>&quo_id=<?php echo $this->quo_row->quotation_id;?>" title="<?php echo JText::_('Click to see detail PNs');?>">Remove</a>
+                                                        <?php
+                                                        ?>
+                                                </td>
+                                               </tr>
+                                                <?php 
+                                                $i++;
+                                                }
+                                        } 
+                                        else
+                                        {
+                                                echo "Not found PNs"; 
+                                        }
+                                        ?>
+                </tbody>
+        </table>		                                                                                                                                      
+					</td>
+					
+				</tr>                                  
+                               <tr>				
+					<td valign="top">						
+							<a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmquo&task=get_list_pns_quo_detail&tmpl=component&quo_id=<?php echo $this->quo_row->quotation_id?>" title="<?php echo JText::_('click here to add more PN')?>"><?php echo JText::_('Click here to add more PN')?></a>			
+						
+					</td>
+				</tr>
+                                                                                                                		
+			</table>
                 </fieldset>
-        </div>
-		
-				<input type="hidden" name="pns_sto_id" value="<?php echo $this->sto_row->pns_sto_id?>" />
-	<input type="hidden" name="option" value="com_apdmsto" />
-	<input type="hidden" name="return" value="sto"  />
-	<input type="hidden" name="task" value="save_editito" />     
+         </div>
+                
+	<input type="hidden" name="quo_id" value="<?php echo $this->quo_row->quotation_id;?>"  />	
+	<input type="hidden" name="option" value="com_apdmquo" />
+	<input type="hidden" name="return" value="quo"  />
+	<input type="hidden" name="task" value="save_edit_quo" />        
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

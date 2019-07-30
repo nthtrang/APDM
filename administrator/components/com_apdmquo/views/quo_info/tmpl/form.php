@@ -235,13 +235,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                                              <td class="key"><?php echo JText::_( 'Due Date' ); ?></td>
                                                           <td class="key"></td>
                                                 </tr>
-                                                <tr><td><input type="hidden" name="boxcheckedpn" value="0" />
-                                                           <?php 
-//                                                           for($i=0;$i<4;$i++)
-//                                                           {
-//                                                                   echo JHTML::_('calendar',"", 'due_date['.$i.']', 'due_date['.$i.']', '%m/%d/%Y', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10'));
-//                                                           }
-                                                           ?>     
+                                                <tr><td><input type="hidden" name="boxcheckedpn" value="0" />                                                          
                                                         </td></tr>
                                                 </table>                                                                                                                                               
 					</td>

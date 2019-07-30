@@ -9,13 +9,13 @@ $role = JAdministrator::RoleOnComponent(8);
 JToolBarHelper::title($this->quo_row->quo_code .' '. $this->quo_row->quo_revision .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
 if (in_array("E", $role)&& ($this->quo_row->sto_state  != "Done")) {
-        JToolBarHelper::customX("editito",'edit',"Edit","Edit",false);
+        JToolBarHelper::customX("editquo",'edit',"Edit","Edit",false);
 }
 JToolBarHelper::cancel( 'cancel', 'Close' );
 JToolBarHelper::customX("printitopdf","print",'',"Print",false);
 
-if (in_array("D", $role) && $this->quo_row->sto_state !="Done") {
-    JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletesto', 'delete', 'Delete ETO');
+if (in_array("D", $role) && $this->quo_row->quo_state !="Done") {
+    JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletequo', 'delete', 'Delete QUO');
 }
 $cparams = JComponentHelper::getParams ('com_media');
 // clean item data
@@ -33,7 +33,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 				submitform( pressbutton );
 				return;
 			}
-                if (pressbutton == 'editito') {
+                if (pressbutton == 'editquo') {
                         submitform( pressbutton );
                         return;
                 }
@@ -95,11 +95,8 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
                      submitform( pressbutton );
                      return;
                 }     
-                if (pressbutton == 'save_doc_sto') {
-                        submitform( pressbutton );
-                        return;
-                }  
-                 if (pressbutton == 'deletesto') {
+                
+                 if (pressbutton == 'deletequo') {
                         submitform( pressbutton );
                         return;
                 }  
@@ -294,8 +291,9 @@ function checkedforMarkScan(ischecked)
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
-			<li><a id="bom" href="index.php?option=com_apdmsto&task=ito_detail_pns&id=<?php echo $this->quo_row->quotation_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
+			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="bom" href="index.php?option=com_apdmquo&task=quo_rev&id=<?php echo $this->quo_row->quotation_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmquo&task=quo_routes&cid[]=<?php echo $this->quo_row->quotation_id;?>&time=<?php echo time();?>"><?php echo JText::_( 'Routes' ); ?></a></li>
                         
                 </ul>
 		<div class="clr"></div>
@@ -354,28 +352,17 @@ function checkedforMarkScan(ischecked)
 <?php
 if($this->quo_row->sto_owner_confirm==0 && !$this->quo_row->sto_owner) {
     if (in_array("W", $role) && ($this->quo_row->sto_state != "Done")) {
-            $session = JFactory::getSession();
-        if($session->get('is_scanito')){
-            $itoscanchecked = 'checked="checked"';
-            $itoonkeyUp = "onkeyup=\"autoAddPartIto(this.value,'".$this->quo_row->quotation_id."')\" autofocus";
-        }
-        else
-        {
-            $itoscanchecked = "";
-            $itoonkeyUp = "";
-        }
         ?>
                                     <td class="button" id="toolbar-addpnsave">           
-                Scan PN Barcode <input <?php echo $itoonkeyUp?> onchange="autoAddPartIto(this.value,'<?php echo $this->quo_row->quotation_id; ?>')" onkeyup="autoAddPartIto(this.value,'<?php echo $this->quo_row->quotation_id; ?>')" type="text"  name="pns_code" id="pns_code" value="" >
-                 <input <?php echo $itoscanchecked?> type="checkbox" name="check_scan_barcode" value="1" onclick="checkforscanito(this.checked)" />
+                
         </td>
         <td class="button" id="toolbar-save">
             <a href="#"
                onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save receiving part');}else{ hideMainMenu(); submitbutton('saveqtyQuofk')}"
                class="toolbar">
-<span class="icon-32-save" title="Save Receiving Part">
+<span class="icon-32-save" title="Save Part">
 </span>
-                Save Receiving Part
+                Save Part
             </a>
         </td>
         <td class="button" id="toolbar-popup-Popup">
