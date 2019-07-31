@@ -15,7 +15,7 @@ class pnsViewpns extends JView
 	    global $mainframe, $option;
         
         $db                =& JFactory::getDBO();
-        $option             = 'com_apdmpns';
+        $option             = 'com_apdmpns1';
 
         $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
         $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      

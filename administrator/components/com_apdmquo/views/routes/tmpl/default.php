@@ -1,25 +1,17 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
-dd
 <?php
 
-	$role = JAdministrator::RoleOnComponent(5);
-        $cid = JRequest::getVar( 'cid', array(0) );
-	//$tabfiles = '<button onclick="javascript:hideMainMenu(); submitbutton(\'files\')" class="buttonfiles" style="vertical-align:middle"><span>Files </span></button>';
-    //    $tabApprovers = '<button onclick="javascript:hideMainMenu(); submitbutton(\'approvers\')" class="buttonfiles" style="vertical-align:middle"><span>Approvers </span></button>';
-     //   $tabSummary = '<button onclick="javascript:hideMainMenu(); submitbutton(\'summary\')" class="buttonfiles" style="vertical-align:middle"><span>Summary </span></button>';        
-	//JToolBarHelper::title( JText::_( 'ADP ECO MAMANGEMENT' )  . ': <small><small>[ '. JText::_( 'Affected Parts Edit' ).' ]</small></small>'.$tabApprovers.$tabSummary, 'cpanel.png' );
-	
-	
-        JToolBarHelper::title( JText::_($this->quo_row->eco_name));
+$role = JAdministrator::RoleOnComponent(5);
+$cid = JRequest::getVar( 'cid', array(0) );
+JToolBarHelper::title($this->quo_row->quo_code .' '. $this->quo_row->quo_revision .': <small><small>[ view ]</small></small>' , 'generic.png' );
+if (in_array("E", $role) && ($this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview")) {
+    JToolBarHelper::addQuoRoutes("New",$cid[0]);
+}
 
-	//if (in_array("E", $role) && $this->quo_row->eco_status !="Released" && $this->quo_row->eco_status !="Inreview") {
-		JToolBarHelper::addQuoRoutes("New",$cid[0]);
-//	} 
-
-	if (in_array("D", $role)) {           
-		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it(s)?','remove_routes');
+	if (in_array("D", $role) && ($this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview")) {
+		JToolBarHelper::deleteEcoRoutes('Are you sure to delete it(s)?','remove_routes_quo');
 	}        
 //	if (in_array("E", $role)) {
 //		JToolBarHelper::editListX();
@@ -69,9 +61,9 @@ function submitbutton(pressbutton) {
         </div>
         <div class="m">
 		<ul id="submenu" class="configuration">
-			<li><a id="detail" href="index.php?option=com_apdmquo&task=quo_detail&id=<?php echo $this->quo_row->eco_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
-			<li><a id="affected" href="index.php?option=com_apdmeco&task=quo_rev&id=<?php echo $this->quo_row->eco_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
-                        <li><a id="routes"  class="active"><?php echo JText::_( 'Routes' ); ?></a></li>                     
+			<li><a id="detail" href="index.php?option=com_apdmquo&task=quo_detail&id=<?php echo $this->quo_row->quotation_id;?>"><?php echo JText::_( 'Detail' ); ?></a></li>
+			<li><a id="affected" href="index.php?option=com_apdmeco&task=quo_rev&id=<?php echo $this->quo_row->quotation_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
+            <li><a id="routes"  class="active"><?php echo JText::_( 'Routes' ); ?></a></li>
 		</ul>
 		<div class="clr"></div>
         </div>
@@ -83,7 +75,7 @@ function submitbutton(pressbutton) {
 </div>
 <div class="clr"></div>
 <p>&nbsp;</p>
-<form action="index.php?option=com_apdmeco" method="post" name="adminForm" >
+<form action="index.php?option=com_apdmquo" method="post" name="adminForm" >
 <table class="adminlist" cellpadding="1">
 		<thead>
 			<tr>
@@ -123,8 +115,8 @@ function submitbutton(pressbutton) {
        
 				$row 	=& $this->rows[$i];
 				$link 	= 'index.php?option=com_apdmpns&amp;task=detail&cid[0]='.$row->id;	
-                                $set_route = 'index.php?option=com_apdmeco&amp;task=set_route_eco&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
-				$edit_link = 'index.php?option=com_apdmeco&amp;task=edit_routes&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;	
+                $set_route = 'index.php?option=com_apdmquo&amp;task=set_route_quo&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;
+				$edit_link = 'index.php?option=com_apdmquo&amp;task=edit_routes_quo&time='.time().'&cid[0]='.$cid[0].'&id='.$row->id;
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
@@ -133,7 +125,7 @@ function submitbutton(pressbutton) {
 				<td align="center"><input  type="checkbox" id = "route_id" onclick="isChecked(this.checked);" value="<?php echo $row->id;?>" name="route_id[]"  />					
 				</td>
 				<td align="center">
-                                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmeco&task=add_approvers&cid[]=<?php echo $cid[0]?>&routes=<?php echo $row->id?>" title="Click here for add Approvers">
+                                        <a class="modal-button" rel="{handler: 'iframe', size: {x: 650, y: 400}}" href="index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=<?php echo $cid[0]?>&routes=<?php echo $row->id?>" title="Click here for add Approvers">
                                                 <?php echo $row->name; ?>
                                         </a>
 					<p id="listAjaxUser">
@@ -154,7 +146,7 @@ function submitbutton(pressbutton) {
 				</td>
 				<td align="center">
                                         <?php                                         
-                                        if($row->id == $this->quo_row->eco_routes_id)
+                                        if($row->id == $this->quo_row->quo_routes_id)
                                                 echo '<strong>Current Route</strong>';
                                         else{
                                                 if($row->status=="Create" || $row->status=="Started"){
@@ -183,9 +175,9 @@ function submitbutton(pressbutton) {
 
 	<div class="clr"></div>	
 
-	<input type="hidden" name="option" value="com_apdmeco" />
+	<input type="hidden" name="option" value="com_apdmquo" />
 	<input type="hidden" name="task" value="" />
-        <input type="hidden" name="eco" value="<?php echo $cid[0]?>" />
+        <input type="hidden" name="quo" value="<?php echo $cid[0]?>" />
 	<input type="hidden" name="boxchecked" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>

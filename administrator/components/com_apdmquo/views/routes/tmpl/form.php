@@ -12,10 +12,7 @@ $me = & JFactory::getUser();
 $row = $this->row;
 
 JToolBarHelper::title( JText::_($row[0]->name));
-if (!intval($edit)) {
-        JToolBarHelper::save('save', 'Save & Add new');
-}
-JToolBarHelper::apply('update_routes', 'Save');
+JToolBarHelper::apply('update_routes_quo', 'Save');
 
 if ($edit) {
         // for existing items the button is renamed `close`
@@ -93,9 +90,9 @@ $editor = &JFactory::getEditor();
 echo $editor->display( 'text',  $row->text , '10%', '10', '10', '3' ) ;
 ?></div>
         <input type="hidden" name="route_id" value="<?php echo  $row[0]->id?>" />
-	<input type="hidden" name="eco_id" value="<?php echo  $row[0]->eco_id?>" />
-	<input type="hidden" name="cid[]" value="<?php echo  $row[0]->eco_id?>" />
-	<input type="hidden" name="option" value="com_apdmeco" />
+	<input type="hidden" name="quo_id" value="<?php echo  $row[0]->quotation_id?>" />
+	<input type="hidden" name="cid[]" value="<?php echo  $row[0]->quotation_id?>" />
+	<input type="hidden" name="option" value="com_apdmquo" />
 	<input type="hidden" name="task" value="" />	
         <input type="hidden" name="id" value="" />	
 	<?php echo JHTML::_( 'form.token' ); ?>

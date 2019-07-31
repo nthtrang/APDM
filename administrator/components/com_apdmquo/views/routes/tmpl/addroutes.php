@@ -127,7 +127,7 @@ if($exist_route_promoted)
 
 	<input type="hidden" name="quo_id" value="<?php echo $cid[0];?>" />
 	<input type="hidden" name="option" value="com_apdmquo" />
-	<input type="hidden" name="return" value="quo_routes"  />
+	<input type="hidden" name="return" value="routes_quo"  />
 	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
 <?php }?>
