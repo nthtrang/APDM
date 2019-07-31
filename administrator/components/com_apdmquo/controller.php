@@ -425,7 +425,7 @@ class QUOController extends JController
  /**
      * Display all files eco
      */
-    function quo_routes(){      
+    function routes_quo(){
         JRequest::setVar( 'layout', 'default'  );
         JRequest::setVar( 'view', 'routes' );
         parent::display();
@@ -480,8 +480,613 @@ class QUOController extends JController
     function routestmp()
     {
         $quo_id = JRequest::getVar('quo_id');
-        return $this->setRedirect( 'index.php?option=com_apdmquo&task=quo_routes&time='.time().'&cid[]='.$quo_id, $msg );
+        return $this->setRedirect( 'index.php?option=com_apdmquo&task=routes_quo&time='.time().'&cid[]='.$quo_id, $msg );
     }
+
+    function add_approvers_quo(){
+        JRequest::setVar( 'layout', 'add_approvers'  );
+        JRequest::setVar( 'view', 'routes' );
+        parent::display();
+    }
+    function canSetRouteQuo($quo_id,$route_id)
+    {
+        $db = & JFactory::getDBO();
+        $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $quo_id . ' and routes_id = "' . $route_id . '"');
+        return $check_approve = $db->loadResult();
+    }
+    function GetNameApproverQuo($email) {
+        $db = & JFactory::getDBO();
+        $db->setQuery("SELECT name FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 and  email = '".$email."' ORDER BY jos.username ");
+        return $db->loadResult();
+    }
+    function addapproveQuo()
+    {
+        global $mainframe;
+        // Check for request forgeries
+        JRequest::checkToken() or jexit('Invalid Token');
+
+        $option = JRequest::getCmd('option');
+        // Initialize some variables
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $cid = JRequest::getVar('cid', array(0));
+        $routes = JRequest::getVar('route');
+        $approve_status = JRequest::getVar('approve_status',array());
+        $approve_note = JRequest::getVar('approve_note',array());
+        $title = JRequest::getVar('title',array());
+        $sequence = JRequest::getVar('sequence',array());
+        $mail_user = JRequest::getVar('mail_user',array());
+        //$approve_status[$key]
+        for($i=1;$i<=20;$i++)
+        {
+            $title = JRequest::getVar('title'.$i);
+            $sequence = JRequest::getVar('sequence'.$i);
+            $mail_user = JRequest::getVar('mail_user'.$i);
+            if($mail_user!="") {
+                //check email exist
+                $db->setQuery('select id from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = ' . $routes . ' and email = "' . $mail_user . '"');
+                $id_exist = $db->loadResult();
+                if (!$id_exist) {
+                    $query = "SELECT * FROM jos_users WHERE email='".$mail_user."' limit 1";
+                    $db->setQuery($query);
+                    $user = $db->loadObject();
+                    $query = 'insert into apdm_eco_status (eco_id,quotation_id,username,user_id,email,eco_status,routes_id,title,sequence) values (0,' . $cid[0] . ',"' . $user->username . '","' . $user->id . '","' . $mail_user . '","Inreview",' . $routes . ',"' . $title . '","' . $sequence . '") on duplicate key update user_id=user_id';
+                    $db->setQuery($query);
+                    $db->query();
+                }
+            }
+
+        }
+        /* foreach($mail_user as $key => $user)
+         {
+             if($user)
+             {
+                 //check email exist
+                 $db->setQuery('select id from apdm_eco_status where eco_id = ' . $cid[0] . ' and routes_id = '.$routes.' and email = "'.$user.'"');
+                 $id_exist = $db->loadResult();
+                 if (!$id_exist) {
+                    echo $query = 'insert into apdm_eco_status (eco_id,email,eco_status,routes_id,title,sequence) values ('.$cid[0].',"'.$user.'","Inreview",'.$routes.',"'.$title[$key].'","'.$sequence[$key].'") on duplicate key update user_id=user_id';
+                     $db->setQuery($query);
+                     $db->query();
+                 }
+                /* else
+                 {
+                          $approve_sequence = JRequest::getVar('sequence'.$id_exist);
+                         $query = 'update apdm_eco_status set sequence = "'.$approve_sequence.'" where id = ' . $id_exist . ' and email= "' . $user . '" and routes_id = "'.$routes.'"';
+                         $db->setQuery($query);
+                         $db->query();
+                 }
+             }
+         }*/
+        $msg = JText::sprintf('Successfully Add Approvers into Quotation', $cid[0]);
+        $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&time='.time().'&cid[]=' . $cid[0].'&routes='.$routes, $msg);
+    }
+
+    function saveapproveQuo()
+    {
+        global $mainframe;
+        // Check for request forgeries
+        JRequest::checkToken() or jexit('Invalid Token');
+        $option = JRequest::getCmd('option');
+        $MailFrom = $mainframe->getCfg('mailfrom');
+        $FromName = $mainframe->getCfg('fromname');
+        $SiteName = $mainframe->getCfg('sitename');
+        $SiteUrl = $mainframe->getCfg('siteurl');
+        // Initialize some variables
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $datenow    =& JFactory::getDate();
+        $cid = JRequest::getVar('cid', array(0));
+        $routes = JRequest::getVar('route');
+        $approve_status = JRequest::getVar('approve_status',array());
+        $approve_note = JRequest::getVar('approve_note',array());
+        $approve_sequence = JRequest::getVar('sequence',array());
+        $title = JRequest::getVar('title',array());
+        $mail_user = JRequest::getVar('mail_user',array());
+
+        $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
+        $row =  $db->loadObject();
+        $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
+
+        $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = "' . $routes . '"');
+        $check_approver = $db->loadResult();
+        if ($check_approver==0) {
+            $msg = JText::sprintf('Must choose at least 2 person for Review', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$routes, $msg);
+        }
+        foreach($mail_user as $key => $user)
+        {
+            if($user === $me->get('email'))
+            {
+                if($approve_note[0]=="")
+                {
+                    $msg = JText::sprintf('Please input comment before save', $cid[0]);
+                    return $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$routes, $msg);
+                }
+                $approved_at = $datenow->toMySQL();
+                $query = 'update apdm_eco_status set approved_at = "'.$approved_at.'", eco_status= "' . $approve_status[0] . '", note = "'.$approve_note[0].'" where quotation_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
+                $db->setQuery($query);
+                $db->query();
+                $db->setQuery('select * from apdm_eco_status where eco_id = ' . $cid[0] . ' and user_id= "' . $me->get('id') . '" and routes_id = "' . $routes . '"');
+                $rwapprove = $db->loadObject();
+                //IF REJECT will CLOSE
+                if($approve_status[0]=="Reject"){
+                    $query = 'update apdm_eco_routes set status= "Closed" where quotation_id = ' . $cid[0] . ' and id =' . $routes;
+                    $db->setQuery($query);
+                    $db->query();
+                    //send email to OWNER notice CLOSED route
+                    $subject = "[APDM] Quotation " . $row->quo_state . " Result - " . $quo_code;
+                    $message = "<br>+ Quotation: " . $quo_code .
+                        //"<br>+ Description: " . $row->eco_description .
+                        "<br>+ Sequence: " . $rwapprove->sequence .
+                        "<br>+ Approver: " . GetValueUser($rwapprove->user_id, 'name') .
+                        "<br>+ Approved/Rejected: Reject" .
+                        "<br>+ Comment: " . $rwapprove->note .
+                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6')) .
+                        $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
+
+                    $adminEmail = $me->get('email');
+                    $adminName = $me->get('name');
+                    if ($MailFrom != '' && $FromName != '') {
+                        $adminName = $FromName;
+                        $adminEmail = $MailFrom;
+                    }
+                    $owner_email = GetValueUser($row->eco_create_by, 'email');
+                    JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $message, 1 );
+                    //end SENTEMAIL
+                }
+                //for CASE APPROVED
+                if ($approve_status[0] == "Released") {
+                    $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $row->eco_id . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                    $totalSequenceApprovers = $db->loadResult();
+                    //check all release
+                    $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                    $totalSequenceReleased = $db->loadResult();
+                    if ($totalSequenceApprovers == $totalSequenceReleased) {
+                        //send email Inreview for next SEQUENCE
+                        $subject = "[APDM] Quotation Approval Request - " . $quo_code;
+                        $message = "<br>+ Quotation : " . $quo_code .
+                          //  "<br>+ Description: " . $row->eco_description .
+                            "<br>+ State: " . $row->quo_state .
+                            "<br>+ Created by: " . GetValueUser($row->quo_created_by, 'name') .
+                            "<br>+ Created Date: " . JHTML::_('date',$row->quo_created, JText::_('DATE_FORMAT_LC6'));
+                        //"<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
+                        //"<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
+                        $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
+                        $adminEmail = $me->get('email');
+                        $adminName = $me->get('name');
+                        if ($MailFrom != '' && $FromName != '') {
+                            $adminName = $FromName;
+                            $adminEmail = $MailFrom;
+                        }
+
+                        //get first sequence
+                        $db->setQuery('select sequence from apdm_eco_status where sequence != "'.$rwapprove->sequence.'" and quotation_id = ' . $cid[0] . '  and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '") order by sequence asc limit 1');
+                        $hightSequence = $db->loadResult();
+                        //GET EMAIL LIST BELONG  $hightSequence
+                        $db->setQuery('select email from apdm_eco_status where quotation_id = ' . $cid[0] . '  and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '") and sequence = "'.$hightSequence.'"');
+                        $result = $db->loadObjectList();
+                        if (count($result) > 0) {
+                            foreach ($result as $obj) {
+                                JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                                //update status EMAIL SENT
+                                $query = 'update apdm_eco_status set sent_email= "1" where quotation_id = ' . $cid[0] . ' and  sequence = "'.$hightSequence.'" and email ="'.$obj->email.'" ';
+                                $db->setQuery($query);
+                                $db->query();
+                            }
+                        }
+
+                    }
+                    //send email to OWNER notice APPROVER APPROVE route
+
+                    //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                    $subject = "[APDM] Quotation " . $row->quo_state . " Result - " . $quo_code;
+
+                    $message1 = "<br>+ Quotation: " . $quo_code .
+                        //"<br>+ Description: " . $row->eco_description .
+                        "<br>+ Sequence: " . $rwapprove->sequence .
+                        "<br>+ Approver: " . GetValueUser($rwapprove->user_id, 'name') .
+                        "<br>+ Approved/Rejected: Approve" .
+                        "<br>+ Comment: " . $rwapprove->note .
+                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6')) .
+                        $message1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for this Quotation";
+
+                    $adminEmail = $me->get('email');
+                    $adminName = $me->get('name');
+                    if ($MailFrom != '' && $FromName != '') {
+                        $adminName = $FromName;
+                        $adminEmail = $MailFrom;
+                    }
+                    $owner_email = GetValueUser($row->eco_create_by, 'email');
+                    JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $message1, 1 );
+                    //end SENTEMAIL
+                }
+            }
+        }
+        $msg = JText::sprintf('Successfully Approve/Reject', $cid[0]);
+        $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$routes, $msg);
+    }
+    function set_route_quo() {
+
+        global $mainframe;
+        // Initialize some variables
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $cid = JRequest::getVar('cid', array(0));
+        $id = JRequest::getVar('id');
+        $db->setQuery('select count(*) from apdm_quotation where quotation_id = ' . $cid[0] . ' and quo_created_by = "' . $me->get('id') . '"');
+        $check_owner = $db->loadResult();
+        if ($check_owner==0) {
+            $msg = JText::sprintf('You are not permission set routes', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
+        }
+
+        $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');
+        $check_approve = $db->loadResult();
+        if ($check_approve<=1) {
+            $msg = JText::sprintf('Please add at least 2 persons into route before set', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[]=' . $cid[0], $msg);
+        }
+        $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
+        $row =  $db->loadObject();
+        $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
+        if ($row->quo_state == 'Released') {
+            $msg = JText::sprintf('Quotation released can not set another route', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[]=' . $cid[0], $msg);
+        }
+
+        $query = 'update apdm_quotation set quo_routes_id= "' . $id . '" where quotation_id = ' . $cid[0] . ' and quo_created_by = "' . $me->get('id') . '"';
+        $db->setQuery($query);
+        $db->query();
+        //set route to Inreview
+        $query = 'update apdm_eco_routes set status = "Started" where id = ' . $id . '';
+        $db->setQuery($query);
+        $db->query();
+        //reset all review of approvers
+        $query = 'update apdm_eco_status set eco_status = "Inreview", quotation_id = ' . $cid[0] . ' where routes_id = ' . $id . '';
+        $db->setQuery($query);
+        $db->query();
+        //SEND EMAIL
+//                //send email
+//                $row =& JTable::getInstance('apdmeco');
+//                $row->load($cid[0]);
+//                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+//                $subject = "[ADP] ECO " . $row->eco_status . " notice - " . $row->eco_name;
+//                $message1 = "Please be noticed that this ECO has been " . $row->eco_status;
+//
+//                $message2 = "<br>+ ECO #: " . $row->eco_name .
+//                        "<br>+ Description: " . $row->eco_description .
+//                        "<br>+ Status: " . $row->eco_status .
+//                        "<br>+ Created by: " . GetValueUser($row->eco_create_by, 'username') .
+//                        "<br>+ Date of create: " . JHTML::_('date', $row->eco_create, '%Y-%m-%d %H:%M:%S');
+//
+//                $message = $message1 . $message2;
+//
+//
+//                if (!$isNew) {
+//                        $message .= "<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'username') .
+//                                "<br>+ Date of modify: " . JHTML::_('date', $row->eco_modified, '%Y-%m-%d %H:%M:%S');
+//                }
+//                $message .= "<br>Please go to <a href='http://10.10.1.217/asxdp/administrator/index.php?option=com_apdmeco&task=detail&cid[]=" . $row->eco_id . "'>ADP</a> to ".$row->eco_status." for this ECO";
+//
+//                $adminEmail = $me->get('email');
+//                $adminName = $me->get('name');
+//                if ($MailFrom != '' && $FromName != '') {
+//                        $adminName = $FromName;
+//                        $adminEmail = $MailFrom;
+//                }
+//                $db->setQuery('select email from apdm_eco_status where eco_id = ' . $cid[0] . 'and routes_id = ' . $id);
+//                $result = $db->loadObjectList();
+//                     if (count($result) > 0){
+//                         foreach ($result as $obj){
+//                           JUtility::sendMail( $adminEmail, $adminName, $obj->email, $subject, $message, 1 );
+//                         }
+//                     }
+        //end sent email
+        $msg = JText::sprintf('Successfully set route quotation', $cid[0]);
+        $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$id, $msg);
+    }
+    function edit_routes_quo() {
+        JRequest::setVar('layout', 'form');
+        JRequest::setVar('view', 'routes');
+        JRequest::setVar( 'edit', true );
+        parent::display();
+    }
+    function update_routes_quo() {
+
+
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $datenow    =& JFactory::getDate();
+
+        $name = JRequest::getVar('name');
+        $description = JRequest::getVar('description');
+        $status = 'Create';
+        $due_date = JRequest::getVar('due_date');
+        $quo_id = JRequest::getVar('quo_id');
+        $route_id = JRequest::getVar('route_id');
+        $created = $datenow->toMySQL();
+        $owner = $me->get('id');
+        $return = JRequest::getVar('return');
+        $me = & JFactory::getUser();
+        $cid = JRequest::getVar('cid', array(0));
+        $db->setQuery('select count(*) from apdm_eco_routes  where quotation_id = ' . $cid[0] . ' and id ="'.$route_id.'" and owner = "' . $me->get('id') . '"');
+        $check_owner = $db->loadResult();
+        if ($check_owner==0) {
+            $msg = JText::sprintf('You are not permission save routes', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[]=' . $cid[0], $msg);
+        }
+        $db->setQuery("update apdm_eco_routes set name = '".$name."',description='".$description."',due_date='".$due_date."' where quotation_id =  '".$quo_id."' and id = '" . $route_id . "'");
+        $db->query();
+        $msg = "Successfully Saved Route Quotation";
+        $this->setRedirect( 'index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[0]='.$cid[0], $msg );
+
+    }
+
+
+    /**
+     * Display all files eco
+     */
+    function promote_quo() {
+
+        global $mainframe;
+        $MailFrom = $mainframe->getCfg('mailfrom');
+        $FromName = $mainframe->getCfg('fromname');
+        $SiteName = $mainframe->getCfg('sitename');
+        $SiteUrl = $mainframe->getCfg('siteurl');
+        $db = & JFactory::getDBO();
+        $cid = JRequest::getVar('cid', array(0));
+        $me = & JFactory::getUser();
+        $datenow = & JFactory::getDate();
+        $quo_modified = $datenow->toMySQL();
+        $route = JRequest::getVar('routes');
+        $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
+        $row =  $db->loadObject();
+        $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
+
+        $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '")');
+        $trow = $db->loadResult();
+        if ($trow<2) {
+            $msg = JText::sprintf('Must choose at least 2 persons for Review', $cid[0]);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$route, $msg);
+        }
+        else {
+            if ($row->quo_state == 'Create') {
+                //promote up to inreview
+                $query = 'update apdm_quotation set quo_state= "Inreview",quo_promote_date = "'.$quo_modified.'",quo_updated = "'.$quo_modified.'",quo_updated_by = "'.$me->get('id').'" where quotation_id = ' . $cid[0];
+                $db->setQuery($query);
+                $db->query();
+/*                //set all pn
+                $query = 'update apdm_pns set pns_life_cycle= "Inreview" where quotation_id = ' . $cid[0] . '';
+                $db->setQuery($query);
+                $db->query();*/
+                //update status REV
+                /*$query = 'update apdm_pns_rev set pns_life_cycle= "Inreview" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+                $db->setQuery($query);
+                $db->query();*/
+                //send email Inreview
+
+                //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+
+                $subject = "[APDM] Quotation Approval Request - " . $quo_code;
+                $message = "<br>+ Quotation : " . $quo_code .
+                    //"<br>+ Description: " . $row->eco_description .
+                    "<br>+ State: " . $row->quo_state .
+                    "<br>+ Created by: " . GetValueUser($row->quo_created_by, 'name') .
+                    "<br>+ Created Date: " . JHTML::_('date',$row->quo_created, JText::_('DATE_FORMAT_LC6')).
+                    "<br>+ Promoted Dated:" . JHTML::_('date',$row->quo_promote_date, JText::_('DATE_FORMAT_LC6'));
+                //"<br>+ Modified by: " . GetValueUser($row->eco_modified_by, 'name') .
+                //"<br>+ Modified Date: " . JHTML::_('date', $row->eco_modified, JText::_('DATE_FORMAT_LC6'));
+
+                $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo'>APDM</a> to access Approved/Rejected for this Quotation";
+                $adminEmail = $me->get('email');
+                $adminName = $me->get('name');
+                if ($MailFrom != '' && $FromName != '') {
+                    $adminName = $FromName;
+                    $adminEmail = $MailFrom;
+                }
+                //get first sequence
+                $db->setQuery('select sequence from apdm_eco_status where quotation_id = ' . $cid[0] . '  and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '") order by sequence asc limit 1');
+                $hightSequence = $db->loadResult();
+                //GET EMAIL LIST BELONG  $hightSequence
+                $db->setQuery('select email from apdm_eco_status where quotation_id = ' . $cid[0] . '  and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '") and sequence = "'.$hightSequence.'"');
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                    foreach ($result as $obj) {
+                        JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                        //update status EMAIL SENT
+                        $query = 'update apdm_eco_status set sent_email= "1" where quotation_id = ' . $cid[0] . ' and  sequence = "'.$hightSequence.'" and email ="'.$obj->email.'" ';
+                        $db->setQuery($query);
+                        $db->query();
+                    }
+                }
+                $msg = JText::sprintf('Successfully Promote Quotation', $cid[0]);
+                return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $cid[0], $msg);
+            } elseif ($row->quo_state == 'Inreview') {
+                $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');
+                $totalApprovers = $db->loadResult();
+                //check all release
+                $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and quotation_id = ' . $cid[0] . ' and routes_id = "' . $route . '"');
+                $totalReleased = $db->loadResult();
+                if ($totalApprovers == $totalReleased) {
+                    //$row->eco_status = 'Released';//JRequest::getVar('eco_status_tmp');
+                    //update route status Released
+                    $query = 'update apdm_eco_routes set status= "Finished" where quotation_id = ' . $cid[0] . ' and id =' . $route;
+                    $db->setQuery($query);
+                    $db->query();
+                    //update eco to Released
+                    $query = 'update apdm_quotation set quo_state= "Released",quo_promote_date = "'.$quo_modified.'",quo_updated = "'.$quo_modified.'",quo_updated_by = "'.$me->get('id').'"  where quotation_id = ' . $cid[0];
+                    $db->setQuery($query);
+                    $db->query();
+                    //set all pn
+                    /*$query = 'update apdm_pns set pns_life_cycle= "Released" where quotation_id = ' . $cid[0] . '';
+                    $db->setQuery($query);
+                    $db->query();
+                    //update status REV
+                    $query = 'update apdm_pns_rev set pns_life_cycle= "Released" where quotation_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where quotation_id = ' . $cid[0] . ') ';
+                    $db->setQuery($query);
+                    $db->query();*/
+
+                    //send email PRROMOTE RELEASED
+                    //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                    $subject = "[APDM] Quotation " . $row->quo_state . " - " . $quo_code;
+                    $message1 = "Please be noticed that this Quotation has been " . $row->quo_state;
+                    $date_updated = "";
+                    if($row->quo_updated)
+                    {
+                        $date_updated = JHTML::_('date', $row->quo_updated, JText::_('DATE_FORMAT_LC6'));
+                    }
+                    $message2 = "<br>+ Quotation : " . $quo_code .
+                       // "<br>+ Description: " . $row->eco_description .
+                        "<br>+ State: " . $row->quo_state .
+                        "<br>+ Created by: " . GetValueUser($row->quo_created_by, 'name') .
+                        "<br>+ Created Date: " . JHTML::_('date',$row->quo_created, JText::_('DATE_FORMAT_LC6')).
+                        "<br>+ Modified by: " . GetValueUser($row->quo_updated_by, 'name') .
+                        "<br>+ Modified Date: " . $date_updated;
+
+                    $message = $message1 . $message2;
+                    $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access and see more detail for Quotation " . $quo_code;
+
+                    $adminEmail = $me->get('email');
+                    $adminName = $me->get('name');
+                    if ($MailFrom != '' && $FromName != '') {
+                        $adminName = $FromName;
+                        $adminEmail = $MailFrom;
+                    }
+                    $db->setQuery('select email from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '")');
+                    $result = $db->loadObjectList();
+                    if (count($result) > 0) {
+                        foreach ($result as $obj) {
+                            JUtility::sendMail($adminEmail, $adminName, $obj->email, $subject, $message, 1);
+                        }
+                    }
+                    //send email to OWNER notice RELEASED ECO
+                    //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
+                    $subject = "[APDM] Quotation " . $row->quo_state . " - " . $quo_code;
+                    $messageowner1 = "Please be noticed that this Quotation has been " . $row->quo_state;
+                    $messageowner1 .= "<br>+ Quotation : " . $quo_code .
+                        //"<br>+ Description: " . $row->eco_description .
+                        "<br>+ State: " . $row->quo_state .
+                        "<br>+ Created by: " . GetValueUser($row->quo_created_by, 'name') .
+                        "<br>+ Created Date: " . JHTML::_('date',$row->quo_created, JText::_('DATE_FORMAT_LC6'));
+                    "<br>+ Modified by: " . GetValueUser($row->quo_updated_by, 'name') .
+                    "<br>+ Modified Date: " . $date_updated;
+                    $messageowner1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
+
+                    $adminEmail = $me->get('email');
+                    $adminName = $me->get('name');
+                    if ($MailFrom != '' && $FromName != '') {
+                        $adminName = $FromName;
+                        $adminEmail = $MailFrom;
+                    }
+                    $owner_email = GetValueUser($row->quo_created_by, 'email');
+                    JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $messageowner1, 1 );
+                    //end SENTEMAIL
+
+                    $msg = JText::sprintf('Successfully Promote Quotation', $cid[0]);
+                    return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $cid[0], $msg);
+                } else {
+                    $msg = JText::sprintf('In the route have a approver selected Reject, please recheck', $cid[0]);
+                    return $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0] . '&routes=' . $route, $msg);
+                }
+
+            }
+        }
+        $msg = JText::sprintf('Successfully Promote Quotation', $cid[0]);
+        return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $cid[0], $msg);
+    }
+
+    /**
+     * Display all files eco
+     */
+    function demote_quo(){
+
+        $db = & JFactory::getDBO();
+        $cid = JRequest::getVar( 'cid', array(0) );
+        $me			= & JFactory::getUser();
+        $route = JRequest::getVar('routes');
+        //update route status Inreview
+        $query = 'update apdm_eco_routes set status= "Closed" where quotation_id = ' . $cid[0] .' and id ='.$route;
+        $db->setQuery($query);
+        $db->query();
+        //$query = 'update apdm_eco_status set eco_status= "Inreview" where quotation_id = '.$cid[0].' and routes_id ='.$route;
+        //$db->setQuery($query);
+        //$db->query();
+        $query = 'update apdm_quotation set quo_state= "Create" where quotation_id = ' . $cid[0];
+        $db->setQuery($query);
+        $db->query();
+        //set all pn
+        /*$query = 'update apdm_pns set pns_life_cycle= "Create" where eco_id = ' . $cid[0] . '';
+        $db->setQuery($query);
+        $db->query();
+        //update status REV
+        $query = 'update apdm_pns_rev set pns_life_cycle= "Create" where eco_id = ' . $cid[0] . ' and  pns_revision in (select pns_revision from apdm_pns where eco_id = ' . $cid[0] . ') ';
+        $db->setQuery($query);
+        $db->query();*/
+        $msg = JText::sprintf( 'Successfully Demote Quotation',$cid[0]  );
+        $this->setRedirect( 'index.php?option=com_apdmquo&task=quo_detail&id='. $cid[0], $msg );
+
+    }
+    function remove_routes_quo()
+    {
+
+        $db       =& JFactory::getDBO();
+        $cid      = JRequest::getVar( 'quo');
+        $me = & JFactory::getUser();
+        $route_id      = JRequest::getVar( 'route_id', array(), '', 'array' );
+        foreach($route_id as $id)
+        {
+            $db->setQuery('select count(*) from apdm_eco_routes where quotation_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');
+            $check_owner = $db->loadResult();
+            if ($check_owner==0) {
+                $id_f[] = $id;
+                continue;
+                //return $this->setRedirect('index.php?option=com_apdmeco&task=routes&t='.time().'&cid[]=' . $cid, $msg);
+            }
+            $db->setQuery('select status from apdm_eco_routes where quotation_id = ' . $cid . ' and id ="'.$id.'" and owner = "' . $me->get('id') . '"');
+            $check_status = $db->loadResult();
+            if ($check_status!='Create') {
+                $id_f[] = $id;
+                continue;
+            }
+            $id_o[] = $id;
+
+            $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (". $id.")");
+            $db->query();
+        }
+        if(isset($id_f) && sizeof($id_f)>0)
+        {
+            $msg = JText::sprintf('You are not permission delete routes: '.  implode(",", $id_f));
+            $msg .= "<>";
+        }
+        if(isset($id_o) && sizeof($id_o)>0)
+        {
+            $msg .= JText::sprintf(' Have deleted successfull routes: '.implode(",", $id_o));
+        }
+
+        //$msg = JText::_($msgf.'<>'.$msg);
+        $this->setRedirect( 'index.php?option=com_apdmquo&task=routes_quo&cid[]='.$cid, $msg);
+        //  apdm_eco_routes
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function GetSupplierName($supplier_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
@@ -1930,50 +2535,7 @@ class QUOController extends JController
         JRequest::setVar('view', 'getpnsforstos');
         parent::display();   
     }
-    function importpneto()
-    {
-            $db =& JFactory::getDBO();
-             $sto_id = JRequest::getVar('id');
-             $query = "SELECT sto_wo_id  FROM apdm_pns_sto  WHERE sto_type = '2' and pns_sto_id = '".$sto_id."' order by pns_sto_id desc limit 1";
-             $db->setQuery($query);
-             $sto_wo_id = $db->loadResult();
-             if(!$sto_wo_id)
-             {
-                  $msg = JText::_('Can not file PN without WO.');
-                  return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
-             }
-             //getPN 
-             $query = "SELECT pns_id  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$sto_wo_id."'";
-             $db->setQuery($query);
-             $pns_id = $db->loadResult();
-             if(!$pns_id)
-             {
-                  $msg = JText::_('Can not find PN.');
-                  return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
-             }
-             //getBOM
-             // check exist REV
-              $db->setQuery("SELECT pns_id FROM `apdm_pns_rev` where parent_id = ".$pns_id."");         
-              $revCheck = $db->loadResult();
-              if($revCheck){
-                      
-              }              
-              $db->setQuery('SELECT p.pns_id FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');              
-              $result = $db->loadObjectList();             
-              foreach($result as  $rw)
-              {
-                $db->setQuery("SELECT stofk.* from apdm_pns_sto_fk stofk inner join apdm_pns_sto sto on stofk.sto_id = sto.pns_sto_id WHERE stofk.pns_id= '".$rw->pns_id."' and sto.sto_type = 1  AND stofk.sto_id != '".$sto_id."' order by stofk.id desc limit 1");                
-                $row = $db->loadObject();
-                $location = $row->location;
-                $partState = $row->partstate;
-                $pns_mfg_pn_id = $row->pns_mfg_pn_id;
-                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate,pns_mfg_pn_id) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "','".$pns_mfg_pn_id."')");
-                $db->query();
-              }
-              $msg = "Successfull add PN";
-              return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
-              
-    }
+
     function importpnito()
     {
         JRequest::setVar('layout', 'importpart');

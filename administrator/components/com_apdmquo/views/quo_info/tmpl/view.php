@@ -8,13 +8,13 @@ $quo_id = JRequest::getVar('id');
 $role = JAdministrator::RoleOnComponent(8);	
 JToolBarHelper::title($this->quo_row->quo_code .' '. $this->quo_row->quo_revision .': <small><small>[ view ]</small></small>' , 'generic.png' );
 
-if (in_array("E", $role)&& ($this->quo_row->sto_state  != "Done")) {
+if (in_array("E", $role) && $this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview") {
         JToolBarHelper::customX("editquo",'edit',"Edit","Edit",false);
 }
 JToolBarHelper::cancel( 'cancel', 'Close' );
 JToolBarHelper::customX("printitopdf","print",'',"Print",false);
 
-if (in_array("D", $role) && $this->quo_row->quo_state !="Done") {
+if (in_array("D", $role) && $this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview") {
     JToolBarHelper::customXDel( 'Are you sure to delete it?', 'deletequo', 'delete', 'Delete QUO');
 }
 $cparams = JComponentHelper::getParams ('com_media');
@@ -293,7 +293,7 @@ function checkedforMarkScan(ischecked)
 		<ul id="submenu" class="configuration">
 			<li><a id="detail" class="active"><?php echo JText::_( 'Detail' ); ?></a></li>
 			<li><a id="bom" href="index.php?option=com_apdmquo&task=quo_rev&id=<?php echo $this->quo_row->quotation_id;?>"><?php echo JText::_( 'Rev' ); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmquo&task=quo_routes&cid[]=<?php echo $this->quo_row->quotation_id;?>&time=<?php echo time();?>"><?php echo JText::_( 'Routes' ); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmquo&task=routes_quo&cid[]=<?php echo $this->quo_row->quotation_id;?>&time=<?php echo time();?>"><?php echo JText::_( 'Routes' ); ?></a></li>
                         
                 </ul>
 		<div class="clr"></div>
@@ -351,7 +351,7 @@ function checkedforMarkScan(ischecked)
             <table class="toolbar"><tbody><tr>
 <?php
 if($this->quo_row->sto_owner_confirm==0 && !$this->quo_row->sto_owner) {
-    if (in_array("W", $role) && ($this->quo_row->sto_state != "Done")) {
+    if (in_array("W", $role) && (($this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview"))) {
         ?>
                                     <td class="button" id="toolbar-addpnsave">           
                 
@@ -376,7 +376,8 @@ if($this->quo_row->sto_owner_confirm==0 && !$this->quo_row->sto_owner) {
         </td>
         <?php
     }
-    if (in_array("D", $role) && ($this->quo_row->quo_state != "Done")) {
+    if (in_array("D", $role) && ($this->quo_row->quo_state !="Released" && $this->quo_row->quo_state !="Inreview")) {
+
         ?>
         <td class="button" id="toolbar-Are you sure to delete it?">
             <a href="#"
