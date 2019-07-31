@@ -3,7 +3,7 @@
 <?php  JHTML::_('behavior.tooltip');  ?>
 
 <?php
-	JToolBarHelper::title( JText::_( 'ADP User Management' ), 'user.png' );	
+	JToolBarHelper::title( JText::_( 'APDM User Management' ), 'user.png' );	
 	JToolBarHelper::editListX();
 	JToolBarHelper::addNewX();
 

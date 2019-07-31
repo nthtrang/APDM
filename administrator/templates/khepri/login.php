@@ -63,7 +63,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 				</div>
 				<div class="m">
 
-					<h1><?php echo JText::_('ADP Management Login') ?></h1>
+					<h1><?php echo JText::_('APDM Management Login') ?></h1>
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
 					<p><?php echo JText::_('DESCUSEVALIDLOGIN') ?></p>

@@ -517,16 +517,16 @@ class UsersController extends JController
 			$MailFrom	= $mainframe->getCfg('mailfrom');
 			$FromName	= $mainframe->getCfg('fromname');
 			$SiteName	= $mainframe->getCfg('sitename');
-            $SiteUrl	= $mainframe->getCfg('siteurl');
+                        $SiteUrl	= $mainframe->getCfg('siteurl');
 			$adminEmail = $me->get('email');
 			$adminName	= $me->get('name');
 
 			$subject = JText::_('APPROVE_MAIL_SUBJECT'); 
 			
-			$message = 'Welcome to ADP <br/>';
+			$message = 'Welcome to APDM <br/>';
 			$message .='<br>+ Username: '.$row[0]->username;
 			$message .='<br> + Password: use your current password to access corporate network';
-			$message .='<br> + Link: <a href="http://app.ascenx.com"> http://app.ascenx.com </a>';
+			$message .='<br> + Link: <a href="'.$SiteUrl.'"> APDM </a>';
 			
 			
 			$db->setQuery('SELECT email FROM jos_users WHERE id='.$cid[0]);

@@ -10,7 +10,7 @@
 	<license>GNU/GPL</license>
 	<version>1.5.0</version>
 	  <description>
-	  This component to management ADP Recyle Bin
+	  This component to management APDM Recyle Bin
    </description> 
 	<files>
 		<filename>index.html</filename>		
@@ -19,7 +19,7 @@
 		<language tag="en-GB">en-GB.com_apdmrecylebin.ini</language>
 	</languages>	
 	<administration>		
-		<menu img="generic.png">ADP ECO Management</menu>	
+		<menu img="generic.png">APDM ECO Management</menu>	
 		<submenu>
 			<menu link="option=com_apdmrecylebin&amp;task=ccs">Commodity Codess</menu>
 			<menu link="option=com_apdmrecylebin&amp;task=info">Info VD/SP/MF</menu>
