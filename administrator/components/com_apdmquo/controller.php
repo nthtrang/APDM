@@ -1025,7 +1025,22 @@ class QUOController extends JController
     }
 
 
-
+/*
+             * type_id 4
+             */
+    function  GetListApproverQuo($routeId){
+        $db = & JFactory::getDBO();
+        $rows  = array();
+        $query = "SELECT st.*,rt.status as route_status,rt.owner,rt.name as route_name,rt.due_date FROM apdm_eco_status st  inner join apdm_eco_routes rt on st.routes_id = rt.id WHERE rt.id = ".$routeId ." order by st.sequence asc";
+        $db->setQuery($query);
+        $result = $db->loadObjectList();
+        if (count($result) > 0){
+            foreach ($result as $obj){
+                $rows[] = array('routeId'=>$obj->routes_id, 'title'=>$obj->title, 'approver'=>ECOController::GetNameApprover($obj->email), 'due_date'=>$obj->due_date, 'approver_status'=>$obj->eco_status, 'approver_date'=>$obj->approved_at);
+            }
+        }
+        return $rows;
+    }
 
 
 

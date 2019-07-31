@@ -3,11 +3,10 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
-$cid = JRequest::getVar('cid', array(0));
-$edit = JRequest::getVar('edit', true);
-$viewmore = JRequest::getVar('viewmore');
-
-JToolBarHelper::title("Quotation", 'cpanel.png');
+	$role = JAdministrator::RoleOnComponent(5);
+     	
+	$cparams = JComponentHelper::getParams ('com_media');
+        JToolBarHelper::title("Quotation", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
@@ -16,436 +15,234 @@ if (in_array("W", $role)) {
         //JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
         
 }
-$cparams = JComponentHelper::getParams('com_media');
-$editor = &JFactory::getEditor();
 ?>
+
 <?php
-// clean item data
-JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
+	// clean item data
+	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
+
+	
 ?>
-<script language="javascript" type="text/javascript">
-       function submitbutton(pressbutton) {
-                var form = document.adminForm;
-                if (pressbutton == 'btnSubmit') {
-                        var d = document.adminForm;
-                        if ( document.adminForm.text_search.value==""){
-                                alert("Please input keyword");	
-                                d.text_search.focus();
-                                return false;				
-                        }else{                                
-                                document.adminForm.submit();
-                                submitform( pressbutton );
-				
+<script language="javascript">
+function submitbutton(pressbutton) {
+			var form = document.adminForm;
+//                        if (pressbutton == 'summary') {
+//                                window.location.assign("index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $cid[0]?>")
+//                                return;
+//                        }
+//                        if (pressbutton == 'files') {
+//                                window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $cid[0]?>");
+//                                return;
+//                        }      
+//                        if (pressbutton == 'approvers') {
+//                                window.location.assign("index.php?option=com_apdmeco&task=approvers&cid[]=<?php echo $cid[0]?>");
+//                                return;
+//                        }      
+                        if(pressbutton == 'remove_routes')
+                        {
+                             submitform( pressbutton );
+                             return;
                         }
+}
+function saveApproveTask(id){
+                var approve_status = $('approve_status_'+id).value;
+                var approve_note = $('approve_note_'+id).value; 
+		var routes_id = $('routes_id_'+id).value;
+                var eco_id = $('eco_id_'+id).value;
+                if(approve_note=="")
+                {
+                        alert("Please input comment before save");
+                        return false;
                 }
-                
-                 if (pressbutton == 'search_qty') {
-                        submitform( pressbutton );
-                        return;
-                }
-                
-                if (pressbutton == 'addquo') {
-                        submitform( pressbutton );
-                        return;
-                }
-                if (pressbutton == 'addform') {
-                        submitform( pressbutton );
-                        return;
-                }
-			
-        }
+                var url = 'index.php?option=com_apdmeco&task=saveapproveAjax&cid='+eco_id;
+                url = url + '&approve_status=' + approve_status + '&approve_note=' + approve_note+ '&routes_id=' + routes_id;
+		var MyAjax = new Ajax(url, {
+			method:'get',
+			onComplete:function(result){
+				window.location.assign("index.php?option=com_apdmeco&task=dashboard");
+                               
+			}
+		}).request();
+	}
+
 </script>
-<style>
-section {
-  position: relative;
-  padding-top: 30px;
-      text-align: center;
-    background: #f0f0f0;
-    color: #666;
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #fff;
-}
-section.positioned {
-  position: absolute;
-  top:100px;
-  left:100px;
-  width:800px;
-  box-shadow: 0 0 15px #333;
-}
-.container {
-  overflow-y: auto;
-  height: 160px;
-}
-table {
-  border-spacing: 0;
-  width:100%;
-}
-td + td {
-  border-left:1px solid #eee;
-}
-td, th {
-  border-bottom:1px solid #eee;
-  padding: 10px 10px 7px 0px;
-}
-th {
-  height: 0;
-  line-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  color: transparent;
-  border: none;
-  white-space: nowrap;
-}
-th div{
-  position: absolute;
-  background: transparent;
-     color: #666;
-  padding: 10px;
-  top: 0;
-  line-height: normal;
-    border-left: 1px solid #fff;
-}
-th:first-child div{
-  border: none;
-}
-</style>
-<div class="clr"></div>
-<form action="index.php"   onsubmit="submitbutton('')"  method="post" name="adminForm" >	
-        <input type="hidden" name="query_exprot" value="<?php echo $this->lists['query'];?>" />
-<input type="hidden" name="total_record" value="<?php echo $this->lists['total_record'];?>" />
- <fieldset class="adminform">
-		<legend><font style="size:14px"><?php echo JText::_( 'Inventory Transaction' ); ?> </font></legend>
-<section class="">
-<div class="col width-100 scroll container">
-<?php if (count($this->stos_list) > 0) { ?>
-                <table class="adminlist1" cellspacing="1" width="400">
-                         <thead>
-                               <tr class="header">
-                                        <th  class="title" width="50"><?php echo JText::_('NUM'); ?><div style="width:50px;padding:10px 0px 0px 15px"><?php echo JText::_('No.'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Quotation'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Quotation'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Description'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Description'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Target Date'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Target Date'); ?></div></th>                            
-                                        <th  class="title" width="100"><?php echo JText::_('Time Remain'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Time Remain'); ?></div></th>
-                                        <th  class="title" width="100"><?php echo JText::_('Owner'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Owner'); ?></div></th>                                        
-                                </tr>
-                        </thead>                  
-                        <tbody>					
-        <?php
-        $i = 0;
-        foreach ($this->stos_list as $sto) {
-                $i++;
-                ?>
-                                        <tr>
-                                                <td align="center"><?php echo $i+$this->pagination->limitstart;?></td>
-                                                <td align="center">
-                                                        <?php
-                                                                $style="";
-                                                                $link = "index.php?option=com_apdmsto&task=ito_detail&id=".$sto->pns_sto_id;
-                                                                $linkedit = "index.php?option=com_apdmsto&task=editito&id=".$sto->pns_sto_id."&sto_type=".$sto->sto_type;
-                                                                if($sto->sto_type==2){
-                                                                        $style="color: #f00";
-                                                                        $link = "index.php?option=com_apdmsto&task=eto_detail&id=".$sto->pns_sto_id;
-                                                                        $linkedit = "index.php?option=com_apdmsto&task=editeto&id=".$sto->pns_sto_id."&sto_type=".$sto->sto_type;
-                                                                }elseif($sto->sto_type==3){
-                                                                        $link = "index.php?option=com_apdmpns&task=sto_detail_movelocation&id=".$sto->pns_sto_id;
-                                                                }
-                                                                ?>
-                                                        <a style="<?php echo $style?>" href="<?php echo $link;?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $sto->sto_code; ?></a> </td>
-                                                
-                                                <td align="left" style="<?php //echo $style?>" ><?php echo $sto->sto_description; ?></td>
-                                                <td align="center" style="<?php //echo $style?>" >
-                                                    <?php echo $sto->sto_state; ?>
-                                                </td>
-                                                <td align="center"  style="<?php //echo $style?>" >
-                                                        <?php echo JHTML::_('date', $sto->sto_created, JText::_('DATE_FORMAT_LC5')); ?>
-                                                </td>
-                                                <td align="center"  style="<?php //echo $style?>" >
-                                                        <?php echo GetValueUser($sto->sto_owner, "name"); ?>
-                                                </td> 
-                                                <td align="center"  style="<?php //echo $style?>" >
-                                                        <?php echo GetValueUser($sto->sto_create_by, "name"); ?>
-                                                </td>
-                                                <td align="center" ></td>
-                                                <td align="center"  style="<?php //echo $style?>" ><?php if (in_array("E", $role)) {
-
-                                                        ?>
-                                                        <a style="<?php //echo $style?>"  href="<?php echo $linkedit; ?>" title="Click to edit"><?php echo JText::_('Edit') ?></a>
-                                                        <?php
-                                                }
-                                                        ?>
-                                                </td></tr>
-                                                <?php }
-                                        } ?>
-                </tbody>
-                </table></div></section>
-      </fieldset>
 
 
-<fieldset class="adminform">
-		<legend><font style="size:14px"><?php echo JText::_( 'Warehouse Tracking' ); ?> </font></legend>
-                <table width="100%" border="0">
-                        <tr>
-                                <td align="right">
-                                        PN <input type="text" maxlength="20" name="pn_code_wr" id="pn_code_wr" class="inputbox" size="30" value="<?php echo $this->pn_code_wr;?>"/> 
-                                        QTY From&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_from"  onKeyPress="return numbersOnly(this, event);" id="qty_from" class="inputbox" size="30" value="<?php echo $this->qty_from?>"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        To&nbsp;&nbsp;<input type="text" maxlength="20" name="qty_to"  onKeyPress="return numbersOnly(this, event);" id="qty_to" class="inputbox" size="30" value="<?php echo $this->qty_to?>"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input type="submit"  onclick="submitbutton('search_qty')"  name="search_qty" value="Go">
-                                        <a href="index.php?option=com_apdmsto&amp;task=sto&amp;clean=all"><input type="button" value="Reset"></a>
-                                </td>
-                        </tr>
-                </table>
-                <section class="">
-                <div class="col width-100 scroll container">
-                        <?php if (count($this->warehouse_list) > 0) { ?>
-                    <table class="adminlist1" cellspacing="1" width="400">
-                        <thead>
-                        <tr>
-                            <th width="50" align="center" class="title">
-                                <?php echo JText::_('No.'); ?>
-                                <div style="width:50px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div>
-                            </th>
-                            <th class="title" width="100">
-                                <?php JText::_('PART_NUMBER_CODE'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('PART_NUMBER_CODE'); ?></div>
-                            </th>
-                            <th class="title" width="100">
-                                <?php echo JText::_('PNS_DESCRIPTION'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('PNS_DESCRIPTION'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('MFR Name'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('MFR Name'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('MFR PN'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('MFG PN'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('Supplier'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Supplier'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('Supplier PN'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Supplier PN'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('Vendor'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Vendor'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('Vendor PN'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Vendor PN'); ?></div>
-                            </th>
-                            <th width="100" class="title">
-                                <?php echo JText::_('Inventory'); ?>
-                                <div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Inventory'); ?></div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $path_image = '../uploads/pns/images/';
-                        $k = 0;
-                        $total = 0;
-                        $count = 0;
-                        for ($i = 0, $n = count($this->warehouse_list); $i < $n; $i++) {
-                            $row =& $this->warehouse_list[$i];
-                            // if (($this->qty_from =="") && $row->inventory > 0) {
-                            if ($row->pns_cpn == 1)
-                                $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
-                            else
-                                $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $row->pns_id;
-                            if ($row->pns_revision)
-                                $pns_code = $row->ccs_code . '-' . $row->pns_code . '-' . $row->pns_revision;
-                            else
-                                $pns_code = $row->ccs_code . '-' . $row->pns_code;
+                        <fieldset class="adminform">
+                        <legend><?php echo JText::_( 'My Task' ); ?></legend>
+<!--<form action="index.php?option=com_apdmeco" method="post" name="adminForm1" >-->
+<form action="index.php?option=option=com_apdmquo&task=quo&tmpl=component" method="post" name="adminForm1" id="adminFormPns"  >
+        <div class="col width-100 scroll">
+        <table class="adminlist" cellpadding="0">
+<thead>
+			<tr>
+				<th width="5%" class="title">
+					<?php echo JText::_( 'NUM' ); ?>
+				</th>
+				
+				<th class="title" width="7%">
+					<?php echo  JText::_('Quotation'); ?>
+                                </th>
+				<th  class="title" width="20%">
+					<?php echo  JText::_('Description'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Target Date'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Time Remain'); ?>
+				</th>                             
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Owner'); ?>
+				</th>        				                   
+			</tr>
+		</thead>                
+		<tbody>
+		<?php		
+//                rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.name as route_name,eco.eco_name,eco.description,eco.eco_status
+			$i = 0;
+			foreach ($this->arr_inreview as $row)
+			{
+                                
+                                $i++;
+				$linkQuo 	= 'index.php?option=com_apdmquo&task=quo_detail&id='.$row->quotation_id;	
+                                $linkRoute = 'index.php?option=com_apdmeco&task=add_approvers&id='.$row->quotation_id.'&routes='.$row->routes_id;				
+                                
+                                $background="";
+                            $remain_day = $row->route_remain_date;                            
+                            $arr = array('Started','Create');
+                            if(in_array($row->route_status,$arr)){
+                                if($remain_day<=0)
+                                {
+                                    $background= "style='background-color:#f00;color:#fff'";
 
-                            $mf = QUOController::GetManufacture($row->pns_id, 4);//manufacture
-                            $ms = QUOController::GetManufacture($row->pns_id, 3);//Supplier
-                            $mv = QUOController::GetManufacture($row->pns_id, 2);//vendor
-
-                            $stock = CalculateInventoryValueforView($row->pns_id);
-                            $background = "";
-                            if ($stock <= 3) {
-                                $background = "style='background-color:#f00;color:#fff'";
-                            }
-                            $qty_from = $this->qty_from;
-                            $qty_to = $this->qty_to;
-                            $pn_code_wr = $this->pn_code_wr;
-                            if ($qty_from && $qty_to) {
-                                if ($stock < $qty_from || $stock > $qty_to) {
-                                    $count++;
-                                    continue;
                                 }
-                            } elseif ($qty_to) {
-                                if ($stock > $qty_to) {
-                                    continue;
-                                }
-                            } elseif ($qty_from) {
-                                if ($stock < $qty_from) {
-                                    $count++;
-                                    continue;
-                                }
-                            } else {
-                                if ($pn_code_wr == "" && ($stock <= 0 || $stock > 10)) {
-                                    $count++;
-                                    continue;
+                                elseif($remain_day<=3)
+                                {
+
+                                    $background= "style='background-color:#ff0;color:#000'";
+
                                 }
                             }
-
-
-                            ?>
-                            <tr class="<?php echo "row$k"; ?>">
-                                <td align="center" width="50">
-                                    <?php echo $total + 1; ?>
-                                </td>
-                                <td align="left">
-                                    <a href="<?php echo $link; ?>"
-                                       title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pns_code; ?></a>
-                                </td>
-                                <td align="left">
-                                    <?php echo $row->pns_description; ?>
-                                </td>
-                                <td align="left">
-                                        <table>
-                                    <?php
-                                    if (count($mf) > 0) {
-                                        $imf=1;
-                                        foreach ($mf as $m) {                                                
-                                                $style="";
-                                                if($imf==count($mf))
-                                                        $style ="style='border-bottom:none'";                                                        
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $imf++;
-                                        }
-                                    }
-                                    ?>
-                                                </table>
-                                </td>
-                                <td align="left">
-                                         <table>
-                                    <?php
-                                    if (count($mf) > 0) {
-                                         $imf1=1;
-                                        foreach ($mf as $m) {
-                                                $style="";
-                                                if($imf1==count($mf))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $imf1++;
-                                        }
-
-                                    }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($ms) > 0) {
-                                            $ims1=1;
-                                        foreach ($ms as $m) {
-                                                $style="";
-                                                if($ims1==count($ms))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $ims1++;
-                                        }
-                                    }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($ms) > 0) {
-                                            $ims2=1;
-                                        foreach ($ms as $m) {
-                                                $style="";
-                                                if($ims2==count($ms))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $ims2++;
-                                        }
-
-                                    }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($mv) > 0) {
-                                            $imv=1;
-                                        foreach ($mv as $m) {
-                                                $style="";
-                                                if($imv==count($mv))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['mf'] . '</tr></td>';
-                                            $imv++;
-                                        }
-                                    }
-                                    ?> </table>
-                                </td>
-                                <td align="left"> <table>
-                                    <?php
-                                    if (count($mv) > 0) {
-                                            $imv1=1;
-                                        foreach ($mv as $m) {
-                                                $style="";
-                                                if($imv1==count($mv))
-                                                        $style ="style='border-bottom:none'";      
-                                            echo "<tr><td ".$style.">".$m['v_mf'] . '</tr></td>';
-                                            $imv1++;
-                                        }
-
-                                    }
-                                    ?> </table>
-                                </td>
-                                <td align="center" <?php echo $background; ?>>
-                                    <?php
-                                    echo $stock;
-                                    $inventory = round($row->inventory, 2);
-                                    if ($inventory <= 0)
-                                        $inventory = 0;
-                                    //echo $inventory;
-                                    ?>
-                                </td>
-                            </tr>
-                            <?php
-                            $k = 1 - $k;
-                            $total++;
-                            if (($qty_from == "" && $qty_to == "" && $pn_code_wr == "") && $total == 5 && !$viewmore) {
-                                break;
-                            }
-
-
-                        }
-                        //  }
-                        ?>
-                        <tr>
-                            <td colspan="10"><?php
-                                if ($qty_from == "" && $qty_to == "" && $pn_code_wr == "") {
-                                    if ($count + $total < count($this->warehouse_list)) {
-                                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=1'>Click here to view more</a>";
-                                    } else {
-                                        echo "<a href = 'index.php?option=com_apdmsto&task=sto&viewmore=0'>Click here to  collapse</a>";
-                                    }
-                                }
-                    ?></td></tr>
-                    
+			?>
+			<tr class="">
+				<td align="center" width="3%" >
+					<?php echo $i;?>
+				</td>				
+				<td align="center" width="8%"><a href='<?php echo $linkQuo;?>'><?php echo $row->quo_code.' '. $row->quo_revision; ?></a></td>
+                                <td align="center" width="25%" width="15%"><?php echo $row->description; ?></td>
+                                <td align="center" width="5%"><?php echo JHTML::_('date', $row->route_due_date, JText::_('DATE_FORMAT_LC5')) ;?></td>
+                                <td   width="8%" align="center" <?php echo $background?>>
+					<?php echo $remain_day?>
+				</td>                                
+                                <td align="center" width="5%">
+                                        <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>
+				</td>                                								                          				                            
+			</tr>
+			<?php
+				
+				}
+			?>
 		</tbody>
+                 <tfoot>
+			<tr>
+				<td colspan="11">
+					<?php // echo $this->pagination_inreview->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
-                        <?php 
-                        }?>
-                </div>
-                </section>
-</fieldset>
+</div>
+	<div class="clr"></div>	
 
-
-        <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />
-        <input name="nspid" value="<?php echo $this->lists['count_sp']; ?>" type="hidden" />
-        <input name="nmfid" value="<?php echo $this->lists['count_mf']; ?>" type="hidden" />
-        <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
-        <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />	
-        <input type="hidden" name="option" value="com_apdmquo" />
-        <input type="hidden" name="task" value="quo" />
-        <input type="hidden" name="redirect" value="mep" />
-        <input type="hidden" name="boxchecked" value="0" />
-        <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
-<?php echo JHTML::_('form.token'); ?>
+	<input type="hidden" name="option" value="com_apdmeco" />
+	<input type="hidden" name="task" value="" />
+       
+	<input type="hidden" name="boxchecked" value="0" />
+	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
+                </fieldset>
+
+                
+		<fieldset class="adminform">
+		<legend><?php echo JText::_( 'My Pending Task' ); ?></legend>
+                <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+             		<div class="col width-100 scroll">
+              <table class="adminlist" cellpadding="1">
+		<thead>
+			<tr>
+				<th width="5%" class="title">
+					<?php echo JText::_( 'NUM' ); ?>
+				</th>
+				
+				<th class="title" width="10%">
+					<?php echo  JText::_('Quotation'); ?>
+                                </th>                               
+				<th  class="title" width="25%">
+					<?php echo  JText::_('Description'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('State'); ?>
+				</th>
+				<th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Target Date'); ?>
+				</th>            
+                                <th width="5%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Time Remain'); ?>
+				</th>  
+				<th width="7%" class="title" nowrap="nowrap">
+					<?php echo JText::_('Approver'); ?>
+				</th>                        
+			</tr>
+		</thead>
+  
+
+		<tbody>
+		<?php		
+//                rt.status as route_status,st.*,eco.eco_id,eco.eco_create_by,rt.name as route_name,eco.eco_name,eco.description,eco.eco_status
+			$i = 0;
+			foreach ($this->arr_pending as $row)
+			{
+                                $i++;                               
+				$linkQuo 	= 'index.php?option=com_apdmquo&task=quo_detail&id='.$row->quotation_id;	
+                                $linkRoute = 'index.php?option=com_apdmquo&task=add_approvers_quo&id='.$row->quotation_id.'&routes='.$row->id;				
+			?>
+			<tr class="">
+				<td align="center">
+					<?php echo $i;?>
+				</td>				
+				<td align="center"><a href='<?php echo $linkQuo;?>'><?php echo $row->quo_code.' '. $row->quo_revision; ?></a></td>
+                                <td align="left"><?php echo $row->description; ?></td>
+                                <td align="center"><?php echo $row->quo_state; ?></td>                               
+                                <td align="center" width="5%"><?php echo JHTML::_('date', $row->route_due_date, JText::_('DATE_FORMAT_LC5')) ;?></td>
+                               <td   width="8%" align="center" <?php echo $background?>>
+					<?php echo $remain_day?>
+				</td>  
+                                <td align="center" width="5%">
+                                        <?php echo ($row->user_id) ? GetValueUser($row->user_id, 'name') : '';?>
+				</td>                      
+			</tr>
+			<?php
+				
+				}
+			?>
+		</tbody>                
+                <tfoot>
+			<tr>
+				<td colspan="11">
+					<?php  //echo $this->pagination_pending->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+                </div>
+                        <input type="hidden" name="option" value="com_apdmquo" />
+	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
+	<?php echo JHTML::_( 'form.token' ); ?>
+                </form>
+
+                </fieldset>
+                        </div>
+
+
+
