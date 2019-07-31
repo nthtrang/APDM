@@ -107,10 +107,10 @@ class QUOController extends JController
                  
                 exit;
         }
-         function get_list_pns_quo() {
-                JRequest::setVar('layout', 'default');
-                JRequest::setVar('view', 'getpnsquo');
-                parent::display();
+        function get_list_pns_quo() {
+            JRequest::setVar('layout', 'default');
+            JRequest::setVar('view', 'getpnsquo');
+            parent::display();
         }
         function get_list_pns_quo_detail() {
             JRequest::setVar('layout', 'add_fromdetail');
@@ -123,138 +123,124 @@ class QUOController extends JController
           funcntion get list PNs child for ajax request
          */
         function ajax_list_pns_quo() {
-
-                $db = & JFactory::getDBO();
-                $cid = JRequest::getVar('cid', array(), '', 'array');
-                $query = "select pns_id,pns_uom,pns_description, CONCAT_WS( '-', ccs_code, pns_code, pns_revision) AS pns_full_code,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . implode(",", $cid) . ")";
-               
-                $db->setQuery($query);
-                $rows = $db->loadObjectList();
-                $str = JHTML::_('behavior.calendar').'<table class="admintable" cellspacing="1" width="60%"><tr>'.
-                        '<td class="key">No.</td>'.
-                        '<td class="key">Part Number</td>'.
-                        '<td class="key">Rev</td>'.
-                        '<td class="key">Description</td>'.
-                        '<td class="key">Qty</td>'.
-                        '<td class="key">UOM</td>'.
-                        '<td class="key">Unit Price</td>'.
-                        '<td class="key">Extended</td>'.
-                        '<td class="key">Due Date</td><input type="hidden" name="boxcheckedpn" value="'.count($rows).'" /></tr>';
-                
-
-                
-                $i=0;
-                foreach ($rows as $row) {
-                $i++;        
-                         if ($row->pns_revision) {
-                                $pnNumber =  '-' . $row->pns_code . '-' . $row->pns_revision;
-                        } else {
-                                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
-                        }
-                    $attribs='readonly="readonly" onclick="Calendar.setup({inputField: \'due_date['.$row->pns_id .']\',ifFormat: \'%Y-%m-%d\','.
-								'button: \'cal\','.
-								'align: \'Tl\','.
-								'singleClick: true});"';
-                        $str .= '<tr>'.
-                                ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /></td>'.
-                                ' <td class="key">'.$row->pns_code.'</td>'.
-                                ' <td class="key">'.$row->pns_revision .'</td>'.
-                                ' <td class="key">'.$row->pns_description .'</td>'.                                                                
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
-                                ' <td class="key">'.$row->pns_uom.'</td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
-                                ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="extended['.$row->pns_id.']"  name="extended['.$row->pns_id.']" /></td>'.
-                                //' <td class="key"><input style="width: 70px" onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
-                                ' <td class="key"><input style="width: 70px" '.$attribs.' onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
-                                ' <td class="key"></td>';
-                }
-                $str .='</table>';
-                echo $str;
-                exit;
+            $db = & JFactory::getDBO();
+            $cid = JRequest::getVar('cid', array(), '', 'array');
+            $query = "select pns_id,pns_uom,pns_description, CONCAT_WS( '-', ccs_code, pns_code, pns_revision) AS pns_full_code,ccs_code, pns_code, pns_revision FROM apdm_pns WHERE pns_id IN (" . implode(",", $cid) . ")";
+            $db->setQuery($query);
+            $rows = $db->loadObjectList();
+            $str = JHTML::_('behavior.calendar').'<table class="admintable" cellspacing="1" width="60%"><tr>'.
+            '<td class="key">No.</td>'.
+            '<td class="key">Part Number</td>'.
+            '<td class="key">Rev</td>'.
+            '<td class="key">Description</td>'.
+            '<td class="key">Qty</td>'.
+            '<td class="key">UOM</td>'.
+            '<td class="key">Unit Price</td>'.
+            '<td class="key">Extended</td>'.
+            '<td class="key">Due Date</td><input type="hidden" name="boxcheckedpn" value="'.count($rows).'" /></tr>';
+            $i=0;
+            foreach ($rows as $row) {
+            $i++;
+            if ($row->pns_revision) {
+                $pnNumber =  '-' . $row->pns_code . '-' . $row->pns_revision;
+            } else {
+                $pnNumber = $row->ccs_code . '-' . $row->pns_code;
+            }
+                $attribs='readonly="readonly" onclick="Calendar.setup({inputField: \'due_date['.$row->pns_id .']\',ifFormat: \'%Y-%m-%d\','.
+                        'button: \'cal\','.
+                        'align: \'Tl\','.
+                        'singleClick: true});"';
+                    $str .= '<tr>'.
+                        ' <td><input checked="checked" type="checkbox" name="pns_child[]" value="' . $row->pns_id . '" /></td>'.
+                        ' <td class="key">'.$row->pns_code.'</td>'.
+                        ' <td class="key">'.$row->pns_revision .'</td>'.
+                        ' <td class="key">'.$row->pns_description .'</td>'.
+                        ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnly(this, event);" type="text" value="" id="qty['.$row->pns_id.']"  name="qty['.$row->pns_id.']" /></td>'.
+                        ' <td class="key">'.$row->pns_uom.'</td>'.
+                        ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="price['.$row->pns_id.']"  name="price['.$row->pns_id.']" /></td>'.
+                        ' <td class="key"><input style="width: 70px" onKeyPress="return numbersOnlyEspecialFloat(this, event);" type="text" value="" id="extended['.$row->pns_id.']"  name="extended['.$row->pns_id.']" /></td>'.
+                        //' <td class="key"><input style="width: 70px" onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
+                        ' <td class="key"><input style="width: 70px" '.$attribs.' onKeyPress="return dateEspecialmdy(this, event);" type="text" value="" id="due_date['.$row->pns_id.']"  name="due_date['.$row->pns_id.']" /></td>'.
+                        ' <td class="key"></td>';
+            }
+            $str .='</table>';
+            echo $str;
+            exit;
         }      
-         function save_quotation()
+        function save_quotation()
         {
-                // Initialize some variables
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');                        
-                
-                
-                $startdate = new DateTime($post['quo_start_date']);
-                $expire_date = new DateTime($post['quo_expire_date']);
-                $quo_start_date = $startdate->format('Y-m-d'); 
-                $quo_expire_date = $expire_date->format('Y-m-d'); 
-                $quoNumber = $post['quo_code'];
-                $arrQuo = explode(" ", $quoNumber);
-                $quo_code = $arrQuo[0];
-                $quo_rev = $arrQuo[1];
-                //check so exist or not
-                $db->setQuery('select count(*) from apdm_quotation where  quo_code = "'.$quo_code.'" and customer_id= "' .$post['customer_id'].'"');               
-                $check_so_exist = $db->loadResult();
-                if ($check_so_exist!=0) {
-                        $msg = JText::_('The Quotation Code already exist please add another Quotation Code');
-                         return $this->setRedirect('index.php?option=com_apdmquo&task=addquo', $msg);
-
-                }
-                $db->setQuery("INSERT INTO apdm_quotation (so_id,customer_id,quo_code,quo_revision,quo_state,quo_start_date,quo_expire_date,quo_created,quo_created_by) VALUES (0,'" . $post['customer_id'] . "', '" . $quo_code . "', '" . $quo_rev . "','Create' ,'" . $quo_start_date . "', '" . $quo_expire_date . "','" . $datenow->toMySQL() . "', " . $me->get('id') . ")");               
-                $db->query();     
-                //getLast SO ID
-                $quo_id = $db->insertid();
-                if($quo_id)
+            // Initialize some variables
+            $db = & JFactory::getDBO();
+            $me = & JFactory::getUser();
+            //$row = & JTable::getInstance('apdmpnso');
+            $datenow = & JFactory::getDate();
+            $post = JRequest::get('post');
+            $startdate = new DateTime($post['quo_start_date']);
+            $expire_date = new DateTime($post['quo_expire_date']);
+            $quo_start_date = $startdate->format('Y-m-d');
+            $quo_expire_date = $expire_date->format('Y-m-d');
+            $quoNumber = $post['quo_code'];
+            $arrQuo = explode(" ", $quoNumber);
+            $quo_code = $arrQuo[0];
+            $quo_rev = $arrQuo[1];
+            //check so exist or not
+            $db->setQuery('select count(*) from apdm_quotation where  quo_code = "'.$quo_code.'" and customer_id= "' .$post['customer_id'].'"');
+            $check_so_exist = $db->loadResult();
+            if ($check_so_exist!=0) {
+                $msg = JText::_('The Quotation Code already exist please add another Quotation Code');
+                return $this->setRedirect('index.php?option=com_apdmquo&task=addquo', $msg);
+            }
+            $db->setQuery("INSERT INTO apdm_quotation (so_id,customer_id,quo_code,quo_revision,quo_state,quo_start_date,quo_expire_date,quo_created,quo_created_by) VALUES (0,'" . $post['customer_id'] . "', '" . $quo_code . "', '" . $quo_rev . "','Create' ,'" . $quo_start_date . "', '" . $quo_expire_date . "','" . $datenow->toMySQL() . "', " . $me->get('id') . ")");
+            $db->query();
+            //getLast SO ID
+            $quo_id = $db->insertid();
+            if($quo_id)
+            {
+                $listPns = $post['pns_child'];
+                //insert to PN ASYY
+                if($listPns)
                 {
-                        $listPns = $post['pns_child'];
-                        //insert to PN ASYY
-                        if($listPns)
-                        {
-                                foreach($listPns as $pnId)
-                                {
-                                    $due_date = new DateTime($post['due_date'][$pnId] );
-                                    $quo_due_date = $due_date->format('Y-m-d');
-                                    $db->setQuery("INSERT INTO apdm_quotation_pn_fk (pns_id,quotation_id,qty,unit_price,extend_price,quo_pn_created,quo_pn_created_by,quo_pn_due_date) VALUES ('" . $pnId . "', '" . $quo_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $post['extended'][$pnId]  . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $quo_due_date . "')");
-                                    $db->query();
-                                }                                
-                        }                     
-                }//for save database of pns                
-                $msg = JText::_('Successfully Saved Quotation');
-                return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);                               
+                    foreach($listPns as $pnId)
+                    {
+                        $due_date = new DateTime($post['due_date'][$pnId] );
+                        $quo_due_date = $due_date->format('Y-m-d');
+                        $db->setQuery("INSERT INTO apdm_quotation_pn_fk (pns_id,quotation_id,qty,unit_price,extend_price,quo_pn_created,quo_pn_created_by,quo_pn_due_date) VALUES ('" . $pnId . "', '" . $quo_id . "', '" . $post['qty'][$pnId] . "', '" . $post['price'][$pnId]  . "', '" . $post['extended'][$pnId]  . "', '" . $datenow->toMySQL() . "', " . $me->get('id') . ",'" . $quo_due_date . "')");
+                        $db->query();
+                    }
+                }
+            }//for save database of pns
+            $msg = JText::_('Successfully Saved Quotation');
+            return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);
         }
          function save_quo_template()
         {
-                // Initialize some variables
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');                        
-                
-                
-                $ascenx_info = JRequest::getVar( 'ascenx_info', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
-                $content = JRequest::getVar( 'content', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
-                $term_conditions = JRequest::getVar( 'term_conditions', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
-                $question = JRequest::getVar( 'question', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
-               
-               
-                $db->setQuery("update apdm_quotation_template set ascenx_info = '".$ascenx_info."',content='".$content."',term_conditions='".$term_conditions."',question='".$question."',updated_at='" . $datenow->toMySQL() . "' , updated_by ='".$me->get('id')."' WHERE id = 1");
-                $db->query();  
-                         
-                $msg = JText::_('Successfully Saved Quotation Template');
-                return $this->setRedirect('index.php?option=com_apdmquo&task=addform&id=1', $msg);                               
+            // Initialize some variables
+            $db = & JFactory::getDBO();
+            $me = & JFactory::getUser();
+            $datenow = & JFactory::getDate();
+            $post = JRequest::get('post');
+            $ascenx_info = JRequest::getVar( 'ascenx_info', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+            $content = JRequest::getVar( 'content', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+            $term_conditions = JRequest::getVar( 'term_conditions', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+            $question = JRequest::getVar( 'question', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
+            $db->setQuery("update apdm_quotation_template set ascenx_info = '".$ascenx_info."',content='".$content."',term_conditions='".$term_conditions."',question='".$question."',updated_at='" . $datenow->toMySQL() . "' , updated_by ='".$me->get('id')."' WHERE id = 1");
+            $db->query();
+            $msg = JText::_('Successfully Saved Quotation Template');
+            return $this->setRedirect('index.php?option=com_apdmquo&task=addform&id=1', $msg);
         }
         function addform()
         {
-                 JRequest::setVar('layout', 'formtemplate');
-                JRequest::setVar('view', 'quo_info');
-                parent::display();
+            JRequest::setVar('layout', 'formtemplate');
+            JRequest::setVar('view', 'quo_info');
+            parent::display();
         }
 		/*
          * Detail STO 
          */        
         function quo_detail() {                
-                JRequest::setVar('layout', 'formtemplate');
-                JRequest::setVar('view', 'quo_info');
-                parent::display();
+            JRequest::setVar('layout', 'formtemplate');
+            JRequest::setVar('view', 'quo_info');
+            parent::display();
         }
         function GetQuoFrommPns($pns_id,$quo_id) {
             $db = & JFactory::getDBO();
@@ -304,7 +290,6 @@ class QUOController extends JController
                 $qty = JRequest::getVar('qty_'. $pns .'_' . $id);
                 $price = JRequest::getVar('price_' . $pns .'_' . $id);
                 $extend = JRequest::getVar('extend_' . $pns .'_' . $id);
-
                 $due_date = new DateTime(JRequest::getVar('duedate_' . $pns .'_' . $id));
                 $quo_due_date = $due_date->format('Y-m-d');
                 $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
@@ -319,7 +304,6 @@ class QUOController extends JController
         $msg .= "Successfully Saved Part Number";
         $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
     }
-
     /*
            * Remove PNS out of STO in STO management
            */
@@ -346,14 +330,13 @@ class QUOController extends JController
         $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
 
     }
-
     /*
                * Remove PNS out of STO in STO management
                */
     function removepnsquos() {
         $db = & JFactory::getDBO();
         $pnsfk = JRequest::getVar('cid', array(), '', 'array');
-         $quo_id = JRequest::getVar('quo_id');
+        $quo_id = JRequest::getVar('quo_id');
         foreach($pnsfk as $fk_id)
         {
             $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE id = '" . $fk_id . "' AND quotation_id = " . $quo_id . "");
@@ -367,62 +350,57 @@ class QUOController extends JController
         $this->setRedirect('index.php?option=com_apdmquo&task='.$return.'&id=' . $quo_id, $msg);
     }
 
-        function save_edit_quo()
+    function save_edit_quo()
+    {
+        // Initialize some variables
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        //$row = & JTable::getInstance('apdmpnso');
+        $datenow = & JFactory::getDate();
+        $post = JRequest::get('post');
+        $startdate = new DateTime($post['quo_start_date']);
+        $expire_date = new DateTime($post['quo_expire_date']);
+        $quo_start_date = $startdate->format('Y-m-d');
+        $quo_expire_date = $expire_date->format('Y-m-d');
+        $quo_id = $post['quo_id'];
+        $db->setQuery("update apdm_quotation set quo_start_date = '".$quo_start_date."',quo_expire_date='".$quo_expire_date."',quo_updated= '" . $datenow->toMySQL() . "',quo_updated_by ='" . $me->get('id') . "' where quotation_id ='".$quo_id."'");
+        $db->query();
+        if($quo_id)
         {
-                // Initialize some variables
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $post = JRequest::get('post');                        
-                
-                
-                $startdate = new DateTime($post['quo_start_date']);
-                $expire_date = new DateTime($post['quo_expire_date']);
-                $quo_start_date = $startdate->format('Y-m-d'); 
-                $quo_expire_date = $expire_date->format('Y-m-d');              
-                $quo_id = $post['quo_id'];
-                $db->setQuery("update apdm_quotation set quo_start_date = '".$quo_start_date."',quo_expire_date='".$quo_expire_date."',quo_updated= '" . $datenow->toMySQL() . "',quo_updated_by ='" . $me->get('id') . "' where quotation_id ='".$quo_id."'");
-                $db->query();                   
-                if($quo_id)
-                {
-                        $cid = JRequest::getVar('cid', array(), '', 'array');
-                        foreach ($cid as $pnsid) {
-                            $obj = explode("_", $pnsid);
-                            $pns=$obj[0];
-                            $ids = explode(",",$obj[1]);
-                            $msg = "";
-                            foreach ($ids as $id) {
-                                $qty = JRequest::getVar('qty_'. $pns .'_' . $id);
-                                $price = JRequest::getVar('price_' . $pns .'_' . $id);
-                                $extend = JRequest::getVar('extend_' . $pns .'_' . $id);
-                                $due_date = new DateTime(JRequest::getVar('duedate_' . $pns .'_' . $id));
-                                $quo_due_date = $due_date->format('Y-m-d');
-                                $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
-                                $db->query();
-                            }
-                        }                    
-                }//for save database of pns                
-                $msg = JText::_('Successfully Saved Quotation');
-                return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);                               
-
-        }
-
-/*
+            $cid = JRequest::getVar('cid', array(), '', 'array');
+            foreach ($cid as $pnsid) {
+                $obj = explode("_", $pnsid);
+                $pns=$obj[0];
+                $ids = explode(",",$obj[1]);
+                $msg = "";
+                foreach ($ids as $id) {
+                    $qty = JRequest::getVar('qty_'. $pns .'_' . $id);
+                    $price = JRequest::getVar('price_' . $pns .'_' . $id);
+                    $extend = JRequest::getVar('extend_' . $pns .'_' . $id);
+                    $due_date = new DateTime(JRequest::getVar('duedate_' . $pns .'_' . $id));
+                    $quo_due_date = $due_date->format('Y-m-d');
+                    $db->setQuery("update apdm_quotation_pn_fk set qty=" . $qty . ", unit_price='" . $price . "', extend_price='" . $extend . "',quo_pn_due_date = '".$quo_due_date."',quo_pn_updated = '" . $datenow->toMySQL() . "',quo_pn_updated_by ='" . $me->get('id') . "' WHERE  id = " . $id);
+                    $db->query();
+                }
+            }
+        }//for save database of pns
+        $msg = JText::_('Successfully Saved Quotation');
+        return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $quo_id, $msg);
+    }
+    /*
          * Remove QUO
-         */
-        function deletequo() {
-                $db = & JFactory::getDBO();                
-                $quo_id = JRequest::getVar('quo_id');
-                $db->setQuery("DELETE FROM apdm_quotation WHERE quotation_id = '" . $quo_id . "'");
-                $db->query();                    
-                $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE quotation_id = '" . $quo_id . "'");
-                $db->query(); 
-                $msg = JText::_('Have removed successfull.');
-                return $this->setRedirect('index.php?option=com_apdmquo&task=quo', $msg);
-        }   
-
- /**
+    */
+    function deletequo() {
+        $db = & JFactory::getDBO();
+        $quo_id = JRequest::getVar('quo_id');
+        $db->setQuery("DELETE FROM apdm_quotation WHERE quotation_id = '" . $quo_id . "'");
+        $db->query();
+        $db->setQuery("DELETE FROM apdm_quotation_pn_fk WHERE quotation_id = '" . $quo_id . "'");
+        $db->query();
+        $msg = JText::_('Have removed successfull.');
+        return $this->setRedirect('index.php?option=com_apdmquo&task=quo', $msg);
+    }
+    /**
      * Display all files eco
      */
     function routes_quo(){
@@ -431,34 +409,35 @@ class QUOController extends JController
         parent::display();
     }
 
- function check_routequo_promote($quo_id)
-        {
-                 $db = & JFactory::getDBO();         
-                //$eco_id = JRequest::getVar( 'cid', array(0) );
-                $db->setQuery("select rt.id,rt.quotation_id from apdm_eco_routes rt inner join apdm_quotation quo on rt.quotation_id =  quo.quotation_id and rt.status not in ('Create','Closed') and quo.quotation_id = '".$quo_id."'");             
-                return $db->loadResult();                
-                
-        }
- function add_routesquo() {       
+    function check_routequo_promote($quo_id)
+    {
+             $db = & JFactory::getDBO();
+            //$eco_id = JRequest::getVar( 'cid', array(0) );
+            $db->setQuery("select rt.id,rt.quotation_id from apdm_eco_routes rt inner join apdm_quotation quo on rt.quotation_id =  quo.quotation_id and rt.status not in ('Create','Closed') and quo.quotation_id = '".$quo_id."'");
+            return $db->loadResult();
+
+    }
+    function add_routesquo() {
         JRequest::setVar('layout', 'addroutes');
         JRequest::setVar('view', 'routes');
         parent::display();
     }
-    
-     function get_routename_quo_default()
+    /*
+     * Get Default Route Name
+     * */
+    function get_routename_quo_default()
     {
-                $db = & JFactory::getDBO();
-                $quo_id = JRequest::getVar('quo_id');
-                $query = "SELECT count(*)  FROM apdm_eco_routes  WHERE  quotation_id = '".$quo_id."'";
-                $db->setQuery($query);
-                $pns_latest = $db->loadResult();
-               
-                $next_poprf_code = (int) $pns_latest;
-                $next_poprf_code++;
-                echo "Route ".$next_poprf_code;
-                exit;
-        }       
-        function save_routes_quo() {
+        $db = & JFactory::getDBO();
+        $quo_id = JRequest::getVar('quo_id');
+        $query = "SELECT count(*)  FROM apdm_eco_routes  WHERE  quotation_id = '".$quo_id."'";
+        $db->setQuery($query);
+        $pns_latest = $db->loadResult();
+        $next_poprf_code = (int) $pns_latest;
+        $next_poprf_code++;
+        echo "Route ".$next_poprf_code;
+        exit;
+    }
+    function save_routes_quo() {
 
         $db = & JFactory::getDBO();
         $me = & JFactory::getUser();
@@ -475,7 +454,6 @@ class QUOController extends JController
         $db->query();
         $msg = "Successfully Saved Route Quotation";
         return $this->setRedirect( 'index.php?option=com_apdmquo&task=routestmp&time='.time().'&cid[]='.$quo_id, $msg );
-
     }
     function routestmp()
     {
@@ -504,7 +482,6 @@ class QUOController extends JController
         global $mainframe;
         // Check for request forgeries
         JRequest::checkToken() or jexit('Invalid Token');
-
         $option = JRequest::getCmd('option');
         // Initialize some variables
         $db = & JFactory::getDBO();
@@ -535,7 +512,6 @@ class QUOController extends JController
                     $db->query();
                 }
             }
-
         }
         /* foreach($mail_user as $key => $user)
          {
@@ -583,11 +559,9 @@ class QUOController extends JController
         $approve_sequence = JRequest::getVar('sequence',array());
         $title = JRequest::getVar('title',array());
         $mail_user = JRequest::getVar('mail_user',array());
-
         $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
         $row =  $db->loadObject();
         $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
-
         $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = "' . $routes . '"');
         $check_approver = $db->loadResult();
         if ($check_approver==0) {
@@ -607,7 +581,7 @@ class QUOController extends JController
                 $query = 'update apdm_eco_status set approved_at = "'.$approved_at.'", eco_status= "' . $approve_status[0] . '", note = "'.$approve_note[0].'" where quotation_id = ' . $cid[0] . ' and email= "' . $me->get('email') . '" and routes_id = "'.$routes.'"';
                 $db->setQuery($query);
                 $db->query();
-                $db->setQuery('select * from apdm_eco_status where eco_id = ' . $cid[0] . ' and user_id= "' . $me->get('id') . '" and routes_id = "' . $routes . '"');
+                $db->setQuery('select * from apdm_eco_status where quotation_id = ' . $cid[0] . ' and user_id= "' . $me->get('id') . '" and routes_id = "' . $routes . '"');
                 $rwapprove = $db->loadObject();
                 //IF REJECT will CLOSE
                 if($approve_status[0]=="Reject"){
@@ -622,25 +596,24 @@ class QUOController extends JController
                         "<br>+ Approver: " . GetValueUser($rwapprove->user_id, 'name') .
                         "<br>+ Approved/Rejected: Reject" .
                         "<br>+ Comment: " . $rwapprove->note .
-                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6')) .
-                        $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
-
+                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6'));
+                    $message .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
                     $adminEmail = $me->get('email');
                     $adminName = $me->get('name');
                     if ($MailFrom != '' && $FromName != '') {
                         $adminName = $FromName;
                         $adminEmail = $MailFrom;
                     }
-                    $owner_email = GetValueUser($row->eco_create_by, 'email');
+                    $owner_email = GetValueUser($row->quo_created_by, 'email');
                     JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $message, 1 );
                     //end SENTEMAIL
                 }
                 //for CASE APPROVED
                 if ($approve_status[0] == "Released") {
-                    $db->setQuery('select count(*) from apdm_eco_status where eco_id = ' . $row->eco_id . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                    $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $row->quotation_id . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
                     $totalSequenceApprovers = $db->loadResult();
                     //check all release
-                    $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and eco_id = ' . $cid[0] . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
+                    $db->setQuery('select count(*) from apdm_eco_status where eco_status = "Released" and quotation_id = ' . $cid[0] . ' and routes_id = "' . $routes . '" and sequence = "'.$rwapprove->sequence.'"');
                     $totalSequenceReleased = $db->loadResult();
                     if ($totalSequenceApprovers == $totalSequenceReleased) {
                         //send email Inreview for next SEQUENCE
@@ -659,7 +632,6 @@ class QUOController extends JController
                             $adminName = $FromName;
                             $adminEmail = $MailFrom;
                         }
-
                         //get first sequence
                         $db->setQuery('select sequence from apdm_eco_status where sequence != "'.$rwapprove->sequence.'" and quotation_id = ' . $cid[0] . '  and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '") order by sequence asc limit 1');
                         $hightSequence = $db->loadResult();
@@ -675,29 +647,26 @@ class QUOController extends JController
                                 $db->query();
                             }
                         }
-
                     }
                     //send email to OWNER notice APPROVER APPROVE route
 
                     //$subject = "ECO#".$row->eco_name." ".$IsCreater." by ".$me->get('username')." on ".date('m-d-Y');
                     $subject = "[APDM] Quotation " . $row->quo_state . " Result - " . $quo_code;
-
                     $message1 = "<br>+ Quotation: " . $quo_code .
                         //"<br>+ Description: " . $row->eco_description .
                         "<br>+ Sequence: " . $rwapprove->sequence .
                         "<br>+ Approver: " . GetValueUser($rwapprove->user_id, 'name') .
                         "<br>+ Approved/Rejected: Approve" .
                         "<br>+ Comment: " . $rwapprove->note .
-                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6')) .
-                        $message1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for this Quotation";
-
+                        "<br>+ Approved/Rejected Date: " . JHTML::_('date', $rwapprove->approved_at, JText::_('DATE_FORMAT_LC6'));
+                    $message1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for this Quotation";
                     $adminEmail = $me->get('email');
                     $adminName = $me->get('name');
                     if ($MailFrom != '' && $FromName != '') {
                         $adminName = $FromName;
                         $adminEmail = $MailFrom;
                     }
-                    $owner_email = GetValueUser($row->eco_create_by, 'email');
+                    $owner_email = GetValueUser($row->quo_created_by, 'email');
                     JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $message1, 1 );
                     //end SENTEMAIL
                 }
@@ -707,7 +676,6 @@ class QUOController extends JController
         $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0].'&routes='.$routes, $msg);
     }
     function set_route_quo() {
-
         global $mainframe;
         // Initialize some variables
         $db = & JFactory::getDBO();
@@ -718,9 +686,8 @@ class QUOController extends JController
         $check_owner = $db->loadResult();
         if ($check_owner==0) {
             $msg = JText::sprintf('You are not permission set routes', $cid[0]);
-            return $this->setRedirect('index.php?option=com_apdmquo&task=routes&&t='.time().'&cid[]=' . $cid[0], $msg);
+            return $this->setRedirect('index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[]=' . $cid[0], $msg);
         }
-
         $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id = "' . $id . '"');
         $check_approve = $db->loadResult();
         if ($check_approve<=1) {
@@ -729,7 +696,6 @@ class QUOController extends JController
         }
         $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
         $row =  $db->loadObject();
-        $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
         if ($row->quo_state == 'Released') {
             $msg = JText::sprintf('Quotation released can not set another route', $cid[0]);
             return $this->setRedirect('index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[]=' . $cid[0], $msg);
@@ -798,7 +764,6 @@ class QUOController extends JController
         $db = & JFactory::getDBO();
         $me = & JFactory::getUser();
         $datenow    =& JFactory::getDate();
-
         $name = JRequest::getVar('name');
         $description = JRequest::getVar('description');
         $status = 'Create';
@@ -820,10 +785,7 @@ class QUOController extends JController
         $db->query();
         $msg = "Successfully Saved Route Quotation";
         $this->setRedirect( 'index.php?option=com_apdmquo&task=routes_quo&t='.time().'&cid[0]='.$cid[0], $msg );
-
     }
-
-
     /**
      * Display all files eco
      */
@@ -843,7 +805,6 @@ class QUOController extends JController
         $db->setQuery("SELECT * from apdm_quotation where quotation_id=".$cid[0]);
         $row =  $db->loadObject();
         $quo_code = $row->quo_code  . ' ' . $row->quo_revision;
-
         $db->setQuery('select count(*) from apdm_eco_status where quotation_id = ' . $cid[0] . ' and routes_id in (select quo_routes_id from apdm_quotation where quotation_id= "' . $cid[0] . '")');
         $trow = $db->loadResult();
         if ($trow<2) {
@@ -971,8 +932,7 @@ class QUOController extends JController
                         "<br>+ Created Date: " . JHTML::_('date',$row->quo_created, JText::_('DATE_FORMAT_LC6'));
                     "<br>+ Modified by: " . GetValueUser($row->quo_updated_by, 'name') .
                     "<br>+ Modified Date: " . $date_updated;
-                    $messageowner1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->eco_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
-
+                    $messageowner1 .= "<br>Please click on <a href='".$SiteUrl."administrator/index.php?option=com_apdmquo&task=quo_detail&id=" . $row->quotation_id . "'>APDM</a> to access Approved/Rejected for Quotation " . $quo_code;
                     $adminEmail = $me->get('email');
                     $adminName = $me->get('name');
                     if ($MailFrom != '' && $FromName != '') {
@@ -982,14 +942,12 @@ class QUOController extends JController
                     $owner_email = GetValueUser($row->quo_created_by, 'email');
                     JUtility::sendMail( $adminEmail, $adminName, $owner_email, $subject, $messageowner1, 1 );
                     //end SENTEMAIL
-
                     $msg = JText::sprintf('Successfully Promote Quotation', $cid[0]);
                     return $this->setRedirect('index.php?option=com_apdmquo&task=quo_detail&id=' . $cid[0], $msg);
                 } else {
                     $msg = JText::sprintf('In the route have a approver selected Reject, please recheck', $cid[0]);
                     return $this->setRedirect('index.php?option=com_apdmquo&task=add_approvers_quo&cid[]=' . $cid[0] . '&routes=' . $route, $msg);
                 }
-
             }
         }
         $msg = JText::sprintf('Successfully Promote Quotation', $cid[0]);
@@ -1025,11 +983,9 @@ class QUOController extends JController
         $db->query();*/
         $msg = JText::sprintf( 'Successfully Demote Quotation',$cid[0]  );
         $this->setRedirect( 'index.php?option=com_apdmquo&task=quo_detail&id='. $cid[0], $msg );
-
     }
     function remove_routes_quo()
     {
-
         $db       =& JFactory::getDBO();
         $cid      = JRequest::getVar( 'quo');
         $me = & JFactory::getUser();
@@ -1050,7 +1006,6 @@ class QUOController extends JController
                 continue;
             }
             $id_o[] = $id;
-
             $db->setQuery("update apdm_eco_routes set deleted =1 WHERE  id IN (". $id.")");
             $db->query();
         }
@@ -1074,137 +1029,8 @@ class QUOController extends JController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function GetSupplierName($supplier_id) {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                $query = "SELECT s.info_name FROM  apdm_supplier_info AS s WHERE  s.info_deleted=0 AND  s.info_activate=1  AND  s.info_id =" . $supplier_id;
-                $db->setQuery($query);                
-                $info_name = $db->loadResult();
-                echo $info_name;
-        }
-        function ito_detail_pns() {
-                JRequest::setVar('layout', 'view_detail_pns');
-                JRequest::setVar('view', 'ito');
-                parent::display();
-        }  
-
-		 function GetLocationCodeList() {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                $query = "SELECT pns_location_id, location_code FROM apdm_pns_location WHERE  location_status =1";
-                $db->setQuery($query);
-                return $result = $db->loadObjectList();               
-        }
-		function GetCodeLocation($pns_location_id) {
-                $db = & JFactory::getDBO();                
-                $db->setQuery("SELECT location_code FROM apdm_pns_location WHERE pns_location_id=" . $pns_location_id);                
-                return $db->loadResult();
-        }	
-        function GetIdLocation($pns_location_code) {
-                $db = & JFactory::getDBO();                
-                $db->setQuery("SELECT pns_location_id FROM apdm_pns_location WHERE location_code='" . $pns_location_code."'");                                
-                return $db->loadResult();
-        }	
-		 function GetStoFrommPns($pns_id,$sto_id) {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
-                $query = "SELECT pns_id,id FROM apdm_pns_sto_fk WHERE pns_id = ".$pns_id ." and sto_id = ".$sto_id;
-
-                $db->setQuery($query);
-                $result = $db->loadObjectList();
-                if (count($result) > 0) {
-                        foreach ($result as $obj) {
-                                $rows[] = $obj->id;
-                        }
-                }
-                return $rows;
-        }        
-		function GetImagePreview($pns_id)
-        {
-                $db = & JFactory::getDBO();
-                $db->setQuery("select image_file from apdm_pns_image where pns_id ='".$pns_id."' limit 1");
-                return $db->loadResult();                
-        }
-		function GetManufacture($pns_id,$type=4) {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                $query = "SELECT p.supplier_id, p.supplier_info, s.info_name FROM apdm_pns_supplier AS p LEFT JOIN apdm_supplier_info AS s ON s.info_id = p.supplier_id WHERE  s.info_deleted=0 AND  s.info_activate=1 AND p.type_id = ".$type." AND  p.pns_id =" . $pns_id;
-
-                $db->setQuery($query);
-                $result = $db->loadObjectList();
-                if (count($result) > 0) {
-                        foreach ($result as $obj) {
-                                $rows[] = array('mf' => $obj->info_name, 'v_mf' => $obj->supplier_info);
-                        }
-                }
-                return $rows;
-        }
-        function getLocationPartStatePn($partState,$pnsId)
-        {
-                $db = & JFactory::getDBO();
-                $rows = array();
-                $query = "select fk.pns_id,fk.sto_id ,sto.sto_type,fk.partstate,fk.location,loc.location_code ".
-                        " from apdm_pns_sto_fk fk  ".
-                        " inner join apdm_pns_location loc on loc.pns_location_id=location ".
-                        " inner join apdm_pns_sto sto on fk.sto_id = sto.pns_sto_id ".
-                        " where fk.pns_id = ".$pnsId." and sto.sto_type=1 and fk.partstate = '".$partState."' group by loc.location_code";
-                $db->setQuery($query);
-                $result = $db->loadObjectList();
-                if (count($result) > 0) {
-                        $locationArr=array();
-                        foreach ($result as $obj) {
-                                if($obj->sto_type==1 )
-                                {
-                                    //$array_partstate[$obj->partstate] = $obj->partstate;                                
-                                    $locationArr[] = JHTML::_('select.option', $obj->location, $obj->location_code , 'value', 'text');                                                                          
-                                }
-                        }
-                }
-                return $locationArr;
-        }	
         
 
-        function ito_detail_support_doc()
-        {
-                JRequest::setVar('layout', 'view_detail_doc');
-                JRequest::setVar('view', 'ito');
-                parent::display();
-        }
-                /**
-         * @desc Read file size
-         */
-        function readfilesizeSto($folder_sto, $filename,$type) {
-                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'sto' . DS;
-                $filesize = '';               
-                $path_so .= $folder_sto . DS . $type . DS;
-                if (file_exists($path_so . $filename)) {
-                        $filesize = ceil(filesize($path_so . $filename) / 1000);
-                } else {
-                        $filesize = 0;
-                }
-                return $filesize;
-        }      
-        
-        function get_owner_confirm_sto()
-        {
-                JRequest::setVar('layout', 'inform');
-                JRequest::setVar('view', 'userinform');
-                parent::display();
-        }
         function ajax_checkownersto()
         {
                 $db = & JFactory::getDBO();
