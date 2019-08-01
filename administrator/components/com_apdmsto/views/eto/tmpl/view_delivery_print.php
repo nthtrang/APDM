@@ -37,42 +37,89 @@
     .tgi .tg-0pky-shipping{background-color: #0000cc}
     .tgi .tg-0pky-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 16px;color: #0B55C4}
     .tgi .tg-xldj-pr-title{border-color:inherit;text-align:left;vertical-align:top;font-size: 18px;color: #0B55C4;font-weight: bold}
+    .tgi .tg-xldj-pr-title1{border-color:inherit;text-align:left;vertical-align:top;}
+    .tgi .span-title{font-size: 18px;color: #0B55C4;font-weight: bold;}
+    .tgi .span-title-header{font-weight:bold;font-size: 11px;border-color:inherit;text-align:left}
     .tgi .tg-xldj-pr-title-ship{border-color:inherit;text-align:center;vertical-align:top;font-size: 18px;color: #0B55C4;font-weight: bold}
 </style>
 <table class="tgi" width="100%">
          <tr>
-    <th class="tg-xldj-pr-title">ASCENX TECHNOLOGIES</th>
-    <th class="tg-xldj-pr-title">DELIVERY NOTE</th>
-  </tr>
-    <tr>
-        <th class="tg-kiyi" rowspan="3">            
-            <br>Unit 5B, 5th Floor, Standard Factory Building
-            <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
-            <br>District 7, HCMC, Vietnam<br>Tax ID: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583</th>
-        <th class="tg-xldj-pr">PO:<?php
-           // $soNumber = $this->sto_row->so_cuscode;
-            if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
-                echo SToController::getPoExCodeFromId($this->sto_row->sto_so_id);
+    <th class="tg-xldj-pr-title1"><span class="span-title">ASCENX TECHNOLOGIES</span>
+        <span class="span-title-header">
+        <br>Unit 5B, 5th Floor, Standard Factory Building
+        <br>Road 14, Tan Thuan EPZ, Tan Thuan Dong Ward,
+        <br>District 7, HCMC, Vietnam<br>Tax ID: 0305.399.533<br>(O) : (8428) 3620.5581<br>(F):  (8428) 3620.5583
+        </span>
+    </th>
+    <th class="tg-xldj-pr-title1"><span class="span-title">DELIVERY NOTE</span>
+        <table class="tgi" cellspacing="1" width="100%" border="1">
+            <tr style="border-style:solid;border-width:1px;">
+                <td class="key" width="30%" style="border-style:solid !important;border-right:1px;">
+                    <label for="name">
+                        <?php echo JText::_( 'ETO' ); ?>:
+                    </label>
+                </td>
+                <td class="tg-xldj-pr">
+                    <?php
+                    $img			=	code128BarCode($this->sto_row->sto_code, 1);
+                    //Start output buffer to capture the image
+                    //Output PNG image
+                    ob_start();
+                    imagepng($img);
+                    //Get the image from the output buffer
+                    $output_img		=	ob_get_clean();
+                    echo '&nbsp;&nbsp;<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->sto_row->sto_code;
+                    ?>
+                </td>
+            </tr>
+            <tr style="border-style:solid;border-width:1px;">
+                <td class="key1" width="30%" style="border-style:solid !important;border-right:1px;">
+                    <label for="name">
+                        <?php echo JText::_( 'PO' ); ?>:
+                    </label>
+                </td>
+                <td class="tg-xldj-pr">
+                    PO:<?php
+                    // $soNumber = $this->sto_row->so_cuscode;
+                    if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                        echo SToController::getPoExCodeFromId($this->sto_row->sto_so_id);
 
-            }
-          //  echo $soNumber;
-            ?></th>            
-    </tr>
-    <tr>
-        <td class="tg-xldj-pr">Customer:
-            <?php
-            if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
-                echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
-            }
-            else
-            {
-                echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";
-            }
-            ?></td>
-    </tr>
-    <tr>
-        <td class="tg-xldj-pr">Delivery Method:<?php  echo $this->sto_row->delivery_method; ?></td>      
-    </tr>
+                    }
+                    //  echo $soNumber;
+                    ?>
+                </td>
+            </tr>
+            <tr style="border-style:solid;border-width:1px;">
+                <td class="key" width="30%" style="border-style:solid !important;border-right:1px;">
+                    <label for="name">
+                        <?php echo JText::_( 'Customer' ); ?>:
+                    </label>
+                </td>
+                <td class="tg-xldj-pr">
+                    <?php
+                    if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
+                        echo SToController::getCustomerCodeFromSoId($this->sto_row->sto_so_id);
+                    }
+                    else
+                    {
+                        echo ($this->sto_row->ccs_name)?$this->sto_row->ccs_name:"NA";
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr style="border-style:solid;border-width:1px;">
+                <td class="key" width="30%" style="border-style:solid !important;border-right:1px;">
+                    <label for="name">
+                        <?php echo JText::_( 'Delivery Method' ); ?>:
+                    </label>
+                </td>
+                <td class="tg-xldj-pr">
+                    <?php  echo $this->sto_row->delivery_method; ?>
+                </td>
+            </tr>
+        </table>
+    </th>
+  </tr>
     <tr>
         <td class="tg-xldj-pr"></td>      
     </tr>
@@ -266,6 +313,10 @@
         </td>
     </tr>
        <tr>
-        <td class="tg-0pky-pr" style="text-align:right" colspan="4">Receive date: <?php echo JHTML::_('date', date("Y-m-d H:i:s"), JText::_('DATE_FORMAT_LC5')); ?></td>
+        <td class="tg-0pky-pr" style="text-align:right" colspan="4">Received date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php //echo JHTML::_('date', date("Y-m-d H:i:s"), JText::_('DATE_FORMAT_LC5')); ?></td>
+    </tr>
+    <tr>
+        <td class="tg-0pky-pr" style="text-align:left"><br>Ascenx Technologies Vietnam Ltd. Co</td>
+        <td class="tg-0pky-pr" style="text-align:right" colspan="3"><br>Customer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     </tr>
 </table>

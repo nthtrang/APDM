@@ -1544,7 +1544,7 @@ class ECOController extends JController
                     $msg = JText::sprintf('Successfully Promote', $cid[0]);
                     return $this->setRedirect('index.php?option=com_apdmeco&task=detail&cid[]=' . $cid[0], $msg);
                 } else {
-                    $msg = JText::sprintf('In the route have a approver selected Reject, please recheck', $cid[0]);
+                    $msg = JText::sprintf('All approver haven\'t selected Approver/Reject yet', $cid[0]);
                     return $this->setRedirect('index.php?option=com_apdmeco&task=add_approvers&cid[]=' . $cid[0] . '&routes=' . $route, $msg);
                 }
 
@@ -1966,7 +1966,7 @@ class ECOController extends JController
         {
                  $db = & JFactory::getDBO();         
                 //$eco_id = JRequest::getVar( 'cid', array(0) );
-                $db->setQuery("select rt.id,rt.eco_id from apdm_eco_routes rt inner join apdm_eco eco on rt.eco_id =  eco.eco_id and rt.status not in ('Create','Closed') and eco.eco_id = '".$eco_id."'");             
+                $db->setQuery("select rt.id,rt.eco_id from apdm_eco_routes rt inner join apdm_eco eco on rt.eco_id =  eco.eco_id and rt.status not in ('Closed') and eco.eco_id = '".$eco_id."'");                             
                 return $db->loadResult();                
                 
         }

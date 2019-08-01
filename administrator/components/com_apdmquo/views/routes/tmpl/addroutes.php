@@ -74,7 +74,7 @@ if($exist_route_promoted)
 <div name="notice" style="color:#D30000" id ="notice"><strong>Please demote route before create new route</strong></div>
 <?php 
 }else{
-?>dd
+?>
 <form action="index.php?option=com_apdmquo&task=save_routes_quo&cid[]=<?php echo $cid[0]?>" method="post" name="adminFormSaveRoutes" enctype="multipart/form-data" >
          <table  width="100%">
 		<tr>

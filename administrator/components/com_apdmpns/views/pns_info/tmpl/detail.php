@@ -237,7 +237,7 @@ input.addEventListener("keyup", function(event) {
                         $ecoInitialReleased = PNsController::getLastEcoInitialReleased($this->row->pns_id);
                         if($ecoInitialReleased)
                         {
-                            echo $ecoInitialReleased;
+                            echo $ecoInitialReleased->eco_name;
                         }
                         else
                         {
@@ -253,7 +253,15 @@ input.addEventListener("keyup", function(event) {
 						</label>
 					</td>
 					<td>
-						<?php echo $this->row->pns_type; ?>
+						<?php 
+                                                if($ecoInitialReleased)
+                                                {
+                                                        echo $ecoInitialReleased->init_make_buy;
+                                                }
+                                                else{
+                                                        echo $this->row->pns_type;
+                                                }
+                                                ?>
 					</td>
 				</tr>
 				<tr>

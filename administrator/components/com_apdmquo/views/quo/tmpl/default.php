@@ -3,75 +3,60 @@
 <?php JHTML::_('behavior.tooltip'); ?>
 
 <?php
-	$role = JAdministrator::RoleOnComponent(5);
-     	
-	$cparams = JComponentHelper::getParams ('com_media');
-        JToolBarHelper::title("Quotation", 'cpanel.png');
+$cparams = JComponentHelper::getParams ('com_media');
+JToolBarHelper::title("Quotation", 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(8);      
 if (in_array("W", $role)) {
       //  JToolBarHelper::addNewito("New ITO", $this->row->pns_id);
         JToolBarHelper::customX('addquo', 'new', '', 'New Quotation', false);        
         JToolBarHelper::customX('addform', 'new', '', 'Form Template', false);
         //JToolBarHelper::addNeweto("New ETO", $this->row->pns_id);
-        
 }
+$cparams = JComponentHelper::getParams('com_media');
+$editor = &JFactory::getEditor();
 ?>
-
 <?php
-	// clean item data
-	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
-
-	
+// clean item data
+JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 ?>
-<script language="javascript">
-function submitbutton(pressbutton) {
-			var form = document.adminForm;
-//                        if (pressbutton == 'summary') {
-//                                window.location.assign("index.php?option=com_apdmeco&task=detail&cid[]=<?php echo $cid[0]?>")
-//                                return;
-//                        }
-//                        if (pressbutton == 'files') {
-//                                window.location.assign("index.php?option=com_apdmeco&task=files&cid[]=<?php echo $cid[0]?>");
-//                                return;
-//                        }      
-//                        if (pressbutton == 'approvers') {
-//                                window.location.assign("index.php?option=com_apdmeco&task=approvers&cid[]=<?php echo $cid[0]?>");
-//                                return;
-//                        }      
-                        if(pressbutton == 'remove_routes')
-                        {
-                             submitform( pressbutton );
-                             return;
-                        }
-}
-function saveApproveTask(id){
-                var approve_status = $('approve_status_'+id).value;
-                var approve_note = $('approve_note_'+id).value; 
-		var routes_id = $('routes_id_'+id).value;
-                var eco_id = $('eco_id_'+id).value;
-                if(approve_note=="")
-                {
-                        alert("Please input comment before save");
-                        return false;
-                }
-                var url = 'index.php?option=com_apdmeco&task=saveapproveAjax&cid='+eco_id;
-                url = url + '&approve_status=' + approve_status + '&approve_note=' + approve_note+ '&routes_id=' + routes_id;
-		var MyAjax = new Ajax(url, {
-			method:'get',
-			onComplete:function(result){
-				window.location.assign("index.php?option=com_apdmeco&task=dashboard");
-                               
-			}
-		}).request();
-	}
+<script language="javascript" type="text/javascript">
+    function submitbutton(pressbutton) {
+        var form = document.adminForm;
+        if (pressbutton == 'btnSubmit') {
+            var d = document.adminForm;
+            if ( document.adminForm.text_search.value==""){
+                alert("Please input keyword");
+                d.text_search.focus();
+                return false;
+            }else{
+                document.adminForm.submit();
+                submitform( pressbutton );
 
+            }
+        }
+
+        if (pressbutton == 'search_qty') {
+            submitform( pressbutton );
+            return;
+        }
+
+        if (pressbutton == 'addquo') {
+            submitform( pressbutton );
+            return;
+        }
+        if (pressbutton == 'addform') {
+            submitform( pressbutton );
+            return;
+        }
+
+    }
 </script>
 
 
                         <fieldset class="adminform">
                         <legend><?php echo JText::_( 'My Task' ); ?></legend>
 <!--<form action="index.php?option=com_apdmeco" method="post" name="adminForm1" >-->
-<form action="index.php?option=option=com_apdmquo&task=quo&tmpl=component" method="post" name="adminForm1" id="adminFormPns"  >
+        <form action="index.php"  onsubmit="submitbutton('')"  method="post" name="adminForm" >
         <div class="col width-100 scroll">
         <table class="adminlist" cellpadding="0">
 <thead>
@@ -155,8 +140,8 @@ function saveApproveTask(id){
 </div>
 	<div class="clr"></div>	
 
-	<input type="hidden" name="option" value="com_apdmeco" />
-	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="option" value="com_apdmquo" />
+	<input type="hidden" name="task" value="quo" />
        
 	<input type="hidden" name="boxchecked" value="0" />
 	<?php echo JHTML::_( 'form.token' ); ?>
@@ -166,7 +151,7 @@ function saveApproveTask(id){
                 
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'My Pending Task' ); ?></legend>
-                <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminForm" id="adminFormPns"  >
+                <form action="index.php?option=option=com_apdmeco&task=dashboard&tmpl=component" method="post" name="adminFormPns" id="adminFormPns"  >
              		<div class="col width-100 scroll">
               <table class="adminlist" cellpadding="1">
 		<thead>
@@ -236,13 +221,22 @@ function saveApproveTask(id){
 		</tfoot>
 	</table>
                 </div>
-                        <input type="hidden" name="option" value="com_apdmquo" />
-	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
-	<?php echo JHTML::_( 'form.token' ); ?>
+
+                    <input name="nvdid" value="<?php echo $this->lists['count_vd']; ?>" type="hidden" />
+                    <input name="nspid" value="<?php echo $this->lists['count_sp']; ?>" type="hidden" />
+                    <input name="nmfid" value="<?php echo $this->lists['count_mf']; ?>" type="hidden" />
+                    <input type="hidden" name="pns_id" value="<?php echo $this->row->pns_id; ?>" />
+                    <input type="hidden" name="cid[]" value="<?php echo $this->row->pns_id; ?>" />
+                    <input type="hidden" name="option" value="com_apdmquo" />
+                    <input type="hidden" name="task" value="quo" />
+                    <input type="hidden" name="redirect" value="mep" />
+                    <input type="hidden" name="boxchecked" value="0" />
+                    <input type="hidden" name="return" value="<?php echo $this->cd; ?>"  />
+                    <?php echo JHTML::_('form.token'); ?>
                 </form>
 
                 </fieldset>
-                        </div>
+
 
 
 
