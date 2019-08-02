@@ -57,7 +57,7 @@ $editor = &JFactory::getEditor();
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="name" id="name"  size="10" value="<?php echo $row[0]->name;?>"/>						
+						<input type="text" readonly="readonly" name="name" id="name"  size="10" value="<?php echo $row[0]->name;?>"/>
 					</td>
 				</tr>
 				<tr>

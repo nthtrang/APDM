@@ -439,7 +439,7 @@ if (count($this->arr_status) > 0) {
                                                 <?php
                                                 
                                                 if ($owner == $me->get('id')) {                                                             
-                                                        if ($this->arr_route[0]->status == "Create" || $this->arr_route[0]->status =="Started") {
+                                                        if ($this->arr_route[0]->status == "Create") {
                                                                 echo $add_routes;
                                                         }
                                                         $link = "index.php?option=com_apdmeco&amp;task=addapprove&amp;cid[]=" . $this->row->eco_id . "&amp;time=" . time();

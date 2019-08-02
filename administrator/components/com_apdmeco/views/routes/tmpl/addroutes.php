@@ -68,10 +68,11 @@ function UpdateRoutesWindow(){
 </script>
 <?php 
 $exist_route_promoted = EcoController::check_route_promote($cid[0]);
+$exist_route_create = EcoController::check_route_create($cid[0]);
 if($exist_route_promoted)
 {
 ?>
-<div name="notice" style="color:#D30000" id ="notice"><strong>Please demote route before create new route</strong></div>
+<div name="notice" style="color:#D30000" id ="notice"><strong>Please re-check <?php echo $exist_route_promoted->name;?> if you want to create new route</strong></div>
 <?php 
 }else{
 ?>
@@ -94,7 +95,7 @@ if($exist_route_promoted)
 						</label>
 					</td>
 					<td>
-						<input type="text"  name="name" id="name"  size="10" value="<?php echo $row[0]->name;?>"/>						
+						<input readonly="readonly" type="text"  name="name" id="name"  size="10" value="<?php echo $row[0]->name;?>"/>
 					</td>
 				</tr>
 				<tr>

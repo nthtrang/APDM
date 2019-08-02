@@ -149,7 +149,8 @@ function submitbutton(pressbutton) {
 					<?php echo $row->status; ?>
 				</td>		                                
 				<td align="center">
-					<?php echo JHTML::_('date', $row->due_date, JText::_('DATE_FORMAT_LC5')) ;?>
+					<?php echo JHTML::_('date', $row->due_date, JText::_('DATE_FORMAT_LC5'));
+					?>
 				</td>
 				<td align="center">
                                         <?php echo ($row->owner) ? GetValueUser($row->owner, 'name') : '';?>

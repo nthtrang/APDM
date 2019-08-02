@@ -355,7 +355,8 @@ class modMenuHelper
                         $role11 = JAdministrator::RoleOnComponent(11);                             
 			if(($user_apdm==0 &&  (in_array(11, $arr_component) && !in_array("H", $role11) ) || $usertype =='Administrator' || $usertype=="Super Administrator" )){                                
 				$menu->addChild(new JMenuNode(JText::_('Tool Tracker'), 'index.php?option=com_apdmtto', 'class:dashboard'));
-			} 
+			}
+            $menu->addChild(new JMenuNode(JText::_('Quotation'), 'index.php?option=com_apdmquo&task=quo', 'class:dashboard'));
 		}
 
 		/*
