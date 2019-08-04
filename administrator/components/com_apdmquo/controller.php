@@ -2623,4 +2623,11 @@ class QUOController extends JController
                 }
                 return 0;
         }
+        function savecompletestep()
+        {                          
+                echo 32;die;
+                JRequest::setVar('layout', 'popup_complete_step');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
 }

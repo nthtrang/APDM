@@ -13,7 +13,8 @@
                 $allow_edit = 1;
         }
         $role = JAdministrator::RoleOnComponent(10);     
-        
+        $op_arr  = $this->op_arr;                
+
         JToolBarHelper::apply('save_editwo', 'Save');
         if ( $edit ) {
         // for existing items the button is renamed `close`
@@ -809,9 +810,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
     <th class="tg-0pky"><label for="name">TARGET DATE</label></th>
   </tr>
   <tr>
-    <?php 
-    $op_arr  = $this->op_arr;
-    ?>
+    
     <td class="tg-0pky"><label for="name">1</label></td>
     <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation By:</label></td>
     <td>
