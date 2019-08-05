@@ -9321,6 +9321,15 @@ class PNsController extends JController {
 
                 
         }
+    function GetTotalEtoPns($pns_id,$so_id)
+    {
+        $db =& JFactory::getDBO();
+        $query = "SELECT count(DISTINCT(fk.sto_id)) FROM apdm_pns_sto_fk AS fk inner JOIN apdm_pns_sto sto on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id left join apdm_pns_so so on sto.sto_so_id = so.pns_so_id  where  so.pns_so_id=  ".$so_id." and fk.pns_id = ".$pns_id." and sto.sto_isdelivery_good = 1 and sto.sto_type = 2 and sto.sto_state in ('InTransit','Done') GROUP by fk.sto_id";
+        $db->setQuery($query);
+        return $db->loadResult();
+
+
+    }
         function quickViewWo()
         {
             JRequest::setVar('layout', 'scanscreen');
@@ -10464,138 +10473,151 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'shopfloor');
                 parent::display();
         }
-         function save_complete_step()
+        
+        function save_complete_step()
         {                                          
                 JRequest::setVar('layout', 'popup_complete_step');
                 JRequest::setVar('view', 'wo');
                 parent::display();                
         }
+        function save_start_step()
+        {                                          
+                JRequest::setVar('layout', 'popup_start_step');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
+        function save_pause_step()
+        {                                          
+                JRequest::setVar('layout', 'popup_pause_step');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
+        function save_resume_step()
+        {                                          
+                JRequest::setVar('layout', 'popup_resume_step');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
         function saveCompeteStepWo()
-        {
-                global $mainframe;
-          // Initialize some variables
+        {                
+                // Initialize some variables
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');         
                 $wo_id = $post['wo_id'];
-                $wo_step = $post['wo_step'];
-                
+                $wo_step = $post['wo_step'];                
 		$username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-
 		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
                 $isLogin = $db->loadResult();
                 if(!$isLogin)
                 {
                         echo 0;
-                        exit();
-                        
+                        exit();                        
                 }
-                //check lastest status 
-                       
+                //check lastest status                        
                 switch ($wo_step) {
                          case 'wo_step1':
                                 $status ="doc_reparation";
-                                 PNsController::saveWoStep1($post);   
+                                 PNsController::saveWoCompleteStep($post,'wo_step1','wo_step2');   
                                 break;
                         case 'wo_step2':
                                 $status ="label_printed";
-                                PNsController::saveWoStep2($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step2','wo_step3');   
                                 break;    
                         case 'wo_step3':
                                 $status ="wire_cut";
-                                PNsController::saveWoStep3($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step3','wo_step4');   
                                 break;
                         case 'wo_step4':
                                 $status ="kitted";
-                                PNsController::saveWoStep4($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step4','wo_step5');   
                                 break;    
                         case 'wo_step5':
                                 $status ="production";
-                                PNsController::saveWoStep5($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step5','wo_step6');   
                                 break;
                         case 'wo_step6':
                                 $status ="final_inspection";     
-                                PNsController::saveWoStep6($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step6','wo_step7');   
                                 break;   
                         case 'wo_step7':
                                 $status ="packaging";
-                                PNsController::saveWoStep7($post);   
+                                PNsController::saveWoCompleteStep($post,'wo_step7','wo_step7');   
                                 break;             
                         default:
                                 $status ="done";
-                }    
-                 $sql = "select count(*) from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code desc";
-                        $db->setQuery($sql);                        
-                        $totalWodone = $db->loadResult();
-                        if($totalWodone==0)
+                }
+                $sql = "select count(*) from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code desc";
+                $db->setQuery($sql);                        
+                $totalWodone = $db->loadResult();
+                if($totalWodone==0)
+                {
+                        $status ="done";
+                }
+                else
+                {
+                        $sql = "select * from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code asc limit 1";
+                        $db->setQuery($sql);                                              
+                        $row = $db->loadObject();
+                        switch($row->op_code)
                         {
-                                $status ="done";
-                        }
-                        else
-                        {
-                               $sql = "select * from apdm_pns_wo_op where wo_id =".$wo_id." and op_assigner !=0  and op_status != 'done'   order by op_code asc limit 1";
-                                     $db->setQuery($sql);                                              
-                                     $row = $db->loadObject();
-                                     switch($row->op_code)
-                                                {
-                                                        case 'wo_step1':
-                                                                $status ="doc_reparation";
-                                                                break;
-                                                        case 'wo_step2':
-                                                                $status ="label_printed";
-                                                                break;    
-                                                        case 'wo_step3':
-                                                                $status ="wire_cut";
-                                                                break;
-                                                        case 'wo_step4':
-                                                                $status ="kitted";
-                                                                break;    
-                                                        case 'wo_step5':
-                                                                $status ="production";
-                                                                break;
-                                                        case 'wo_step6':
-                                                                $status ="final_inspection";                                                                
-                                                                break;   
-                                                        case 'wo_step7':
-                                                                $status ="packaging";
-                                                                break;             
-                                                        default:
-                                                                $status ="done";
-
-                                                } 
-                        }
+                                case 'wo_step1':
+                                        $status ="doc_reparation";
+                                        break;
+                                case 'wo_step2':
+                                        $status ="label_printed";
+                                        break;    
+                                case 'wo_step3':
+                                        $status ="wire_cut";
+                                        break;
+                                case 'wo_step4':
+                                        $status ="kitted";
+                                        break;    
+                                case 'wo_step5':
+                                        $status ="production";
+                                        break;
+                                case 'wo_step6':
+                                        $status ="final_inspection";                                                                
+                                        break;   
+                                case 'wo_step7':
+                                        $status ="packaging";
+                                        break;             
+                                default:
+                                        $status ="done";
+                        } 
+                }
                 $sql= " update apdm_pns_wo set ".
-                                " wo_state = '" . $status . "'".                                
-                                ",wo_updated = '" . $datenow->toMySQL() . "'".
-                                ",wo_updated_by = '" . $me->get('id') . "'".
-                                " where pns_wo_id ='".$wo_id."' ";
+                        " wo_state = '" . $status . "'".                                
+                        ",wo_updated = '" . $datenow->toMySQL() . "'".
+                        ",wo_updated_by = '" . $me->get('id') . "'".
+                        " where pns_wo_id ='".$wo_id."' ";
+                $db->setQuery($sql);
+                $db->query();                           
+                //CHECK ALL WO DONE OR NOT
+                $query ="select count(*) from apdm_pns_wo where so_id = ".$post['so_id'];
+                $db->setQuery($query);
+                $totalWo = $db->loadResult();
+                $query ="select count(*) from apdm_pns_wo where so_id = ".$post['so_id']."  and wo_state= 'done'";
+                $db->setQuery($query);
+                $totalWoDone = $db->loadResult();
+                //SO have 4 status:onhold,cancel,done,inprogress
+                if($totalWoDone == $totalWo)//all WO done
+                {
+                        $sql= "update apdm_pns_so set so_state = 'done' where pns_so_id = ".$post['so_id'];
                         $db->setQuery($sql);
-                        $db->query();   
-                        
-                        //CHECK ALL WO DONE OR NOT
-                        $query ="select count(*) from apdm_pns_wo where so_id = ".$post['so_id'];
-                        $db->setQuery($query);
-                        $totalWo = $db->loadResult();
-                        $query ="select count(*) from apdm_pns_wo where so_id = ".$post['so_id']."  and wo_state= 'done'";
-                        $db->setQuery($query);
-                        $totalWoDone = $db->loadResult();
-                        //SO have 4 status:onhold,cancel,done,inprogress
-                        if($totalWoDone == $totalWo)//all WO done
-                        {
-                                 $sql= "update apdm_pns_so set so_state = 'done' where pns_so_id = ".$post['so_id'];
-                                 $db->setQuery($sql);
-                                 $db->query();
-                        }           
-                        $msg = JText::_('Have save successfull.');
-                        return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id, $msg);
-                        
+                        $db->query();
+                }           
+                $msg = JText::_('Have save successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id, $msg);                        
         }
-        
-        function saveWoStep1($post)
+        /*
+         * Check and save WO Step Complete
+         */
+        function saveWoCompleteStep($post,$current_step="wo_step1",$next_step="wo_step2")
         {                
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
@@ -10604,7 +10626,7 @@ class PNsController extends JController {
                 $wo_id = $post['wo_id'];
                  //Update step1                        
                 //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step1' and op_delay_check=0 and wo_id = ".$wo_id;
+                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = '".$current_step."' and op_delay_check=0 and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $delayt = $db->loadResult();
                 //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
@@ -10612,213 +10634,126 @@ class PNsController extends JController {
                 {
                         $sql= " update apdm_pns_wo_op set op_completed_date ='" .$datenow->toMySQL() . "'".
                                  " ,op_delay_check = 1 , op_delay = op_delay + 1  ".
-                                 " where op_code = 'wo_step1' and wo_id = ".$wo_id;
+                                 " where op_code = '".$current_step."' and wo_id = ".$wo_id;
                          $db->setQuery($sql);
                          $db->query();  
                 }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;
-                $db->setQuery($sql);
-                $db->query(); 
-                        						                        
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL()."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step1' and wo_id = ".$wo_id;
+                if($current_step!="wo_step7"){
+                        //set start date for next step
+                        $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                        $db->setQuery($sql);
+                        $db->query(); 
+                }                        						                        
+                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query();                                                
                         //end op 1
-        }
-        function saveWoStep2($post)
+        }    
+        
+        function saveCommentStepWo()
         {
+                 // Initialize some variables
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step2' and op_delay_check=0 and wo_id = ".$wo_id;
+                $datenow = & JFactory::getDate();                
+                $id = JRequest::getVar('id');                
+                $wo_id = JRequest::getVar('wo_id');
+                $wo_step = JRequest::getVar('wo_step');
+                $op_comment = JRequest::getVar('op_comment');                
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
+                $isLogin = $db->loadResult();
+                if(!$isLogin)
                 {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step2' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
+                        echo 0;
+                        exit();                        
                 }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;                
+                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
-                $db->query(); 
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step2' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
+                $db->query();  
+                echo 1;
         }
-        function saveWoStep3($post)
+        
+        function saveStartStepWo()
         {
+                 // Initialize some variables
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step3' and op_delay_check=0 and wo_id = ".$wo_id;
+                $datenow = & JFactory::getDate();                
+                $id = JRequest::getVar('id');                
+                $wo_id = JRequest::getVar('wo_id');
+                $wo_step = JRequest::getVar('wo_step');
+                $op_comment = JRequest::getVar('op_comment');     
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
+                $isLogin = $db->loadResult();
+                if(!$isLogin)
                 {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step3' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
+                        echo 0;
+                        exit();                        
                 }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;                
+                $sql = "update apdm_pns_wo_op set op_is_start = 1,op_start_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
-                $db->query(); 
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step3' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
+                $db->query();  
+                echo 1;
         }
-         function saveWoStep4($post)
+        function savePauseStepWo()
         {
+                 // Initialize some variables
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step4' and op_delay_check=0 and wo_id = ".$wo_id;
+                $datenow = & JFactory::getDate();                
+                $id = JRequest::getVar('id');                
+                $wo_id = JRequest::getVar('wo_id');
+                $wo_step = JRequest::getVar('wo_step');
+                $op_comment = JRequest::getVar('op_comment');        
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
+                $isLogin = $db->loadResult();
+                if(!$isLogin)
                 {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step4' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
+                        echo 0;
+                        exit();                        
                 }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;                
+                $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
-                $db->query(); 
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step4' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
+                $db->query();  
+                echo 1;
         }
-        function saveWoStep5($post)
+        function saveResumeStepWo()
         {
+                 // Initialize some variables
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step5' and op_delay_check=0 and wo_id = ".$wo_id;
+                $datenow = & JFactory::getDate();                
+                $id = JRequest::getVar('id');                
+                $wo_id = JRequest::getVar('wo_id');
+                $wo_step = JRequest::getVar('wo_step');
+                $op_comment = JRequest::getVar('op_comment');               
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
+                $isLogin = $db->loadResult();
+                if(!$isLogin)
                 {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step5' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
+                        echo 0;
+                        exit();                        
                 }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;                
+                $sql = "update apdm_pns_wo_op set op_is_pause=0,op_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
-                $db->query(); 
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step5' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
-        }
-        function saveWoStep6($post)
-        {
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step6' and op_delay_check=0 and wo_id = ".$wo_id;
-                $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
-                {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step6' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
-                }
-                //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query(); 
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step6' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
-        }
-        function saveWoStep7($post)
-        {
-                $db = & JFactory::getDBO();
-                $me = & JFactory::getUser();
-                //$row = & JTable::getInstance('apdmpnso');
-                $datenow = & JFactory::getDate();
-                $wo_id = $post['wo_id'];
-                //Update step2                
-                //$status ="kitted";
-                //check done with pass day target
-                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = 'wo_step7' and op_delay_check=0 and wo_id = ".$wo_id;
-                $db->setQuery($query);
-                $delayt = $db->loadResult();
-                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
-                if($delayt>0)
-                {
-                        $sql= " update apdm_pns_wo_op set op_completed_date ='" . $datenow->toMySQL() . "'".
-                                 " ,op_delay_check = 1, op_delay = op_delay + 1".
-                                 " where op_code = 'wo_step7' and wo_id = ".$wo_id;
-                         $db->setQuery($sql);
-                         $db->query();  
-                }                
-					
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."',op_target_date='" . $datenow->toMySQL() . "',op_status ='done', op_title ='Done',op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL() ."',op_assigner ='".$post['wo_assigner']."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = 'wo_step7' and wo_id = ".$wo_id;                
-                $db->setQuery($sql);
-                $db->query();                         
-                //check update op_target_date for implement count number delay step                
-                //end op 2
+                $db->query();  
+                echo 1;
         }
 }
 

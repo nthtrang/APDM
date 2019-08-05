@@ -86,6 +86,11 @@ class pnsViewwo extends JView {
                             'op_status' => $rop->op_status,
                             'op_assigner' => $rop->op_assigner,
                             'op_target_date' => $rop->op_target_date,
+                            'op_is_start' => $rop->op_is_start,
+                            'op_start_date' => $rop->op_start_date,
+                            'op_is_pause' => $rop->op_is_pause,
+                            'op_pause_date' => $rop->op_pause_date,
+                            'op_resume_date' => $rop->op_resume_date,
                             'pns_op_id' => $rop->pns_op_id);
                 }
                 $this->assignRef('op_arr', $op_arr);

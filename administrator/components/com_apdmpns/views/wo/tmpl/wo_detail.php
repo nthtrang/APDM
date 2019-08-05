@@ -11,8 +11,10 @@ $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 $usertype	= $me->get('usertype');
 $allow_edit = 0;
+$allow_complete=0;
 if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->wo_row->wo_created_by  == $me->get('id') ) {
         $allow_edit = 1;
+        $allow_complete=1;
 }
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(12);
@@ -26,39 +28,122 @@ JToolBarHelper::customX("printwopdf","print",'',"Print",false);
 
 
 $op_arr  = $this->op_arr;                
-if($op_arr['wo_step1']['op_assigner'] == $me->get('id') && $op_arr['wo_step1']['op_status'] != 'done'){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')      
-         JToolBarHelper::popUpCompleteStepWo('Complete1', 'save_complete_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+if(($allow_complete || $op_arr['wo_step1']['op_assigner'] == $me->get('id')) && $op_arr['wo_step1']['op_status'] != 'done'){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')      
+        if($op_arr['wo_step1']['op_is_start']==1){ //after start
+                if($op_arr['wo_step1']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume1', 'save_resume_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause1', 'save_pause_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete1', 'save_complete_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start1', 'save_start_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step2        
 $checkStep1 =  PNsController::checkStepBeforeDone('step2',$this->wo_row->pns_wo_id);
-if($checkStep1==1 && $op_arr['wo_step1']['op_status']=="done" && $op_arr['wo_step2']['op_assigner'] == $me->get('id')  && $op_arr['wo_step2']['op_status'] != 'done'){                
-        echo 4;
-        JToolBarHelper::popUpCompleteStepWo('Complete2', 'save_complete_step','wo_step2',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+if(($allow_complete || $op_arr['wo_step2']['op_assigner'] == $me->get('id')) && ($checkStep1==1 && $op_arr['wo_step1']['op_status']=="done"  && $op_arr['wo_step2']['op_status'] != 'done')){                                
+        if($op_arr['wo_step2']['op_is_start']==1){ //after start
+                if($op_arr['wo_step2']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume2', 'save_resume_step','wo_step2',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause2', 'save_pause_step','wo_step2',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete2', 'save_complete_step','wo_step2',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start2', 'save_start_step','wo_step2',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step3        
 $checkStep2 =  PNsController::checkStepBeforeDone('step3',$this->wo_row->pns_wo_id);
-if($checkStep2==1 && $op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_assigner'] == $me->get('id')  && $op_arr['wo_step3']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
-        JToolBarHelper::popUpCompleteStepWo('Complete3', 'save_complete_step','wo_step3',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+if(($allow_complete || $op_arr['wo_step3']['op_assigner'] == $me->get('id')) && ($checkStep2==1 && $op_arr['wo_step2']['op_status']=="done" && $op_arr['wo_step3']['op_status'] != 'done')){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')        
+        if($op_arr['wo_step3']['op_is_start']==1){ //after start
+                if($op_arr['wo_step3']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume3', 'save_resume_step','wo_step3',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause3', 'save_pause_step','wo_step3',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete3', 'save_complete_step','wo_step3',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start3', 'save_start_step','wo_step3',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step4
 $checkStep3 =  PNsController::checkStepBeforeDone('step4',$this->wo_row->pns_wo_id);
-if($checkStep3 == 1 && $op_arr['wo_step3']['op_status']=="done" && $op_arr['wo_step4']['op_assigner'] == $me->get('id')  && $op_arr['wo_step4']['op_status'] != 'done'){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')
-        JToolBarHelper::popUpCompleteStepWo('Complete4', 'save_complete_step','wo_step4',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+if(($allow_complete || $op_arr['wo_step4']['op_assigner'] == $me->get('id')) && ($checkStep3 == 1 && $op_arr['wo_step3']['op_status']=="done"  && $op_arr['wo_step4']['op_status'] != 'done')){// && $op_arr['wo_step3']['op_assigner'] == $me->get('id')        
+        if($op_arr['wo_step4']['op_is_start']==1){ //after start
+                if($op_arr['wo_step4']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume4', 'save_resume_step','wo_step4',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause4', 'save_pause_step','wo_step4',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete4', 'save_complete_step','wo_step4',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start4', 'save_start_step','wo_step4',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step5
 $checkStep4 =  PNsController::checkStepBeforeDone('step5',$this->wo_row->pns_wo_id); 
-if($checkStep4 == 1 && $op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_assigner'] == $me->get('id') && $op_arr['wo_step5']['op_status'] != 'done'){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
-        JToolBarHelper::popUpCompleteStepWo('Complete5', 'save_complete_step','wo_step5',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+if(($allow_complete || $op_arr['wo_step5']['op_assigner'] == $me->get('id')) && ($checkStep4 == 1 && $op_arr['wo_step4']['op_status']=="done" && $op_arr['wo_step5']['op_status'] != 'done')){// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')        
+        if($op_arr['wo_step5']['op_is_start']==1){ //after start
+                if($op_arr['wo_step5']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume5', 'save_resume_step','wo_step5',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause5', 'save_pause_step','wo_step5',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete5', 'save_complete_step','wo_step5',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start5', 'save_start_step','wo_step5',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step6
 $checkStep5 =  PNsController::checkStepBeforeDone('step6',$this->wo_row->pns_wo_id);
-if($checkStep5 == 1 && $op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_assigner'] == $me->get('id') && $op_arr['wo_step6']['op_status'] != 'done'){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')
-      JToolBarHelper::popUpCompleteStepWo('Complete6', 'save_complete_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);  
+if(($allow_complete || $op_arr['wo_step6']['op_assigner'] == $me->get('id')) && ($checkStep5 == 1 && $op_arr['wo_step5']['op_status']=="done" && $op_arr['wo_step6']['op_status'] != 'done')){// && $op_arr['wo_step6']['op_assigner'] == $me->get('id')      
+       if($op_arr['wo_step6']['op_is_start']==1){ //after start
+                if($op_arr['wo_step6']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume6', 'save_resume_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause6', 'save_pause_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete6', 'save_complete_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);  
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start6', 'save_start_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 //complete step7
 $checkStep6 = PNsController::checkStepBeforeDone('step7',$this->wo_row->pns_wo_id);
-if($checkStep6==1 && $op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_assigner'] == $me->get('id') && $op_arr['wo_step7']['op_status'] != 'done'){//
-        JToolBarHelper::popUpCompleteStepWo('Complete7', 'save_complete_step','wo_step7',$this->wo_row->pns_wo_id,$this->wo_row->so_id);  
+if(($allow_complete || $op_arr['wo_step7']['op_assigner'] == $me->get('id')) && ($checkStep6==1 && $op_arr['wo_step6']['op_status']=="done" && $op_arr['wo_step7']['op_status'] != 'done')){//        
+        if($op_arr['wo_step7']['op_is_start']==1){ //after start
+                if($op_arr['wo_step4']['op_is_pause']==1){ //after start
+                        JToolBarHelper::popUpCompleteStepWo('Resume6', 'save_resume_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                else
+                {
+                        JToolBarHelper::popUpCompleteStepWo('Pause6', 'save_pause_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                }
+                JToolBarHelper::popUpCompleteStepWo('Complete7', 'save_complete_step','wo_step7',$this->wo_row->pns_wo_id,$this->wo_row->so_id);  
+                
+        }else{
+                 JToolBarHelper::popUpCompleteStepWo('Start6', 'save_start_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+        }
 }
 
 $cparams = JComponentHelper::getParams('com_media');
