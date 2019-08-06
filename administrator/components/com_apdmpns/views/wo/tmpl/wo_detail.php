@@ -37,6 +37,7 @@ if(($allow_complete || $op_arr['wo_step1']['op_assigner'] == $me->get('id')) && 
                 {
                         JToolBarHelper::popUpCompleteStepWo('Pause1', 'save_pause_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
                 }
+                JToolBarHelper::popUpCompleteStepWo('Complete1', 'save_complete_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
                 JToolBarHelper::popUpCompleteStepWo('Complete1', 'save_complete_step','wo_step1',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
                 
         }else{

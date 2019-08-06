@@ -2009,9 +2009,11 @@ class SToController extends JController
                   return $this->setRedirect('index.php?option=com_apdmsto&task=eto_detail&id='.$sto_id, $msg);   
              }
              //getPN 
-             $query = "SELECT pns_id  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$sto_wo_id."'";
+             $query = "SELECT pns_id,wo_qty  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$sto_wo_id."'";
              $db->setQuery($query);
-             $pns_id = $db->loadResult();
+             $rw_wo = $db->loadObject();
+             $pns_id = $rw_wo->pns_id;
+             $wo_qty = $rw_wo->wo_qty;
              if(!$pns_id)
              {
                   $msg = JText::_('Can not find PN.');
@@ -2024,7 +2026,7 @@ class SToController extends JController
               if($revCheck){
                       
               }              
-              $db->setQuery('SELECT p.pns_id FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');              
+              $db->setQuery('SELECT p.pns_id,pr.stock FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');
               $result = $db->loadObjectList();             
               foreach($result as  $rw)
               {
@@ -2033,7 +2035,8 @@ class SToController extends JController
                 $location = $row->location;
                 $partState = $row->partstate;
                 $pns_mfg_pn_id = $row->pns_mfg_pn_id;
-                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate,pns_mfg_pn_id) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "','".$pns_mfg_pn_id."')");
+                $qty = round($wo_qty *$rw->stock,2);
+                $db->setQuery("INSERT INTO apdm_pns_sto_fk (pns_id,sto_id,location,partstate,pns_mfg_pn_id,qty) VALUES ( '" . $rw->pns_id . "','" . $sto_id . "','" . $location . "','" . $partState . "','".$pns_mfg_pn_id."','".$qty."')");
                 $db->query();
               }
               $msg = "Successfull add PN";

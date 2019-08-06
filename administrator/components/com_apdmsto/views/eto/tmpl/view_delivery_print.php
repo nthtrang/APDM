@@ -79,7 +79,7 @@
                     </label>
                 </td>
                 <td class="tg-xldj-pr">
-                    PO:<?php
+                    <?php
                     // $soNumber = $this->sto_row->so_cuscode;
                     if($this->sto_row->sto_isdelivery_good && $this->sto_row->sto_so_id){
                         echo SToController::getPoExCodeFromId($this->sto_row->sto_so_id);

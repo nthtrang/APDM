@@ -342,9 +342,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                  <?php
                                                                  foreach ($this->so_pn_list as $row) {                                                                         
                                                                  $rowEto = PNsController::GetEtoPns($row->pns_id,$this->so_row->pns_so_id);
-                                                                 
-                                                                 $totalEto= count($rowEto);
-                                                                 if($totalEto){
+                                                                     $totalEtoW = PNsController::GetTotalEtoPns($row->pns_id,$this->so_row->pns_so_id);
+
+                                                                     $totalEto = count($totalEtoW);
+                                                                 if(count($rowEto)){
                                                                  if ($row->pns_cpn == 1)
                                                                         $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $row->pns_id;
                                                                  else

@@ -260,10 +260,10 @@ class ECOController extends JController
             $date = & JFactory::getDate($row->eco_create, $tzoffset);
             $row->eco_create = $date->toMySQL();
             $row->eco_description = JRequest::getVar('eco_description');
-            $row->eco_reason = JRequest::getVar( 'eco_reason', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_reason');
-            $row->eco_what = JRequest::getVar( 'eco_what', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_what');
-            $row->eco_special =JRequest::getVar( 'eco_special', '', 'post', 'string', JREQUEST_ALLOWHTML );//JRequest::getVar('eco_special');
-            $row->eco_record_number = JRequest::getVar( 'eco_record_number', '', 'post', 'string', JREQUEST_ALLOWHTML );//
+            $row->eco_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'eco_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));//JRequest::getVar('eco_reason');
+            $row->eco_what = str_replace("Â","&nbsp;",JRequest::getVar( 'eco_what', '', 'post', 'string', JREQUEST_ALLOWHTML ));//JRequest::getVar('eco_what');
+            $row->eco_special =str_replace("Â","&nbsp;",JRequest::getVar( 'eco_special', '', 'post', 'string', JREQUEST_ALLOWHTML));//JRequest::getVar('eco_special');
+            $row->eco_record_number = str_replace("Â","&nbsp;",JRequest::getVar( 'eco_record_number', '', 'post', 'string', JREQUEST_ALLOWHTML));//
             $row->eco_benefit = JRequest::getVar('eco_benefit');
             $row->eco_technical =JRequest::getVar('eco_technical');
 

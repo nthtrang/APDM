@@ -72,7 +72,7 @@ JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
         }
         if (pressbutton == 'importpneto') {
             submitform( pressbutton );
-            return window.location = "index.php?option=com_apdmsto&task=importpneto&id="+form.sto_id.value;
+            return window.location = "index.php?option=com_apdmsto&task=importpneto&id="+form.sto_id.value+"&time=<?php echo time();?>";
 
         }
          if (pressbutton == 'printetoDelivery') {
