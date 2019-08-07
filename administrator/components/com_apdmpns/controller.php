@@ -8687,6 +8687,18 @@ class PNsController extends JController {
                 $stepValue['wo_step7'] = JText::_('Packaging');
                 echo $stepValue[$stepCode];
         }
+         function getWoStepCode($wo_state)
+        {
+                $stepValue = array();                
+                $stepValue['doc_reparation'] = JText::_('wo_step1');
+                $stepValue['label_printed'] = JText::_('wo_step2');
+                $stepValue['wire_cut'] = JText::_('wo_step3');
+                $stepValue['kitted'] = JText::_('wo_step4');
+                $stepValue['production'] =  JText::_('wo_step5');
+                $stepValue['final_inspection'] =  JText::_('wo_step6');
+                $stepValue['packaging'] = JText::_('wo_step7');
+                return $stepValue[$wo_state];
+        }
         function getSoStatus($statusCode)
         {
                 $arrSoStatus =array();   
@@ -10480,6 +10492,18 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'wo');
                 parent::display();                
         }
+        function save_complete_step5()
+        {                                          
+                JRequest::setVar('layout', 'popup_complete_step_5');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
+        function save_complete_step6()
+        {                                          
+                JRequest::setVar('layout', 'popup_complete_step_6');
+                JRequest::setVar('view', 'wo');
+                parent::display();                
+        }
         function save_start_step()
         {                                          
                 JRequest::setVar('layout', 'popup_start_step');
@@ -10501,6 +10525,13 @@ class PNsController extends JController {
         function save_failure_step()
         {
                 JRequest::setVar('layout', 'popup_failure_step');
+                JRequest::setVar('view', 'wo');
+                parent::display();     
+        }
+        
+        function save_rework_step()
+        {
+                JRequest::setVar('layout', 'popup_rework_step');
                 JRequest::setVar('view', 'wo');
                 parent::display();     
         }
@@ -10548,7 +10579,7 @@ class PNsController extends JController {
                                 break;
                         case 'wo_step6':
                                 $status ="final_inspection";     
-                                PNsController::saveWoCompleteStep($post,'wo_step6','wo_step7');   
+                                PNsController::saveWoCompleteStepQc($post,'wo_step6','wo_step7');   
                                 break;   
                         case 'wo_step7':
                                 $status ="packaging";
@@ -10666,7 +10697,66 @@ class PNsController extends JController {
                 $db->query(); 
                         //end op 1
         }    
-        
+        /*
+         * Check and save WO Step Complete
+         */
+        function saveWoCompleteStepQc($post,$current_step="wo_step6",$next_step="wo_step7")
+        {                
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();
+                $wo_id = $post['wo_id'];
+                 //Update step1                        
+                //check done with pass day target
+                $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = '".$current_step."' and op_delay_check=0 and wo_id = ".$wo_id;
+                $db->setQuery($query);
+                $delayt = $db->loadResult();
+                //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+                if($delayt>0)
+                {
+                        $sql= " update apdm_pns_wo_op set op_completed_date ='" .$datenow->toMySQL() . "'".
+                                 " ,op_delay_check = 1 , op_delay = op_delay + 1  ".
+                                 " where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                         $db->setQuery($sql);
+                         $db->query();  
+                }
+                if($current_step!="wo_step7"){
+                        //set start date for next step
+                        $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                        $db->setQuery($sql);
+                        $db->query(); 
+                }                        						                        
+                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                $wo_log =  JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML );
+                 $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
+                $db->setQuery($sql);
+                $db->query();          
+                
+                //log time sheet
+                $total_minute = 0;
+                $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $db->setQuery($query);
+                $log_total= $db->loadObject();
+                
+                $total=  $log_total->log_timesheet + $log_total->op_total_time;
+                $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $db->query(); 
+                //get op_id from step 6
+                $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $pns_op_id = $db->loadResult();
+                if($pns_op_id)
+                {                            
+                                $op_final_value = $post['op_final_value1'];
+                                $sql = "update apdm_pns_wo_op_final set op_final_value1='".$post['op_final_value1']."',op_final_value2='".$post['op_final_value2']."',op_final_value3='".$post['op_final_value3']."',op_final_value4='".$post['op_final_value4']."',op_final_value5='".$post['op_final_value5']."',op_final_value6='".$post['op_final_value6']."',op_final_value7='".$post['op_final_value7']."',op_final_value8='".$post['op_final_value8']."',op_final_updated='" . $datenow->toMySQL() . "',op_final_updated_by=" . $me->get('id') . " where op_final_fail_times = 1 and pns_op_id = ".$pns_op_id." and pns_wo_id=".$wo_id;
+                                $db->setQuery($sql);
+                                $db->query();
+                        
+                }
+                        //end op 1
+        }    
         function saveCommentStepWo()
         {
                  // Initialize some variables
@@ -10809,9 +10899,20 @@ class PNsController extends JController {
                 $sql = "SELECT pns_op_id,op_code FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) < ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0  and op_status = 'done' order by op_code desc limit 1";
                 $db->setQuery($sql);
                 $prestep = $db->loadObject();
-                $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
-                $db->setQuery($sql);
-                $db->query();
+                if($prestep->pns_op_id)
+                {
+                        $wo_prestep = $prestep->op_code;
+                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
+                        $db->setQuery($sql);
+                        $db->query();
+                }
+                else
+                {
+                        $wo_prestep = $wo_step;
+                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $db->setQuery($sql);
+                        $db->query();
+                }
                 //set PRE STATUS for WO
                   switch($prestep->op_code)
                         {
@@ -10837,13 +10938,13 @@ class PNsController extends JController {
                                         $status ="packaging";
                                         break;             
                                 default:
-                                        $status ="done";
+                                        $status ="doc_reparation";
                         }                 
                 $sql= " update apdm_pns_wo set ".
                         " wo_state = '" . $status . "'".                                
                         ",wo_updated = '" . $datenow->toMySQL() . "'".
                         ",wo_updated_by = '" . $me->get('id') . "'".
-                        ",wo_failure_report = '".$prestep->op_code."'".                        
+                        ",wo_failure_report = '".$wo_prestep."'".                        
                         " where pns_wo_id ='".$wo_id."' ";
                 $db->setQuery($sql);
                 $db->query();                       
