@@ -10575,7 +10575,7 @@ class PNsController extends JController {
                                 break;    
                         case 'wo_step5':
                                 $status ="production";
-                                PNsController::saveWoCompleteStep($post,'wo_step5','wo_step6');   
+                                PNsController::saveWoCompleteStepProduction($post,'wo_step5','wo_step6');
                                 break;
                         case 'wo_step6':
                                 $status ="final_inspection";     
@@ -10735,12 +10735,12 @@ class PNsController extends JController {
                 
                 //log time sheet
                 $total_minute = 0;
-                $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$current_step."' and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $log_total= $db->loadObject();
                 
                 $total=  $log_total->log_timesheet + $log_total->op_total_time;
-                $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query(); 
                 //get op_id from step 6
@@ -10756,7 +10756,65 @@ class PNsController extends JController {
                         
                 }
                         //end op 1
-        }    
+        }
+        function saveWoCompleteStepProduction($post,$current_step="wo_step6",$next_step="wo_step7")
+        {
+            $db = & JFactory::getDBO();
+            $me = & JFactory::getUser();
+            //$row = & JTable::getInstance('apdmpnso');
+            $datenow = & JFactory::getDate();
+            $wo_id = $post['wo_id'];
+            $wo_step = $post['wo_step'];
+            
+            //Update step1
+            //check done with pass day target
+            $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = '".$current_step."' and op_delay_check=0 and wo_id = ".$wo_id;
+            $db->setQuery($query);
+            $delayt = $db->loadResult();
+            //if datecomplte input diff with current target date will be reset op_delay_check for count up 1
+            if($delayt>0)
+            {
+                $sql= " update apdm_pns_wo_op set op_completed_date ='" .$datenow->toMySQL() . "'".
+                    " ,op_delay_check = 1 , op_delay = op_delay + 1  ".
+                    " where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $db->query();
+            }
+            if($current_step!="wo_step7"){
+                //set start date for next step
+                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $db->query();
+            }
+            $op_comment = $post['op_comment']; //str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+            $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+            $db->setQuery($sql);
+            $db->query();
+
+            //log time sheet
+            $total_minute = 0;
+            $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
+            $db->setQuery($query);
+            $log_total= $db->loadObject();
+
+            $total=  $log_total->log_timesheet + $log_total->op_total_time;
+            $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+            $db->setQuery($sql);
+            $db->query();
+            //update apdm_pns_wo_op_assembly
+            $op_assemble_id = $post['op_assemble_id'];
+            if(sizeof($op_assemble_id))
+            {
+                foreach($op_assemble_id as $assem_id)
+                {
+                    $sql = "update apdm_pns_wo_op_assembly set op_assembly_value1 = '".$post['op_assembly_value1'][$assem_id]."',op_assembly_value2='".$post['op_assembly_value2'][$assem_id]."',op_assembly_value3='".$post['op_assembly_value3'][$assem_id]."',op_assembly_value4='".$post['op_assembly_value4'][$assem_id]."',op_assembly_value5='".$post['op_assembly_value5'][$assem_id]."',op_assembly_updated='" . $datenow->toMySQL() . "',op_assembly_updated_by = " . $me->get('id') . " where id=".$assem_id." and pns_wo_id =".$wo_id;
+                    $db->setQuery($sql);
+                    $db->query();
+                }
+            }
+            //end op 1
+        }
+
         function saveCommentStepWo()
         {
                  // Initialize some variables

@@ -39,7 +39,7 @@ function onCompleteWo(){
                                 }
 				else
                                 {                                    
-                                        window.parent.document.getElementById('sbox-window').close();	
+                                       window.parent.document.getElementById('sbox-window').close();
                                         window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
 				
@@ -54,19 +54,32 @@ function cancelUpdate()
 {
         window.parent.document.getElementById('sbox-window').close();	
 }
-function saveCommentWoStep(){         
-         var form = document.adminForm;
-        var wo_id = form.wo_id.value;
-        var wo_step = form.wo_step.value;
-        var op_comment = form.op_comment.value;
-        var url = 'index.php?option=com_apdmpns&task=saveCommentStepWo&time=<?php echo time();?>&wo_id='+wo_id;                
-        url = url + '&wo_step='+wo_step+'&op_comment='+op_comment;
-        var MyAjax = new Ajax(url, {
-                        method:'get',
-                        onComplete:function(result){
-                                 document.getElementById('notice').innerHTML = "Update Comment Successfull";                               
-                        }
-                }).request();
+
+function numbersOnlyEspecialFloat(myfield, e, dec){
+
+    var key;
+    var keychar;
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    // control keys
+
+    if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+    // numbers
+    else if ((("0123456789").indexOf(keychar) > -1))
+        return true;
+    // decimal point jump
+    else if (dec && (keychar == "."))
+    {
+        myfield.form.elements[dec].focus();
+        return false;
+    }
+    else
+        return false;
 }
 </script>
 <form action="index.php?option=com_apdmpns&task=saveCompeteStepWo&tmpl=component&id=<?php echo $wo_id?>" method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >      
@@ -87,16 +100,56 @@ function saveCommentWoStep(){
                                                  </td>
                                                 
                                         </tr>
-                                       
+                                    <?php
+                                    $a_row = $this->wo_assem_rows[0];
+                                    ?>
+                                    <tr>
+                                        <td><strong>CONT#:</strong></td><td colspan="2">
+                                            <input type="text" size="20" maxlength='20'  value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Wire size:</strong></td><td colspan="2">
+                                    <input type="text" size="20" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tool ID:</strong></td><td colspan="2">
+                                            <?php
+
+                                            $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
+                                            if(sizeof($arrTool)) {
+                                                for ($iassem = 1; $iassem < 4; $iassem++) {
+                                                    echo $arrTool[$iassem];
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ?>
+                                        <input type="text" size="20" maxlength='10' value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" />
+                                            <?php
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Height:</strong></td><td colspan="2">
+                                            <input type="text" size="20" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pull Force:</strong></td><td colspan="2">
+                                   <input type="text" size="20" maxlength='10' value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
+                                    </tr>
                                         <tr>
-                                                <td colspan="3"><strong>Reason:</strong></td>
+                                                <td colspan="3"><strong>Comments:</strong></td>
                                                 
                                         </tr>
                                         <tr>
                                                 <td colspan="3">
                                                         <textarea name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
                                                 </td>
-                                               
+                                            <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row->id ?>" />
                                         </tr>
                                         
 			   
@@ -124,7 +177,6 @@ function saveCommentWoStep(){
 			
 			<td <td colspan="3" align="center">
                                 <input type="button" name="btinsersave" value="Save"  onclick="onCompleteWo();"/>
-                                <input type="button" name="btinsersavecomment" value="Comment"  onclick="saveCommentWoStep();"/>                        
                                 <input type="button" name="btinsercancel" value="Cancel"  onclick="cancelUpdate();"/>                        
                         </td>	
 		</tr>	
