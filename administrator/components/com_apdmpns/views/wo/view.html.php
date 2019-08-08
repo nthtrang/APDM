@@ -152,16 +152,18 @@ class pnsViewwo extends JView {
                 $lists['soStatus'] = JHTML::_('select.genericlist', $statusValue, 'so_status', 'class="inputbox " ' . $classDisabled . ' size="1"', 'value', 'text', $defaultStatus);
 
                 $arrSoStatus = array("inprogress" => JText::_('In Progress'), 'onhold' => JText::_('On hold'), 'cancel' => JText::_('Cancel'));
-                $arrWoStatus = array(
-                        'wo_step1' => JText::_('Label Prin'), 
-                        'wo_step2' => JText::_('Wire Cut'),
-                        'wo_step3'=>JText::_('Kitted'),
-                        'wo_step4'=>JText::_('Wire Cut'),
-                        'wo_step5'=>JText::_('Kitted'),
-                        'wo_step6' =>JText::_('Production'),
-                        'wo_step7' => JText::_('Visual Inspection')
-                        );
 
+                
+                $statusReworkValue = array();
+                $statusReworkValue[] = JHTML::_('select.option', '', '- ' . JText::_('Select') . ' -', 'value', 'text');                
+                $statusReworkValue[] = JHTML::_('select.option', 'doc_reparation', JText::_('Doc. Preparation By'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'label_printed', JText::_('Label Printed'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wire_cut', JText::_('Wire Cut'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'kitted', JText::_('Kitted'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'production', JText::_('Production'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'visual_inspection', JText::_('Visual Inspection'), 'value', 'text');
+                $listStatusReworkValue =  JHTML::_('select.genericlist', $statusReworkValue, 'step_rework', 'class="inputbox" size="1"', 'value', 'text', "");
+                
                 $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
                 $list_users = $db->loadObjectList();
                 $assigners[] = JHTML::_('select.option', 0, JText::_('Select Assigner'), 'value', 'text');
@@ -215,6 +217,9 @@ class pnsViewwo extends JView {
                 $this->assignRef('lists', $lists);
                 $this->assignRef('list_file_log', $list_file_log);
                 $this->assignRef('arr_status', $arrSoStatus);
+                $this->assignRef('arr_rework_status', $statusReworkValue);                
+                $this->assignRef('list_status_rework',       $listStatusReworkValue);
+                
                 $this->assignRef('list_user', $list_user);
                 $this->assignRef('wo_list', $rows);
                 $this->assignRef('pagination', $pagination);

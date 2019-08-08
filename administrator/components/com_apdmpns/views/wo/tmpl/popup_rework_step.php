@@ -57,20 +57,80 @@ function cancelUpdate()
                         <fieldset class="adminform">	
                                 <div name="notice" style="color:#D30000" id ="notice"></div>
                                 <table class="admintable" cellspacing="1" width="100%">
-                                        
-                                         <tr>
-                                                <td><strong>Step:</strong><?php echo PNsController::getWoStep($step);?></td>
-                                                 <td><strong>Assignee:</strong>
-                                                 <?php echo ($assignee!=0)?GetValueUser($assignee, "name"):"N/A"; ?>
-                                                 </td>
-                                                 <td><strong>Target Date:</strong>
-                                                <?php echo ($op_arr[$step]['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr[$step]['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?>
-                                                 </td>
+                                        <tr>
+                                                <td colspan="3" align="center"><strong style="font-size:18px;border-color:inherit;" >REWORK</strong></td>
                                                 
                                         </tr>
+                                          <tr>
+                                                <td colspan="3" align="center"><strong><?php
+                                        // echo $generator->getBarcode($this->wo_row->wo_code,$generator::TYPE_CODE_128,3,50);
+                                        //TYPE_EAN_13
+                                        //TYPE_CODE_128
+                                        $img			=	code128BarCode($this->wo_row->wo_code, 1);
+
+                                        //Start output buffer to capture the image
+                                        //Output PNG image
+
+                                        ob_start();
+                                        imagepng($img);
+
+                                        //Get the image from the output buffer
+
+                                        $output_img		=	ob_get_clean();
+                                        echo '<img src="data:image/png;base64,' . base64_encode($output_img) . '" /><br>'.$this->wo_row->wo_code;
+                                        ?></strong></td>
+                                                
+                                        </tr>
+                                        <tr>
+                                                <td><strong>Rework from:</strong>                                                
+                                                        <?php echo $this->list_status_rework;?>
+                                                </td>
+                                                <td></td>
+                                                <td><strong>QC By:</strong>
+                                                <?php echo ($assignee!=0)?GetValueUser($assignee, "name"):"N/A"; ?>
+                                                </td>
+                                        </tr>
+                                         <tr>
+                                                <td><strong>Failure:</strong>                                                
+                                                        <?php $opfn_arr = $this->opfn_arr;                                                        
+                                                        ?>
+                                                        <?php
+                                                        $arrFail = array();
+                                                        if($opfn_arr[1]['op_final_value1']==0)
+                                                            $arrFail[] ="Document(BOM,Drawing,Pro. Traveler)";
+                                                        if($opfn_arr[1]['op_final_value2']==0)
+                                                            $arrFail[] ="Visual Inspection";
+                                                        if($opfn_arr[1]['op_final_value3']==0)
+                                                            $arrFail[] ="Dimention";
+                                                        if($opfn_arr[1]['op_final_value4']==0)
+                                                            $arrFail[] ="Label";
+                                                        if($opfn_arr[1]['op_final_value5']==0)
+                                                            $arrFail[] ="Wiring";
+                                                        if($opfn_arr[1]['op_final_value6']==0)
+                                                            $arrFail[] ="Connection";
+                                                        if($opfn_arr[1]['op_final_value7']==0)
+                                                            $arrFail[] ="Hipot Test";
+                                                        if($opfn_arr[1]['op_final_value8']==0)
+                                                            $arrFail[] ="Other";
+                                                        echo implode(",",$arrFail);
+                                                        ?>
+                                                </td>
+                                                <td></td>
+                                                <td><strong>Rework Time</strong>
+                                                1
+                                                </td>
+                                        </tr>
+                                         <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td><strong>Rework Qty:</strong>
+                                                <input readonly type="text" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="rework_qty" id="rework_qty"/>
+                                                </td>
+                                        </tr>
+                                         
                                        
                                         <tr>
-                                                <td colspan="3"><strong>Reason:</strong></td>
+                                                <td colspan="3"><strong>Comments:</strong></td>
                                                 
                                         </tr>
                                         <tr>
@@ -80,8 +140,14 @@ function cancelUpdate()
                                                
                                         </tr>
                                         
-			   
-                 <tr>
+                                        <tr>
+                                                <td colspan="2">
+                                                        <strong>Reference attachment:</strong>
+                                                        <input type="file" name="wo_log_zip" /> </td>
+                                                </td>
+                                               
+                                        </tr>
+                                        <tr>
 					<td class="key">
 						<label for="name">
 							<?php echo JText::_( 'User Name' ); ?>

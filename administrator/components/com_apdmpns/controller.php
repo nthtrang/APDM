@@ -8687,6 +8687,7 @@ class PNsController extends JController {
                 $stepValue['wo_step7'] = JText::_('Packaging');
                 echo $stepValue[$stepCode];
         }
+        
          function getWoStepCode($wo_state)
         {
                 $stepValue = array();                

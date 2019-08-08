@@ -127,7 +127,7 @@ if(($allow_complete || $op_arr['wo_step6']['op_assigner'] == $me->get('id')) && 
                 }
                 else
                 {
-                        JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
+                        JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id,700,500);
                         JToolBarHelper::popUpCompleteStepWo('Pause6', 'save_pause_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
                         JToolBarHelper::popUpCompleteStepWo('Complete6', 'save_complete_step6','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id,700,500);  
                         JToolBarHelper::popUpCompleteStepWo('FAILURE REPORT1', 'save_failure_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
@@ -151,7 +151,7 @@ if(($allow_complete || $op_arr['wo_step7']['op_assigner'] == $me->get('id')) && 
                 }                
                 
         }else{
-                 JToolBarHelper::popUpCompleteStepWo('Start7', 'save_start_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
+                 JToolBarHelper::popUpCompleteStepWo('Start7', 'save_start_step','wo_step7',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
         }
 }
 
@@ -395,41 +395,41 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-uys7">1</td>
             <td class="tg-0pky" colspan="5">Doc. Preparation By:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step1']['op_comment'];?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_assigner']!=0)?GetValueUser($op_arr['wo_step1']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <tr>
             <td class="tg-uys7">2</td>
             <td class="tg-0pky" colspan="5">Label Print By:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step2']['op_comment'];?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_assigner']!=0)?GetValueUser($op_arr['wo_step2']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step2']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step2']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <tr>
             <td class="tg-uys7">3</td>
             <td class="tg-0pky" colspan="5">Wire Cut By:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step3']['op_comment'];?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_assigner']!=0)?GetValueUser($op_arr['wo_step3']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step3']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step3']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <tr>
             <td class="tg-uys7">4</td>
             <td class="tg-0pky" colspan="5">Kitted By:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step4']['op_comment'];?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_assigner']!=0)?GetValueUser($op_arr['wo_step4']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step4']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step4']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <tr>
             <td class="tg-c3ow">5</td>
             <td class="tg-0pky" colspan="5">Assembly performed by:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step5']['op_comment'];?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_assigner']!=0)?GetValueUser($op_arr['wo_step5']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <tr>
             <td class="tg-c3ow">Process</td>
@@ -486,8 +486,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 
         <tr>
             <td class="tg-0pky" colspan="5"></td>
-            <td class="tg-b2ze">1st Fail Qty</td>
-            <td class="tg-b2ze">2nd Fail Qty</td>
+            <td class="tg-b2ze" colspan="2">Inspection(QC)</td>
+            <!--<td class="tg-b2ze">2nd Fail Qty</td>-->
             <td class="tg-b2ze">DATE</td>
             <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
@@ -496,69 +496,77 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <tr>
             <td class="tg-7btt">6</td>
             <td class="tg-0pky" colspan="4">Inspection(QC) By:</td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-0pky" colspan="2"></td>
+<!--            <td class="tg-0pky"></td>-->
+            <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_assigner']!=0)?GetValueUser($op_arr['wo_step6']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
         <?php $opfn_arr = $this->opfn_arr;?>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Document not match</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value1']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>
+            <td class="tg-0pky" colspan="3">Document(BOM,Drawing,Pro. Traveler)</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value1']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>-->
             <td class="tg-0pky"></td>
             <td class="tg-c3ow" colspan="2"><span style="font-weight:700">COMMENTS</span></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Traveler incomplete</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value2']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value2']?></td>
+            <td class="tg-0pky" colspan="3">Visual Inspection</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value2']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value2']?></td>-->
             <td class="tg-0pky"></td>
-            <td class="tg-0pky" colspan="2" rowspan="6"><?php echo $op_arr['wo_step6']['op_comment'];?></td>
+            <td class="tg-0pky" colspan="2" rowspan="7"><?php echo $op_arr['wo_step6']['op_comment'];?></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Wrong Dimension</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value3']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value3']?></td>
-            <td class="tg-0pky"></td>
-        </tr>
-        <tr>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Label print error</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value4']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value4']?></td>
+            <td class="tg-0pky" colspan="3">Dimention</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value3']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value3']?></td>-->
             <td class="tg-0pky"></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Missing Label / Wrong Location</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value5']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value5']?></td>
+            <td class="tg-0pky" colspan="3">Label</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value4']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value4']?></td>-->
             <td class="tg-0pky"></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Miss Wire / Open Connection</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value6']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value6']?></td>
+            <td class="tg-0pky" colspan="3">Wiring</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value5']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value5']?></td>-->
             <td class="tg-0pky"></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
-            <td class="tg-0pky" colspan="3">Fail Hipot Test</td>
-            <td class="tg-0pky"><?php echo $opfn_arr[1]['op_final_value7']?></td>
-            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value7']?></td>
+            <td class="tg-0pky" colspan="3">Connection</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value6']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value6']?></td>-->
+            <td class="tg-0pky"></td>
+        </tr>
+        <tr>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky">&gt;</td>
+            <td class="tg-0pky" colspan="3">Hipot Test</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value7']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value7']?></td>-->
+            <td class="tg-0pky"></td>
+        </tr>
+        <tr>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky">&gt;</td>
+            <td class="tg-0pky" colspan="3">Other</td>
+            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value8']==1)?"PASS":"FAIL"?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value8']?></td>-->
             <td class="tg-0pky"></td>
         </tr>
         <tr>
@@ -572,9 +580,9 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-7btt">7</td>
             <td class="tg-0pky" colspan="5">Packaging by</td>
             <td class="tg-0pky"><?php echo $op_arr['wo_step7']['op_comment'];?></td>
-            <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_assigner']!=0)?GetValueUser($op_arr['wo_step7']['op_assigner'], "name"):"N/A"; ?></td>
-            <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?></td>
+            <td class="tg-0pky"><?php echo ($op_arr['wo_step7']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step7']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
     </table>
     <input type="hidden" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
