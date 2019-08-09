@@ -11021,5 +11021,147 @@ class PNsController extends JController {
                 $db->query(); 
                 echo 1;
         }
+        function checkloginSuccess()
+        {
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();    
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+                $db->setQuery($query);
+                $isLogin = $db->loadResult();
+                if(!$isLogin)
+                {
+                        echo 0;
+                        exit();                        
+                }
+                echo 1;
+        }
+        function saveReworkStepWo()
+        {
+                // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();                
+                $id = JRequest::getVar('id');                
+                $wo_id = JRequest::getVar('wo_id');
+                $so_id = JRequest::getVar('so_id');
+                $step_rework = JRequest::getVar('step_rework');
+                $wo_step = JRequest::getVar('wo_step');
+                $op_comment = JRequest::getVar('op_comment');        
+                $username = JRequest::getVar('username', '', 'method', 'username');
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+                $db->setQuery($query);
+                $isUserId = $db->loadResult();
+                if(!$isUserId)
+                {
+                        echo 0;
+                        exit();                        
+                }
+                //get STEP need rework
+                //$step_rework = step_rework
+               $post = JRequest::get('post'); 
+                 if($_FILES['wo_files_zip']['size']>0){                                        
+                        $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo';
+                        $folder = $wo_id;
+
+                        $path_wo_zips = $path_upload  .DS. $folder . DS;
+                        $upload = new upload($_FILES['']);
+                        $upload->r_mkdir($path_wo_zips, 0777);                        
+                        $arr_file_upload = array();
+                        $arr_error_upload_zips = array();
+                       // for ($i = 1; $i <= 20; $i++) {       
+                        if ($_FILES['wo_files_zip']['size'] > 0) {
+                                if($_FILES['wo_files_zip']['size']<20000000)
+                                {
+                                        if (!move_uploaded_file($_FILES['wo_files_zip' . $i]['tmp_name'], $path_wo_zips . $_FILES['wo_files_zip']['name'])) {
+                                                        $arr_error_upload_zips[] = $_FILES['wo_files_zip']['name'];
+                                        } else {
+                                                        $arr_file_upload[] = $_FILES['wo_files_zip']['name'];
+                                        }
+                                }
+                                else
+                                {
+                                        $msg = JText::_('Please upload file less than 20MB.');
+                                                return $this->setRedirect('index.php?option=com_apdmpns&task=save_rework_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);    
+                                }
+                        }
+                        
+                        
+                       // }
+                        if (count($arr_file_upload) > 0) {
+                                foreach ($arr_file_upload as $file) {
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $wo_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $isUserId . " ) ");
+                                        $db->query();
+                                }
+                        }      
+                }
+                
+                //set PRE STATUS for WO
+                  switch($step_rework)
+                        {
+                                case 'wo_step1':
+                                        $status ="doc_reparation";
+                                        break;
+                                case 'wo_step2':
+                                        $status ="label_printed";
+                                        break;    
+                                case 'wo_step3':
+                                        $status ="wire_cut";
+                                        break;
+                                case 'wo_step4':
+                                        $status ="kitted";
+                                        break;    
+                                case 'wo_step5':
+                                        $status ="production";
+                                        break;
+                                case 'wo_step6':
+                                        $status ="final_inspection";                                                                
+                                        break;   
+                                case 'wo_step7':
+                                        $status ="packaging";
+                                        break;             
+                                default:
+                                        $status ="doc_reparation";
+                        }   
+                       
+                        
+                $sql= " update apdm_pns_wo set ".
+                        " wo_state = '" . $status . "'".                                
+                        ",wo_updated = '" . $datenow->toMySQL() . "'".
+                        ",wo_updated_by = '" . $isUserId . "'".
+                        ",wo_rework_times = wo_rework_times + 1".                        
+                        " where pns_wo_id ='".$wo_id."' ";
+                $db->setQuery($sql);
+                $db->query();                       
+                
+                //get ALL  PRE STEP for reset
+                $lastNumber = substr($step_rework, -1);
+                $sql = "SELECT pns_op_id,op_code FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) >= ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0  and op_status = 'done' order by op_code desc limit 7";
+                $db->setQuery($sql);
+                $presteps = $db->loadObjectList();
+                foreach($presteps as $rpre)
+                {
+                      $sql = "update apdm_pns_wo_op set op_rework_times = 1,op_status='pending',op_title='Pending',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
+                        $db->setQuery($sql);
+                        $db->query();  
+                }               
+                //log time sheet
+                $total_minute = 0;
+                $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_pause_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_pause_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $db->setQuery($query);
+                $log_total= $db->loadObject();
+                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                $total=  $log_total->log_timesheet + $log_total->op_total_time;
+                $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $db->query(); 
+                echo 1;
+        }
 }
 

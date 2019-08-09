@@ -32,7 +32,7 @@ $editor = &JFactory::getEditor();
         {
                 
                 window.parent.document.getElementById('sbox-window').close();	
-                    window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
         }
 function onCompleteWo(){
         var form = window.document.adminForm;
@@ -41,14 +41,9 @@ function onCompleteWo(){
 		alert('Please type your password.');
                 form.passwd.focus();
 		return false;
-	}
-        else if (form.op_comment.value==""){
-		alert('Please type your comment.');
-                form.op_comment.focus();
-		return false;
-	}
+	}       
         else{	
-		var url = 'index.php?option=com_apdmpns&task=saveCompeteStepWo&id='+wo_id;                
+		var url = 'index.php?option=com_apdmpns&task=checkloginSuccess&id='+wo_id;                
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminForm').toQueryString(),
@@ -58,7 +53,8 @@ function onCompleteWo(){
                                         document.getElementById('notice').innerHTML = "Incorrect Password";				                
                                 }
 				else
-                                {                                    
+                                {   
+                                        submitform("saveCompeteStepWo");
                                        // window.parent.document.getElementById('sbox-window').close();	
                                        // window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
@@ -176,7 +172,7 @@ function cancelUpdate()
                                     <tr>
 			
 			<td <td colspan="3" align="center">
-                                <input type="button" name="btinsersave" value="Save"  onclick="javascript: submitbutton('saveCompeteStepWo');"/>
+                                <input type="button" name="btinsersave" value="Save"  onclick="onCompleteWo();"/>
                                 <input type="button" name="btinsercancel" value="Cancel"  onclick="cancelUpdate();"/>                        
                         </td>	
 		</tr>	

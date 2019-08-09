@@ -156,12 +156,12 @@ class pnsViewwo extends JView {
                 
                 $statusReworkValue = array();
                 $statusReworkValue[] = JHTML::_('select.option', '', '- ' . JText::_('Select') . ' -', 'value', 'text');                
-                $statusReworkValue[] = JHTML::_('select.option', 'doc_reparation', JText::_('Doc. Preparation By'), 'value', 'text');
-                $statusReworkValue[] = JHTML::_('select.option', 'label_printed', JText::_('Label Printed'), 'value', 'text');
-                $statusReworkValue[] = JHTML::_('select.option', 'wire_cut', JText::_('Wire Cut'), 'value', 'text');
-                $statusReworkValue[] = JHTML::_('select.option', 'kitted', JText::_('Kitted'), 'value', 'text');
-                $statusReworkValue[] = JHTML::_('select.option', 'production', JText::_('Production'), 'value', 'text');
-                $statusReworkValue[] = JHTML::_('select.option', 'visual_inspection', JText::_('Visual Inspection'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step1', JText::_('Doc. Preparation By'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step2', JText::_('Label Printed'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step3', JText::_('Wire Cut'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step4', JText::_('Kitted'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step5', JText::_('Production'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step6', JText::_('Visual Inspection'), 'value', 'text');
                 $listStatusReworkValue =  JHTML::_('select.genericlist', $statusReworkValue, 'step_rework', 'class="inputbox" size="1"', 'value', 'text', "");
                 
                 $db->setQuery("SELECT jos.id as value, jos.name as text FROM jos_users jos inner join apdm_users apd on jos.id = apd.user_id  WHERE user_enable=0 ORDER BY jos.username ");
