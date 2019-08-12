@@ -213,6 +213,12 @@ class pnsViewwo extends JView {
                 $db->setQuery("SELECT * FROM apdm_pns_wo_files WHERE wo_id='".$wo_id."'");
                 $list_file_log = $db->loadObjectList();
                 
+                
+                //get PN MATERIAL
+                $db->setQuery("SELECT fk.id,fk.qty,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_ref_des,p.pns_find_number,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_wo AS wo inner JOIN apdm_pns_wo_fk fk on wo.pns_wo_id = fk.wo_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where wo.pns_wo_id=".$wo_id." group by fk.pns_id order by fk.pns_id desc");
+                $material_pn_list = $db->loadObjectList();         
+                $this->assignRef('material_pn_list',        $material_pn_list);
+                
                 $lists['search'] = $search;
                 $this->assignRef('lists', $lists);
                 $this->assignRef('list_file_log', $list_file_log);

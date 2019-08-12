@@ -19,7 +19,8 @@ if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->wo
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(12);
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
-    JToolBarHelper::editListX("editwo","Edit WO");
+        JToolBarHelper::editListX("editwo","Edit WO");
+        JToolBarHelper::customX("requestmaterialwo","help",'',"Request Material",false);
 }
 if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
     JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO");
@@ -177,6 +178,11 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             submitform( pressbutton );
             return;
         }
+        if (pressbutton == 'requestmaterialwo') {
+                window.location = "index.php?option=com_apdmpns&task=requestmaterialwo&id="+form.wo_id.value;
+           //submitform( pressbutton );
+            return;
+        }        
         if (pressbutton == 'printwopdf') {
             //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
             var url = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";

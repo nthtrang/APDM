@@ -1,0 +1,248 @@
+<?php
+/**
+* @version		$Id: view.html.php 10496 2008-07-03 07:08:39Z ircmaxell $
+* @package		Joomla
+* @subpackage	Users
+* @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
+* @license		GNU/GPL, see LICENSE.php
+* Joomla! is free software. This version may have been modified pursuant
+* to the GNU General Public License, and as distributed it includes or
+* is derivative of works licensed under the GNU General Public License or
+* other free or open source software licenses.
+* See COPYRIGHT.php for copyright notices and details.
+*/
+
+// Check to ensure this file is included in Joomla!
+defined('_JEXEC') or die( 'Restricted access' );
+
+jimport( 'joomla.application.component.view');
+
+/**
+ * HTML View class for the Users component
+ *
+ * @static
+ * @package		Joomla
+ * @subpackage	Users
+ * @since 1.0
+ */
+class pnsViewgetpnsformateriawo extends JView
+{
+	function display($tpl = null)
+	{
+	    global $mainframe, $option;
+        
+        $db                =& JFactory::getDBO();
+        $option             = 'com_apdmpns&task=getpnsformateriawo';
+        $id               = JRequest::getVar('id');
+        $wo_id = JRequest::getVar('wo_id');
+        
+        $filter_order        = $mainframe->getUserStateFromRequest( "$option.filter_order",        'filter_order',        'p.pns_id',    'cmd' );        
+        $filter_order_Dir    = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",    'filter_order_Dir',    'desc',       'word' );      
+        
+        $filter_status    = $mainframe->getUserStateFromRequest( "$option.filter_status",    'filter_status',     '',    'string' );
+        $filter_type      = $mainframe->getUserStateFromRequest( "$option.filter_type",    'filter_type',     '',    'string' );
+        
+        $filter_created_by    = $mainframe->getUserStateFromRequest( "$option.filter_created_by",    'filter_created_by',     0,    'int' );
+        $filter_modified_by    = $mainframe->getUserStateFromRequest( "$option.filter_modified_by",    'filter_modified_by',     0,    'int' ); 
+        
+        $search                = $mainframe->getUserStateFromRequest( "$option.text_search", 'text_search', '','string' );
+        $keyword                = $search;
+        $search                = JString::strtolower( $search );
+        
+        $type_filter   = $mainframe->getUserStateFromRequest("$option.type_filter", 'type_filter', 0, 'int');
+        
+        $limit        = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
+        $limitstart = $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+        
+        
+        $where = array();  
+      //  $where[] = 'p.pns_deleted = 0';//and po_id = 0
+        
+        if ($filter_status !=''){
+            $where[]='p.pns_status ="'.$filter_status.'"';
+        }
+        
+        if ($filter_type !=''){
+            $where[]='p.pns_type ="'.$filter_type.'"';            
+        }
+        if($filter_created_by){
+            $where[] = 'p.pns_create_by ='.$filter_created_by;          
+        }
+        if($filter_modified_by){
+            $where[] = 'p.pns_modified_by ='.$filter_modified_by;
+        }
+		
+        if ($id){ //get pns_child have exist
+            $arrPNsChild  = array();
+            $arrPNsChild[] = $id;			           
+        }
+       if (isset( $search ) && $search!= '')
+        {
+            $searchEscaped = $db->Quote( '%'.$db->getEscaped( $search, false ).'%', false );
+           
+        }
+       
+        if ($type_filter){           
+            switch($type_filter){
+                case '1': //ECO
+                    $arr_eco_id = array();
+                    //select table ECO with keyword input     
+                    $db->setQuery('SELECT eco_id FROM apdm_eco WHERE eco_deleted= 0 AND (eco_name LIKE '.$searchEscaped.' OR  eco_description LIKE '.$searchEscaped .' )');
+                    $rs_eco = $db->loadObjectList();
+                    if (count($rs_eco) >0){
+                        foreach ($rs_eco as $eco){
+                           $arr_eco_id[] = $eco->eco_id; 
+                        }
+                        
+                    }
+                break;
+                case '7': //Manufacture PN                         
+                    $arr_mf_id = array();
+                         //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.' group by ASI.info_id');
+                   //echo $db->getQuery();
+                    $rs_mf = $db->loadObjectList();                   
+                    if (count($rs_mf) > 0){
+                        foreach ($rs_mf as $mf){
+                           $arr_mf_id[] = $mf->pns_id;
+                        }
+                        $arr_mf_id = array_unique($arr_mf_id);                       
+                    }
+                    break;                
+                case '6': //for information of pns
+                    if (isset( $search ) && $search!= '') {
+                        $where[] = 'p.pns_description LIKE ' . $searchEscaped;
+                    }
+                break;
+                case '5': //for code
+                    //  $where[] = 'p.pns_code_full LIKE '.$searchEscaped;
+                  //  echo $search; exit;
+                $leght = strlen (trim($keyword));                    
+                    if($leght==10){
+                         $arr_code = explode("-", trim($keyword));
+                         $where[] = 'p.ccs_code ="'.$arr_code[0].'" AND p.pns_code like "%'.$arr_code[1].'%"';
+                         
+                   }else{
+                               if($searchEscaped) {                                       
+                                   $arr_code = explode("-", trim($keyword));
+                                   $where[] = 'p.ccs_code LIKE "%' . $arr_code[0] . '%" AND p.pns_code like "%' . $arr_code[1] . '%" or p.pns_code LIKE ' . $searchEscaped . ' OR p.pns_revision LIKE ' . $searchEscaped . ' OR p.ccs_code LIKE ' . $searchEscaped;
+                               }
+                   }         
+                break;
+            }
+            
+        }
+
+         if(count($arr_mf_id) > 0){
+            //get list pns have this supplier
+             $where[] = 'p.pns_id IN ('.implode(',', $arr_mf_id).')';
+        }
+        if (count($arr_eco_id) > 0) {
+            $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).') or e.eco_id IN ('.implode(',', $arr_eco_id).') ';
+        }
+         //check if exist in TTO with state USING will be exclude
+            $pns_id_tto = array();
+            $db->setQuery("select  fkt.pns_id from apdm_pns_tto_fk fkt inner join apdm_pns_tto  tto on fkt.tto_id = tto.pns_tto_id and tto_state ='Using'");
+            $rs_ps_tto = $db->loadObjectList();
+            if(count($rs_ps_tto) > 0){
+                foreach ($rs_ps_tto as $obj){
+                    $pns_id_tto[] = $obj->pns_id;        
+                }
+               $pns_id_tto = array_unique($pns_id_tto);
+             //  $where[] = 'p.pns_id NOT IN ('.implode(',', $pns_id_tto).')';
+            }   
+        
+        $query = "SELECT pns_id,wo_qty  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$wo_id."'";
+             $db->setQuery($query);
+             $rw_wo = $db->loadObject();
+             $pns_id = $rw_wo->pns_id;
+             $wo_qty = $rw_wo->wo_qty;
+             if(!$pns_id)
+             {
+                  $where[] = 'p.pns_id IN (0)';
+             }
+             //getBOM
+              $db->setQuery('SELECT p.pns_id,pr.stock FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_parent in (' . $pns_id . ')');
+              $result_pn_wo = $db->loadObjectList();      
+              
+              if(count($result_pn_wo) > 0){
+                foreach ($result_pn_wo as $obj){
+                    $pns_id_wo[] = $obj->pns_id;        
+                }
+               $pns_id_wo = array_unique($pns_id_wo);
+               $where[] = 'p.pns_id  IN ('.implode(',', $pns_id_wo).')';
+            }   
+            
+        $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+        //$where = ( count( $where ) ? ' WHERE (' . implode( ') AND (', $where ) . ')' : '' );
+        $where = ( count( $where ) ? ' WHERE p.pns_deleted = 0 and (' . implode( ') and (', $where ) . ')' : '' );
+        $group_by = ' group by p.pns_id ';
+        
+        $query = 'SELECT COUNT(p.pns_id)'
+        . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '
+        . $filter
+        . $where
+        . $group_by
+        ;
+       //echo $query;
+        $db->setQuery( $query );
+        $total = $db->loadResult();
+
+        jimport('joomla.html.pagination');
+        $pagination = new JPagination( $total, $limitstart, $limit );
+        
+         $query = 'SELECT if(e.eco_id,e.eco_id,p.eco_id) as eco_released_id, p.* '
+            . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '
+            . $filter
+            . $where     
+            . $group_by
+            . $orderby
+        ;
+        $lists['query'] = base64_encode($query);   
+        $lists['total_record'] = $total; 
+        $db->setQuery( $query, $pagination->limitstart, $pagination->limit );
+        $rows = $db->loadObjectList(); 
+              
+        $pns_type[] = JHTML::_( 'select.option', '', JText::_('SELECT_TYPE'), 'value', 'text' );
+        $pns_type[] = JHTML::_( 'select.option', 'Making', 'Making', 'value', 'text' );
+        $pns_type[] = JHTML::_( 'select.option', 'Buying', 'Buying', 'value', 'text' ); 
+        $pns_type[] = JHTML::_( 'select.option', 'Reference', 'Reference', 'value', 'text' );          
+        $lists['pns_type']   = JHTML::_('select.genericlist', $pns_type, 'filter_type', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_type );
+        ///Cerated by
+        $db->setQuery("SELECT p.pns_create_by as value, u.name as text FROM apdm_pns as p LEFT JOIN jos_users as u ON u.id=p.pns_create_by WHERE p.pns_deleted=0  GROUP BY p.pns_create_by ORDER BY text "); 
+        $create_by[] = JHTML::_('select.option', 0, JText::_('SELECT_CREATED_BY'), 'value', 'text');
+        $create_bys = array_merge($create_by, $db->loadObjectList());
+        $lists['pns_create_by'] = JHTML::_('select.genericlist', $create_bys, 'filter_created_by', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', $filter_created_by );
+        
+        //Modified by
+        $db->setQuery("SELECT p.pns_modified_by as value, u.name as text FROM apdm_pns as p LEFT JOIN jos_users as u ON u.id=p.pns_modified_by WHERE p.pns_deleted=0 AND p.pns_modified_by !=0  GROUP BY p.pns_modified_by ORDER BY text ");        
+        $modified[] = JHTML::_('select.option', 0, JText::_('SELECT_MODIFIED_BY'), 'value', 'text');
+        $modifieds = array_merge($modified, $db->loadObjectList());
+        
+        $lists['pns_modified_by'] = JHTML::_('select.genericlist', $modifieds, 'filter_modified_by', 'class="inputbox" size="1"  onchange="document.adminForm.submit( );"', 'value', 'text', $filter_modified_by );
+        //for list filter type
+       //$type[] = JHTML::_('select.option', 0, JText::_('SELECT_TYPE_TO_FILTER'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 5, JText::_('PN'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 6, JText::_('Description'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 1, JText::_('ECO'), 'value', 'text');
+        $type[] = JHTML::_('select.option', 7, JText::_('MFG PN'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 2, JText::_('Vendor'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 3, JText::_('Supplier'), 'value', 'text');
+        //$type[] = JHTML::_('select.option', 4, JText::_('Manufacture'), 'value', 'text');
+        $lists['type_filter'] = JHTML::_('select.genericlist', $type, 'type_filter', 'class="inputbox" size="1"', 'value', 'text', $type_filter);
+        
+        $db->setQuery("SELECT pns_status from apdm_pns WHERE pns_id=".$id);                    
+        $this->assignRef('pns_status',$db->loadResult());
+      
+        // table ordering
+        $lists['order_Dir']    = $filter_order_Dir;
+        $lists['order']        = $filter_order;
+        $lists['search']= $search;    
+        $this->assignRef('lists',        $lists);
+        $this->assignRef('rows',        $rows);
+        $this->assignRef('pagination',    $pagination);   
+        $this->assignRef('id',    $id);       
+		parent::display($tpl);
+	}
+}
+

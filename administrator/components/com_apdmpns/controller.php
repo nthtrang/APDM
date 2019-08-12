@@ -5904,9 +5904,9 @@ class PNsController extends JController {
                         $array_loacation=array();
                         foreach ($result as $obj) {
                                 if($obj->sto_type==1 )
-                                    $array_loacation[$obj->loc_mfg] = $array_loacation[$obj->loc_mfg] + $obj->qty;
+                                     $array_loacation[$obj->loc_mfg] = round($array_loacation[$obj->loc_mfg],2) + $obj->qty;
                                 elseif($obj->sto_type==2)
-                                     $array_loacation[$obj->loc_mfg] =$array_loacation[$obj->loc_mfg] - $obj->qty;
+                                     $array_loacation[$obj->loc_mfg] = round($array_loacation[$obj->loc_mfg],2) - $obj->qty;
                         }
                 }
                 /*//get calculate move location
@@ -11163,5 +11163,97 @@ class PNsController extends JController {
                 $db->query(); 
                 echo 1;
         }
+        function requestmaterialwo()
+        {
+                JRequest::setVar('layout', 'wo_request_material');
+                JRequest::setVar('view', 'wo');
+                parent::display();
+        }
+        
+        function get_list_pns_material() {                
+                JRequest::setVar('layout', 'default');
+                JRequest::setVar('view', 'getpnsformateriawo');
+                parent::display();
+        }      
+        
+        function ajax_add_pns_material_wo() {
+                $db = & JFactory::getDBO();
+                // Initialize some variables                
+                $me = & JFactory::getUser();
+                //$row = & JTable::getInstance('apdmpnso');
+                $datenow = & JFactory::getDate();                
+                $pns = JRequest::getVar('cid', array(), '', 'array');                
+                $wo_id = JRequest::getVar('wo_id');  
+                 //getPN 
+                $query = "SELECT pns_id,wo_qty  FROM apdm_pns_wo  WHERE  pns_wo_id = '".$wo_id."'";
+                $db->setQuery($query);
+                $rw_wo = $db->loadObject();
+                $wo_qty = $rw_wo->wo_qty;
+                $parent_id = $rw_wo->pns_id;
+                //innsert to FK table                
+                foreach($pns as $pn_id)
+                {                      
+                        $db->setQuery('SELECT pr.stock FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id ='.$pn_id . ' and pr.pns_parent in (' .$parent_id .')');                        
+                        $stock_bom = $db->loadResult();
+                        $qty = round($wo_qty *$stock_bom,2);  
+                        $db->setQuery("INSERT INTO apdm_pns_wo_fk (pns_id,wo_id,created_by,created_at,qty) VALUES ( '" . $pn_id . "','" . $wo_id . "','" . $me->get('id')  . "','".$datenow->toMySQL()."','".$qty."')");
+                        $db->query();                         
+                }                 
+                return $msg = JText::_('Have add pns successfull.');
+        }       
+        function GetWoFkFrommPns($pns_id,$wo_id) {
+                $db = & JFactory::getDBO();
+                $rows = array();
+                //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
+                $query = "SELECT pns_id,id FROM apdm_pns_wo_fk WHERE pns_id = ".$pns_id ." and wo_id = ".$wo_id;
+
+                $db->setQuery($query);
+                $result = $db->loadObjectList();
+                if (count($result) > 0) {
+                        foreach ($result as $obj) {
+                                $rows[] = $obj->id;
+                        }
+                }
+                return $rows;
+        }        
+        function saveqtyWoMaterialfk() {
+        $db = & JFactory::getDBO();
+        $cid = JRequest::getVar('cid', array(), '', 'array');
+        $wo_id = JRequest::getVar('wo_id');
+        $fkid = JRequest::getVar('id');
+        foreach ($cid as $pnsid) {
+            $obj = explode("_", $pnsid);
+            $pns=$obj[0];
+            $ids = explode(",",$obj[1]);
+            $msg = "";
+            foreach ($ids as $id) {
+                  $stock = JRequest::getVar('qty_'. $pns .'_' . $id);                                
+                $db->setQuery("update apdm_pns_wo_fk set qty=" . $stock . " WHERE  id = " . $id);
+                $db->query();
+            }
+        }       
+        $msg .= "Successfully Saved Part Number";
+        $this->setRedirect('index.php?option=com_apdmpns&task=requestmaterialwo&id=' . $wo_id, $msg);
+    }
+    /*
+           * Remove PNS out of STO in STO management
+           */
+    function removeAllPnsMaterial() {
+        $db = & JFactory::getDBO();        
+        $wo_id = JRequest::getVar('wo_id');
+        $pnsfk = JRequest::getVar('cid', array(), '', 'array');        
+        foreach($pnsfk as $fk_ids){
+            $obj = explode("_", $fk_ids);
+            $pns=$obj[0];
+            $ids = explode(",",$obj[1]);
+            foreach ($ids as $fk_id)
+            {
+                $db->setQuery("DELETE FROM apdm_pns_wo_fk WHERE id = '" . $fk_id . "' AND wo_id = " . $wo_id . "");
+                $db->query();
+            }
+        }
+        $msg = JText::_('Have removed successfull.');        
+        return $this->setRedirect('index.php?option=com_apdmpns&task=requestmaterialwo&id=' . $wo_id, $msg);
+    }
 }
 
