@@ -127,8 +127,10 @@ if(($allow_complete || $op_arr['wo_step6']['op_assigner'] == $me->get('id')) && 
                         JToolBarHelper::popUpCompleteStepWo('Resume6', 'save_resume_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
                 }
                 else
-                {
-                        JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id,700,600);
+                {       
+                        if($this->wo_row->wo_rework_times<2){
+                                JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id,700,600);
+                        }                        
                         JToolBarHelper::popUpCompleteStepWo('Pause6', 'save_pause_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);         
                         JToolBarHelper::popUpCompleteStepWo('Complete6', 'save_complete_step6','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id,700,500);  
                         JToolBarHelper::popUpCompleteStepWo('FAILURE REPORT6', 'save_failure_step','wo_step6',$this->wo_row->pns_wo_id,$this->wo_row->so_id);
@@ -242,6 +244,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <ul id="submenu" class="configuration">
             <li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
             <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>
+            <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
         </ul>
         <div class="clr"></div>
     </div>

@@ -40,7 +40,7 @@ function onCompleteWo(){
 				else
                                 {                                    
                                        window.parent.document.getElementById('sbox-window').close();
-                                        window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                                       window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
 				
 				
