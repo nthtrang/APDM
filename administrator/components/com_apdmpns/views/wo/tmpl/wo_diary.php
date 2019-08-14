@@ -1,5 +1,5 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-wodiary
+
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
 //
@@ -54,7 +54,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
 <p>&nbsp;</p>
 
 <form action="index.php" method="post" name="adminForm" enctype="multipart/form-data" >      
-        <fieldset class="adminform">
+        
 
                 <div class="col width-100">
                         <fieldset class="adminform">		
@@ -219,7 +219,41 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                 </table>                                                                
                         </fieldset>
                 </div>	
-        </fieldset>
+     
+                        <fieldset class="adminform">
+                                <legend>DAIRY</legend>     
+                                <?php 
+                                if($this->dairy_list){
+                                ?>
+                                <table class="adminlist" cellpadding="1">                                        
+                                                <tr>
+                                                <th  align="left"class="title"><?php echo JText::_('Date'); ?></th>
+                                                <th  align="left"class="title"><?php echo JText::_('Status'); ?></th>
+                                                <th  align="left"class="title"><?php echo JText::_('Action'); ?></th>
+                                                <th  align="left"class="title"><?php echo JText::_('By'); ?></th>
+                                                <th  align="left" class="title"><?php echo JText::_('Comments'); ?></th>
+                                                </tr>
+                                                <?php 
+                                                foreach($this->dairy_list as $row)
+                                                {
+                                                        ?>
+                                                  <tr>
+                                                <td><?php echo JHTML::_('date', $row->wo_log_created, JText::_('DATE_FORMAT_LC6')); ?></td>                                                
+                                                <td><?php echo PNsController::getWoStep($row->op_code);?></td>
+                                                <td><?php echo $row->op_action; ?></td>
+                                                <td><?php echo ($row->wo_log_created_by!=0)?GetValueUser($row->wo_log_created_by, "name"):"N/A"; ?></td>
+                                                <td><?php echo $row->wo_log_content; ?></td>   
+                                                </tr>
+                                                <?php 
+                                                }
+                                                ?>
+                                                
+                                </table>
+                                <?php
+                                }
+                                ?>
+                                  </fieldset>
+                
         <input type="hidden" name="wo_id" value="<?php echo $this->wo_row->pns_wo_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />     
         <input type="hidden" name="id" value="<?php echo JRequest::getVar('id'); ?>" />     

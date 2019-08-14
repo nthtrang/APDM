@@ -222,6 +222,12 @@ class pnsViewwo extends JView {
                 $material_pn_list = $db->loadObjectList();         
                 $this->assignRef('material_pn_list',        $material_pn_list);
                 
+                //get dairy tab
+                $db->setQuery("SELECT * FROM apdm_pns_wo_history  where wo_id=".$wo_id." order by id desc");
+                $dairy_list = $db->loadObjectList();         
+                $this->assignRef('dairy_list',        $dairy_list);
+                
+                
                 $lists['search'] = $search;
                 $this->assignRef('lists', $lists);
                 $this->assignRef('list_file_log', $list_file_log);

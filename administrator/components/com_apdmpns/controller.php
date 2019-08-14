@@ -10546,45 +10546,48 @@ class PNsController extends JController {
                 $post = JRequest::get('post');         
                 $wo_id = $post['wo_id'];
                 $wo_step = $post['wo_step'];                
+                
 		$username = JRequest::getVar('username', '', 'method', 'username');
-		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);		
+                $query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
+                $isUserId = $db->loadResult();                
+                if(!$isUserId)
                 {
+                        $UserId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
+                $UserId = $isUserId;
                 //check lastest status                        
                 switch ($wo_step) {
                          case 'wo_step1':
                                 $status ="doc_reparation";
-                                 PNsController::saveWoCompleteStep($post,'wo_step1','wo_step2');   
+                                 PNsController::saveWoCompleteStep($post,'wo_step1','wo_step2',$UserId);   
                                 break;
                         case 'wo_step2':
                                 $status ="label_printed";
-                                PNsController::saveWoCompleteStep($post,'wo_step2','wo_step3');   
+                                PNsController::saveWoCompleteStep($post,'wo_step2','wo_step3',$UserId);   
                                 break;    
                         case 'wo_step3':
                                 $status ="wire_cut";
-                                PNsController::saveWoCompleteStep($post,'wo_step3','wo_step4');   
+                                PNsController::saveWoCompleteStep($post,'wo_step3','wo_step4',$UserId);   
                                 break;
                         case 'wo_step4':
                                 $status ="kitted";
-                                PNsController::saveWoCompleteStep($post,'wo_step4','wo_step5');   
+                                PNsController::saveWoCompleteStep($post,'wo_step4','wo_step5',$UserId);   
                                 break;    
                         case 'wo_step5':
                                 $status ="production";
-                                PNsController::saveWoCompleteStepProduction($post,'wo_step5','wo_step6');
+                                PNsController::saveWoCompleteStepProduction($post,'wo_step5','wo_step6',$UserId);
                                 break;
                         case 'wo_step6':
                                 $status ="final_inspection";     
-                                PNsController::saveWoCompleteStepQc($post,'wo_step6','wo_step7');   
+                                PNsController::saveWoCompleteStepQc($post,'wo_step6','wo_step7',$UserId);   
                                 break;   
                         case 'wo_step7':
                                 $status ="packaging";
-                                PNsController::saveWoCompleteStep($post,'wo_step7','wo_step7');   
+                                PNsController::saveWoCompleteStep($post,'wo_step7','wo_step7',$UserId);   
                                 break;             
                         default:
                                 $status ="done";
@@ -10655,13 +10658,14 @@ class PNsController extends JController {
         /*
          * Check and save WO Step Complete
          */
-        function saveWoCompleteStep($post,$current_step="wo_step1",$next_step="wo_step2")
+        function saveWoCompleteStep($post,$current_step="wo_step1",$next_step="wo_step2",$userId = 0)
         {                
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
                 //$row = & JTable::getInstance('apdmpnso');
                 $datenow = & JFactory::getDate();
                 $wo_id = $post['wo_id'];
+                $pns_op_id = $post['pns_op_id'];
                  //Update step1                        
                 //check done with pass day target
                 $query ="select DATEDIFF('".$datenow->toMySQL()."',date(op_target_date))  from apdm_pns_wo_op where op_code = '".$current_step."' and op_delay_check=0 and wo_id = ".$wo_id;
@@ -10678,19 +10682,19 @@ class PNsController extends JController {
                 }
                 if($current_step!="wo_step7"){                        
                         //set start date for next step
- //update pause date forcase rework
+                        //update pause date forcase rework
                         $query = "select op_rework_times from apdm_pns_wo_op where  op_code = '".$next_step."' and wo_id = ".$wo_id;
                         $db->setQuery($query);
                         $rework_times = $db->loadResult();
                         if($rework_times==0)
                         {
-                                $sql = "update apdm_pns_wo_op set op_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }elseif($rework_times==1)
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }elseif($rework_times==2)
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }
                         $db->setQuery($sql);
                         $db->query();                        
@@ -10698,9 +10702,10 @@ class PNsController extends JController {
 //                        $db->setQuery($sql);
 //                        $db->query(); 
                 }                        						                        
-                $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$post['op_comment']."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
-                $db->query();          
+                $db->query();   
+                
                 
                 //log time sheet
                 $total_minute = 0;
@@ -10727,12 +10732,15 @@ class PNsController extends JController {
                 }                                
                 $db->setQuery($sql);
                 $db->query(); 
+                //inserr history
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,pns_op_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ",'".$pns_op_id."', '".$current_step."', 'Completed','" . $current_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$post['op_comment']."') ");                                
+                $db->query(); 
                         //end op 1
         }    
         /*
          * Check and save WO Step Complete
          */
-        function saveWoCompleteStepQc($post,$current_step="wo_step6",$next_step="wo_step7")
+        function saveWoCompleteStepQc($post,$current_step="wo_step6",$next_step="wo_step7",$userId =0)
         {                
                 $db = & JFactory::getDBO();
                 $me = & JFactory::getUser();
@@ -10761,7 +10769,7 @@ class PNsController extends JController {
                 }                        						                        
                 $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
                 $wo_log =  JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML );
-                 $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
+                 $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
                 $db->setQuery($sql);
                 $db->query();          
                 
@@ -10800,14 +10808,17 @@ class PNsController extends JController {
                 if($pns_op_id)
                 {                            
                                 $op_final_value = $post['op_final_value1'];
-                                $sql = "update apdm_pns_wo_op_final set op_final_value1='".$post['op_final_value1']."',op_final_value2='".$post['op_final_value2']."',op_final_value3='".$post['op_final_value3']."',op_final_value4='".$post['op_final_value4']."',op_final_value5='".$post['op_final_value5']."',op_final_value6='".$post['op_final_value6']."',op_final_value7='".$post['op_final_value7']."',op_final_value8='".$post['op_final_value8']."',op_final_updated='" . $datenow->toMySQL() . "',op_final_updated_by=" . $me->get('id') . " where op_final_fail_times = 1 and pns_op_id = ".$pns_op_id." and pns_wo_id=".$wo_id;
+                                $sql = "update apdm_pns_wo_op_final set op_final_value1='".$post['op_final_value1']."',op_final_value2='".$post['op_final_value2']."',op_final_value3='".$post['op_final_value3']."',op_final_value4='".$post['op_final_value4']."',op_final_value5='".$post['op_final_value5']."',op_final_value6='".$post['op_final_value6']."',op_final_value7='".$post['op_final_value7']."',op_final_value8='".$post['op_final_value8']."',op_final_updated='" . $datenow->toMySQL() . "',op_final_updated_by=" . $userId . " where op_final_fail_times = 1 and pns_op_id = ".$pns_op_id." and pns_wo_id=".$wo_id;
                                 $db->setQuery($sql);
                                 $db->query();
                         
                 }
+                //inserr history
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$current_step."', 'Completed','" . $current_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");                                
+                $db->query(); 
                         //end op 1
         }
-        function saveWoCompleteStepProduction($post,$current_step="wo_step6",$next_step="wo_step7")
+        function saveWoCompleteStepProduction($post,$current_step="wo_step6",$next_step="wo_step7",$userId=0)
         {
             $db = & JFactory::getDBO();
             $me = & JFactory::getUser();
@@ -10832,12 +10843,12 @@ class PNsController extends JController {
             }
             if($current_step!="wo_step7"){
                 //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query();
             }
             $op_comment = $post['op_comment']; //str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
-            $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+            $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
             $db->setQuery($sql);
             $db->query();
 
@@ -10873,11 +10884,14 @@ class PNsController extends JController {
             {
                 foreach($op_assemble_id as $assem_id)
                 {
-                    $sql = "update apdm_pns_wo_op_assembly set op_assembly_value1 = '".$post['op_assembly_value1'][$assem_id]."',op_assembly_value2='".$post['op_assembly_value2'][$assem_id]."',op_assembly_value3='".$post['op_assembly_value3'][$assem_id]."',op_assembly_value4='".$post['op_assembly_value4'][$assem_id]."',op_assembly_value5='".$post['op_assembly_value5'][$assem_id]."',op_assembly_updated='" . $datenow->toMySQL() . "',op_assembly_updated_by = " . $me->get('id') . " where id=".$assem_id." and pns_wo_id =".$wo_id;
+                    $sql = "update apdm_pns_wo_op_assembly set op_assembly_value1 = '".$post['op_assembly_value1'][$assem_id]."',op_assembly_value2='".$post['op_assembly_value2'][$assem_id]."',op_assembly_value3='".$post['op_assembly_value3'][$assem_id]."',op_assembly_value4='".$post['op_assembly_value4'][$assem_id]."',op_assembly_value5='".$post['op_assembly_value5'][$assem_id]."',op_assembly_updated='" . $datenow->toMySQL() . "',op_assembly_updated_by = " .$userId . " where id=".$assem_id." and pns_wo_id =".$wo_id;
                     $db->setQuery($sql);
                     $db->query();
                 }
             }
+             //inserr history
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$current_step."', 'Completed','" . $current_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");                                
+                $db->query(); 
             //end op 1
         }
 
@@ -10890,22 +10904,21 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();                
                 $id = JRequest::getVar('id');                
                 $wo_id = JRequest::getVar('wo_id');
+                $userId = JRequest::getVar('user_id');
                 $wo_step = JRequest::getVar('wo_step');
                 $op_comment = JRequest::getVar('op_comment');                
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
-                $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
-                {
-                        echo 0;
-                        exit();                        
-                }
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+		
+                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query();  
+                //inserr history
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Comment','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");                                
+                
+                $db->query();
                 echo 1;
+                exit;
         }
         
         function saveStartStepWo()
@@ -10921,17 +10934,22 @@ class PNsController extends JController {
                 $op_comment = JRequest::getVar('op_comment');     
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
+                $isUserId = $db->loadResult();                
+                if(!$isUserId)
                 {
+                        $userId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
-                $sql = "update apdm_pns_wo_op set op_is_start = 1,op_start_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $userId = $isUserId;
+                $sql = "update apdm_pns_wo_op set op_is_start = 1,op_start_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query();  
+                //inserr history
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Started','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");                                
+                $db->query();
                 echo 1;
         }
         function savePauseStepWo()
@@ -10944,30 +10962,33 @@ class PNsController extends JController {
                 $id = JRequest::getVar('id');                
                 $wo_id = JRequest::getVar('wo_id');
                 $wo_step = JRequest::getVar('wo_step');
+                $pns_op_id  = JRequest::getVar('pns_op_id');
                 $op_comment = JRequest::getVar('op_comment');        
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
+                $isUserId = $db->loadResult();                
+                if(!$isUserId)
                 {
+                        $userId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
+                $userId = $isUserId;
                 //update pause date forcase rework
                 $query = "select op_rework_times from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $rework_times = $db->loadResult();
                 if($rework_times==0)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($rework_times==1)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($rework_times==2)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }
                 $db->setQuery($sql);
                 $db->query();
@@ -10998,6 +11019,9 @@ class PNsController extends JController {
                 }                                
                 $db->setQuery($sql);
                 $db->query(); 
+                //inserr history                
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Pause','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
+                $db->query(); 
                 
                 
                 echo 1;
@@ -11015,34 +11039,35 @@ class PNsController extends JController {
                 $op_comment = JRequest::getVar('op_comment');               
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
+                $isUserId = $db->loadResult();                
+                if(!$isUserId)
                 {
+                        $userId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
+                $userId = $isUserId;
                 //update pause date forcase rework
                 $query = "select op_rework_times from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $rework_times = $db->loadResult();
                 if($rework_times==0)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($rework_times==1)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_rework_f_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_rework_f_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($rework_times==2)
                 {
-                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_rework_s_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause=0,op_rework_s_resume_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }
                 $db->setQuery($sql);
                 $db->query();
-                
-                
-                $db->setQuery($sql);
-                $db->query();  
+                //inserr history                
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Resume','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
+                $db->query();                              
                 echo 1;
         }
         function saveFailureStepWo()
@@ -11058,14 +11083,16 @@ class PNsController extends JController {
                 $op_comment = JRequest::getVar('op_comment');        
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isLogin = $db->loadResult();
-                if(!$isLogin)
+                $isUserId = $db->loadResult();                
+                if(!$isUserId)
                 {
+                        $userId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
+                $userId = $isUserId;
                 //get PRE STEP                
                 $lastNumber = substr($wo_step, -1);
                 $sql = "SELECT pns_op_id,op_code FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) < ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0  and op_status = 'done' order by op_code desc limit 1";
@@ -11074,14 +11101,14 @@ class PNsController extends JController {
                 if($prestep->pns_op_id)
                 {
                         $wo_prestep = $prestep->op_code;
-                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
                 else
                 {
                         $wo_prestep = $wo_step;
-                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
@@ -11115,7 +11142,7 @@ class PNsController extends JController {
                 $sql= " update apdm_pns_wo set ".
                         " wo_state = '" . $status . "'".                                
                         ",wo_updated = '" . $datenow->toMySQL() . "'".
-                        ",wo_updated_by = '" . $me->get('id') . "'".
+                        ",wo_updated_by = '" . $userId . "'".
                         ",wo_failure_report = '".$wo_prestep."'".                        
                         " where pns_wo_id ='".$wo_id."' ";
                 $db->setQuery($sql);
@@ -11158,7 +11185,10 @@ class PNsController extends JController {
                 }                                
                 $db->setQuery($sql);
                 $db->query(); 
-                
+                //inserr history                
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Failure Report','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
+                $db->query();                              
+               
                 echo 1;
         }
         function checkloginSuccess()
@@ -11170,7 +11200,7 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();    
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select count(*) from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
                 $isLogin = $db->loadResult();
                 if(!$isLogin)
@@ -11178,7 +11208,8 @@ class PNsController extends JController {
                         echo 0;
                         exit();                        
                 }
-                echo 1;
+                echo $isLogin;
+                exit();   
         }
         function saveReworkStepWo()
         {
@@ -11197,12 +11228,14 @@ class PNsController extends JController {
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
 		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
-                $isUserId = $db->loadResult();
+                $isUserId = $db->loadResult();                
                 if(!$isUserId)
                 {
+                        $userId = $me->get('id');
                         echo 0;
                         exit();                        
                 }
+                $userId = $isUserId;
                 //get STEP need rework
                 //$step_rework = step_rework
                $post = JRequest::get('post'); 
@@ -11236,7 +11269,7 @@ class PNsController extends JController {
                        // }
                         if (count($arr_file_upload) > 0) {
                                 foreach ($arr_file_upload as $file) {
-                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $wo_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $isUserId . " ) ");
+                                        $db->setQuery("INSERT INTO apdm_pns_wo_files (wo_id, file_name,file_type, wo_file_create, wo_file_created_by) VALUES (" . $wo_id . ", '" . $file . "',0, '" . $datenow->toMySQL() . "', " . $userId . " ) ");
                                         $db->query();
                                 }
                         }      
@@ -11274,7 +11307,7 @@ class PNsController extends JController {
                 $sql= " update apdm_pns_wo set ".
                         " wo_state = '" . $status . "'".                                
                         ",wo_updated = '" . $datenow->toMySQL() . "'".
-                        ",wo_updated_by = '" . $isUserId . "'".
+                        ",wo_updated_by = '" . $userId . "'".
                         ",wo_rework_times = wo_rework_times + 1".                        
                         " where pns_wo_id ='".$wo_id."' ";
                 $db->setQuery($sql);
@@ -11289,13 +11322,13 @@ class PNsController extends JController {
                 {
                         if($rpre->op_rework_times==0)//for first
                         {
-                             $sql = "update apdm_pns_wo_op set op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
+                             $sql = "update apdm_pns_wo_op set op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
                                 $db->setQuery($sql);
                                 $db->query();     
                         }
                         elseif($rpre->op_rework_times==1)//for second
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
                                 $db->setQuery($sql);
                                 $db->query();  
                         }
@@ -11310,6 +11343,9 @@ class PNsController extends JController {
                 $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query(); 
+                //inserr history                
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Rework','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
+                $db->query();   
                 echo 1;
         }
         function requestmaterialwo()

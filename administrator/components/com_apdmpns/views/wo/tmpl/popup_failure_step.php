@@ -12,6 +12,7 @@ $wo_id = JRequest::getVar('id');
 $so_id = JRequest::getVar('so_id');
 $op_arr  = $this->op_arr;
 $assignee = $op_arr[$step]['op_assigner'];
+$pns_op_id = $op_arr[$step]['pns_op_id'];
 ?>
 <script language="javascript">
 function saveFailureWoStep(){
@@ -118,6 +119,7 @@ function cancelUpdate()
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
+        <input type="hidden" name="pns_op_id" value="<?php echo $pns_op_id; ?>" />        
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="saveFailureStepWo " />	
         <input type="hidden" name="return" value="wo_detail"  />

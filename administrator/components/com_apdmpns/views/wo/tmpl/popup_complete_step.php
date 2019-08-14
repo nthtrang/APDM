@@ -12,11 +12,13 @@ $wo_id = JRequest::getVar('id');
 $so_id = JRequest::getVar('so_id');
 $op_arr  = $this->op_arr;
 $assignee = $op_arr[$step]['op_assigner'];
+$pns_op_id = $op_arr[$step]['pns_op_id'];
 ?>
 <script language="javascript">
 function onCompleteWo(){
         var form = document.adminForm;
         var wo_id = form.wo_id.value;
+        document.getElementById('task').value = "saveCompeteStepWo";
        if (form.passwd.value==""){
 		alert('Please type your password.');
                 form.passwd.focus();
@@ -57,16 +59,46 @@ function cancelUpdate()
 function saveCommentWoStep(){         
          var form = document.adminForm;
         var wo_id = form.wo_id.value;
+        var so_id = form.so_id.value;
         var wo_step = form.wo_step.value;
         var op_comment = form.op_comment.value;
-        var url = 'index.php?option=com_apdmpns&task=saveCommentStepWo&time=<?php echo time();?>&wo_id='+wo_id;                
+       /* var url = 'index.php?option=com_apdmpns&task=saveCommentStepWo&time=<?php echo time();?>&wo_id='+wo_id;                
         url = url + '&wo_step='+wo_step+'&op_comment='+op_comment;
         var MyAjax = new Ajax(url, {
                         method:'get',
                         onComplete:function(result){
-                                 document.getElementById('notice').innerHTML = "Update Comment Successfull";                               
+                                if(result==0)
+                                {
+                                 document.getElementById('notice').innerHTML = "Incorrect Password";				                
+                                }
+                                else{
+                                 document.getElementById('notice').innerHTML = "Update Comment Successfullwwww";                                      
+                                }
                         }
-                }).request();
+                }).request();*/
+                document.getElementById('task').value = "checkloginSuccess";
+                var url = 'index.php?option=com_apdmpns&task=checkloginSuccess&id='+wo_id;                
+		var MyAjax = new Ajax(url, {
+			method:'post',
+			data:  $('adminForm').toQueryString(),
+			onComplete:function(result){                                
+                                if(result==0)
+                                {
+                                         document.getElementById('user_id').value = result;
+                                        document.getElementById('notice').innerHTML = "Incorrect Password";				                
+                                }
+				else
+                                {
+                                            document.getElementById('user_id').value = result;
+                                            document.getElementById('task').value = "saveCommentStepWo";
+                                        submitform("saveCommentStepWo");                                        
+                                       // window.parent.document.getElementById('sbox-window').close();	
+                                        window.location = "index.php?option=com_apdmpns&task=save_complete_step&step="+wo_step+"&tmpl=component&id="+wo_id+"&so_id="+so_id;
+                                        //document.getElementById('notice').innerHTML =  "Update Comment Successfull";   			                
+                                }
+			}
+		}).request();
+                
 }
 </script>
 <form action="index.php?option=com_apdmpns&task=saveCompeteStepWo&tmpl=component&id=<?php echo $wo_id?>" method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >      
@@ -137,9 +169,11 @@ function saveCommentWoStep(){
         <input type="hidden" name="wo_id" value="<?php echo $wo_id; ?>" />
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
+        <input type="hidden" name="pns_op_id" value="<?php echo $pns_op_id; ?>" />        
+        <input type="text" name="user_id" id="user_id" value="<?php echo $me->get('id'); ?>" />        
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
-        <input type="hidden" name="task" value="saveCompeteStepWo" />	
+        <input type="hidden" name="task" id="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />
         <input type="hidden" name="boxchecked" value="1" />
                                         <?php echo JHTML::_('form.token'); ?>
