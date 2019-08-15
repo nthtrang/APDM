@@ -170,7 +170,7 @@ function saveCommentWoStep(){
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="pns_op_id" value="<?php echo $pns_op_id; ?>" />        
-        <input type="text" name="user_id" id="user_id" value="<?php echo $me->get('id'); ?>" />        
+        <input type="hidden" name="user_id" id="user_id" value="<?php echo $me->get('id'); ?>" />        
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" id="task" value="" />	

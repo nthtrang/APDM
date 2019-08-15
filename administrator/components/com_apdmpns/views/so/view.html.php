@@ -57,22 +57,14 @@ class pnsViewso extends JView {
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();
                 //for issue report                                
-                $query = "select DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,so.customer_id as ccs_so_code,wo.wo_code,so.pns_so_id,wo.pns_wo_id,wo.wo_delay".
+                $query = "select DATEDIFF(wo.wo_completed_date, CURDATE()) as wo_remain_date,DATEDIFF(CURDATE(),op_target_date) as step_delay_date,op.*,so.so_cuscode,so.customer_id as ccs_so_code,wo.wo_code,wo.wo_state,so.pns_so_id,wo.pns_wo_id,wo.wo_delay".
                           " from apdm_pns_wo_op op inner join apdm_pns_wo wo on op.wo_id = wo.pns_wo_id".
                           " inner join  apdm_pns_so so on so.pns_so_id = wo.so_id".
                          # " inner join apdm_ccs ccs on so.customer_id = ccs.ccs_code". //ccs.ccs_code,ccs.ccs_coordinator,
                           " where ".
-                          " (((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
-                       //   " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".
-                        'or wo.pns_wo_id  in (select op.wo_id '.
-                               ' from apdm_pns_wo_op op '.
-                               ' inner join  apdm_pns_wo_op_visual vi on op.pns_op_id =vi.pns_op_id '.
-                               ' where (op_visual_value1 != "" or op_visual_value2 != "" or op_visual_value3 != "" or op_visual_value4 != "" or op_visual_value5 != "")) '.
-                        ' or wo.pns_wo_id  in (select op.wo_id '.
-                               ' from apdm_pns_wo_op op '.
-                               ' inner join  apdm_pns_wo_op_final fi on op.pns_op_id =fi.pns_op_id '.
-                               ' where (op_final_value1 != "" or op_final_value2 != "" or op_final_value3 != "" or op_final_value4 != "" or op_final_value5 != "" or op_final_value6 != "" or op_final_value7 != ""))'.
-                          " or op_delay != 0) and op_status != 'done'"
+                          " ((op_status ='pending' or op_status =''  or op_completed_date = '0000-00-00 00:00:00' ) and DATEDIFF(CURDATE(),op_target_date) > 0)".
+                       //   " or  (op_status ='done' and op_completed_date != '0000-00-00 00:00:00' and DATEDIFF(CURDATE(),op_delay_date) >= 0)".                      
+                          " and op_status != 'done'"
                         .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                
                 $db->setQuery($query);

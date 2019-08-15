@@ -11101,7 +11101,7 @@ class PNsController extends JController {
                 if($prestep->pns_op_id)
                 {
                         $wo_prestep = $prestep->op_code;
-                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_pause_date='" . $datenow->toMySQL() . "',op_resume_date='" . $datenow->toMySQL() . "',op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
