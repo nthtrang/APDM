@@ -567,11 +567,11 @@ class JToolBarHelper
 		// Add an upload button
 		$bar->appendButton( 'Popup', 'new', $alt, "index.php?option=com_apdmquo&task=add_routesquo&tmpl=component&cid[]=$id", 750,400 );
 	} 
-        function popUpCompleteStepWo($alt = 'New', $task = 'save_complete_step',$step='wo_step1',$id=0,$so_id=0,$width=750,$height=400)
+        function popUpCompleteStepWo($alt = 'New', $task = 'save_complete_step',$step='wo_step1',$id=0,$so_id=0,$width=750,$height=400,$icon='forward')
 	{
 		$bar = & JToolBar::getInstance('toolbar');
 		// Add an upload button
-		$bar->appendButton( 'Popup', 'forward', $alt, "index.php?option=com_apdmpns&task=".$task."&step=".$step."&tmpl=component&id=".$id."&so_id=".$so_id."", $width,$height);
+		$bar->appendButton( 'Popup', $icon, $alt, "index.php?option=com_apdmpns&task=".$task."&step=".$step."&tmpl=component&id=".$id."&so_id=".$so_id."", $width,$height);
 	} 
 	function deleteEcoRoutes($msg = '', $task = 'remove_routes', $alt = 'Delete')
 	{

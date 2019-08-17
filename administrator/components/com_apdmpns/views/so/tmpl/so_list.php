@@ -237,7 +237,7 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                                         <th width="100"><?php echo JText::_('Step'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('Step'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Assignee'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Assignee'); ?></div></th>
                                         <th width="100"><?php echo JText::_('Issue'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Issue'); ?></div></th>
-                                        <th width="100"><?php echo JText::_('Remain Times'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Remain Times'); ?></div></th>                                                                                
+                                        <th width="100"><?php echo JText::_('Remained Times'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Remained Times'); ?></div></th>
                                 </tr>
                         </thead>                  
                       <tbody style="height: 300px; overflow-y: auto"> 				
@@ -305,7 +305,159 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                                         } ?>
                
                 
-
+<?php 
+if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
+<fieldset class="adminform">
+		<legend><font style="size:14px"><?php echo JText::_( 'SO Progress' ); ?> </font></legend>                          
+                <section class="">
+                <div class="col width-100 scroll container">
+                <table class="adminlist1" cellspacing="1" width="100%">
+                        <thead>
+                                 <tr class="header">
+                                        <th width="10"><?php echo JText::_('NUM'); ?><div style="width:10px;padding:10px 0px 0px 10px"><?php echo JText::_('NUM'); ?></div></th>
+                                        <th width="120"><?php echo JText::_('SO'); ?><div style="width:120px;padding:10px 0px 0px 20px"><?php echo JText::_('SO'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Customer'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Customer'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Status'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Status'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('TOP ASSY PN'); ?><div style="width:100px;padding:10px 0px 0px 25px"><?php echo JText::_('TOP ASSY PN'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Order Qty'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Order Qty'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Production Qty'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Production Qty'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Shipped Qty'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Shipped Qty'); ?></div></th>
+                                        <th width="100"><?php echo JText::_('Remained Times'); ?><div style="width:100px;padding:10px 0px 0px 20px"><?php echo JText::_('Remained Times'); ?></div></th>                                                                                
+                                </tr>
+                        </thead>                  
+                      <tbody style="height: 300px; overflow-y: auto"> 				
+        <?php
+        $i = 0;
+        foreach ($this->so_progress as $so) {
+                $i++;              
+                $soNumber = $so->so_cuscode;
+                if($so->ccs_so_code)
+                {
+                       $soNumber = $so->ccs_so_code."-".$soNumber;
+                } 
+                 $background="";
+                $remain_day = $so->so_remain_date+1;
+                if($remain_day<=0)
+                {       
+                        //$remain_day = 0;
+                        if($so->so_state != 'done' && $so->so_state != 'cancel')
+                        {
+                                $background= "style='background-color:#f00;color:#fff'";
+                        }
+                }
+                elseif($remain_day<=3)
+                {               
+                        if($so->so_state != 'done' && $so->so_state != 'cancel')
+                        {
+                                $background= "style='background-color:#ff0;color:#000'";
+                        }
+                } 
+                ?>
+                                        <tr>
+                                                <td align="center"><?php echo $i?></td>
+                                                <td align="left"><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
+                                                <td align="center"><?php echo $so->ccs_name; ?></td>
+                                                <td align="left">
+                                                <?php
+                                          $arrStatus = $this->arr_status;
+                                          echo strtoupper($arrStatus[$so->so_state]);
+                                      ?>
+                                                </td>
+                                                <td align="left">
+                                                        <table class="adminlist1" cellspacing="1" width="200">
+                                                                <?php 
+                                                                $pnTopInfo = PNsController::getTopAssysSo($so->pns_so_id);
+                                                                foreach($pnTopInfo as $top )
+                                                                {
+                                                                        $i++;
+                                                                if ($top->pns_cpn == 1)
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
+                                                                else
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
+                                                                if ($top->pns_revision) {
+                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
+                                                                } else {
+                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code;
+                                                                }
+                                                                        ?>
+                                                                <tr>
+                                                                        <td align="center"><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
+                                                                                        <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
+                                                                                </span></td>
+                                                                </tr>
+                                                                <?php 
+                                                                }
+                                                                ?>
+                                                                <tr></tr>
+                                                        </table>
+                                                </td>
+                                                <td align="center">
+                                                         <table class="adminlist1" cellspacing="1" width="200">
+                                                                <?php 
+                                                                
+                                                                foreach($pnTopInfo as $top )
+                                                                {
+                                                                        $i++;
+                                                                if ($top->pns_cpn == 1)
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
+                                                                else
+                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
+                                                                if ($top->pns_revision) {
+                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
+                                                                } else {
+                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code;
+                                                                }
+                                                                        ?>
+                                                                <tr>
+                                                                        <td align="center"><?php echo $topSysQty=$top->qty;?></td>
+                                                                </tr>
+                                                                <?php 
+                                                                }
+                                                                ?>
+                                                                <tr></tr>
+                                                        </table>
+                                                </td>
+                                                <td  align="center"> 
+                                                        <table class="adminlist1" cellspacing="1" width="200">
+                                                                <?php 
+                                                                
+                                                                foreach($pnTopInfo as $top )
+                                                                {
+                                                                        $i++;                                                                        
+                                                                        ?>
+                                                                <tr>
+                                                                        <td align="center"><?php echo PNsController::getQtyTopAssysDone($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                </tr>
+                                                                <?php 
+                                                                }
+                                                                ?>
+                                                                <tr></tr>
+                                                        </table></td>
+                                                        <td  align="center">
+                                                        <table class="adminlist1" cellspacing="1" width="200">
+                                                                <?php 
+                                                                
+                                                                foreach($pnTopInfo as $top )
+                                                                {
+                                                                        $i++;                                                                        
+                                                                        ?>
+                                                                <tr>
+                                                                        <td align="center"><?php echo PNsController::getQtyTopAssysShipped($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                </tr>
+                                                                <?php 
+                                                                }
+                                                                ?>
+                                                                <tr></tr>
+                                                        </table></td>
+                                                 <td  align="center"<?php echo $background?>><?php echo $remain_day;?></td>
+                                                </tr>
+                                                <?php }
+                                                ?>
+                                                 </tbody>
+                                        </table></div></section>
+                                      </fieldset>
+                                                <?php
+                                        } ?>
         <input type="hidden" name="option" value="com_apdmpns" />
         <input type="hidden" name="task" value="somanagement" />
         <input type="hidden" name="redirect" value="mep" />

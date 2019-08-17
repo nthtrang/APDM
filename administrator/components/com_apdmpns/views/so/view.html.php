@@ -68,11 +68,16 @@ class pnsViewso extends JView {
                         .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
                
                 $db->setQuery($query);
-                $report_list = $db->loadObjectList();
-                $usertype	= $me->get('usertype');
+                $report_list = $db->loadObjectList();                                
+                //get SO PROGRESS
+                $db->setQuery("SELECT so.*,DATEDIFF(so.so_shipping_date, CURDATE()) as so_remain_date,so.customer_id as ccs_so_code,ccs.ccs_name,ccs.ccs_coordinator,ccs.ccs_code from apdm_pns_so so left join apdm_ccs ccs on so.customer_id = ccs.ccs_code where so.so_state not in ('cancel','done') order by so.so_created desc");                
+                $so_progress = $db->loadObjectList();
+                
+                $usertype	= $me->get('usertype');                
                 $role = JAdministrator::RoleOnComponent(12);                   
                 if (in_array("V", $role) ||  $usertype =='Administrator' || $usertype=="Super Administrator" ) {
                         $this->assignRef('report_list', $report_list);
+                        $this->assignRef('so_progress', $so_progress);
                 }
                 
                 //for PO detailid

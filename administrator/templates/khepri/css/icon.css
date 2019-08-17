@@ -63,6 +63,7 @@
 .icon-32-summary		{ background-image: url(../images/toolbar/icon-32-ads_done_small.png); }
 .icon-32-affected		{ background-image: url(../images/toolbar/icon-32-adduser.png); }
 .icon-32-download        { background-image: url(../images/toolbar/icon-32-download.png);}
+.icon-32-refresh        { background-image: url(../images/toolbar/icon-32-refresh.png);}
 .icon-32-cannotdownload		{ background-image: url(../images/toolbar/icon-32-download.png);background-position:0px 32px; }
 .icon-32-print        { background-image: url(../images/toolbar/icon-32-print.png);background-position:0px 32px;}
 .icon-32-search        { background-image: url(../images/toolbar/icon-32-search.png);background-position:0px 32px;}

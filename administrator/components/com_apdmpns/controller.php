@@ -11447,5 +11447,29 @@ class PNsController extends JController {
                 //JRequest::setVar('edit', true);
                 parent::display();        
     }
+    function getTopAssysSo($soId)
+    {
+                $db = & JFactory::getDBO();
+                $db->setQuery('select p.pns_cpn,p.pns_id,p.ccs_code, p.pns_code, p.pns_revision,fk.qty from apdm_pns_so so inner join apdm_pns_so_fk fk on so.pns_so_id = fk.so_id inner join  apdm_pns p on fk.pns_id = p.pns_id where so.pns_so_id =' . $soId);
+                return $db->loadObjectList();                
+    }
+    function getQtyTopAssysDone($pns_id,$so_id)
+    {
+            $db = & JFactory::getDBO();
+            $db->setQuery("select sum(wo.wo_qty) from apdm_pns_wo wo inner join apdm_pns_so_fk fk on wo.top_pns_id = fk.pns_id inner join apdm_pns_so so on so.pns_so_id = fk.so_id where fk.pns_id = ".$pns_id." and fk.so_id = ".$so_id." and wo.wo_state = 'done'");
+            $total = $db->loadResult();
+            if($total)
+                    return  $total;
+            return 0;
+    }
+    function getQtyTopAssysShipped($pns_id,$so_id)
+    {
+            $db = & JFactory::getDBO();
+            $db->setQuery("select sum(fk.qty) from apdm_pns_sto sto inner join apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns_so so on so.pns_so_id = sto.sto_so_id where fk.pns_id = ".$pns_id." and sto.sto_so_id = ".$so_id."  and sto.sto_state = 'Done'");
+            $total = $db->loadResult();
+            if($total)
+                    return  $total;
+            return 0;
+    }
 }
 
