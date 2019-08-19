@@ -14,19 +14,17 @@ $op_arr  = $this->op_arr;
 $assignee = $op_arr[$step]['op_assigner'];
 $allow_edit = 0;
 $role = JAdministrator::RoleOnComponent(12);
-if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
-        JToolBarHelper::apply('save_material_wo', 'Save');
-}
  JToolBarHelper::cancel( 'cancelWo', 'Close' );
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 //if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
 //    JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO");
 //}
-//JToolBarHelper::customX("printwopdf","print",'',"Print",false);
+JToolBarHelper::customX("print_material","print",'',"Print",false);
 
 
 ?>
 <script language="javascript">
+        window.print();
         function submitbutton(pressbutton) {
 		var form = document.adminForm;
 		 if (pressbutton == 'cancelWo') {
@@ -38,9 +36,9 @@ JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
                         return;
                 }
                 
-                if (pressbutton == 'printitopdf') {
+                if (pressbutton == 'print_material') {
                     //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
-                    var url = "index.php?option=com_apdmsto&task=printitopdf&id="+form.sto_id.value + "&tmpl=component";
+                    var url = "index.php?option=com_apdmpns&task=print_material&material_id="+form.material_id.value + "&tmpl=component";
                     window.open(url, '_blank');
                     return;
                 }
@@ -235,12 +233,12 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                         </tr>
                                         <tr>                                                                                         
                                                 <td class="key"><strong>Created By:</strong></td><td colspan="4">   
-                                                <?php echo ($this->material_pending->material_created_by!=0)?GetValueUser($this->material_pending->material_created_by, "name"):"N/A"; ?>
+                                                <?php echo ($this->material->material_created_by!=0)?GetValueUser($this->material->material_created_by, "name"):"N/A"; ?>
                                                 </td>
                                         </tr>
                                          <tr>                                                                                         
-                                                <td class="key"><strong>Request To:</strong></td><td colspan="4">   
-                                                        <?php echo $this->lists['material_to'];?>     
+                                                <td class="key"><strong>Request To:</strong></td><td colspan="4">                                                           
+                                                        <?php echo ($this->material->material_to!=0)?GetValueUser($this->material->material_to, "name"):"N/A"; ?>
                                                 </td>
                                         </tr>
                                            
@@ -251,10 +249,8 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                         </tr>
                                         <tr>
                                                 <td colspan="4">
-<!--                                                        <textarea name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>-->
-                                                            <?php                                     
-                                                $editor =& JFactory::getEditor();                                                
-                                                     echo $editor->display('material_reason', $this->material_pending->material_reason, '2%', '2', '2', '1',false);
+                                                            <?php     
+                                                            echo $this->material->material_reason;                                                
                                         ?>
                                                 </td>
                                                
@@ -268,45 +264,9 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                                 
                                         </tr></table>
             <div class="toolbar">
-            <table class="toolbar"><tbody><tr>
-<?php  
-    if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
-        ?>  
-    <td class="button" id="toolbar-save">
-            <a href="#"
-               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to save part');}else{ hideMainMenu(); submitbutton('saveqtyWoMaterialfk')}"
-               class="toolbar">
-<span class="icon-32-save" title="Save">
-</span>
-                Save
-            </a>
-        </td>
-        <td class="button" id="toolbar-popup-Popup">
-            <a class="modal"
-               href="index.php?option=com_apdmpns&amp;task=get_list_pns_material&amp;tmpl=component&amp;wo_id=<?php echo $this->wo_row->pns_wo_id; ?>"
-               rel="{handler: 'iframe', size: {x: 850, y: 500}}">
-<span class="icon-32-new" title="Add Part">
-</span>
-                Add Part
-            </a>
-        </td>        
-        <?php
-    }    
-    if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
-        ?>
-        <td class="button" id="toolbar-Are you sure to delete it\?">
-            <a href="#"
-               onclick="javascript:if(document.adminForm.boxchecked.value==0){alert('Please make a selection from the list to delete');}else{if(confirm('Are you sure to delete it?')){submitbutton('removeAllPnsMaterial');}}"
-               class="toolbar">
-<span class="icon-32-delete" title="Remove Part">
-</span>
-                Remove
-            </a>
-        </td>
-    <?php }
-                    ?>
-                </tr></tbody></table></div>
-                <?php if (count($this->material_pn_list) > 0) { ?>
+          
+
+                <?php if (count($this->material_pn_list_detail) > 0) { ?>
                 <table class="adminlist" cellspacing="1" width="400">
                         <thead>
                                 <tr>
@@ -326,7 +286,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                         <tbody>					
         <?php                
         $i = 0;
-        foreach ($this->material_pn_list as $row) {
+        foreach ($this->material_pn_list_detail as $row) {
                 
                                 if($row->pns_cpn==1)
                                         $link 	= 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]='.$row->pns_id;	
@@ -417,7 +377,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
-        <input type="text" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
+        <input type="hidden" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />

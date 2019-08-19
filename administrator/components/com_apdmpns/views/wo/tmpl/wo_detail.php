@@ -11,10 +11,10 @@ $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 $usertype	= $me->get('usertype');
 $allow_edit = 0;
-$allow_complete=0;
+$allow_complete=1;
 if ($usertype =='Administrator' || $usertype=="Super Administrator" || $this->wo_row->wo_created_by  == $me->get('id') ) {
         $allow_edit = 1;
-        $allow_complete=1;
+       // $allow_complete=1;
 }
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 $role = JAdministrator::RoleOnComponent(12);
@@ -245,6 +245,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
             <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>
             <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
+            <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
         </ul>
         <div class="clr"></div>
     </div>
@@ -402,7 +403,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </tr>
         <tr>
             <td class="tg-uys7">1</td>
-            <td class="tg-0pky" colspan="5">Doc. Preparation By:</td>
+            <td class="tg-0pky" colspan="5">Doc. Preparation:</td>
             <td class="tg-xldj"><?php echo $op_arr['wo_step1']['op_comment'];?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step1']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step1']['op_assigner']!=0)?GetValueUser($op_arr['wo_step1']['op_assigner'], "name"):"N/A"; ?></td>

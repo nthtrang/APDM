@@ -436,7 +436,7 @@ function check_so_first()
   </tr>
   <tr>
     <td class="tg-0pky"><label for="name">1</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation By:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation:</label></td>
     <td><textarea maxlength='40' name="op_comment1" rows="3" cols="30"></textarea></td>
     <td><?php //echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date1', 'op_completed_date1', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td> <select  name="op_assigner1" id="op_assigner1" >

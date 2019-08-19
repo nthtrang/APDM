@@ -812,7 +812,7 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
   <tr>
     
     <td class="tg-0pky"><label for="name">1</label></td>
-    <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation By:</label></td>
+    <td class="tg-0pky" colspan="5"><label for="name">Doc. Preparation:</label></td>
     <td>
     <?php
     if($op_arr['wo_step1']['op_assigner'] == $me->get('id')){    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')

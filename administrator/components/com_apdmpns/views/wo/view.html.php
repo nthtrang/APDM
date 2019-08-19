@@ -18,6 +18,7 @@ class pnsViewwo extends JView {
                 $db = & JFactory::getDBO();
                 $cid = JRequest::getVar('cid', array(0), '', 'array');
                 $wo_id = JRequest::getVar('id');
+                $material_id = JRequest::getVar('material_id');
                 $me = JFactory::getUser();
                 JArrayHelper::toInteger($cid, array(0));
                 $search = $mainframe->getUserStateFromRequest("$option.text_search", 'text_search', '', 'string');
@@ -159,7 +160,7 @@ class pnsViewwo extends JView {
                 
                 $statusReworkValue = array();
                 $statusReworkValue[] = JHTML::_('select.option', '', '- ' . JText::_('Select') . ' -', 'value', 'text');                
-                $statusReworkValue[] = JHTML::_('select.option', 'wo_step1', JText::_('Doc. Preparation By'), 'value', 'text');
+                $statusReworkValue[] = JHTML::_('select.option', 'wo_step1', JText::_('Doc. Preparation'), 'value', 'text');
                 $statusReworkValue[] = JHTML::_('select.option', 'wo_step2', JText::_('Label Printed'), 'value', 'text');
                 $statusReworkValue[] = JHTML::_('select.option', 'wo_step3', JText::_('Wire Cut'), 'value', 'text');
                 $statusReworkValue[] = JHTML::_('select.option', 'wo_step4', JText::_('Kitted'), 'value', 'text');
@@ -180,7 +181,6 @@ class pnsViewwo extends JView {
                 else {
                         $lists['assigners'] = JHTML::_('select.genericlist', $assigners, 'wo_assigner', 'class="inputbox" size="1"', 'value', 'text', $wo_row->wo_assigner);
                 }
-                
                 
 
                 //get wo po delay
@@ -216,11 +216,46 @@ class pnsViewwo extends JView {
                 $db->setQuery("SELECT * FROM apdm_pns_wo_files WHERE wo_id='".$wo_id."'");
                 $list_file_log = $db->loadObjectList();
                 
+                //get Material pending
+                $me = & JFactory::getUser();
+                $datenow = & JFactory::getDate();
+                $task = JRequest::getVar('task');
+                if($task === "requestmaterialwo"){
+                        $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state ='Open' order by material_id desc limit 1");                
+                        $check_material_pending = $db->loadObject();
+                        if(!sizeof($check_material_pending))
+                        {                      
+                                 $db->setQuery("INSERT INTO apdm_pns_wo_material (wo_id, material_state,material_created,material_created_by) VALUES (" . $wo_id . ", 'Open','" . $datenow->toMySQL() . "','".$me->get('id')."')");
+                                 $db->query();
+
+                        }                        
+                        
+                }
+                $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state ='Open' order by material_id desc limit 1");                                        
+                        $material_pending = $db->loadObject();
+                        $this->assignRef('material_pending',        $material_pending);
+                        //rquest material to
+                $option_material_to[] = JHTML::_('select.option', 0, JText::_('Select Request To'), 'value', 'text');
+                $assign_request_to = array_merge($option_material_to, $list_users);
+                $lists['material_to'] = JHTML::_('select.genericlist', $assign_request_to, 'material_request_to', 'class="inputbox" size="1"', 'value', 'text', $material_pending->material_request_to);
                 
                 //get PN MATERIAL
-                $db->setQuery("SELECT fk.id,fk.qty,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_ref_des,p.pns_find_number,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_wo AS wo inner JOIN apdm_pns_wo_fk fk on wo.pns_wo_id = fk.wo_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where wo.pns_wo_id=".$wo_id." group by fk.pns_id order by fk.pns_id desc");
+                $db->setQuery("SELECT fk.id,fk.qty,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_ref_des,p.pns_find_number,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_wo AS wo inner JOIN apdm_pns_wo_fk fk on wo.pns_wo_id = fk.wo_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where wo.pns_wo_id=".$wo_id." and fk.material_id = ".$material_pending->material_id." group by fk.pns_id order by fk.pns_id desc");                
                 $material_pn_list = $db->loadObjectList();         
                 $this->assignRef('material_pn_list',        $material_pn_list);
+                
+                //get PN MATERIAL process
+                 $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state !='Open' order by material_id desc");                
+                        $material_list = $db->loadObjectList();  
+                $this->assignRef('material_list',        $material_list);
+                //get material detail
+                 $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_id ='".$material_id."' order by material_id desc");                
+                        $material = $db->loadObject();  
+                $this->assignRef('material',        $material);
+                 //get PN MATERIAL
+                $db->setQuery("SELECT fk.id,fk.qty,p.pns_uom, p.pns_description,p.pns_cpn,p.pns_ref_des,p.pns_find_number,p.pns_id,p.pns_stock,p.ccs_code, p.pns_code, p.pns_revision,CONCAT_WS( '-', p.ccs_code, p.pns_code, p.pns_revision ) AS parent_pns_code  FROM apdm_pns_wo AS wo inner JOIN apdm_pns_wo_fk fk on wo.pns_wo_id = fk.wo_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where wo.pns_wo_id=".$wo_id." and fk.material_id = ".$material_id." group by fk.pns_id order by fk.pns_id desc");                                
+                $material_pn_list_detail = $db->loadObjectList();         
+                $this->assignRef('material_pn_list_detail',        $material_pn_list_detail);
                 
                 //get dairy tab
                 $db->setQuery("SELECT * FROM apdm_pns_wo_history  where wo_id=".$wo_id." order by id desc");

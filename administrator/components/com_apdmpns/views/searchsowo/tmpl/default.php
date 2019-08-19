@@ -97,7 +97,7 @@ function submitbutton(pressbutton) {
     <td>Time remain under</td>
     <td><input type="text" maxlength="20" name="time_remain"  onKeyPress="return numbersOnly(this, event);" id="time_remain" class="inputbox" size="30" value="<?php echo $this->time_remain?>"/> days</td>
     <td><input type="radio" name="so_status" id="so_status1" value="done" <?php echo ($this->so_status=='done')?"checked='checked'":"";?>>Done</td>
-      <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="doc_reparation" <?php echo ($this->wo_op_status=='doc_reparation')?"checked='checked'":"";?>>Doc. Preparation By</td>
+      <td><input type="radio" name="wo_op_status"  id="wo_op_status1" value="doc_reparation" <?php echo ($this->wo_op_status=='doc_reparation')?"checked='checked'":"";?>>Doc. Preparation</td>
   </tr>
   <tr>
     <td><input type="radio" onclick="controlStatusSearch(this.value)"  name="search_swo_type" value="searchwo" <?php echo ($this->search_swo_type=='searchwo')?"checked='checked'":"";?>>WO:</td>

@@ -8665,7 +8665,7 @@ class PNsController extends JController {
                 $statusValue['done'] = JText::_('Done');
                 $statusValue['onhold'] = JText::_('On hold');
                 $statusValue['cancel'] =  JText::_('Cancel');
-                $statusValue['doc_reparation'] = JText::_('Doc. Preparation By');
+                $statusValue['doc_reparation'] = JText::_('Doc. Preparation');
                 $statusValue['label_printed'] = JText::_('Label Printed');
                 $statusValue['wire_cut'] = JText::_('Wire Cut');
                 $statusValue['kitted'] = JText::_('Kitted');
@@ -8678,7 +8678,7 @@ class PNsController extends JController {
         function getWoStep($stepCode)
         {
                 $stepValue = array();                
-                $stepValue['wo_step1'] = JText::_('Doc. Preparation By');
+                $stepValue['wo_step1'] = JText::_('Doc. Preparation');
                 $stepValue['wo_step2'] = JText::_('Label Printed');
                 $stepValue['wo_step3'] = JText::_('Wire Cut');
                 $stepValue['wo_step4'] = JText::_('Kitted');
@@ -11374,6 +11374,7 @@ class PNsController extends JController {
                 $db->setQuery($query);
                 $rw_wo = $db->loadObject();
                 $wo_qty = $rw_wo->wo_qty;
+                $material_id = JRequest::getVar('material_id');  
                 $parent_id = $rw_wo->pns_id;
                 //innsert to FK table                
                 foreach($pns as $pn_id)
@@ -11381,16 +11382,16 @@ class PNsController extends JController {
                         $db->setQuery('SELECT pr.stock FROM apdm_pns AS p LEFT JOIN apdm_pns_parents as pr ON p.pns_id=pr.pns_id LEFT JOIN apdm_ccs AS c ON c.ccs_code = p.ccs_code LEFT JOIN apdm_eco AS e ON e.eco_id=p.eco_id WHERE c.ccs_activate= 1 AND c.ccs_deleted=0 AND  p.pns_deleted =0 AND pr.pns_id ='.$pn_id . ' and pr.pns_parent in (' .$parent_id .')');                        
                         $stock_bom = $db->loadResult();
                         $qty = round($wo_qty *$stock_bom,2);  
-                        $db->setQuery("INSERT INTO apdm_pns_wo_fk (pns_id,wo_id,created_by,created_at,qty) VALUES ( '" . $pn_id . "','" . $wo_id . "','" . $me->get('id')  . "','".$datenow->toMySQL()."','".$qty."')");
+                        $db->setQuery("INSERT INTO apdm_pns_wo_fk (pns_id,wo_id,created_by,created_at,qty,material_id) VALUES ( '" . $pn_id . "','" . $wo_id . "','" . $me->get('id')  . "','".$datenow->toMySQL()."','".$qty."','".$material_id."')");
                         $db->query();                         
                 }                 
                 return $msg = JText::_('Have add pns successfull.');
         }       
-        function GetWoFkFrommPns($pns_id,$wo_id) {
+        function GetWoFkFrommPns($pns_id,$wo_id,$material_id) {
                 $db = & JFactory::getDBO();
                 $rows = array();
                 //$query = "SELECT fk.id  FROM apdm_pns_sto AS sto inner JOIN apdm_pns_sto_fk fk on sto.pns_sto_id = fk.sto_id inner join apdm_pns AS p on p.pns_id = fk.pns_id where fk.pns_id=".$pns_id;
-                $query = "SELECT pns_id,id FROM apdm_pns_wo_fk WHERE pns_id = ".$pns_id ." and wo_id = ".$wo_id;
+                $query = "SELECT pns_id,id FROM apdm_pns_wo_fk WHERE pns_id = ".$pns_id ." and wo_id = ".$wo_id." and material_id = ".$material_id."";
 
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
@@ -11470,6 +11471,42 @@ class PNsController extends JController {
             if($total)
                     return  $total;
             return 0;
+    }
+    function save_material_wo()
+    {
+             // Initialize some variables
+                $db = & JFactory::getDBO();
+                $me = & JFactory::getUser();                
+                $datenow = & JFactory::getDate();
+                $post = JRequest::get('post');         
+                $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
+                if($material_reason)
+                {
+                        $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Processed',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);                        
+                        $db->query(); 
+                }
+                $msg = JText::_('Have submit material successfull.');        
+                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $post['wo_id'], $msg);
+    }
+    function wo_material()
+    {
+             JRequest::setVar('layout', 'wo_material_list');
+                JRequest::setVar('view', 'wo');
+                //JRequest::setVar('edit', true);
+                parent::display();   
+    }
+     function detail_material()
+    {
+             JRequest::setVar('layout', 'wo_material_detail');
+                JRequest::setVar('view', 'wo');
+                //JRequest::setVar('edit', true);
+                parent::display();   
+    }
+    function print_material()
+    {
+            JRequest::setVar('layout', 'wo_material_detail_print');
+                JRequest::setVar('view', 'wo');
+                 parent::display();
     }
 }
 
