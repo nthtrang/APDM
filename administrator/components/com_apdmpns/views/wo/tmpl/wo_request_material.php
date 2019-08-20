@@ -15,7 +15,7 @@ $assignee = $op_arr[$step]['op_assigner'];
 $allow_edit = 0;
 $role = JAdministrator::RoleOnComponent(12);
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
-        JToolBarHelper::apply('save_material_wo', 'Save');
+        JToolBarHelper::apply('save_material_wo', 'Submit');
 }
  JToolBarHelper::cancel( 'cancelWo', 'Close' );
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
@@ -283,7 +283,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         </td>
         <td class="button" id="toolbar-popup-Popup">
             <a class="modal"
-               href="index.php?option=com_apdmpns&amp;task=get_list_pns_material&amp;tmpl=component&amp;wo_id=<?php echo $this->wo_row->pns_wo_id; ?>"
+               href="index.php?option=com_apdmpns&amp;task=get_list_pns_material&amp;tmpl=component&amp;wo_id=<?php echo $this->wo_row->pns_wo_id; ?>&amp;material_id=<?php echo $this->material_pending->material_id; ?>"
                rel="{handler: 'iframe', size: {x: 850, y: 500}}">
 <span class="icon-32-new" title="Add Part">
 </span>
@@ -417,7 +417,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
-        <input type="text" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
+        <input type="hidden" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />

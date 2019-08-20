@@ -11320,18 +11320,33 @@ class PNsController extends JController {
                 $presteps = $db->loadObjectList();
                 foreach($presteps as $rpre)
                 {
-                        if($rpre->op_rework_times==0)//for first
+                    if($rpre->op_code==$step_rework)// check if step rework will update pause status
+                    {
+                        if ($rpre->op_rework_times == 0)//for first
                         {
-                             $sql = "update apdm_pns_wo_op set op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
-                                $db->setQuery($sql);
-                                $db->query();     
-                        }
-                        elseif($rpre->op_rework_times==1)//for second
+                            $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $db->setQuery($sql);
+                            $db->query();
+                        } elseif ($rpre->op_rework_times == 1)//for second
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$rpre->pns_op_id."' and wo_id = ".$wo_id;
-                                $db->setQuery($sql);
-                                $db->query();  
+                            $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $db->setQuery($sql);
+                            $db->query();
                         }
+                    }
+                    else{
+                        if ($rpre->op_rework_times == 0)//for first
+                        {
+                            $sql = "update apdm_pns_wo_op set op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $db->setQuery($sql);
+                            $db->query();
+                        } elseif ($rpre->op_rework_times == 1)//for second
+                        {
+                            $sql = "update apdm_pns_wo_op set op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $db->setQuery($sql);
+                            $db->query();
+                        }
+                    }
                 }               
                 //log time sheet
                 $total_minute = 0;
@@ -11374,7 +11389,7 @@ class PNsController extends JController {
                 $db->setQuery($query);
                 $rw_wo = $db->loadObject();
                 $wo_qty = $rw_wo->wo_qty;
-                $material_id = JRequest::getVar('material_id');  
+                $material_id = JRequest::getVar('material_id');
                 $parent_id = $rw_wo->pns_id;
                 //innsert to FK table                
                 foreach($pns as $pn_id)

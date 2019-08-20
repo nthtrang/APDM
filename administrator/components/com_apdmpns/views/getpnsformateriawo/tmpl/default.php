@@ -4,6 +4,7 @@
 
 <?php
   $wo_id		= JRequest::getVar( 'wo_id');
+$material_id		= JRequest::getVar( 'material_id');
 	// clean item data
 	JFilterOutput::objectHTMLSafe( $user, ENT_QUOTES, '' );
 
@@ -25,11 +26,12 @@ function CheckForm() {
 }
 function UpdatePnsMaterialWo(){        
         var wo_id = $('wo_id').value;
+    var material_id = $('material_id').value;
 	if ($('boxchecked').value==0){
 		alert('Please select PNs.');
 		return false;
 	}else{	
-		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_material_wo&wo_id='+wo_id;
+		var url = 'index.php?option=com_apdmpns&task=ajax_add_pns_material_wo&wo_id='+wo_id+'material_id='+material_id;
 		var MyAjax = new Ajax(url, {
 			method:'post',
 			data:  $('adminFormPns').toQueryString(),
@@ -187,6 +189,7 @@ function UpdatePnsMaterialWo(){
 	<input type="hidden" name="option" value="com_apdmpns" />
         
         <input type="hidden" name="wo_id" id="wo_id" value="<?php echo $wo_id; ?>" />
+    <input type="hidden" name="material_id" id="material_id" value="<?php echo $material_id; ?>" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
