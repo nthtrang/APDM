@@ -93,54 +93,109 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                         
                                          <tr>
                                                 <td><strong>Step:</strong><?php echo PNsController::getWoStep($step);?></td>
-                                                 <td><strong>Assignee:</strong>
+                                                 <td colspan="2"><strong>Assignee:</strong>
                                                  <?php echo ($assignee!=0)?GetValueUser($assignee, "name"):"N/A"; ?>
                                                  </td>
-                                                 <td><strong>Target Date:</strong>
+                                                 <td colspan="2"><strong>Target Date:</strong>
                                                 <?php echo ($op_arr[$step]['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr[$step]['op_target_date'], JText::_('DATE_FORMAT_LC5')):""; ?>
                                                  </td>
                                                 
                                         </tr>
                                     <?php
-                                    $a_row = $this->wo_assem_rows[0];
+                                    $a_row1 = $this->wo_assem_rows[0];
+                                    $a_row2 = $this->wo_assem_rows[1];
+                                    $a_row3 = $this->wo_assem_rows[2];
+                                    $a_row4 = $this->wo_assem_rows[3];
                                     ?>
                                     <tr>
-                                        <td><strong>CONT#:</strong></td><td colspan="2">
-                                            <input type="text" size="20" maxlength='20'  value="<?php echo $a_row->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row->id;?>]" id="op_assembly_value1" />
+                                        <td><strong>CONT#:</strong></td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='20'  value="<?php echo $a_row1->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row1->id;?>]" id="op_assembly_value1_<?php echo $a_row1->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='20'  value="<?php echo $a_row2->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row2->id;?>]" id="op_assembly_value1_<?php echo $a_row2->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='20'  value="<?php echo $a_row3->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row3->id;?>]" id="op_assembly_value1_<?php echo $a_row3->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='20'  value="<?php echo $a_row4->op_assembly_value1;?>" name="op_assembly_value1[<?php echo $a_row4->id;?>]" id="op_assembly_value1_<?php echo $a_row4->id;?>" />
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Wire size:</strong></td><td>
+                                    <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row1->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row1->id;?>]" id="op_assembly_value2_<?php echo $a_row1->id;?>" />
+                                        </td>
+                                         <td>
+                                    <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row2->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row2->id;?>]" id="op_assembly_value2_<?php echo $a_row2->id;?>" />
+                                        </td>
+                                         <td>
+                                    <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row3->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row3->id;?>]" id="op_assembly_value2_<?php echo $a_row3->id;?>" />
+                                        </td>
+                                         <td>
+                                    <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row4->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row4->id;?>]" id="op_assembly_value2_<?php echo $a_row4->id;?>" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Wire size:</strong></td><td colspan="2">
-                                    <input type="text" size="20" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value2;?>" name="op_assembly_value2[<?php echo $a_row->id;?>]" id="op_assembly_value2" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Tool ID:</strong></td><td colspan="2">
+                                        <td><strong>Tool ID:</strong></td>
                                             <?php
 
                                             $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
                                             if(sizeof($arrTool)) {
                                                 for ($iassem = 1; $iassem < 4; $iassem++) {
-                                                    echo $arrTool[$iassem];
+                                                    echo "<td colspan='3'>".$arrTool[$iassem]."</td>";
                                                 }
                                             }
                                             else
                                             {
                                                 ?>
-                                        <input type="text" size="20" maxlength='10' value="<?php echo $a_row->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row->id;?>]" id="op_assembly_value3" />
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row1->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row1->id;?>]" id="op_assembly_value3_<?php echo $a_row1->id;?>" />
+                                        </td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row2->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row2->id;?>]" id="op_assembly_value3_<?php echo $a_row2->id;?>" />
+                                        </td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row3->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row3->id;?>]" id="op_assembly_value3_<?php echo $a_row3->id;?>" />
+                                        </td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row4->op_assembly_value3;?>" name="op_assembly_value3[<?php echo $a_row4->id;?>]" id="op_assembly_value3_<?php echo $a_row4->id;?>" />
+                                        </td>
                                             <?php
                                             }
                                             ?>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Height:</strong></td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row1->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row1->id;?>]" id="op_assembly_value4_<?php echo $a_row1->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row2->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row2->id;?>]" id="op_assembly_value4_<?php echo $a_row2->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row3->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row3->id;?>]" id="op_assembly_value4_<?php echo $a_row3->id;?>" />
+                                        </td>
+                                        <td>
+                                            <input type="text" size="15" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row4->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row4->id;?>]" id="op_assembly_value4_<?php echo $a_row4->id;?>" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Height:</strong></td><td colspan="2">
-                                            <input type="text" size="20" maxlength='10' onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $a_row->op_assembly_value4;?>" name="op_assembly_value4[<?php echo $a_row->id;?>]" id="op_assembly_value4" />
+                                        <td><strong>Pull Force:</strong></td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row1->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row1->id;?>]" id="op_assembly_value5_<?php echo $a_row1->id;?>" />
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Pull Force:</strong></td><td colspan="2">
-                                   <input type="text" size="20" maxlength='10' value="<?php echo $a_row->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row->id;?>]" id="op_assembly_value5" /></td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row2->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row2->id;?>]" id="op_assembly_value5_<?php echo $a_row2->id;?>" />
+                                        </td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row3->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row3->id;?>]" id="op_assembly_value5_<?php echo $a_row3->id;?>" />
+                                        </td>
+                                        <td>
+                                        <input type="text" size="15" maxlength='10' value="<?php echo $a_row4->op_assembly_value5;?>" name="op_assembly_value5[<?php echo $a_row4->id;?>]" id="op_assembly_value5_<?php echo $a_row4->id;?>" />
+                                        </td>
                                     </tr>
                                         <tr>
                                                 <td colspan="3"><strong>Comments:</strong></td>
@@ -148,9 +203,12 @@ function numbersOnlyEspecialFloat(myfield, e, dec){
                                         </tr>
                                         <tr>
                                                 <td colspan="3">
-                                                        <textarea name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
+                                                        <textarea maxlength="100" name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
                                                 </td>
-                                            <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row->id ?>" />
+                                            <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row1->id ?>" />
+                                            <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row2->id ?>" />
+                                                   <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row3->id ?>" />
+                                            <input type="hidden" name="op_assemble_id[]" value="<?php echo $a_row4->id ?>" />
                                         </tr>
                                         
 			   

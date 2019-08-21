@@ -238,7 +238,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                         </tr>
                                          <tr>                                                                                         
                                                 <td class="key"><strong>Request To:</strong></td><td colspan="4">                                                           
-                                                        <?php echo ($this->material->material_to!=0)?GetValueUser($this->material->material_to, "name"):"N/A"; ?>
+                                                        <?php echo ($this->material->material_request_to!=0)?GetValueUser($this->material->material_request_to, "name"):"N/A"; ?>
                                                 </td>
                                         </tr>
                                            

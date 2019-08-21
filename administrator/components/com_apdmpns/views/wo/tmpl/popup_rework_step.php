@@ -18,6 +18,9 @@ $pns_op_id = $op_arr[$step]['pns_op_id'];
 function saveReworkWoStep(){
         var form = document.adminForm;
         var wo_id = form.wo_id.value;
+        
+        var contents = $("#op_comment").val();
+        alert(contents);
        if (form.passwd.value==""){
 		alert('Please type your password.');
                 form.passwd.focus();
@@ -34,7 +37,7 @@ function saveReworkWoStep(){
                                 }
 				else
                                 {
-                                        submitform("saveReworkStepWo");
+                                      //  submitform("saveReworkStepWo");
                                         window.parent.document.getElementById('sbox-window').close();	
                                         window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
@@ -47,7 +50,40 @@ function cancelUpdate()
 {
         window.parent.document.getElementById('sbox-window').close();	
 }
+function print_rework()
+{
+                    //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
+//                    var url = "index.php?option=com_apdmpns&task=print_rework&rework_id="+form.material_id.value + "&id="+form.wo_id.value+"&tmpl=component";
+//                    window.open(url, '_blank');
+//                    return;
 
+ var form = document.adminForm;
+        var wo_id = form.wo_id.value;
+        
+       if (form.passwd.value==""){
+		alert('Please type your password.');
+                form.passwd.focus();
+		return false;
+	}else{	                
+		var url = 'index.php?option=com_apdmpns&task=checkloginSuccess&id='+wo_id;                
+		var MyAjax = new Ajax(url, {
+			method:'post',
+			data:  $('adminForm').toQueryString(),
+			onComplete:function(result){                                
+                                if(result==0)
+                                {
+                                        document.getElementById('notice').innerHTML = "Incorrect Password";				                
+                                }
+				else
+                                {
+                                      //  submitform("saveReworkStepWo");
+                                        window.parent.document.getElementById('sbox-window').close();	
+                                        window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                                }
+			}
+		}).request();
+	}
+            }
 </script>
 <form action="index.php?option=com_apdmpns&task=saveReworkStepWo&tmpl=component&id=<?php echo $wo_id?>" method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >      
         <fieldset class="adminform">
@@ -122,7 +158,7 @@ function cancelUpdate()
                                                 <td></td>
                                                 <td></td>
                                                 <td class="key"><strong>Rework Qty:</strong></td><td>   
-                                                <input readonly type="text" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="rework_qty" id="rework_qty"/>
+                                                <?php echo $this->wo_row->wo_qty;?>
                                                 </td>
                                         </tr>
                                          
@@ -172,8 +208,9 @@ function cancelUpdate()
                                     <tr>
 			
 			<td <td colspan="4" align="center">                                
-                                <input type="button" name="btinsersavecomment" value="Ok"  onclick="saveReworkWoStep();"/>                        
+                                <input type="button" name="btinsersavecomment" value="Save"  onclick="saveReworkWoStep();"/>                        
                                 <input type="button" name="btinsercancel" value="Cancel"  onclick="cancelUpdate();"/>                        
+                                <input type="button" name="btinsercancel" value="Save & Print"   onclick="print_rework" />                   
                         </td>	
 		</tr>	
                                 </table>

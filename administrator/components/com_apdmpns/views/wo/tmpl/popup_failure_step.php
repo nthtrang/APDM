@@ -22,6 +22,11 @@ function saveFailureWoStep(){
 		alert('Please type your password.');
                 form.passwd.focus();
 		return false;
+	}
+        if (form.op_comment.value==""){
+		alert('Please type your comment.');
+                form.passwd.focus();
+		return false;
 	}else{	
 		var url = 'index.php?option=com_apdmpns&task=saveFailureStepWo&id='+wo_id;                
 		var MyAjax = new Ajax(url, {
@@ -76,7 +81,7 @@ function cancelUpdate()
                                         </tr>
                                         <tr>
                                                 <td colspan="3">
-                                                        <textarea name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
+                                                        <textarea maxlength="100" name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
                                                 </td>
                                                
                                         </tr>

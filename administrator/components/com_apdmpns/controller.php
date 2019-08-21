@@ -10798,8 +10798,17 @@ class PNsController extends JController {
                 }                                
                 $db->setQuery($sql);
                 $db->query(); 
-                
-                
+//                $fail_rework = 0;
+//               for($i==1;$i<9;$i++)
+//               {
+//                       if($post['op_final_value1']==0)
+//                               $fail_rework = 1;
+//               }
+//                if($fail_rework)
+//                {
+//                         return $this->setRedirect('index.php?option=com_apdmpns&task=save_rework_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);
+//                         exit;
+//                }
                 
                 //get op_id from step 6
                 $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
@@ -11102,14 +11111,14 @@ class PNsController extends JController {
                 if($prestep->pns_op_id)
                 {
                         $wo_prestep = $prestep->op_code;
-                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_pause_date='" . $datenow->toMySQL() . "',op_resume_date='" . $datenow->toMySQL() . "',op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_pause_date='" . $datenow->toMySQL() . "',op_resume_date='" . $datenow->toMySQL() . "',op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
                 else
                 {
                         $wo_prestep = $wo_step;
-                        $sql = "update apdm_pns_wo_op set op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }

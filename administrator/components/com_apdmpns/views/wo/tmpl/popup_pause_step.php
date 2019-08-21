@@ -76,7 +76,7 @@ function cancelUpdate()
                                         </tr>
                                         <tr>
                                                 <td colspan="3">
-                                                        <textarea name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
+                                                        <textarea maxlength="100" name="op_comment" rows="10" cols="70"><?php echo $op_arr[$step]['op_comment']?></textarea>
                                                 </td>
                                                
                                         </tr>

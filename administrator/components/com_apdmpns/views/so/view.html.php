@@ -149,7 +149,7 @@ class pnsViewso extends JView {
                         " from apdm_pns_wo_history woh inner join apdm_pns_wo wo on woh.wo_id = wo.pns_wo_id ".
                         " inner join apdm_pns_so so on wo.so_id = so.pns_so_id " .
                         " left join apdm_pns p on  p.pns_id = wo.pns_id " .
-                        " where so.pns_so_id =" . $so_row->pns_so_id ." order by woh.id desc";
+                        " where so.pns_so_id =" . $so_row->pns_so_id ." AND woh.pre_status is not null order by woh.id desc";
                 $db->setQuery($sql);
                 $wo_lists_history= $db->loadObjectList();
                 $this->assignRef('wo_list_history', $wo_lists_history);     

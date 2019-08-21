@@ -16,19 +16,7 @@ $editor = &JFactory::getEditor();
 $pns_op_id = $op_arr[$step]['pns_op_id'];
 ?>
 <script language="javascript">
-        function submitbutton(pressbutton) {
-                var form = window.document.adminForm;
-		var wo_id = form.wo_id.value;
-       if (form.passwd.value==""){
-		alert('Please type your password.');
-                form.passwd.focus();
-		return false;
-	}
-        else {
-			submitform( pressbutton);
-                        closereload(wo_id);
-		}
-	}
+        
         function closereload(wo_id)
         {
                 
@@ -43,7 +31,22 @@ function onCompleteWo(){
                 form.passwd.focus();
 		return false;
 	}       
-        else{	
+        var ischecked_method = false;
+         for ( var i = 1; i < 9; i++) {
+               var off_checklist = document.getElementsByName('op_final_value'+i);                
+                for ( var j = 0; j < off_checklist.length; j++) {
+                    if(off_checklist[j].checked) {
+                        ischecked_method = true;
+                        break;
+                    }
+                }
+        }
+        if(!ischecked_method)   { //payment method button is not checked
+            alert("Please choose all checklist");
+            return false;
+        }
+       
+       // else{	
 		var url = 'index.php?option=com_apdmpns&task=checkloginSuccess&id='+wo_id;                
 		var MyAjax = new Ajax(url, {
 			method:'post',
@@ -56,15 +59,15 @@ function onCompleteWo(){
 				else
                                 {   
                                         submitform("saveCompeteStepWo");
-                                       // window.parent.document.getElementById('sbox-window').close();	
-                                       // window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                                        window.parent.document.getElementById('sbox-window').close();	
+                                       window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
 				
 				
 
 			}
 		}).request();
-	}
+	//}
 	
 }
 function cancelUpdate()

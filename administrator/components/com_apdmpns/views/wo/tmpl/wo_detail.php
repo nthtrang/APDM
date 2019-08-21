@@ -29,7 +29,7 @@ JToolBarHelper::customX("printwopdf","print",'',"Print",false);
 
 
 $op_arr  = $this->op_arr;
-if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
+if ($this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
     if (($allow_complete || $op_arr['wo_step1']['op_assigner'] == $me->get('id')) && $op_arr['wo_step1']['op_status'] != 'done') {    // && $op_arr['wo_step1']['op_assigner'] == $me->get('id')
         if ($op_arr['wo_step1']['op_is_start'] == 1) { //after start
             if ($op_arr['wo_step1']['op_is_pause'] == 1) { //after start
@@ -118,7 +118,7 @@ if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo
                 JToolBarHelper::popUpCompleteStepWo('Resume', 'save_resume_step', 'wo_step6', $this->wo_row->pns_wo_id, $this->wo_row->so_id);
             } else {
                 if ($this->wo_row->wo_rework_times < 2) {
-                    JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step', 'wo_step6', $this->wo_row->pns_wo_id, $this->wo_row->so_id, 700, 600, 'refresh');
+                    JToolBarHelper::popUpCompleteStepWo('REWORK', 'save_rework_step', 'wo_step6', $this->wo_row->pns_wo_id, $this->wo_row->so_id, 780, 600, 'refresh');
                 }
                 JToolBarHelper::popUpCompleteStepWo('Pause', 'save_pause_step', 'wo_step6', $this->wo_row->pns_wo_id, $this->wo_row->so_id, 700, 500, 'restore');
                 JToolBarHelper::popUpCompleteStepWo('Complete', 'save_complete_step6', 'wo_step6', $this->wo_row->pns_wo_id, $this->wo_row->so_id, 700, 500);
@@ -289,6 +289,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             {
                     echo "(failure report)";
             }
+            if($op_arr[$wo_step]['op_rework_times']==1)
+            {
+                    echo "(1st Rework)";
+            }
+            elseif($op_arr[$wo_step]['op_rework_times']==2)
+            {
+                    echo "(2nd Rework)";
+            }
             ?></td>
         </tr>
         <tr>
@@ -425,7 +433,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         <tr>
             <td class="tg-c3ow">5</td>
             <td class="tg-0pky" colspan="5">Assembly performed by:</td>
-            <td class="tg-xldj"><?php echo $op_arr['wo_step5']['op_comment'];?></td>
+            <td class="tg-xldj"></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_completed_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_completed_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_assigner']!=0)?GetValueUser($op_arr['wo_step5']['op_assigner'], "name"):"N/A"; ?></td>
             <td class="tg-xldj"><?php echo ($op_arr['wo_step5']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step5']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
@@ -435,10 +443,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="2">Solder?</td>
             <td class="tg-0pky" colspan="2">Crimp?</td>
             <td class="tg-0pky">None</td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
+            <td class="tg-0pky" colspan="4" rowspan="6"><?php echo $op_arr['wo_step5']['op_comment'];?></td>
+            
         </tr>
         <tr>
             <td class="tg-c3ow" rowspan="5">Production</td>
@@ -454,10 +460,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             ?></td>
             <td class="tg-0pky">Height</td>
             <td class="tg-0pky">Pull Force</td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky"></td>
+            
         </tr>
         <?php
         $iassem=1;
@@ -466,17 +469,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             ?>
             <tr>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value1; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?></td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?>cc</td>
                 <td class="tg-0pky">
                 <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
                 echo $arrTool[$iassem];
                // echo $a_row->op_assembly_value3; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
-                <td class="tg-0pky"></td>
-                <td class="tg-0pky"></td>
-                <td class="tg-0pky"></td>
-                <td class="tg-0pky"></td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?>c</td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?>c</td>
+               
             </tr>
             <?php
             $iassem++;
@@ -487,7 +487,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="5"></td>
             <td class="tg-b2ze" colspan="2">Inspection(QC)</td>
             <!--<td class="tg-b2ze">2nd Fail Qty</td>-->
-            <td class="tg-b2ze">DATE</td>
+            <td class="tg-b2ze">COMPLETED DATE</td>
             <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>
@@ -508,17 +508,16 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Document(BOM,Drawing,Pro. Traveler)</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value1']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>-->
-            <td class="tg-0pky"></td>
-            <td class="tg-c3ow" colspan="2"><span style="font-weight:700">COMMENTS</span></td>
+            
+            <td class="tg-c3ow" colspan="3"><span style="font-weight:700">COMMENTS</span></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Visual Inspection</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value2']==1)?"PASS":"FAIL"?></td>
-<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value2']?></td>-->
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky" colspan="2" rowspan="7"><?php echo $op_arr['wo_step6']['op_comment'];?></td>
+<!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value2']?></td>-->            
+            <td class="tg-0pky" colspan="3" rowspan="7"><?php echo $op_arr['wo_step6']['op_comment'];?></td>
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -526,7 +525,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Dimention</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value3']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value3']?></td>-->
-            <td class="tg-0pky"></td>
+            
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -534,7 +533,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Label</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value4']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value4']?></td>-->
-            <td class="tg-0pky"></td>
+            
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -542,7 +541,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Wiring</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value5']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value5']?></td>-->
-            <td class="tg-0pky"></td>
+            
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -550,7 +549,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Connection</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value6']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value6']?></td>-->
-            <td class="tg-0pky"></td>
+            
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -558,7 +557,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Hipot Test</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value7']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value7']?></td>-->
-            <td class="tg-0pky"></td>
+            
         </tr>
         <tr>
             <td class="tg-0pky"></td>
@@ -566,12 +565,12 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky" colspan="3">Other</td>
             <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value8']==1)?"PASS":"FAIL"?></td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value8']?></td>-->
-            <td class="tg-0pky"></td>
+           
         </tr>
         <tr>
             <td class="tg-0pky" colspan="6"></td>
             <td class="tg-b2ze">COMMENTS</td>
-            <td class="tg-b2ze">DATE</td>
+            <td class="tg-b2ze">COMPLETED DATE</td>
             <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>

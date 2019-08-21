@@ -1,5 +1,5 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-wo_material
+
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
 //

@@ -367,51 +367,67 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                         <table class="adminlist1" cellspacing="1" width="200">
                                                                 <?php 
                                                                 $pnTopInfo = PNsController::getTopAssysSo($so->pns_so_id);
-                                                                foreach($pnTopInfo as $top )
-                                                                {
+                                                                $i=1;
+                                                                if (count($pnTopInfo) > 0) {
+                                                                        foreach($pnTopInfo as $top )
+                                                                        {
+                                                                                $style="style='border-bottom:1px solid #eee;'";
+                                                                               if($i==count($pnTopInfo))
+                                                                                      $style ="style='border-bottom:none'";
+                                                                               
+                                                                        if ($top->pns_cpn == 1)
+                                                                                $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
+                                                                        else
+                                                                                $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
+                                                                        if ($top->pns_revision) {
+                                                                                $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
+                                                                        } else {
+                                                                                $pnNumber = $top->ccs_code . '-' . $top->pns_code;
+                                                                        }
+                                                                                ?>
+                                                                        <tr>
+                                                                                <td align="center" <?php echo $style;?>>
+                                                                                                <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
+                                                                                        </td>
+                                                                        </tr>
+                                                                        <?php 
                                                                         $i++;
-                                                                if ($top->pns_cpn == 1)
-                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
-                                                                else
-                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
-                                                                if ($top->pns_revision) {
-                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
-                                                                } else {
-                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code;
+                                                                        }
+                                                                        
                                                                 }
                                                                         ?>
-                                                                <tr>
-                                                                        <td align="center"><span class="editlinktip hasTip" title="<?php echo $pnNumber; ?>" >
-                                                                                        <a href="<?php echo $link; ?>" title="<?php echo JText::_('Click to see detail PNs'); ?>"><?php echo $pnNumber; ?></a>
-                                                                                </span></td>
-                                                                </tr>
-                                                                <?php 
-                                                                }
-                                                                ?>
                                                                 <tr></tr>
                                                         </table>
                                                 </td>
                                                 <td align="center">
                                                          <table class="adminlist1" cellspacing="1" width="200">
                                                                 <?php 
-                                                                
-                                                                foreach($pnTopInfo as $top )
-                                                                {
-                                                                        $i++;
-                                                                if ($top->pns_cpn == 1)
-                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
-                                                                else
-                                                                        $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
-                                                                if ($top->pns_revision) {
-                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
-                                                                } else {
-                                                                        $pnNumber = $top->ccs_code . '-' . $top->pns_code;
-                                                                }
-                                                                        ?>
-                                                                <tr>
-                                                                        <td align="center"><?php echo $topSysQty=$top->qty;?></td>
-                                                                </tr>
-                                                                <?php 
+                                                                if (count($pnTopInfo) > 0) {
+                                                                        $a=1;
+                                                                        foreach($pnTopInfo as $top )
+                                                                        {
+                                                                               $style="style='border-bottom:1px solid #eee;'";
+                                                                               if($a==count($pnTopInfo))
+                                                                                      $style ="style='border-bottom:none'";
+
+
+                                                                        if ($top->pns_cpn == 1)
+                                                                                $link = 'index.php?option=com_apdmpns&amp;task=detailmpn&cid[0]=' . $top->pns_id;
+                                                                        else
+                                                                                $link = 'index.php?option=com_apdmpns&amp;task=detail&cid[0]=' . $top->pns_id;                                                                
+                                                                        if ($top->pns_revision) {
+                                                                                $pnNumber = $top->ccs_code . '-' . $top->pns_code . '-' . $top->pns_revision;
+                                                                        } else {
+                                                                                $pnNumber = $top->ccs_code . '-' . $top->pns_code;
+                                                                        }
+                                                                                ?>
+                                                                        <tr>
+                                                                                <td align="center" <?php echo $style;?>><?php echo $topSysQty=$top->qty;?></td>
+                                                                        </tr>
+                                                                        <?php 
+                                                                        $a++;
+                                                                        }
+                                                                        
                                                                 }
                                                                 ?>
                                                                 <tr></tr>
@@ -419,16 +435,23 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                 </td>
                                                 <td  align="center"> 
                                                         <table class="adminlist1" cellspacing="1" width="200">
-                                                                <?php 
-                                                                
-                                                                foreach($pnTopInfo as $top )
-                                                                {
-                                                                        $i++;                                                                        
-                                                                        ?>
-                                                                <tr>
-                                                                        <td align="center"><?php echo PNsController::getQtyTopAssysDone($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
-                                                                </tr>
-                                                                <?php 
+                                                                <?php                                                                 
+                                                                if (count($pnTopInfo) > 0) {
+                                                                        $i=1;
+                                                                        foreach($pnTopInfo as $top )
+                                                                        {
+                                                                                $style="style='border-bottom:1px solid #eee;'";
+                                                                                if($i==count($pnTopInfo))
+                                                                                    $style ="style='border-bottom:none'";
+                                                                                     
+                                                                                
+                                                                                ?>
+                                                                        <tr>
+                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysDone($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                        </tr>
+                                                                        <?php 
+                                                                        $i++;  
+                                                                        }
                                                                 }
                                                                 ?>
                                                                 <tr></tr>
@@ -436,17 +459,23 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                         <td  align="center">
                                                         <table class="adminlist1" cellspacing="1" width="200">
                                                                 <?php 
-                                                                
-                                                                foreach($pnTopInfo as $top )
-                                                                {
-                                                                        $i++;                                                                        
-                                                                        ?>
-                                                                <tr>
-                                                                        <td align="center"><?php echo PNsController::getQtyTopAssysShipped($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
-                                                                </tr>
-                                                                <?php 
+                                                                if (count($pnTopInfo) > 0) {
+                                                                        $j=1;
+                                                                        foreach($pnTopInfo as $top )
+                                                                        {
+                                                                                $style="style='border-bottom:1px solid #eee;'";
+                                                                                if($j==count($pnTopInfo))
+                                                                                    $style ="style='border-bottom:none'";
+                                                                                                                                                 
+                                                                                ?>
+                                                                        <tr>
+                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysShipped($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                        </tr>
+                                                                        <?php 
+                                                                        $j++;       
+                                                                        }
                                                                 }
-                                                                ?>
+                                                                        ?>
                                                                 <tr></tr>
                                                         </table></td>
                                                  <td  align="center"<?php echo $background?>><?php echo $remain_day;?></td>
