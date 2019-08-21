@@ -204,7 +204,7 @@ if (count($this->so_list) > 0) { ?>
                                                          }
                                                          elseif($so->op_rework_times==2)
                                                          {
-                                                                  echo '(2st Rework)';
+                                                                  echo '(2nd Rework)';
                                                          }
                                                  }
                                                         ?>
@@ -290,7 +290,7 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                                                          }
                                                          elseif($so->op_rework_times==2)
                                                          {
-                                                                  echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">2st Rework</a>';
+                                                                  echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">2nd Rework</a>';
                                                          }
                                                  }
                                                  ?></td>

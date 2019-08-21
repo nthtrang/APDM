@@ -495,7 +495,7 @@ function check_so_first()
     <td><textarea maxlength='40' name="op_comment5" rows="3" cols="30"></textarea></td>
     <td><?php //echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date4', 'op_completed_date4', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
     <td>
-            <select  name="op_assigner4" id="op_assigner5" >
+            <select  name="op_assigner5" id="op_assigner5" >
                 <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>

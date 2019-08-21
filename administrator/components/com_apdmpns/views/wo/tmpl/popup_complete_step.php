@@ -93,7 +93,7 @@ function saveCommentWoStep(){
                                             document.getElementById('task').value = "saveCommentStepWo";
                                         submitform("saveCommentStepWo");                                        
                                        // window.parent.document.getElementById('sbox-window').close();	
-                                        window.location = "index.php?option=com_apdmpns&task=save_complete_step&step="+wo_step+"&tmpl=component&id="+wo_id+"&so_id="+so_id;
+                                     //......   window.location = "index.php?option=com_apdmpns&task=save_complete_step&step="+wo_step+"&tmpl=component&id="+wo_id+"&so_id="+so_id;
                                         //document.getElementById('notice').innerHTML =  "Update Comment Successfull";   			                
                                 }
 			}
@@ -173,7 +173,7 @@ function saveCommentWoStep(){
         <input type="hidden" name="user_id" id="user_id" value="<?php echo $me->get('id'); ?>" />        
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
-        <input type="hidden" name="task" id="task" value="" />	
+        <input type="text" name="task" id="task" value="" />
         <input type="hidden" name="return" value="wo_detail"  />
         <input type="hidden" name="boxchecked" value="1" />
                                         <?php echo JHTML::_('form.token'); ?>

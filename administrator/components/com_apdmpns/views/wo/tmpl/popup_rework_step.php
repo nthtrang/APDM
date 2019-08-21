@@ -115,7 +115,7 @@ function cancelUpdate()
                                                 </td>
                                                
                                                 <td class="key"><strong>Rework Times:</strong></td><td>   
-                                                <?php echo $this->wo_row->wo_rework_times;?>
+                                                <?php echo $this->wo_row->wo_rework_times + 1;?>
                                                 </td>
                                         </tr>
                                          <tr>

@@ -10904,19 +10904,21 @@ class PNsController extends JController {
                 $datenow = & JFactory::getDate();                
                 $id = JRequest::getVar('id');                
                 $wo_id = JRequest::getVar('wo_id');
+            $so_id = JRequest::getVar('so_id');
                 $userId = JRequest::getVar('user_id');
                 $wo_step = JRequest::getVar('wo_step');
                 $op_comment = JRequest::getVar('op_comment');                
                 $username = JRequest::getVar('username', '', 'method', 'username');
 		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
 		
-                $sql = "update apdm_pns_wo_op set op_completed_date='".$datenow->toMySQL()."', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query();  
+
                 //inserr history
-                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Comment','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");                                
-                
-                $db->query();
+                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Comment','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
+            $db->query();
+            return $this->setRedirect('index.php?option=com_apdmpns&task=save_complete_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);
                 echo 1;
                 exit;
         }
@@ -10933,9 +10935,8 @@ class PNsController extends JController {
                 $wo_step = JRequest::getVar('wo_step');
                 $op_comment = JRequest::getVar('op_comment');     
                 $username = JRequest::getVar('username', '', 'method', 'username');
-		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
-                $db->setQuery($query);
+		        $password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+                $db->setQuery("select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'");
                 $isUserId = $db->loadResult();                
                 if(!$isUserId)
                 {
@@ -11225,8 +11226,8 @@ class PNsController extends JController {
                 $wo_step = JRequest::getVar('wo_step');
                 $op_comment = JRequest::getVar('op_comment');        
                 $username = JRequest::getVar('username', '', 'method', 'username');
-		$password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
+                $password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
+                $query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
                 $db->setQuery($query);
                 $isUserId = $db->loadResult();                
                 if(!$isUserId)
@@ -11358,9 +11359,11 @@ class PNsController extends JController {
                 $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
                 $db->query(); 
-                //inserr history                
-                $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id. ", '".$wo_step."', 'Rework','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId. " ,'".$op_comment."') ");
-                $db->query();   
+                //inserr history
+                if($op_comment) {
+                    $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id . ", '" . $wo_step . "', 'Rework','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId . " ,'" . $op_comment . "') ");
+                    $db->query();
+                }
                 echo 1;
         }
         function requestmaterialwo()
