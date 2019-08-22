@@ -46,7 +46,7 @@ class pnsViewshopfloor extends JView {
                 
                 $group_by = "group by wo.pns_wo_id";
                 $orderby = ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
-                echo  $query = " select  COUNT(wo.pns_wo_id)
+                  $query = " select  COUNT(wo.pns_wo_id)
                          from apdm_pns_wo wo
                         left join apdm_pns p on wo.pns_id = p.pns_id
                         left join apdm_pns p2 on p2.pns_id = wo.top_pns_id
@@ -76,13 +76,13 @@ class pnsViewshopfloor extends JView {
                         CONCAT_WS( '-',p2.ccs_code, p2.pns_code, p2.pns_revision) as top_pn,so.so_cuscode, 
                         CONCAT_WS( '-',so.customer_id, so.so_cuscode) as so_number,ccs.ccs_name, wo.wo_qty
                         ,p.pns_revision,so.so_shipping_date,wo.wo_completed_date
-                        ,st1.op_completed_date as step1_complete_date,st1.op_assigner as step1_assigner
-                        ,st2.op_completed_date as step2_complete_date,st2.op_assigner as step2_assigner
-                        ,st3.op_completed_date as step3_complete_date,st3.op_assigner as step3_assigner
-                        ,st4.op_completed_date as step4_complete_date,st4.op_assigner as step4_assigner
-                        ,st5.op_completed_date as step5_complete_date,st5.op_assigner as step5_assigner
-                        ,st6.op_completed_date as step6_complete_date,st6.op_assigner as step6_assigner
-                        ,st7.op_completed_date as step7_complete_date,st7.op_assigner as step7_assigner
+                        ,st1.op_completed_date as step1_complete_date,st1.op_assigner as step1_assigner,st1.op_total_time as step1_op_total_time,st1.op_rework_f_total_time as step1_op_rework_f_total_time,st1.op_rework_s_total_time as step1_op_rework_s_total_time
+                        ,st2.op_completed_date as step2_complete_date,st2.op_assigner as step2_assigner,st2.op_total_time as step2_op_total_time,st2.op_rework_f_total_time as step2_op_rework_f_total_time,st2.op_rework_s_total_time as step2_op_rework_s_total_time
+                        ,st3.op_completed_date as step3_complete_date,st3.op_assigner as step3_assigner,st3.op_total_time as step3_op_total_time,st3.op_rework_f_total_time as step3_op_rework_f_total_time,st3.op_rework_s_total_time as step3_op_rework_s_total_time
+                        ,st4.op_completed_date as step4_complete_date,st4.op_assigner as step4_assigner,st4.op_total_time as step4_op_total_time,st4.op_rework_f_total_time as step4_op_rework_f_total_time,st4.op_rework_s_total_time as step4_op_rework_s_total_time
+                        ,st5.op_completed_date as step5_complete_date,st5.op_assigner as step5_assigner,st5.op_total_time as step5_op_total_time,st5.op_rework_f_total_time as step5_op_rework_f_total_time,st5.op_rework_s_total_time as step5_op_rework_s_total_time
+                        ,st6.op_completed_date as step6_complete_date,st6.op_assigner as step6_assigner,st6.op_total_time as step6_op_total_time,st6.op_rework_f_total_time as step6_op_rework_f_total_time,st6.op_rework_s_total_time as step6_op_rework_s_total_time
+                        ,st7.op_completed_date as step7_complete_date,st7.op_assigner as step7_assigner,st7.op_total_time as step7_op_total_time,st7.op_rework_f_total_time as step7_op_rework_f_total_time,st7.op_rework_s_total_time as step7_op_rework_s_total_time
                         from apdm_pns_wo wo
                         left join apdm_pns p on wo.pns_id = p.pns_id
                         left join apdm_pns p2 on p2.pns_id = wo.top_pns_id
@@ -101,7 +101,7 @@ class pnsViewshopfloor extends JView {
                 $lists['query'] = base64_encode($query);
                 $lists['total_record'] = $total;
                 $db->setQuery($query, $pagination->limitstart, $pagination->limit);
-                echo $db->getQuery();
+                
                 $rows = $db->loadObjectList();  
                 
                  $wostep[] = JHTML::_('select.option',  '',  JText::_( 'Select Step' ), 'value', 'text'); 

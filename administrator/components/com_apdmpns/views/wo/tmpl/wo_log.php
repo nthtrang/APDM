@@ -41,6 +41,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <li><a id="bom" class="active"><?php echo JText::_('LOG'); ?></a></li>                        
                         <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
                         <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
+                        <li><a id="rework_log" href="index.php?option=com_apdmpns&task=wo_rework_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'REWORK' ); ?></a></li>
                 </ul>
                 <div class="clr"></div>
         </div>
@@ -117,7 +118,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                  <?php                                                                               
 																			   if ($this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ){
                                                                                 ?>
-                                                                        qq<a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
+                                                                        <a href="index.php?option=com_apdmpns&task=remove_file_wo_log&woid=<?php echo $this->wo_row->pns_wo_id;?>&id=<?php echo $rowf->id?>&remove=<?php echo $i.time();?>" title="Click to remove" onclick="if ( confirm('Are you sure to delete it ? ') ) { return true;} else {return false;} "><img src="images/cancel_f2.png" width="15" height="15" /></a>
                                                                          <?php
                                                                                }
                                                                                 ?>

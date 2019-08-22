@@ -1,5 +1,5 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-
+wo_rework_list
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
 //
@@ -41,8 +41,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                         <li><a id="detail" href="index.php?option=com_apdmpns&task=wo_detail&id=<?php echo $this->wo_row->pns_wo_id; ?>" ><?php echo JText::_('DETAIL'); ?></a></li>
                         <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>
                         <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
-                        <li><a id="diary" class="active" href="#"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
-                        <li><a id="rework_log" href="index.php?option=com_apdmpns&task=wo_rework_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'REWORK' ); ?></a></li>
+                        <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
+                        <li><a id="rework_log"  class="active"><?php echo JText::_( 'REWORK' ); ?></a></li>
                 </ul>
                 <div class="clr"></div>
         </div>
@@ -67,26 +67,42 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                         <table width="100%"  class="adminlist" cellpadding="1">						
                                                                                 <thead>
                                                                                         <th><strong><?php echo JText::_('No.')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Time')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Request By')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Request To')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Reason')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Status')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Rework')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Created Time')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('QC By')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Rework Qty')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Rework From')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Failure')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Comments')?> </strong></th>
+                                                                                        <th><strong><?php echo JText::_('Attached')?> </strong></th>
                                                                                         
                                                                                 </thead>
                                                                                
                                                                 <?php
 
                                                                 $i = 1;                                                                
-                                                                foreach ($this->material_list as $rowf) {                                                                        
+                                                                foreach ($this->rework_log_list as $rowf) {                                                                        
                                                                 ?>
                                                                 <tr>
                                                                         <td><?php echo $i?></td>
-                                                                        <td><?php echo JHTML::_('date', $rowf->material_submited, JText::_('DATE_FORMAT_LC5')); ?></td>
-                                                                        <td><?php echo GetValueUser($rowf->material_submited_by, "name"); ?></td>
-                                                                       <td><?php echo GetValueUser($rowf->material_request_to, "name"); ?></td>
-                                                                       <td><?php echo $rowf->material_reason; ?></td>
-                                                                       <td><a href="index.php?option=com_apdmpns&task=detail_material&material_id=<?php echo $rowf->material_id;?>&id=<?php echo $rowf->wo_id;?>" title="<?php echo JText::_('Click to see detail Material Request'); ?>" /><?php echo $rowf->material_state; ?></a></td>
+                                                                        <td><?php if($rowf->rework_times=='1'){
+                                                                                        echo "1st";
+                                                                        }
+                                                                        elseif($rowf->rework_times=='2')
+                                                                        {
+                                                                                echo "2nd";
+                                                                        }
+                                                                                ?></td>
+                                                                        <td><?php echo JHTML::_('date', $rowf->rework_created, JText::_('DATE_FORMAT_LC6')); ?></td>
+                                                                        <td><?php echo GetValueUser($rowf->rework_created_by, "name"); ?></td>
+                                                                       <td><?php echo $rowf->rework_qty; ?></td>
+                                                                       <td><?php echo PNsController::getWoStep($rowf->rework_from); ?></td>
+                                                                       <td><?php echo $rowf->rework_failure; ?></td>
+                                                                       <td><?php echo $rowf->rework_comments; ?></td>                                                                                                                                                                                                                                                                                                
+                                                                       <td><a href="index.php?option=com_apdmpns&task=download_file_rework&id=<?php echo $rowf->wo_id?>&file=<?php echo $rowf->rework_attached_file?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+                                                                       </td>
+                                                                       <td><a target="_blank" href="index.php?option=com_apdmpns&task=print_rework&tmpl=component&id=<?php echo $rowf->wo_id?>&rework_id=<?php echo $rowf->rework_id?>" title="Click here to print">Print Detail</a>&nbsp;&nbsp;
+                                                                       </td>
                                                                 </tr>
                                                                 <?php $i++; } ?>
 

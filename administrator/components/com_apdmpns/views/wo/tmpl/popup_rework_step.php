@@ -34,9 +34,9 @@ function saveReworkWoStep(){
                                 }
 				else
                                 {
-                                      //  submitform("saveReworkStepWo");
-                                        window.parent.document.getElementById('sbox-window').close();	
-                                        window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                                        submitform("saveReworkStepWo");
+                                     //   window.parent.document.getElementById('sbox-window').close();	
+                                      //  window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
 			}
 		}).request();
@@ -73,7 +73,7 @@ function print_rework()
                                 }
 				else
                                 {
-                                      //  submitform("saveReworkStepWo");
+                                        submitform("saveReworkStepWo");
                                         window.parent.document.getElementById('sbox-window').close();	
                                         window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
@@ -81,6 +81,33 @@ function print_rework()
 		}).request();
 	}
             }
+            
+            function numbersOnlyEspecialFloat(myfield, e, dec){
+       
+	 var key;
+	 var keychar;
+	 if (window.event)
+		key = window.event.keyCode;
+	 else if (e)
+		key = e.which;
+	 else
+		return true;
+	 keychar = String.fromCharCode(key);
+	 // control keys
+
+	 if ((key==null) || (key==0) || (key==8) || (key==9) || (key==13) || (key==27)|| (key==46) ) return true;
+	 // numbers
+	 else if ((("0123456789").indexOf(keychar) > -1))
+		return true;
+	 // decimal point jump
+	 else if (dec && (keychar == "."))
+		{
+		myfield.form.elements[dec].focus();
+		return false;
+		}
+	 else
+		return false;
+}
 </script>
 <form action="index.php?option=com_apdmpns&task=saveReworkStepWo&tmpl=component&id=<?php echo $wo_id?>" method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >      
         <fieldset class="adminform">
@@ -119,6 +146,7 @@ function print_rework()
                                                 </td>                                                
                                                 <td class="key"><strong>QC By:</strong></td><td>   
                                                 <?php echo ($assignee!=0)?GetValueUser($assignee, "name"):"N/A"; ?>
+                                               <input type="hidden" value="<?php echo $assignee;?>" name="qc_by" id="qc_by"/>
                                                 </td>
                                         </tr>
                                          <tr>
@@ -143,19 +171,22 @@ function print_rework()
                                                             $arrFail[] ="Hipot Test";
                                                         if($opfn_arr[1]['op_final_value8']==0)
                                                             $arrFail[] ="Other";
-                                                        echo implode(",",$arrFail);
+                                                        echo implode(",",$arrFail);                                                        
                                                         ?>
+                                                        <input type="hidden" value="<?php echo implode(",",$arrFail);?>" name="rework_failure" id="rework_failure"/>
                                                 </td>
                                                
                                                 <td class="key"><strong>Rework Times:</strong></td><td>   
                                                 <?php echo $this->wo_row->wo_rework_times + 1;?>
+                                                         <input type="hidden"  value="<?php echo $this->wo_row->wo_rework_times + 1;?>" name="rework_times" id="rework_times"/>
                                                 </td>
                                         </tr>
                                          <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td class="key"><strong>Rework Qty:</strong></td><td>   
-                                                <?php echo $this->wo_row->wo_qty;?>
+                                                
+                                                 <input type="text" onKeyPress="return numbersOnlyEspecialFloat(this, event);" value="<?php echo $this->wo_row->wo_qty;?>" name="rework_qty" id="rework_qty"/>
                                                 </td>
                                         </tr>
                                          
@@ -222,7 +253,7 @@ function print_rework()
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
         <input type="hidden" name="pns_op_id" value="<?php echo $pns_op_id; ?>" />        
         <input type="hidden" name="option" value="com_apdmpns" />             
-        <input type="hidden" name="task" value="saveReworkStepWo " />	
+        <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />
         <input type="hidden" name="boxchecked" value="1" />
                                         <?php echo JHTML::_('form.token'); ?>

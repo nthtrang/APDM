@@ -19,6 +19,7 @@ class pnsViewwo extends JView {
                 $cid = JRequest::getVar('cid', array(0), '', 'array');
                 $wo_id = JRequest::getVar('id');
                 $material_id = JRequest::getVar('material_id');
+                $rework_id = JRequest::getVar('rework_id');
                 $me = JFactory::getUser();
                 JArrayHelper::toInteger($cid, array(0));
                 $search = $mainframe->getUserStateFromRequest("$option.text_search", 'text_search', '', 'string');
@@ -266,14 +267,20 @@ class pnsViewwo extends JView {
                 $db->setQuery("SELECT * FROM apdm_pns_wo_history  where wo_id=".$wo_id." order by id desc");
                 $dairy_list = $db->loadObjectList();         
                 $this->assignRef('dairy_list',        $dairy_list);
-                
-                
+                //get list rework
+                $db->setQuery("SELECT * FROM apdm_pns_wo_rework WHERE wo_id='".$wo_id."' order by rework_id desc");                
+                        $rework_log_list = $db->loadObjectList();  
+                //get detail rework        
+                        $db->setQuery("SELECT * FROM apdm_pns_wo_rework WHERE wo_id='".$wo_id."' and rework_id = '".$rework_id."' order by rework_id desc");                
+                        $rework_detail = $db->loadObject();  
+                        $this->assignRef('rework_detail', $rework_detail);
                 $lists['search'] = $search;
                 $this->assignRef('lists', $lists);
                 $this->assignRef('list_file_log', $list_file_log);
                 $this->assignRef('arr_status', $arrSoStatus);
                 $this->assignRef('arr_rework_status', $statusReworkValue);                
                 $this->assignRef('list_status_rework',       $listStatusReworkValue);
+                $this->assignRef('rework_log_list', $rework_log_list);
                 
                 $this->assignRef('list_user', $list_user);
                 $this->assignRef('wo_list', $rows);

@@ -84,6 +84,9 @@ function submitbutton(pressbutton) {
                                  <th rowspan="2" align="center" class="title" width="15%">
 					<?php echo JText::_('WO Finish'); ?>
 				</th>
+                                <th rowspan="2" align="center" class="title" width="15%">
+					<?php echo JText::_('Total Time'); ?>
+				</th>
                                 <th colspan="2" align="center" class="title" width="15%">
 					<?php echo JText::_('Doc. Pre'); ?>
 				</th>                                
@@ -157,7 +160,7 @@ function submitbutton(pressbutton) {
 					<?php  echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
-		</tfoot>
+		</tfoot>                                
 		<tbody>
 		<?php		
 			$k = 0;
@@ -218,7 +221,16 @@ function submitbutton(pressbutton) {
                                 <td align="left">					
                                         <?php echo ($row->wo_completed_date!="")?JHTML::_('date', $row->wo_completed_date, JText::_('DATE_FORMAT_LC5')):""; ?>
 				</td>
-                                
+                                 <td align="left">					
+                                        <?php
+                                        
+                                        $total_op =  $row->step1_op_total_time + $row->step2_op_total_time + $row->step3_op_total_time + $row->step4_op_total_time+ $row->step5_op_total_time+$row->step6_op_total_time+$row->step7_op_total_time;
+                                        $total_f_rework =  $row->step1_op_rework_f_total_time + $row->step2_op_rework_f_total_time + $row->step3_op_rework_f_total_time + $row->step4_op_rework_f_total_time+ $row->step5_op_rework_f_total_time+$row->step6_op_rework_f_total_time+$row->step7_op_rework_f_total_time;
+                                        $total_s_rework =  $row->step1_op_rework_s_total_time + $row->step2_op_rework_s_total_time + $row->step3_op_rework_s_total_time + $row->step4_op_rework_s_total_time+ $row->step5_op_rework_s_total_time+$row->step6_op_rework_s_total_time+$row->step7_op_rework_s_total_time;
+                                        echo $total_op + $total_f_rework+$total_s_rework;
+
+                                        ?>
+				</td>
                                 <td align="left">					
                                         <?php echo ($row->step1_complete_date!="0000-00-00 00:00:00")?JHTML::_('date', $row->step1_complete_date, JText::_('DATE_FORMAT_LC5')):""; ?>
 				</td>

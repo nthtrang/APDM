@@ -10486,12 +10486,6 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'shopfloor');
                 parent::display();
         }
-        function shopfloor()
-        {
-                JRequest::setVar('layout', 'list');
-                JRequest::setVar('view', 'shopfloor');
-                parent::display();
-        }
         
         function save_complete_step()
         {                                          
@@ -10767,55 +10761,50 @@ class PNsController extends JController {
                          $db->setQuery($sql);
                          $db->query();  
                 }
-                if($current_step!="wo_step7"){
+                $pass_step = 1;
+                if(!$post['op_final_value1']||!$post['op_final_value2']||!$post['op_final_value3']||!$post['op_final_value4']||!$post['op_final_value5']||!$post['op_final_value6']||!$post['op_final_value7']||!$post['op_final_value8'])
+                {
+                        $pass_step = 0;
+                }
+                if($pass_step && $current_step!="wo_step7"){
                         //set start date for next step
                         $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query(); 
-                }                        						                        
-                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
-                $wo_log =  JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML );
-                 $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
-                $db->setQuery($sql);
-                $db->query();          
-                
-                //log time sheet            
-                $total_minute = 0;
-                $query = "select case op_rework_times ".
-                        " when '0' then  IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date))".
-                        " when '1' then   IF(op_rework_f_resume_date!='', TIMESTAMPDIFF(MINUTE, op_rework_f_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_rework_f_start_date,op_completed_date)) ".
-                        " when '2' then    IF(op_rework_s_resume_date!='', TIMESTAMPDIFF(MINUTE, op_rework_s_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_rework_s_start_date,op_completed_date)) ".
-                        " END as log_timesheet,op_rework_times,op_total_time,op_rework_f_total_time,op_rework_s_total_time ".
-                        " from apdm_pns_wo_op where  op_code = '".$current_step."' and wo_id = ".$wo_id;
-                $db->setQuery($query);
-                $log_total= $db->loadObject();
-                if($log_total->op_rework_times==0)
-                {
-                        $total=  $log_total->log_timesheet + $log_total->op_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
-                }elseif($log_total->op_rework_times==1)
-                {
-                        $total=  $log_total->log_timesheet + $log_total->op_rework_f_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_rework_f_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
-                }elseif($log_total->op_rework_times==2)
-                {
-                        $total=  $log_total->log_timesheet + $log_total->op_rework_s_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_rework_s_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
-                }                                
-                $db->setQuery($sql);
-                $db->query(); 
-//                $fail_rework = 0;
-//               for($i==1;$i<9;$i++)
-//               {
-//                       if($post['op_final_value1']==0)
-//                               $fail_rework = 1;
-//               }
-//                if($fail_rework)
-//                {
-//                         return $this->setRedirect('index.php?option=com_apdmpns&task=save_rework_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);
-//                         exit;
-//                }
-                
+                }     
+                if($pass_step){
+                        $op_comment = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                        $wo_log =  JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML );
+                        $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
+                        $db->setQuery($sql);
+                        $db->query();          
+
+                        //log time sheet            
+                        $total_minute = 0;
+                        $query = "select case op_rework_times ".
+                                " when '0' then  IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_completed_date))".
+                                " when '1' then   IF(op_rework_f_resume_date!='', TIMESTAMPDIFF(MINUTE, op_rework_f_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_rework_f_start_date,op_completed_date)) ".
+                                " when '2' then    IF(op_rework_s_resume_date!='', TIMESTAMPDIFF(MINUTE, op_rework_s_resume_date,op_completed_date),  TIMESTAMPDIFF(MINUTE, op_rework_s_start_date,op_completed_date)) ".
+                                " END as log_timesheet,op_rework_times,op_total_time,op_rework_f_total_time,op_rework_s_total_time ".
+                                " from apdm_pns_wo_op where  op_code = '".$current_step."' and wo_id = ".$wo_id;
+                        $db->setQuery($query);
+                        $log_total= $db->loadObject();
+                        if($log_total->op_rework_times==0)
+                        {
+                                $total=  $log_total->log_timesheet + $log_total->op_total_time;        
+                                $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                        }elseif($log_total->op_rework_times==1)
+                        {
+                                $total=  $log_total->log_timesheet + $log_total->op_rework_f_total_time;        
+                                $sql = "update apdm_pns_wo_op set op_rework_f_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                        }elseif($log_total->op_rework_times==2)
+                        {
+                                $total=  $log_total->log_timesheet + $log_total->op_rework_s_total_time;        
+                                $sql = "update apdm_pns_wo_op set op_rework_s_total_time = ".$total." where op_code = '".$current_step."' and wo_id = ".$wo_id;
+                        }                                
+                        $db->setQuery($sql);
+                        $db->query(); 
+                }
                 //get op_id from step 6
                 $sql = "select pns_op_id from apdm_pns_wo_op where op_code = 'wo_step6' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
@@ -10862,7 +10851,7 @@ class PNsController extends JController {
                 $db->setQuery($sql);
                 $db->query();
             }
-            $op_comment = $post['op_comment']; //str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+            $op_comment = $post['op_comment']; //str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
             $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
             $db->setQuery($sql);
             $db->query();
@@ -11239,7 +11228,12 @@ class PNsController extends JController {
                 $so_id = JRequest::getVar('so_id');
                 $step_rework = JRequest::getVar('step_rework');
                 $wo_step = JRequest::getVar('wo_step');
-                $op_comment = JRequest::getVar('op_comment');        
+                $op_comment = JRequest::getVar('op_comment');
+                $qc_by = JRequest::getVar('qc_by');
+                $rework_failure = JRequest::getVar('rework_failure');
+                $rework_qty = JRequest::getVar('rework_qty');
+                $rework_times = JRequest::getVar('rework_times');
+                $rework_from  = JRequest::getVar('step_rework');
                 $username = JRequest::getVar('username', '', 'method', 'username');
                 $password = JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW);
                 $query = "select user_id from apdm_users where user_password = md5('".$password."') and username='".$username."'";
@@ -11254,7 +11248,7 @@ class PNsController extends JController {
                 $userId = $isUserId;
                 //get STEP need rework
                 //$step_rework = step_rework
-               $post = JRequest::get('post'); 
+               $post = JRequest::get('post');                
                  if($_FILES['wo_files_zip']['size']>0){                                        
                         $path_upload = JPATH_SITE . DS . 'uploads' . DS . 'wo';
                         $folder = $wo_id;
@@ -11280,6 +11274,8 @@ class PNsController extends JController {
                                                 return $this->setRedirect('index.php?option=com_apdmpns&task=save_rework_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);    
                                 }
                         }
+                        
+                        
                        // }
                         if (count($arr_file_upload) > 0) {
                                 foreach ($arr_file_upload as $file) {
@@ -11367,7 +11363,7 @@ class PNsController extends JController {
                 $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_pause_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_pause_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $log_total= $db->loadObject();
-                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                $op_comment = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
                 $total=  $log_total->log_timesheet + $log_total->op_total_time;
                 $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
@@ -11376,6 +11372,10 @@ class PNsController extends JController {
                 if($op_comment) {
                     $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content) VALUES (" . $wo_id . ", '" . $wo_step . "', 'Rework','" . $wo_step . "','" . $datenow->toMySQL() . "'," . $userId . " ,'" . $op_comment . "') ");
                     $db->query();
+                
+                        //save into Rework TAB
+                        $db->setQuery("INSERT INTO apdm_pns_wo_rework (wo_id,rework_times,rework_from,rework_failure,rework_qty, rework_created, rework_created_by,rework_attached_file,rework_comments) VALUES (" . $wo_id . ", '" . $rework_times . "', '".$rework_from."','" . $rework_failure . "','".$rework_qty."','" . $datenow->toMySQL() . "'," . $userId . ",'".$file."','".$op_comment."') ");                
+                        $db->query();
                 }
                 echo 1;
         }
@@ -11510,7 +11510,7 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();                
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');         
-                $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
+                $material_reason = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
                 if($material_reason)
                 {
                         $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
@@ -11553,5 +11553,26 @@ class PNsController extends JController {
         //detail_material&material_id=1424&id=106
         return $this->setRedirect('index.php?option=com_apdmpns&task=detail_material&material_id='.$post['material_id'].'&id=' . $post['wo_id'], $msg);
     }
+    function wo_rework_log()
+    {
+            JRequest::setVar('layout', 'wo_rework_list');
+                JRequest::setVar('view', 'wo');                
+                parent::display();   
+    }
+     function download_file_rework() {
+                $db = & JFactory::getDBO();
+                $file = JRequest::getVar('file');
+                $wo_id = JRequest::getVar('id');                
+                $path_so = JPATH_SITE . DS . 'uploads' . DS . 'wo' . DS;
+                $path_cads = $path_so  . DS . $wo_id . DS;                                          
+                $dFile = new DownloadFile($path_cads, $file);
+                exit;
+        }     
+        function print_rework()
+        {
+                JRequest::setVar('layout', 'wo_rework_detail_print');
+                JRequest::setVar('view', 'wo');                
+                parent::display();                   
+        }
 }
 

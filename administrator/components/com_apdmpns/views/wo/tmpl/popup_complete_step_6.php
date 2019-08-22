@@ -95,8 +95,8 @@ function cancelUpdate()
                                                 
                                         </tr>
                                         <tr>
-                                                <td>CHECKLIST</td>
-                                                <td colspan="2">PASS&nbsp;&nbsp;&nbsp;FAIL</td>
+                                                <td><strong>CHECKLIST</strong></td>
+                                                <td colspan="2"><strong>PASS&nbsp;&nbsp;&nbsp;FAIL</strong></td>
                                         </tr>
                                        <tr>
                                                 <td>Document(BOM,Drawing,Pro. Traveler)</td>
