@@ -30,29 +30,44 @@ class pnsViewso extends JView {
                 $lists['order']        = $filter_order;
                 
                 $where = array();
+                $where_op = array();
+                $where_mate = array();
                 if (isset($search) && $search != '') {
                         $searchEscaped = $db->Quote('%' . $db->getEscaped($search, false) . '%', false);
                         $where[] = 'so.so_cuscode LIKE ' . $searchEscaped . '';
                         $where[] = 'wo.wo_code LIKE ' . $searchEscaped . '';
                 }
-                $where[] ="wop.op_assigner = ".$me->get('id');
+                $where_op[] ="wop.op_assigner = ".$me->get('id');
                 $where[] = " wop.op_status != 'done'";
                 $where[] = " wo.wo_state not in('done','cancel')";
                 $where[] = " so.so_state not in('done','cancel')";
-                
+
+                $where_mate[] = "mate.material_request_to = ".$me->get('id');
+                $where_material =array_merge($where,$where_mate);
+                $where_material = ( count($where_material) ? ' WHERE (' . implode(') AND (', $where_material) . ')' : '' );
+
+                $where = array_merge($where,$where_op);
                 $where = ( count($where) ? ' WHERE (' . implode(') AND (', $where) . ')' : '' );
+
                // $orderby = ' ORDER BY so.pns_so_id desc';
 
 
                 //for my task #somanagement
-               $query = 'SELECT  wop.*,so.pns_so_id,wo.wo_assigner,so.customer_id as ccs_so_code,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
+               $query = 'SELECT  wop.*,0 as material_id,so.pns_so_id,wo.wo_assigner,so.customer_id as ccs_so_code,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework  '
                         . ' from apdm_pns_wo_op wop '
                         .' inner join apdm_pns_wo wo on wo.pns_wo_id = wop.wo_id'
                         .' inner join apdm_pns_so so on wo.so_id = so.pns_so_id '
                         . ' left join apdm_pns p on  p.pns_id = wo.pns_id '
                       //  . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
                         . $where
-                        .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+                        . ' union SELECT wop.*,mate.material_id,so.pns_so_id,wo.wo_assigner,so.customer_id as ccs_so_code,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework '
+                        . ' from apdm_pns_wo_material mate left join  apdm_pns_wo wo on mate.wo_id = wo.pns_wo_id and mate.material_request_to = '.$me->get('id').' '//and mate.material_state = "Open"
+                        . ' left join apdm_pns_wo_op wop on wo.pns_wo_id = wop.wo_id '
+                        . '  inner join apdm_pns_so so on wo.so_id = so.pns_so_id left join apdm_pns p on p.pns_id = wo.pns_id '
+                        . $where_material
+                        . ' group by mate.material_id';
+                    //   .  ' ORDER BY '. $filter_order .' '. $filter_order_Dir;
+
 
                 $db->setQuery($query);
                 $rows = $db->loadObjectList();

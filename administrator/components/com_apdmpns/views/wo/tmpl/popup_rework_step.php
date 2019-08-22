@@ -18,9 +18,6 @@ $pns_op_id = $op_arr[$step]['pns_op_id'];
 function saveReworkWoStep(){
         var form = document.adminForm;
         var wo_id = form.wo_id.value;
-        
-        var contents = $("#op_comment").val();
-        alert(contents);
        if (form.passwd.value==""){
 		alert('Please type your password.');
                 form.passwd.focus();

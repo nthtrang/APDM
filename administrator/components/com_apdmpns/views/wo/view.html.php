@@ -126,13 +126,17 @@ class pnsViewwo extends JView {
                 $wo_fn_rows = $db->loadObjectList();
                 $opfn_arr = array();
                 foreach ($wo_fn_rows as $rov) {
-                        $opfn_arr[$rov->op_final_fail_times] = array('op_final_value1' => $rov->op_final_value1,
+                        $opfn_arr[$rov->op_final_fail_times] = array(
+                            'op_final_value1' => $rov->op_final_value1,
                             'op_final_value2' => $rov->op_final_value2,
                             'op_final_value3' => $rov->op_final_value3,
                             'op_final_value4' => $rov->op_final_value4,
                             'op_final_value5' => $rov->op_final_value5,
                             'op_final_value6' => $rov->op_final_value6,
-                            'op_final_value7' => $rov->op_final_value7);
+                            'op_final_value7' => $rov->op_final_value7,
+                            'op_final_value8' => $rov->op_final_value8)
+                        ;
+
                 }
                 $this->assignRef('opfn_arr', $opfn_arr);
                 //WO Status

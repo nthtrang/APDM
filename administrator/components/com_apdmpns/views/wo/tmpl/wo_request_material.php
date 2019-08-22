@@ -270,7 +270,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
             <div class="toolbar">
             <table class="toolbar"><tbody><tr>
 <?php  
-    if (in_array("W", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
+    if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
         ?>  
     <td class="button" id="toolbar-save">
             <a href="#"
@@ -292,7 +292,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         </td>        
         <?php
     }    
-    if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
+    if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
         ?>
         <td class="button" id="toolbar-Are you sure to delete it\?">
             <a href="#"

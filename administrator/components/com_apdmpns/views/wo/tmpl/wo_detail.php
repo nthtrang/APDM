@@ -501,12 +501,21 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_assigner']!=0)?GetValueUser($op_arr['wo_step6']['op_assigner'], "name"):"N/A"; ?></td>
             <td class="tg-0pky"><?php echo ($op_arr['wo_step6']['op_target_date']!='0000-00-00 00:00:00')?JHTML::_('date', $op_arr['wo_step6']['op_target_date'], JText::_('DATE_FORMAT_LC6')):""; ?></td>
         </tr>
-        <?php $opfn_arr = $this->opfn_arr;?>
+        <?php
+        $opfn_arr = $this->opfn_arr;
+        ?>
         <tr>
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Document(BOM,Drawing,Pro. Traveler)</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value1']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value1']=='1')
+                    echo "PASS";
+                elseif($opfn_arr[1]['op_final_value1']=='0')
+                    echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value1']?></td>-->
             
             <td class="tg-c3ow" colspan="3"><span style="font-weight:700">COMMENTS</span></td>
@@ -515,7 +524,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Visual Inspection</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value2']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+            <?php
+                if($opfn_arr[1]['op_final_value2']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value2']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value2']?></td>-->            
             <td class="tg-0pky" colspan="3" rowspan="7"><?php echo $op_arr['wo_step6']['op_comment'];?></td>
         </tr>
@@ -523,7 +539,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Dimention</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value3']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value3']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value3']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value3']?></td>-->
             
         </tr>
@@ -531,7 +554,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Label</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value4']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value4']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value4']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value4']?></td>-->
             
         </tr>
@@ -539,7 +569,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Wiring</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value5']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value5']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value5']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value5']?></td>-->
             
         </tr>
@@ -547,7 +584,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Connection</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value6']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value6']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value6']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value6']?></td>-->
             
         </tr>
@@ -555,7 +599,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Hipot Test</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value7']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value7']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value7']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value7']?></td>-->
             
         </tr>
@@ -563,7 +614,14 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"></td>
             <td class="tg-0pky">&gt;</td>
             <td class="tg-0pky" colspan="3">Other</td>
-            <td class="tg-0pky" colspan="2"><?php echo ($opfn_arr[1]['op_final_value8']==1)?"PASS":"FAIL"?></td>
+            <td class="tg-0pky" colspan="2">
+                <?php
+                if($opfn_arr[1]['op_final_value8']=='1')
+                echo "PASS";
+                elseif($opfn_arr[1]['op_final_value8']=='0')
+                echo "FAIL";
+                ?>
+            </td>
 <!--            <td class="tg-0pky"><?php echo $opfn_arr[2]['op_final_value8']?></td>-->
            
         </tr>

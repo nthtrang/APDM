@@ -191,22 +191,22 @@ if (count($this->so_list) > 0) { ?>
                                                 <?php echo $so->pns_uom; ?>
                                                 </td> 
                                                 <td align="left">
-                                                        <?php echo PNsController::getWoStep($so->op_code); 
-                                                        if($so->op_failure_report)
-                                                 {
-                                                         echo '(Failure Report)';
-                                                 }
-                                                 else
-                                                 {
-                                                         if($so->op_rework_times==1)
-                                                         {
-                                                                echo '(1st Rework)';
-                                                         }
-                                                         elseif($so->op_rework_times==2)
-                                                         {
-                                                                  echo '(2nd Rework)';
-                                                         }
-                                                 }
+                                                        <?php
+                                                        if(!$so->material_id) {
+                                                            echo PNsController::getWoStep($so->op_code);
+                                                            if ($so->op_failure_report) {
+                                                                echo '(Failure Report)';
+                                                            } else {
+                                                                if ($so->op_rework_times == 1) {
+                                                                    echo '(1st Rework)';
+                                                                } elseif ($so->op_rework_times == 2) {
+                                                                    echo '(2nd Rework)';
+                                                                }
+                                                            }
+                                                        }
+                                                        else{//for material request
+                                                            echo "Material Request";
+                                                        }
                                                         ?>
                                                 </td>
                                                 <td align="center"><?php echo JHTML::_('date', $so->op_target_date, JText::_('DATE_FORMAT_LC5')); ?></td>
@@ -280,18 +280,16 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                                                          echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">Delayed WO</a><br>';
                                                  if($so->op_failure_report)
                                                  {
-                                                         echo '<a href="index.php?option=com_apdmpns&task=wo_diary&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">Failure Report</a>';
+                                                         echo '<a href="index.php?option=com_apdmpns&task=wo_diary&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">Failure Report</a><br>';
                                                  }
-                                                 else
+                                                 if($so->op_rework_times==1)
                                                  {
-                                                         if($so->op_rework_times==1)
-                                                         {
-                                                                echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">1st Rework</a>';
-                                                         }
-                                                         elseif($so->op_rework_times==2)
-                                                         {
-                                                                  echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">2nd Rework</a>';
-                                                         }
+                                                        echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">1st Rework</a><br>';
+                                                 }
+                                                 elseif($so->op_rework_times==2)
+                                                 {
+                                                     echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">1st Rework</a>,';
+                                                     echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">2nd Rework</a><br>';
                                                  }
                                                  ?></td>
                                                 <td  align="center"<?php echo $background?>><?php echo $remain_day;?></td>

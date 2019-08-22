@@ -11111,14 +11111,14 @@ class PNsController extends JController {
                 if($prestep->pns_op_id)
                 {
                         $wo_prestep = $prestep->op_code;
-                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_pause_date='" . $datenow->toMySQL() . "',op_resume_date='" . $datenow->toMySQL() . "',op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_pause_date='" . $datenow->toMySQL() . "',op_resume_date='" . $datenow->toMySQL() . "',op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where pns_op_id = '".$prestep->pns_op_id."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
                 else
                 {
                         $wo_prestep = $wo_step;
-                        $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "',op_failure_report = 1,op_status='pending',op_title='Pending',op_failure_report_date = '" . $datenow->toMySQL() . "', op_comment = '".$op_comment."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
                         $db->query();
                 }
@@ -11334,12 +11334,12 @@ class PNsController extends JController {
                     {
                         if ($rpre->op_rework_times == 0)//for first
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         } elseif ($rpre->op_rework_times == 1)//for second
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         }
@@ -11347,12 +11347,12 @@ class PNsController extends JController {
                     else{
                         if ($rpre->op_rework_times == 0)//for first
                         {
-                            $sql = "update apdm_pns_wo_op set op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         } elseif ($rpre->op_rework_times == 1)//for second
                         {
-                            $sql = "update apdm_pns_wo_op set op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         }
@@ -11509,7 +11509,7 @@ class PNsController extends JController {
                 $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
                 if($material_reason)
                 {
-                        $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Processed',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);                        
+                        $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
                         $db->query(); 
                 }
                 $msg = JText::_('Have submit material successfull.');        
