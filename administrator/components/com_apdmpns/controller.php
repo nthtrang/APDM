@@ -10486,6 +10486,12 @@ class PNsController extends JController {
                 JRequest::setVar('view', 'shopfloor');
                 parent::display();
         }
+        function shopfloor()
+        {
+                JRequest::setVar('layout', 'list');
+                JRequest::setVar('view', 'shopfloor');
+                parent::display();
+        }
         
         function save_complete_step()
         {                                          
@@ -10767,7 +10773,7 @@ class PNsController extends JController {
                         $db->setQuery($sql);
                         $db->query(); 
                 }                        						                        
-                $op_comment = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
                 $wo_log =  JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML );
                  $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$current_step."' and wo_id = ".$wo_id;               
                 $db->setQuery($sql);
@@ -10856,7 +10862,7 @@ class PNsController extends JController {
                 $db->setQuery($sql);
                 $db->query();
             }
-            $op_comment = $post['op_comment']; //str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+            $op_comment = $post['op_comment']; //str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
             $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
             $db->setQuery($sql);
             $db->query();
@@ -11361,7 +11367,7 @@ class PNsController extends JController {
                 $query = "select IF(op_resume_date!='', TIMESTAMPDIFF(MINUTE, op_resume_date,op_pause_date),  TIMESTAMPDIFF(MINUTE, op_start_date,op_pause_date)) as log_timesheet,op_total_time from apdm_pns_wo_op where  op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($query);
                 $log_total= $db->loadObject();
-                $op_comment = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+                $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
                 $total=  $log_total->log_timesheet + $log_total->op_total_time;
                 $sql = "update apdm_pns_wo_op set op_comment = '".$op_comment."',op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 $db->setQuery($sql);
@@ -11504,7 +11510,7 @@ class PNsController extends JController {
                 $me = & JFactory::getUser();                
                 $datenow = & JFactory::getDate();
                 $post = JRequest::get('post');         
-                $material_reason = str_replace("Ã‚","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
+                $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
                 if($material_reason)
                 {
                         $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);

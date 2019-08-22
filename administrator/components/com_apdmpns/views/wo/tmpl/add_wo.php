@@ -481,7 +481,7 @@ function check_so_first()
     <td class="tg-0pky" colspan="5"><label for="name">Kitted By:</label></td>
     <td><textarea maxlength='40' name="op_comment4" rows="3" cols="30"></textarea></td>
     <td><?php //echo JHTML::_('calendar',$this->so_row->op_completed_date, 'op_completed_date3', 'op_completed_date3', '%Y-%m-%d', array('class'=>'inputbox', 'size'=>'15',  'maxlength'=>'10')); ?></td>
-    <td><select  name="op_assigner3" id="op_assigner4" >
+    <td><select  name="op_assigner4" id="op_assigner4" >
                 <option value="">Select Assignee</option>
                  <?php foreach ($this->list_user as $list) { ?>
                         <option value="<?php echo $list->id; ?>"><?php echo $list->name; ?></option>

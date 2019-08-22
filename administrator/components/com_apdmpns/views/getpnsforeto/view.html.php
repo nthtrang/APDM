@@ -204,8 +204,7 @@ class pnsViewgetpnsforeto extends JView
                 case '7': //Manufacture PN                         
                     $arr_mf_id = array();
                          //echo 'SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND (APS.supplier_info LIKE '.$searchEscaped.'OR ASI.info_description LIKE '.$searchEscaped.' ) group by ASI.info_id';
-                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.' group by ASI.info_id');
-                   // echo $db->getQuery();
+                    $db->setQuery('SELECT * FROM apdm_supplier_info ASI LEFT JOIN apdm_pns_supplier APS ON ASI.info_id = APS.supplier_id WHERE ASI.info_deleted=0 AND ASI.info_type =4 AND APS.supplier_info LIKE '.$searchEscaped.' group by APS.pns_id');
                     $rs_mf = $db->loadObjectList();                   
                     if (count($rs_mf) > 0){
                         foreach ($rs_mf as $mf){
@@ -213,7 +212,8 @@ class pnsViewgetpnsforeto extends JView
                         }
                         $arr_mf_id = array_unique($arr_mf_id);                       
                     }
-                    break;                
+                    break;
+
                 case '6': //for information of pns
                     if (isset( $search ) && $search!= '') {
                         $where[] = 'p.pns_description LIKE ' . $searchEscaped;
@@ -275,7 +275,6 @@ class pnsViewgetpnsforeto extends JView
          if(count($arr_mf_id) > 0){
             //get list pns have this supplier
              $where[] = 'p.pns_id IN ('.implode(',', $arr_mf_id).')';
-            
         }
         if (count($arr_eco_id) > 0) {
             $where[] = 'p.eco_id IN ('.implode(',', $arr_eco_id).')';
