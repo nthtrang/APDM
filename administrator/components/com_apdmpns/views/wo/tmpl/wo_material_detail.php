@@ -19,6 +19,9 @@ JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 //if (in_array("D", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {
 //    JToolBarHelper::deletePns('Are you sure to delete it?',"deletewo","Delete WO");
 //}
+if($this->material->material_request_to == $me->get('id') && $this->material->material_state =="Submit"){
+    JToolBarHelper::customX("processed_material", "save", '', "Processed", false);
+}
 JToolBarHelper::customX("print_material","print",'',"Print",false);
 
 
@@ -30,7 +33,7 @@ JToolBarHelper::customX("print_material","print",'',"Print",false);
                         submitform( pressbutton );
                         return;
                 }
-                 if (pressbutton == 'save_material_wo') {
+                 if (pressbutton == 'processed_material') {
                         submitform( pressbutton );
                         return;
                 }
@@ -240,7 +243,21 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                                         <?php echo ($this->material->material_request_to!=0)?GetValueUser($this->material->material_request_to, "name"):"N/A"; ?>
                                                 </td>
                                         </tr>
-                                           
+                                    <tr>
+                                        <td class="key"><strong>Processed:</strong></td><td colspan="4">
+                                            <?php
+                                            if($this->material->material_state =='Submit') {
+                                                ?>
+                                                <input type="checkbox" name="material_state" value="Processed"/>
+                                                <?php
+                                            }elseif($this->material->material_state =='Processed'){
+                                                ?>
+                                                Processed
+                                                <?php
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
                                        
                                         <tr>
                                                 <td colspan="4"><strong>Reason:</strong></td>
@@ -376,7 +393,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
-        <input type="hidden" name="material_id" value="<?php echo $this->material->material_id; ?>" />
+        <input type="text" name="material_id" value="<?php echo $this->material->material_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />

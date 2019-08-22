@@ -11274,8 +11274,6 @@ class PNsController extends JController {
                                                 return $this->setRedirect('index.php?option=com_apdmpns&task=save_rework_step&step='.$wo_step.'&tmpl=component&id='.$wo_id.'&so_id='.$so_id, $msg);    
                                 }
                         }
-                        
-                        
                        // }
                         if (count($arr_file_upload) > 0) {
                                 foreach ($arr_file_upload as $file) {
@@ -11534,6 +11532,20 @@ class PNsController extends JController {
             JRequest::setVar('layout', 'wo_material_detail_print');
                 JRequest::setVar('view', 'wo');
                  parent::display();
+    }
+    function processed_material()
+    {
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $datenow = & JFactory::getDate();
+        $post = JRequest::get('post');
+
+        $db->setQuery("update apdm_pns_wo_material set material_state='".$post['material_state']."',material_processed_by='".$me->get('id')."',material_processed = '".$datenow->toMySQL()."' WHERE  material_id  = ".$post['material_id']);
+        $db->query();
+
+        $msg = JText::_('Have processed material successfull.');
+        //detail_material&material_id=1424&id=106
+        return $this->setRedirect('index.php?option=com_apdmpns&task=detail_material&material_id='.$post['material_id'].'&id=' . $post['wo_id'], $msg);
     }
 }
 

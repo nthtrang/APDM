@@ -61,7 +61,7 @@ class pnsViewso extends JView {
                       //  . ' left join apdm_ccs AS ccs on  so.customer_id = ccs.ccs_code'
                         . $where
                         . ' union SELECT wop.*,mate.material_id,so.pns_so_id,wo.wo_assigner,so.customer_id as ccs_so_code,wo.pns_wo_id,p.pns_id,wo.wo_state,wo.wo_code,p.pns_description,so.so_cuscode,p.ccs_code, p.pns_code, p.pns_revision,wo.wo_qty,p.pns_uom,wo.wo_start_date,wo.wo_completed_date,DATEDIFF(wop.op_target_date, CURDATE()) as wo_remain_date,wo.wo_delay,wo.wo_rework '
-                        . ' from apdm_pns_wo_material mate left join  apdm_pns_wo wo on mate.wo_id = wo.pns_wo_id and mate.material_request_to = '.$me->get('id').' '//and mate.material_state = "Open"
+                        . ' from apdm_pns_wo_material mate left join  apdm_pns_wo wo on mate.wo_id = wo.pns_wo_id and mate.material_request_to = '.$me->get('id').' and mate.material_state = "Submit" '
                         . ' left join apdm_pns_wo_op wop on wo.pns_wo_id = wop.wo_id '
                         . '  inner join apdm_pns_so so on wo.so_id = so.pns_so_id left join apdm_pns p on p.pns_id = wo.pns_id '
                         . $where_material
