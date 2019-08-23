@@ -237,7 +237,12 @@ class pnsViewwo extends JView {
                         }                        
                         
                 }
-                $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state ='Open' order by material_id desc limit 1");                                        
+                $whereMaterial = "";
+                if($material_id)
+                {
+                    $whereMaterial = " and material_id = ".$material_id."";
+                }
+                $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state ='Open' ".$whereMaterial." order by material_id desc limit 1");
                         $material_pending = $db->loadObject();
                         $this->assignRef('material_pending',        $material_pending);
                         //rquest material to
@@ -251,7 +256,7 @@ class pnsViewwo extends JView {
                 $this->assignRef('material_pn_list',        $material_pn_list);
                 
                 //get PN MATERIAL process
-                 $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' and material_state !='Open' order by material_id desc");                
+                 $db->setQuery("SELECT * FROM apdm_pns_wo_material WHERE wo_id='".$wo_id."' order by material_id desc");
                         $material_list = $db->loadObjectList();  
                 $this->assignRef('material_list',        $material_list);
                 //get material detail

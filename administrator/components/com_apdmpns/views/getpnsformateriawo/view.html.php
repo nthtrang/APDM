@@ -194,7 +194,7 @@ class pnsViewgetpnsformateriawo extends JView
          $query = 'SELECT if(e.eco_id,e.eco_id,p.eco_id) as eco_released_id, p.* '
             . ' FROM apdm_pns AS p inner join apdm_pns_initial init on init.pns_id = p.pns_id left JOIN apdm_eco AS e ON e.eco_id=init.eco_id and e.eco_status = "Released" '
             . $filter
-            . $where     
+            . $where
             . $group_by
             . $orderby
         ;

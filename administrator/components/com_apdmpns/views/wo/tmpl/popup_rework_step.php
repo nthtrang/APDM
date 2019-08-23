@@ -35,8 +35,8 @@ function saveReworkWoStep(){
 				else
                                 {
                                         submitform("saveReworkStepWo");
-                                     //   window.parent.document.getElementById('sbox-window').close();	
-                                      //  window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
+                                        window.parent.document.getElementById('sbox-window').close();
+                                        window.parent.location = "index.php?option=com_apdmpns&task=wo_detail&id="+wo_id;
                                 }
 			}
 		}).request();
@@ -237,8 +237,7 @@ function print_rework()
 			
 			<td <td colspan="4" align="center">                                
                                 <input type="button" name="btinsersavecomment" value="Save"  onclick="saveReworkWoStep();"/>                        
-                                <input type="button" name="btinsercancel" value="Cancel"  onclick="cancelUpdate();"/>                        
-                                <input type="button" name="btinsercancel" value="Save & Print"   onclick="print_rework" />                   
+                                <input type="button" name="btinsercancel" value="Cancel"  onclick="cancelUpdate();"/>
                         </td>	
 		</tr>	
                                 </table>

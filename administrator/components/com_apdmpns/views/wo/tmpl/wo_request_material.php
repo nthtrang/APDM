@@ -15,7 +15,9 @@ $assignee = $op_arr[$step]['op_assigner'];
 $allow_edit = 0;
 $role = JAdministrator::RoleOnComponent(12);
 if (in_array("E", $role) && $this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $this->wo_row->wo_state!="cancel" ) {        
-        JToolBarHelper::apply('save_material_wo', 'Submit');
+        //JToolBarHelper::apply('save_material_wo', 'Save');
+        JToolBarHelper::customX("save_material_wo","save",'',"Save",false);
+        JToolBarHelper::apply('save_submit_material_wo', 'Save & Submit');
 }
  JToolBarHelper::cancel( 'cancelWo', 'Close' );
 JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
@@ -37,7 +39,10 @@ JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
                         submitform( pressbutton );
                         return;
                 }
-                
+            if (pressbutton == 'save_submit_material_wo') {
+                submitform( pressbutton );
+                return;
+            }
                 if (pressbutton == 'printitopdf') {
                     //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
                     var url = "index.php?option=com_apdmsto&task=printitopdf&id="+form.sto_id.value + "&tmpl=component";

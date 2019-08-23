@@ -286,7 +286,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             echo PNsController::getWoStatus($this->wo_row->wo_state); 
              $wo_step = PNsController::getWoStepCode($this->wo_row->wo_state);
              $op_arr[$wo_step]['op_failure_report'];
-            if($op_arr[$wo_step]['op_failure_report']!=0)
+             if($this->wo_row->op_failure_report)
             {
                     echo "(failure report)";
             }
@@ -470,13 +470,13 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             ?>
             <tr>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value1; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?>cc</td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?></td>
                 <td class="tg-0pky">
                 <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
                 echo $arrTool[$iassem];
                // echo $a_row->op_assembly_value3; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?>c</td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?>c</td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
                
             </tr>
             <?php

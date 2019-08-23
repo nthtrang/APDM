@@ -11117,7 +11117,7 @@ class PNsController extends JController {
                         $db->setQuery($sql);
                         $db->query();
                 }
-                //set PRE STATUS for WO
+            //set PRE STATUS for WO
                   switch($prestep->op_code)
                         {
                                 case 'wo_step1':
@@ -11178,15 +11178,15 @@ class PNsController extends JController {
                 if($log_total->op_rework_times==0)
                 {
                         $total=  $log_total->log_timesheet + $log_total->op_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($log_total->op_rework_times==1)
                 {
                         $total=  $log_total->log_timesheet + $log_total->op_rework_f_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_rework_f_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }elseif($log_total->op_rework_times==2)
                 {
                         $total=  $log_total->log_timesheet + $log_total->op_rework_s_total_time;        
-                        $sql = "update apdm_pns_wo_op set op_rework_s_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_total_time = ".$total." where op_code = '".$wo_step."' and wo_id = ".$wo_id;
                 }                                
                 $db->setQuery($sql);
                 $db->query(); 
@@ -11513,11 +11513,27 @@ class PNsController extends JController {
                 $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));                
                 if($material_reason)
                 {
-                        $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
+                        $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Open',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
                         $db->query(); 
                 }
-                $msg = JText::_('Have submit material successfull.');        
-                return $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $post['wo_id'], $msg);
+                $msg = JText::_('Have save material successfull.');
+                return $this->setRedirect('index.php?option=com_apdmpns&task=detail_material&material_id='.$post['material_id'].'&id=' . $post['wo_id'], $msg);
+    }
+    function save_submit_material_wo()
+    {
+        // Initialize some variables
+        $db = & JFactory::getDBO();
+        $me = & JFactory::getUser();
+        $datenow = & JFactory::getDate();
+        $post = JRequest::get('post');
+        $material_reason = str_replace("Â","&nbsp;",JRequest::getVar( 'material_reason', '', 'post', 'string', JREQUEST_ALLOWHTML ));
+        if($material_reason)
+        {
+            $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
+            $db->query();
+        }
+        $msg = JText::_('Have submit material successfull.');
+        return $this->setRedirect('index.php?option=com_apdmpns&task=detail_material&material_id='.$post['material_id'].'&id=' . $post['wo_id'], $msg);
     }
     function wo_material()
     {
@@ -11573,6 +11589,12 @@ class PNsController extends JController {
                 JRequest::setVar('layout', 'wo_rework_detail_print');
                 JRequest::setVar('view', 'wo');                
                 parent::display();                   
+        }
+        function edit_material()
+        {
+            JRequest::setVar('layout', 'wo_request_material');
+            JRequest::setVar('view', 'wo');
+            parent::display();
         }
 }
 

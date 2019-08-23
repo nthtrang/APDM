@@ -86,7 +86,16 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                         <td><?php echo GetValueUser($rowf->material_submited_by, "name"); ?></td>
                                                                        <td><?php echo GetValueUser($rowf->material_request_to, "name"); ?></td>
                                                                        <td><?php echo $rowf->material_reason; ?></td>
-                                                                       <td><a href="index.php?option=com_apdmpns&task=detail_material&material_id=<?php echo $rowf->material_id;?>&id=<?php echo $rowf->wo_id;?>" title="<?php echo JText::_('Click to see detail Material Request'); ?>" /><?php echo $rowf->material_state; ?></a></td>
+                                                                       <td>
+                                                                           <?php
+
+                                                                               ?>
+                                                                               <a href="index.php?option=com_apdmpns&task=detail_material&material_id=<?php echo $rowf->material_id; ?>&id=<?php echo $rowf->wo_id; ?>"
+                                                                               title="<?php echo JText::_('Click to see detail Material Request'); ?>" /><?php echo $rowf->material_state; ?></a>
+
+
+
+                                                                               </td>
                                                                 </tr>
                                                                 <?php $i++; } ?>
 

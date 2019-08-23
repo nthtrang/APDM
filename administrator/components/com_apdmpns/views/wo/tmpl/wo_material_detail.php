@@ -22,6 +22,9 @@ JToolBarHelper::title("WO: ".$this->wo_row->wo_code, 'cpanel.png');
 if($this->material->material_request_to == $me->get('id') && $this->material->material_state =="Submit"){
     JToolBarHelper::customX("processed_material", "save", '', "Processed", false);
 }
+if($this->material->material_created_by == $me->get('id') && $this->material->material_state =="Open"){
+    JToolBarHelper::customX("edit_material", "edit", '', "Edit", false);
+}
 JToolBarHelper::customX("print_material","print",'',"Print",false);
 
 
@@ -30,65 +33,73 @@ JToolBarHelper::customX("print_material","print",'',"Print",false);
         function submitbutton(pressbutton) {
 		var form = document.adminForm;
 		 if (pressbutton == 'cancelWo') {
-                        submitform( pressbutton );
-                        return;
-                }
-                 if (pressbutton == 'processed_material') {
-                        submitform( pressbutton );
-                        return;
-                }
-                
-                if (pressbutton == 'print_material') {
-                    //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
-                    var url = "index.php?option=com_apdmpns&task=print_material&material_id="+form.material_id.value + "&id="+form.wo_id.value+"&tmpl=component";
-                    window.open(url, '_blank');
-                    return;
-                }
-                if (pressbutton == 'saveqtyWoMaterialfk') {
-                         if (document.adminForm.boxchecked.value==0){
-                                alert("Please make a selection from the list to save");			
-                                return false;
-                         }
-                         else
-                             {
-                                var cpn = document.getElementsByName('cid[]');
-                                var len = cpn.length;         
-                                
-                                for (var i=0; i<len; i++)
+		     submitform( pressbutton);
+		     return;
+		 }
+		 if (pressbutton == 'processed_material') {
+		     if(!form.material_state.checked)
+             {
+                 alert("Please checked Processed first");
+             }
+		     submitform(pressbutton);
+		     return;
+		 }
+		 if (pressbutton == 'edit_material') {
+		     //submitform(pressbutton);
+             window.location = "index.php?option=com_apdmpns&task=requestmaterialwo&id="+form.wo_id.value + "&material_id="+form.material_id.value;
+		     return;
+		 }
+        if (pressbutton == 'print_material') {
+            //window.location = "index.php?option=com_apdmpns&task=printwopdf&id="+form.wo_id.value + "&tmpl=component";
+            var url = "index.php?option=com_apdmpns&task=print_material&material_id="+form.material_id.value + "&id="+form.wo_id.value+"&tmpl=component";
+            window.open(url, '_blank');
+            return;
+        }
+        if (pressbutton == 'saveqtyWoMaterialfk') {
+                 if (document.adminForm.boxchecked.value==0){
+                        alert("Please make a selection from the list to save");
+                        return false;
+                 }
+                 else
+                     {
+                        var cpn = document.getElementsByName('cid[]');
+                        var len = cpn.length;
+
+                        for (var i=0; i<len; i++)
+                        {
+                                if(cpn[i].checked)
                                 {
-                                        if(cpn[i].checked)
+                                    var arr_sto = cpn[i].value.split("_");
+                                    var arr_qfk = arr_sto[1].split(",");
+                                    arr_qfk.forEach(function(sti)
+                                    {
+
+                                        var qty_value = document.getElementById('qty_' + arr_sto[0]+'_'+sti).value;
+
+                                        if (qty_value == 0)
                                         {
-                                            var arr_sto = cpn[i].value.split("_");
-                                            var arr_qfk = arr_sto[1].split(",");
-                                            arr_qfk.forEach(function(sti)
-                                            {
-
-                                                var qty_value = document.getElementById('qty_' + arr_sto[0]+'_'+sti).value;
-                                    
-                                                if (qty_value == 0)
-                                                {
-                                                //    alert("Please input QTY for PN selected");
-                                                    document.getElementById('qty_' + arr_sto[0]+'_'+ sti).focus();
-                                                    return;
-                                                }
-                                            });
+                                        //    alert("Please input QTY for PN selected");
+                                            document.getElementById('qty_' + arr_sto[0]+'_'+ sti).focus();
+                                            return;
                                         }
+                                    });
                                 }
-                                 submitform( pressbutton );
-                             }
+                        }
+                         submitform( pressbutton );
+                     }
 
-                        return;
-                }                      
-                if(pressbutton == 'removeAllPnsMaterial')
-                {
-                     submitform( pressbutton );
-                     return;
-                } 
-                if(pressbutton == 'download_sto')
-                {
-                     submitform( pressbutton );
-                     return;
-                }     
+                return;
+        }
+        if(pressbutton == 'removeAllPnsMaterial')
+        {
+             submitform( pressbutton );
+             return;
+        }
+        if(pressbutton == 'download_sto')
+        {
+             submitform( pressbutton );
+             return;
+        }
 
 
     }
@@ -248,7 +259,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
                                             <?php
                                             if($this->material->material_state =='Submit') {
                                                 ?>
-                                                <input type="checkbox" name="material_state" value="Processed"/>
+                                                <input type="checkbox" name="material_state" id="material_state" value="Processed"/>
                                                 <?php
                                             }elseif($this->material->material_state =='Processed'){
                                                 ?>
@@ -393,7 +404,7 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
         <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
-        <input type="text" name="material_id" value="<?php echo $this->material->material_id; ?>" />
+        <input type="hidden" name="material_id" value="<?php echo $this->material->material_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />

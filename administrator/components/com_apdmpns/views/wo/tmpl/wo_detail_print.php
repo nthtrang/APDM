@@ -297,13 +297,13 @@ window.print();
             ?>
             <tr>
                 <td class="tg-0pky"><?php echo $a_row->op_assembly_value1; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?>cc</td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value2; ?></td>
                 <td class="tg-0pky">
                 <?php  $arrTool = PNsController::getTtofromWo($this->wo_row->pns_wo_id);
                 echo $arrTool[$iassem];
                // echo $a_row->op_assembly_value3; ?></td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?>c</td>
-                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?>c</td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value4; ?></td>
+                <td class="tg-0pky"><?php echo $a_row->op_assembly_value5; ?></td>
                
             </tr>
             <?php
@@ -315,7 +315,7 @@ window.print();
             <td class="tg-0pky" colspan="5"></td>
             <td class="tg-b2ze" colspan="2">Inspection(QC)</td>
             <!--<td class="tg-b2ze">2nd Fail Qty</td>-->
-            <td class="tg-b2ze">DATE</td>
+            <td class="tg-b2ze">COMPLETED DATE</td>
             <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>
@@ -454,7 +454,7 @@ window.print();
         <tr>
             <td class="tg-0pky" colspan="6"></td>
             <td class="tg-b2ze">COMMENTS</td>
-            <td class="tg-b2ze">DATE</td>
+            <td class="tg-b2ze">COMPLETED DATE</td>
             <td class="tg-b2ze">ASSIGNEE</td>
             <td class="tg-b2ze">TARGET DATE</td>
         </tr>

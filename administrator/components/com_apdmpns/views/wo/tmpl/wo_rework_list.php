@@ -1,5 +1,5 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
-wo_rework_list
+
 <?php JHTML::_('behavior.tooltip'); ?>
 <?php
 //
@@ -74,7 +74,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                                         <th><strong><?php echo JText::_('Rework From')?> </strong></th>
                                                                                         <th><strong><?php echo JText::_('Failure')?> </strong></th>
                                                                                         <th><strong><?php echo JText::_('Comments')?> </strong></th>
-                                                                                        <th><strong><?php echo JText::_('Attached')?> </strong></th>
+                                                                                        <th colspan =2><strong><?php echo JText::_('Attached')?> </strong></th>
                                                                                         
                                                                                 </thead>
                                                                                
