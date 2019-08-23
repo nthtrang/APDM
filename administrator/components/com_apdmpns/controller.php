@@ -10691,10 +10691,10 @@ class PNsController extends JController {
                                 $sql = "update apdm_pns_wo_op set op_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }elseif($rework_times==1)
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }elseif($rework_times==2)
                         {
-                                $sql = "update apdm_pns_wo_op set op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                                $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         }
                         $db->setQuery($sql);
                         $db->query();                        
@@ -10768,9 +10768,25 @@ class PNsController extends JController {
                 }
                 if($pass_step && $current_step!="wo_step7"){
                         //set start date for next step
-                        $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                    $query = "select op_rework_times from apdm_pns_wo_op where  op_code = '".$next_step."' and wo_id = ".$wo_id;
+                    $db->setQuery($query);
+                    $rework_times = $db->loadResult();
+                    if($rework_times==0)
+                    {
+                        $sql = "update apdm_pns_wo_op set op_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                    }elseif($rework_times==1)
+                    {
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                    }elseif($rework_times==2)
+                    {
+                        $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                    }
+                    $db->setQuery($sql);
+                    $db->query();
+
+                    /*$sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $me->get('id') . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
                         $db->setQuery($sql);
-                        $db->query(); 
+                        $db->query();*/
                 }     
                 if($pass_step){
                         $op_comment = str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
@@ -10847,9 +10863,24 @@ class PNsController extends JController {
             }
             if($current_step!="wo_step7"){
                 //set start date for next step
-                $sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                $query = "select op_rework_times from apdm_pns_wo_op where  op_code = '".$next_step."' and wo_id = ".$wo_id;
+                $db->setQuery($query);
+                $rework_times = $db->loadResult();
+                if($rework_times==0)
+                {
+                    $sql = "update apdm_pns_wo_op set op_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                }elseif($rework_times==1)
+                {
+                    $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                }elseif($rework_times==2)
+                {
+                    $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_start_date = '" . $datenow->toMySQL() . "',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                }
                 $db->setQuery($sql);
                 $db->query();
+                /*$sql = "update apdm_pns_wo_op set op_start_date='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$next_step."' and wo_id = ".$wo_id;
+                $db->setQuery($sql);
+                $db->query();*/
             }
             $op_comment = $post['op_comment']; //str_replace("Â","&nbsp;",JRequest::getVar( 'op_comment', '', 'post', 'string', JREQUEST_ALLOWHTML ));
             $sql = "update apdm_pns_wo_op set op_is_pause=0, op_completed_date='".$datenow->toMySQL()."', op_status ='done', op_title ='Done', op_comment = '".$op_comment."',op_delay_date = '".$datenow->toMySQL()."',op_updated='".$datenow->toMySQL()."',op_updated_by='" . $userId . "' where op_code = '".$wo_step."' and wo_id = ".$wo_id;
