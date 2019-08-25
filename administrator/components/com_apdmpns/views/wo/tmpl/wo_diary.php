@@ -1,6 +1,8 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
+
+
 <?php
 //
 //ini_set('display_errors', 1);
@@ -243,7 +245,23 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                   <tr>
                                                 <td><?php echo JHTML::_('date', $row->wo_log_created, JText::_('DATE_FORMAT_LC6')); ?></td>                                                
                                                 <td><?php echo PNsController::getWoStep($row->op_code);?></td>
-                                                <td><?php echo $row->op_action; ?></td>
+                                                <td><?php 
+                                                if($row->op_action == "Rework")
+                                                {                                                 
+                                                                ?>
+                                                         <a href="index.php?option=com_apdmpns&task=wo_rework_log&id=<?php echo $row->wo_id; ?>" /><?php echo $row->op_action; ?></a>
+                                                        <?php 
+                                                }
+                                                elseif($row->material_id)
+                                                {
+                                                        ?>
+                                                         <a href="index.php?option=com_apdmpns&task=detail_material&material_id=<?php echo $row->material_id; ?>&id=<?php echo $row->wo_id; ?>" /><?php echo $row->op_action; ?></a>
+                                                         <?php 
+                                                }
+                                                else{
+                                                        echo $row->op_action;
+                                                }
+                                                ?></td>
                                                 <td><?php echo ($row->wo_log_created_by!=0)?GetValueUser($row->wo_log_created_by, "name"):"N/A"; ?></td>
                                                 <td><?php echo $row->wo_log_content; ?></td>   
                                                 </tr>

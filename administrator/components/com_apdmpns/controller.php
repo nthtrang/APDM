@@ -11356,7 +11356,7 @@ class PNsController extends JController {
                 
                 //get ALL  PRE STEP for reset
                 $lastNumber = substr($step_rework, -1);
-                $sql = "SELECT pns_op_id,op_code,op_rework_times FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) >= ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0  order by op_code desc limit 7";
+                $sql = "SELECT pns_op_id,op_code,op_rework_times FROM `apdm_pns_wo_op` WHERE  SUBSTR(op_code, -1) >= ".$lastNumber." and `wo_id` = '".$wo_id."' and op_assigner != 0 and op_code !='wo_step7'  order by op_code desc limit 6";
                 $db->setQuery($sql);
                 $presteps = $db->loadObjectList();
                 foreach($presteps as $rpre)
@@ -11408,7 +11408,8 @@ class PNsController extends JController {
                         $db->setQuery("INSERT INTO apdm_pns_wo_rework (wo_id,rework_times,rework_from,rework_failure,rework_qty, rework_created, rework_created_by,rework_attached_file,rework_comments) VALUES (" . $wo_id . ", '" . $rework_times . "', '".$rework_from."','" . $rework_failure . "','".$rework_qty."','" . $datenow->toMySQL() . "'," . $userId . ",'".$file."','".$op_comment."') ");                
                         $db->query();
                 }
-                echo 1;
+                $msg .= "Successfully Saved Rework";
+                $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id.'&time='.time(), $msg);
         }
         function requestmaterialwo()
         {
@@ -11562,6 +11563,10 @@ class PNsController extends JController {
         {
             $db->setQuery("update apdm_pns_wo_material set material_request_to='".$post['material_request_to']."',material_state = 'Submit',material_submited_by='".$me->get('id')."',material_submited = '".$datenow->toMySQL()."',material_reason = '".$material_reason."'  WHERE  material_id  = ".$post['material_id']);
             $db->query();
+            //inserr history                
+        $db->setQuery("INSERT INTO apdm_pns_wo_history (wo_id,op_code,op_action,cur_status, wo_log_created, wo_log_created_by,wo_log_content,material_id) VALUES ('" . $post['wo_id']. "', '" . $post['wo_step'] . "', 'Material Request','" . $post['wo_step'] . "','" . $datenow->toMySQL() . "'," . $me->get('id'). " ,'".$material_reason."','".$post['material_id']."') ");        
+        $db->query();                              
+               
         }
         $msg = JText::_('Have submit material successfull.');
         return $this->setRedirect('index.php?option=com_apdmpns&task=detail_material&material_id='.$post['material_id'].'&id=' . $post['wo_id'], $msg);

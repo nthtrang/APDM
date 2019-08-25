@@ -38,9 +38,11 @@ JToolBarHelper::customX("print_material","print",'',"Print",false);
 		 }
 		 if (pressbutton == 'processed_material') {
 		     if(!form.material_state.checked)
-             {
-                 alert("Please checked Processed first");
-             }
+                        {
+                        alert("Please checked Processed first");
+                        form.material_state.focus();
+                        return;
+                        }
 		     submitform(pressbutton);
 		     return;
 		 }

@@ -7,7 +7,7 @@ $edit = JRequest::getVar('edit', true);
 $me = & JFactory::getUser();
 // clean item data
 JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
-$step = JRequest::getVar('step');
+$step = PNsController::getWoStepCode($this->wo_row->wo_state);
 $wo_id = JRequest::getVar('id');
 $so_id = JRequest::getVar('so_id');
 $op_arr  = $this->op_arr;
@@ -420,9 +420,9 @@ window.addEvent('domready', function(){ var JTooltips = new Tips($$('.hasTip'), 
         </fieldset>
         <input type="hidden" name="wo_id" value="<?php echo $wo_id; ?>" />
         <input type="hidden" name="so_id" value="<?php echo $so_id; ?>" />
-        <input type="hidden" name="wo_step" value="<?php echo $step; ?>" />
+        <input type="hidden" name="wo_step" value="<?php echo PNsController::getWoStepCode($this->wo_row->wo_state); ?>" />
         <input type="hidden" name="wo_assigner" value="<?php echo $assignee; ?>" />
-        <input type="hidden" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
+        <input type="text" name="material_id" value="<?php echo $this->material_pending->material_id; ?>" />
         <input type="hidden" name="option" value="com_apdmpns" />             
         <input type="hidden" name="task" value="" />	
         <input type="hidden" name="return" value="wo_detail"  />

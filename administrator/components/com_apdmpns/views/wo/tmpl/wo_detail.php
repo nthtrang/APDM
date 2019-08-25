@@ -284,9 +284,8 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
             <td class="tg-0pky"><span style="font-weight:bold">STATUS</span></td>
             <td class="tg-c3ow" colspan="3"><?php 
             echo PNsController::getWoStatus($this->wo_row->wo_state); 
-             $wo_step = PNsController::getWoStepCode($this->wo_row->wo_state);
-             $op_arr[$wo_step]['op_failure_report'];
-             if($this->wo_row->op_failure_report)
+             $wo_step = PNsController::getWoStepCode($this->wo_row->wo_state);                          
+             if($op_arr[$wo_step]['op_failure_report']!=0)
             {
                     echo "(failure report)";
             }
