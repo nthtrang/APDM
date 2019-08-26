@@ -38,10 +38,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
         </div>
         <div class="m">
                 <ul id="submenu" class="configuration">
-                        <li><a id="detail" href="index.php?option=com_apdmpns&task=wo_detail&id=<?php echo $this->wo_row->pns_wo_id; ?>" ><?php echo JText::_('DETAIL'); ?></a></li>
-                        <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>
-                        <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
-                        <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
+                        <li><a id="detail" href="index.php?option=com_apdmpns&task=wo_detail&id=<?php echo $this->wo_row->pns_wo_id; ?>&time=<?php echo time()?>" ><?php echo JText::_('DETAIL'); ?></a></li>
+                        <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'LOG' ); ?></a></li>
+                        <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
+                        <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
                         <li><a id="rework_log"  class="active"><?php echo JText::_( 'REWORK' ); ?></a></li>
                 </ul>
                 <div class="clr"></div>

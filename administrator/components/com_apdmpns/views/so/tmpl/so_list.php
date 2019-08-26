@@ -252,6 +252,7 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                 }
                 $background="";
                 $remain_day = $so->wo_remain_date+1;
+                $delaytitle = "";
                 if($remain_day<=0)
                 {       
                         //$remain_day = 0;
@@ -275,18 +276,19 @@ if (in_array("V", $rolewo) && count($this->report_list) > 0) { ?>
                                                 <td align="left"><?php echo PNsController::getWoStatus($so->wo_state); ?></td>
                                                 <td align="left"><?php echo PNsController::getWoStep($so->op_code); ?></td>
                                                 <td align="center"><?php echo GetValueUser($so->op_assigner, "name"); ?></td>
-                                                 <td align="center"><?php 
-                                                 if($so->op_delay)
-                                                         echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">Delayed WO</a><br>';
-                                                 if($so->op_failure_report)
+                                                 <td align="center"><?php
+                                                 if($so->wo_delay=="1") {
+                                                     echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id=' . $so->pns_wo_id . '" title="' . JText::_('Click to see detail WO') . '">Delayed WO</a><br>';
+                                                 }
+                                                 if($so->op_failure_report=="1")
                                                  {
                                                          echo '<a href="index.php?option=com_apdmpns&task=wo_diary&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">Failure Report</a><br>';
                                                  }
-                                                 if($so->op_rework_times==1)
+                                                 if($so->op_rework_times=="1")
                                                  {
                                                         echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">1st Rework</a><br>';
                                                  }
-                                                 elseif($so->op_rework_times==2)
+                                                 elseif($so->op_rework_times=="2")
                                                  {
                                                      echo '<a href="index.php?option=com_apdmpns&task=wo_detail&id='.$so->pns_wo_id.'" title="'.JText::_('Click to see detail WO').'">2nd Rework</a><br>';
                                                  }
@@ -324,9 +326,9 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                         </thead>                  
                       <tbody style="height: 300px; overflow-y: auto"> 				
         <?php
-        $i = 0;
+        $prnum = 0;
         foreach ($this->so_progress as $so) {
-                $i++;              
+            $prnum++;
                 $soNumber = $so->so_cuscode;
                 if($so->ccs_so_code)
                 {
@@ -351,7 +353,7 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                 } 
                 ?>
                                         <tr>
-                                                <td align="center"><?php echo $i?></td>
+                                                <td align="center"><?php echo $prnum?></td>
                                                 <td align="left"><a href="index.php?option=com_apdmpns&task=so_detail&id=<?php echo $so->pns_so_id; ?>" title="<?php echo JText::_('Click here view detail') ?>" ><?php echo $soNumber; ?></a> </td>
                                                 <td align="center"><?php echo $so->ccs_name; ?></td>
                                                 <td align="left">

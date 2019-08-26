@@ -99,7 +99,7 @@ if ($this->wo_row->wo_state!="done" && $this->wo_row->wo_state !="onhold" && $th
     if (($allow_complete || $op_arr['wo_step5']['op_assigner'] == $me->get('id')) && ($checkStep4 == 1 && $op_arr['wo_step4']['op_status'] == "done" && $op_arr['wo_step5']['op_status'] != 'done')) {// && $op_arr['wo_step4']['op_assigner'] == $me->get('id')
         if ($op_arr['wo_step5']['op_is_start'] == 1) { //after start
             if ($op_arr['wo_step5']['op_is_pause'] == 1) { //after start
-                JToolBarHelper::popUpCompleteStepWo('Resume5', 'save_resume_step', 'wo_step5', $this->wo_row->pns_wo_id, $this->wo_row->so_id);
+                JToolBarHelper::popUpCompleteStepWo('Resume', 'save_resume_step', 'wo_step5', $this->wo_row->pns_wo_id, $this->wo_row->so_id);
             } else {
                 JToolBarHelper::popUpCompleteStepWo('Pause', 'save_pause_step', 'wo_step5', $this->wo_row->pns_wo_id, $this->wo_row->so_id, 700, 500, 'restore');
                 JToolBarHelper::popUpCompleteStepWo('Complete', 'save_complete_step5', 'wo_step5', $this->wo_row->pns_wo_id, $this->wo_row->so_id);
@@ -232,10 +232,10 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
     <div class="m">
         <ul id="submenu" class="configuration">
             <li><a id="detail" class="active"><?php echo JText::_( 'DETAIL' ); ?></a></li>
-            <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'LOG' ); ?></a></li>
-            <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
-            <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
-            <li><a id="rework_log" href="index.php?option=com_apdmpns&task=wo_rework_log&id=<?php echo $this->wo_row->pns_wo_id;?>"><?php echo JText::_( 'REWORK' ); ?></a></li>
+            <li><a id="bom" href="index.php?option=com_apdmpns&task=wo_log&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'LOG' ); ?></a></li>
+            <li><a id="diary" href="index.php?option=com_apdmpns&task=wo_diary&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'DIARY' ); ?></a></li>
+            <li><a id="material" href="index.php?option=com_apdmpns&task=wo_material&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'MATERIAL REQUEST' ); ?></a></li>
+            <li><a id="rework_log" href="index.php?option=com_apdmpns&task=wo_rework_log&id=<?php echo $this->wo_row->pns_wo_id;?>&time=<?php echo time()?>"><?php echo JText::_( 'REWORK' ); ?></a></li>
         </ul>
         <div class="clr"></div>
     </div>

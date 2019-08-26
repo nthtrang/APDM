@@ -11365,12 +11365,12 @@ class PNsController extends JController {
                     {
                         if ($rpre->op_rework_times == 0)//for first
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_failure_report=0,op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         } elseif ($rpre->op_rework_times == 1)//for second
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_failure_report=0,op_is_start=1,op_is_pause = 1,op_rework_s_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         }
@@ -11378,12 +11378,12 @@ class PNsController extends JController {
                     else{
                         if ($rpre->op_rework_times == 0)//for first
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_failure_report=0,op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_first=1, op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_f_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         } elseif ($rpre->op_rework_times == 1)//for second
                         {
-                            $sql = "update apdm_pns_wo_op set op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
+                            $sql = "update apdm_pns_wo_op set op_failure_report=0,op_is_start=1,op_is_pause = 1,op_rework_f_pause_date = '" . $datenow->toMySQL() . "', op_rework_second = 1,op_rework_times = op_rework_times+1,op_status='pending',op_title='Pending',op_rework_s_start_date='" . $datenow->toMySQL() . "',op_updated='" . $datenow->toMySQL() . "',op_updated_by='" . $userId . "' where pns_op_id = '" . $rpre->pns_op_id . "' and wo_id = " . $wo_id;
                             $db->setQuery($sql);
                             $db->query();
                         }
@@ -11408,8 +11408,14 @@ class PNsController extends JController {
                         $db->setQuery("INSERT INTO apdm_pns_wo_rework (wo_id,rework_times,rework_from,rework_failure,rework_qty, rework_created, rework_created_by,rework_attached_file,rework_comments) VALUES (" . $wo_id . ", '" . $rework_times . "', '".$rework_from."','" . $rework_failure . "','".$rework_qty."','" . $datenow->toMySQL() . "'," . $userId . ",'".$file."','".$op_comment."') ");                
                         $db->query();
                 }
-                $msg .= "Successfully Saved Rework";
-                $this->setRedirect('index.php?option=com_apdmpns&task=wo_detail&id=' . $wo_id.'&time='.time(), $msg);
+                $msg = "Successfully Saved Rework";
+                return $this->setRedirect('index.php?option=com_apdmpns&task=wostmp&id=' . $wo_id.'&time='.time(), $msg);
+        }
+        function wostmp()
+        {
+          //  $msg = "Successfully Saved Rework";
+            $wo_id = JRequest::getVar('id');
+            return $this->setRedirect( 'index.php?option=com_apdmpns&task=wo_detail&time='.time().'&id='.$wo_id, $msg );
         }
         function requestmaterialwo()
         {
