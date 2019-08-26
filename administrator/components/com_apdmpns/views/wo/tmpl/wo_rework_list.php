@@ -61,7 +61,7 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                 <div class="col width-100">
                         <fieldset class="adminform">		
                                 
-                                                                         <?php if (count($this->material_list) > 0) {
+                                                                         <?php if (count($this->rework_log_list) > 0) {
                                                                 ?>				
                                                               
                                                                         <table width="100%"  class="adminlist" cellpadding="1">						
@@ -99,7 +99,21 @@ JFilterOutput::objectHTMLSafe($user, ENT_QUOTES, '');
                                                                        <td><?php echo PNsController::getWoStep($rowf->rework_from); ?></td>
                                                                        <td><?php echo $rowf->rework_failure; ?></td>
                                                                        <td><?php echo $rowf->rework_comments; ?></td>                                                                                                                                                                                                                                                                                                
-                                                                       <td><a href="index.php?option=com_apdmpns&task=download_file_rework&id=<?php echo $rowf->wo_id?>&file=<?php echo $rowf->rework_attached_file?>" title="Click here to download file"><img src="images/download_f2.png" width="20" height="20" /></a>&nbsp;&nbsp;
+                                                                       <td><?php
+                                                                           if($rowf->rework_attached_file) {
+                                                                               ?>
+                                                                               <a href="index.php?option=com_apdmpns&task=download_file_rework&id=<?php echo $rowf->wo_id ?>&file=<?php echo $rowf->rework_attached_file; ?>"
+                                                                                  title="Click here to download file"><img
+                                                                                           src="images/download_f2.png"
+                                                                                           width="20"
+                                                                                           height="20"/></a>&nbsp;&nbsp;
+                                                                               <?php
+                                                                           }else{
+                                                                               ?>
+                                                                               None
+                                                                               <?php
+                                                                           }
+                                                                               ?>
                                                                        </td>
                                                                        <td><a target="_blank" href="index.php?option=com_apdmpns&task=print_rework&tmpl=component&id=<?php echo $rowf->wo_id?>&rework_id=<?php echo $rowf->rework_id?>" title="Click here to print">Print Detail</a>&nbsp;&nbsp;
                                                                        </td>
