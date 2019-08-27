@@ -11526,7 +11526,8 @@ class PNsController extends JController {
     function getQtyTopAssysDone($pns_id,$so_id)
     {
             $db = & JFactory::getDBO();
-            $db->setQuery("select sum(wo.wo_qty) from apdm_pns_wo wo inner join apdm_pns_so_fk fk on wo.top_pns_id = fk.pns_id inner join apdm_pns_so so on so.pns_so_id = fk.so_id where fk.pns_id = ".$pns_id." and fk.so_id = ".$so_id." and wo.wo_state = 'done'");
+            $db->setQuery("select sum(wo.wo_qty) from apdm_pns_wo wo inner join apdm_pns_so so on so.pns_so_id = wo.so_id where wo.top_pns_id = '".$pns_id."' and wo.pns_id = '".$pns_id."' and so.pns_so_id = '".$so_id."' and wo.wo_state = 'done'");
+            //echo $db->getQuery();
             $total = $db->loadResult();
             if($total)
                     return  $total;

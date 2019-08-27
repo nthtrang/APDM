@@ -366,6 +366,7 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                         <table class="adminlist1" cellspacing="1" width="200">
                                                                 <?php 
                                                                 $pnTopInfo = PNsController::getTopAssysSo($so->pns_so_id);
+
                                                                 $i=1;
                                                                 if (count($pnTopInfo) > 0) {
                                                                         foreach($pnTopInfo as $top )
@@ -421,7 +422,7 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                                         }
                                                                                 ?>
                                                                         <tr>
-                                                                                <td align="center" <?php echo $style;?>><?php echo $topSysQty=$top->qty;?></td>
+                                                                                <td align="center" <?php echo $style;?>><?php echo $top->qty;?></td>
                                                                         </tr>
                                                                         <?php 
                                                                         $a++;
@@ -446,7 +447,7 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                                                 
                                                                                 ?>
                                                                         <tr>
-                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysDone($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysDone($top->pns_id,$so->pns_so_id)."/".$top->qty;?></td>
                                                                         </tr>
                                                                         <?php 
                                                                         $i++;  
@@ -468,7 +469,7 @@ if (in_array("V", $rolewo) && count($this->so_progress) > 0) { ?>
                                                                                                                                                  
                                                                                 ?>
                                                                         <tr>
-                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysShipped($top->pns_id,$so->pns_so_id)."/".$topSysQty;?></td>
+                                                                                <td align="center" <?php echo $style;?>><?php echo PNsController::getQtyTopAssysShipped($top->pns_id,$so->pns_so_id)."/".$top->qty;?></td>
                                                                         </tr>
                                                                         <?php 
                                                                         $j++;       
